@@ -1,3 +1,19 @@
+=== spot / futures / ETF numeric toys ===
+spot_long_pnl 10.0
+futures_long_pnl 500.0
+etf_long_pnl -20.0
+
+=== long vs short P&L at ±2% ===
+move +2%: long_pnl=2.00 short_pnl=-2.00
+move -2%: long_pnl=-2.00 short_pnl=2.00
+
+=== margin & liquidation toy ===
+initial_margin 10000.0
+maintenance_margin 7000.0
+liquidation_return_trigger -0.03
+liquidation_price_ratio_vs_entry 0.97
+if_entry_price_4000_liq_price 3880.0
+
 === simple vs compound NAV ===
        r  simple_nav  compound_nav
 0  0.010       1.010      1.010000
@@ -15,3 +31,9 @@
 4 -0.005   1.009620  1.018460
 final_unlev 1.00962
 final_lev2 1.01846
+
+=== benchmark & tracking error ===
+active_mean -0.000212
+tracking_error_daily 0.001739
+tracking_error_ann 0.027608
+te_note: annualized TE is std(port - bench)*sqrt(252); lower means tighter benchmark tracking.

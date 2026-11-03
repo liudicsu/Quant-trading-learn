@@ -1,16 +1,24 @@
 ## Learning goals
 
-Build the smallest pandas time-series workflow for quant research: turn a table into a `DatetimeIndex`, compute returns and rolling stats, and protect reproducibility with asserts. If you can already do CSV→DatetimeIndex→pct_change→rolling→plot on your own, you may test out.
+This lesson (~**7 hours**: 3h concepts + 3h lab + 1h quiz/review) builds the minimum pandas time-series workflow for quant research: load a CSV into a `DatetimeIndex`, `reindex`/`align` mismatched calendars, handle missing values (`dropna` / `ffill` / `interpolate` with trade-offs), compute `pct_change` and `rolling`, and plot with matplotlib. If you can already do CSV→DatetimeIndex→pct_change→rolling→plot on your own, you may test out.
+
+**Goals (same as the curriculum outline):**
+
+- Be fluent with `DatetimeIndex` / `reindex` / `align`.
+- Use rolling windows and missing-value handling.
+- Turn OHLC into reproducible inputs.
+
+**Must-teach:** time index is a first-class citizen; misalignment = silent lookahead; vectorize over row loops; asserts and dtype checks.
 
 <Callout type="info" title="Learning only — not investment advice">
-Examples use **synthetic offline data** to show syntax and traps. They are not trade recommendations.
+Labs use the in-repo **synthetic offline CSV** (`examples/p0/data/synthetic_ohlc.csv`). Syntax and traps only — not trading advice.
 </Callout>
 
-## Intuition: the time index is first-class
+## Intuition: time index is first-class
 
-If a finance table is aligned only by row number, it is easy to attach **tomorrow’s price** to today’s signal by accident. A `DatetimeIndex` forces an explicit answer: which session does this row belong to? When two series merge, do they align by calendar or by position?
+If you align finance tables by row number alone, tomorrow’s price can silently land on today’s signal. A `DatetimeIndex` forces the question: which session does this row represent? When two series merge, do they align by date or by position?
 
-**Misalignment = silent lookahead**: e.g. using tomorrow’s close to decide today’s position. Equity curves look better; the science is fake.
+**Misalignment = silent lookahead**: using tomorrow’s close to decide today’s position makes backtests pretty and research false.
 
 ## Formulas
 
@@ -20,7 +28,7 @@ Simple return:
 r_t = P_t / P_(t-1) − 1
 </Formula>
 
-Simple moving average of window w:
+Simple moving average of length w:
 
 <Formula label="Rolling mean">
 MA_t(w) = (P_t + P_(t-1) + … + P_(t−w+1)) / w
@@ -32,39 +40,81 @@ Closes 100, 101, 100.5:
 
 - r_2 = 101/100 - 1 = 0.01
 - r_3 = 100.5/101 - 1 ≈ -0.00495
-- Third-day \(MA_3 = (100+101+100.5)/3 = 100.5\)
+- MA_3 on day 3: (100+101+100.5)/3 = 100.5
 
-## Python lab (actually run locally)
+## 1. read_csv into a DatetimeIndex
 
-Script: `examples/p0/01_pandas_timeseries.py` (synthetic OHLC, no network).
+Bundled CSV: `examples/p0/data/synthetic_ohlc.csv` (12 synthetic business days of OHLC).
 
 ```python
 import pandas as pd
+from pathlib import Path
 
-idx = pd.bdate_range("2024-01-02", periods=8)
-close = pd.Series(
-    [100.0, 101.0, 100.5, 102.0, 101.5, 103.0, 104.0, 103.5],
-    index=idx,
-    name="close",
-)
-ohlc = pd.DataFrame({
-    "open": close.shift(1).fillna(close.iloc[0]),
-    "high": close + 0.5,
-    "low": close - 0.5,
-    "close": close,
-})
+CSV = Path("examples/p0/data/synthetic_ohlc.csv")
+raw = pd.read_csv(CSV)
+ohlc = raw.copy()
+ohlc["date"] = pd.to_datetime(ohlc["date"])
+ohlc = ohlc.set_index("date").sort_index()
+assert isinstance(ohlc.index, pd.DatetimeIndex)
+print(ohlc.head())
+```
+
+## 2. reindex / align worked example
+
+Series `a` keeps every close; series `b` drops two dates. `join="inner"` keeps the intersection; `join="outer"` keeps the union with `NaN` on the missing side.
+
+```python
+a = ohlc["close"].rename("a")
+b = a.drop(a.index[[2, 5]]).rename("b")
+inner = pd.concat([a, b], axis=1, join="inner")
+outer = pd.concat([a, b], axis=1, join="outer")
+```
+
+Lab output: `a_len 12`, `b_len 10`, `inner_rows 10`, `outer_rows 12` with `outer_null_b 2`. Row-number merges would silently pair 2024-01-04’s `a` with the wrong `b`.
+
+## 3. Missing values: dropna / ffill / interpolate
+
+Plant two `NaN` closes (iloc 3 and 7), then compare methods:
+
+| Method | Meaning | Main cost |
+| --- | --- | --- |
+| `dropna` | Drop missing days | Shorter sample; rolling windows shift |
+| `ffill` | Forward-fill last print | **Invented quotes** on halt days |
+| `interpolate(method="time")` | Time interpolation | Invents a smooth path — still not real volume |
+
+Printed mean returns: `dropna≈0.006005`, `ffill≈0.004913`, `interpolate≈0.004909`. There is no universal “correct” fill — choose for the research question and document it.
+
+## 4. Returns, rolling windows, and a plot
+
+```python
 ret = ohlc["close"].pct_change()
 ma3 = ohlc["close"].rolling(3).mean()
-good_signal = (ohlc["close"] > ma3).astype(int)
-position = good_signal.shift(1)
-bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # peek at future close
 ```
+
+`pct_change` is **NaN on the first row**; `rolling(3)` needs three points. The script writes `public/p0/returns_ma.png`, embedded below via `withBasePath` so it works under the Pages `basePath`:
+
+![Synthetic close and 3-day MA](/p0/returns_ma.png)
+
+## 5. Lookahead contrast
+
+```python
+good_signal = (ohlc["close"] > ma3).astype(int)
+position = good_signal.shift(1)          # prior known signal
+bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # peeks tomorrow
+```
+
+On this synthetic sample, `misaligned_days = 4`.
+
+## Python lab (run locally)
+
+Script: `examples/p0/01_pandas_timeseries.py` (`pandas`, `matplotlib`, offline).
 
 ### Real run output
 
 ```text
-=== OHLC head ===
+=== OHLC from CSV (DatetimeIndex) ===
              open   high    low  close
+date                                  
 2024-01-02  100.0  100.5   99.5  100.0
 2024-01-03  100.0  101.5  100.5  101.0
 2024-01-04  101.0  101.0  100.0  100.5
@@ -73,9 +123,68 @@ bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # peek at future close
 2024-01-09  101.5  103.5  102.5  103.0
 2024-01-10  103.0  104.5  103.5  104.0
 2024-01-11  104.0  104.0  103.0  103.5
+2024-01-12  103.5  105.5  104.5  105.0
+2024-01-15  105.0  104.7  103.7  104.2
+2024-01-16  104.2  106.5  105.5  106.0
+2024-01-17  106.0  106.0  105.0  105.5
+index_type DatetimeIndex
+
+=== align calendars ===
+a_len 12 b_len 10
+inner_rows 10 inner_nonnull_b 10
+outer_rows 12 outer_null_b 2
+inner_table
+                a      b
+date                    
+2024-01-02  100.0  100.0
+2024-01-03  101.0  101.0
+2024-01-05  102.0  102.0
+2024-01-08  101.5  101.5
+2024-01-10  104.0  104.0
+2024-01-11  103.5  103.5
+2024-01-12  105.0  105.0
+2024-01-15  104.2  104.2
+2024-01-16  106.0  106.0
+2024-01-17  105.5  105.5
+outer_table
+                a      b
+date                    
+2024-01-02  100.0  100.0
+2024-01-03  101.0  101.0
+2024-01-04  100.5    NaN
+2024-01-05  102.0  102.0
+2024-01-08  101.5  101.5
+2024-01-09  103.0    NaN
+2024-01-10  104.0  104.0
+2024-01-11  103.5  103.5
+2024-01-12  105.0  105.0
+2024-01-15  104.2  104.2
+2024-01-16  106.0  106.0
+2024-01-17  105.5  105.5
+
+=== missing-value handling (planted NaN at iloc 3,7) ===
+planted_close
+date
+2024-01-02    100.0
+2024-01-03    101.0
+2024-01-04    100.5
+2024-01-05      NaN
+2024-01-08    101.5
+2024-01-09    103.0
+2024-01-10    104.0
+2024-01-11      NaN
+2024-01-12    105.0
+2024-01-15    104.2
+2024-01-16    106.0
+2024-01-17    105.5
+dropna: n=10 mean_ret=0.006005 n_ret_nonnull=9
+ffill: n=12 mean_ret=0.004913 n_ret_nonnull=11
+interpolate: n=12 mean_ret=0.004909 n_ret_nonnull=11
+tradeoffs: dropna shortens the sample and changes overlapping windows; ffill invents flat prices on missing days (fake prints); time-interpolate invents a smooth path between known prints — neither is 'true' volume.
 
 === returns & MA3 ===
                  ret         ma3
+date                            
 2024-01-02       NaN         NaN
 2024-01-03  0.010000         NaN
 2024-01-04 -0.004950  100.500000
@@ -84,9 +193,15 @@ bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # peek at future close
 2024-01-09  0.014778  102.166667
 2024-01-10  0.009709  102.833333
 2024-01-11 -0.004808  103.500000
+2024-01-12  0.014493  104.166667
+2024-01-15 -0.007619  104.233333
+2024-01-16  0.017274  105.066667
+2024-01-17 -0.004717  105.233333
+saved_plot public/p0/returns_ma.png
 
-=== signals (1=above MA3) ===
+=== signals ===
             good_signal  position_shift1  bad_lookahead
+date                                                   
 2024-01-02            0              NaN              0
 2024-01-03            0              0.0              0
 2024-01-04            0              0.0              1
@@ -94,84 +209,82 @@ bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # peek at future close
 2024-01-08            1              1.0              1
 2024-01-09            1              1.0              1
 2024-01-10            1              1.0              1
-2024-01-11            0              1.0              0
+2024-01-11            0              1.0              1
+2024-01-12            1              0.0              1
+2024-01-15            0              1.0              1
+2024-01-16            1              0.0              1
+2024-01-17            1              1.0              0
+misaligned_days 4
 
 ASSERTS_OK
-misaligned_days 1
 ```
-
-Notes:
-
-- First `pct_change` value is **NaN** — no previous close.
-- `position_shift1` delays the decision one bar so you do not spend same-day close information on same-day return.
-- `bad_lookahead` uses `shift(-1)`; on this toy path it disagrees on **1** day (`misaligned_days 1`).
-
-Three asserts at the end check index type, numeric dtype, and the leading NaN. Success prints `ASSERTS_OK`.
 
 ## Common mistakes / pitfalls
 
-1. **Blind `ffill` after `reindex`** — invents quotes on halt days and pollutes returns.  
-2. **Row-number merges** instead of calendar `align`/`join`.  
-3. **Python row loops** that skip calendar edge cases; prefer vectorized ops, still inspect NaNs.  
-4. **No `shift` on signals** before multiplying by same-bar returns.  
-5. **No asserts** — object dtypes and duplicate dates fail late and loudly.
+1. **Blind `ffill` after `reindex`**: fake prints on halt days pollute returns.
+2. **Row-number merges instead of date align**: silent calendar skew.
+3. **Row loops that ignore the session calendar**: prefer vectorized ops; still audit `NaN`s.
+4. **Multiplying an unshifted signal by same-day returns**: classic lookahead.
+5. **No asserts**: object dtypes and duplicate dates fail far downstream.
 
-## Practice (wired to the task checklist)
+## Practice (1:1 with the checklist)
 
-1. **ex1** — Recompute `ret` and `ma3` from the fake OHLC; match the table.  
-2. **ex2** — Keep `bad_lookahead` on a longer series; count mismatched days.  
-3. **ex3** — Add another assert (monotonic index / no duplicate dates).  
-4. **done1** — Ship a zero-config script/notebook that prints `ASSERTS_OK`.
+1. **ex1** — Load `examples/p0/data/synthetic_ohlc.csv` with a `DatetimeIndex`; **done when** the index is a `DatetimeIndex` with OHLC columns.
+2. **ex2** — `reindex`/`align` two mismatched calendars; **done when** you show both inner and outer tables.
+3. **ex3** — Apply `dropna` / `ffill` / `interpolate` to planted missing closes; **done when** three side-by-side results plus trade-off notes.
+4. **ex4** — Compute `pct_change` and `rolling(3).mean` and save the plot; **done when** the local PNG matches the lesson figure.
+5. **ex5** — Lookahead signal vs `shift(1)` position; **done when** `misaligned_days` prints and is explained.
+6. **ex6** — Keep ≥3 asserts; **done when** the script prints `ASSERTS_OK`.
 
 ## Quiz
 
 <Quiz
   id="q1-index"
-  question="Why prefer a DatetimeIndex over bare 0..n row numbers for quant tables?"
-  options={["It is always faster", "It forces calendar alignment and reduces silent misalignment/lookahead", "Pandas forbids integer indexes", "It auto-downloads prices"]}
+  question="Why prefer a DatetimeIndex over raw 0..n row numbers for quant tables?"
+  options={["Faster", "Forces calendar alignment and reduces silent lookahead", "Pandas forbids integer indexes", "It auto-downloads prices"]}
   answer={1}
-  explanation="A time index makes alignment rules explicit; positional joins quietly break when calendars differ."
+  explanation="A time index makes alignment rules explicit; row joins most easily skew mismatched calendars."
 />
 
 <Quiz
   id="q2-pct"
-  question="After pct_change on closes, the first row is usually?"
+  question="After pct_change on a close series, the first row is usually?"
   options={["0", "1", "NaN", "Equal to the second row"]}
   answer={2}
-  explanation="There is no previous price, so the simple return is undefined (NaN)."
+  explanation="Without a prior price, a simple return is undefined → NaN."
 />
 
 <Quiz
   id="q3-ffill"
-  question="Biggest risk of reindexing to all business days then immediately ffill closes?"
-  options={["Larger memory", "Fabricating quotes on missing days and poisoning returns/signals", "It always errors", "Sharpe must fall"]}
+  question="Biggest risk of ffill closes immediately after reindexing to a full calendar?"
+  options={["More RAM", "Inventing fake prints that pollute returns and signals", "It always errors", "Sharpe must fall"]}
   answer={1}
-  explanation="Forward-fill pretends halted days still traded."
+  explanation="Forward-fill pretends halted days still printed a trade."
 />
 
 <Quiz
   id="q4-shift"
-  question="Main motive for position = signal.shift(1) on daily bars?"
-  options={["Speed up rolling", "Use last period’s known signal for this period’s position to reduce same-close peeking", "Subtract commissions", "Drop all NaNs"]}
+  question="Main motive for position = signal.shift(1) on daily data?"
+  options={["Faster rolling", "Use the prior known signal for this period’s position", "Auto fees", "Drop all NaNs"]}
   answer={1}
-  explanation="shift(1) is a common timing alignment; it does not guarantee profits."
+  explanation="shift(1) is a common information-timing alignment; it does not guarantee profits."
 />
 
 <Quiz
   id="q5-lookahead"
   question="Using close.shift(-1) > ma as a “today” signal is wrong because?"
-  options={["Syntax error", "It uses future close information (lookahead)", "MA windows must be even", "Correlation becomes zero"]}
+  options={["Syntax error", "It uses future close information (lookahead)", "MA window must be even", "Correlation becomes 0"]}
   answer={1}
-  explanation="shift(-1) points to the future row — a classic peek."
+  explanation="shift(-1) points at the next row — a classic peek."
 />
 
 ## Done when
 
-- `examples/p0/01_pandas_timeseries.py` prints `ASSERTS_OK` locally  
-- You can explain misalignment, ffill, and shift traps  
-- Quizzes and checklist tasks are finished  
+- `examples/p0/01_pandas_timeseries.py` prints `ASSERTS_OK` and writes the PNG
+- You can explain misalignment / ffill / `shift` / the three missing-value trade-offs
+- Quizzes and checklist tasks ex1–ex6 are done
 
 <Summary>
-**Takeaways**: time index, vectorized returns/rolling, asserts, anti-lookahead.  
-**Next**: statistics — mean/variance/quantiles, noisy correlation, multiple-testing false positives.
+**Takeaways**: CSV→DatetimeIndex, align, missing-value trade-offs, rolling plots, asserts, anti-lookahead.  
+**Next**: stats — distributions & IID, p-value misuse, multiple-testing false positives (AFML spirit).
 </Summary>

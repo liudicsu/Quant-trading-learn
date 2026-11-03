@@ -84,13 +84,13 @@
   },
   "about": {
     "title": "About",
-    "lead": "Self-contained quant trading learning site (Batch A scaffold).",
-    "sourceTitle": "Content",
-    "source": "Batch A ships the site scaffold, placeholder outline, one sample lesson, and progress/quiz UX. The researched syllabus replaces the placeholder later.",
+    "lead": "A self-contained quant trading research learning site: concepts, formulas, runnable labs, quizzes, and local progress.",
+    "sourceTitle": "Content & version",
+    "source": "The outline is Curriculum V2 (phases from knowledge dependencies; see docs/CURRICULUM_V2.md). Lessons are bilingual. P0 is fully written; later phases fill in by batch. Published lessons do not require outside sites.",
     "copyrightTitle": "Disclaimer",
-    "copyright": "Not investment advice. No security recommendations. No broker signup or live-order steps.",
+    "copyright": "Learning only — not investment advice. No security tips, broker signup, or live-order tutorials. Labs mostly use synthetic/teaching data.",
     "privacyTitle": "Privacy",
-    "privacy": "No login, no analytics collection. Progress lives in localStorage only.",
+    "privacy": "No login. Progress (lessons, tasks, quizzes) stays in this browser’s localStorage and is never uploaded.",
     "openSource": "Source on GitHub"
   },
   "notFound": {

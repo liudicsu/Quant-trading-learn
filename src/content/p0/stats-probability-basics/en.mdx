@@ -1,6 +1,14 @@
 ## Learning goals
 
-With pandas time series in place, build statistical intuition for return research: mean/variance/quantiles, correlation versus sample noise, and why trying many rules produces false “significance.” If you already know distributions, correlation pitfalls, p-value misuse, and multiple testing, you may test out.
+This lesson (~**8 hours**: 4h concepts + 3h simulation lab + 1h quiz) builds statistical intuition for return research: distributions and **why the IID assumption often fails**, mean/variance/quantiles, correlation versus sample noise, **how p-values get misused** (numeric walk-through), and false positives under 100 random rules. If you already know these topics, you may test out.
+
+**Goals:**
+
+- Explain mean, variance, and quantiles.
+- Separate sample noise from correlation.
+- State multiple-testing false discoveries.
+
+**Must-teach:** IID often fails in finance; correlation ≠ causation and drifts; many trials must discount “significance.” On backtest overfitting and multiple testing, see López de Prado, *Advances in Financial Machine Learning* (Wiley, 2018; **AFML**).
 
 <Callout type="info" title="Learning only">
 Synthetic RNG experiments — not live strategy evaluation and not stock tips.
@@ -8,11 +16,11 @@ Synthetic RNG experiments — not live strategy evaluation and not stock tips.
 
 ## Intuition
 
-- **Mean** centers; **variance/std** spreads. Financial returns are often heavy-tailed, so “mean ± 1 std” is not the whole story.  
-- **Quantiles** (5%/95%) speak about tails without assuming normality.  
-- **Correlation** summarizes linear co-movement; short samples are noisy; rolling correlation drifts.  
-- **IID often fails** in markets: volatility clusters; regimes break.  
-- **Many trials**: among 100 random rules, a few will look great in-sample — that is multiple comparison, not discovery.
+- **Mean** centers; **variance/std** spreads. Financial returns are often heavy-tailed, so “mean ± 1 std” is not the whole story.
+- **Quantiles** (5%/95%) speak about tails without assuming normality.
+- **Correlation** summarizes linear co-movement; short samples are noisy; rolling correlation drifts.
+- **IID often fails** in markets: volatility clusters; regimes break. Textbook p-value formulas that assume IID then **overstate** significance (a theme AFML stresses for financial data).
+- **Many trials**: among 100 random rules, a few look great in-sample — that is multiple comparison, not discovery. Shipping the best in-sample curve is **backtest overfitting** (AFML spirit).
 
 ## Formulas
 
@@ -29,26 +37,84 @@ A teaching Sharpe (zero rf) on daily returns:
 Sharpe ≈ mean(r) / std(r) * sqrt(252)
 </Formula>
 
-## Worked numeric example
+When n=252, the t-statistic mean/(std/sqrt(n)) for “mean = 0” matches that Sharpe sketch numerically — a teaching coincidence for comparison, not a definition identity.
 
-Returns 0.01, -0.02, 0.015: mean ≈ 0.00167; sample variance uses sum of squared deviations over 2; std is the square root.
+## Why read quantiles together with volatility
+
+Means get yanked by a few huge days; variance/std describe dispersion; quantiles answer “how bad is a 5% day?” Honest research reports all three, not a lone Sharpe.
+
+## Worked numeric example (hand calculation)
+
+Returns 0.01, -0.02, 0.015:
+
+- Mean \bar r ≈ 0.001667
+- Sum of squared deviations over 2 → sample variance **var≈0.000358**, std **std≈0.0189**
+
+Script check: `mean=0.001666…`, `var=0.00035833…`, `std=0.018929…`.
+
+## Distributions, histogram, and IID
+
+Synthetic daily returns (numpy seed 42, n=252) are drawn approximately normal — **a teaching convenience, not a market claim**. Real returns often show volatility clustering: large moves beget large moves, breaking IID. Plug IID formulas into backtest metrics and p-values look too pretty.
+
+Full plotting code (from the lab):
+
+```python
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(7.2, 3.6), dpi=120)
+ax.hist(r_a.values, bins=30, color="#3b82f6", edgecolor="white", alpha=0.9)
+ax.axvline(stats["mean"], color="#ef4444", linestyle="--", label=f"mean={stats['mean']:.5f}")
+ax.axvline(stats["q05"], color="#f59e0b", linestyle=":", label=f"q05={stats['q05']:.4f}")
+ax.axvline(stats["q95"], color="#10b981", linestyle=":", label=f"q95={stats['q95']:.4f}")
+ax.set_title("Synthetic daily returns histogram (seed=42)")
+ax.set_xlabel("return")
+ax.set_ylabel("count")
+ax.legend(loc="best", fontsize=8)
+ax.grid(True, alpha=0.25)
+fig.tight_layout()
+fig.savefig("public/p0/returns_hist.png")
+```
+
+![Synthetic daily returns histogram](/p0/returns_hist.png)
+
+## P-value misuse: numeric walk-through
+
+Null H0: mean daily PnL of a random-sign rule is 0.  
+Among **100** random trials, pick the largest |Sharpe|, then compute a two-sided normal-approx p-value — here about **p≈0.0013** with |Sharpe|≈3.22.
+
+Reporting **only that trial** as “p under 0.01, therefore significant” misuses the p-value: the significance budget never paid for searching 100 rules. That is multiple testing / backtest overfitting (AFML). Honest practice at least pre-registers hypotheses, reports trial counts, and uses out-of-sample or combinatorial penalties.
+
+## Complete multiple-testing loop (shown in the lesson)
+
+```python
+rng_mt = np.random.default_rng(7)
+false_hits = 0
+sharpes = []
+for i in range(100):
+    noise = rng_mt.normal(size=n)
+    pos = np.sign(noise)
+    pnl = pos * r_a.values
+    sh = sharpe(pd.Series(pnl))  # mean/std*sqrt(252)
+    sharpes.append(sh)
+    if abs(sh) > 2:
+        false_hits += 1
+print("trials", 100)
+print("false_hits_|Sharpe|>2", false_hits)
+print("max_abs_sharpe", round(max(abs(s) for s in sharpes), 3))
+```
 
 ## Python lab (run locally)
 
-Script: `examples/p0/02_stats_probability.py` (fixed numpy seed, offline).
-
-```python
-import numpy as np, pandas as pd
-rng = np.random.default_rng(42)
-n = 252
-r_a = pd.Series(rng.normal(0.0004, 0.01, n), index=pd.bdate_range("2023-01-02", periods=n))
-r_b = 0.3 * r_a + pd.Series(rng.normal(0, 0.01, n), index=r_a.index)
-# 100 trials: random sign positions; count |Sharpe|>2
-```
+Script: `examples/p0/02_stats_probability.py`.
 
 ### Real run output
 
 ```text
+=== hand_calc three returns ===
+{'mean': 0.0016666666666666663, 'var': 0.00035833333333333333, 'std': 0.018929694486000914}
+
 === summary stats (a) ===
 {'mean': -8.370182923358801e-05, 'var': 8.791401392017147e-05, 'std': 0.009376247326098618, 'q05': -0.01411631978767748, 'q50': -0.0006621647108214935, 'q95': 0.016293006921201513}
 
@@ -60,46 +126,58 @@ rolling_63_corr_tail
 2023-12-18    0.4010
 2023-12-19    0.3811
 Freq: B
+saved_plot public/p0/returns_hist.png
 
 === multiple testing toy ===
 trials 100
-count_|Sharpe|>2 3
-max_abs_sharpe 2.848
-mean_abs_sharpe 0.761
+false_hits_|Sharpe|>2 10
+max_abs_sharpe 3.222
+mean_abs_sharpe 0.854
+
+=== p-value misuse walk-through (best of 100 trials) ===
+H0: mean daily pnl of this random-sign rule is 0
+best_trial_index 2
+best_sharpe -3.2217
+t_stat_mean0 -3.2217
+two_sided_normal_p_approx 0.001274
+misuse_note: a small p on the *selected* best trial is not evidence of a real edge; you already searched 100 rules (multiple testing / backtest overfitting — see AFML, López de Prado 2018).
+iid_note: financial returns often violate IID (volatility clustering); IID-based p-values then overstate significance.
 ```
 
-Full-sample corr ≈ **0.27**, while 63-day rolling corr near the end sits around **0.38–0.40** — correlation drifts. In 100 random-position trials, **3** still clear |Sharpe|>2, with max abs ≈ **2.85**. Reporting only the best trial misleads.
+Full-sample corr ≈ **0.27**, while 63-day rolling corr near the end sits around **0.38–0.40** — correlation drifts. In 100 random-position trials, **10** clear |Sharpe|>2, max abs ≈ **3.22**; the tiny p on that “best” trial does **not** prove a real edge.
 
 ## Common mistakes / pitfalls
 
-1. Treating one lucky in-sample Sharpe as a repeatable edge.  
-2. Assuming IID normality despite clustered volatility.  
-3. Confusing variance with std (different units).  
-4. Estimating correlation on tiny windows without uncertainty.  
+1. Treating one lucky in-sample Sharpe (or tiny p) as a repeatable edge.
+2. Assuming IID normality despite clustered volatility (same warning spirit as AFML).
+3. Confusing variance with std (different units).
+4. Estimating correlation on tiny windows without uncertainty.
 5. Reading correlation as causation.
+6. Searching thousands of parameters and posting only the best curve — classic backtest overfitting.
 
-## Practice
+## Practice (1:1 with the checklist)
 
-1. **ex1** — Histogram `r_a`; match printed quantiles.  
-2. **ex2** — Compare full vs rolling correlation; write three observations.  
-3. **ex3** — Change seed/trial count; watch `|Sharpe|>2` counts.  
-4. **done1** — Deliver the false-positive output plus a short conclusion.
+1. **ex1** — Print mean/var/quantiles and save the histogram PNG; **done when** numbers/figure match the lesson (same seed).
+2. **ex2** — Full-sample vs 63-day rolling correlation; **done when** `full_corr` and the last five rolling values print.
+3. **ex3** — Implement the full 100-trial loop; **done when** trials / false_hits / max_abs_sharpe print.
+4. **ex4** — Demonstrate p-value misuse on one seemingly significant trial; **done when** H0, p-value, and a misuse note are written.
+5. **ex5** — Three sentences linking non-IID to backtest overfitting (AFML spirit); **done when** each mentions clustering, many trials, or overfitting.
 
 ## Quiz
 
 <Quiz id="q1-var" question="How are sample std and sample variance related?" options={["Identical", "Std is the square root of variance", "Variance is the square root of std", "Unrelated"]} answer={1} explanation="s = √(s²)." />
 <Quiz id="q2-iid" question="Why do people say financial returns often are not IID?" options={["Too few sessions", "Volatility clusters and distributions shift across regimes", "Pandas cannot correlate", "Sharpe is illegal"]} answer={1} explanation="Clustering and structural breaks break IID." />
 <Quiz id="q3-corr" question="A correlation of 0.27 means?" options={["Causation", "A noisy summary of linear co-movement", "It will be 0.27 next year", "Risk-free arbitrage"]} answer={1} explanation="Corr ≠ causation; estimates move with sample and window." />
-<Quiz id="q4-multi" question="Seeing |Sharpe|>2 in a few of 100 random strategies mainly shows?" options={["Random strategies work", "False positives appear under multiple testing — do not show only the lucky run", "Sharpe is wrong", "Leverage is required"]} answer={1} explanation="More trials → more extremes by chance." />
-<Quiz id="q5-sharpe" question="The √252 in the teaching Sharpe sketch comes from?" options={["Days in a month", "A rough factor to annualize daily volatility", "A mandatory regulatory formula", "Ticker length"]} answer={1} explanation="Under crude assumptions, volatility scales with the square root of time." />
+<Quiz id="q4-multi" question="Seeing |Sharpe|>2 in several of 100 random strategies mainly shows?" options={["Random strategies work", "False positives appear under multiple testing — do not show only the lucky run", "Sharpe is wrong", "Leverage is required"]} answer={1} explanation="More trials → more extremes by chance (AFML: backtest overfitting)." />
+<Quiz id="q5-pval" question="After searching 100 rules, quoting p=0.001 on the best one is mainly wrong because?" options={["p-values are always invalid", "You did not pay for multiple testing — a tiny p does not prove a shippable edge", "You must switch to monthly data", "Sharpe cannot be negative"]} answer={1} explanation="Selection then testing warps nominal significance." />
 
 ## Done when
 
-- `02_stats_probability.py` runs  
-- You can explain the false-positive demo  
-- Quizzes and tasks complete  
+- `02_stats_probability.py` runs and writes `public/p0/returns_hist.png`
+- You can explain p-value misuse and the false-positive demo (AFML link)
+- Quizzes and tasks ex1–ex5 are done
 
 <Summary>
-**Takeaways**: descriptive stats, noisy correlation, discount many trials.  
-**Next**: basic finance — long/short, leverage, compounding, benchmarks (process, not tips).
+**Takeaways**: quantiles with vol, fragile IID, p-value misuse, discount many trials (AFML).  
+**Next**: basic finance — spot/futures/ETF, long/short & margin, compounding & tracking error (process, not tips).
 </Summary>

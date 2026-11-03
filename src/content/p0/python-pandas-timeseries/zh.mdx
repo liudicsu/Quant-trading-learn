@@ -1,14 +1,22 @@
 ## 学习目标
 
-本课建立量化研究的最小 pandas 时间序列工作流：把 CSV/表变成 `DatetimeIndex`，算收益与滚动统计，并用断言守住可复现输入。程序员若已能独立完成「CSV→DatetimeIndex→pct_change→rolling→画图」，可通过测验跳过。
+本课（约 **7 学时**：概念 3h + 实验 3h + 测验/复盘 1h）建立量化研究的最小 pandas 时间序列工作流：从 CSV 读入并设 `DatetimeIndex`，用 `reindex`/`align` 对齐不同日历，系统处理缺失值（`dropna` / `ffill` / `interpolate` 及取舍），计算 `pct_change` 与 `rolling`，并用 matplotlib 出图。程序员若已能独立完成「CSV→DatetimeIndex→pct_change→rolling→画图」，可通过测验跳过。
+
+**课内目标（与大纲一致）：**
+
+- 熟练 `DatetimeIndex` / `reindex` / `align`。
+- 会 rolling 与缺失处理。
+- 把 OHLC 整理成可复现输入。
+
+**必须教会：** 时间索引是第一公民；错位 = 隐性前瞻；向量化优于行循环；断言与 dtype 检查。
 
 <Callout type="info" title="学习用途 · 非投资建议">
-示例使用**合成离线数据**，只演示语法与陷阱。不构成买卖建议。
+示例使用仓库内 **合成离线 CSV**（`examples/p0/data/synthetic_ohlc.csv`），只演示语法与陷阱。不构成买卖建议。
 </Callout>
 
 ## 直觉：时间索引是第一公民
 
-金融表如果只按「第几行」对齐，就很容易把**明天的价格**不小心接到今天的信号上。时间索引（`DatetimeIndex`）强迫你显式回答：这一行代表哪个交易日的哪一个字段？两个序列合并时，是按日期对齐，还是按位置硬拼？
+金融表如果只按「第几行」对齐，就很容易把**明天的价格**不小心接到今天的信号上。`DatetimeIndex` 强迫你显式回答：这一行代表哪个交易日？两个序列合并时，是按日期对齐，还是按位置硬拼？
 
 **错位 = 隐性前瞻（lookahead）**：例如用「明日收盘」判断「今日该不该持仓」。回测曲线会变漂亮，但研究结论是假的。
 
@@ -34,37 +42,79 @@ MA_t(w) = (P_t + P_(t-1) + … + P_(t−w+1)) / w
 - r_3 = 100.5/101 - 1 ≈ -0.00495
 - MA_3 在第三天：(100+101+100.5)/3 = 100.5
 
-## Python 实验（已本地运行）
+## 1. 从 CSV 读入并设 DatetimeIndex
 
-仓库脚本：`examples/p0/01_pandas_timeseries.py`（合成 OHLC，无网络）。
+仓库已附带小 CSV：`examples/p0/data/synthetic_ohlc.csv`（12 个交易日合成 OHLC）。
 
 ```python
 import pandas as pd
+from pathlib import Path
 
-idx = pd.bdate_range("2024-01-02", periods=8)
-close = pd.Series(
-    [100.0, 101.0, 100.5, 102.0, 101.5, 103.0, 104.0, 103.5],
-    index=idx,
-    name="close",
-)
-ohlc = pd.DataFrame({
-    "open": close.shift(1).fillna(close.iloc[0]),
-    "high": close + 0.5,
-    "low": close - 0.5,
-    "close": close,
-})
-ret = ohlc["close"].pct_change()
-ma3 = ohlc["close"].rolling(3).mean()
-good_signal = (ohlc["close"] > ma3).astype(int)
-position = good_signal.shift(1)
-bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # 故意用未来收盘
+CSV = Path("examples/p0/data/synthetic_ohlc.csv")
+raw = pd.read_csv(CSV)
+ohlc = raw.copy()
+ohlc["date"] = pd.to_datetime(ohlc["date"])
+ohlc = ohlc.set_index("date").sort_index()
+assert isinstance(ohlc.index, pd.DatetimeIndex)
+print(ohlc.head())
 ```
 
-### 实际运行输出（节选）
+## 2. reindex / align 工作实例
+
+两条不完全重合的日历：序列 `a` 用完整收盘；序列 `b` 故意丢掉两天。`join="inner"` 只留交集；`join="outer"` 保留并集并在缺失侧出现 `NaN`。
+
+```python
+a = ohlc["close"].rename("a")
+b = a.drop(a.index[[2, 5]]).rename("b")
+inner = pd.concat([a, b], axis=1, join="inner")
+outer = pd.concat([a, b], axis=1, join="outer")
+```
+
+本课脚本输出：`a_len 12`、`b_len 10`、`inner_rows 10`、`outer_rows 12` 且 `outer_null_b 2`。按行号硬拼会把 2024-01-04 的 `a` 错配到别的 `b`——这就是静默错位。
+
+## 3. 缺失值处理：dropna / ffill / interpolate
+
+在收盘上故意插入两处 `NaN`（iloc 3 与 7），分别用三种方法处理后再算收益均值：
+
+| 方法 | 含义 | 主要代价 |
+| --- | --- | --- |
+| `dropna` | 丢掉缺失日 | 样本变短，滚动窗口对齐改变 |
+| `ffill` | 用前一有效值填 | **发明假报价**（停牌日假装有成交） |
+| `interpolate(method="time")` | 按时间插值 | 发明一条平滑路径，仍不是真实成交 |
+
+脚本打印的均值收益：`dropna≈0.006005`，`ffill≈0.004913`，`interpolate≈0.004909`。没有「唯一正确」填法——要按研究问题选择，并写进数据文档。
+
+## 4. 收益、滚动窗口与作图
+
+```python
+ret = ohlc["close"].pct_change()
+ma3 = ohlc["close"].rolling(3).mean()
+```
+
+`pct_change` **首行为 NaN**；`rolling(3)` 前两行不足以成窗亦为 NaN。脚本把收盘与 MA3 画到 `public/p0/returns_ma.png`，课页通过 `withBasePath` 嵌入（GitHub Pages 的 `basePath` 下也可加载）：
+
+![合成收盘与 3 日均线](/p0/returns_ma.png)
+
+## 5. Lookahead 对照
+
+```python
+good_signal = (ohlc["close"] > ma3).astype(int)
+position = good_signal.shift(1)          # 用上一期已知信号
+bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # 偷看明日收盘
+```
+
+本段合成数据上 `misaligned_days = 4`：有四天「偷看未来」与诚实信号不一致。
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p0/01_pandas_timeseries.py`（依赖 `pandas`、`matplotlib`，无网络）。
+
+### 实际运行输出
 
 ```text
-=== OHLC head ===
+=== OHLC from CSV (DatetimeIndex) ===
              open   high    low  close
+date                                  
 2024-01-02  100.0  100.5   99.5  100.0
 2024-01-03  100.0  101.5  100.5  101.0
 2024-01-04  101.0  101.0  100.0  100.5
@@ -73,9 +123,68 @@ bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # 故意用未来收�
 2024-01-09  101.5  103.5  102.5  103.0
 2024-01-10  103.0  104.5  103.5  104.0
 2024-01-11  104.0  104.0  103.0  103.5
+2024-01-12  103.5  105.5  104.5  105.0
+2024-01-15  105.0  104.7  103.7  104.2
+2024-01-16  104.2  106.5  105.5  106.0
+2024-01-17  106.0  106.0  105.0  105.5
+index_type DatetimeIndex
+
+=== align calendars ===
+a_len 12 b_len 10
+inner_rows 10 inner_nonnull_b 10
+outer_rows 12 outer_null_b 2
+inner_table
+                a      b
+date                    
+2024-01-02  100.0  100.0
+2024-01-03  101.0  101.0
+2024-01-05  102.0  102.0
+2024-01-08  101.5  101.5
+2024-01-10  104.0  104.0
+2024-01-11  103.5  103.5
+2024-01-12  105.0  105.0
+2024-01-15  104.2  104.2
+2024-01-16  106.0  106.0
+2024-01-17  105.5  105.5
+outer_table
+                a      b
+date                    
+2024-01-02  100.0  100.0
+2024-01-03  101.0  101.0
+2024-01-04  100.5    NaN
+2024-01-05  102.0  102.0
+2024-01-08  101.5  101.5
+2024-01-09  103.0    NaN
+2024-01-10  104.0  104.0
+2024-01-11  103.5  103.5
+2024-01-12  105.0  105.0
+2024-01-15  104.2  104.2
+2024-01-16  106.0  106.0
+2024-01-17  105.5  105.5
+
+=== missing-value handling (planted NaN at iloc 3,7) ===
+planted_close
+date
+2024-01-02    100.0
+2024-01-03    101.0
+2024-01-04    100.5
+2024-01-05      NaN
+2024-01-08    101.5
+2024-01-09    103.0
+2024-01-10    104.0
+2024-01-11      NaN
+2024-01-12    105.0
+2024-01-15    104.2
+2024-01-16    106.0
+2024-01-17    105.5
+dropna: n=10 mean_ret=0.006005 n_ret_nonnull=9
+ffill: n=12 mean_ret=0.004913 n_ret_nonnull=11
+interpolate: n=12 mean_ret=0.004909 n_ret_nonnull=11
+tradeoffs: dropna shortens the sample and changes overlapping windows; ffill invents flat prices on missing days (fake prints); time-interpolate invents a smooth path between known prints — neither is 'true' volume.
 
 === returns & MA3 ===
                  ret         ma3
+date                            
 2024-01-02       NaN         NaN
 2024-01-03  0.010000         NaN
 2024-01-04 -0.004950  100.500000
@@ -84,9 +193,15 @@ bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # 故意用未来收�
 2024-01-09  0.014778  102.166667
 2024-01-10  0.009709  102.833333
 2024-01-11 -0.004808  103.500000
+2024-01-12  0.014493  104.166667
+2024-01-15 -0.007619  104.233333
+2024-01-16  0.017274  105.066667
+2024-01-17 -0.004717  105.233333
+saved_plot public/p0/returns_ma.png
 
-=== signals (1=above MA3) ===
+=== signals ===
             good_signal  position_shift1  bad_lookahead
+date                                                   
 2024-01-02            0              NaN              0
 2024-01-03            0              0.0              0
 2024-01-04            0              0.0              1
@@ -94,34 +209,32 @@ bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # 故意用未来收�
 2024-01-08            1              1.0              1
 2024-01-09            1              1.0              1
 2024-01-10            1              1.0              1
-2024-01-11            0              1.0              0
+2024-01-11            0              1.0              1
+2024-01-12            1              0.0              1
+2024-01-15            0              1.0              1
+2024-01-16            1              0.0              1
+2024-01-17            1              1.0              0
+misaligned_days 4
 
 ASSERTS_OK
-misaligned_days 1
 ```
-
-解读：
-
-- `pct_change` **首行为 NaN**——没有「前一日」可比。
-- `good_signal` 用当日收盘相对 MA3；`position_shift1` 把决策推到下一期，避免「收盘才知道的信息吃当日收益」。
-- `bad_lookahead` 用 `shift(-1)` 偷看明日收盘；本段合成数据上有 **1** 天与诚实信号不一致（`misaligned_days 1`）。
-
-三条断言在脚本末尾：索引类型、数值 dtype、首行 NaN。全部通过则打印 `ASSERTS_OK`。
 
 ## 常见错误 / 陷阱
 
-1. **`reindex` 后盲目 `ffill`**：把停牌空档填成「假成交价」，再算收益，等于发明了并不存在的报价。  
-2. **按行号 `merge` 而不是按日期 `align`/`join`**：两个来源的日历不同时会静默错位。  
-3. **行循环改价格却忘记时区/交易日历**：向量化 `pct_change`/`rolling` 更不易漏边界，但仍要检查 `NaN` 位置。  
-4. **信号未 `shift` 就乘当日收益**：经典 lookahead。  
-5. **不写断言**：dtype 变成 object、重复日期索引，错误会拖到很后面才爆。
+1. **`reindex` 后盲目 `ffill`**：把停牌空档填成假成交价，再算收益。
+2. **按行号 merge 而不是按日期 align**：不同日历会静默错位。
+3. **行循环改价格却忘记交易日历**：优先向量化，但仍要检查 `NaN` 位置。
+4. **信号未 `shift` 就乘当日收益**：经典 lookahead。
+5. **不写断言**：dtype 变成 object、重复日期索引，错误拖到很后面才爆。
 
-## 练习（对应课页任务清单）
+## 练习（与任务清单 1:1）
 
-1. **ex1**：用脚本中的假 OHLC 自己重算 `ret` 与 `ma3`，核对输出表。  
-2. **ex2**：保留 `bad_lookahead`，改成更长序列，统计错位天数。  
-3. **ex3**：再加至少一条断言（例如：索引单调、无重复日期）。  
-4. **done1**：整理成可复现小 notebook/脚本，他人克隆后零配置能跑出 `ASSERTS_OK`。
+1. **ex1**：从 `examples/p0/data/synthetic_ohlc.csv` 读入并设 `DatetimeIndex`，打印 head；**完成标准**：索引为 `DatetimeIndex` 且含 open/high/low/close。
+2. **ex2**：对两条不完全重合日历做 `reindex`/`align`；**完成标准**：展示 inner 与 outer 对齐结果各一张表。
+3. **ex3**：对故意缺失的收盘分别用 `dropna` / `ffill` / `interpolate`，对比收益均值；**完成标准**：三列结果并排且能口头说明取舍。
+4. **ex4**：计算 `pct_change` 与 `rolling(3).mean` 并保存图；**完成标准**：本地 PNG 与课内图一致。
+5. **ex5**：构造 lookahead 信号并与 `shift(1)` 仓位对比；**完成标准**：打印 `misaligned_days` 并解释。
+6. **ex6**：至少三条断言（DatetimeIndex、数值 dtype、首行 NaN）；**完成标准**：脚本打印 `ASSERTS_OK`。
 
 ## 测验
 
@@ -167,11 +280,11 @@ misaligned_days 1
 
 ## 完成标准
 
-- 本地跑通 `examples/p0/01_pandas_timeseries.py` 并看到 `ASSERTS_OK`  
-- 能解释错位/ffill/`shift` 三类陷阱  
-- 完成本页 ≥5 题测验与任务清单  
+- 本地跑通 `examples/p0/01_pandas_timeseries.py` 并看到 `ASSERTS_OK` 与 PNG
+- 能解释错位 / ffill / `shift` / 三种缺失处理的取舍
+- 完成本页测验与任务清单（ex1–ex6）
 
 <Summary>
-**要点**：时间索引、向量化收益/滚动、断言、防前瞻。  
-**下一课**：统计与概率——均值方差分位、相关噪声、多重比较假阳性。
+**要点**：CSV→DatetimeIndex、align、缺失取舍、rolling 作图、断言、防前瞻。  
+**下一课**：统计与概率——分布与 IID、p 值误用、多重比较假阳性（AFML 精神）。
 </Summary>

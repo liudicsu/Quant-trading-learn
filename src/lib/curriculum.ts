@@ -89,9 +89,12 @@ const phase_P0_lessons: Lesson[] = [
       { zh: "断言与 dtype 检查。", en: "Asserts and dtype checks." },
     ],
     exercises: [
-      { zh: "假 OHLC 算收益与均线。", en: "Fake OHLC returns+MA." },
-      { zh: "故意错位观察后果。", en: "Deliberate misalignment." },
-      { zh: "三条断言。", en: "Three asserts." },
+      { zh: "CSV→DatetimeIndex。", en: "CSV→DatetimeIndex." },
+      { zh: "reindex/align 错位日历。", en: "reindex/align calendars." },
+      { zh: "缺失：dropna/ffill/interpolate。", en: "Missing: dropna/ffill/interpolate." },
+      { zh: "pct_change+rolling 作图。", en: "pct_change+rolling plot." },
+      { zh: "lookahead vs shift(1)。", en: "lookahead vs shift(1)." },
+      { zh: "三条断言 ASSERTS_OK。", en: "Three asserts ASSERTS_OK." },
     ],
     quizTopics: [
       { zh: "reindex+ffill 危险", en: "reindex+ffill danger" },
@@ -102,14 +105,16 @@ const phase_P0_lessons: Lesson[] = [
     ],
     methodTags: {
       classic: ["JoinQuant W01 pandas", "QuantStart Python stack"],
-      niche: ["XQuant Learning: run first then fill gaps (@_zheergen)"],
+      niche: [],
       frontier: [],
     },
     tasks: [
-      { id: "ex1", text: { zh: "假 OHLC 算收益与均线。", en: "Fake OHLC returns+MA." } },
-      { id: "ex2", text: { zh: "故意错位观察后果。", en: "Deliberate misalignment." } },
-      { id: "ex3", text: { zh: "三条断言。", en: "Three asserts." } },
-      { id: "done1", text: { zh: "可复现小 notebook+断言。", en: "Reproducible mini-notebook+asserts." } },
+      { id: "ex1", text: { zh: "从 examples/p0/data/synthetic_ohlc.csv 读入并设 DatetimeIndex，打印 head；完成标准：索引为 DatetimeIndex 且含 open/high/low/close。", en: "Load examples/p0/data/synthetic_ohlc.csv with DatetimeIndex; done when index is DatetimeIndex with OHLC columns." } },
+      { id: "ex2", text: { zh: "对两条日历不完全重合的序列做 reindex/align，写出对齐后非空行数；完成标准：展示 inner 与 outer 对齐结果各一张表。", en: "reindex/align two misaligned calendars; done when you show both inner and outer alignment tables." } },
+      { id: "ex3", text: { zh: "对故意插入的缺失收盘分别用 dropna / ffill / interpolate，对比收益均值；完成标准：三列结果并排且能口头说明取舍。", en: "Apply dropna/ffill/interpolate to planted missing closes; done when three side-by-side results plus trade-off notes." } },
+      { id: "ex4", text: { zh: "计算 pct_change 与 rolling(3).mean，并保存收益/均线图；完成标准：本地生成与课内一致的 PNG。", en: "Compute pct_change and rolling(3).mean and save the plot; done when PNG matches the lesson figure." } },
+      { id: "ex5", text: { zh: "构造 lookahead 信号并与 shift(1) 仓位对比错位天数；完成标准：打印 misaligned_days 并解释。", en: "Build a lookahead signal vs shift(1) position; done when misaligned_days is printed and explained." } },
+      { id: "ex6", text: { zh: "保留至少三条断言（DatetimeIndex、数值 dtype、首行 NaN）；完成标准：脚本打印 ASSERTS_OK。", en: "Keep ≥3 asserts (DatetimeIndex, numeric dtype, leading NaN); done when script prints ASSERTS_OK." } },
     ],
   },
   {
@@ -134,9 +139,11 @@ const phase_P0_lessons: Lesson[] = [
       { zh: "多次试错需打折显著性。", en: "Many trials discount significance." },
     ],
     exercises: [
-      { zh: "收益直方图与分位。", en: "Return histogram/quantiles." },
+      { zh: "直方图与分位。", en: "Histogram/quantiles." },
       { zh: "滚动 vs 全样本相关。", en: "Rolling vs full-sample corr." },
-      { zh: "100 次随机策略假阳性。", en: "100 random-strategy false positives." },
+      { zh: "100 次多重检验循环。", en: "100-trial multiple-testing loop." },
+      { zh: "p 值误用走读。", en: "p-value misuse walk-through." },
+      { zh: "IID 与回测过拟合三句（AFML）。", en: "IID vs overfitting (AFML) three sentences." },
     ],
     quizTopics: [
       { zh: "标准差与方差", en: "Std vs variance" },
@@ -151,10 +158,11 @@ const phase_P0_lessons: Lesson[] = [
       frontier: [],
     },
     tasks: [
-      { id: "ex1", text: { zh: "收益直方图与分位。", en: "Return histogram/quantiles." } },
-      { id: "ex2", text: { zh: "滚动 vs 全样本相关。", en: "Rolling vs full-sample corr." } },
-      { id: "ex3", text: { zh: "100 次随机策略假阳性。", en: "100 random-strategy false positives." } },
-      { id: "done1", text: { zh: "假阳性模拟+结论。", en: "False-positive sim + write-up." } },
+      { id: "ex1", text: { zh: "打印合成收益的均值/方差/分位并保存直方图 PNG；完成标准：数字与图和课内输出一致（同种子）。", en: "Print mean/var/quantiles and save histogram PNG; done when numbers/figure match the lesson (same seed)." } },
+      { id: "ex2", text: { zh: "计算全样本相关与 63 日滚动相关并对比；完成标准：打印 full_corr 与滚动末五值。", en: "Compute full-sample vs 63-day rolling correlation; done when full_corr and last five rolling values print." } },
+      { id: "ex3", text: { zh: "实现完整 100 次随机仓位多重检验循环并统计 |Sharpe|>2；完成标准：输出 trials/false_hits/max_abs_sharpe。", en: "Implement the full 100-trial random-position loop; done when trials/false_hits/max_abs_sharpe print." } },
+      { id: "ex4", text: { zh: "用一次「看似显著」的单次试验演示 p 值误用；完成标准：写出原假设、p 值与为何不能直接宣称有效。", en: "Show p-value misuse on one seemingly significant trial; done when H0, p-value, and misuse note are written." } },
+      { id: "ex5", text: { zh: "用三句话联系 IID 不成立与回测过拟合风险（参考 AFML 精神）；完成标准：三句都出现「波动聚集/多次试错/过拟合」之一。", en: "Three sentences linking non-IID to backtest overfitting (AFML spirit); done when each mentions clustering, many trials, or overfitting." } },
     ],
   },
   {
@@ -179,8 +187,12 @@ const phase_P0_lessons: Lesson[] = [
       { zh: "本课是研究流程非荐股。", en: "Research process not stock tips." },
     ],
     exercises: [
+      { zh: "现货/期货/ETF 数例。", en: "Spot/futures/ETF numerics." },
+      { zh: "多空 ±2% 损益。", en: "Long/short ±2% P&L." },
+      { zh: "保证金与强平。", en: "Margin & liquidation." },
       { zh: "单利 vs 复利净值。", en: "Simple vs compound NAV." },
-      { zh: "研究市场与基准一段。", en: "Market+benchmark paragraph." },
+      { zh: "跟踪误差。", en: "Tracking error." },
+      { zh: "市场/基准一页纸。", en: "Market/benchmark one-pager." },
     ],
     quizTopics: [
       { zh: "多空与杠杆", en: "Long/short leverage" },
@@ -195,9 +207,12 @@ const phase_P0_lessons: Lesson[] = [
       frontier: [],
     },
     tasks: [
-      { id: "ex1", text: { zh: "单利 vs 复利净值。", en: "Simple vs compound NAV." } },
-      { id: "ex2", text: { zh: "研究市场与基准一段。", en: "Market+benchmark paragraph." } },
-      { id: "done1", text: { zh: "市场/基准一页纸。", en: "Market/benchmark one-pager." } },
+      { id: "ex1", text: { zh: "分别用文字+数例说明现货、期货、ETF 的差异；完成标准：三类各有定义与一个数字例子。", en: "Explain spot vs futures vs ETF with a numeric example each; done when all three have definition+number." } },
+      { id: "ex2", text: { zh: "手算并代码验证多头与空头在 ±2% 价格变动下的损益；完成标准：多空各一行损益表。", en: "Hand-calc and code long vs short P&L for ±2% moves; done when both sides have a P&L row." } },
+      { id: "ex3", text: { zh: "保证金与强平数值例子（含维持保证金）；完成标准：给出初始保证金、价格跌幅触发强平的临界价。", en: "Margin/liquidation numeric example; done when initial margin and liquidation trigger price are stated." } },
+      { id: "ex4", text: { zh: "单利 vs 复利净值对比（跑 03 脚本）；完成标准：终值与课内输出一致。", en: "Simple vs compound NAV via script 03; done when finals match the lesson output." } },
+      { id: "ex5", text: { zh: "构造基准与组合收益，计算跟踪误差；完成标准：打印 TE 年化值并解释含义。", en: "Build benchmark vs portfolio returns and tracking error; done when annualized TE prints with meaning." } },
+      { id: "ex6", text: { zh: "写「市场/基准」一页纸（可投资、可复现、事先指定）；完成标准：含市场、基准、频率、摩擦四节。", en: "Market/benchmark one-pager (investable, reproducible, pre-specified); done with market, benchmark, frequency, frictions." } },
     ],
   },
 ];

@@ -1,3 +1,6 @@
+=== hand_calc three returns ===
+{'mean': 0.0016666666666666663, 'var': 0.00035833333333333333, 'std': 0.018929694486000914}
+
 === summary stats (a) ===
 {'mean': -8.370182923358801e-05, 'var': 8.791401392017147e-05, 'std': 0.009376247326098618, 'q05': -0.01411631978767748, 'q50': -0.0006621647108214935, 'q95': 0.016293006921201513}
 
@@ -9,9 +12,19 @@ rolling_63_corr_tail
 2023-12-18    0.4010
 2023-12-19    0.3811
 Freq: B
+saved_plot public/p0/returns_hist.png
 
 === multiple testing toy ===
 trials 100
-count_|Sharpe|>2 3
-max_abs_sharpe 2.848
-mean_abs_sharpe 0.761
+false_hits_|Sharpe|>2 10
+max_abs_sharpe 3.222
+mean_abs_sharpe 0.854
+
+=== p-value misuse walk-through (best of 100 trials) ===
+H0: mean daily pnl of this random-sign rule is 0
+best_trial_index 2
+best_sharpe -3.2217
+t_stat_mean0 -3.2217
+two_sided_normal_p_approx 0.001274
+misuse_note: a small p on the *selected* best trial is not evidence of a real edge; you already searched 100 rules (multiple testing / backtest overfitting — see AFML, López de Prado 2018).
+iid_note: financial returns often violate IID (volatility clustering); IID-based p-values then overstate significance.

@@ -1,37 +1,85 @@
 ## Learning goals
 
-Build pre-research finance literacy: intuitive differences among spot, futures, and ETFs; how long/short and leverage reshape P&amp;L paths; simple versus compound NAV; and why evaluation needs an **investable, reproducible benchmark**. If you can already explain these cleanly, test out. This lesson teaches **research vocabulary**, not stock tips or order placement.
+This lesson (~**5 hours**: 3h reading + 1.5h writing + 0.5h quiz) builds pre-research finance literacy: separate **spot / futures / ETF** sections, long vs short P&L, a numeric margin and liquidation example, simple vs compound NAV, and benchmarks with **tracking error**. If you already explain these cleanly, you may test out. This is **research-process language**, not stock tips or an order-entry tutorial.
+
+**Goals:**
+
+- Distinguish spot, futures, and ETF intuition.
+- Explain long/short and leverage P&L.
+- Pick a simple benchmark.
+
+**Must-teach:** return and risk travel together (no free lunch); benchmarks must be investable and reproducible; this lesson is process, not tips.
 
 <Callout type="warn" title="Not investment advice">
-No recommendations of names or leverage. The leverage toy ignores financing costs.
+No security or leverage recommendations. Margin/liquidation and leverage toys ignore many real frictions.
 </Callout>
 
-## Intuition
+## 1. Spot
 
-- **Spot** — exposure to the instrument itself (broker books aside); P&amp;L roughly tracks price.  
-- **Futures** — standardized forwards with expiry and margin; extra mechanics versus “buy shares.”  
-- **ETFs** — fund shares on a basket; often used as a **tradable benchmark** proxy.  
-- **Long** benefits when prices rise; **short** when prices fall (locate/borrow frictions exist — awareness only here).  
-- **Leverage** amplifies equity swings; paths hurt more in drawdowns.  
-- **Benchmark** — “alpha” is relative; prefer investable, reproducible benchmarks chosen up front.
+**Definition:** You hold the underlying (or a broker book entry). P&L roughly follows price; usually cash or stock margin — no futures-style expiry.
 
-**No free lunch**: higher expected return usually pairs with risk, cost, or hidden constraints.
+**Numeric example:** Buy 10 shares at 50, exit 51 → P&L = 10×(51−50) = **+10** (`spot_long_pnl 10.0`).
+
+## 2. Futures
+
+**Definition:** Standardized forward contracts with expiry, margin, and mark-to-market; common for hedging and price discovery — more machinery than “buy a share.”
+
+**Numeric example:** 1 contract, multiplier 50, entry 4000 → exit 4010 (long) → P&L = 50×(4010−4000) = **+500** (`futures_long_pnl 500.0`).
+
+## 3. ETFs
+
+**Definition:** Fund shares on a basket; often used as a **tradable benchmark** proxy; still subject to premiums/discounts and tracking error.
+
+**Numeric example:** Buy 20 shares at 100, exit 99 → P&L = 20×(99−100) = **−20** (`etf_long_pnl -20.0`).
+
+## Long vs short P&L (±2%)
+
+Teaching unit: 1 unit at price 100.
+
+| Move | Long P&L | Short P&L |
+| --- | ---: | ---: |
+| +2% (→102) | +2 | −2 |
+| −2% (→98) | −2 | +2 |
+
+Shorts can profit when prices fall in this toy — real borrowing, margin, and squeeze risk still apply.
+
+## Margin and liquidation (numeric)
+
+Toy: notional 100,000; **initial margin** 10% = **10,000**; **maintenance** 7% = **7,000**.  
+Equity ≈ initial margin + P&L; a breach of maintenance is the teaching trigger.
+
+Critical return: (7000 − 10000) / 100000 = **−3%**. If entry is 4000, illustrative liquidation price ≈ **3880**.
+
+Linear mark-to-market toy only — **not** any exchange’s real rulebook.
 
 ## Formulas
 
-Per-period simple return r_t.  
+Single-period simple return r_t.  
 **Compound NAV** from 1:
 
-<Formula label="Compound equity">
+<Formula label="Compound NAV">
 NAV_T = ∏_(t=1)^T (1 + r_t)
 </Formula>
 
-**Arithmetic cumulation (simple-style teaching contrast):** 1 + \sum r_t.  
-**Leverage toy** (no financing): \(NAV_L_T = product (1 + L * r_t)\).
+**Arithmetic cumulation (simple-style sketch):** 1 + sum r_t — for teaching contrast.  
+**Leverage toy** (no financing): product of (1 + L * r_t).  
+**Tracking error (annualized sketch):** std(r_port − r_bench) * sqrt(252).
 
 ## Worked numeric example
 
-Returns +10\% then −10\%: compound finish 1.1 × 0.9 = 0.99. A “zero average return” story misses path dependence.
+Two periods +10%, −10%:
+
+- Compound: 1.1 × 0.9 = 0.99 (lose 1%)
+- Calling the average return “0” hides the path.
+
+## Benchmark and tracking error
+
+A good research benchmark is **investable, reproducible, and pre-specified**. The script builds 63 synthetic days of benchmark vs portfolio and prints:
+
+- `tracking_error_daily ≈ 0.001739`
+- `tracking_error_ann ≈ 0.0276` (~2.8% annualized)
+
+Lower TE means tighter tracking; low TE alone is not a “good strategy.”
 
 ## Python lab (run locally)
 
@@ -43,11 +91,28 @@ rets = pd.Series([0.01, -0.02, 0.015, 0.01, -0.005])
 simple_nav = 1 + rets.cumsum()
 compound_nav = (1 + rets).cumprod()
 lev_nav = (1 + 2.0 * rets).cumprod()  # 2x, no financing
+# See also spot/futures/ETF, long/short, margin, TE blocks in the script
 ```
 
 ### Real run output
 
 ```text
+=== spot / futures / ETF numeric toys ===
+spot_long_pnl 10.0
+futures_long_pnl 500.0
+etf_long_pnl -20.0
+
+=== long vs short P&L at ±2% ===
+move +2%: long_pnl=2.00 short_pnl=-2.00
+move -2%: long_pnl=-2.00 short_pnl=2.00
+
+=== margin & liquidation toy ===
+initial_margin 10000.0
+maintenance_margin 7000.0
+liquidation_return_trigger -0.03
+liquidation_price_ratio_vs_entry 0.97
+if_entry_price_4000_liq_price 3880.0
+
 === simple vs compound NAV ===
        r  simple_nav  compound_nav
 0  0.010       1.010      1.010000
@@ -65,39 +130,50 @@ lev_nav = (1 + 2.0 * rets).cumprod()  # 2x, no financing
 4 -0.005   1.009620  1.018460
 final_unlev 1.00962
 final_lev2 1.01846
+
+=== benchmark & tracking error ===
+active_mean -0.000212
+tracking_error_daily 0.001739
+tracking_error_ann 0.027608
+te_note: annualized TE is std(port - bench)*sqrt(252); lower means tighter benchmark tracking.
 ```
 
-Final unlevered compound NAV ≈ **1.00962**; 2x toy ≈ **1.01846**. Real leverage adds financing, liquidation, and gap risk — **not** a reason to lever up.
+Finals: unlevered compound NAV ≈ **1.00962**; 2x toy ≈ **1.01846**. Real leverage adds financing, liquidation, and gap risk — that gap is **not** a reason to lever up.
 
 ## Common mistakes / pitfalls
 
-1. Treating futures/ETFs as tiny stocks while ignoring expiry, premium/discount, tracking error.  
-2. Discussing shorts without frictions/squeeze asymmetry.  
-3. Mixing simple and compound storytelling in comparisons.  
-4. Choosing benchmarks after seeing results.  
-5. Promoting the teaching leverage toy as a sizing advice.
+1. Treating futures/ETFs as “tiny stocks” while ignoring expiry, premiums, and TE.
+2. Discussing shorts without frictions and squeeze risk.
+3. Advertising compound products with simple arithmetic (or the reverse).
+4. Picking the benchmark after seeing results (data snooping).
+5. Exporting teaching leverage/liquidation toys as position advice.
+6. Reporting mean excess without tracking error.
 
-## Practice
+## Practice (1:1 with the checklist)
 
-1. **ex1** — Change the return path; rebuild simple vs compound tables.  
-2. **ex2** — Write a paragraph: research market + a reproducible benchmark idea (no stock tips).  
-3. **done1** — One-pager: market/benchmark definition, frequency, known frictions.
+1. **ex1** — Explain spot vs futures vs ETF with a numeric example each; **done when** all three have definition+number.
+2. **ex2** — Hand-calc and code long vs short P&L for ±2%; **done when** both sides have a P&L row.
+3. **ex3** — Margin/liquidation numeric example; **done when** initial margin and liquidation trigger price are stated.
+4. **ex4** — Simple vs compound NAV via script 03; **done when** finals match the lesson output.
+5. **ex5** — Benchmark vs portfolio tracking error; **done when** annualized TE prints with meaning.
+6. **ex6** — Market/benchmark one-pager; **done when** it has market, benchmark, frequency, frictions.
 
 ## Quiz
 
-<Quiz id="q1-etf" question="Why are ETFs often used as benchmark proxies in research?" options={["Zero tracking error", "They often give tradable, reproducible basket exposure", "Regulators allow only one benchmark", "ETFs cannot be shorted"]} answer={1} explanation="Investability/reproducibility matter; tracking error still exists." />
-<Quiz id="q2-short" question="If price falls, a short position (teaching intuition) usually?" options={["Must liquidate", "May profit (frictions/risk remain)", "Matches long P&amp;L", "Is illegal"]} answer={1} explanation="Shorts benefit from declines in the basic story, with real-world frictions." />
-<Quiz id="q3-lev" question="What important reality does the 2x toy omit?" options={["Calendars", "Financing, liquidation, gaps", "Pandas version", "Compounding definition"]} answer={1} explanation="The toy only multiplies by L." />
-<Quiz id="q4-comp" question="After +10% then −10%, compound NAV equals?" options={["1.00", "0.99", "1.01", "1.10"]} answer={1} explanation="1.1×0.9=0.99." />
-<Quiz id="q5-bench" question="A good research benchmark should primarily be?" options={["Hard to beat after the fact", "Investable, reproducible, pre-specified", "Zero volatility", "A single stock"]} answer={1} explanation="Pre-commitment and reproducibility keep “alpha” honest." />
+<Quiz id="q1-etf" question="Why do researchers often use ETFs as benchmark proxies?" options={["Zero tracking error forever", "They often give a tradable, reproducible basket exposure", "Regulators allow only one benchmark", "ETFs cannot be shorted"]} answer={1} explanation="Investability and reproducibility matter; TE and other frictions remain." />
+<Quiz id="q2-short" question="When prices fall, a short position in the teaching toy usually?" options={["Always liquidates", "May profit (frictions and risks remain)", "Matches long P&L", "Is illegal"]} answer={1} explanation="Shorts benefit from declines in the toy; real borrow and tail risks still exist." />
+<Quiz id="q3-lev" question="What important reality does the 2x toy omit?" options={["Calendars", "Financing, liquidation, gaps, and more", "Pandas version", "The definition of compounding"]} answer={1} explanation="The toy only multiplies by L." />
+<Quiz id="q4-comp" question="Compound final value after +10% then −10%?" options={["1.00", "0.99", "1.01", "1.10"]} answer={1} explanation="1.1×0.9=0.99." />
+<Quiz id="q5-bench" question="A good research benchmark should primarily be?" options={["Hard to beat after the fact", "Investable, reproducible, and pre-specified", "Zero volatility", "A single stock"]} answer={1} explanation="Pre-specification and reproducibility keep “excess” honest." />
+<Quiz id="q6-te" question="Annualized TE ≈ std(r_p−r_b)×√252 measures?" options={["How high absolute returns are", "Volatility of active returns vs the benchmark", "Total commissions", "Margin ratio"]} answer={1} explanation="TE is about deviation volatility, not return level." />
 
 ## Done when
 
-- `03_basic_finance.py` runs  
-- You can explain spot/futures/ETF, long/short, leverage, compounding, benchmarks  
-- One-pager + quizzes done  
+- `03_basic_finance.py` runs
+- You can separately explain spot/futures/ETF, long/short, margin/liquidation, compounding, benchmark & TE
+- One-pager, quizzes, and tasks ex1–ex6 are done
 
 <Summary>
-**Takeaways**: instrument intuition, compound paths, leverage is not free, benchmark discipline.  
-**End of P0**: three test-out lessons; next is P1 market language & measurement.
+**Takeaways**: three instrument sections, long/short & margin numerics, compounding paths, TE and benchmark discipline.  
+**P0 wrap**: three test-out lessons; next is P1 market language & measurement.
 </Summary>

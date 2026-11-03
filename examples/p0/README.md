@@ -1,11 +1,17 @@
-# P0 lab scripts
+# P0 labs
 
-Offline synthetic demos for foundations lessons. Learning only — not investment advice.
+Offline synthetic examples for Batch P0. Learning only — not investment advice.
 
-| Script | Lesson | Run |
-| --- | --- | --- |
-| `01_pandas_timeseries.py` | python-pandas-timeseries | `python3 01_pandas_timeseries.py` |
-| `02_stats_probability.py` | stats-probability-basics | `python3 02_stats_probability.py` |
-| `03_basic_finance.py` | basic-finance-markets | `python3 03_basic_finance.py` |
+| Script | Writes |
+| --- | --- |
+| `01_pandas_timeseries.py` | reads `data/synthetic_ohlc.csv`; `public/p0/returns_ma.png`; stdout → `01_pandas_timeseries.out` |
+| `02_stats_probability.py` | `public/p0/returns_hist.png`; stdout → `02_stats_probability.out` |
+| `03_basic_finance.py` | stdout → `03_basic_finance.out` |
 
-Outputs checked into `*.out` for lesson paste reproducibility.
+```bash
+python examples/p0/01_pandas_timeseries.py | tee examples/p0/01_pandas_timeseries.out
+python examples/p0/02_stats_probability.py | tee examples/p0/02_stats_probability.out
+python examples/p0/03_basic_finance.py | tee examples/p0/03_basic_finance.out
+```
+
+Requires `pandas`, `numpy`, `matplotlib`.

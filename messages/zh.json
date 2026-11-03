@@ -84,13 +84,13 @@
   },
   "about": {
     "title": "关于",
-    "lead": "自包含量化交易学习站（Batch A 脚手架）。",
-    "sourceTitle": "内容说明",
-    "source": "Batch A 仅交付站点脚手架、占位大纲、一节示例课与进度/测验组件。正式课程大纲待研究文档审核后替换。",
+    "lead": "自包含的量化交易研究学习站：概念、公式、可运行示例、测验与本地进度。",
+    "sourceTitle": "内容与版本",
+    "source": "大纲为 Curriculum V2（阶段由知识依赖导出，见 docs/CURRICULUM_V2.md）。站点实现中英双语课稿；P0 已写满，后续阶段按批次补正文。不依赖外站也能学完已发布课。",
     "copyrightTitle": "免责声明",
-    "copyright": "本站不构成投资建议，不推荐具体证券，不提供券商开户或实盘下单步骤。",
+    "copyright": "学习用途，非投资建议。不推荐具体证券，不提供券商开户或实盘下单教程。示例多为合成/教学数据。",
     "privacyTitle": "隐私",
-    "privacy": "不需要登录，不收集数据。进度只保存在浏览器 localStorage。",
+    "privacy": "无需登录。学习进度（完成课、任务、测验）仅保存在本浏览器 localStorage，不会上传。",
     "openSource": "源码开源于 GitHub"
   },
   "notFound": {
