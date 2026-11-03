@@ -1,9 +1,137 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**5 hours**: 2h concepts + 2.5h exercises + 0.5h quiz) builds trading-research vocabulary: hypothesis→signal→risk→attribution, **Alpha / Beta**, market frictions, and CSV closes → returns → NAV. Prereq: `basic-finance-markets`.
+
+**Goals:** three-sentence research goal; distinguish Alpha/Beta; list frictions.
+
+**Must-teach:** the main objective is **constrained risk-adjusted performance**; a programmer’s edge is research engineering; strategies must be reproducible.
+
+<Callout type="info" title="Learning only — not investment advice">
+Synthetic offline data. Not trading advice.
 </Callout>
 
-## For now
+## Intuition: the research chain
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+A defensible research statement usually is:
+
+1. **Hypothesis** (falsifiable) → 2. **Signal** (clear information time) → 3. **Risk/constraints** → 4. **Attribution** (vs which benchmark, costs deducted?).
+
+A programmer’s edge is often turning that chain into a **versioned, reproducible** pipeline—not a one-off clever formula.
+
+## Alpha and Beta (numeric example)
+
+**Beta:** co-movement with the benchmark.  
+**Alpha:** residual mean after subtracting Beta×benchmark (teaching annualization often ×252).
+
+The lab uses a known DGP: `true_alpha_daily=0.0001`, `true_beta=1.2`, `n=251`, `seed=11`, `Rf=0`. Estimates: `beta_hat≈1.22`, `alpha_hat_ann≈0.084` (sample noise ≠ exact truth).
+
+<Formula label="Teaching OLS">
+beta = cov(r, r_m) / var(r_m);  alpha_d = mean(r) − beta * mean(r_m)
+</Formula>
+
+**Look-ahead risk:** OLS uses aligned contemporaneous returns; do not sneak `shift(-1)` prices into the signal before talking about Alpha.
+
+## Friction checklist
+
+At least five (the script prints six): bid-ask spread, commissions, slippage/impact, borrow/financing, delayed fills, taxes (venue-dependent). Gross-only stories that ignore frictions are dishonest — the last P1 lesson quantifies this.
+
+## Three-sentence research goal (template)
+
+The script fills a reproducible template: **market/sample → constraints & annualization → success criteria (net Sharpe/drawdown, frozen OOS)**. Goals must be testable, not merely “sound smart.”
+
+## CSV→returns→NAV
+
+Data: `examples/p1/data/synthetic_ohlc_ba.csv` (generation seed 11, n=252).
+
+```python
+raw = pd.read_csv(CSV, parse_dates=["date"]).set_index("date")
+ret = raw["close"].pct_change()
+nav = (1 + ret.fillna(0)).cumprod()  # day-1 fill 0 only for a teaching NAV path
+```
+
+Parameters: `Rf_daily=0`. Final NAV ≈ **1.106**.
+
+## Python lab (run locally)
+
+Script: `examples/p1/01_markets_language.py`.
+
+### Real run output
+
+```text
+=== CSV→returns→NAV ===
+n_rows 252
+params: Rf_daily=0; NAV starts at 1 on first row (ret filled 0 for day-1 only for NAV path)
+                 close       ret       nav
+date                                      
+2023-01-02  100.071031       NaN  1.000000
+2023-01-03  101.733909  0.016617  1.016617
+2023-01-04  103.259577  0.014997  1.031863
+2023-01-05  102.658226 -0.005824  1.025854
+2023-01-06  102.321955 -0.003276  1.022493
+...
+                 close       ret       nav
+date                                      
+2023-12-15  108.491293  0.008687  1.084143
+2023-12-18  109.748834  0.011591  1.096709
+2023-12-19  110.720976  0.008858  1.106424
+final_nav 1.106424
+
+=== Alpha/Beta toy (known DGP) ===
+params: true_alpha_daily=0.0001 true_beta=1.2 n= 251 seed=11 Rf=0
+beta_hat 1.2206
+alpha_hat_daily 0.000334
+alpha_hat_ann_252x 0.0841
+note: Alpha = residual mean after beta×benchmark; Beta = co-movement with benchmark.
+lookahead_flag: none — OLS uses contemporaneous aligned returns only; do not shift(-1) prices into signals.
+
+=== friction checklist (≥5) ===
+1. bid-ask spread
+2. commissions / fees
+3. slippage / market impact
+4. borrow / financing costs
+5. latency / delayed fills
+6. taxes / stamp duties (venue-dependent)
+
+=== three-sentence research goal (template filled) ===
+GOAL: On synthetic daily equity-like closes (n=252), test whether a pre-registered rule improves constrained risk-adjusted performance vs a buy-and-hold benchmark after costs.
+CONSTRAINTS: Max 100% gross exposure; declare Rf=0 and √252 annualization; no look-ahead fills.
+SUCCESS: Net Sharpe and max drawdown beat the benchmark on a frozen hold-out block — reproducible from seed+CSV.
+ASSERTS_OK
+```
+
+## Common mistakes / pitfalls
+
+1. Targeting high absolute return without constraints or drawdown.  
+2. Calling Beta exposure “Alpha.”  
+3. Claiming live-ready without a friction list.  
+4. Non-reproducible research (no seed/CSV/version).  
+5. Defining today’s signal with future returns (lookahead).
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — CSV→returns→NAV; **done when** `final_nav` matches the lesson (same CSV).  
+2. **ex2** — Write your three-sentence goal; **done when** it has market/constraints/success.  
+3. **ex3** — Friction list ≥5; **done when** each has a one-line definition.  
+4. **ex4** — Reproduce the Alpha/Beta toy and report `beta_hat`; **done when** seed/n/Rf are stated.  
+5. **ex5** — Explain constrained risk-adjusted performance as the main goal; **done when** ≥3 sentences mention constraints and a benchmark.
+
+## Quiz
+
+<Quiz id="q1-ab" question="In the teaching sense, Alpha is closest to?" options={["Co-movement with the benchmark", "Residual performance after Beta×benchmark", "Always-positive return", "Fees"]} answer={1} explanation="Alpha is residual mean after benchmark risk." />
+<Quiz id="q2-beta" question="Beta mainly describes?" options={["The risk-free rate", "Strength of co-movement with the benchmark", "Max drawdown", "Win rate"]} answer={1} explanation="Beta comes from co-movement with benchmark returns." />
+<Quiz id="q3-goal" question="A good research goal should primarily be?" options={["Complex-sounding", "Testable, with constraints and success criteria", "Guaranteed profit", "Daily-frequency only"]} answer={1} explanation="Falsifiability/testability is research discipline." />
+<Quiz id="q4-fric" question="Which is usually a market friction?" options={["Benchmark name", "Bid-ask spread and slippage", "DatetimeIndex", "√252 in Sharpe"]} answer={1} explanation="Spread/slippage are execution frictions." />
+<Quiz id="q5-repro" question="Reproducibility first requires?" options={["NAV screenshots only", "Fixed data version/seed and code", "Hidden parameters", "Gross returns only"]} answer={1} explanation="Others must rebuild the same outputs from the same inputs." />
+
+## Done when
+
+- `01_markets_language.py` runs  
+- Three-sentence goal + NAV path + friction list  
+- Quizzes and tasks complete  
+
+**Sources:** classic — Canvas m1; QuantStart SAT process. niche — Awesome Systematic Trading orientation (@bkdgiffug/@silvanrec) **「待核验」** (external pointer not re-verified in this repo).
+
+<Summary>
+**Takeaways**: research-chain language, Alpha/Beta, frictions, reproducible NAV.  
+**Next**: microstructure & orders — mid, market-buy bps, fill timing, cost sheet.
+</Summary>

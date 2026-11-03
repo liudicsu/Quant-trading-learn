@@ -1,9 +1,117 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**7 hours**: 3h concepts + 3h exercises + 1h quiz) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
+
+**Goals:** hand-calc mid and market-buy bps; write a fill/cost sheet; compare close vs next-open (and shift) narratives.
+
+**Must-teach:** mid=(bid+ask)/2; market buys lean ask; impact/latency intuition only — **no HFT recipes**.
+
+<Callout type="warn" title="Learning only">
+Synthetic quotes. Not a broker manual or HFT tutorial.
 </Callout>
 
-## For now
+## mid and market-buy (hand calc)
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+Given bid=99.90, ask=100.10:
+
+- mid = (99.90+100.10)/2 = **100.0**
+- teaching market-buy fill = ask = **100.10**
+- cost vs mid = (100.10/100 − 1)×10000 = **10 bps** (half-spread)
+
+<Formula label="Mid">
+mid = (bid + ask) / 2
+</Formula>
+
+## Half-spread on the CSV
+
+On `synthetic_ohlc_ba.csv` (n=252): mean half-spread ≈ **6.22 bps**, median ≈ **6.36 bps**.
+
+## Fill timing: same-bar look-ahead vs honest
+
+Parameters: signal = close > MA5.
+
+| Narrative | Meaning | Lesson NAV |
+| --- | --- | ---: |
+| optimistic same-bar | today’s close in signal **and** today’s close return (**LOOK-AHEAD**) | ≈ **2.39** |
+| honest shift(1) | trade next period’s return | ≈ **1.04** |
+| honest next-open | fill next open, earn open→close | ≈ **1.04** |
+
+Same-bar zero-cost fills inflate curves — ban them explicitly in backtests.
+
+## Cost assumption one-pager (toy numbers)
+
+- Half-spread 10 bps; one-way slippage 5; commission 1
+- Round-trip ≈ **32 bps**
+- Impact/latency: larger size → more impact; delay → mid moves against you — **stop here**; no HFT parameter sheet.
+
+## Python lab (run locally)
+
+Script: `examples/p1/02_microstructure_orders.py`.
+
+### Real run output
+
+```text
+=== hand mid & market-buy bps ===
+params: bid=99.90 ask=100.10; market buy fill=ask; bps vs mid
+mid 100.0
+market_buy_fill 100.1
+buy_cost_bps_vs_mid 10.0
+half_spread_bps 10.0
+teach: mid=(bid+ask)/2; market buys lean ask (pay the spread).
+
+=== CSV half-spread stats (n=252) ===
+mean_half_spread_bps 6.2187
+median_half_spread_bps 6.3641
+
+=== fill timing: same-bar vs honest ===
+params: signal=close>MA5; optimistic=same-bar (LOOK-AHEAD); honest_shift=signal.shift(1); honest_next_open=fill next open
+nav_optimistic_same_bar 2.392529
+nav_honest_shift1 1.036162
+nav_honest_next_open 1.036162
+lookahead_warning: same-bar zero-cost fills that reuse today's close in signal AND return are over-optimistic.
+
+=== cost assumption one-pager (toy numbers) ===
+venue: synthetic equity-like
+half_spread_bps_assumed 10
+slippage_bps_per_trade 5
+commission_bps 1
+round_trip_bps 32
+impact_latency: intuition only — larger size → more impact; delay → mid moves against you. No HFT recipe.
+ASSERTS_OK
+```
+
+## Common mistakes / pitfalls
+
+1. Treating mid as the market-buy fill.
+2. Same-bar signal×return while claiming no look-ahead.
+3. Pretending the spread is “not a cost.”
+4. Treating toy bps as a real exchange schedule.
+5. Asking for / designing HFT recipes (out of scope).
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — Hand mid and market-buy bps; **done when** both numbers are written.
+2. **ex2** — Cost assumption one-pager; **done when** half-spread/slippage/commission/round-trip appear.
+3. **ex3** — Contrast same-bar vs shift(1)/next-open in prose; **done when** LOOK-AHEAD is named.
+4. **ex4** — Run the script; **done when** optimistic vs honest NAVs match the lesson.
+5. **ex5** — Why impact/latency stay intuitive only; **done when** ≥2 sentences refuse an HFT recipe.
+
+## Quiz
+
+<Quiz id="q1-mid" question="Definition of mid?" options={["Equal to ask", "(bid+ask)/2", "Prior close", "Open"]} answer={1} explanation="Mid is the average of bid and ask." />
+<Quiz id="q2-mkt" question="A teaching market buy leans toward?" options={["bid", "ask", "Prior close", "No fill"]} answer={1} explanation="Aggressive buys typically lift the ask." />
+<Quiz id="q3-spr" question="Half-spread vs mid is?" options={["Income", "A hidden trading cost", "Alpha", "Beta"]} answer={1} explanation="Crossing the spread is a cost." />
+<Quiz id="q4-lh" question="Main problem with same-bar close signal earning close return?" options={["Too slow", "LOOK-AHEAD / over-optimism", "Sharpe formula wrong", "Futures required"]} answer={1} explanation="Information time overlaps the return window." />
+<Quiz id="q5-hft" question="This lesson’s stance on impact/latency?" options={["Ship HFT parameters", "Intuition only — no HFT recipes", "Ignore them", "Same as commissions"]} answer={1} explanation="Course boundary: intuition, not recipes." />
+
+## Done when
+
+- Cost one-pager + script + quizzes
+- You can explain mid / market side / same-bar look-ahead
+
+**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer). niche — @sera00111 crypto venue frictions **「待核验」**.
+
+<Summary>
+**Takeaways**: mid, market-buy bps, honest fill timing, cost sheet.  
+**Next**: returns, vol & correlation — annualization, Sharpe, MDD, rolling plots.
+</Summary>

@@ -1,0 +1,39 @@
+=== CSV→returns→NAV ===
+n_rows 252
+params: Rf_daily=0; NAV starts at 1 on first row (ret filled 0 for day-1 only for NAV path)
+                 close       ret       nav
+date                                      
+2023-01-02  100.071031       NaN  1.000000
+2023-01-03  101.733909  0.016617  1.016617
+2023-01-04  103.259577  0.014997  1.031863
+2023-01-05  102.658226 -0.005824  1.025854
+2023-01-06  102.321955 -0.003276  1.022493
+...
+                 close       ret       nav
+date                                      
+2023-12-15  108.491293  0.008687  1.084143
+2023-12-18  109.748834  0.011591  1.096709
+2023-12-19  110.720976  0.008858  1.106424
+final_nav 1.106424
+
+=== Alpha/Beta toy (known DGP) ===
+params: true_alpha_daily=0.0001 true_beta=1.2 n= 251 seed=11 Rf=0
+beta_hat 1.2206
+alpha_hat_daily 0.000334
+alpha_hat_ann_252x 0.0841
+note: Alpha = residual mean after beta×benchmark; Beta = co-movement with benchmark.
+lookahead_flag: none — OLS uses contemporaneous aligned returns only; do not shift(-1) prices into signals.
+
+=== friction checklist (≥5) ===
+1. bid-ask spread
+2. commissions / fees
+3. slippage / market impact
+4. borrow / financing costs
+5. latency / delayed fills
+6. taxes / stamp duties (venue-dependent)
+
+=== three-sentence research goal (template filled) ===
+GOAL: On synthetic daily equity-like closes (n=252), test whether a pre-registered rule improves constrained risk-adjusted performance vs a buy-and-hold benchmark after costs.
+CONSTRAINTS: Max 100% gross exposure; declare Rf=0 and √252 annualization; no look-ahead fills.
+SUCCESS: Net Sharpe and max drawdown beat the benchmark on a frozen hold-out block — reproducible from seed+CSV.
+ASSERTS_OK

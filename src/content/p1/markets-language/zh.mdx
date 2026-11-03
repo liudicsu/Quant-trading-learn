@@ -1,9 +1,137 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **5 学时**：概念 2h + 练习 2.5h + 测验 0.5h）建立交易研究语言：假设→信号→风险→归因，区分 **Alpha / Beta**，列出市场摩擦，并把 CSV 收盘变成收益与净值。前置：`basic-finance-markets`。
+
+**课内目标：** 三句话研究目标；区分 Alpha/Beta；列出市场摩擦。
+
+**必须教会：** 主目标是**约束下的风险调整后表现**；程序员优势在工程化研究链；策略必须可复现。
+
+<Callout type="info" title="学习用途 · 非投资建议">
+合成离线数据。不构成买卖建议。
 </Callout>
 
-## 现阶段
+## 直觉：研究链
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+一条可辩护的研究陈述通常是：
+
+1. **假设**（可证伪）→ 2. **信号**（信息时点明确）→ 3. **风险/约束** → 4. **归因**（相对何基准、是否扣成本）。
+
+程序员的优势往往不在「灵光一现的公式」，而在把上述链条做成**可版本化、可复现**的流水线。
+
+## Alpha 与 Beta（数值例子）
+
+**Beta**：与基准共变的部分。  
+**Alpha**：扣掉 Beta×基准之后的残差均值（教学里常年化为 ×252）。
+
+脚本用已知 DGP：`true_alpha_daily=0.0001`，`true_beta=1.2`，`n=251`，`seed=11`，`Rf=0`。估计得到 `beta_hat≈1.22`，`alpha_hat_ann≈0.084`（样本噪声下不会精确等于真值）。
+
+<Formula label="教学 OLS">
+beta = cov(r, r_m) / var(r_m);  alpha_d = mean(r) − beta * mean(r_m)
+</Formula>
+
+**前瞻风险：** OLS 用的是已对齐的同期收益；不要把 `shift(-1)` 的价格偷进信号再谈 Alpha。
+
+## 市场摩擦清单
+
+至少五条（脚本打印了六条）：买卖价差、佣金、滑点/冲击、借券/融资、延迟成交、税费（视市场）。忽略摩擦的「毛收益」叙事不诚实——P1 末课会量化。
+
+## 三句话研究目标（模板）
+
+脚本给出可复现模板：**市场/样本 → 约束与年化约定 → 成功标准（净夏普/回撤、冻结样本外）**。目标必须可检验，不能是「看起来聪明」。
+
+## CSV→收益→净值
+
+数据：`examples/p1/data/synthetic_ohlc_ba.csv`（生成种子 11，n=252）。
+
+```python
+raw = pd.read_csv(CSV, parse_dates=["date"]).set_index("date")
+ret = raw["close"].pct_change()
+nav = (1 + ret.fillna(0)).cumprod()  # day-1 fill 0 仅为净值路径教学
+```
+
+参数：`Rf_daily=0`。终值净值约 **1.106**。
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p1/01_markets_language.py`。
+
+### 实际运行输出
+
+```text
+=== CSV→returns→NAV ===
+n_rows 252
+params: Rf_daily=0; NAV starts at 1 on first row (ret filled 0 for day-1 only for NAV path)
+                 close       ret       nav
+date                                      
+2023-01-02  100.071031       NaN  1.000000
+2023-01-03  101.733909  0.016617  1.016617
+2023-01-04  103.259577  0.014997  1.031863
+2023-01-05  102.658226 -0.005824  1.025854
+2023-01-06  102.321955 -0.003276  1.022493
+...
+                 close       ret       nav
+date                                      
+2023-12-15  108.491293  0.008687  1.084143
+2023-12-18  109.748834  0.011591  1.096709
+2023-12-19  110.720976  0.008858  1.106424
+final_nav 1.106424
+
+=== Alpha/Beta toy (known DGP) ===
+params: true_alpha_daily=0.0001 true_beta=1.2 n= 251 seed=11 Rf=0
+beta_hat 1.2206
+alpha_hat_daily 0.000334
+alpha_hat_ann_252x 0.0841
+note: Alpha = residual mean after beta×benchmark; Beta = co-movement with benchmark.
+lookahead_flag: none — OLS uses contemporaneous aligned returns only; do not shift(-1) prices into signals.
+
+=== friction checklist (≥5) ===
+1. bid-ask spread
+2. commissions / fees
+3. slippage / market impact
+4. borrow / financing costs
+5. latency / delayed fills
+6. taxes / stamp duties (venue-dependent)
+
+=== three-sentence research goal (template filled) ===
+GOAL: On synthetic daily equity-like closes (n=252), test whether a pre-registered rule improves constrained risk-adjusted performance vs a buy-and-hold benchmark after costs.
+CONSTRAINTS: Max 100% gross exposure; declare Rf=0 and √252 annualization; no look-ahead fills.
+SUCCESS: Net Sharpe and max drawdown beat the benchmark on a frozen hold-out block — reproducible from seed+CSV.
+ASSERTS_OK
+```
+
+## 常见错误 / 陷阱
+
+1. 把「绝对收益高」当成目标，却不谈约束与回撤。  
+2. 把 Beta 暴露说成 Alpha。  
+3. 不写摩擦清单就宣称可实盘。  
+4. 研究不可复现（无种子、无 CSV、无版本）。  
+5. 用未来收益定义今日信号（lookahead）。
+
+## 练习（与任务清单 1:1）
+
+1. **ex1**：从 CSV 计算收益与净值；**完成标准**：打印 `final_nav` 与课内一致（同 CSV）。  
+2. **ex2**：写出你的三句话研究目标；**完成标准**：含市场/约束/成功标准三句。  
+3. **ex3**：摩擦清单 ≥5；**完成标准**：每条一句话定义。  
+4. **ex4**：复现 Alpha/Beta 玩具并报告 `beta_hat`；**完成标准**：参数（seed/n/Rf）写明。  
+5. **ex5**：说明为何主目标是约束下风险调整后表现；**完成标准**：≥3 句且提到约束与基准。
+
+## 测验
+
+<Quiz id="q1-ab" question="教学语境下 Alpha 更接近？" options={["与基准共变的部分", "扣掉 Beta×基准后的残差表现", "永远为正的收益", "手续费"]} answer={1} explanation="Alpha 是相对基准风险调整后的残差均值叙事。" />
+<Quiz id="q2-beta" question="Beta 主要描述？" options={["无风险利率", "与基准的共变强度", "最大回撤", "胜率"]} answer={1} explanation="Beta 来自与基准收益的共变。" />
+<Quiz id="q3-goal" question="好的研究目标应优先满足？" options={["听起来复杂", "可检验、含约束与成功标准", "保证盈利", "必须日频"]} answer={1} explanation="可证伪/可检验是研究纪律。" />
+<Quiz id="q4-fric" question="下列哪项通常算市场摩擦？" options={["Benchmark 名称", "买卖价差与滑点", "DatetimeIndex", "夏普公式里的 √252"]} answer={1} explanation="价差/滑点等是执行摩擦。" />
+<Quiz id="q5-repro" question="策略可复现首先需要？" options={["只截图净值", "固定数据版本/种子与代码", "隐藏参数", "只报毛收益"]} answer={1} explanation="他人能从同样输入得到同样输出。" />
+
+## 完成标准
+
+- 跑通 `01_markets_language.py`  
+- 三句话目标 + 净值路径 + 摩擦清单  
+- 完成测验与任务  
+
+**来源：** classic — Canvas m1；QuantStart SAT process。niche — Awesome Systematic Trading orientation（@bkdgiffug/@silvanrec）**「待核验」**（外链指向未在本仓库复验）。
+
+<Summary>
+**要点**：研究链语言、Alpha/Beta、摩擦、可复现净值。  
+**下一课**：微观结构与订单——mid、市价买 bps、成交时点与成本假设。
+</Summary>

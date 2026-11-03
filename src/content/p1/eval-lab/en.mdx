@@ -1,9 +1,99 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**5 hours**: 1.5h concepts + 3h lab + 0.5h quiz) builds a **net-of-cost** metric table: toy MA signal vs buy-and-hold; slippage bumps; why win rate ≠ a good strategy. Prereqs: `returns-vol-corr`, `microstructure-orders`.
+
+**Goals:** build a net-of-cost table; explain win rate ≠ good strategy.
+
+**Must-teach:** gross-only reporting is dishonest; turnover amplifies costs.
+
+<Callout type="warn" title="Not investment advice">
+Toy signal — not a trade recommendation.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- n≈251; MA window **10**; `position = signal.shift(1)` (anti look-ahead)
+- Rf=0; ann √252
+- One-way cost levels: **0 / 5 / 15 bps**
+- Win-rate trap demo: seed=3, n=1000
+
+## Net-of-cost table (highlights)
+
+Buy-and-hold gross Sharpe≈0.66; toy MA net Sharpe≈0.39 at 0 bps, ≈0.19 at 5 bps, and **turns negative at 15 bps**. Annualized one-way turns ≈ **49** — costs scale with turnover.
+
+## Win-rate trap
+
+Seed=3 toy path: win rate≈**0.91** but **negative** mean return. High win rate can hide rare large losses.
+
+## Slippage bump experiment
+
+Same signal, higher one-way bps → worse net NAV/Sharpe. Always report the cost assumption beside the metrics.
+
+## Python lab (run locally)
+
+Script: `examples/p1/04_eval_lab.py`.
+
+### Real run output
+
+```text
+=== parameters ===
+n 251
+MA_window 10
+position = signal.shift(1)  # anti look-ahead
+Rf_daily 0.0 ann_sqrt252 15.874508
+one_way_cost_bps_levels [0, 5, 15]
+
+=== metric comparison table ===
+                    ann_ret  ann_vol  sharpe_Rf0  max_dd  win_rate  final_nav
+name                                                                         
+buy_hold_gross       0.1170   0.1762      0.6641 -0.1080    0.5219     1.1064
+toy_MA10_net_0bps    0.0492   0.1263      0.3892 -0.0837    0.2629     1.0419
+toy_MA10_net_5bps    0.0246   0.1260      0.1949 -0.0919    0.2590     1.0167
+toy_MA10_net_15bps  -0.0246   0.1257     -0.1959 -0.1081    0.2550     0.9681
+
+=== win-rate trap (seed=3, n=1000) ===
+win_rate 0.913
+mean_return -0.00131
+note: win_rate=0.9 but mean return negative — win rate ≠ good strategy.
+
+=== turnover ===
+mean_daily_turnover 0.194444
+approx_annual_one_way_turns 49.0
+teach: higher turnover amplifies costs; reporting gross-only is dishonest.
+ASSERTS_OK
+```
+
+## Common mistakes / pitfalls
+
+1. Posting gross curves only.
+2. Using win rate instead of expectancy and drawdown.
+3. Ignoring turnover×cost linkage.
+4. No benchmark comparison.
+5. Evaluating “net of cost” without shifting the signal (still mixed with look-ahead).
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — Reproduce the metric table; **done when** it includes buy&hold and ≥2 cost levels.
+2. **ex2** — Slippage bump (e.g. add 10 bps); **done when** a new row + one-sentence conclusion appear.
+3. **ex3** — Three-sentence conclusion (gross vs net, turnover, win-rate trap); **done when** all three appear.
+4. **ex4** — Report annualized turnover; **done when** it matches the lesson’s order of magnitude.
+5. **ex5** — Why benchmarks are required; **done when** ≥2 sentences mention relative evaluation.
+
+## Quiz
+
+<Quiz id="q1-gross" question="Main problem with gross-only reporting?" options={["Charts look nicer", "It hides cost/turnover drag — dishonest", "Sharpe is illegal", "Must use monthly"]} answer={1} explanation="Net-of-cost numbers are what research can compare." />
+<Quiz id="q2-to" question="Higher turnover usually means?" options={["Costs vanish", "Costs are amplified", "Alpha must rise", "No benchmark needed"]} answer={1} explanation="Every turn pays frictions." />
+<Quiz id="q3-wr" question="Does a high win rate guarantee a good strategy?" options={["Yes", "No — expectancy and tails can still be poor", "If above 50%", "It equals Sharpe"]} answer={1} explanation="The lesson’s ~91% win rate still had negative mean." />
+<Quiz id="q4-bm" question="Why use a benchmark?" options={["Regulators allow only ETFs", "Relative evaluation — avoid calling Beta Alpha", "Remove all risk", "Raise win rate"]} answer={1} explanation="Benchmarks discipline “excess” claims." />
+<Quiz id="q5-shift" question="position=signal.shift(1) before evaluation mainly?" options={["Speeds rolling", "Reduces same-day close look-ahead", "Raises win rate", "Cancels costs"]} answer={1} explanation="Information-timing alignment." />
+
+## Done when
+
+- Table + three-sentence conclusion + quizzes
+
+**Sources:** classic — JoinQuant strategy evaluation; Canvas eval. niche — @FG731314 “good strategy” notes **「待核验」**.
+
+<Summary>
+**Takeaways**: net-of-cost tables, turnover, win-rate trap, benchmarks.  
+**P1 wrap**: after four lessons, P2 (data & honest backtests) comes in a later batch.
+</Summary>

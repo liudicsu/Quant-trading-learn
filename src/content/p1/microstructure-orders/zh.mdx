@@ -1,9 +1,117 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **7 学时**：概念 3h + 练习 3h + 测验 1h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+
+**课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
+
+**必须教会：** mid=(bid+ask)/2；市价买贴近 ask；冲击/延迟只建直觉，**不做 HFT 配方**。
+
+<Callout type="warn" title="学习用途">
+合成报价。非券商手册，非高频交易教程。
 </Callout>
 
-## 现阶段
+## mid 与市价买（手算）
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+给定 bid=99.90，ask=100.10：
+
+- mid = (99.90+100.10)/2 = **100.0**
+- 市价买教学成交价 = ask = **100.10**
+- 相对 mid 的成本 = (100.10/100 − 1)×10000 = **10 bps**（半价差）
+
+<Formula label="中价">
+mid = (bid + ask) / 2
+</Formula>
+
+## CSV 上的半价差
+
+对 `synthetic_ohlc_ba.csv`（n=252）：平均半价差约 **6.22 bps**，中位数约 **6.36 bps**。
+
+## 成交时点：同 bar 前瞻 vs 诚实
+
+参数：信号 = close > MA5。
+
+| 叙事 | 含义 | 本课净值 |
+| --- | --- | ---: |
+| optimistic same-bar | 用今日收盘做信号并吃今日收盘收益（**LOOK-AHEAD**） | ≈ **2.39** |
+| honest shift(1) | 信号推到下一期再乘收益 | ≈ **1.04** |
+| honest next-open | 信号后次日开盘成交，吃开→收 | ≈ **1.04** |
+
+同 bar 零成本会显著美化曲线——回测里必须显式禁止。
+
+## 成本假设一页（玩具数字）
+
+- 半价差假设 10 bps；单边滑点 5 bps；佣金 1 bps
+- 往返约 **32 bps**（两边半价差+滑点+佣金）
+- 冲击/延迟：直觉上「量越大冲击越大、越慢越容易挨打」——**到此为止**，无 HFT 参数表。
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p1/02_microstructure_orders.py`。
+
+### 实际运行输出
+
+```text
+=== hand mid & market-buy bps ===
+params: bid=99.90 ask=100.10; market buy fill=ask; bps vs mid
+mid 100.0
+market_buy_fill 100.1
+buy_cost_bps_vs_mid 10.0
+half_spread_bps 10.0
+teach: mid=(bid+ask)/2; market buys lean ask (pay the spread).
+
+=== CSV half-spread stats (n=252) ===
+mean_half_spread_bps 6.2187
+median_half_spread_bps 6.3641
+
+=== fill timing: same-bar vs honest ===
+params: signal=close>MA5; optimistic=same-bar (LOOK-AHEAD); honest_shift=signal.shift(1); honest_next_open=fill next open
+nav_optimistic_same_bar 2.392529
+nav_honest_shift1 1.036162
+nav_honest_next_open 1.036162
+lookahead_warning: same-bar zero-cost fills that reuse today's close in signal AND return are over-optimistic.
+
+=== cost assumption one-pager (toy numbers) ===
+venue: synthetic equity-like
+half_spread_bps_assumed 10
+slippage_bps_per_trade 5
+commission_bps 1
+round_trip_bps 32
+impact_latency: intuition only — larger size → more impact; delay → mid moves against you. No HFT recipe.
+ASSERTS_OK
+```
+
+## 常见错误 / 陷阱
+
+1. 用 mid 当市价买成交价。
+2. 同 bar 信号×同 bar 收益却声称无前瞻。
+3. 把价差当成「不是成本」。
+4. 把教学滑点数字当成某交易所真实费率。
+5. 索要/设计 HFT 配方（本课明确不做）。
+
+## 练习（与任务清单 1:1）
+
+1. **ex1**：手算 mid 与市价买 bps；**完成标准**：写出 mid 与 bps 两数。
+2. **ex2**：写成交成本假设一页；**完成标准**：含半价差/滑点/佣金/往返。
+3. **ex3**：用文字对比同 bar vs shift(1)/次日开盘；**完成标准**：点名 LOOK-AHEAD。
+4. **ex4**：跑脚本核对 optimistic vs honest 净值；**完成标准**：与课内输出一致。
+5. **ex5**：说明冲击/延迟为何只留直觉；**完成标准**：≥2 句且拒绝 HFT 配方。
+
+## 测验
+
+<Quiz id="q1-mid" question="mid 的定义？" options={["等于 ask", "(bid+ask)/2", "等于昨收", "开盘价"]} answer={1} explanation="中价是买卖价平均。" />
+<Quiz id="q2-mkt" question="教学里市价买单更贴近？" options={["bid", "ask", "昨收", "无成交"]} answer={1} explanation="主动买通常吃卖价。" />
+<Quiz id="q3-spr" question="半价差相对 mid 是？" options={["收入", "一种隐性交易成本", "Alpha", "Beta"]} answer={1} explanation="穿越价差是成本。" />
+<Quiz id="q4-lh" question="同 bar 用收盘信号吃收盘收益的主要问题？" options={["算得慢", "LOOK-AHEAD / 过乐观", "夏普定义错", "必须用期货"]} answer={1} explanation="信息时点与收益窗口重叠。" />
+<Quiz id="q5-hft" question="本课对冲击/延迟的立场？" options={["给出可上线 HFT 参数", "只建直觉，不做 HFT 配方", "忽略即可", "等于佣金"]} answer={1} explanation="课程边界：直觉而非配方。" />
+
+## 完成标准
+
+- 成本假设一页 + 跑通脚本 + 测验
+- 能解释 mid/市价侧/同 bar 前瞻
+
+**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。niche — @sera00111 crypto venue frictions **「待核验」**。
+
+<Summary>
+**要点**：mid、市价买 bps、诚实成交时点、成本一页。  
+**下一课**：收益、波动与相关——年化、夏普、MDD、滚动图。
+</Summary>

@@ -1,9 +1,99 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **5 学时**：概念 1.5h + 实验 3h + 测验 0.5h）做**成本后**指标对照：玩具 MA 信号 vs 买入持有；滑点升档；解释胜率≠好策略。前置：`returns-vol-corr`、`microstructure-orders`。
+
+**课内目标：** 做成本后对照表；解释胜率≠好策略。
+
+**必须教会：** 只报毛收益不诚实；换手放大成本。
+
+<Callout type="warn" title="非投资建议">
+玩具信号，不是可交易策略推荐。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- n≈251；MA 窗 **10**；`position = signal.shift(1)`（反前瞻）
+- Rf=0；年化 √252
+- 单边成本档：**0 / 5 / 15 bps**
+- 胜率陷阱演示：seed=3，n=1000
+
+## 成本后对照表（要点）
+
+买入持有毛收益夏普≈0.66；玩具 MA 在 0 bps 净夏普≈0.39，5 bps≈0.19，**15 bps 净夏普转负**。换手年化约 **49** 次单边——成本被放大。
+
+## 胜率陷阱
+
+seed=3 的玩具路径：胜率≈**0.91**，但均值收益为**负**。高胜率可以掩盖偶发大亏。
+
+## 滑点升档实验
+
+同一信号，仅提高单边 bps，净净值与夏普单调变差——汇报时必须并排给出成本假设。
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p1/04_eval_lab.py`。
+
+### 实际运行输出
+
+```text
+=== parameters ===
+n 251
+MA_window 10
+position = signal.shift(1)  # anti look-ahead
+Rf_daily 0.0 ann_sqrt252 15.874508
+one_way_cost_bps_levels [0, 5, 15]
+
+=== metric comparison table ===
+                    ann_ret  ann_vol  sharpe_Rf0  max_dd  win_rate  final_nav
+name                                                                         
+buy_hold_gross       0.1170   0.1762      0.6641 -0.1080    0.5219     1.1064
+toy_MA10_net_0bps    0.0492   0.1263      0.3892 -0.0837    0.2629     1.0419
+toy_MA10_net_5bps    0.0246   0.1260      0.1949 -0.0919    0.2590     1.0167
+toy_MA10_net_15bps  -0.0246   0.1257     -0.1959 -0.1081    0.2550     0.9681
+
+=== win-rate trap (seed=3, n=1000) ===
+win_rate 0.913
+mean_return -0.00131
+note: win_rate=0.9 but mean return negative — win rate ≠ good strategy.
+
+=== turnover ===
+mean_daily_turnover 0.194444
+approx_annual_one_way_turns 49.0
+teach: higher turnover amplifies costs; reporting gross-only is dishonest.
+ASSERTS_OK
+```
+
+## 常见错误 / 陷阱
+
+1. 只贴毛收益曲线。
+2. 用胜率代替期望与回撤。
+3. 忽略换手与成本联动。
+4. 无基准对照。
+5. 信号未 shift 就评「成本后」（仍混有前瞻）。
+
+## 练习（与任务清单 1:1）
+
+1. **ex1**：复现指标对照表；**完成标准**：含 buy&hold 与至少两档成本。
+2. **ex2**：滑点升档（再加一档如 10 bps）；**完成标准**：表中新行 + 一句结论。
+3. **ex3**：写三句结论（毛vs净、换手、胜率陷阱）；**完成标准**：三句都出现。
+4. **ex4**：计算并报告年化换手；**完成标准**：与课内量级一致。
+5. **ex5**：说明为何需要基准；**完成标准**：≥2 句提到相对评价。
+
+## 测验
+
+<Quiz id="q1-gross" question="只报毛收益的主要问题？" options={["图更好看", "隐瞒成本与换手拖累，不诚实", "夏普公式非法", "必须用月频"]} answer={1} explanation="成本后数字才接近可比较的研究结论。" />
+<Quiz id="q2-to" question="换手升高通常意味着？" options={["成本自动消失", "成本被放大", "Alpha 必升", "无需基准"]} answer={1} explanation="每次换仓都付摩擦。" />
+<Quiz id="q3-wr" question="胜率高一定是好策略吗？" options={["是", "否，期望与尾部可能仍很差", "只要大于 50% 即可", "等于夏普"]} answer={1} explanation="课内 91% 胜率均值仍可为负。" />
+<Quiz id="q4-bm" question="为何需要基准？" options={["监管唯一要求用 ETF", "相对评价，避免把 Beta 当 Alpha", "去掉所有风险", "提高胜率"]} answer={1} explanation="基准约束「超额」叙事。" />
+<Quiz id="q5-shift" question="评价前 position=signal.shift(1) 为了？" options={["加快滚动", "降低同日收盘前瞻", "提高胜率", "取消成本"]} answer={1} explanation="信息时点对齐。" />
+
+## 完成标准
+
+- 对照表 + 三句结论 + 测验
+
+**来源：** classic — JoinQuant 策略评价；Canvas eval。niche — @FG731314 好策略共性 **「待核验」**。
+
+<Summary>
+**要点**：成本后对照、换手、胜率陷阱、基准。  
+**P1 收束**：四课完成后进入 P2 数据与诚实回测（下一批次）。
+</Summary>

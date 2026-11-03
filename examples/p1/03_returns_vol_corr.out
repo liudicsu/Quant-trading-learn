@@ -1,0 +1,30 @@
+=== parameters ===
+n 251
+ann_factor_sqrt252 15.874508
+Rf_daily 0.0
+Rf_note: teaching Sharpe uses Rf=0; always declare frequency and Rf.
+
+=== vol & Sharpe ===
+sigma_daily 0.011101
+sigma_ann 0.176222
+sharpe_ann_Rf0 0.6641
+
+=== max drawdown (path-dependent) ===
+final_nav 1.106424
+max_drawdown -0.107993
+mdd_note: same returns in different order → different MDD; path matters.
+saved_plot public/p1/rolling_vol.png
+
+=== correlation ===
+params: seed_b=21; stress_last_40_sessions; roll_window=63
+full_sample_corr 0.3949
+rolling_63_corr_tail
+date
+2023-12-13    0.4995
+2023-12-14    0.4912
+2023-12-15    0.4933
+2023-12-18    0.4621
+2023-12-19    0.4707
+stress_window_mean_roll_corr 0.5173
+saved_plot public/p1/rolling_corr_stress.png
+ASSERTS_OK
