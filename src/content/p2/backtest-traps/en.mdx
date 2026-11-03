@@ -1,9 +1,110 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**16 hours**: 5h concepts + 9h labs + 2h write-up — **heavy**) builds backtest interrogation: cheat vs honest, grid overfitting, freeze-then-hold-out, and trial logging. Prereqs: `data-cleaning`, `stats-probability-basics`.
+
+**Goals:** cheat/honest controls; OOS/walk-forward spirit; log failures and trial counts.
+
+**Must-teach:** same-bar return without shift = look-ahead; many trials create false discoveries; freeze rules before OOS.
+
+<Callout type="warn" title="Learning only">
+Synthetic asset. Interrogate process — not stock tips.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Asset AAA_adj; n≈299; Rf=0; ann √252  
+- MA grid windows 5…40 step 5 (8 trials)  
+- Hold-out: last **80** days; random-rule sweep 50 seeds × 30 trials, thr |SR|>1.5  
+
+## Cheat vs honest MA
+
+Same-bar (no shift) Sharpe can hit **~5.3** with NAV **~2.29**; honest `shift(1)` Sharpe is **negative**. Definition: today’s close in the signal earning today’s close-to-close return = look-ahead.
+
+## Grid overfitting
+
+The window that maximizes IS Sharpe often collapses OOS. Here best_train_w=35, train SR≈0.18, test SR≈−1.90.
+
+## Freeze then hold-out
+
+Select on a develop block, score a final window that never entered selection — sealed-evaluation spirit.
+
+<Callout type="info" title="Sealed hold-out spirit (paper read)">
+[Quant-Arena (arXiv:2610.30113)](https://arxiv.org/abs/2610.30113) lets models take feedback only on 2022–2023, then **freezes one strategy** for sealed 2024 assessment. This lesson practices the same discipline with develop→hold-out (a teaching simplification, not a reproduction of that benchmark).
+</Callout>
+
+## Trial counts and false hits
+
+Across 50 seeds, mean count of |SR|>1.5 among 30 random rules ≈ **2.78** (std≈1.38) — noise looks “significant,” so log trials.
+
+## Python lab (run locally)
+
+Script: `examples/p2/02_backtest_traps.py`.
+
+### Real run output
+
+```text
+=== parameters ===
+n 299 ann_sqrt252 15.874508 asset=AAA_adj Rf=0
+
+=== MA10 cheat vs honest ===
+cheat_same_bar_sharpe 5.2663 nav 2.290582
+honest_shift1_sharpe -1.1193 nav 0.818344
+lookahead_def: using today's close in the signal while earning today's close-to-close return.
+
+=== parameter grid (honest shift1) ===
+windows [5, 10, 15, 20, 25, 30, 35, 40]
+best_train_w 35 sharpe_train 0.1801 sharpe_test -1.9025
+mean_train_sharpe -0.3252 mean_test_sharpe -1.8011
+teach: picking max in-sample Sharpe after many trials overstates OOS — log trial counts.
+
+=== freeze-then-holdout ===
+develop_n 220 holdout_n 80
+frozen_w 35
+sharpe_develop 0.1717
+sharpe_holdout -2.1282
+quant_arena_spirit: research feedback only on an earlier window; freeze one rule; score a sealed later window (arXiv:2610.30113).
+
+=== random-rule false hits (50 seeds × 30 trials, thr |SR|>1.5) ===
+mean_false_hits 2.78 std_false_hits 1.375
+null_note: under noise, some seeds look 'significant' — record trials.
+
+=== failure log template ===
+date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
+2026-11-04 | MA grid | 8 windows | train SR see above | holdout SR see above | IS≠OOS | shrink search / pre-register
+ASSERTS_OK
+```
+
+## Common mistakes / pitfalls
+
+1. Treating same-bar fills as honest.  
+2. Posting only the best grid curve.  
+3. Tuning on the test set.  
+4. No trial log.  
+5. Leaking sealed-set feedback into R&D.
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — MA cheat/honest; **done when** both Sharpe/NAV match the lesson.  
+2. **ex2** — parameter grid; **done when** best train window and test SR print.  
+3. **ex3** — final hold-out; **done when** frozen w + holdout SR print.  
+4. **ex4** — one failure-log row; **done when** trials and fail_reason appear.  
+5. **ex5** — why log trial counts; **done when** linked to the false-hit mean.
+
+## Quiz
+
+<Quiz id="q1-lh" question="Same-bar return without shift is mainly?" options={["More stable", "Look-ahead", "Lower turnover", "PIT"]} answer={1} explanation="Information overlaps the return window." />
+<Quiz id="q2-trials" question="Logging trial counts helps?" options={["Cosmetics", "Discount false discoveries under multiple testing", "Raise win rate", "Cancel costs"]} answer={1} explanation="More tries → more lucky extremes." />
+<Quiz id="q3-wf" question="Freeze-then-hold-out aims to?" options={["Raise IS Sharpe", "Mimic sealed evaluation and cut tuning leakage", "Force monthly bars", "Drop hashes"]} answer={1} explanation="Same spirit as Quant-Arena’s sealed year." />
+<Quiz id="q4-grid" question="Showing only the best IS grid cell?" options={["More honest", "Overfit storytelling", "Removes Beta", "Defines PIT"]} answer={1} explanation="Selection bias." />
+<Quiz id="q5-fail" question="A failure log should at least have?" options={["Screenshots only", "Hypothesis/trials/OOS/reason", "Broker login", "Live orders"]} answer={1} explanation="Auditable interrogation." />
+
+## Done when
+
+- Trap report with controls + OOS + quizzes  
+
+**Sources:** classic — Canvas m5; AFML backtest-as-CV spirit. frontier — Quant-Arena arXiv:2610.30113. Dropped unverifiable XQuant niche tags this batch.
+
+<Summary>
+**Takeaways**: look-ahead controls, grid overfitting, freeze/hold-out, trial logs.  
+**Next**: wire costs into the backtest.
+</Summary>

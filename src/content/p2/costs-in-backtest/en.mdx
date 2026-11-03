@@ -1,9 +1,86 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**6 hours**: 2h concepts + 3.5h coding + 0.5h quiz) wires commission/slippage into a formula and runs ≥3 cost tiers. Prereq: `backtest-traps`.
+
+**Goals:** implement turnover cost formula; ≥3 cost tiers.
+
+**Must-teach:** zero-cost curves ≠ live evidence; explicit vs implicit costs.
+
+<Callout type="info" title="Learning only — not investment advice">
+Toy bps. Not an exchange fee schedule.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- MA=10, `position=shift(1)`, Rf=0, √252  
+- Formula: `net = pos*ret − turnover * one_way_bps/1e4`  
+- Ladder: 0/5/10/20/40 bps  
+
+## Explicit vs implicit
+
+Explicit: commission-like bps you can write down. Implicit: spread/impact etc., approximated here by the same bps ladder — a reminder that some frictions remain unmodeled.
+
+## Cost ladder
+
+Even the zero-cost Sharpe is negative here; higher bps make Sharpe and NAV worse — turnover amplifies every step.
+
+![Cost ladder](/p2/cost_ladder.png)
+
+## Python lab (run locally)
+
+Script: `examples/p2/03_costs_in_backtest.py`.
+
+### Real run output
+
+```text
+=== parameters ===
+n 299 MA=10 position=shift(1) Rf=0 ann=sqrt(252)
+cost_formula: net = pos*ret - turnover * one_way_bps/1e4
+explicit_costs: commission-like bps; implicit: spread/impact approximated in bps ladder
+
+=== cost ladder ===
+ bps  sharpe  final_nav  ann_ret
+   0 -1.1193     0.8183  -0.1588
+   5 -1.2775     0.7965  -0.1816
+  10 -1.4345     0.7752  -0.2043
+  20 -1.7441     0.7343  -0.2498
+  40 -2.3405     0.6588  -0.3409
+teach: zero-cost curve ≠ live evidence; turnover amplifies every bps.
+saved_plot public/p2/cost_ladder.png
+ASSERTS_OK
+```
+
+## Common mistakes / pitfalls
+
+1. Posting zero-cost curves only.  
+2. Ignoring turnover.  
+3. Treating toy bps as official venue fees.  
+4. Rewriting the signal after seeing costs (leakage).  
+5. Not stating Rf/annualization.
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — wire net returns; **done when** the formula matches the script.  
+2. **ex2** — cost ladder chart; **done when** PNG is under `public/p2/`.  
+3. **ex3** — interpret ≥3 tiers; **done when** three sentences note monotone worsening.  
+4. **ex4** — one explicit and one implicit example; **done when** both appear.  
+5. **ex5** — why zero-cost ≠ live evidence; **done when** ≥2 sentences.
+
+## Quiz
+
+<Quiz id="q1-zero" question="Main issue with zero-cost backtest curves?" options={["Too slow", "Not live evidence", "Illegal", "No hash"]} answer={1} explanation="Missing frictions." />
+<Quiz id="q2-to" question="Turnover enters the formula as?" options={["Ignored", "turnover×bps subtracted from returns", "Added only to price", "Beta only"]} answer={1} explanation="Lesson net-return definition." />
+<Quiz id="q3-imp" question="An implicit cost example?" options={["Stated commission rate", "Impact/spread not fully modeled", "Rf", "SHA256"]} answer={1} explanation="Implicit = hard-to-invoice friction." />
+<Quiz id="q4-lad" question="As the cost ladder rises, usually?" options={["Sharpe must rise", "Net performance worsens", "MDD vanishes", "Trial count resets"]} answer={1} explanation="Lesson numbers worsen monotonically." />
+<Quiz id="q5-dec" question="When to freeze the signal definition?" options={["After freely editing post-ladder", "Before the cost experiment", "Never", "Only live"]} answer={1} explanation="Anti-leakage." />
+
+## Done when
+
+- Net-of-cost main backtest runs + chart + quizzes  
+
+**Sources:** classic — Canvas costs; QuantStart/NYU TCA themes.
+
+<Summary>
+**Takeaways**: net formula, cost ladder, zero-cost is not evidence.  
+**Next**: vectorized vs event-driven engine assumptions.
+</Summary>

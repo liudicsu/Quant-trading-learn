@@ -1,9 +1,136 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**10 hours**: 4h concepts + 5h pipeline lab + 1h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+
+**Goals:** version downloads and hashes; survivorship examples; write a data sheet.
+
+**Must-teach:** today's constituents ≠ historical universe; fundamentals need PIT; timezone mess can look ahead a day.
+
+<Callout type="info" title="Learning only — not investment advice">
+Synthetic panel. Not a vendor endorsement.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Panel `examples/p2/data/panel_toy.csv`, generation seed **17**, n=300
+- PIT publish lag **5** business days
+- Adj vs raw: AAA teaching 2:1 split at iloc 200
+
+## Versioning and hashes
+
+The script SHA-256s the file against `panel_toy.sha256`. Reproducibility starts with **same bytes → same hash**.
+
+## Survivorship (numeric)
+
+Today's universe keeps AAA/BBB while the panel still has CCC. Survivor-only equal-weight mean return differs from the full historical universe — replaying history with today's members flatters survivors.
+
+## PIT fundamentals
+
+`FUND_pit = FUND_true.shift(5)`. Aligning on `FUND_true` as if it were knowable that day leaks unpublished prints.
+
+## Timezone / session mislabel
+
+Hand example: shift close labels one business day earlier, then align back — **Tuesday’s row carries Wednesday’s close**. That is “off-by-one session ≈ one day of look-ahead.”
+
+## Adj vs raw
+
+Across the split, raw return ≈ **-50.8%**, adj ≈ **-1.6%**. Research must declare which field is used.
+
+## Further reading: data entry points (sources read)
+
+- [Binance Vision](https://data.binance.vision/) hosts bulk historical market files; [sera00111’s tooling note](https://x.com/sera00111/status/2108332340753969191) says minute/hour research can start from Vision and CCXT-style free entry points, and to choose data granularity after you know the strategy.
+- [OpenBB quantitative docs](https://docs.openbb.co/odp/python/extensions/data-processing/quantitative) describe `obb.quantitative` stats/factor tools on **already aligned** series — they assume you fixed timestamps first.
+- [PyQuant News API example post](https://x.com/pyquantnews/status/2109990383828471949) (same thread also names yfinance and IBApi) lists concrete market-data APIs as an index of where to pull data, not as a strategy.
+
+## Python lab (run locally)
+
+Script: `examples/p2/01_data_cleaning.py`.
+
+### Real run output
+
+```text
+=== versioned download / hash ===
+file panel_toy.csv
+sha256 3e9fab66351315c8cde71fd61a9bd776df738fb73c651784b8c0f8bd3ed6678b
+hash_match True
+params: panel seed=17 when generated; n_rows from file
+n_rows 300
+
+=== survivorship toy ===
+today_universe ['AAA', 'BBB']
+historical_members_in_panel ['AAA', 'BBB', 'CCC']
+mean_ret_survivors_only -0.000557
+mean_ret_full_hist_universe -0.000386
+teach: today's constituents != historical investable universe.
+
+=== PIT fundamental lag ===
+params: publish_lag_bdays=5; FUND_pit = FUND_true.shift(5)
+corr_fund_true_vs_ret -0.0541
+corr_fund_pit_vs_ret -0.1088
+lookahead_flag: aligning fundamentals without as-of/PIT can leak future prints.
+
+=== timezone / session label mess ===
+true_closes
+2024-01-02    100.0
+2024-01-03    101.0
+2024-01-04    100.5
+mislabeled_closes_minus_1bd
+2024-01-01    100.0
+2024-01-02    101.0
+2024-01-03    100.5
+aligned_bug_on_true_calendar
+2024-01-02    101.0
+2024-01-03    100.5
+2024-01-04      NaN
+tue_row_price_after_bug 100.5
+teach: Tue's row now carries Wed's close — one-day timezone/session mislabel embeds look-ahead.
+panel_nav_honest_shift1 0.818344
+panel_nav_signal_times_next_ret 0.818344
+
+=== reindex + missingness assert ===
+calendar_rows 300 panel_rows 300 missing_after_reindex 0
+ASSERT_missing_ok
+
+=== adj vs raw (2:1 split toy at iloc 200) ===
+raw_before 92.8473 raw_after 45.6782
+adj_before 92.8473 adj_after 91.3565
+raw_ret_across_split -0.508
+adj_ret_across_split -0.0161
+data_sheet_stub: source=synthetic; seed=17; fields=adj/raw/PIT; timezone=naive dates; universe_rule=see survivorship note
+ASSERTS_OK
+```
+
+## Common mistakes / pitfalls
+
+1. Backtesting a decade with today’s members only.  
+2. Fundamentals without PIT.  
+3. UTC vs local off-by-one.  
+4. Mixing raw/adj silently.  
+5. No hash / no version.
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — reindex + missingness assert; **done when** missing=0 and ASSERT print.  
+2. **ex2** — adj vs raw; **done when** split-day raw/adj returns are stated.  
+3. **ex3** — data sheet with four sections; **done when** source/fields/timezone/universe appear.  
+4. **ex4** — survivorship means; **done when** both means match the lesson.  
+5. **ex5** — PIT lag note; **done when** lag=5 and a look-ahead sentence appear.
+
+## Quiz
+
+<Quiz id="q1-surv" question="A classic survivorship move is?" options={["Use the full historical universe", "Replay history with only names still listed today", "Futures only", "Ignore returns"]} answer={1} explanation="Today’s members drop delistings." />
+<Quiz id="q2-pit" question="PIT means?" options={["Final filings anytime", "Only information knowable as-of then", "Adj only", "Daily only"]} answer={1} explanation="Point-in-time = then-available." />
+<Quiz id="q3-tz" question="A one-day session mislabel most resembles?" options={["Lower vol", "Future closes pasted onto earlier rows (look-ahead)", "Higher fees", "Dropping Beta"]} answer={1} explanation="Labels move information earlier." />
+<Quiz id="q4-adj" question="Raw crashes on a split while adj does not — meaning?" options={["Strategy broke", "Unadjusted jump; declare the field", "Must short", "Bad hash"]} answer={1} explanation="Field choice defines returns." />
+<Quiz id="q5-hash" question="Saving sha256 mainly?" options={["Speeds downloads", "Proves byte-level reproducibility", "Raises Sharpe", "Replaces the sheet"]} answer={1} explanation="Version check." />
+
+## Done when
+
+- Rerunnable pipeline + sheet + quizzes  
+
+**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer. niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.
+
+<Summary>
+**Takeaways**: hashes, survivorship, PIT, timezone look-ahead, adj declarations.  
+**Next**: backtest traps and overfitting interrogation.
+</Summary>

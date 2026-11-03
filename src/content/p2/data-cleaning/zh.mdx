@@ -1,9 +1,136 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **10 学时**：概念 4h + 管线实验 5h + 文档/测验 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+
+**课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
+
+**必须教会：** 今日成分 ≠ 历史宇宙；基本面需 PIT；时区混乱可前瞻一天。
+
+<Callout type="info" title="学习用途 · 非投资建议">
+合成面板。不构成数据供应商推荐。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 面板 `examples/p2/data/panel_toy.csv`，生成种子 **17**，n=300
+- PIT 发布滞后 **5** 个交易日
+- 复权对照：AAA 在 iloc 200 发生教学用 2:1 拆分
+
+## 版本化与哈希
+
+脚本计算 SHA-256 并与 `panel_toy.sha256` 对照。研究复现的第一步是：**同一字节 → 同一哈希**。
+
+## 幸存者偏差（数例）
+
+今日宇宙假设只剩 AAA/BBB，历史面板仍含 CCC。幸存者等权日均收益与全历史宇宙不同——用今日成分回放历史会美化存活者。
+
+## PIT 基本面
+
+`FUND_pit = FUND_true.shift(5)`。若用「当日已可知」的 `FUND_true` 对齐收益，等于偷看尚未发布的数字。
+
+## 时区 / 会话错标
+
+手算：把收盘价整体贴到「早一个交易日」的标签上，再对齐回真日历后，**周二那一行会拿到周三的收盘价**——这就是「错一天标签 ≈ 前瞻一天」。
+
+## 复权 vs 未复权
+
+拆分处 raw 收益约 **-50.8%**，adj 约 **-1.6%**。研究收益应明确用哪一套，并写进说明书。
+
+## 延伸：数据入口（已阅读来源）
+
+- [Binance Vision](https://data.binance.vision/) 提供可批量下载的历史行情文件；[sera00111 的工具笔记](https://x.com/sera00111/status/2108332340753969191)写到：分钟/小时级研究可先用 Vision 与 CCXT 等免费入口，先定策略再决定要不要买更细的订单簿数据。
+- [OpenBB quantitative 文档](https://docs.openbb.co/odp/python/extensions/data-processing/quantitative) 说明 `obb.quantitative` 如何在**已对齐的**序列上做摘要/滚动/因子回归——它假设你先把数据时点弄对。
+- [PyQuant News 的 API 举例帖](https://x.com/pyquantnews/status/2109990383828471949)（同线程还列了 yfinance、IBApi）把具体行情 API 点名列出，适合当「从哪拉数」的索引，而不是策略本身。
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p2/01_data_cleaning.py`。
+
+### 实际运行输出
+
+```text
+=== versioned download / hash ===
+file panel_toy.csv
+sha256 3e9fab66351315c8cde71fd61a9bd776df738fb73c651784b8c0f8bd3ed6678b
+hash_match True
+params: panel seed=17 when generated; n_rows from file
+n_rows 300
+
+=== survivorship toy ===
+today_universe ['AAA', 'BBB']
+historical_members_in_panel ['AAA', 'BBB', 'CCC']
+mean_ret_survivors_only -0.000557
+mean_ret_full_hist_universe -0.000386
+teach: today's constituents != historical investable universe.
+
+=== PIT fundamental lag ===
+params: publish_lag_bdays=5; FUND_pit = FUND_true.shift(5)
+corr_fund_true_vs_ret -0.0541
+corr_fund_pit_vs_ret -0.1088
+lookahead_flag: aligning fundamentals without as-of/PIT can leak future prints.
+
+=== timezone / session label mess ===
+true_closes
+2024-01-02    100.0
+2024-01-03    101.0
+2024-01-04    100.5
+mislabeled_closes_minus_1bd
+2024-01-01    100.0
+2024-01-02    101.0
+2024-01-03    100.5
+aligned_bug_on_true_calendar
+2024-01-02    101.0
+2024-01-03    100.5
+2024-01-04      NaN
+tue_row_price_after_bug 100.5
+teach: Tue's row now carries Wed's close — one-day timezone/session mislabel embeds look-ahead.
+panel_nav_honest_shift1 0.818344
+panel_nav_signal_times_next_ret 0.818344
+
+=== reindex + missingness assert ===
+calendar_rows 300 panel_rows 300 missing_after_reindex 0
+ASSERT_missing_ok
+
+=== adj vs raw (2:1 split toy at iloc 200) ===
+raw_before 92.8473 raw_after 45.6782
+adj_before 92.8473 adj_after 91.3565
+raw_ret_across_split -0.508
+adj_ret_across_split -0.0161
+data_sheet_stub: source=synthetic; seed=17; fields=adj/raw/PIT; timezone=naive dates; universe_rule=see survivorship note
+ASSERTS_OK
+```
+
+## 常见错误 / 陷阱
+
+1. 用今日成分回测十年。  
+2. 基本面不 PIT。  
+3. UTC/本地日错一天。  
+4. raw/adj 混用却不声明。  
+5. 无哈希/无版本号。
+
+## 练习（与任务清单 1:1）
+
+1. **ex1**：reindex + 缺失断言；**完成标准**：打印 missing=0 与 ASSERT。  
+2. **ex2**：复权对照；**完成标准**：给出拆分日 raw/adj 收益。  
+3. **ex3**：写数据说明书四节；**完成标准**：来源/字段/时区/宇宙规则。  
+4. **ex4**：复现幸存者均值对比；**完成标准**：两均值与课内一致。  
+5. **ex5**：说明 PIT 滞后；**完成标准**：写出 lag=5 与 lookahead 一句。
+
+## 测验
+
+<Quiz id="q1-surv" question="幸存者偏差典型做法是？" options={["用历史全宇宙", "只用今天仍上市的名字回放历史", "只用期货", "忽略收益"]} answer={1} explanation="今日成分回放会丢掉退市者。" />
+<Quiz id="q2-pit" question="PIT 的含义？" options={["任意时点都可用最终财报", "只用当时可得的信息", "只要复权", "只要日频"]} answer={1} explanation="Point-in-time = 当时可知。" />
+<Quiz id="q3-tz" question="会话标签错一天最像？" options={["降低波动", "把未来收盘价贴到更早的行（前瞻）", "提高佣金", "取消 Beta"]} answer={1} explanation="错标等价于信息时点前移。" />
+<Quiz id="q4-adj" question="拆分日 raw 大跌、adj 不大，说明？" options={["策略失效", "未复权价格跳变，研究需声明字段", "必须做空", "哈希错误"]} answer={1} explanation="字段选择改变收益定义。" />
+<Quiz id="q5-hash" question="保存 sha256 的主要目的？" options={["加快下载", "证明字节级可复现", "提高夏普", "替代说明书"]} answer={1} explanation="版本化校验。" />
+
+## 完成标准
+
+- 管线可复跑 + 说明书 + 测验  
+
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖。
+
+<Summary>
+**要点**：哈希、幸存者、PIT、时区前瞻、复权声明。  
+**下一课**：回测陷阱与过拟合审讯。
+</Summary>

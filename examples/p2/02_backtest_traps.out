@@ -1,0 +1,29 @@
+=== parameters ===
+n 299 ann_sqrt252 15.874508 asset=AAA_adj Rf=0
+
+=== MA10 cheat vs honest ===
+cheat_same_bar_sharpe 5.2663 nav 2.290582
+honest_shift1_sharpe -1.1193 nav 0.818344
+lookahead_def: using today's close in the signal while earning today's close-to-close return.
+
+=== parameter grid (honest shift1) ===
+windows [5, 10, 15, 20, 25, 30, 35, 40]
+best_train_w 35 sharpe_train 0.1801 sharpe_test -1.9025
+mean_train_sharpe -0.3252 mean_test_sharpe -1.8011
+teach: picking max in-sample Sharpe after many trials overstates OOS — log trial counts.
+
+=== freeze-then-holdout ===
+develop_n 220 holdout_n 80
+frozen_w 35
+sharpe_develop 0.1717
+sharpe_holdout -2.1282
+quant_arena_spirit: research feedback only on an earlier window; freeze one rule; score a sealed later window (arXiv:2610.30113).
+
+=== random-rule false hits (50 seeds × 30 trials, thr |SR|>1.5) ===
+mean_false_hits 2.78 std_false_hits 1.375
+null_note: under noise, some seeds look 'significant' — record trials.
+
+=== failure log template ===
+date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
+2026-11-04 | MA grid | 8 windows | train SR see above | holdout SR see above | IS≠OOS | shrink search / pre-register
+ASSERTS_OK

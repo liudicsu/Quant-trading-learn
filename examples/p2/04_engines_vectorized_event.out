@@ -1,0 +1,18 @@
+=== parameters ===
+n 300 MA=10 gap_seed=4 Rf=0
+
+=== same signal, two fill timings (vectorized) ===
+nav_vectorized_same_bar_cc 2.290582
+nav_next_open_fill 0.824673
+nav_honest_shift1_cc 0.818344
+vectorized_default_risk: same-bar close fills silently inflate results unless you shift.
+
+=== event-loop sketch (initialize / handle_data) ===
+initialize: set calendar, commission model, universe, warm-up bars
+handle_data(bar): read as-of data only → emit orders → engine fills on next event
+teach: engine choice = fill + calendar assumptions, not just 'library brand'.
+
+=== assumptions paragraph (machine-printed) ===
+ASSUMPTIONS: daily bars; signal from adjusted close; honest research uses shift(1) or next-open fills; costs applied as bps×turnover; no short locate; timezone=naive dates; freeze params before hold-out.
+isomorphic_note: NautilusTrader documents Backtest/Sandbox/Live sharing one kernel — same code path reduces research≠live gaps (concept; see nautilustrader.io architecture docs).
+ASSERTS_OK

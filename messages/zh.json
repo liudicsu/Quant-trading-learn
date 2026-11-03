@@ -32,7 +32,7 @@
     "how3Title": "诚实研究",
     "how3": "强调回测陷阱、成本与样本外——先学流程，再谈策略。",
     "progressLocal": "进度仅保存在本浏览器（localStorage），不会上传。",
-    "placeholderNote": "大纲 V2：按知识依赖分阶段。P0–P1 已写满；其余课为占位正文。"
+    "placeholderNote": "大纲 V2：按知识依赖分阶段。P0–P2 已写满；其余课为占位正文。"
   },
   "lesson": {
     "lesson": "第 {n} 课",

@@ -1,9 +1,110 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **16 学时**：概念 5h + 多实验 9h + 写作 2h，**重课**）建立回测审讯：作弊 vs 诚实、网格过拟合、冻结后再看 hold-out、记录试验次数。前置：`data-cleaning`、`stats-probability-basics`。
+
+**课内目标：** 作弊/诚实对照；样本外/walk-forward 精神；记录失败与试验次数。
+
+**必须教会：** 未 shift 用当日收益 = 前瞻；多重试错制造虚假发现；冻结规则后再看样本外。
+
+<Callout type="warn" title="学习用途">
+合成资产。审讯的是流程，不是荐股。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 资产 AAA_adj；n≈299；Rf=0；年化 √252  
+- MA 网格 windows=5…40 step 5（共 8 次试验）  
+- Hold-out：末 **80** 日；随机规则扫描 50 seeds × 30 trials，阈值 |SR|>1.5  
+
+## 作弊 vs 诚实均线
+
+同 bar（无 shift）夏普可到 **~5.3**、净值 **~2.29**；`shift(1)` 诚实路径夏普 **负**。定义：用今日收盘做信号并吃今日收盘收益 = lookahead。
+
+## 网格过拟合
+
+样本内挑最大夏普的窗，样本外常崩。本课 best_train_w=35，train SR≈0.18，test SR≈−1.90。
+
+## 冻结后再 hold-out
+
+先在发展段选窗，再在从未参与选择的末段评分——呼应密封评估精神。
+
+<Callout type="info" title="密封 hold-out 精神（已读论文）">
+[Quant-Arena (arXiv:2610.30113)](https://arxiv.org/abs/2610.30113) 要求模型只在 2022–2023 研究窗口拿反馈，**冻结一条策略**后，在密封的 2024 年评估。本课用「发展段选参 → 末段 hold-out」练同一纪律（教学简化，不是复现该基准）。
+</Callout>
+
+## 试验次数与假阳性
+
+50 个种子上，30 次随机仓位里 |SR|>1.5 的次数均值约 **2.78**（std≈1.38）——噪声也会「显著」，所以要记账。
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p2/02_backtest_traps.py`。
+
+### 实际运行输出
+
+```text
+=== parameters ===
+n 299 ann_sqrt252 15.874508 asset=AAA_adj Rf=0
+
+=== MA10 cheat vs honest ===
+cheat_same_bar_sharpe 5.2663 nav 2.290582
+honest_shift1_sharpe -1.1193 nav 0.818344
+lookahead_def: using today's close in the signal while earning today's close-to-close return.
+
+=== parameter grid (honest shift1) ===
+windows [5, 10, 15, 20, 25, 30, 35, 40]
+best_train_w 35 sharpe_train 0.1801 sharpe_test -1.9025
+mean_train_sharpe -0.3252 mean_test_sharpe -1.8011
+teach: picking max in-sample Sharpe after many trials overstates OOS — log trial counts.
+
+=== freeze-then-holdout ===
+develop_n 220 holdout_n 80
+frozen_w 35
+sharpe_develop 0.1717
+sharpe_holdout -2.1282
+quant_arena_spirit: research feedback only on an earlier window; freeze one rule; score a sealed later window (arXiv:2610.30113).
+
+=== random-rule false hits (50 seeds × 30 trials, thr |SR|>1.5) ===
+mean_false_hits 2.78 std_false_hits 1.375
+null_note: under noise, some seeds look 'significant' — record trials.
+
+=== failure log template ===
+date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
+2026-11-04 | MA grid | 8 windows | train SR see above | holdout SR see above | IS≠OOS | shrink search / pre-register
+ASSERTS_OK
+```
+
+## 常见错误 / 陷阱
+
+1. 同 bar 成交当诚实。  
+2. 搜完参数只贴最好曲线。  
+3. 用测试集调参。  
+4. 不记试验次数。  
+5. 把密封集反馈泄漏回研发。
+
+## 练习（与任务清单 1:1）
+
+1. **ex1**：均线作弊/诚实；**完成标准**：两套夏普/净值与课内一致。  
+2. **ex2**：参数网格；**完成标准**：打印 best train 窗与 test SR。  
+3. **ex3**：末段 hold-out；**完成标准**：冻结 w + holdout SR。  
+4. **ex4**：失败日志模板一行；**完成标准**：含 trials 与 fail_reason。  
+5. **ex5**：解释为何记录试验次数；**完成标准**：联系假阳性均值。
+
+## 测验
+
+<Quiz id="q1-lh" question="未 shift 用当日收益主要是？" options={["更稳", "lookahead", "更低换手", "PIT"]} answer={1} explanation="信息与收益窗口重叠。" />
+<Quiz id="q2-trials" question="记录试验次数为了？" options={["好看", "打折多重比较下的虚假发现", "提高胜率", "取消成本"]} answer={1} explanation="试得越多越易撞运气。" />
+<Quiz id="q3-wf" question="冻结后再看 hold-out 的目的？" options={["提高 IS 夏普", "模拟密封评估，降低调参泄漏", "必须用月频", "去掉哈希"]} answer={1} explanation="与 Quant-Arena 密封精神同向。" />
+<Quiz id="q4-grid" question="只展示网格中最好 IS 结果会？" options={["更诚实", "过拟合叙事", "消除 Beta", "定义 PIT"]} answer={1} explanation="选择偏差。" />
+<Quiz id="q5-fail" question="失败日志至少应有？" options={["只有截图", "假设/试验次数/OOS/原因", "券商账号", "实盘下单"]} answer={1} explanation="可审计的审讯记录。" />
+
+## 完成标准
+
+- 陷阱报告含对照与 OOS + 测验  
+
+**来源：** classic — Canvas m5；AFML backtest-as-CV 精神。frontier — Quant-Arena arXiv:2610.30113（密封 hold-out）。已从大纲移除无法在本批核验的 XQuant 标签。
+
+<Summary>
+**要点**：lookahead 对照、网格过拟合、冻结 hold-out、试验记账。  
+**下一课**：把成本写入回测。
+</Summary>

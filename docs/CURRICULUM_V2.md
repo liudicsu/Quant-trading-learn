@@ -355,7 +355,7 @@
   - walk-forward目的
 - **Completion criteria:**
   - 陷阱报告含对照与OOS。
-- **Method tags:** classic: Canvas m5; JoinQuant审讯室; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: XQuant AI-first strategies still need interrogation | frontier: Quant-Arena sealed-holdout spirit (detail P8)
+- **Method tags:** classic: Canvas m5; JoinQuant审讯室; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out
 
 #### `costs-in-backtest` — 成本写入回测 / Costs in the backtest
 - **Hours:** 6h · **Difficulty:** 3/5 · **Basis:** 2h concepts + 3.5h coding + 0.5h quiz
@@ -398,7 +398,7 @@
   - 事件驱动解决什么
 - **Completion criteria:**
   - 假设段+双成交对照。
-- **Method tags:** classic: VectorBT; Zipline Reloaded; Backtrader; Canvas engines | niche: @RoundtableSpace Nautilus/Hummingbot; Qbot (@BTCqzy1); Packt Cookbook | frontier: NautilusTrader research-to-live parity (2024-2026)
+- **Method tags:** classic: VectorBT; Zipline Reloaded; Backtrader; Canvas engines | niche: @RoundtableSpace/2111272232249143360 engine list | frontier: NautilusTrader shared-kernel architecture docs
 
 ### P3 · 经典策略族（Classic strategy families）— 30h / 4 课
 

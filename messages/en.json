@@ -32,7 +32,7 @@
     "how3Title": "Honest research",
     "how3": "Focus on traps, costs, and out-of-sample thinking before clever strategies.",
     "progressLocal": "Progress is stored only in this browser (localStorage) and is never uploaded.",
-    "placeholderNote": "Curriculum V2: phases from knowledge dependencies. P0–P1 are fully written; later lessons are stubs."
+    "placeholderNote": "Curriculum V2: phases from knowledge dependencies. P0–P2 are fully written; later lessons are stubs."
   },
   "lesson": {
     "lesson": "Lesson {n}",

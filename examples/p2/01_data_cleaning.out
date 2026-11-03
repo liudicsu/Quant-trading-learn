@@ -1,0 +1,49 @@
+=== versioned download / hash ===
+file panel_toy.csv
+sha256 3e9fab66351315c8cde71fd61a9bd776df738fb73c651784b8c0f8bd3ed6678b
+hash_match True
+params: panel seed=17 when generated; n_rows from file
+n_rows 300
+
+=== survivorship toy ===
+today_universe ['AAA', 'BBB']
+historical_members_in_panel ['AAA', 'BBB', 'CCC']
+mean_ret_survivors_only -0.000557
+mean_ret_full_hist_universe -0.000386
+teach: today's constituents != historical investable universe.
+
+=== PIT fundamental lag ===
+params: publish_lag_bdays=5; FUND_pit = FUND_true.shift(5)
+corr_fund_true_vs_ret -0.0541
+corr_fund_pit_vs_ret -0.1088
+lookahead_flag: aligning fundamentals without as-of/PIT can leak future prints.
+
+=== timezone / session label mess ===
+true_closes
+2024-01-02    100.0
+2024-01-03    101.0
+2024-01-04    100.5
+mislabeled_closes_minus_1bd
+2024-01-01    100.0
+2024-01-02    101.0
+2024-01-03    100.5
+aligned_bug_on_true_calendar
+2024-01-02    101.0
+2024-01-03    100.5
+2024-01-04      NaN
+tue_row_price_after_bug 100.5
+teach: Tue's row now carries Wed's close — one-day timezone/session mislabel embeds look-ahead.
+panel_nav_honest_shift1 0.818344
+panel_nav_signal_times_next_ret 0.818344
+
+=== reindex + missingness assert ===
+calendar_rows 300 panel_rows 300 missing_after_reindex 0
+ASSERT_missing_ok
+
+=== adj vs raw (2:1 split toy at iloc 200) ===
+raw_before 92.8473 raw_after 45.6782
+adj_before 92.8473 adj_after 91.3565
+raw_ret_across_split -0.508
+adj_ret_across_split -0.0161
+data_sheet_stub: source=synthetic; seed=17; fields=adj/raw/PIT; timezone=naive dates; universe_rule=see survivorship note
+ASSERTS_OK

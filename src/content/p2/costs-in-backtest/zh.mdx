@@ -1,9 +1,86 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **6 学时**：概念 2h + 编码 3.5h + 测验 0.5h）把佣金/滑点写成公式，并做 ≥3 档成本敏感。前置：`backtest-traps`。
+
+**课内目标：** 实现换手成本公式；≥3 档成本敏感。
+
+**必须教会：** 零成本曲线 ≠ 实盘论据；显性 vs 隐性成本。
+
+<Callout type="info" title="学习用途 · 非投资建议">
+bps 玩具。非券商费率表。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- MA=10，`position=shift(1)`，Rf=0，√252  
+- 成本公式：`net = pos*ret − turnover * one_way_bps/1e4`  
+- 阶梯：0/5/10/20/40 bps  
+
+## 显性 vs 隐性
+
+显性：可写成 bps 的佣金类扣减。隐性：价差/冲击等，本课用同一 bps 阶梯近似，提醒「还有没建模的部分」。
+
+## 成本阶梯
+
+零成本夏普已为负；随着 bps 上升，夏普与净值进一步变差——换手放大每一档成本。
+
+![成本阶梯](/p2/cost_ladder.png)
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p2/03_costs_in_backtest.py`。
+
+### 实际运行输出
+
+```text
+=== parameters ===
+n 299 MA=10 position=shift(1) Rf=0 ann=sqrt(252)
+cost_formula: net = pos*ret - turnover * one_way_bps/1e4
+explicit_costs: commission-like bps; implicit: spread/impact approximated in bps ladder
+
+=== cost ladder ===
+ bps  sharpe  final_nav  ann_ret
+   0 -1.1193     0.8183  -0.1588
+   5 -1.2775     0.7965  -0.1816
+  10 -1.4345     0.7752  -0.2043
+  20 -1.7441     0.7343  -0.2498
+  40 -2.3405     0.6588  -0.3409
+teach: zero-cost curve ≠ live evidence; turnover amplifies every bps.
+saved_plot public/p2/cost_ladder.png
+ASSERTS_OK
+```
+
+## 常见错误 / 陷阱
+
+1. 只贴零成本曲线。  
+2. 忽略换手。  
+3. 把玩具 bps 当成某交易所官方费率。  
+4. 先看成本后再改信号定义（泄漏）。  
+5. 不声明 Rf/年化。
+
+## 练习（与任务清单 1:1）
+
+1. **ex1**：写入净收益函数；**完成标准**：公式与脚本一致。  
+2. **ex2**：成本阶梯图；**完成标准**：PNG 在 `public/p2/`。  
+3. **ex3**：解读 ≥3 档；**完成标准**：三句说明单调变差。  
+4. **ex4**：区分显性/隐性各一例；**完成标准**：两例。  
+5. **ex5**：说明为何零成本 ≠ 实盘论据；**完成标准**：≥2 句。
+
+## 测验
+
+<Quiz id="q1-zero" question="零成本回测曲线主要问题？" options={["太慢", "不能当实盘论据", "非法", "无哈希"]} answer={1} explanation="缺摩擦。" />
+<Quiz id="q2-to" question="换手进入公式的方式？" options={["忽略", "turnover×bps 从收益扣除", "只加到价格", "只改 Beta"]} answer={1} explanation="课内净收益定义。" />
+<Quiz id="q3-imp" question="隐性成本例子？" options={["明示佣金率", "冲击/价差等未完全建模部分", "Rf", "SHA256"]} answer={1} explanation="隐性=难直接开票的摩擦。" />
+<Quiz id="q4-lad" question="成本阶梯上升时通常？" options={["夏普必升", "净表现变差", "MDD 消失", "试验次数归零"]} answer={1} explanation="本课数字单调变差。" />
+<Quiz id="q5-dec" question="应在何时固定信号定义？" options={["看完成本阶梯后随意改", "成本实验前冻结", "永远不冻结", "只在实盘改"]} answer={1} explanation="防泄漏。" />
+
+## 完成标准
+
+- 成本后主回测可运行 + 图 + 测验  
+
+**来源：** classic — Canvas costs；QuantStart/NYU TCA 主题。
+
+<Summary>
+**要点**：净收益公式、成本阶梯、零成本不是证据。  
+**下一课**：向量化与事件驱动引擎假设。
+</Summary>

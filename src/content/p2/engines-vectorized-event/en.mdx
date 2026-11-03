@@ -1,9 +1,92 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**8 hours**: 3h concepts + 4h compare lab + 1h optional docs) clarifies engine assumptions: vectorized default risks, two fill-timing NAVs, and an initialize/handle_data event-loop sketch. Prereq: `costs-in-backtest`.
+
+**Goals:** state vectorized default risks; compare two fill-timing NAVs; describe the event loop.
+
+**Must-teach:** engine choice = fill/calendar assumptions; honest vectorized then event validation; isomorphic engines reduce research≠live gaps (concept).
+
+<Callout type="info" title="Learning only">
+Not tied to one vendor; concepts first.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- MA=10; gap_seed=4 for gappy opens; Rf=0  
+
+## Same signal, two fill timings
+
+Vectorized same-bar close NAV can hit **~2.29**; next-open fill ≈ **0.82**; `shift(1)` close ≈ **0.82**. Silent same-bar defaults are optimistic.
+
+## Event-loop sketch
+
+`initialize`: calendar, fees, universe, warm-up.  
+`handle_data(bar)`: read as-of data only → emit orders → engine fills on a **later** event.
+
+## Isomorphic engines (docs read)
+
+[NautilusTrader architecture](https://nautilustrader.io/docs/latest/concepts/architecture/) states Backtest / Sandbox / Live share one `NautilusKernel` — same core path shrinks research≠live gaps (conceptual; this lesson does not install live trading).
+
+[RoundtableSpace’s engine list post](https://x.com/RoundtableSpace/status/2111272232249143360) summarizes NautilusTrader as “the same code runs your backtest and your live bot,” alongside Hummingbot / Jesse / vectorbt — use it as a **map**, and still write your own assumptions paragraph.
+
+## Python lab (run locally)
+
+Script: `examples/p2/04_engines_vectorized_event.py`.
+
+### Real run output
+
+```text
+=== parameters ===
+n 300 MA=10 gap_seed=4 Rf=0
+
+=== same signal, two fill timings (vectorized) ===
+nav_vectorized_same_bar_cc 2.290582
+nav_next_open_fill 0.824673
+nav_honest_shift1_cc 0.818344
+vectorized_default_risk: same-bar close fills silently inflate results unless you shift.
+
+=== event-loop sketch (initialize / handle_data) ===
+initialize: set calendar, commission model, universe, warm-up bars
+handle_data(bar): read as-of data only → emit orders → engine fills on next event
+teach: engine choice = fill + calendar assumptions, not just 'library brand'.
+
+=== assumptions paragraph (machine-printed) ===
+ASSUMPTIONS: daily bars; signal from adjusted close; honest research uses shift(1) or next-open fills; costs applied as bps×turnover; no short locate; timezone=naive dates; freeze params before hold-out.
+isomorphic_note: NautilusTrader documents Backtest/Sandbox/Live sharing one kernel — same code path reduces research≠live gaps (concept; see nautilustrader.io architecture docs).
+ASSERTS_OK
+```
+
+## Common mistakes / pitfalls
+
+1. Treating a library name as an assumptions sheet.  
+2. Vectorized same-bar defaults.  
+3. Reading future bars inside handle_data.  
+4. No assumptions paragraph.  
+5. Comparing engines without costs.
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — same signal, two fills; **done when** both NAVs print with an explanation.  
+2. **ex2** — assumptions paragraph; **done when** fill/calendar/cost/timezone appear.  
+3. **ex3** — two sentences each for initialize/handle_data; **done when** four sentences total.  
+4. **ex4** — isomorphic-engine note; **done when** linked to Nautilus docs in one sentence.  
+5. **ex5** — one vectorized optimistic default; **done when** same-bar is named.
+
+## Quiz
+
+<Quiz id="q1-vec" question="A common optimistic vectorized default is?" options={["Forced next-open", "Same-bar close fills", "Auto PIT", "Auto hash"]} answer={1} explanation="Source of the NAV gap here." />
+<Quiz id="q2-ev" question="Event-driven mainly buys you?" options={["Higher win rate", "Explicit fill/event timing", "Free trading", "No assumptions"]} answer={1} explanation="Timing made explicit." />
+<Quiz id="q3-iso" question="Isomorphic engines emphasize?" options={["Any language switch", "Shared research/live core path", "Vectorized only", "Monthly only"]} answer={1} explanation="Shared kernel in Nautilus docs." />
+<Quiz id="q4-eng" question="Choosing an engine means choosing?" options={["A logo", "Fill and calendar assumptions", "Rf color", "Follower count"]} answer={1} explanation="Assumptions drive numbers." />
+<Quiz id="q5-ass" question="An assumptions paragraph should include?" options={["Screenshots only", "Fill timing/costs/calendar/etc.", "Live passwords", "Stock tips"]} answer={1} explanation="Auditable." />
+
+## Done when
+
+- Assumptions paragraph + dual-fill control + quizzes  
+
+**Sources:** classic — VectorBT / Zipline / Backtrader concepts. niche — RoundtableSpace engine list post. frontier — NautilusTrader architecture (shared kernel). Unverified Qbot/Packt tags not used in the body this batch.
+
+<Summary>
+**Takeaways**: fill assumptions, event loops, isomorphic-engine concept.  
+**P2 wrap**: versioned data + trap interrogation + costs + engines; next batch is P3 classic families.
+</Summary>
