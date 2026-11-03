@@ -34,7 +34,10 @@ HALF_SPREAD_BPS = 5.0         # half bid-ask (implicit microstructure)
 SLIPPAGE_BPS = 3.0            # extra slippage beyond half-spread
 IMPACT_K = 0.10               # square-root prefactor (dimensionless)
 ADV_SHARES = 1_000_000.0      # average daily volume (shares)
-SIGMA_DAILY = float(r.std(ddof=1))  # daily vol from panel
+VOL_LB = 20
+# Single-trade demo uses STATED prior sigma from first 100 bars only (no future).
+SIGMA_PRIOR = float(r.iloc[:100].std(ddof=1))
+SIGMA_DAILY = SIGMA_PRIOR  # print alias; path impact uses lagged rolling
 PRICE = float(px.iloc[-1])
 CAPITAL_BASE = 1_000_000.0    # $ for unit demo
 PARTICIPATION_DEFAULT = 0.05  # Q/ADV for single-trade demo
@@ -45,7 +48,8 @@ print("commission_bps", COMMISSION_BPS)
 print("half_spread_bps", HALF_SPREAD_BPS)
 print("slippage_bps", SLIPPAGE_BPS)
 print("impact_model: k*sigma*sqrt(Q/ADV) with k=", IMPACT_K)
-print("ADV_shares", ADV_SHARES, "sigma_daily", round(SIGMA_DAILY, 6), "price", round(PRICE, 4))
+print("ADV_shares", ADV_SHARES, "sigma_prior_first100", round(SIGMA_PRIOR, 6), "price", round(PRICE, 4))
+print("impact_vol_rule: rolling", VOL_LB, "std shifted by 1; warm-up=expanding std shifted by 1")
 print("cite: Almgren et al. 2005 Direct Estimation of Equity Market Impact (√ candidate; empirical β≈0.6)")
 
 
@@ -82,12 +86,20 @@ c_slip = turnover * bps_to_ret(SLIPPAGE_BPS)
 
 
 # 4) Market impact via square-root: each rebalance trades Q shares ≈ turnover * (capital/price)
+def lagged_sigma(ret: pd.Series, lb: int = VOL_LB) -> pd.Series:
+    """sigma[t] from returns strictly before t (rolling lb; warm-up expanding)."""
+    roll = ret.rolling(lb, min_periods=lb).std(ddof=1)
+    expand = ret.expanding(min_periods=2).std(ddof=1)
+    return roll.fillna(expand).shift(1).fillna(0.0)
+
+
 def impact_cost_series(capital: float) -> pd.Series:
     # shares traded on a day ≈ turnover * (capital / price); Q/ADV = shares/ADV
     shares = turnover * (capital / PRICE)
     q_over_adv = shares / ADV_SHARES
-    # impact in return units (fraction of price): k * σ * sqrt(Q/ADV)
-    impact_ret = IMPACT_K * SIGMA_DAILY * np.sqrt(q_over_adv.clip(lower=0))
+    # impact: k * σ_{t-1} * sqrt(Q/ADV) — no full-sample look-ahead
+    sigma = lagged_sigma(r)
+    impact_ret = IMPACT_K * sigma * np.sqrt(q_over_adv.clip(lower=0))
     return impact_ret
 
 
@@ -96,14 +108,14 @@ net = gross - c_comm - c_spread - c_slip - c_impact
 
 print("\n=== four-part numeric example (single trade Q/ADV=%.2f) ===" % PARTICIPATION_DEFAULT)
 q = PARTICIPATION_DEFAULT
-imp_one = IMPACT_K * SIGMA_DAILY * np.sqrt(q)
+imp_one = IMPACT_K * SIGMA_PRIOR * np.sqrt(q)
 print("commission_one_way_ret", round(bps_to_ret(COMMISSION_BPS), 6), f"({COMMISSION_BPS} bps)")
 print("half_spread_one_way_ret", round(bps_to_ret(HALF_SPREAD_BPS), 6), f"({HALF_SPREAD_BPS} bps)")
 print("slippage_one_way_ret", round(bps_to_ret(SLIPPAGE_BPS), 6), f"({SLIPPAGE_BPS} bps)")
 print(
     "impact_one_trade_ret",
     round(imp_one, 6),
-    f"= {IMPACT_K}*{round(SIGMA_DAILY,4)}*sqrt({q})",
+    f"= {IMPACT_K}*{round(SIGMA_PRIOR,4)}*sqrt({q}) (stated prior)",
 )
 print(
     "total_one_way_demo_bps",

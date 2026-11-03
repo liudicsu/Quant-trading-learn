@@ -11,10 +11,10 @@ cite: NYU Stern Dhar syllabus — trend → counter-trend → pairs
 further_reading: Ernest P. Chan, Algorithmic Trading: Winning Strategies and Their Rationale, Wiley 2013 (ISBN 978-1-118-46014-6)
 
 === dual-MA vs TSMOM (Moskowitz-style own-return) vs CS (JT-style ranks) ===
-dual_MA              gross_SR=-0.588 net_SR=-0.659 net_NAV=0.8889 maxDD=-0.191 turn=0.0333 OOS_net_SR=-1.691
+dual_MA              gross_SR=-0.588 net_SR=-0.660 net_NAV=0.8888 maxDD=-0.191 turn=0.0333 OOS_net_SR=-1.688
 ts_mom_skip          gross_SR=-0.090 net_SR=-0.118 net_NAV=0.9695 maxDD=-0.124 turn=0.0133 OOS_net_SR=-1.673
 ts_mom_no_skip       gross_SR=0.260 net_SR=0.232 net_NAV=1.0268 maxDD=-0.086 turn=0.0133 OOS_net_SR=nan
-ts_mom_vol_target    gross_SR=-0.010 net_SR=-0.080 net_NAV=0.9922 maxDD=-0.048 turn=0.0104 OOS_net_SR=-1.673
+ts_mom_vol_target    gross_SR=-0.010 net_SR=-0.081 net_NAV=0.9922 maxDD=-0.048 turn=0.0104 OOS_net_SR=-1.673
 
 === CS long/short (3-name toy) ===
 cs_net_SR=0.497 cs_NAV=1.0838 mean_turn=0.0900 OOS_net_SR=0.913
@@ -22,9 +22,9 @@ teach: with 3 synthetic names CS is a toy — real CS needs a broad universe
 
 === by-year net Sharpe (TS mom skip) ===
 date
-2022   -0.127049
+2022   -0.127051
 2023         NaN
-mean_by_year -0.12704883291837588
+mean_by_year -0.12705120153815352
 
 === skip vs no-skip (must-teach) ===
 skip_net_SR=-0.118 no_skip_net_SR=0.232 delta=-0.350

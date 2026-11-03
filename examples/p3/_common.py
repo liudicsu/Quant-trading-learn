@@ -60,7 +60,12 @@ def apply_costs(
     c_stack = turnover * bps
     shares = CAPITAL / price.reindex(ret.index).ffill().bfill().clip(lower=1e-6)
     participation = (n_legs * turnover * shares) / ADV_SHARES
-    sigma = float(ret.std(ddof=1))
+    # Look-ahead-free vol: rolling std shift(1). Warm-up: expanding std of past only, also shifted.
+    # Stated: VOL_LB=20; sigma[t] uses returns strictly before t.
+    VOL_LB = 20
+    roll = ret.rolling(VOL_LB, min_periods=VOL_LB).std(ddof=1)
+    expand = ret.expanding(min_periods=2).std(ddof=1)
+    sigma = roll.fillna(expand).shift(1).reindex(ret.index).fillna(0.0)
     c_impact = IMPACT_K * sigma * np.sqrt(participation.clip(lower=0.0))
     net = gross - c_stack - c_impact
     stats = {

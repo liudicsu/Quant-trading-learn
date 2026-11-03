@@ -33,7 +33,7 @@
 
 实验（已修）：按 OOS 最优 = **pairs_rolling**，表内 OOS 夏普 ≈ **−0.47**。仅在该 OOS 窗上：
 
-- `sr_daily` ≈ **−0.0298**（与 −0.47 年化一致，为负）
+- `sr_daily` ≈ **−0.0299**（与 −0.47 年化一致，为负）
 - `sr_daily × √252` **断言等于**表中 `OOS_net_SR`
 - 由 **N=4 段 OOS** 原始日频夏普得到 `σ_SR` ≈ **0.061**
 - SR* = E[max SR] ≈ **0.0643**；**DSR ≈ 0.189**（远低于 0.5）
@@ -70,24 +70,24 @@ further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quote
 
 === comparison table (ONE cost model; net of costs) ===
         strategy  IS_net_SR  OOS_net_SR  net_NAV  turnover   maxDD  n_legs  beats_baseline_OOS
-baseline_dual_MA    -0.4310     -1.6906   0.8889    0.0333 -0.1910       1               False
+baseline_dual_MA    -0.4327     -1.6885   0.8888    0.0333 -0.1910       1               False
 ts_momentum_skip    -0.1330     -1.6733   0.9695    0.0133 -0.1237       1                True
-mean_reversion_z    -0.6546     -2.8499   0.8256    0.0233 -0.2144       1               False
-   pairs_rolling     0.4222     -0.4732   1.0094    0.0500 -0.0590       2                True
+mean_reversion_z    -0.6559     -2.8492   0.8256    0.0233 -0.2144       1               False
+   pairs_rolling     0.4233     -0.4744   1.0095    0.0500 -0.0590       2                True
 
 === DSR on best OOS strategy (link P2 backtest-traps) ===
 rule: DSR uses the SAME OOS net-return series that produced OOS_net_SR / the choice — never mix full-sample PnL with an OOS ranking
 best_strategy=pairs_rolling
 N_trials=4
-OOS_raw_SR_trials=[-0.106497, -0.105409, -0.179524, -0.029806] sigma_SR_OOS=0.061128
-sr_daily=-0.029806 sr_ann=-0.4732 table_OOS_net_SR=-0.4732
+OOS_raw_SR_trials=[-0.106364, -0.105409, -0.17948, -0.029983] sigma_SR_OOS=0.061078
+sr_daily=-0.029983 sr_ann=-0.4744 table_OOS_net_SR=-0.4744
 ASSERT_sr_daily_times_sqrt252_matches_table_OOS_SR: OK (diff=0.00e+00)
-SR_star_Emax=0.064314 DSR=0.188737 n_obs_OOS=90
+SR_star_Emax=0.064262 DSR=0.188677 n_obs_OOS=90
 formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson) on OOS bars only
 teach: even the horse-race winner must clear a multiple-testing bar — see P2 DSR vs N
 
 === judgment ===
-baseline_OOS_net_SR=-1.6906
+baseline_OOS_net_SR=-1.6885
 any_complex_beats_baseline_OOS=True
 rule: complexity needs OOS proof under identical cost/fill assumptions + survive DSR(N)
 

@@ -58,7 +58,7 @@ cite: Stern Dhar counter-trend; Canvas m7; OU/AR(1) half-life for lookback choic
 further_reading: Ernest P. Chan, Algorithmic Trading: Winning Strategies and Their Rationale, Wiley 2013 (ISBN 978-1-118-46014-6) — no quotes
 
 === AR(1) / OU half-life ===
-model: dx = a + b * x_(t-1) + eps
+model: dx = a + b * x_{t-1} + eps
 OU link: kappa ≈ -ln(1+b) per bar; half_life = ln(2)/kappa = -ln(2)/ln(1+b)
 a=0.932778 b=-0.012340 kappa=0.012417
 half_life_bars=55.82 n=299
@@ -69,10 +69,10 @@ stop_exits=4
 
 === A/B stops (original panel) ===
 no_stop  net_SR=-1.972 NAV=0.7719 turn=0.0033 OOS=-3.539
-with_stop net_SR=-1.104 NAV=0.9118 turn=0.0300 stop_exits=4 OOS=-1.852
+with_stop net_SR=-1.101 NAV=0.9120 turn=0.0300 stop_exits=4 OOS=-1.847
 
 === trend-failure foil (synthetic +0.15%/day drift) ===
-mr_on_trend net_SR=-0.231 NAV=0.9839 stop_exits=1
+mr_on_trend net_SR=-0.230 NAV=0.9839 stop_exits=1
 invalidation_list:
  1) repeated stops in a one-way trend
  2) z thresholds estimated on full sample
