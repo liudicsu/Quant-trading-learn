@@ -86,20 +86,25 @@ print("teach: TWAP ignores volume; VWAP matches expected volume profile")
 print("\n=== implementation shortfall (Perold 1988) ===")
 # arrival price S0; decision to sell X0; simulate mid path + temporary impact on AC balanced traj
 _, x, trades, _ = ac_trajectory(1e-5)
-# Brownian mid
+# Brownian mid — permanent impact is INCREMENTAL: each slice moves the mid by γ·n_j once
+# (do NOT subtract the running sum of permanent impact every step — that double-counts)
 dW = rng.normal(0, sigma * np.sqrt(tau), N)
 mid = np.zeros(N + 1); mid[0] = S0
-perm = 0.0
 exec_px = np.zeros(N)
 for j in range(N):
-    perm += gamma * trades[j]
-    mid[j + 1] = mid[j] + dW[j] - perm  # sell pressure depresses mid (permanent)
-    exec_px[j] = mid[j] - eta * (trades[j] / tau)  # temporary: worse for seller
+    # temporary impact on this fill (seller gets worse than prevailing mid)
+    exec_px[j] = mid[j] - eta * (trades[j] / tau)
+    # mid evolves: diffusion + incremental permanent impact from this slice
+    mid[j + 1] = mid[j] + dW[j] - gamma * trades[j]
 arrival = S0
 paper = arrival * X0  # paper liquidation at arrival
 realized = np.sum(exec_px * trades)
 IS = paper - realized  # positive = shortfall for a sell program vs arrival
-print(f"arrival={arrival:.2f} paper_value={paper:.0f} realized={realized:.0f} IS={IS:.0f} IS_bps={1e4*IS/(arrival*X0):.1f}")
+IS_bps = 1e4 * IS / (arrival * X0)
+# volume-weighted arrival slip ≡ Perold IS/arrival (same dollars / same notional)
+vw_arrival_slip_bps = 1e4 * np.sum((arrival - exec_px) * trades) / (arrival * X0)
+print(f"arrival={arrival:.2f} paper_value={paper:.0f} realized={realized:.0f} IS={IS:.0f} IS_bps={IS_bps:.1f}")
+print(f"volume_weighted_arrival_slip_bps={vw_arrival_slip_bps:.1f}  (== IS_bps; identical to Perold IS, not a second metric)")
 print("post-trade: decompose IS ≈ delay + trading (impact) components under arrival-price benchmark")
 
 # Limit vs market toy
@@ -124,16 +129,27 @@ limit_pnl = np.where(
 print(f"market mean_cost={-mkt_pnl.mean():.4f} limit mean_pnl={limit_pnl.mean():.4f} fill_rate={filled.mean():.2f}")
 print("teach: limits improve price conditional on fill but add non-fill + adverse-selection risk")
 
-# Slippage monitoring report
-print("\n=== slippage / TCA mini report (arrival-price benchmark) ===")
+# Slippage monitoring report — arrival (= Perold) vs interval VWAP vs close
+print("\n=== slippage / TCA mini report (multiple benchmarks) ===")
+# Interval VWAP foil: volume-weighted mid over the window (ex-post interval benchmark)
+interval_vwap = float(np.sum(mid[:-1] * vol_profile))  # profile as interval volume weights
+close_px = float(mid[-1])
 report = pd.DataFrame({
     "slice": np.arange(1, N + 1),
     "shares": trades,
     "exec_px": exec_px,
     "mid": mid[:-1],
-    "slip_bps": 1e4 * (arrival - exec_px) / arrival,
+    "arrival_slip_bps": 1e4 * (arrival - exec_px) / arrival,
+    "vwap_slip_bps": 1e4 * (interval_vwap - exec_px) / interval_vwap,
+    "close_slip_bps": 1e4 * (close_px - exec_px) / close_px,
 })
 print(report.round(4).to_string(index=False))
-print(f"mean_slip_bps={report['slip_bps'].mean():.2f} participation≈{(trades/X0).max():.2f} max_slice")
+# Volume-weighted arrival slip == Perold IS_bps (do NOT treat unweighted mean as a second IS)
+vw_arr = 1e4 * np.sum((arrival - exec_px) * trades) / (arrival * np.sum(trades))
+vw_vwap = 1e4 * np.sum((interval_vwap - exec_px) * trades) / (interval_vwap * np.sum(trades))
+vw_close = 1e4 * np.sum((close_px - exec_px) * trades) / (close_px * np.sum(trades))
+print(f"benchmarks (volume-weighted): arrival/Perold={vw_arr:.2f} bps | interval_VWAP={vw_vwap:.2f} bps | close={vw_close:.2f} bps")
+print(f"note: unweighted mean arrival_slip={report['arrival_slip_bps'].mean():.2f} bps ≠ Perold; use volume-weighted (=IS)")
+print(f"interval_VWAP={interval_vwap:.4f} close={close_px:.4f} participation_max={(trades/X0).max():.2f}")
 report.to_csv(DATA / "tca_report.csv", index=False)
 print("disclaimer: toy paths — learning only, not a broker TCA")

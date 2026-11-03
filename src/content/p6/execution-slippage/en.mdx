@@ -36,7 +36,7 @@ Lab λ sweep moves from patient (low E premium, higher inventory risk) to urgent
 
 ## Implementation shortfall (Perold 1988)
 
-Perold (*Journal of Portfolio Management* 14(3), pp. 4–9) defines **implementation shortfall** as paper portfolio (decision / arrival price) minus realised execution. Lab sell programme: arrival 100, paper 1e8, realised ≈ 9.88e7, **IS ≈ 1.16e6 (~116 bps)**. Decompose delay vs trading (impact) under the arrival-price benchmark for post-trade review.
+Perold (*Journal of Portfolio Management* 14(3), pp. 4–9) defines **implementation shortfall** as paper portfolio (decision / arrival price) minus realised execution. Lab sell programme (after fixing permanent impact to the **incremental** form `mid += dW − γ·n_j`): arrival 100, paper 1e8, realised ≈ 9.90e7, **IS ≈ 1.038e6 (~103.8 bps)** — matches the reviewer ~104 bps. Decompose delay vs trading (impact) under the arrival-price benchmark.
 
 ## Limit vs market (toy)
 
@@ -44,7 +44,9 @@ Market orders pay the half-spread for immediacy (lab mean cost 0.02). Limits imp
 
 ## Slippage monitoring / TCA mini-report
 
-Arrival-price benchmark per slice: `slip_bps = 1e4 · (arrival − exec_px) / arrival`. Lab mean slip ≈ 116 bps; max slice participation ≈ 0.10. Export `examples/p6/data/tca_report.csv`.
+**Identity:** the *volume-weighted* arrival-price slippage equals Perold IS in bps — `Σ (arrival − exec)·n / (arrival·X0)`. It is **not** a second independent ~104 bps result. An *unweighted* mean of per-slice slip differs slightly and should not be quoted as IS.
+
+Lab volume-weighted benchmarks on the same fills: **arrival/Perold ≈ 103.8 bps**, **interval VWAP ≈ 100.0 bps**, **close ≈ 95.4 bps**. Export `examples/p6/data/tca_report.csv`.
 
 ## Look-ahead warnings
 
@@ -61,9 +63,10 @@ Arrival-price benchmark per slice: `slip_bps = 1e4 · (arrival − exec_px) / ar
 ```
 TWAP slice: [100000. 100000. 100000.] ...
 VWAP slice: [160793.8 ... 160793.8]  # U-shape
-arrival=100.00 IS≈1158432 IS_bps≈115.8
+arrival=100.00 IS≈1038421 IS_bps≈103.8
+volume_weighted_arrival_slip_bps=103.8  (== IS_bps)
+benchmarks: arrival/Perold=103.84 | interval_VWAP=100.03 | close=95.35
 market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
-mean_slip_bps≈115.85 participation≈0.10 max_slice
 ```
 
 ## Common mistakes / pitfalls
@@ -89,7 +92,7 @@ mean_slip_bps≈115.85 participation≈0.10 max_slice
 <Quiz id="p6ex-q3" question="Perold implementation shortfall compares?" options={["Close vs open", "Paper (arrival/decision) value vs realised execution", "Bid vs ask only", "VaR vs stress"]} answer={1} explanation="Paper vs reality under the arrival-price idea." />
 <Quiz id="p6ex-q4" question="TWAP differs from VWAP because TWAP?" options={["Matches volume profile", "Ignores volume and splits evenly in time", "Always minimises IS", "Uses only limit orders"]} answer={1} explanation="TWAP is time-uniform; VWAP follows expected volume." />
 <Quiz id="p6ex-q5" question="Limit orders vs market in the toy mainly add?" options={["Guaranteed better PnL", "Non-fill risk and adverse-selection risk", "Zero slippage", "Higher κ"]} answer={1} explanation="Fills are probabilistic and biased when the mid moves against you." />
-<Quiz id="p6ex-q6" question="Arrival-price slip_bps in the lab report is?" options={["Always zero", "≈116 bps mean on the toy sell path", "Equal to VWAP automatically", "A Kelly fraction"]} answer={1} explanation="Post-trade TCA under arrival benchmark." />
+<Quiz id="p6ex-q6" question="Volume-weighted arrival slippage vs Perold IS?" options={["Independent second metric ≈116 bps", "Mathematically identical (same dollars / notional)", "Always equal to close slippage", "Ignores share sizes"]} answer={1} explanation="VW arrival slip ≡ IS_bps; use VWAP/close as truly different benchmarks." />
 
 ## Done when
 

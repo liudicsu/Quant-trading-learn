@@ -36,7 +36,7 @@ P4 **弱**面板（`MU_WEAK=0.001`），50 只子样本。数字用于方法论�
 
 ## 为何此处 shuffle 未必抬高 IC
 
-在**面板**上，行级 shuffle 会把同一日的不同资产打散到各折。截面信号**很弱**时，这并不稳定抬高日度截面 RankIC 均值——此处 shuffle ≈+0.035 **低于** purged ridge ≈+0.040，噪声占主导。请看更清晰的泄漏：(i) 全样本标准化（往往不明显）；(ii) 带噪声的远期收益特征（实验 IC ≈+0.93 ≫ oracle ≈+0.10）。
+在**面板**上，行级 shuffle 会把同一日的不同资产打散到各折。截面信号**很弱**时，这并不稳定抬高日度截面 RankIC 均值——此处 shuffle ≈+0.035 **低于** purged ridge ≈+0.040，噪声占主导。请看更清晰的泄漏：(i) 全样本标准化（真实泄漏类型，但**不明显**——本样本相对 purged **未抬高**）；(ii) 带噪声的远期收益特征（实验 IC ≈+0.93 ≫ oracle ≈+0.10）。
 
 ## 并排对照：oracle / 泄漏 / purged / 过拟合
 
@@ -44,7 +44,7 @@ P4 **弱**面板（`MU_WEAK=0.001`），50 只子样本。数字用于方法论�
 |------|----------------------|---|------|------|
 | oracle `beta_true` | ≈ **+0.099** | ≈6.3 | ≈3.7 | 上界 |
 | LEAK 噪声远期特征 | ≈ **+0.93** | 极大 | 极大 | 标签泄漏 ≫ oracle |
-| LEAK 全样本 scaler | ≈ +0.040 | ≈4.6 | ≈2.7 | 截面特征上往往不明显 |
+| LEAK 全样本 scaler | ≈ +0.040 | ≈4.6 | ≈2.7 | 不明显——本样本相对 purged **未抬高** |
 | LEAK 未 purge KFold | ≈ **+0.052** | ≈6.0 | ≈3.6 | 轻度 CV 泄漏 |
 | LEAK shuffle | ≈ +0.035 | ≈2.8 | ≈1.7 | 弱面板上未必抬高 IC |
 | **purged ridge** | ≈ **+0.040** | ≈4.6 | ≈2.7 | 弱信号被回收 |
@@ -61,7 +61,7 @@ P4 **弱**面板（`MU_WEAK=0.001`），50 只子样本。数字用于方法论�
 
 ## 三种情形（勿混为一谈）
 
-1. **(a) 管线幻觉** — 明确的标签泄漏会炸高 IC（噪声远期 ≈+0.93 ≫ oracle）；未 purge CV 轻度抬高（≈0.052 > purged ≈0.040）。弱面板上仅靠 shuffle 未必抬高截面 IC。
+1. **(a) 管线幻觉** — 明确的**标签**泄漏会炸高 IC（噪声远期 ≈+0.93 ≫ oracle）；未 purge CV 轻度抬高（≈0.052 > purged ≈0.040）。全样本标准化属于真实泄漏类型，但在本样本上**不明显**（IC ≈ purged ≈+0.040——并未抬高）。弱面板上仅靠 shuffle 未必抬高截面 IC。
 2. **(b) 弱但可回收** — purge+embargo 后，ridge/GBM 仍回收约 **+0.04** 的截面 IC（oracle ~0.10 为天花板）。
 3. **(c) 有真实 IC，成本抹掉净夏普** — 见实验 02：purged ridge IC ≈+0.04，但共享成本下 **净夏普 ≈ −0.38**。IC>0 ≠ 可交易优势。
 
@@ -136,14 +136,14 @@ overfit_GBM OOS              mean_daily_CS_RankIC=+0.0211 t=1.73 ICIR=1.86 n_day
 model                  mean_CS_IC        t     ICIR  note
 oracle_beta_true          +0.0991     6.29     3.71  upper bound
 LEAK noisy_fwd_feat       +0.9252   740.74   436.41  label leak >> oracle
-LEAK full_sample_scaler    +0.0398     4.64     2.73  scaler leak
+LEAK full_sample_scaler    +0.0398     4.64     2.73  subtle; did NOT inflate here
 LEAK unpurged_KFold       +0.0518     6.03     3.55  mild CV leak
 LEAK shuffle_split        +0.0345     2.82     1.68  weak/noisy on panel
 purged_ridge              +0.0398     4.64     2.73  weak signal recovered
 purged_GBM                +0.0336     4.69     2.77  weak signal recovered
 overfit_GBM_OOS           +0.0211     1.73     1.86  train high / OOS collapse
 teach three cases:
-  (a) ILLUSION: clear leaks (fwd feature / full-sample scaler) inflate IC well above purged; shuffle alone may NOT on a weak panel
+  (a) ILLUSION: clear label leak (noisy fwd) inflates IC ≫ oracle/purged; full-sample scaler is subtle and did NOT inflate on this sample (≈ purged); shuffle alone may NOT on a weak panel
   (b) WEAK RECOVERABLE: purged ridge/GBM still recover mean CS IC ~ +0.04 on this planted weak panel
   (c) REAL BUT COST-WIPED: see lab 02 — positive IC can still yield net SR≤0 after shared costs
 verify: purged_ridge mean daily CS IC = 0.0398 (reviewer ~+0.040)

@@ -8,7 +8,7 @@ cite: lag all estimates — no look-ahead into same-day PnL
 === VaR backtest (Kupiec) ===
 n=1247 hist_exceptions=73 rate=0.0585 (target 0.05) LR=1.820 p=0.177
 n=1247 para_exceptions=67 rate=0.0537 (target 0.05) LR=0.357 p=0.550
-mean_hist_VaR=0.0270 mean_CVaR=0.0337 CVaR>=VaR check=0.83
+mean_hist_VaR=0.0270 mean_CVaR=0.0337 CVaR>=VaR check=1.00 (finite days only; expect 1.00)
 MC_t5 VaR=0.0298 CVaR=0.0423
 
 === stress tests (scenario PnL) ===

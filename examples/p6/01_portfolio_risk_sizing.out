@@ -14,6 +14,7 @@ Bernoulli edge: p=0.55 even-money → f*=0.100
 Kelly_full   f=0.100 median_log_growth=2.504 ruin_rate=0.000 median_maxDD=-0.803
 Kelly_half   f=0.050 median_log_growth=1.876 ruin_rate=0.000 median_maxDD=-0.534
 Kelly_double f=0.200 median_log_growth=-0.069 ruin_rate=0.156 median_maxDD=-0.995
+ruin definition: terminal wealth < 1% of start
 teach: over-betting (2×Kelly) raises ruin / DD; half-Kelly trades growth for smaller drawdowns (Thorp)
 
 === volatility targeting (lagged vol) ===

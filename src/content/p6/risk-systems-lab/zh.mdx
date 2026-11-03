@@ -25,7 +25,7 @@
 - **MC：** 从厚尾示意（Student-t）模拟，再读 VaR/CVaR
 - **CVaR / ES：** 超过 VaR 阈值的平均损失（Artzner 等 1999 推动相干风险；此处 CVaR 作实务 ES 对照）
 
-实验：均值历史 VaR ≈ 0.027，均值 CVaR ≈ 0.034；MC_t5 VaR ≈ 0.030，CVaR ≈ 0.042。多数日 CVaR ≥ VaR（检查率 ≈ 0.83；并列/空尾解释其余）。
+实验：均值历史 VaR ≈ 0.027，均值 CVaR ≈ 0.034；MC_t5 VaR ≈ 0.030，CVaR ≈ 0.042。**仅在两者皆有限的交易日上**计算时，**CVaR ≥ VaR 检查率 = 1.00**（热身期 NaN 必须排除——若对含 NaN 的布尔比较做 `nanmean`，会把假阴性与无效日混在一起，误报成约 0.83；并非「并列/空尾」）。
 
 ## Kupiec 违约回测
 
@@ -71,7 +71,7 @@ Kupiec（1995，*Journal of Derivatives* 3(2)）给出违约率是否等于名�
 ```
 n=1247 hist_exceptions=73 rate=0.0585 LR=1.820 p=0.177
 n=1247 para_exceptions=67 rate=0.0537 LR=0.357 p=0.550
-mean_hist_VaR=0.0270 mean_CVaR=0.0337
+mean_hist_VaR=0.0270 mean_CVaR=0.0337 CVaR>=VaR check=1.00 (finite days)
 MC_t5 VaR=0.0298 CVaR=0.0423
 uncontrolled maxDD≈-0.750 controlled maxDD≈-0.200
 book0: max_w≤0.30 gross≤1.5 after projection

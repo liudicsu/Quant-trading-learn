@@ -191,7 +191,7 @@ print("\n=== SIDE-BY-SIDE TABLE (primary = mean daily CS RankIC) ===")
 rows = [
     ("oracle_beta_true", m_oracle["mean_ic"], m_oracle["t_stat"], m_oracle["ICIR"], "upper bound"),
     ("LEAK noisy_fwd_feat", m_yleak["mean_ic"], m_yleak["t_stat"], m_yleak["ICIR"], "label leak >> oracle"),
-    ("LEAK full_sample_scaler", m_fullscale["mean_ic"], m_fullscale["t_stat"], m_fullscale["ICIR"], "scaler leak"),
+    ("LEAK full_sample_scaler", m_fullscale["mean_ic"], m_fullscale["t_stat"], m_fullscale["ICIR"], "subtle; did NOT inflate here"),
     ("LEAK unpurged_KFold", m_unp["mean_ic"], m_unp["t_stat"], m_unp["ICIR"], "mild CV leak"),
     ("LEAK shuffle_split", m_shuffle["mean_ic"], m_shuffle["t_stat"], m_shuffle["ICIR"], "weak/noisy on panel"),
     ("purged_ridge", m_ridge["mean_ic"], m_ridge["t_stat"], m_ridge["ICIR"], "weak signal recovered"),
@@ -202,7 +202,7 @@ print(f"{'model':22s} {'mean_CS_IC':>10} {'t':>8} {'ICIR':>8}  note")
 for name, ic, tstat, icir, note in rows:
     print(f"{name:22s} {ic:+10.4f} {tstat:8.2f} {icir:8.2f}  {note}")
 print("teach three cases:")
-print("  (a) ILLUSION: clear leaks (fwd feature / full-sample scaler) inflate IC well above purged; shuffle alone may NOT on a weak panel")
+print("  (a) ILLUSION: clear label leak (noisy fwd) inflates IC ≫ oracle/purged; full-sample scaler is subtle and did NOT inflate on this sample (≈ purged); shuffle alone may NOT on a weak panel")
 print("  (b) WEAK RECOVERABLE: purged ridge/GBM still recover mean CS IC ~ +0.04 on this planted weak panel")
 print("  (c) REAL BUT COST-WIPED: see lab 02 — positive IC can still yield net SR≤0 after shared costs")
 print(f"verify: purged_ridge mean daily CS IC = {m_ridge['mean_ic']:.4f} (reviewer ~+0.040)")

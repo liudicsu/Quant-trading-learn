@@ -45,7 +45,7 @@ for lab, f in fs.items():
 
 def path_stats(W):
     terminal = W[:, -1]
-    ruined = (terminal < 0.01).mean()  # <1% of start ≈ ruin foil
+    ruined = (terminal < 0.01 * 1.0).mean()  # ruin := terminal wealth < 1% of starting wealth
     # median log growth
     g = np.median(np.log(terminal))
     # median max DD along path
@@ -58,6 +58,7 @@ def path_stats(W):
 for lab in ["full", "half", "double"]:
     g, ruin, dd = path_stats(wealth[lab])
     print(f"Kelly_{lab:6s} f={fs[lab]:.3f} median_log_growth={g:.3f} ruin_rate={ruin:.3f} median_maxDD={dd:.3f}")
+print("ruin definition: terminal wealth < 1% of start")
 print("teach: over-betting (2×Kelly) raises ruin / DD; half-Kelly trades growth for smaller drawdowns (Thorp)")
 
 fig, ax = plt.subplots(figsize=(8, 4))

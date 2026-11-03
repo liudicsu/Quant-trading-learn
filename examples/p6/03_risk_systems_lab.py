@@ -72,7 +72,9 @@ lr_p, pv_p = kupiec_lr(x_p, n_test)
 print("\n=== VaR backtest (Kupiec) ===")
 print(f"n={n_test} hist_exceptions={x_h} rate={p_hat_h:.4f} (target {alpha}) LR={lr_h:.3f} p={pv_h:.3f}")
 print(f"n={n_test} para_exceptions={x_p} rate={p_hat_p:.4f} (target {alpha}) LR={lr_p:.3f} p={pv_p:.3f}")
-print(f"mean_hist_VaR={np.nanmean(hvar):.4f} mean_CVaR={np.nanmean(cvar):.4f} CVaR>=VaR check={np.nanmean(cvar>=hvar):.2f}")
+finite = np.isfinite(hvar) & np.isfinite(cvar)
+cvar_ge = float(np.mean(cvar[finite] >= hvar[finite])) if finite.any() else float("nan")
+print(f"mean_hist_VaR={np.nanmean(hvar):.4f} mean_CVaR={np.nanmean(cvar):.4f} CVaR>=VaR check={cvar_ge:.2f} (finite days only; expect 1.00)")
 
 # MC VaR snapshot at last day
 window = ret[-L - 1 : -1]

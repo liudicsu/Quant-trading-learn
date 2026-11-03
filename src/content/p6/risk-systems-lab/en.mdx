@@ -25,7 +25,7 @@ Educational simulations — not a production risk system or trading advice.
 - **MC:** simulate from a fat-tailed foil (Student-t), read VaR/CVaR from the simulated loss distribution
 - **CVaR / ES:** mean loss beyond the VaR threshold (Artzner et al. 1999 motivate coherent risk measures; CVaR is the practical ES foil here)
 
-Lab: mean hist VaR ≈ 0.027, mean CVaR ≈ 0.034; MC_t5 VaR ≈ 0.030, CVaR ≈ 0.042. CVaR ≥ VaR on most days (check rate ≈ 0.83; ties/empty tails explain the rest).
+Lab: mean hist VaR ≈ 0.027, mean CVaR ≈ 0.034; MC_t5 VaR ≈ 0.030, CVaR ≈ 0.042. **CVaR ≥ VaR check = 1.00** when computed only over days where both estimates are finite (NaN warm-up days must be excluded — a naive `nanmean(cvar>=hvar)` wrongly mixes False with NaN comparisons).
 
 ## Kupiec exception backtest
 
@@ -71,7 +71,7 @@ Map each limit → owner, metric, breach action, lagged data source. Secrets: no
 ```
 n=1247 hist_exceptions=73 rate=0.0585 LR=1.820 p=0.177
 n=1247 para_exceptions=67 rate=0.0537 LR=0.357 p=0.550
-mean_hist_VaR=0.0270 mean_CVaR=0.0337
+mean_hist_VaR=0.0270 mean_CVaR=0.0337 CVaR>=VaR check=1.00 (finite days)
 MC_t5 VaR=0.0298 CVaR=0.0423
 uncontrolled maxDD≈-0.750 controlled maxDD≈-0.200
 book0: max_w≤0.30 gross≤1.5 after projection
