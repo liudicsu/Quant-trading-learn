@@ -35,3 +35,12 @@ Next.js 16 + MDX + next-intl (`zh`/`en`) + Tailwind v4; Quiz / TaskChecklist / L
 
 - Formal outline rearrange (user-driven)
 - Fill remaining lesson bodies in later batches
+
+
+## Git push status (2026-11-04 Asia/Shanghai)
+
+- **Pushed** `main` to https://github.com/liudicsu/Quant-trading-learn (`9666a7f`)
+- Pages site setting already enabled: https://liudicsu.github.io/Quant-trading-learn/
+- **Actions workflow not installed on remote yet**: OAuth token lacks `workflow` scope (API create of `.github/workflows/*` returned 404/forbidden). Templates are in `docs/deploy/pages.yml` and `docs/deploy/ci.yml`.
+- **To finish Pages deploy:** re-auth with `workflow` scope, copy templates into `.github/workflows/`, push, confirm Actions run green.
+
