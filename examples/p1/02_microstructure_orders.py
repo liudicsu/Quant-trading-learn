@@ -56,6 +56,16 @@ print("nav_optimistic_same_bar", round(nav_of(optimistic_same_bar), 6))
 print("nav_honest_shift1", round(nav_of(honest_shift), 6))
 print("nav_honest_next_open", round(nav_of(honest_next_open), 6))
 print("lookahead_warning: same-bar zero-cost fills that reuse today's close in signal AND return are over-optimistic.")
+# Why honest_shift1 NAV == honest_next_open NAV on THIS CSV:
+# the generator set open[t] = close[t-1], so open→close on day t equals close[t-1]→close[t].
+prev_close = close.shift(1)
+open_eq_prev_close = bool((raw["open"].iloc[1:] == prev_close.iloc[1:]).all())
+print("open_equals_prev_close_all_rows_after_first", open_eq_prev_close)
+print(
+    "why_shift1_equals_next_open_here: synthetic open[t]=close[t-1], so next-open-to-close "
+    "path matches close-to-close after shift(1); real markets with gaps would diverge."
+)
+
 
 print("\n=== cost assumption one-pager (toy numbers) ===")
 print("venue: synthetic equity-like")

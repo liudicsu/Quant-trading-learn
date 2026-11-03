@@ -36,6 +36,8 @@ mid = (bid + ask) / 2
 | honest shift(1) | 信号推到下一期再乘收益 | ≈ **1.04** |
 | honest next-open | 信号后次日开盘成交，吃开→收 | ≈ **1.04** |
 
+**为何本课 `nav_honest_shift1` 与 `nav_honest_next_open` 相同？** 生成 CSV 时令 `open[t] = close[t-1]`（脚本打印 `open_equals_prev_close_all_rows_after_first True`）。于是「次日开→收」的收益路径，在数值上等于「昨日收→今日收」在 `shift(1)` 仓位下的路径。真实市场常有跳空，两者会分开——这是合成数据的简化，不是一般定理。
+
 同 bar 零成本会显著美化曲线——回测里必须显式禁止。
 
 ## 成本假设一页（玩具数字）
@@ -69,6 +71,8 @@ nav_optimistic_same_bar 2.392529
 nav_honest_shift1 1.036162
 nav_honest_next_open 1.036162
 lookahead_warning: same-bar zero-cost fills that reuse today's close in signal AND return are over-optimistic.
+open_equals_prev_close_all_rows_after_first True
+why_shift1_equals_next_open_here: synthetic open[t]=close[t-1], so next-open-to-close path matches close-to-close after shift(1); real markets with gaps would diverge.
 
 === cost assumption one-pager (toy numbers) ===
 venue: synthetic equity-like
@@ -109,7 +113,7 @@ ASSERTS_OK
 - 成本假设一页 + 跑通脚本 + 测验
 - 能解释 mid/市价侧/同 bar 前瞻
 
-**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。niche — @sera00111 crypto venue frictions **「待核验」**。
+**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

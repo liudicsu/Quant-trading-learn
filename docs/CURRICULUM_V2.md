@@ -107,8 +107,8 @@
 | 仓位/VaR/Kelly | QuantStart；Canvas m11 | classic | `portfolio-risk-sizing` |
 | 纸面先于实盘 | JoinQuant W08；Canvas m13 | classic | `paper-trading-infra` |
 | XQuant Learning Spec+AI 先跑再补 | @_zheergen/2114885286039789576 | niche | `python-pandas-timeseries + frontier-llm-agents` |
-| Awesome Systematic Trading / 开源合集 | @bkdgiffug；@silvanrec | niche | `markets-language` |
-| Crypto 工具链 Binance Vision/CCXT/资金费率 | @sera00111 | niche | `data-cleaning + microstructure-orders + frontier-tsfm-altdata-crypto` |
+| Awesome Systematic Trading / 开源合集 | paperswithbacktest/awesome-systematic-trading | niche | `markets-language` |
+| Crypto 工具链 Binance Vision/CCXT/资金费率 | @sera00111 | niche | `data-cleaning + frontier-tsfm-altdata-crypto` |
 | TradingView Pine 策略包 | @_zheergen；Alorse | niche | `momentum-trend / mean-reversion / strategy-compare-lab` |
 | quants.md + QuantJourney | @_zheergen | niche | `strategy-compare-lab` |
 | Algo Trading Cookbook 配套仓 | @_zheergen；Packt | niche | `engines-vectorized-event / paper-trading-infra` |
@@ -235,7 +235,7 @@
   - 目标是否可检验
 - **Completion criteria:**
   - 目标三句话+净值 notebook。
-- **Method tags:** classic: Canvas m1; QuantStart SAT process | niche: Awesome Systematic Trading orientation (@bkdgiffug/@silvanrec)
+- **Method tags:** classic: Canvas m1; QuantStart SAT process | niche: Awesome Systematic Trading (paperswithbacktest GitHub)
 
 #### `microstructure-orders` — 微观结构与订单 / Microstructure & orders
 - **Hours:** 7h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz
@@ -258,7 +258,7 @@
   - 价差是否成本
 - **Completion criteria:**
   - 成本假设一页+测验。
-- **Method tags:** classic: Canvas m2; NYU MATH-GA 2708 | niche: @sera00111 crypto venue frictions
+- **Method tags:** classic: Canvas m2; NYU MATH-GA 2708 | niche: (moved @sera00111 crypto data notes to data-cleaning)
 
 #### `returns-vol-corr` — 收益、波动与相关 / Returns, volatility & correlation
 - **Hours:** 8h · **Difficulty:** 2/5 · **Basis:** 3h formulas + 4h coding + 1h quiz
@@ -301,7 +301,7 @@
   - 换手与成本
 - **Completion criteria:**
   - 对照表+三句结论。
-- **Method tags:** classic: JoinQuant 策略评价; Canvas eval | niche: @FG731314 好策略共性
+- **Method tags:** classic: JoinQuant 策略评价; Canvas eval | niche: @FG731314/2115609441748001008 risk-adjusted traits
 
 ### P2 · 数据与诚实回测（Data & honest backtests）— 40h / 4 课
 
@@ -330,7 +330,7 @@
   - PIT含义
 - **Completion criteria:**
   - 管线可复跑+说明书。
-- **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; JoinQuant data | niche: @pyquantnews API list; OpenBB entry (@quantscience_); Binance Vision (@sera00111) | frontier: Alt-data awareness; deeper in P8
+- **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; JoinQuant data | niche: @pyquantnews finance API notes; OpenBB quantitative docs; Binance Vision + @sera00111 crypto data notes | frontier: Alt-data awareness; deeper in P8
 
 #### `backtest-traps` — 回测陷阱与过拟合审讯 / Backtest traps & overfitting interrogation
 - **Hours:** 16h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 9h multi-labs + 2h write-up — HEAVY

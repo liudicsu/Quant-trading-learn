@@ -36,6 +36,8 @@ Parameters: signal = close > MA5.
 | honest shift(1) | trade next period’s return | ≈ **1.04** |
 | honest next-open | fill next open, earn open→close | ≈ **1.04** |
 
+**Why are `nav_honest_shift1` and `nav_honest_next_open` equal here?** The CSV generator set `open[t] = close[t-1]` (script prints `open_equals_prev_close_all_rows_after_first True`). Then next-open→close returns match the close-to-close path under a `shift(1)` position. Real markets often gap overnight, so the two NAVs can diverge — this equality is a synthetic simplification, not a general theorem.
+
 Same-bar zero-cost fills inflate curves — ban them explicitly in backtests.
 
 ## Cost assumption one-pager (toy numbers)
@@ -69,6 +71,8 @@ nav_optimistic_same_bar 2.392529
 nav_honest_shift1 1.036162
 nav_honest_next_open 1.036162
 lookahead_warning: same-bar zero-cost fills that reuse today's close in signal AND return are over-optimistic.
+open_equals_prev_close_all_rows_after_first True
+why_shift1_equals_next_open_here: synthetic open[t]=close[t-1], so next-open-to-close path matches close-to-close after shift(1); real markets with gaps would diverge.
 
 === cost assumption one-pager (toy numbers) ===
 venue: synthetic equity-like
@@ -109,7 +113,7 @@ ASSERTS_OK
 - Cost one-pager + script + quizzes
 - You can explain mid / market side / same-bar look-ahead
 
-**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer). niche — @sera00111 crypto venue frictions **「待核验」**.
+**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer).
 
 <Summary>
 **Takeaways**: mid, market-buy bps, honest fill timing, cost sheet.  

@@ -254,7 +254,7 @@ const phase_P1_lessons: Lesson[] = [
     ],
     methodTags: {
       classic: ["Canvas m1", "QuantStart SAT process"],
-      niche: ["Awesome Systematic Trading orientation (@bkdgiffug/@silvanrec)"],
+      niche: ["Awesome Systematic Trading (paperswithbacktest GitHub map)"],
       frontier: [],
     },
     tasks: [
@@ -301,7 +301,7 @@ const phase_P1_lessons: Lesson[] = [
     ],
     methodTags: {
       classic: ["Canvas m2", "NYU MATH-GA 2708"],
-      niche: ["@sera00111 crypto venue frictions"],
+      niche: [],
       frontier: [],
     },
     tasks: [
@@ -393,7 +393,7 @@ const phase_P1_lessons: Lesson[] = [
     ],
     methodTags: {
       classic: ["JoinQuant 策略评价", "Canvas eval"],
-      niche: ["@FG731314 好策略共性"],
+      niche: ["@FG731314 good-strategy traits (X post 2115609441748001008)"],
       frontier: [],
     },
     tasks: [
@@ -441,7 +441,7 @@ const phase_P2_lessons: Lesson[] = [
     ],
     methodTags: {
       classic: ["Canvas m4", "QuantStart securities master", "Qlib data layer", "JoinQuant data"],
-      niche: ["@pyquantnews API list", "OpenBB entry (@quantscience_)", "Binance Vision (@sera00111)"],
+      niche: ["@pyquantnews finance API notes", "OpenBB quantitative docs", "Binance Vision + crypto data notes (@sera00111)"],
       frontier: ["Alt-data awareness; deeper in P8"],
     },
     tasks: [

@@ -1,6 +1,7 @@
 """P1 lab: toy signal vs buy&hold; net-of-cost metrics; slippage bump; win-rate trap.
 Learning only — not investment advice.
 Parameters: n from CSV; cost_bps per one-way trade; Rf=0; ann=√252; MA window=10; seed N/A (deterministic CSV).
+Win rate definition: fraction of ALL days in the pnl series with pnl > 0 (includes flat days as non-wins).
 """
 from __future__ import annotations
 
@@ -30,8 +31,7 @@ def metrics(pnl: pd.Series, name: str) -> dict:
     mdd = float((nav / peak - 1).min())
     mu, sd = float(x.mean()), float(x.std(ddof=1))
     sh = float("nan") if sd == 0 else (mu - RF) / sd * float(ANN)
-    # Win rate on days with nonzero pnl contribution when in market — teaching definition:
-    active = x[pos.reindex_like(x).fillna(0) != 0] if False else x
+    # Win rate = share of ALL days with pnl > 0 (flat/zero days count as non-wins)
     wins = float((x > 0).mean())
     return {
         "name": name,
@@ -39,7 +39,7 @@ def metrics(pnl: pd.Series, name: str) -> dict:
         "ann_vol": round(sd * float(ANN), 4),
         "sharpe_Rf0": round(sh, 4),
         "max_dd": round(mdd, 4),
-        "win_rate": round(wins, 4),
+        "win_rate_all_days": round(wins, 4),
         "final_nav": round(float(nav.iloc[-1]), 4),
     }
 
@@ -57,6 +57,7 @@ print("MA_window", 10)
 print("position = signal.shift(1)  # anti look-ahead")
 print("Rf_daily", RF, "ann_sqrt252", round(float(ANN), 6))
 print("one_way_cost_bps_levels", [0, 5, 15])
+print("win_rate_def: fraction of ALL days with pnl>0 (flat days are non-wins)")
 
 bh = r.copy()
 rows = []
@@ -71,15 +72,13 @@ print(tab.to_string())
 
 # Win rate trap: high win rate bad expectancy toy
 rng = np.random.default_rng(3)
-# 90% tiny wins, 10% large losses
 w = rng.random(1000)
 toy = np.where(w < 0.9, 0.01, -0.12)
 print("\n=== win-rate trap (seed=3, n=1000) ===")
-print("win_rate", round(float((toy > 0).mean()), 4))
+print("win_rate_all_days", round(float((toy > 0).mean()), 4))
 print("mean_return", round(float(toy.mean()), 6))
-print("note: win_rate=0.9 but mean return negative — win rate ≠ good strategy.")
+print("note: win_rate≈0.9 but mean return negative — win rate ≠ good strategy.")
 
-# Multi-seed noise on costs? Optional: sweep random entry jitter — skip; report turnover instead
 print("\n=== turnover ===")
 print("mean_daily_turnover", round(float(turnover.mean()), 6))
 print("approx_annual_one_way_turns", round(float(turnover.mean() * 252), 2))
