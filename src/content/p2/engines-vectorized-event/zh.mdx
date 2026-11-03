@@ -105,11 +105,11 @@ ASSERTS_OK
 
 ## 测验
 
-<Quiz id="q1-vec" question="常见偏乐观的向量化默认是？" options=['强制次日开盘', '同日收盘成交', '自动 PIT', '自动哈希'] answer={1} explanation="净值差距来源。" />
-<Quiz id="q2-match" question="事件次日开盘 vs 向量化 shift1（平坦开盘）应？" options=['必然分叉', '假设对齐时在浮点误差内匹配', '忽略成交', '必须 GPU'] answer={1} explanation="实验 assert 差分为 0。" />
-<Quiz id="q3-stop" question="纯收盘向量难写止损是因为？" options=['费用消失', '成交取决于日内路径', '哈希损坏', 'Rf 必须为 1'] answer={1} explanation="路径依赖的出场价。" />
-<Quiz id="q4-vbt" question="VectorBT 文档强调的强项？" options=['只做实盘 OMS', '快速向量化研究扫描', '只做 C++ GUI', '托管券商'] answer={1} explanation="vectorbt.dev 定位。" />
-<Quiz id="q5-nau" question="NautilusTrader 架构强调？" options=['实盘必须重写', 'Backtest/Sandbox/Live 共享内核', '只能 CSV', '只能月频'] answer={1} explanation="官方架构文档。" />
+<Quiz id="q1-vec" question="常见偏乐观的向量化默认是？" options={['强制次日开盘', '同日收盘成交', '自动 PIT', '自动哈希']} answer={1} explanation="净值差距来源。" />
+<Quiz id="q2-match" question="事件次日开盘 vs 向量化 shift1（平坦开盘）应？" options={['必然分叉', '假设对齐时在浮点误差内匹配', '忽略成交', '必须 GPU']} answer={1} explanation="实验 assert 差分为 0。" />
+<Quiz id="q3-stop" question="纯收盘向量难写止损是因为？" options={['费用消失', '成交取决于日内路径', '哈希损坏', 'Rf 必须为 1']} answer={1} explanation="路径依赖的出场价。" />
+<Quiz id="q4-vbt" question="VectorBT 文档强调的强项？" options={['只做实盘 OMS', '快速向量化研究扫描', '只做 C++ GUI', '托管券商']} answer={1} explanation="vectorbt.dev 定位。" />
+<Quiz id="q5-nau" question="NautilusTrader 架构强调？" options={['实盘必须重写', 'Backtest/Sandbox/Live 共享内核', '只能 CSV', '只能月频']} answer={1} explanation="官方架构文档。" />
 
 ## 完成标准
 
