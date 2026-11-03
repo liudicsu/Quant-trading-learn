@@ -23,9 +23,16 @@ Buy-and-hold gross Sharpe≈0.66; toy MA net Sharpe≈0.39 at 0 bps, ≈0.19 at 
 
 ## Win-rate trap
 
+**Win-rate definition (this lesson):** `win_rate_all_days` = share of **all** days with `pnl>0` (flat/zero days count as non-wins). Not “days-in-position only.”
+
 Seed=3 toy path: win rate≈**0.91** but **negative** mean return. High win rate can hide rare large losses.
 
+<Callout type="info" title="Risk-adjusted traits (@FG731314)">
+A [post by @FG731314](https://x.com/FG731314/status/2115609441748001008) on “good gold quant strategy” traits stresses (1) **clear logic** you can state in one sentence — not a mystical curve — and (2) **risk-adjusted returns that hold up** (Sharpe/Calmar/max drawdown/payoff), not annualized return alone. That matches this lesson: **net risk-adjusted** metrics beat win rate or gross-only charts.
+</Callout>
+
 ## Slippage bump experiment
+
 
 Same signal, higher one-way bps → worse net NAV/Sharpe. Always report the cost assumption beside the metrics.
 
