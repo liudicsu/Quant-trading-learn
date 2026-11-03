@@ -86,7 +86,7 @@ i0 = TRAIN
 while i0 + TEST <= len(dates):
     tr_end = i0
     te_lo, te_hi = i0, i0 + TEST
-    # embargo: drop last EMBARGO train days from feature fit window (selection still uses full train IC)
+    # embargo: drop last EMBARGO train days from feature fit window (selection uses fit_dates (embargo already dropped); OOF in sealed window is never used for selection)
     fit_dates = dates[: max(0, tr_end - EMBARGO)]
     te_dates = dates[te_lo:te_hi]
     for name, pred in candidates.items():
