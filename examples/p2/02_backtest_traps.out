@@ -40,10 +40,13 @@ per_window_table
     8  2022-08-16 2022-12-05 2022-12-06 2023-01-02      20       -1.0805      -2.2653
     9  2022-09-13 2023-01-02 2023-01-03 2023-01-30      20       -0.4595          NaN
 summary_n_folds 10
+nan_test_folds [6, 7, 9]
+nan_reason: those test windows had a flat position path (all PnL≈0 → std=0), so Sharpe is undefined; pandas mean/median skip NaN by default.
 summary_mean_train_sr 0.2452
 summary_mean_test_sr -0.8914
 summary_median_test_sr -1.7534
 summary_frac_test_positive 0.3
+summary_note: mean/median exclude NaN folds; frac_positive counts NaN as not >0.
 
 === random-rule false hits + null SE check ===
 n_returns 299
@@ -79,6 +82,7 @@ label_horizon 1 embargo_bars 3
 naive_train_n 150 purged_train_n 149
 test_after_embargo_n 40
 teach: purge drops train samples whose labels overlap the test window; embargo adds a gap so serial dependence does not leak.
+afml_note: this embargo/purge block is a SIMPLIFIED sketch of AFML ch.7, not the full combinatorial purged CV / embargo machinery in the book.
 
 === failure log template ===
 date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action

@@ -1,18 +1,30 @@
 === parameters ===
-n 300 MA=10 gap_seed=4 Rf=0
+n 300 MA 10 gap_seed=4 Rf=0 fill=next_open
 
-=== same signal, two fill timings (vectorized) ===
+=== same signal, fill timings (vectorized) ===
 nav_vectorized_same_bar_cc 2.290582
-nav_next_open_fill 0.824673
 nav_honest_shift1_cc 0.818344
+nav_next_open_vec_flat_open 0.818344
 vectorized_default_risk: same-bar close fills silently inflate results unless you shift.
 
-=== event-loop sketch (initialize / handle_data) ===
-initialize: set calendar, commission model, universe, warm-up bars
-handle_data(bar): read as-of data only → emit orders → engine fills on next event
-teach: engine choice = fill + calendar assumptions, not just 'library brand'.
+=== minimal event engine (next-open fills) ===
+nav_event_next_open 0.818344
+nav_vectorized_equiv_shift1_oc 0.818344
+max_abs_equity_diff_event_vs_vectorized 0.0
+ASSERT_event_matches_vectorized
 
-=== assumptions paragraph (machine-printed) ===
-ASSUMPTIONS: daily bars; signal from adjusted close; honest research uses shift(1) or next-open fills; costs applied as bps×turnover; no short locate; timezone=naive dates; freeze params before hold-out.
-isomorphic_note: NautilusTrader documents Backtest/Sandbox/Live sharing one kernel — same code path reduces research≠live gaps (concept; see nautilustrader.io architecture docs).
+=== when an event engine is required (stop-loss demo) ===
+need_event_for: stop-loss / limit fills inside the bar, path-dependent exits, multi-asset partial fills, capital/margin constraints checked before send.
+stop_pct 0.03 stop_exits 1
+nav_event_with_stop 0.820767
+nav_event_no_stop 0.818344
+teach: stop exits are path-dependent inside the bar; a single close-to-close vector cannot place the fill at the stop without an intrabar rule — use an event engine.
+saved_plot public/p2/engines_event_vs_vectorized.png
+
+=== library comparison (docs read this batch) ===
+vectorbt: research-scale vectorized backtests on pandas/NumPy (Numba/Rust); sweep many params/assets fast — https://vectorbt.dev/ | https://github.com/polakowo/vectorbt
+backtrader: Cerebro engine; write a Strategy with indicators + entry/exit logic, add data, run/plot — https://www.backtrader.com/docu/ | https://github.com/mementum/backtrader
+zipline_reloaded: Pythonic event-driven initialize/handle_data API (Quantopian lineage); maintained for bugs/compat; new features → ML4T Backtest — https://zipline.ml4trading.io/ | https://github.com/stefan-jansen/zipline-reloaded
+nautilustrader: Rust-native event-driven; Backtest/Sandbox/Live share NautilusKernel — https://nautilustrader.io/docs/latest/concepts/architecture/ | https://github.com/nautechsystems/nautilus_trader
+ASSUMPTIONS: daily bars; MA signal; event market orders fill next open; stop demo uses min(open,close) as range proxy; Rf=0; learning only.
 ASSERTS_OK

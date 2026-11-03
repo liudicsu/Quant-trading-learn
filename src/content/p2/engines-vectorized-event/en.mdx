@@ -1,33 +1,52 @@
 ## Learning goals
 
-This lesson (~**8 hours**: 3h concepts + 4h compare lab + 1h optional docs) clarifies engine assumptions: vectorized default risks, two fill-timing NAVs, and an initialize/handle_data event-loop sketch. Prereq: `costs-in-backtest`.
+This lesson (~**8 hours**: 3h concepts + 4h compare lab + 1h docs) builds a **minimal event-driven engine**, proves it matches a vectorized next-open path, shows a **stop-loss** the vectorized close path cannot express cleanly, and compares libraries by **official docs**. Prereq: `costs-in-backtest`.
 
-**Goals:** state vectorized default risks; compare two fill-timing NAVs; describe the event loop.
+**Goals:** implement events/orders/fills/portfolio; assert event NAV matches vectorized; state when you need an event engine.
 
-**Must-teach:** engine choice = fill/calendar assumptions; honest vectorized then event validation; isomorphic engines reduce research≠live gaps (concept).
+**Must-teach:** engine choice = fill/calendar assumptions; honest vectorized then event validation; stop/limit/multi-asset/capital need events; isomorphic kernel concept.
 
 <Callout type="info" title="Learning only">
-Not tied to one vendor; concepts first.
+Toy MA + synthetic opens — not a production OMS or live bot.
 </Callout>
 
 ## Parameters
 
-- MA=10; gap_seed=4 for gappy opens; Rf=0  
+- MA=10; Rf=0; market orders fill at **next open**; open = prior close for the match test  
+- Stop demo: **3%** from entry; range proxy = min(open, close)
 
-## Same signal, two fill timings
+## Vectorized fill timings
 
-Vectorized same-bar close NAV can hit **~2.29**; next-open fill ≈ **0.82**; `shift(1)` close ≈ **0.82**. Silent same-bar defaults are optimistic.
+Same-bar close NAV ≈ **2.29** (optimistic). Next-open / `shift(1)` ≈ **0.818**. Silent same-bar defaults inflate results.
 
-## Event-loop sketch
+## Minimal event engine (code)
 
-`initialize`: calendar, fees, universe, warm-up.  
-`handle_data(bar)`: read as-of data only → emit orders → engine fills on a **later** event.
+`examples/p2/04_engines_vectorized_event.py` implements bar events, market orders, fills at next open, and a portfolio equity curve.
 
-## Isomorphic engines (docs read)
+**Match result:** `nav_event_next_open = nav_vectorized_equiv = 0.818344`, `max_abs_equity_diff = 0.0` (asserted).
 
-[NautilusTrader architecture](https://nautilustrader.io/docs/latest/concepts/architecture/) states Backtest / Sandbox / Live share one `NautilusKernel` — same core path shrinks research≠live gaps (conceptual; this lesson does not install live trading).
+![Event vs vectorized](/p2/engines_event_vs_vectorized.png)
 
-[RoundtableSpace’s engine list post](https://x.com/RoundtableSpace/status/2111272232249143360) summarizes NautilusTrader as “the same code runs your backtest and your live bot,” alongside Hummingbot / Jesse / vectorbt — use it as a **map**, and still write your own assumptions paragraph.
+## When you need an event engine
+
+Use events when the fill depends on **intrabar path** or **state**:
+
+- **Stop-loss / take-profit / limits** (fill price ≠ close)  
+- **Multiple assets** with staggered fills / partials  
+- **Capital / margin / risk checks** before send  
+
+Lab stop demo: stop_exits=**1**, NAV with stop ≈ **0.821** vs no-stop **0.818**. A single close-to-close vector cannot place the fill at the stop without an intrabar rule.
+
+## Library comparison (docs & repos read)
+
+| Library | Best use case (from official materials) | Docs / repo |
+| --- | --- | --- |
+| **VectorBT** | Research-scale **vectorized** sweeps on pandas/NumPy (Numba/Rust); many params/assets fast | [vectorbt.dev](https://vectorbt.dev/) · [github.com/polakowo/vectorbt](https://github.com/polakowo/vectorbt) |
+| **Backtrader** | Ease-of-use **Cerebro**: Strategy + indicators, `adddata`, `run`, `plot` | [backtrader.com/docu](https://www.backtrader.com/docu/) · [github.com/mementum/backtrader](https://github.com/mementum/backtrader) |
+| **Zipline Reloaded** | Pythonic **initialize/handle_data** event API (Quantopian lineage); maintained for bugs/compat | [zipline.ml4trading.io](https://zipline.ml4trading.io/) · [github.com/stefan-jansen/zipline-reloaded](https://github.com/stefan-jansen/zipline-reloaded) |
+| **NautilusTrader** | Rust-native event core; **Backtest/Sandbox/Live share one kernel** | [architecture docs](https://nautilustrader.io/docs/latest/concepts/architecture/) · [github.com/nautechsystems/nautilus_trader](https://github.com/nautechsystems/nautilus_trader) |
+
+[RoundtableSpace engine list](https://x.com/RoundtableSpace/status/2111272232249143360) is still a handy map (Nautilus “same code runs backtest and live bot,” plus Hummingbot/Jesse/vectorbt) — write your own assumptions paragraph either way.
 
 ## Python lab (run locally)
 
@@ -37,22 +56,34 @@ Script: `examples/p2/04_engines_vectorized_event.py`.
 
 ```text
 === parameters ===
-n 300 MA=10 gap_seed=4 Rf=0
+n 300 MA 10 gap_seed=4 Rf=0 fill=next_open
 
-=== same signal, two fill timings (vectorized) ===
+=== same signal, fill timings (vectorized) ===
 nav_vectorized_same_bar_cc 2.290582
-nav_next_open_fill 0.824673
 nav_honest_shift1_cc 0.818344
+nav_next_open_vec_flat_open 0.818344
 vectorized_default_risk: same-bar close fills silently inflate results unless you shift.
 
-=== event-loop sketch (initialize / handle_data) ===
-initialize: set calendar, commission model, universe, warm-up bars
-handle_data(bar): read as-of data only → emit orders → engine fills on next event
-teach: engine choice = fill + calendar assumptions, not just 'library brand'.
+=== minimal event engine (next-open fills) ===
+nav_event_next_open 0.818344
+nav_vectorized_equiv_shift1_oc 0.818344
+max_abs_equity_diff_event_vs_vectorized 0.0
+ASSERT_event_matches_vectorized
 
-=== assumptions paragraph (machine-printed) ===
-ASSUMPTIONS: daily bars; signal from adjusted close; honest research uses shift(1) or next-open fills; costs applied as bps×turnover; no short locate; timezone=naive dates; freeze params before hold-out.
-isomorphic_note: NautilusTrader documents Backtest/Sandbox/Live sharing one kernel — same code path reduces research≠live gaps (concept; see nautilustrader.io architecture docs).
+=== when an event engine is required (stop-loss demo) ===
+need_event_for: stop-loss / limit fills inside the bar, path-dependent exits, multi-asset partial fills, capital/margin constraints checked before send.
+stop_pct 0.03 stop_exits 1
+nav_event_with_stop 0.820767
+nav_event_no_stop 0.818344
+teach: stop exits are path-dependent inside the bar; a single close-to-close vector cannot place the fill at the stop without an intrabar rule — use an event engine.
+saved_plot public/p2/engines_event_vs_vectorized.png
+
+=== library comparison (docs read this batch) ===
+vectorbt: research-scale vectorized backtests on pandas/NumPy (Numba/Rust); sweep many params/assets fast — https://vectorbt.dev/ | https://github.com/polakowo/vectorbt
+backtrader: Cerebro engine; write a Strategy with indicators + entry/exit logic, add data, run/plot — https://www.backtrader.com/docu/ | https://github.com/mementum/backtrader
+zipline_reloaded: Pythonic event-driven initialize/handle_data API (Quantopian lineage); maintained for bugs/compat; new features → ML4T Backtest — https://zipline.ml4trading.io/ | https://github.com/stefan-jansen/zipline-reloaded
+nautilustrader: Rust-native event-driven; Backtest/Sandbox/Live share NautilusKernel — https://nautilustrader.io/docs/latest/concepts/architecture/ | https://github.com/nautechsystems/nautilus_trader
+ASSUMPTIONS: daily bars; MA signal; event market orders fill next open; stop demo uses min(open,close) as range proxy; Rf=0; learning only.
 ASSERTS_OK
 ```
 
@@ -60,33 +91,33 @@ ASSERTS_OK
 
 1. Treating a library name as an assumptions sheet.  
 2. Vectorized same-bar defaults.  
-3. Reading future bars inside handle_data.  
-4. No assumptions paragraph.  
-5. Comparing engines without costs.
+3. Claiming a close-only vector “has stops” without an intrabar rule.  
+4. Reading future bars inside handle_data.  
+5. Comparing engines without matching fill conventions.
 
 ## Practice (1:1 with the checklist)
 
-1. **ex1** — same signal, two fills; **done when** both NAVs print with an explanation.  
-2. **ex2** — assumptions paragraph; **done when** fill/calendar/cost/timezone appear.  
-3. **ex3** — two sentences each for initialize/handle_data; **done when** four sentences total.  
-4. **ex4** — isomorphic-engine note; **done when** linked to Nautilus docs in one sentence.  
-5. **ex5** — one vectorized optimistic default; **done when** same-bar is named.
+1. **ex1** — two vectorized fill NAVs; **done when** same-bar vs next-open explained.  
+2. **ex2** — event engine match; **done when** assert prints max diff ≈ 0.  
+3. **ex3** — stop-loss demo; **done when** stop_exits and both NAVs print.  
+4. **ex4** — library table; **done when** each of the four has a use-case sentence + link.  
+5. **ex5** — assumptions paragraph; **done when** fill/calendar/stop/timezone appear.
 
 ## Quiz
 
-<Quiz id="q1-vec" question="A common optimistic vectorized default is?" options={["Forced next-open", "Same-bar close fills", "Auto PIT", "Auto hash"]} answer={1} explanation="Source of the NAV gap here." />
-<Quiz id="q2-ev" question="Event-driven mainly buys you?" options={["Higher win rate", "Explicit fill/event timing", "Free trading", "No assumptions"]} answer={1} explanation="Timing made explicit." />
-<Quiz id="q3-iso" question="Isomorphic engines emphasize?" options={["Any language switch", "Shared research/live core path", "Vectorized only", "Monthly only"]} answer={1} explanation="Shared kernel in Nautilus docs." />
-<Quiz id="q4-eng" question="Choosing an engine means choosing?" options={["A logo", "Fill and calendar assumptions", "Rf color", "Follower count"]} answer={1} explanation="Assumptions drive numbers." />
-<Quiz id="q5-ass" question="An assumptions paragraph should include?" options={["Screenshots only", "Fill timing/costs/calendar/etc.", "Live passwords", "Stock tips"]} answer={1} explanation="Auditable." />
+<Quiz id="q1-vec" question="A common optimistic vectorized default is?" options=['Forced next-open', 'Same-bar close fills', 'Auto PIT', 'Auto hash'] answer={1} explanation="Source of the NAV gap." />
+<Quiz id="q2-match" question="Event next-open vs vectorized shift1 (flat open) should?" options=['Diverge always', 'Match within float noise when assumptions align', 'Ignore fills', 'Require GPUs'] answer={1} explanation="Lab asserts max diff 0." />
+<Quiz id="q3-stop" question="Stops are hard in pure close-to-close vectors because?" options=['Fees vanish', 'Fill depends on intrabar path', 'Hashes break', 'Rf must be 1'] answer={1} explanation="Path-dependent exit price." />
+<Quiz id="q4-vbt" question="VectorBT’s documented strength is?" options=['Only live OMS', 'Fast vectorized research sweeps', 'Only C++ GUIs', 'Broker custody'] answer={1} explanation="vectorbt.dev positioning." />
+<Quiz id="q5-nau" question="NautilusTrader architecture emphasizes?" options=['Separate live rewrite always', 'Shared kernel across Backtest/Sandbox/Live', 'CSV only', 'Monthly bars only'] answer={1} explanation="Official architecture docs." />
 
 ## Done when
 
-- Assumptions paragraph + dual-fill control + quizzes  
+- Event↔vectorized match assert + stop demo + library comparison + quizzes  
 
-**Sources:** classic — VectorBT / Zipline / Backtrader concepts. niche — RoundtableSpace engine list post. frontier — NautilusTrader architecture (shared kernel). Unverified Qbot/Packt tags not used in the body this batch.
+**Sources:** VectorBT docs/repo; Backtrader docs/repo; Zipline Reloaded docs/repo; NautilusTrader architecture + repo; RoundtableSpace map post.
 
 <Summary>
-**Takeaways**: fill assumptions, event loops, isomorphic-engine concept.  
-**P2 wrap**: versioned data + trap interrogation + costs + engines; next batch is P3 classic families.
+**Takeaways**: event engine, match assert, stops need events, library use-cases.  
+**P2 wrap**: next is P3 classic strategy families.
 </Summary>

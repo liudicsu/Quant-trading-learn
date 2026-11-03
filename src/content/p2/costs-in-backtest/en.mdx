@@ -15,7 +15,7 @@ Toy bps and a pedagogical √ impact — not a broker schedule or guaranteed TCA
 - MA10, `position=shift(1)`, Rf=0, √252
 - Commission **2 bps** one-way; half-spread **5 bps**; slippage **3 bps**
 - Impact: `k * sigma * sqrt(Q/ADV)` with k=**0.10**, ADV=**1e6** shares, σ from the panel
-- Base capital **USD 1e6** for the stacked path; capacity grid from **USD 1e5`** to **USD 5e7`**
+- Base capital **USD 1e6** for the stacked path; capacity grid from **USD 1e5** to **USD 5e7**
 
 ## Four parts (each with a number)
 
@@ -36,6 +36,10 @@ On the MA10 path at USD 1e6 capital, cumulative cost sums (return units) ≈ com
 
 ![Cost breakdown](/p2/cost_breakdown.png)
 
+## Continuous positions × turnover
+
+Once positions are **continuous** (not just 0/1 flips), scale impact (and other one-way frictions) by **turnover** `|Δposition|` each bar — not by a single Q/ADV computed from capital alone. The lab’s impact series already multiplies `turnover * (capital/price) / ADV`; keep that link when you move beyond binary holdings.
+
 ## Combined bps ladder (continuity)
 
 Holding a single combined one-way bps × turnover (no separate √ term): Sharpe goes **−1.12 → −2.34** as bps go 0→40. Chart: `/p2/cost_ladder.png`.
@@ -44,7 +48,7 @@ Holding a single combined one-way bps × turnover (no separate √ term): Sharpe
 
 ## Capacity sensitivity
 
-Because impact ∝ √(Q/ADV) and Q scales with capital, larger books pay more impact. Lab table: at USD 1e5` net Sharpe≈**−1.45**; at USD 5e7` ≈**−1.83**. Chart: `/p2/capacity_sensitivity.png`.
+Because impact ∝ √(Q/ADV) and Q scales with capital, larger books pay more impact. Lab table: at USD 1e5 net Sharpe≈**−1.45**; at USD 5e7 ≈**−1.83**. Chart: `/p2/capacity_sensitivity.png`.
 
 ![Capacity](/p2/capacity_sensitivity.png)
 

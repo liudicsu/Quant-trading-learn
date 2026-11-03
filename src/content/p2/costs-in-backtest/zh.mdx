@@ -36,6 +36,10 @@ USD 1e6 资金的 MA10 路径上，累计成本（收益单位）约：佣金 **
 
 ![成本分解](/p2/cost_breakdown.png)
 
+## 连续仓位 × 换手
+
+一旦仓位是**连续**的（不只是 0/1 翻转），冲击（以及其他单边摩擦）必须按每根 bar 的 **换手** `|Δposition|` 缩放——不能只用资金算出的单一 Q/ADV。课内冲击序列已用 `turnover * (capital/price) / ADV`；离开二元持仓时保持这一联系。
+
 ## 合并 bps 阶梯（延续）
 
 单一合并单边 bps×换手（不含单独 √ 项）：bps 从 0→40 时夏普 **−1.12 → −2.34**。图：`/p2/cost_ladder.png`。
@@ -44,7 +48,7 @@ USD 1e6 资金的 MA10 路径上，累计成本（收益单位）约：佣金 **
 
 ## 容量敏感性
 
-冲击 ∝ √(Q/ADV) 且 Q 随资金放大，更大簿记付更多冲击。实验表：USD 1e5` 净夏普≈**−1.45**；USD 5e7` ≈**−1.83**。图：`/p2/capacity_sensitivity.png`。
+冲击 ∝ √(Q/ADV) 且 Q 随资金放大，更大簿记付更多冲击。实验表：USD 1e5 净夏普≈**−1.45**；USD 5e7 ≈**−1.83**。图：`/p2/capacity_sensitivity.png`。
 
 ![容量](/p2/capacity_sensitivity.png)
 

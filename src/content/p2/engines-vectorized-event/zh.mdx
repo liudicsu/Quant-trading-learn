@@ -1,33 +1,52 @@
 ## 学习目标
 
-本课（约 **8 学时**：概念 3h + 对照实验 4h + 可选文档 1h）弄清引擎假设：向量化默认风险、两种成交时点净值、用 initialize/handle_data 描述事件循环。前置：`costs-in-backtest`。
+本课（约 **8 学时**：概念 3h + 对照实验 4h + 文档 1h）实现一个**最小事件驱动引擎**，证明其净值与向量化次日开盘路径一致，演示向量化收盘路径难以干净表达的**止损**，并按**官方文档**对照各库。前置：`costs-in-backtest`。
 
-**课内目标：** 陈述向量化默认风险；对比两成交时点净值；描述事件循环。
+**课内目标：** 实现事件/订单/成交/组合；断言事件净值匹配向量化；说明何时必须用事件引擎。
 
-**必须教会：** 引擎选择 = 成交与日历假设；先诚实向量化再事件验证；同构引擎降低研究≠实盘缝隙（概念）。
+**必须教会：** 引擎选择=成交/日历假设；先诚实向量化再事件校验；止损/限价/多资产/资金约束需要事件；同构内核概念。
 
 <Callout type="info" title="学习用途">
-不绑定单一商业产品；概念优先。
+玩具 MA + 合成开盘价，不是生产 OMS 或实盘机器人。
 </Callout>
 
 ## 参数
 
-- MA=10；gap_seed=4 生成带跳空的 open；Rf=0  
+- MA=10；Rf=0；市价单在**下一根开盘**成交；匹配测试用 open=昨收  
+- 止损演示：相对入场 **3%**；区间代理 = min(open, close)
 
-## 同信号，两成交时点
+## 向量化成交时点
 
-向量化同 bar 收盘净值可到 **~2.29**；次日开盘成交约 **0.82**；`shift(1)` 收盘约 **0.82**。默认若偷偷同 bar，会乐观。
+同日收盘净值 ≈ **2.29**（偏乐观）。次日开盘 / `shift(1)` ≈ **0.818**。静默同日默认会抬高结果。
 
-## 事件循环素描
+## 最小事件引擎（代码）
 
-`initialize`：日历、费用、宇宙、热身。  
-`handle_data(bar)`：只读 as-of 数据 → 发单 → 引擎在**后续事件**成交。
+`examples/p2/04_engines_vectorized_event.py` 实现 bar 事件、市价单、次日开盘成交与组合净值。
 
-## 同构引擎概念（已读文档）
+**匹配结果：** `nav_event_next_open = nav_vectorized_equiv = 0.818344`，`max_abs_equity_diff = 0.0`（已 assert）。
 
-[NautilusTrader 架构文档](https://nautilustrader.io/docs/latest/concepts/architecture/)写明 Backtest / Sandbox / Live 共享同一 `NautilusKernel`——用同一套核心降低「研究代码 ≠ 实盘代码」的缝隙（概念层；本课不安装实盘）。
+![事件 vs 向量化](/p2/engines_event_vs_vectorized.png)
 
-[RoundtableSpace 的引擎列表帖](https://x.com/RoundtableSpace/status/2111272232249143360)把 NautilusTrader 概括为「同一代码跑回测与实盘机器人」，并并列 Hummingbot / Jesse / vectorbt 等——当作**选型地图**，仍要自己写成交假设段。
+## 何时需要事件引擎
+
+当成交取决于**日内路径**或**状态**时用事件：
+
+- **止损 / 止盈 / 限价**（成交价 ≠ 收盘）  
+- **多资产**错位成交 / 部分成交  
+- **资金 / 保证金 / 风控**在发单前检查  
+
+止损演示：stop_exits=**1**，含止损净值 ≈ **0.821** vs 无止损 **0.818**。单靠收盘到收盘的向量，若无日内规则就无法把成交钉在止损价。
+
+## 库对照（已读文档与仓库）
+
+| 库 | 适用场景（来自官方材料） | 文档 / 仓库 |
+| --- | --- | --- |
+| **VectorBT** | 研究向**向量化**大批参数/标的扫描（Numba/Rust） | [vectorbt.dev](https://vectorbt.dev/) · [github.com/polakowo/vectorbt](https://github.com/polakowo/vectorbt) |
+| **Backtrader** | 易用 **Cerebro**：Strategy + 指标，`adddata`/`run`/`plot` | [backtrader.com/docu](https://www.backtrader.com/docu/) · [github.com/mementum/backtrader](https://github.com/mementum/backtrader) |
+| **Zipline Reloaded** | Pythonic **initialize/handle_data** 事件 API；维护侧重缺陷/兼容 | [zipline.ml4trading.io](https://zipline.ml4trading.io/) · [github.com/stefan-jansen/zipline-reloaded](https://github.com/stefan-jansen/zipline-reloaded) |
+| **NautilusTrader** | Rust 事件内核；**Backtest/Sandbox/Live 共享同一 kernel** | [架构文档](https://nautilustrader.io/docs/latest/concepts/architecture/) · [github.com/nautechsystems/nautilus_trader](https://github.com/nautechsystems/nautilus_trader) |
+
+[RoundtableSpace 引擎列表帖](https://x.com/RoundtableSpace/status/2111272232249143360)仍可当地图（Nautilus「同一代码跑回测与实盘」等）——仍要自己写假设段。
 
 ## Python 实验（已本地运行）
 
@@ -37,56 +56,68 @@
 
 ```text
 === parameters ===
-n 300 MA=10 gap_seed=4 Rf=0
+n 300 MA 10 gap_seed=4 Rf=0 fill=next_open
 
-=== same signal, two fill timings (vectorized) ===
+=== same signal, fill timings (vectorized) ===
 nav_vectorized_same_bar_cc 2.290582
-nav_next_open_fill 0.824673
 nav_honest_shift1_cc 0.818344
+nav_next_open_vec_flat_open 0.818344
 vectorized_default_risk: same-bar close fills silently inflate results unless you shift.
 
-=== event-loop sketch (initialize / handle_data) ===
-initialize: set calendar, commission model, universe, warm-up bars
-handle_data(bar): read as-of data only → emit orders → engine fills on next event
-teach: engine choice = fill + calendar assumptions, not just 'library brand'.
+=== minimal event engine (next-open fills) ===
+nav_event_next_open 0.818344
+nav_vectorized_equiv_shift1_oc 0.818344
+max_abs_equity_diff_event_vs_vectorized 0.0
+ASSERT_event_matches_vectorized
 
-=== assumptions paragraph (machine-printed) ===
-ASSUMPTIONS: daily bars; signal from adjusted close; honest research uses shift(1) or next-open fills; costs applied as bps×turnover; no short locate; timezone=naive dates; freeze params before hold-out.
-isomorphic_note: NautilusTrader documents Backtest/Sandbox/Live sharing one kernel — same code path reduces research≠live gaps (concept; see nautilustrader.io architecture docs).
+=== when an event engine is required (stop-loss demo) ===
+need_event_for: stop-loss / limit fills inside the bar, path-dependent exits, multi-asset partial fills, capital/margin constraints checked before send.
+stop_pct 0.03 stop_exits 1
+nav_event_with_stop 0.820767
+nav_event_no_stop 0.818344
+teach: stop exits are path-dependent inside the bar; a single close-to-close vector cannot place the fill at the stop without an intrabar rule — use an event engine.
+saved_plot public/p2/engines_event_vs_vectorized.png
+
+=== library comparison (docs read this batch) ===
+vectorbt: research-scale vectorized backtests on pandas/NumPy (Numba/Rust); sweep many params/assets fast — https://vectorbt.dev/ | https://github.com/polakowo/vectorbt
+backtrader: Cerebro engine; write a Strategy with indicators + entry/exit logic, add data, run/plot — https://www.backtrader.com/docu/ | https://github.com/mementum/backtrader
+zipline_reloaded: Pythonic event-driven initialize/handle_data API (Quantopian lineage); maintained for bugs/compat; new features → ML4T Backtest — https://zipline.ml4trading.io/ | https://github.com/stefan-jansen/zipline-reloaded
+nautilustrader: Rust-native event-driven; Backtest/Sandbox/Live share NautilusKernel — https://nautilustrader.io/docs/latest/concepts/architecture/ | https://github.com/nautechsystems/nautilus_trader
+ASSUMPTIONS: daily bars; MA signal; event market orders fill next open; stop demo uses min(open,close) as range proxy; Rf=0; learning only.
 ASSERTS_OK
 ```
 
 ## 常见错误 / 陷阱
 
 1. 把库名当成假设说明书。  
-2. 向量化默认同 bar。  
-3. 事件驱动却在 handle 里读未来 bar。  
-4. 不写假设段。  
-5. 没成本就比较引擎。
+2. 向量化同日默认。  
+3. 声称纯收盘向量「有止损」却无日内规则。  
+4. 在 handle_data 读未来 bar。  
+5. 未对齐成交约定就横向比引擎。
 
 ## 练习（与任务清单 1:1）
 
-1. **ex1**：同信号两成交时点；**完成标准**：打印两净值并解释差。  
-2. **ex2**：写回测假设段；**完成标准**：含成交/日历/成本/时区。  
-3. **ex3**：用 initialize/handle_data 各写两句；**完成标准**：四句。  
-4. **ex4**：说明同构引擎概念；**完成标准**：链到 Nautilus 文档一句。  
-5. **ex5**：列出向量化乐观默认一条；**完成标准**：点名 same-bar。
+1. **ex1**：两种向量化成交净值；**完成标准**：解释同日 vs 次日开盘。  
+2. **ex2**：事件引擎匹配；**完成标准**：assert 打印 max diff ≈ 0。  
+3. **ex3**：止损演示；**完成标准**：打印 stop_exits 与两种净值。  
+4. **ex4**：库对照表；**完成标准**：四个库各一句场景 + 链接。  
+5. **ex5**：假设段；**完成标准**：含成交/日历/止损/时区。
 
 ## 测验
 
-<Quiz id="q1-vec" question="向量化乐观默认常见是？" options={["强制次日开盘", "同 bar 收盘成交", "自动 PIT", "自动哈希"]} answer={1} explanation="本课 NAV 差距来源。" />
-<Quiz id="q2-ev" question="事件驱动主要买到？" options={["更高胜率", "显式的成交/事件时序", "免成本", "免假设"]} answer={1} explanation="时序显式化。" />
-<Quiz id="q3-iso" question="同构引擎概念强调？" options={["换语言就行", "研究与实盘共享核心路径", "只要向量化", "只要月频"]} answer={1} explanation="Nautilus 文档中的共享 kernel。" />
-<Quiz id="q4-eng" question="选引擎等于选？" options={["Logo", "成交与日历假设", "无风险利率颜色", "Twitter 粉丝"]} answer={1} explanation="假设决定数字。" />
-<Quiz id="q5-ass" question="假设段应包含？" options={["仅截图", "成交时点/成本/日历等", "实盘密码", "荐股列表"]} answer={1} explanation="可审计。" />
+<Quiz id="q1-vec" question="常见偏乐观的向量化默认是？" options=['强制次日开盘', '同日收盘成交', '自动 PIT', '自动哈希'] answer={1} explanation="净值差距来源。" />
+<Quiz id="q2-match" question="事件次日开盘 vs 向量化 shift1（平坦开盘）应？" options=['必然分叉', '假设对齐时在浮点误差内匹配', '忽略成交', '必须 GPU'] answer={1} explanation="实验 assert 差分为 0。" />
+<Quiz id="q3-stop" question="纯收盘向量难写止损是因为？" options=['费用消失', '成交取决于日内路径', '哈希损坏', 'Rf 必须为 1'] answer={1} explanation="路径依赖的出场价。" />
+<Quiz id="q4-vbt" question="VectorBT 文档强调的强项？" options=['只做实盘 OMS', '快速向量化研究扫描', '只做 C++ GUI', '托管券商'] answer={1} explanation="vectorbt.dev 定位。" />
+<Quiz id="q5-nau" question="NautilusTrader 架构强调？" options=['实盘必须重写', 'Backtest/Sandbox/Live 共享内核', '只能 CSV', '只能月频'] answer={1} explanation="官方架构文档。" />
 
 ## 完成标准
 
-- 假设段 + 双成交对照 + 测验  
+- 事件↔向量化匹配 assert + 止损演示 + 库对照 + 测验  
 
-**来源：** classic — VectorBT / Zipline / Backtrader 概念对照。niche — RoundtableSpace 引擎列表帖。frontier — NautilusTrader 架构文档（共享 kernel）。未核验的 Qbot/Packt 标签本批不写入正文。
+**来源：** VectorBT 文档/仓库；Backtrader 文档/仓库；Zipline Reloaded 文档/仓库；NautilusTrader 架构 + 仓库；RoundtableSpace 地图帖。
 
 <Summary>
-**要点**：成交假设、事件循环、同构引擎概念。  
-**P2 收束**：数据可版本化 + 陷阱审讯 + 成本 + 引擎假设；下一批次进入 P3 经典策略族。
+**要点**：事件引擎、匹配断言、止损需事件、库场景对照。  
+**P2 收束**：下一阶段是 P3 经典策略族。
 </Summary>

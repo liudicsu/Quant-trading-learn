@@ -35,6 +35,10 @@ Rolling windows pick the best MA length on each **train** block, then score the 
 
 Lab summary (10 folds): mean train SR≈**0.25**, mean test SR≈**−0.89**, median test≈**−1.75**, fraction of test SR>0 ≈**0.30**. Per-fold table is in the run output below.
 
+## Why some walk-forward test Sharpes are NaN
+
+Folds **6, 7, 9** print `sharpe_test=NaN` because the test window’s position path is **flat** (PnL≈0 → sample std=0), so Sharpe is undefined. The summary **mean/median skip those NaN folds** (pandas default); `frac_test_positive` treats NaN as not >0.
+
 ## False hits under the null (context for mean_false_hits≈2.78)
 
 With n=**299** returns, under a Normal null the SE of the **annualized** Sharpe is ≈ √(252/299) ≈ **0.918**. Then P(|SR|>1.5) ≈ **0.102**, so among **30** trials the expected hit count is ≈ **3.07**. The lab’s Monte Carlo mean_false_hits≈**2.78** (50 seeds) sits close to that; the small gap is expected from ±1 discrete signs vs Gaussian noise.
@@ -45,7 +49,96 @@ From Bailey & López de Prado (2012), *The Sharpe Ratio Efficient Frontier*, wit
 
 
 ```text
-\widehat{PSR}(SR^*)=\Phi\left(\frac{(\hat{SR}-SR^*)\sqrt{n-1}}{\sqrt{1-\gamma_3\hat{SR}+\frac{\gamma_4-1}{4}\hat{SR}^2}}\right)
+=== parameters ===
+n 299 ann_sqrt252 15.874508 asset=AAA_adj Rf=0
+sources: Bailey-LdP 2012 SRE Frontier (PSR); Bailey-LdP 2014 DSR; AFML ch.7/14
+
+=== MA10 cheat vs honest ===
+cheat_same_bar_sharpe 5.2663 nav 2.290582
+honest_shift1_sharpe -1.1193 nav 0.818344
+lookahead_def: using today's close in the signal while earning today's close-to-close return.
+
+=== recap: survivorship & data snooping (see data-cleaning) ===
+survivorship: today's members != historical universe — replaying only survivors inflates means.
+snooping: choosing rules after peeking at full-sample ranks / many unlabeled trials.
+cross_link: /phase/data-honest-backtests/data-cleaning
+
+=== parameter grid (honest shift1) ===
+windows [5, 10, 15, 20, 25, 30, 35, 40]
+best_train_w 35 sharpe_train 0.1796 sharpe_test -1.9121
+mean_train_sharpe -0.3244 mean_test_sharpe -1.8102
+teach: picking max in-sample Sharpe after many trials overstates OOS — log trial counts.
+
+=== freeze-then-holdout ===
+develop_n 220 holdout_n 80
+frozen_w 35
+sharpe_develop 0.1717
+sharpe_holdout -2.1282
+quant_arena_spirit: research feedback only on an earlier window; freeze one rule; score a sealed later window (arXiv:2610.30113).
+
+=== walk-forward (rolling train/test) ===
+params: train_len 80 test_len 20 step 20 windows [5, 10, 15, 20, 25, 30, 35, 40]
+per_window_table
+ fold train_start  train_end test_start   test_end  best_w  sharpe_train  sharpe_test
+    0  2022-01-04 2022-04-25 2022-04-26 2022-05-23      15       -2.5778       0.2497
+    1  2022-02-01 2022-05-23 2022-05-24 2022-06-20      40        0.5422       1.3865
+    2  2022-03-01 2022-06-20 2022-06-21 2022-07-18      40        0.8898      -2.3970
+    3  2022-03-29 2022-07-18 2022-07-19 2022-08-15      40        0.5014       4.0868
+    4  2022-04-26 2022-08-15 2022-08-16 2022-09-12      15        2.3064      -5.5471
+    5  2022-05-24 2022-09-12 2022-09-13 2022-10-10      25        1.1467      -1.7534
+    6  2022-06-21 2022-10-10 2022-10-11 2022-11-07      15        0.5130          NaN
+    7  2022-07-19 2022-11-07 2022-11-08 2022-12-05      15        0.6701          NaN
+    8  2022-08-16 2022-12-05 2022-12-06 2023-01-02      20       -1.0805      -2.2653
+    9  2022-09-13 2023-01-02 2023-01-03 2023-01-30      20       -0.4595          NaN
+summary_n_folds 10
+nan_test_folds [6, 7, 9]
+nan_reason: those test windows had a flat position path (all PnL≈0 → std=0), so Sharpe is undefined; pandas mean/median skip NaN by default.
+summary_mean_train_sr 0.2452
+summary_mean_test_sr -0.8914
+summary_median_test_sr -1.7534
+summary_frac_test_positive 0.3
+summary_note: mean/median exclude NaN folds; frac_positive counts NaN as not >0.
+
+=== random-rule false hits + null SE check ===
+n_returns 299
+SE_ann_SR_under_null ≈ √(252/n) = 0.918046
+P(|SR_ann|>1.5) under Normal null ≈ 0.102279
+expected_hits_per_30_trials ≈ 3.0684
+mean_false_hits 2.78 std_false_hits 1.375
+context: Monte Carlo mean_false_hits≈ 2.78 vs Normal-null expectation≈ 3.068 (close; discrete ±1 signs add slight difference).
+
+=== PSR / DSR (Bailey & López de Prado) ===
+selected_w 35 n_obs 299
+SR_raw -0.011938 SR_ann -0.1895
+skew_gamma3 -0.5624 kurtosis_gamma4_pearson 9.811
+PSR(SR*=0) 0.4181
+N_trials_grid 8 V[SR_raw_trials] 0.000792
+DSR_vs_N_table (SR* = E[max SR] under null; grows with N → DSR falls)
+  N  E_max_SR_raw      DSR
+  1      0.000000 0.418103
+  2      0.014626 0.322743
+  5      0.033559 0.215367
+  8      0.041056 0.179369
+ 10      0.044309 0.165004
+ 20      0.053486 0.128602
+ 30      0.058345 0.111768
+ 50      0.064055 0.094077
+100      0.071211 0.074935
+200      0.077822 0.060036
+formula_note: DSR = PSR(SR̂, SR*=E[max], n, γ3, γ4); E[max]=σ_SR*[(1-γ)Φ^{-1}(1-1/N)+γ Φ^{-1}(1-1/(N e))] (Bailey-LdP 2014).
+saved_plot public/p2/dsr_vs_N.png
+
+=== optional: purged + embargo CV sketch (AFML ch.7) ===
+label_horizon 1 embargo_bars 3
+naive_train_n 150 purged_train_n 149
+test_after_embargo_n 40
+teach: purge drops train samples whose labels overlap the test window; embargo adds a gap so serial dependence does not leak.
+afml_note: this embargo/purge block is a SIMPLIFIED sketch of AFML ch.7, not the full combinatorial purged CV / embargo machinery in the book.
+
+=== failure log template ===
+date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
+2026-11-04 | MA walk-forward | 8 windows × 10 folds | mean_train=0.245 | mean_test=-0.891 | IS≠OOS / DSR falls with N | shrink search / pre-register / sealed hold-out
+ASSERTS_OK
 ```
 
 
@@ -69,7 +162,7 @@ Lab (selected train-best w=35): PSR(0)≈**0.42**; DSR drops from ≈**0.42** (N
 
 ## Optional: purged + embargo CV (AFML ch.7)
 
-If labels use a horizon that overlaps the test window, **purge** those train rows; then add an **embargo** gap so serial dependence does not leak across the cut. Lab sketch: label_horizon=1, embargo=3 → purged train 149 vs naive 150.
+If labels use a horizon that overlaps the test window, **purge** those train rows; then add an **embargo** gap so serial dependence does not leak across the cut. Lab sketch: label_horizon=1, embargo=3 → purged train 149 vs naive 150. This embargo/purge block is a **simplified sketch** of AFML ch.7 — not the full combinatorial purged CV.
 
 ## Sealed hold-out spirit
 

@@ -200,10 +200,17 @@ print("params: train_len", train_len, "test_len", test_len, "step", step, "windo
 print("per_window_table")
 print(wf.to_string(index=False))
 print("summary_n_folds", len(wf))
+nan_folds = wf.loc[wf["sharpe_test"].isna(), "fold"].tolist()
+print("nan_test_folds", nan_folds)
+print(
+    "nan_reason: those test windows had a flat position path (all PnL≈0 → std=0), "
+    "so Sharpe is undefined; pandas mean/median skip NaN by default."
+)
 print("summary_mean_train_sr", round(float(wf["sharpe_train"].mean()), 4))
-print("summary_mean_test_sr", round(float(wf["sharpe_test"].mean()), 4))
-print("summary_median_test_sr", round(float(wf["sharpe_test"].median()), 4))
+print("summary_mean_test_sr", round(float(wf["sharpe_test"].mean(skipna=True)), 4))
+print("summary_median_test_sr", round(float(wf["sharpe_test"].median(skipna=True)), 4))
 print("summary_frac_test_positive", round(float((wf["sharpe_test"] > 0).mean()), 4))
+print("summary_note: mean/median exclude NaN folds; frac_positive counts NaN as not >0.")
 
 # --- false-hit null with SE verification ---
 print("\n=== random-rule false hits + null SE check ===")
@@ -309,6 +316,10 @@ print("test_after_embargo_n", len(test_idx))
 print(
     "teach: purge drops train samples whose labels overlap the test window; "
     "embargo adds a gap so serial dependence does not leak."
+)
+print(
+    "afml_note: this embargo/purge block is a SIMPLIFIED sketch of AFML ch.7, "
+    "not the full combinatorial purged CV / embargo machinery in the book."
 )
 
 print("\n=== failure log template ===")
