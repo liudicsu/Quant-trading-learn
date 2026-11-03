@@ -1,0 +1,121 @@
+{
+  "site": {
+    "name": "量化交易学习",
+    "tagline": "自包含 · 中英双语 · 学习用途",
+    "description": "面向程序员/算法工程师的量化交易自学站点：概念、公式、代码示意、测验与本地进度。仅供学习，不构成投资建议。"
+  },
+  "nav": {
+    "home": "首页",
+    "roadmap": "大纲",
+    "curriculum": "课程大纲",
+    "about": "关于",
+    "language": "语言",
+    "switchTo": "English",
+    "skip": "跳到正文"
+  },
+  "home": {
+    "eyebrow": "学习用途 · 非投资建议",
+    "title": "从程序员到系统化交易研究",
+    "lead": "自包含课稿：预备知识 → 市场与数据 → 回测 → 策略与因子 → 风控与执行 → 结业。进度只保存在你的浏览器里。",
+    "disclaimer": "本站仅用于学习量化研究方法与工程流程，不提供买卖建议、荐股或实盘下单教程。任何示例代码均为教学片段。",
+    "start": "从示例课开始",
+    "continue": "继续学习",
+    "outline": "查看完整大纲",
+    "roadmap": "占位路线（待重排）",
+    "lessons": "{count} 节课",
+    "hours": "约 {n} 小时",
+    "howTitle": "怎么用这个网站",
+    "how1Title": "读讲解",
+    "how1": "每节课给出目标、讲解、公式与 Python 示意；外链仅作可选延伸。",
+    "how2Title": "做测验与任务",
+    "how2": "测验即时反馈；任务清单与完成标记保存在 localStorage。",
+    "how3Title": "诚实研究",
+    "how3": "强调回测陷阱、成本与样本外——先学流程，再谈策略。",
+    "progressLocal": "进度仅保存在本浏览器（localStorage），不会上传。",
+    "placeholderNote": "Batch A：大纲为占位结构（将按内容重排）；示例课为「预备：Python 与 pandas」。研究草稿仅作仓库内参考，不驱动站点。"
+  },
+  "lesson": {
+    "lesson": "第 {n} 课",
+    "of": "共 {total} 课",
+    "tasks": "练习任务",
+    "markDone": "标记本课为已完成",
+    "done": "本课已完成",
+    "prev": "上一课",
+    "next": "下一课",
+    "backToWeek": "返回本月概览",
+    "finishWeek": "查看本月里程碑",
+    "onThisPage": "本课内容",
+    "statusDone": "已完成",
+    "statusTodo": "未完成",
+    "objectives": "学习目标",
+    "prereqs": "开始前需要",
+    "noPrereqs": "无需前置课程，从这里开始。",
+    "summary": "本课小结",
+    "stubBody": "正文将在后续批次填写。",
+    "backToMonth": "返回本月概览",
+    "finishMonth": "查看本月里程碑"
+  },
+  "curriculum": {
+    "title": "课程大纲",
+    "lead": "占位大纲，按月分组仅便于导航；正式课表稍后按内容重排。研究稿 curriculum.draft.ts 不驱动本页。",
+    "phase": "阶段"
+  },
+  "quiz": {
+    "check": "检查答案",
+    "correct": "正确！",
+    "incorrect": "再想想。",
+    "retry": "重试",
+    "showAnswer": "看答案",
+    "answer": "答案：",
+    "yourAnswer": "你的答案",
+    "unit": "单位"
+  },
+  "progress": {
+    "reset": "清空进度",
+    "confirmReset": "确定要清空本浏览器中保存的全部学习进度吗？此操作不可撤销。",
+    "overall": "总体进度",
+    "barLabel": "{label}：",
+    "barValue": "{percent} %"
+  },
+  "footer": {
+    "disclaimer": "学习用途 · 非投资建议 · 无荐股 · 无实盘下单教程",
+    "copyright": "课稿为教学原创内容；外部资源版权归原作者。",
+    "repo": "GitHub 源码"
+  },
+  "about": {
+    "title": "关于",
+    "lead": "自包含量化交易学习站（Batch A 脚手架）。",
+    "sourceTitle": "内容说明",
+    "source": "Batch A 仅交付站点脚手架、占位大纲、一节示例课与进度/测验组件。正式课程大纲待研究文档审核后替换。",
+    "copyrightTitle": "免责声明",
+    "copyright": "本站不构成投资建议，不推荐具体证券，不提供券商开户或实盘下单步骤。",
+    "privacyTitle": "隐私",
+    "privacy": "不需要登录，不收集数据。进度只保存在浏览器 localStorage。",
+    "openSource": "源码开源于 GitHub"
+  },
+  "notFound": {
+    "title": "页面不存在",
+    "back": "回到首页"
+  },
+  "code": {
+    "copy": "复制",
+    "copied": "已复制",
+    "expandAll": "展开全部（{lines} 行）",
+    "collapse": "收起"
+  },
+  "month": {
+    "label": "第 {n} 月",
+    "goal": "本月目标",
+    "lessons": "课程",
+    "milestones": "本月里程碑",
+    "milestonesLead": "本月末你应能做到：",
+    "topics": "本月主题",
+    "progress": "本月进度",
+    "minutes": "约 {n} 分钟",
+    "back": "返回大纲",
+    "start": "开始本月",
+    "stats": "{lessons} 节课 · 约 {hours} 小时 · {tasks} 个任务",
+    "statusReady": "已写正文",
+    "statusOutline": "大纲占位"
+  }
+}

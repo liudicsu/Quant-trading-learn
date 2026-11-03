@@ -1,0 +1,121 @@
+## Learning goals
+
+Connect “some Python” to a minimal quant workflow: load prices, compute returns, plot NAV, and use `shift` for information timing. Snippets are **teaching demos**, not trading signals or investment advice.
+
+## Explanation
+
+Quant research rarely starts with a fancy model. It starts by turning prices into a **reproducible return series**. For closes `px`:
+
+1. **Simple returns** — relative day-to-day change  
+2. **NAV** — compound returns into a path  
+3. **Signals/positions** — only information knowable at decision time
+
+<Callout type="info" title="Learning only">
+Synthetic numbers below show syntax. Do not trade on them. The site outline is still a placeholder and will be rearranged by content.
+</Callout>
+
+### Environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install pandas
+```
+
+## Formulas
+
+Simple return:
+
+<Formula label="Relative change between adjacent prices">
+r_t = P_t / P_(t-1) − 1
+</Formula>
+
+Cumulative NAV:
+
+<Formula label="Compound returns into a NAV path">
+NAV_T = ∏_(t=1)^T (1 + r_t)
+</Formula>
+
+## Python example (not a trading signal)
+
+```python
+import pandas as pd
+
+# Synthetic closes: syntax only — not real data or a recommendation
+px = pd.Series(
+    [100.0, 101.0, 99.5, 100.5, 102.0],
+    index=pd.bdate_range("2024-01-02", periods=5),
+    name="close",
+)
+
+ret = px.pct_change()
+nav = (1 + ret.fillna(0)).cumprod()
+print(pd.DataFrame({"close": px, "ret": ret, "nav": nav}))
+```
+
+Teaching alignment: yesterday’s signal sizes today’s position:
+
+```python
+ma = px.rolling(3).mean()
+raw_signal = (px > ma).astype(int)
+position = raw_signal.shift(1).fillna(0)
+gross = position * ret  # illustrative — not a tradable strategy
+```
+
+<Callout type="warn" title="Still not a strategy">
+No costs, slippage, or out-of-sample evaluation. Align information timing before polishing curves.
+</Callout>
+
+## Quiz
+
+<Quiz
+  id="q-simple-return"
+  question="If yesterday’s close is 100 and today’s is 102, which is closest to simple return r?"
+  options={["0.02", "2", "102/100", "−0.02"]}
+  answer={0}
+  explanation="r = 102/100 − 1 = 0.02."
+/>
+
+<Quiz
+  id="q-shift"
+  question="Main motive for position = signal.shift(1) on daily close signals?"
+  options={[
+    "Make code faster",
+    "Reduce lookahead from same-day close info earning same-day return",
+    "Raise Sharpe automatically",
+    "Subtract all fees",
+  ]}
+  answer={1}
+  explanation="shift aligns timing; it neither guarantees profits nor inserts real costs."
+/>
+
+<Quiz
+  id="q-nav"
+  question="In the demo, fillna(0) on the first NaN return usually means?"
+  options={[
+    "Profits are guaranteed",
+    "Treat missing returns as 0 temporarily so compounding can be shown",
+    "Corporate-action adjustment is done",
+    "All halts are deleted",
+  ]}
+  answer={1}
+  explanation="fillna(0) is a demo convenience; real pipelines need a written missing-data policy."
+/>
+
+## Exercises
+
+1. Reproduce NAV printing in a local notebook.  
+2. Compare when `raw_signal` vs `position` becomes non-zero.  
+3. Write three sentences on why this is not investment advice.
+
+## Done when
+
+- NAV snippet runs locally  
+- You can explain `shift(1)`  
+- Quizzes finished  
+- You state: demo ≠ strategy ≠ advice  
+
+<Summary>
+**Takeaways**: pandas for returns/NAV; `shift` for timing; placeholder outline does not change this template demo.  
+**Next**: browse other placeholder titles; wait for the rearranged formal outline.
+</Summary>

@@ -1,0 +1,121 @@
+{
+  "site": {
+    "name": "Quant Trading Learn",
+    "tagline": "Self-contained · bilingual · learning only",
+    "description": "A self-contained quant trading study site for programmers/ML engineers: concepts, formulas, Python demos, quizzes, and local progress. Learning only — not investment advice."
+  },
+  "nav": {
+    "home": "Home",
+    "roadmap": "Outline",
+    "curriculum": "Curriculum",
+    "about": "About",
+    "language": "Language",
+    "switchTo": "中文",
+    "skip": "Skip to content"
+  },
+  "home": {
+    "eyebrow": "Learning only · not investment advice",
+    "title": "From programmer to systematic trading research",
+    "lead": "Self-contained lessons: prep → markets & data → backtests → strategies & factors → risk & execution → capstone. Progress stays in your browser.",
+    "disclaimer": "This site teaches research methods and engineering workflow only. No buy/sell advice, stock tips, or live-trading order tutorials. Code snippets are educational.",
+    "start": "Start sample lesson",
+    "continue": "Continue",
+    "outline": "Full outline",
+    "roadmap": "Placeholder roadmap (TBD rearrange)",
+    "lessons": "{count} lessons",
+    "hours": "~{n} h",
+    "howTitle": "How to use this site",
+    "how1Title": "Read",
+    "how1": "Each lesson has goals, explanation, formulas, and Python demos; external links are optional.",
+    "how2Title": "Quiz & tasks",
+    "how2": "Instant quiz feedback; task checklist and completion live in localStorage.",
+    "how3Title": "Honest research",
+    "how3": "Focus on traps, costs, and out-of-sample thinking before clever strategies.",
+    "progressLocal": "Progress is stored only in this browser (localStorage) and is never uploaded.",
+    "placeholderNote": "Batch A: placeholder outline (will be rearranged by content); sample lesson is Prep: Python & pandas. Research draft is reference-only in the repo."
+  },
+  "lesson": {
+    "lesson": "Lesson {n}",
+    "of": "of {total}",
+    "tasks": "Practice tasks",
+    "markDone": "Mark lesson complete",
+    "done": "Lesson complete",
+    "prev": "Previous",
+    "next": "Next",
+    "backToWeek": "Back to month overview",
+    "finishWeek": "View month milestones",
+    "onThisPage": "On this page",
+    "statusDone": "Done",
+    "statusTodo": "To do",
+    "objectives": "Learning goals",
+    "prereqs": "Before you start",
+    "noPrereqs": "No prerequisites — start here.",
+    "summary": "Lesson summary",
+    "stubBody": "Full body will be written in a later batch.",
+    "backToMonth": "Back to month overview",
+    "finishMonth": "View month milestones"
+  },
+  "curriculum": {
+    "title": "Curriculum outline",
+    "lead": "Placeholder outline grouped by month for navigation only; formal schedule will be rearranged by content. curriculum.draft.ts does not drive this page.",
+    "phase": "Phase"
+  },
+  "quiz": {
+    "check": "Check",
+    "correct": "Correct!",
+    "incorrect": "Not quite.",
+    "retry": "Retry",
+    "showAnswer": "Show answer",
+    "answer": "Answer: ",
+    "yourAnswer": "Your answer",
+    "unit": "unit"
+  },
+  "progress": {
+    "reset": "Reset progress",
+    "confirmReset": "Clear all learning progress stored in this browser? This cannot be undone.",
+    "overall": "Overall progress",
+    "barLabel": "{label}:",
+    "barValue": "{percent}%"
+  },
+  "footer": {
+    "disclaimer": "Learning only · not investment advice · no stock tips · no live-order tutorials",
+    "copyright": "Lesson text is original teaching material; external resources belong to their authors.",
+    "repo": "GitHub repo"
+  },
+  "about": {
+    "title": "About",
+    "lead": "Self-contained quant trading learning site (Batch A scaffold).",
+    "sourceTitle": "Content",
+    "source": "Batch A ships the site scaffold, placeholder outline, one sample lesson, and progress/quiz UX. The researched syllabus replaces the placeholder later.",
+    "copyrightTitle": "Disclaimer",
+    "copyright": "Not investment advice. No security recommendations. No broker signup or live-order steps.",
+    "privacyTitle": "Privacy",
+    "privacy": "No login, no analytics collection. Progress lives in localStorage only.",
+    "openSource": "Source on GitHub"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back home"
+  },
+  "code": {
+    "copy": "Copy",
+    "copied": "Copied",
+    "expandAll": "Expand all ({lines} lines)",
+    "collapse": "Collapse"
+  },
+  "month": {
+    "label": "Month {n}",
+    "goal": "Month goal",
+    "lessons": "Lessons",
+    "milestones": "Milestones",
+    "milestonesLead": "By month end you should be able to:",
+    "topics": "Topics",
+    "progress": "Month progress",
+    "minutes": "~{n} min",
+    "back": "Back to outline",
+    "start": "Start this month",
+    "stats": "{lessons} lessons · ~{hours} h · {tasks} tasks",
+    "statusReady": "Body ready",
+    "statusOutline": "Outline stub"
+  }
+}
