@@ -1,29 +1,46 @@
 === parameters ===
-reuse panel 200x750; true factor + nuisance raw_factor2 (noise loading)
-look-ahead: shift(1) weights; lagged impact vol; factor[t] → fwd from t+1
-cost model shared with P2/P3/P4-01: 10 bps one-way + √impact
+reuse 200x750; true factor + nuisance raw_factor2
+MU_STRONG=0.0025 (inflated teaching) MU_WEAK=0.001 (realistic-weak foil)
+look-ahead: shift(1) weights; lagged impact vol; neutralize uses log_mcap.shift(1)
+cost model: P2 10 bps one-way + √impact
+overlapping IC windows inflate IC autocorr / ICIR SE (not mean IC) — use non-overlap or NW
 
-=== neutralization before / after ===
-true_factor RankIC mean before_neut=0.0845 after=0.1105
-nuisance_factor RankIC mean after_neut=0.0029 (should be ~0)
-recovery corr after_neut=0.9726
+=== neutralization before / after (strong; lagged mcap) ===
+true_factor RankIC mean before_neut=0.0761 after=0.1119
+nuisance_factor RankIC mean after_neut=-0.0027 (should be ~0)
+recovery corr after_neut=0.9663
+neutralize covariates: industry (static) + log_mcap.shift(1) only — no same-day mcap
 
-=== single vs equal-weight multi-factor ===
-true_only                gross_SR=4.465 net_SR=3.734 turn=0.9349 NAV=34.418 IC=0.1105
-nuisance_only            gross_SR=0.873 net_SR=-7.112 turn=1.5619 NAV=0.340 IC=0.0029
-ew_true_plus_nuisance    gross_SR=4.509 net_SR=3.093 turn=1.3169 NAV=8.481 IC=0.0810
-teach: blending a null nuisance factor dilutes IC and net SR — combining ≠ free lunch
+=== strong vs weak (side-by-side portfolio metrics) ===
+strong MU=0.0025 RankIC=0.1119 ICIR=4.636 gross_SR=4.495 net_SR=3.668 turn=1.0586
+weak   MU=0.0010 RankIC=0.0431 ICIR=1.769 gross_SR=1.619 net_SR=0.792 turn=1.0586
+teach: weak RankIC is the live-like case; costs often erase net edge — multi-factor combination exists to stack weak signals
 
-=== turnover–cost table (rebalance cadence) ===
-hold= 1d mean_turn=0.9349 net_SR=3.734 NAV=34.418
-hold= 5d mean_turn=0.1919 net_SR=4.380 NAV=63.965
-hold=10d mean_turn=0.0943 net_SR=4.440 NAV=68.570
-hold=20d mean_turn=0.0509 net_SR=4.474 NAV=73.174
-teach: lower turnover cuts cost drag; expected-value tradeoff vs signal freshness
+=== single vs equal-weight multi-factor (strong) ===
+true_only                gross_SR=4.495 net_SR=3.668 turn=1.0586 NAV=32.403 IC=0.1119
+nuisance_only            gross_SR=-1.429 net_SR=-8.500 turn=1.3895 NAV=0.273 IC=-0.0027
+ew_true_plus_nuisance    gross_SR=4.497 net_SR=3.085 turn=1.3009 NAV=8.293 IC=0.0788
+teach: blending a null nuisance dilutes IC/net SR — combining ≠ free lunch; combine *informed* weak factors
+
+=== multi-factor honesty on WEAK panel ===
+weak_true_only               gross_SR=1.619 net_SR=0.792 turn=1.0586 IC=0.0431
+weak_ew_true_plus_nuisance   gross_SR=1.637 net_SR=0.225 turn=1.3009 IC=0.0306
+
+=== turnover–cost table (strong true factor) ===
+hold= 1d mean_turn=1.0586 net_SR=3.668 NAV=32.403
+hold= 5d mean_turn=0.2107 net_SR=4.289 NAV=59.940
+hold=10d mean_turn=0.1035 net_SR=4.360 NAV=63.125
+hold=20d mean_turn=0.0533 net_SR=4.230 NAV=53.796
+
+=== turnover–cost table (WEAK true factor) ===
+hold= 1d mean_turn=1.0586 net_SR=0.792 NAV=1.863
+hold= 5d mean_turn=0.2107 net_SR=1.422 NAV=3.483
+hold=10d mean_turn=0.1035 net_SR=1.501 NAV=3.748
+hold=20d mean_turn=0.0533 net_SR=1.392 NAV=3.333
+teach: on weak signals, cutting turnover is often the difference between net>0 and net≈0
 
 === crowding foil ===
-long_leg_HHI_mean=0.02500 rank_AC1=0.8666
-teach: high AC + concentrated books → crowding risk if many funds hold the same names
-chart /workspace/Quant-trading-learn/public/p4/portfolio_nav_compare.png
+long_leg_HHI_mean=0.02497 rank_AC1=0.8809
+chart /workspace/Quant-trading-learn/public/p4/portfolio_strong_vs_weak.png
 chart /workspace/Quant-trading-learn/public/p4/ic_before_after.png
-disclaimer: synthetic planted panel — learning only, not investment advice
+disclaimer: strong MU inflated for teaching; weak panel is the realistic foil — learning only

@@ -1,7 +1,5 @@
 """P4 lab 01: factor construction, IC/RankIC/ICIR/decay, quantiles, FM, Harvey zoo, Alphalens-style.
-Learning only — not investment advice.
-
-Panel: 200 × 750 with planted beta_true and MU_TRUE premium; raw_factor contaminated by industry/size.
+Strong (inflated) vs weak RankIC panels side by side. Learning only — not investment advice.
 """
 from __future__ import annotations
 
@@ -12,207 +10,161 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from _common import ANN, PUBLIC, apply_costs_ls, ensure_panel, DATA as DATA_DIR
+from _common import (
+    ANN,
+    MU_STRONG,
+    MU_WEAK,
+    PUBLIC,
+    apply_costs_ls,
+    build_factor,
+    ensure_panel,
+    forward_sum,
+    load_strength,
+    ls_stats,
+    ls_weights,
+    spearman_ic,
+    zscore_cs,
+    DATA as DATA_DIR,
+)
 
 DATA = DATA_DIR
-ensure_panel()
-rets = pd.read_csv(DATA / "returns.csv", index_col=0, parse_dates=True)
-raw = pd.read_csv(DATA / "raw_factor.csv", index_col=0, parse_dates=True)
-log_mcap = pd.read_csv(DATA / "log_mcap.csv", index_col=0, parse_dates=True)
-meta = pd.read_csv(DATA / "meta.csv").set_index("asset")
-beta_true = meta["beta_true"]
-ind = meta["industry"]
+ensure_panel(force=True)
 
 print("=== parameters ===")
-print("panel", rets.shape[1], "assets x", rets.shape[0], "days; industries", int(ind.nunique()))
+print("panel 200 assets x 750 days; 10 industries")
 print("DGP: r = beta_true*f_true + beta_mkt*f_mkt + beta_size*f_size + industry + noise")
-print("f_true has planted daily premium MU_TRUE=0.0025 (~63% ann per unit beta; exaggerated for teaching clarity)")
-print("raw_factor = beta_true + 0.4*industry + 0.25*size_loading + noise  (nuisance contamination)")
-print("look-ahead: factor[t] vs forward returns starting t+1; LS weights use shift(1); impact vol lagged")
-print("cite: Fama & MacBeth 1973 JPE 81(3) 607-636 — cross-section then time-series mean of slopes")
-print("cite: Fama & French 1993 JFE 33(1) 3-56 — Mkt-Rf, SMB, HML (FF3)")
-print("cite: Fama & French 2015 JFE 116(1) 1-22 — FF5 = FF3 + RMW + CMA")
-print("cite: Harvey, Liu & Zhu 2016 RFS 29(1) 5-68 — '...and the Cross-Section of Expected Returns'; t>3")
-print("cite: Alphalens Reloaded docs (alphalens.ml4trading.io) — get_clean_factor_and_forward_returns + tear sheets")
-print("cite: Qlib DataHandlerLP processors CSZScoreNorm / CSZFillna / Alpha158 (qlib.readthedocs.io)")
-print("niche: quant-wiki factor taxonomy as foil only; frontier LLM formulaic mining deferred to P8 (not re-run)")
-
-
-def winsorize_cs(df: pd.DataFrame, p: float = 0.01) -> pd.DataFrame:
-    lo = df.quantile(p, axis=1)
-    hi = df.quantile(1 - p, axis=1)
-    return df.clip(lo, hi, axis=0)
-
-
-def zscore_cs(df: pd.DataFrame) -> pd.DataFrame:
-    mu = df.mean(axis=1)
-    sd = df.std(axis=1, ddof=1).replace(0, np.nan)
-    return df.sub(mu, axis=0).div(sd, axis=0)
-
-
-def neutralize(df: pd.DataFrame, industry: pd.Series, logcap: pd.DataFrame) -> pd.DataFrame:
-    """Cross-sectional residual: factor ~ C(industry) + log_mcap (regression residual)."""
-    out = pd.DataFrame(np.nan, index=df.index, columns=df.columns)
-    ind_dummies = pd.get_dummies(industry, prefix="ind", dtype=float)
-    X_base = ind_dummies  # static across dates; append logcap each day
-    for dt in df.index:
-        y = df.loc[dt].astype(float)
-        x_m = logcap.loc[dt].astype(float)
-        X = pd.concat([X_base, x_m.rename("log_mcap")], axis=1).reindex(y.index)
-        ok = y.notna() & X.notna().all(axis=1)
-        if int(ok.sum()) < X.shape[1] + 5:
-            continue
-        Yv = y[ok].values
-        Xv = np.column_stack([np.ones(int(ok.sum())), X.loc[ok].values])
-        coef, *_ = np.linalg.lstsq(Xv, Yv, rcond=None)
-        out.loc[dt, y[ok].index] = Yv - Xv @ coef
-    return out
+print(f"MU_STRONG={MU_STRONG} (INFLATED teaching setting)  MU_WEAK={MU_WEAK} (realistic-weak foil, target RankIC ~0.02-0.05)")
+print("raw_factor = beta_true + 0.4*industry + 0.25*size_loading + noise")
+print("look-ahead: factor[t] vs fwd from t+1; LS weights shift(1); impact vol lagged; neutralize uses log_mcap.shift(1)")
+print("cite: Fama & MacBeth 1973 JPE 81(3) 607-636")
+print("cite: Fama & French 1993 JFE 33(1) 3-56 — FF3; 2015 JFE 116(1) 1-22 — FF5")
+print("cite: Harvey, Liu & Zhu 2016 RFS 29(1) 5-68 — t>3 multiple-testing hurdle")
+print("cite: Alphalens Reloaded docs (alphalens.ml4trading.io); Qlib CSZScoreNorm / Alpha158")
+print("niche: quant-wiki foil; frontier LLM mining deferred to P8")
+print("note: overlapping multi-day IC windows mainly inflate IC autocorrelation and ICIR SE (not mean IC);")
+print("      fix with non-overlapping sampling or Newey–West on the IC series")
 
 
 def mean_cs_corr(fac: pd.DataFrame, truth: pd.Series) -> float:
     cors = []
     for dt in fac.index[::5]:
-        s = fac.loc[dt]
-        c = s.corr(truth.reindex(s.index))
+        c = fac.loc[dt].corr(truth.reindex(fac.columns))
         if np.isfinite(c):
             cors.append(float(c))
     return float(np.mean(cors))
 
 
-def forward_sum(rets: pd.DataFrame, h: int) -> pd.DataFrame:
-    """At date t, sum of returns over [t+1, t+h] inclusive. Last h rows NaN."""
-    out = pd.DataFrame(np.nan, index=rets.index, columns=rets.columns)
-    vals = rets.values
-    for i in range(len(rets) - h):
-        out.iloc[i] = vals[i + 1 : i + 1 + h].sum(axis=0)
-    return out
+# ---- strong panel (main walkthrough) ----
+rets_s, raw, raw2, log_mcap, meta = load_strength("strong")
+beta_true = meta["beta_true"]
+ind = meta["industry"]
+f_nz_s = build_factor(raw, ind, log_mcap)
 
-
-def spearman_ic(fac: pd.DataFrame, fwd: pd.DataFrame) -> pd.Series:
-    ics = []
-    idx = []
-    for dt in fac.index:
-        if dt not in fwd.index:
-            continue
-        a, b = fac.loc[dt], fwd.loc[dt]
-        ok = a.notna() & b.notna()
-        if int(ok.sum()) < 30:
-            continue
-        ics.append(float(stats.spearmanr(a[ok], b[ok]).correlation))
-        idx.append(dt)
-    return pd.Series(ics, index=idx, name="RankIC")
-
-
-print("\n=== factor construction ===")
-f_w = winsorize_cs(raw, 0.01)
-f_z = zscore_cs(f_w)
-f_n = neutralize(f_z, ind, log_mcap)
-f_nz = zscore_cs(f_n)
-
+print("\n=== factor construction (strong; log_mcap.shift(1) in neutralize) ===")
+f_z = zscore_cs(raw.clip(raw.quantile(0.01, axis=1), raw.quantile(0.99, axis=1), axis=0))
 print(f"mean_cs_corr(raw, beta_true)={mean_cs_corr(raw, beta_true):.4f}")
 print(f"mean_cs_corr(z_only, beta_true)={mean_cs_corr(f_z, beta_true):.4f}")
-print(f"mean_cs_corr(neutralized, beta_true)={mean_cs_corr(f_nz, beta_true):.4f}")
-print("teach: industry+mcap residualization lifts recovery of the planted loading")
+print(f"mean_cs_corr(neutralized, beta_true)={mean_cs_corr(f_nz_s, beta_true):.4f}")
+print("teach: industry+lagged-mcap residualization lifts recovery of the planted loading")
 
-# cache for lab 02
 CACHE = DATA / "cache"
 CACHE.mkdir(exist_ok=True)
-f_nz.to_csv(CACHE / "factor_neutral.csv")
-f_z.to_csv(CACHE / "factor_z_only.csv")
+f_nz_s.to_csv(CACHE / "factor_neutral_strong.csv")
 
-print("\n=== RankIC / ICIR / decay ===")
+print("\n=== RankIC / ICIR / decay (strong) ===")
 horizons = [1, 5, 10, 20]
 ic_table = {}
 for h in horizons:
-    fwd = forward_sum(rets, h)
-    ic = spearman_ic(f_nz, fwd)
+    ic = spearman_ic(f_nz_s, forward_sum(rets_s, h))
     ic_table[h] = ic
-    # ICIR annualized roughly: mean/std * sqrt(252/h) for overlapping h-day
     icir = ic.mean() / (ic.std(ddof=1) + 1e-12) * np.sqrt(252 / h)
     print(f"RankIC h={h}: mean={ic.mean():.4f} std={ic.std(ddof=1):.4f} ICIR_ann≈{icir:.3f} n={len(ic)}")
-
+print(
+    "overlapping-window note: for h>1, overlapping fwd sums inflate IC autocorr and shrink naive ICIR SE;"
+    " mean IC is less biased — use non-overlapping IC or Newey–West on the IC series"
+)
 ic1 = ic_table[1]
-print(f"ICIR_daily = mean/std * sqrt(252) = {ic1.mean() / ic1.std(ddof=1) * ANN:.3f}")
 
-means = [ic_table[h].mean() for h in horizons]
-# Decaying-alpha foil: AR(1) signal that predicts next residual with half-life ~5d, then dies
+# decaying-alpha foil
 rng_d = np.random.default_rng(7)
-eps = rng_d.normal(0, 1.0, size=f_nz.shape)
-theta = 0.87  # ~5 trading-day half-life
+eps = rng_d.normal(0, 1.0, size=f_nz_s.shape)
+theta = 0.87
 sig = np.zeros_like(eps)
 sig[0] = eps[0]
 for t in range(1, len(eps)):
     sig[t] = theta * sig[t - 1] + eps[t]
-# inject into returns already realized? instead: correlate forward 1d residual with sig
-# Build a synthetic decaying predictive factor aligned to residual of market
-mkt = rets.mean(axis=1)
-resid = rets.sub(mkt, axis=0)
-# factor_decaying[t] predicts resid[t+1] weakly
-fac_dec = pd.DataFrame(sig, index=f_nz.index, columns=f_nz.columns)
-fac_dec = zscore_cs(fac_dec)
-# make resid depend on lagged sig for teaching (in-place overlay on a copy of rets for IC only)
-rets_dec = rets.copy()
-# cannot rewrite history; instead measure IC of fac_dec vs forward resid that we construct
-fwd_res = resid.shift(-1)  # next-day residual
-# Plant: strengthen link by measuring IC of fac_dec shifted against constructed target = 0.05*fac_dec + noise
-# Simpler teach: IC of fac_dec[t] vs fac_dec[t+h] * scale as "signal persistence decay"
+fac_dec = zscore_cs(pd.DataFrame(sig, index=f_nz_s.index, columns=f_nz_s.columns))
 decay_ic = []
 for h in horizons:
-    # RankIC between factor today and residual h days ahead (using planted: resid_fwd ≈ 0.02 * fac_dec)
-    target = (0.02 * fac_dec).shift(-h) + resid * 0.0  # pure: target is scaled future factor? 
-    # Better: IC(fac_dec[t], 0.02*fac_dec[t] + noise) at each horizon via forward resid panel
-    # Construct synthetic forward return panel for decay demo only
-    noise = pd.DataFrame(rng_d.normal(0, 0.02, size=rets.shape), index=rets.index, columns=rets.columns)
+    noise = pd.DataFrame(rng_d.normal(0, 0.02, size=rets_s.shape), index=rets_s.index, columns=rets_s.columns)
     fwd_h = (0.02 * fac_dec).shift(-h) + noise.shift(-h)
     ic_d = spearman_ic(fac_dec, fwd_h)
     decay_ic.append(float(ic_d.mean()))
     print(f"decaying_alpha_foil RankIC h={h}: mean={ic_d.mean():.4f}")
 
+means = [ic_table[h].mean() for h in horizons]
 fig, ax = plt.subplots(figsize=(7, 4))
-ax.plot(horizons, means, "o-", color="#1f4e79", label="planted risk-premium loading (cumulative fwd)")
+ax.plot(horizons, means, "o-", color="#1f4e79", label="planted risk-premium (cumulative fwd)")
 ax.plot(horizons, decay_ic, "s--", color="#c45911", label="decaying-alpha foil")
 ax.set_xlabel("horizon (days)"); ax.set_ylabel("mean RankIC")
 ax.set_title("IC vs horizon: risk premium vs decaying alpha")
 ax.axhline(0, color="k", lw=0.5); ax.legend(); ax.grid(True, alpha=0.3)
 fig.tight_layout(); fig.savefig(PUBLIC / "ic_decay.png", dpi=120); plt.close()
-print("teach: static risk loading → mean RankIC can RISE with cumulative horizon; decaying alpha FALLS — both are 'IC decay' lessons")
 print("chart", PUBLIC / "ic_decay.png")
 
-print("\n=== quintile portfolios (Alphalens-style long-short) ===")
-Q = 5
-labels = pd.DataFrame(np.nan, index=f_nz.index, columns=f_nz.columns)
-for dt in f_nz.index:
-    s = f_nz.loc[dt].dropna()
-    if len(s) < 50:
-        continue
-    labels.loc[dt, s.index] = pd.qcut(s, Q, labels=False, duplicates="drop") + 1
+# ---- strong vs weak side-by-side ----
+print("\n=== strong vs weak panel (side-by-side) ===")
+print("STRONG panel is an INFLATED teaching setting so FM/t>3 recover cleanly;")
+print("WEAK panel (MU_WEAK) targets RankIC ~0.02-0.05 — closer to live single-factor magnitudes.")
+rets_w, _, _, _, _ = load_strength("weak")
+f_nz_w = build_factor(raw, ind, log_mcap)
+stats_s = ls_stats(f_nz_s, rets_s)
+stats_w = ls_stats(f_nz_w, rets_w)
+rows = []
+for label, st, mu in [("strong", stats_s, MU_STRONG), ("weak", stats_w, MU_WEAK)]:
+    row = {
+        "panel": label,
+        "MU": mu,
+        "RankIC": st["RankIC_mean"],
+        "ICIR": st["ICIR"],
+        "gross_SR": st["gross_SR"],
+        "net_SR": st["net_SR"],
+        "mean_turn": st["mean_turn"],
+    }
+    rows.append(row)
+    print(
+        f"{label:6s} MU={mu:.4f} RankIC={st['RankIC_mean']:.4f} ICIR={st['ICIR']:.3f} "
+        f"gross_SR={st['gross_SR']:.3f} net_SR={st['net_SR']:.3f} turn={st['mean_turn']:.4f}"
+    )
+print("teach: real single factors are WEAK; costs can wipe net SR even when gross>0; combining many weak signals is why multi-factor exists")
+pd.DataFrame(rows).to_csv(DATA / "strong_vs_weak.csv", index=False)
 
-w = pd.DataFrame(0.0, index=f_nz.index, columns=f_nz.columns)
-for dt in f_nz.index:
-    lab = labels.loc[dt]
-    for qi, sign in [(1.0, -1.0), (5.0, 1.0)]:
-        members = lab[lab == qi].dropna().index
-        if len(members) == 0:
-            continue
-        w.loc[dt, members] = sign / len(members)
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+for ax, st, title in [(axes[0], stats_s, "strong (inflated)"), (axes[1], stats_w, "weak (realistic foil)")]:
+    eq = (1 + st["net"].fillna(0)).cumprod()
+    ax.plot(eq.index, eq.values, color="#1f4e79")
+    ax.set_title(f"{title}\nnet SR={st['net_SR']:.2f} RankIC={st['RankIC_mean']:.3f}")
+    ax.grid(True, alpha=0.3)
+fig.suptitle("Strong vs weak: LS net NAV")
+fig.tight_layout(); fig.savefig(PUBLIC / "strong_vs_weak.png", dpi=120); plt.close()
+print("chart", PUBLIC / "strong_vs_weak.png")
 
-net, turn = apply_costs_ls(w, rets)
-gross = (w.shift(1).fillna(0) * rets).sum(axis=1)
+print("\n=== quintile portfolios (strong; Alphalens-style) ===")
+w = stats_s["w"]
 print(
-    f"LS gross_SR={gross.mean() / gross.std(ddof=1) * ANN:.3f} "
-    f"net_SR={net.mean() / net.std(ddof=1) * ANN:.3f} "
-    f"mean_turn={float(turn.mean()):.4f} NAV_net={float((1 + net.fillna(0)).cumprod().iloc[-1]):.4f}"
+    f"LS gross_SR={stats_s['gross_SR']:.3f} net_SR={stats_s['net_SR']:.3f} "
+    f"mean_turn={stats_s['mean_turn']:.4f} NAV_net={stats_s['NAV_net']:.4f}"
 )
 print("cost model: P2 10 bps one-way + √impact with LAGGEDrolling σ (VOL_LB=20, shift(1), expanding warm-up)")
 
-print("\n=== Fama–MacBeth (single-factor CS slopes) ===")
-fwd1 = forward_sum(rets, 1)
+print("\n=== Fama–MacBeth (strong panel) ===")
+fwd1 = forward_sum(rets_s, 1)
 gammas = []
-for dt in f_nz.index:
+for dt in f_nz_s.index:
     y = fwd1.loc[dt] if dt in fwd1.index else None
     if y is None:
         continue
-    x = f_nz.loc[dt]
+    x = f_nz_s.loc[dt]
     ok = y.notna() & x.notna()
     if int(ok.sum()) < 40:
         continue
@@ -235,25 +187,18 @@ nw = newey_west_se(g, lags=5)
 t_nw = float(g.mean() / nw) if nw > 0 else float("nan")
 t_iid = float(g.mean() / (g.std(ddof=1) / np.sqrt(len(g))))
 print(f"FM_daily mean_gamma={g.mean():.6f} t_iid={t_iid:.3f} t_NeweyWest_L5={t_nw:.3f} n={len(g)}")
-# Monthly FM (classic frequency): sum daily returns within month, use month-end factor
-months = f_nz.index.to_period("M")
-g_m = []
-for m, idx in f_nz.groupby(months).groups.items():
-    idx = list(idx)
-    if len(idx) < 5:
-        continue
-    # factor at last day of prior month / first available; use last day factor to predict next-month return
-    pass
-# cleaner monthly: for each month m, CS-regress month-sum returns on factor as-of prior month-end
+
+months = f_nz_s.index.to_period("M")
 uniq = sorted(set(months))
+g_m = []
 for i in range(1, len(uniq)):
     m_prev, m_cur = uniq[i - 1], uniq[i]
-    prev_days = f_nz.index[months == m_prev]
-    cur_days = rets.index[rets.index.to_period("M") == m_cur]
+    prev_days = f_nz_s.index[months == m_prev]
+    cur_days = rets_s.index[rets_s.index.to_period("M") == m_cur]
     if len(prev_days) == 0 or len(cur_days) == 0:
         continue
-    x = f_nz.loc[prev_days[-1]]
-    y = rets.loc[cur_days].sum(axis=0)
+    x = f_nz_s.loc[prev_days[-1]]
+    y = rets_s.loc[cur_days].sum(axis=0)
     ok = x.notna() & y.notna()
     if int(ok.sum()) < 40:
         continue
@@ -264,17 +209,18 @@ t_m = float(g_m.mean() / (g_m.std(ddof=1) / np.sqrt(len(g_m)))) if len(g_m) > 2 
 nw_m = newey_west_se(g_m, lags=3) if len(g_m) > 5 else float("nan")
 t_m_nw = float(g_m.mean() / nw_m) if nw_m and nw_m > 0 else float("nan")
 print(f"FM_monthly mean_gamma={g_m.mean():.6f} t_iid={t_m:.3f} t_NeweyWest_L3={t_m_nw:.3f} n_months={len(g_m)}")
-print("FF3 (1993): Mkt-Rf, SMB, HML. FF5 (2015): + RMW, CMA. Lab FM uses the single planted factor.")
+print("FF3 (1993): Mkt-Rf, SMB, HML. FF5 (2015): + RMW, CMA.")
 
 print("\n=== factor zoo / Harvey–Liu–Zhu (2016) multiple testing ===")
 rng = np.random.default_rng(0)
 N_RAND = 200
+# Two-sided normal null under independent t-tests: P(|Z|>2)≈0.0455, P(|Z|>3)≈0.0027
+NULL_GT2 = 2 * (1 - stats.norm.cdf(2))  # ≈0.0455
+NULL_GT3 = 2 * (1 - stats.norm.cdf(3))  # ≈0.0027
 tstats = []
-# subsample dates for speed
-dts = list(f_nz.index[::2])
+dts = list(f_nz_s.index[::2])
 for k in range(N_RAND):
-    fake = pd.DataFrame(rng.normal(size=f_nz.shape), index=f_nz.index, columns=f_nz.columns)
-    fake = zscore_cs(fake)
+    fake = zscore_cs(pd.DataFrame(rng.normal(size=f_nz_s.shape), index=f_nz_s.index, columns=f_nz_s.columns))
     gs = []
     for dt in dts:
         y = fwd1.loc[dt]; x = fake.loc[dt]
@@ -290,57 +236,71 @@ for k in range(N_RAND):
 tstats = np.asarray(tstats)
 frac2 = float(np.mean(np.abs(tstats) > 2))
 frac3 = float(np.mean(np.abs(tstats) > 3))
-print(f"random_factors={len(tstats)} frac_|t|>2={frac2:.3f} frac_|t|>3={frac3:.3f}")
-print(f"true_factor_FM_daily_t={t_iid:.3f} FM_monthly_t={t_m:.3f} (monthly should clear t>3 with planted premium)")
-print("Harvey et al. 2016: with a zoo of published factors, new claims should clear ~t>3, not t≈2")
+exp2 = NULL_GT2 * len(tstats)
+exp3 = NULL_GT3 * len(tstats)
+print(f"random_factors={len(tstats)}")
+print(
+    f"observed frac_|t|>2={frac2:.4f} ({frac2*len(tstats):.1f} of {len(tstats)})  "
+    f"null_expectation≈{NULL_GT2:.4f} (≈{exp2:.1f} of {len(tstats)}; N(0,1) two-sided)"
+)
+print(
+    f"observed frac_|t|>3={frac3:.4f} ({frac3*len(tstats):.1f} of {len(tstats)})  "
+    f"null_expectation≈{NULL_GT3:.4f} (≈{exp3:.1f} of {len(tstats)}; N(0,1) two-sided)"
+)
+print(
+    f"teach: observed ~{frac2*100:.1f}% at |t|>2 is RIGHT IN LINE with pure noise (~{NULL_GT2*100:.2f}%); "
+    f"HLZ 2016 raise the bar to ~t>3 because the published zoo already spent the t≈2 budget"
+)
+print(f"true_factor_FM_daily_t={t_iid:.3f} FM_monthly_t={t_m:.3f} (strong planted clears t>3; weak often would not)")
 
 print("\n=== crowding / decay foil ===")
 rank_ac1 = []
-for dt0, dt1 in zip(f_nz.index[:-1], f_nz.index[1:]):
-    a, b = f_nz.loc[dt0], f_nz.loc[dt1]
+for dt0, dt1 in zip(f_nz_s.index[:-1], f_nz_s.index[1:]):
+    a, b = f_nz_s.loc[dt0], f_nz_s.loc[dt1]
     ok = a.notna() & b.notna()
     if int(ok.sum()) < 30:
         continue
     rank_ac1.append(float(stats.spearmanr(a[ok], b[ok]).correlation))
 print(f"factor_rank_autocorr_lag1_mean={float(np.mean(rank_ac1)):.4f}")
-print("teach: high rank AC → lower theoretical turnover, but crowding if books converge; IC decay caps horizon")
 
 print("\n=== Alphalens/Qlib-style workflow (pandas) ===")
-print("steps: (1) clean factor + forward returns (2) RankIC series (3) quantile returns (4) turnover")
-print("optional API map: alphalens.utils.get_clean_factor_and_forward_returns → tears.create_information_tear_sheet / create_returns_tear_sheet")
-print("Qlib: DataHandlerLP + CSZScoreNorm / CSZFillna processors ≈ winsorize+z+neutralize here; Alpha158 is a feature set ref")
+print("steps: (1) clean factor + forward returns (2) RankIC (3) quantile returns (4) turnover")
+print("optional API map: alphalens.utils.get_clean_factor_and_forward_returns → tears.create_*_tear_sheet")
+print("Qlib: DataHandlerLP + CSZScoreNorm / CSZFillna ≈ winsorize+z+neutralize(log_mcap.shift(1))")
 
-eq = (1 + net.fillna(0)).cumprod()
+eq = (1 + stats_s["net"].fillna(0)).cumprod()
 fig, axes = plt.subplots(2, 1, figsize=(9, 6), sharex=True)
 axes[0].plot(ic1.index, ic1.rolling(20).mean(), label="RankIC MA20", color="#1f4e79")
 axes[0].axhline(0, color="k", lw=0.5); axes[0].legend(); axes[0].grid(True, alpha=0.3)
-axes[0].set_title("RankIC (h=1) and LS net NAV")
+axes[0].set_title("RankIC (h=1) and LS net NAV (strong)")
 axes[1].plot(eq.index, eq.values, label="LS net NAV", color="#c45911")
 axes[1].legend(); axes[1].grid(True, alpha=0.3)
 fig.tight_layout(); fig.savefig(PUBLIC / "factor_ic_nav.png", dpi=120); plt.close()
-print("chart", PUBLIC / "factor_ic_nav.png")
 
-# quantile mean returns bar
+labels = pd.DataFrame(np.nan, index=f_nz_s.index, columns=f_nz_s.columns)
+for dt in f_nz_s.index:
+    s = f_nz_s.loc[dt].dropna()
+    if len(s) < 50:
+        continue
+    labels.loc[dt, s.index] = pd.qcut(s, 5, labels=False, duplicates="drop") + 1
 qret = {}
-for qi in range(1, Q + 1):
-    mask = labels == qi
-    # equal-weight within quantile each day
-    wr = pd.Series(0.0, index=rets.index)
+for qi in range(1, 6):
+    wr = pd.Series(0.0, index=rets_s.index)
     for dt in labels.index[:-1]:
         members = labels.loc[dt][labels.loc[dt] == qi].dropna().index
         if len(members) == 0:
             continue
-        nxt = rets.index[rets.index.get_loc(dt) + 1] if dt in rets.index and rets.index.get_loc(dt) + 1 < len(rets) else None
-        if nxt is None:
+        loc = rets_s.index.get_loc(dt)
+        if not isinstance(loc, int) or loc + 1 >= len(rets_s):
             continue
-        wr.loc[nxt] = rets.loc[nxt, members].mean()
+        nxt = rets_s.index[loc + 1]
+        wr.loc[nxt] = rets_s.loc[nxt, members].mean()
     qret[qi] = float(wr.mean() * 252)
-
 fig, ax = plt.subplots(figsize=(7, 4))
 ax.bar([f"Q{k}" for k in qret], list(qret.values()), color="#2e75b6")
-ax.set_ylabel("ann. mean return"); ax.set_title("Quantile mean returns (neutralized factor)")
+ax.set_ylabel("ann. mean return"); ax.set_title("Quantile mean returns (strong neutralized)")
 ax.grid(True, axis="y", alpha=0.3)
 fig.tight_layout(); fig.savefig(PUBLIC / "quantile_bars.png", dpi=120); plt.close()
 print("quantile_ann_means", {f"Q{k}": round(v, 4) for k, v in qret.items()})
 print("chart", PUBLIC / "quantile_bars.png")
-print("disclaimer: synthetic panel with planted beta_true + MU_TRUE — learning only, not investment advice")
+print("disclaimer: strong panel MU is inflated for teaching; weak panel is the realistic foil — learning only")

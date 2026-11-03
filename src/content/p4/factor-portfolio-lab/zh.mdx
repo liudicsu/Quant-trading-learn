@@ -1,56 +1,70 @@
 ## 学习目标
 
-本课（约 **7 学时**：概念 2h + 实验 4.5h + 测验 0.5h）把清洗后的因子做成**组合实验**：中性化前后对照、单因子 vs 等权多因子诚实性、换手–成本表、拥挤。前置：`factor-workflow`。
+本课（约 **7 学时**：概念 2h + 实验 4.5h + 测验 0.5h）把清洗后的因子做成**组合实验**：中性化前后、单因子 vs 等权多因子诚实性、换手–成本表、拥挤，以及**强 vs 弱**面板。前置：`factor-workflow`。
 
-**课内目标：** 估计因子组合换手；示意市值/行业中性化影响；对照单因子与等权多因子。
+**课内目标：** 估计因子组合换手；示意市值/行业中性化；对照单因子与等权多因子。
 
-**必须教会：** 合成不会自动提高可交易性；换手与共享成本模型决定净收益；中性化前后对照；拥挤与衰减。
+**必须教会：** 合成不会自动提高可交易性；换手与共享成本决定净收益；中性化前后对照；拥挤与衰减；弱信号更需要控成本与诚实合成。
 
 <Callout type="info" title="学习用途 — 非投资建议">
-同一植入 200×750 面板。滋扰因子 `raw_factor2`**没有**溢价——掺进去应受损而非受益。
+同一植入协变量。**`MU_STRONG=0.0025` 为夸大教学**；**`MU_WEAK=0.0010`** 为现实 RankIC 对照。滋扰 `raw_factor2`**没有**溢价。
 </Callout>
 
 ## 参数
 
-- 复用 P4-01 面板 + 缓存的中性化真因子；第二原始因子 = 噪声载荷 + 行业着色
-- 五分位多空；持有节奏 1/5/10/20 日；成本 = P2 10 bps + 滞后 √冲击
-- 前瞻：`shift(1)` 权重；因子[`t`] → 收益[`t+1`]
+- 复用 P4-01 双面板；中性化使用 **`log_mcap.shift(1)`**
+- 五分位多空；持有 1/5/10/20 日；成本 = P2 10 bps + 滞后 √冲击
+- 重叠 IC 窗口抬高 IC 自相关 / ICIR 标准误（非主要偏置平均 IC）— 用非重叠或 Newey–West
 
 ## 中性化前后
 
-实验 RankIC 均值：前 ≈ **0.085** → 后 ≈ **0.111**。滋扰因子中性化后 ≈ **0.003**（近 0）。中性化因子的时序截面均值与 `beta_true` 相关 ≈ **0.97**。
+强面板 RankIC：前 ≈ **0.076** → 后 ≈ **0.112**。滋扰中性化后 ≈ **−0.003**。协变量：行业 + **滞后**市值。
 
 ![中性化前后 IC](/p4/ic_before_after.png)
 
+## 强 vs 弱（组合指标）
+
+| 面板 | MU | RankIC | ICIR | 毛夏普 | 净夏普 | 平均换手 |
+|------|-----|--------|------|--------|--------|----------|
+| 强（夸大教学） | 0.0025 | ≈0.112 | ≈4.64 | ≈4.50 | ≈3.67 | ≈1.06 |
+| 弱（现实对照） | 0.0010 | ≈0.043 | ≈1.77 | ≈1.62 | ≈0.79 | ≈1.06 |
+
+弱 RankIC 更接近实盘：**成本常吃掉大部分毛优势**。多因子研究是为了叠加许多弱信号——不是把空噪声平均进去。
+
+![组合强 vs 弱](/p4/portfolio_strong_vs_weak.png)
+
 ## 单因子 vs 等权多因子
 
-| 设定 | 净夏普 | 平均换手 | RankIC |
-|------|--------|----------|--------|
-| 仅真因子 | ≈3.73 | ≈0.93 | ≈0.111 |
-| 仅滋扰 | ≈−7.11 | ≈1.56 | ≈0.003 |
-| 等权真+滋扰 | ≈3.09 | ≈1.32 | ≈0.081 |
+**强：** 仅真因子净夏普 ≈ **3.67** vs 等权+滋扰 ≈ **3.09**（IC 0.112→0.079）。
 
-掺入空因子会**稀释** IC 与净夏普并抬升换手。合成 ≠ 免费午餐。
+**弱：** 仅真因子净夏普 ≈ **0.79** vs 等权+滋扰 ≈ **0.23**——优势本就薄时，掺入空因子伤害更大。
 
 ![净值对照](/p4/portfolio_nav_compare.png)
 
 ## 换手–成本表
 
-把同一五分位权重持有 5–20 日，平均换手从 ≈0.93 降到 ≈0.05，并在**本**粘性植入信号上抬升净夏普。期望值权衡：新鲜度 vs 成本拖累。IC 衰减快的实盘信号可能更偏短持有。
+| 持有 | 强净夏普 | 弱净夏普 | 平均换手 |
+|------|----------|----------|----------|
+| 1 日 | ≈3.67 | ≈0.79 | ≈1.06 |
+| 5 日 | ≈4.29 | ≈1.42 | ≈0.21 |
+| 10 日 | ≈4.36 | ≈1.50 | ≈0.10 |
+| 20 日 | ≈4.23 | ≈1.39 | ≈0.05 |
+
+在**弱**信号上，降低换手往往是净>0 与净≈0 的分界。
 
 ## 拥挤对照
 
-多头腿 HHI 均值 ≈ **0.025**（约 40 只等权）且秩 AC1 ≈ **0.87**。基金间粘性、重叠持仓才是拥挤通道——即便你的回测在隔离状态下看起来干净。
+多头腿 HHI ≈ **0.025**，秩 AC1 ≈ **0.88**。基金间粘性重叠持仓才是拥挤通道。
 
 ## 期望值框架
 
-植入因子的毛夏普不是产品。共享成本后的净结果，外加诚实的空因子合成测试，才是宣称“多因子升级”前的最低门槛。
+夸大 MU 上的毛夏普不是产品。在**弱**面板上共享成本后的净结果，外加诚实的空合成测试，才是宣称多因子升级前的最低门槛。
 
 ## 前瞻警告
 
-- 勿用未来市值或次日行业归属做中性化。
-- 持有/冻结逻辑不得在持有窗内偷看未来排名。
-- 冲击 σ 仅用滞后值。
+- 仅用 `log_mcap.shift(1)` 中性化。
+- 持有/冻结不得偷看未来排名。
+- 冲击 σ 滞后；重叠 IC → 非重叠或 NW 处理 ICIR 标准误。
 
 ## Python 实验
 
@@ -60,66 +74,83 @@
 
 ```text
 === parameters ===
-reuse panel 200x750; true factor + nuisance raw_factor2 (noise loading)
-look-ahead: shift(1) weights; lagged impact vol; factor[t] → fwd from t+1
-cost model shared with P2/P3/P4-01: 10 bps one-way + √impact
+reuse 200x750; true factor + nuisance raw_factor2
+MU_STRONG=0.0025 (inflated teaching) MU_WEAK=0.001 (realistic-weak foil)
+look-ahead: shift(1) weights; lagged impact vol; neutralize uses log_mcap.shift(1)
+cost model: P2 10 bps one-way + √impact
+overlapping IC windows inflate IC autocorr / ICIR SE (not mean IC) — use non-overlap or NW
 
-=== neutralization before / after ===
-true_factor RankIC mean before_neut=0.0845 after=0.1105
-nuisance_factor RankIC mean after_neut=0.0029 (should be ~0)
-recovery corr after_neut=0.9726
+=== neutralization before / after (strong; lagged mcap) ===
+true_factor RankIC mean before_neut=0.0761 after=0.1119
+nuisance_factor RankIC mean after_neut=-0.0027 (should be ~0)
+recovery corr after_neut=0.9663
+neutralize covariates: industry (static) + log_mcap.shift(1) only — no same-day mcap
 
-=== single vs equal-weight multi-factor ===
-true_only                gross_SR=4.465 net_SR=3.734 turn=0.9349 NAV=34.418 IC=0.1105
-nuisance_only            gross_SR=0.873 net_SR=-7.112 turn=1.5619 NAV=0.340 IC=0.0029
-ew_true_plus_nuisance    gross_SR=4.509 net_SR=3.093 turn=1.3169 NAV=8.481 IC=0.0810
-teach: blending a null nuisance factor dilutes IC and net SR — combining ≠ free lunch
+=== strong vs weak (side-by-side portfolio metrics) ===
+strong MU=0.0025 RankIC=0.1119 ICIR=4.636 gross_SR=4.495 net_SR=3.668 turn=1.0586
+weak   MU=0.0010 RankIC=0.0431 ICIR=1.769 gross_SR=1.619 net_SR=0.792 turn=1.0586
+teach: weak RankIC is the live-like case; costs often erase net edge — multi-factor combination exists to stack weak signals
 
-=== turnover–cost table (rebalance cadence) ===
-hold= 1d mean_turn=0.9349 net_SR=3.734 NAV=34.418
-hold= 5d mean_turn=0.1919 net_SR=4.380 NAV=63.965
-hold=10d mean_turn=0.0943 net_SR=4.440 NAV=68.570
-hold=20d mean_turn=0.0509 net_SR=4.474 NAV=73.174
-teach: lower turnover cuts cost drag; expected-value tradeoff vs signal freshness
+=== single vs equal-weight multi-factor (strong) ===
+true_only                gross_SR=4.495 net_SR=3.668 turn=1.0586 NAV=32.403 IC=0.1119
+nuisance_only            gross_SR=-1.429 net_SR=-8.500 turn=1.3895 NAV=0.273 IC=-0.0027
+ew_true_plus_nuisance    gross_SR=4.497 net_SR=3.085 turn=1.3009 NAV=8.293 IC=0.0788
+teach: blending a null nuisance dilutes IC/net SR — combining ≠ free lunch; combine *informed* weak factors
+
+=== multi-factor honesty on WEAK panel ===
+weak_true_only               gross_SR=1.619 net_SR=0.792 turn=1.0586 IC=0.0431
+weak_ew_true_plus_nuisance   gross_SR=1.637 net_SR=0.225 turn=1.3009 IC=0.0306
+
+=== turnover–cost table (strong true factor) ===
+hold= 1d mean_turn=1.0586 net_SR=3.668 NAV=32.403
+hold= 5d mean_turn=0.2107 net_SR=4.289 NAV=59.940
+hold=10d mean_turn=0.1035 net_SR=4.360 NAV=63.125
+hold=20d mean_turn=0.0533 net_SR=4.230 NAV=53.796
+
+=== turnover–cost table (WEAK true factor) ===
+hold= 1d mean_turn=1.0586 net_SR=0.792 NAV=1.863
+hold= 5d mean_turn=0.2107 net_SR=1.422 NAV=3.483
+hold=10d mean_turn=0.1035 net_SR=1.501 NAV=3.748
+hold=20d mean_turn=0.0533 net_SR=1.392 NAV=3.333
+teach: on weak signals, cutting turnover is often the difference between net>0 and net≈0
 
 === crowding foil ===
-long_leg_HHI_mean=0.02500 rank_AC1=0.8666
-teach: high AC + concentrated books → crowding risk if many funds hold the same names
-chart /workspace/Quant-trading-learn/public/p4/portfolio_nav_compare.png
+long_leg_HHI_mean=0.02497 rank_AC1=0.8809
+chart /workspace/Quant-trading-learn/public/p4/portfolio_strong_vs_weak.png
 chart /workspace/Quant-trading-learn/public/p4/ic_before_after.png
-disclaimer: synthetic planted panel — learning only, not investment advice
+disclaimer: strong MU inflated for teaching; weak panel is the realistic foil — learning only
 ```
 
 ## 常见错误 / 陷阱
 
-1. 无空对照就把候选因子等权合成。
-2. 宣称多因子“改进”却不看换手。
-3. 用未来信息中性化。
-4. 以为高秩自相关一定等于低拥挤（也可能是大家拿一样的票）。
+1. 无空对照就把候选等权合成（弱面板上更糟）。
+2. RankIC 仅几个百分点时仍忽略换手。
+3. 用当日市值中性化。
+4. 把强面板当成实盘基准。
 5. 只报毛净值。
 
 ## 练习（1:1）
 
-1. **ex1** — 中性化前后 RankIC。
-2. **ex2** — 等权多因子 vs 仅真因子表。
-3. **ex3** — 不同持有节奏的换手–成本表。
-4. **done1** — 因子→组合小报告（净夏普 + 换手 + 空合成）。
+1. **ex1** — 中性化前后 RankIC（滞后市值）。
+2. **ex2** — 强**与**弱面板上的等权多因子 vs 仅真因子。
+3. **ex3** — 两套面板的换手–成本表。
+4. **done1** — 因子→组合小报告（含强/弱表）。
 
 ## 测验
 
-<Quiz id="q1-why-neut" question="此处行业/市值中性化的主要目的？" options={["最大化换手", "去掉线性行业/规模，使残差跟踪目标信号", "替代交易成本", "保证 t>3"]} answer={1} explanation="对污染做残差化。" />
-<Quiz id="q2-combo" question="把真因子与空滋扰因子等权合成通常会？" options={["总是抬升净夏普", "稀释 IC/净夏普并可能抬升换手", "消除前瞻", "不再需要成本"]} answer={1} explanation="实验：合成净夏普与 IC 低于仅真因子。" />
-<Quiz id="q3-turn" question="在粘性植入信号上拉长持有窗主要会？" options={["抬升平均换手", "降低换手与成本拖累（相对新鲜度的期望值权衡）", "迫使 t<2", "取消中性化"]} answer={1} explanation="持有 1→20 日：换手 0.93→0.05。" />
+<Quiz id="q1-why-neut" question="此处行业/市值中性化的主要目的？" options={["最大化换手", "去掉线性行业/规模，使残差跟踪目标信号", "替代交易成本", "保证 t>3"]} answer={1} explanation="用滞后市值对污染做残差化。" />
+<Quiz id="q2-combo" question="把真因子与空滋扰等权合成通常会？" options={["总是抬升净夏普", "稀释 IC/净夏普并可能抬升换手——因子本就弱时更糟", "消除前瞻", "不再需要成本"]} answer={1} explanation="弱面板：净夏普 0.79→0.23。" />
+<Quiz id="q3-turn" question="在弱植入信号上拉长持有窗主要会？" options={["抬升平均换手", "降低换手与成本拖累，使净夏普更易存活", "迫使 t<2", "取消中性化"]} answer={1} explanation="弱持有 1→10 日：净夏普 0.79→1.50。" />
 <Quiz id="q4-crowd" question="因子秩自相关很高时警示？" options={["成本为零", "若许多基金看法一致，持仓可能持续集中并拥挤", "ICIR 无穷", "FM 无效"]} answer={1} explanation="粘性秩 ↔ 重叠持仓风险。" />
-<Quiz id="q5-cost" question="共享成本模型后的净收益重要是因为？" options={["毛夏普已含费用", "可交易性由换手×bps 与冲击决定", "中性化消灭成本", "只有 OOS 日期付成本"]} answer={1} explanation="成本随换手缩放。" />
+<Quiz id="q5-strong" question="强 MU 面板最好理解成？" options={["实盘夏普目标", "夸大的教学设定；现实判断看弱面板", "证明成本从不重要", "可以跳过 HLZ 的理由"]} answer={1} explanation="课文标明强为夸大；弱为对照。" />
 
 ## 完成标准
 
-因子→组合小报告：中性化对照、合成诚实性、换手–成本表。
+因子→组合小报告：中性化对照、强/弱表、合成诚实性、换手–成本表。
 
 **来源：** P4-01 文献；Qlib 组合/回测可选；共享 P2 成本栈。
 
 <Summary>
-**要点**：中性化、勿盲目合成、成本×换手、拥挤。  
+**要点**：滞后市值中性化、勿盲目合成、弱信号上的成本×换手、拥挤。  
 **下一阶段**：P5 机器学习防泄漏（待写）。
 </Summary>

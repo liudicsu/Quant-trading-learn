@@ -7,37 +7,50 @@ This lesson (~**14 hours**: 5h concepts + 7h labs + 2h write-up — HEAVY) build
 **Must-teach:** IC = cross-sectional rank agreement; RankIC / ICIR / IC decay; winsorize + z-score + industry/mcap neutralization; quantile L/S + turnover/costs; Fama–MacBeth (+ FF3/FF5 literature); factor mirage & Harvey–Liu–Zhu t>3; start from an economic hypothesis; Alphalens/Qlib-style workflow in plain pandas.
 
 <Callout type="info" title="Learning only — not investment advice">
-Synthetic 200×750 panel with a **planted** `beta_true` and exaggerated premium `MU_TRUE=0.0025` so recovery / IC / FM are checkable. Not a claim that any live factor works.
+Two synthetic 200×750 panels share the same planted `beta_true` and covariates. **`MU_STRONG=0.0025` is an inflated teaching setting** so recovery / FM / t>3 are easy to see. **`MU_WEAK=0.0010`** targets RankIC ≈ 0.02–0.05 — closer to live single-factor magnitudes. Neither is a live performance claim.
 </Callout>
 
 ## Parameters
 
 - Panel: **200 assets × 750** business days; **10 industries**; log market caps
-- DGP: `r = beta_true f_true + beta_mkt f_mkt + beta_size f_size + industry + noise`
-- `f_true` mean = **0.0025**/day (teaching-scale premium); raw factor = `beta_true` + 0.4·industry + 0.25·size + noise
-- Winsorize p=1%; CS z-score; neutralize via residual on industry dummies + log mcap; re-z
+- DGP: `r = beta_true * f_true + beta_mkt * f_mkt + beta_size * f_size + industry + noise`
+- **Strong (inflated teaching):** `MU_STRONG=0.0025`. **Weak (realistic foil):** `MU_WEAK=0.0010`
+- Winsorize p=1%; CS z-score; neutralize via residual on industry dummies + **`log_mcap.shift(1)`** (prior-day mcap only); re-z
 - Costs: P2 stack — **10 bps** one-way + √impact; impact σ = **lagged** rolling std (VOL_LB=20, `shift(1)`, expanding warm-up)
 - Look-ahead: factor at `t` predicts returns from `t+1`; portfolio weights enter via `shift(1)`
 
 ## Factor construction
 
-Winsorize extreme cross-sectional tails, standardize to z-scores, then **residualize** on industry and log market cap so the cleaned factor recovers the planted loading instead of industry/size contamination.
+Winsorize, z-score, then **residualize** on industry and **lagged** log market cap so the cleaned factor recovers the planted loading.
 
-Lab recovery (mean CS corr vs `beta_true`): raw ≈ **0.71** → z-only ≈ **0.71** → neutralized ≈ **0.92**. Neutralization is the step that lifts recovery.
+Lab recovery (strong; mean CS corr vs `beta_true`): raw ≈ **0.71** → neutralized ≈ **0.92**. Neutralization uses `log_mcap.shift(1)` so the code matches the no-lookahead text.
+
+## Strong vs weak (must-teach)
+
+Live single factors are usually **weak**. The strong panel is inflated on purpose; the weak panel is the honesty check.
+
+| Panel | MU | RankIC | ICIR | gross SR | net SR | mean turn |
+|-------|-----|--------|------|----------|--------|-----------|
+| strong (inflated) | 0.0025 | ≈0.112 | ≈4.64 | ≈4.50 | ≈3.67 | ≈1.06 |
+| weak (realistic foil) | 0.0010 | ≈0.043 | ≈1.77 | ≈1.62 | ≈0.79 | ≈1.06 |
+
+Same turnover, much smaller RankIC/ICIR on weak — **costs eat a larger fraction of the edge**. That is why researchers combine many weak, imperfectly correlated factors rather than trusting one loud backtest.
+
+![Strong vs weak NAV](/p4/strong_vs_weak.png)
 
 ## IC, RankIC, ICIR, decay
 
-**RankIC** = Spearman correlation between `factor[t]` and forward returns. **ICIR** ≈ mean(IC)/std(IC)·√(252/h).
+**RankIC** = Spearman correlation between factor[`t`] and forward returns. **ICIR** ≈ mean(IC)/std(IC)·√(252/h).
 
-Lab (neutralized): RankIC h=1 mean ≈ **0.111**, ICIR_daily ≈ **4.65**. Cumulative horizons raise mean RankIC for a **static risk loading**; a separate **decaying-alpha foil** falls from ≈0.60 (h=1) to ≈0.04 (h=20). Both are IC-horizon lessons — do not confuse them.
+Strong lab: RankIC h=1 mean ≈ **0.112**, ICIR_daily ≈ **4.64**. Cumulative horizons raise mean RankIC for a **static risk loading**; a **decaying-alpha foil** falls from ≈0.60 (h=1) to ≈0.04 (h=20).
+
+**Overlapping windows:** for h>1, overlapping forward sums mainly inflate **IC autocorrelation** and shrink the naive ICIR standard error — they do **not** chiefly bias mean IC. Fix with **non-overlapping** IC sampling or **Newey–West** on the IC series.
 
 ![IC decay](/p4/ic_decay.png)
 
 ## Quantile long–short + costs
 
-Alphalens-style: assign quintiles each day; long Q5 / short Q1 equal-weight; apply shared cost model.
-
-Lab: gross SR ≈ **4.47**, net SR ≈ **3.73**, mean turnover ≈ **0.93**, monotone quantile ann. means Q1→Q5 ≈ −0.92 … +0.57. Cost drag is real even when the signal is planted.
+Alphalens-style quintiles; long Q5 / short Q1; shared cost model. Strong: gross SR ≈ **4.50**, net ≈ **3.67**. On the weak panel the same book lands near net SR ≈ **0.79** — costs can wipe a weak factor when turnover stays high.
 
 ![Factor IC and NAV](/p4/factor_ic_nav.png)
 
@@ -45,43 +58,48 @@ Lab: gross SR ≈ **4.47**, net SR ≈ **3.73**, mean turnover ≈ **0.93**, mon
 
 ## Fama–MacBeth and FF3/FF5
 
-**Fama & MacBeth (1973, *JPE* 81(3), 607–636):** each period, cross-sectionally regress returns on loadings; then take the time-series mean of the slope and its t-stat (optionally Newey–West HAC).
+**Fama & MacBeth (1973, JPE 81(3), 607–636):** period-by-period CS slopes, then time-series mean/t (optional Newey–West).
 
-**Fama & French (1993, *JFE* 33(1), 3–56):** FF3 = Mkt−Rf, SMB, HML. **Fama & French (2015, *JFE* 116(1), 1–22):** FF5 = FF3 + RMW + CMA.
+**Fama & French (1993, JFE 33(1), 3–56):** FF3 = Mkt−Rf, SMB, HML. **Fama & French (2015, JFE 116(1), 1–22):** FF5 = FF3 + RMW + CMA.
 
-Lab FM on the planted factor: daily mean γ ≈ **0.00212**, t_iid ≈ **7.77**, t_NW(L5) ≈ **7.31**; monthly t_iid ≈ **7.89**. Citations verified against RePEc / journal records.
+Strong FM: daily t_iid ≈ **7.82**, monthly ≈ **6.37**. The weak panel often would **not** clear HLZ’s t>3 — another reason the strong MU is labeled inflated.
 
 ## Factor zoo and Harvey–Liu–Zhu (2016)
 
-**Harvey, Liu & Zhu (2016, *RFS* 29(1), 5–68), “…and the Cross-Section of Expected Returns”:** with extensive multiple testing across the published factor zoo, new factors should clear roughly **t > 3**, not the conventional t≈2.
+**Harvey, Liu & Zhu (2016, RFS 29(1), 5–68)** argue new factors should clear roughly **t > 3** after the published zoo’s multiple testing.
 
-Lab: **200** random CS factors → frac |`t`|>2 ≈ **0.045**, frac |`t`|>3 ≈ **0.000**; planted true factor FM t ≈ **7.8**. A t≈2 “discovery” among many trials is not enough.
+Lab: **200** random CS factors on the strong panel.
+
+| Threshold | Observed | Null expectation (N(0,1) two-sided) |
+|-----------|----------|--------------------------------------|
+| \|t\|>2 | ≈6.0% (12 of 200) | ≈**4.55%** (≈**9.1** of 200) |
+| \|t\|>3 | ≈0.0% (0 of 200) | ≈**0.27%** (≈**0.54** of 200) |
+
+The observed ~4.5–6% rate at \|t\|>2 is **right in line with pure noise**. That is why HLZ raise the bar toward **t>3**: the industry already spent the t≈2 budget.
 
 ## Crowding and decay
 
-Factor rank autocorr lag-1 ≈ **0.87**: sticky ranks lower theoretical turnover but raise **crowding** risk if many books converge. Pair with IC-horizon charts before claiming a multi-week hold.
+Factor rank autocorr lag-1 ≈ **0.88**: sticky ranks lower theoretical turnover but raise crowding if books converge.
 
 ## Alphalens / Qlib-style workflow (pandas)
 
-Official Alphalens Reloaded docs ([alphalens.ml4trading.io](https://alphalens.ml4trading.io/)): `get_clean_factor_and_forward_returns` → information / returns / turnover tear sheets. We implement the same steps in plain pandas; optional map to `alphalens-reloaded` when installed.
-
-Qlib ([DataHandlerLP processors](https://qlib.readthedocs.io/en/latest/component/data.html)): `CSZScoreNorm`, `CSZFillna`, Alpha158 feature set — conceptual mirrors of winsorize / z / neutralize here.
+Official Alphalens Reloaded docs: `get_clean_factor_and_forward_returns` → tear sheets. Plain-pandas mirror here; optional `alphalens-reloaded` map. Qlib `CSZScoreNorm` / `CSZFillna` / Alpha158 ≈ winsorize + z + neutralize(`log_mcap.shift(1)`).
 
 ## Niche / frontier
 
-- **Niche (foil):** [quant-wiki](https://github.com/LLMQuant/quant-wiki) factor taxonomy — browse as a map, not as validated alphas.
-- **Frontier deferred to P8:** LLM / agent formulaic mining (RD-Agent, Chain-of-Alpha, etc.). Not re-run in this lesson; drop any unverifiable “agent-based mining” claim from the main text.
+- **Niche (foil):** quant-wiki factor taxonomy — map only, not validated alphas.
+- **Frontier deferred to P8:** LLM / agent formulaic mining. Dropped unverifiable agent-based mining from the main text.
 
 ## Expected-value framing
 
-Planted premium makes IC/FM pass on purpose so you can **audit recovery**. Live research starts from an economic hypothesis, reports trials N, and treats t≈2 under a zoo as weak. Net of costs and turnover decides tradeability — Gross SR alone is not a product.
+Inflated MU makes IC/FM pass so you can **audit recovery**. Live research starts from an economic hypothesis, reports trial count N, treats zoo t≈2 as weak, and judges tradeability **net of costs** — especially when RankIC is only a few percent.
 
 ## Look-ahead warnings
 
-- Never use same-bar returns in the factor that you trade that bar.
-- Neutralization covariates must be known at `t` (industry, lagged mcap).
-- Impact σ must be **lagged** (no full-sample std).
-- Forward-return alignment: `factor[t]` ↔ returns[`t+1 ... t+h`].
+- Never use same-bar returns in the factor you trade that bar.
+- Neutralization mcap must be **`log_mcap.shift(1)`** (known at t).
+- Impact σ lagged; forward returns aligned from t+1.
+- Overlapping multi-day IC → prefer non-overlap or Newey–West for ICIR inference.
 
 ## Python lab
 
@@ -91,99 +109,106 @@ Planted premium makes IC/FM pass on purpose so you can **audit recovery**. Live 
 
 ```text
 === parameters ===
-panel 200 assets x 750 days; industries 10
+panel 200 assets x 750 days; 10 industries
 DGP: r = beta_true*f_true + beta_mkt*f_mkt + beta_size*f_size + industry + noise
-f_true has planted daily premium MU_TRUE=0.0025 (~63% ann per unit beta; exaggerated for teaching clarity)
-raw_factor = beta_true + 0.4*industry + 0.25*size_loading + noise  (nuisance contamination)
-look-ahead: factor[t] vs forward returns starting t+1; LS weights use shift(1); impact vol lagged
-cite: Fama & MacBeth 1973 JPE 81(3) 607-636 — cross-section then time-series mean of slopes
-cite: Fama & French 1993 JFE 33(1) 3-56 — Mkt-Rf, SMB, HML (FF3)
-cite: Fama & French 2015 JFE 116(1) 1-22 — FF5 = FF3 + RMW + CMA
-cite: Harvey, Liu & Zhu 2016 RFS 29(1) 5-68 — '...and the Cross-Section of Expected Returns'; t>3
-cite: Alphalens Reloaded docs (alphalens.ml4trading.io) — get_clean_factor_and_forward_returns + tear sheets
-cite: Qlib DataHandlerLP processors CSZScoreNorm / CSZFillna / Alpha158 (qlib.readthedocs.io)
-niche: quant-wiki factor taxonomy as foil only; frontier LLM formulaic mining deferred to P8 (not re-run)
+MU_STRONG=0.0025 (INFLATED teaching setting)  MU_WEAK=0.001 (realistic-weak foil, target RankIC ~0.02-0.05)
+raw_factor = beta_true + 0.4*industry + 0.25*size_loading + noise
+look-ahead: factor[t] vs fwd from t+1; LS weights shift(1); impact vol lagged; neutralize uses log_mcap.shift(1)
+cite: Fama & MacBeth 1973 JPE 81(3) 607-636
+cite: Fama & French 1993 JFE 33(1) 3-56 — FF3; 2015 JFE 116(1) 1-22 — FF5
+cite: Harvey, Liu & Zhu 2016 RFS 29(1) 5-68 — t>3 multiple-testing hurdle
+cite: Alphalens Reloaded docs (alphalens.ml4trading.io); Qlib CSZScoreNorm / Alpha158
+niche: quant-wiki foil; frontier LLM mining deferred to P8
+note: overlapping multi-day IC windows mainly inflate IC autocorrelation and ICIR SE (not mean IC);
+      fix with non-overlapping sampling or Newey–West on the IC series
 
-=== factor construction ===
-mean_cs_corr(raw, beta_true)=0.7120
-mean_cs_corr(z_only, beta_true)=0.7082
-mean_cs_corr(neutralized, beta_true)=0.9194
-teach: industry+mcap residualization lifts recovery of the planted loading
+=== factor construction (strong; log_mcap.shift(1) in neutralize) ===
+mean_cs_corr(raw, beta_true)=0.7068
+mean_cs_corr(z_only, beta_true)=0.7066
+mean_cs_corr(neutralized, beta_true)=0.9121
+teach: industry+lagged-mcap residualization lifts recovery of the planted loading
 
-=== RankIC / ICIR / decay ===
-RankIC h=1: mean=0.1105 std=0.3768 ICIR_ann≈4.654 n=749
-RankIC h=5: mean=0.2268 std=0.3671 ICIR_ann≈4.386 n=745
-RankIC h=10: mean=0.3055 std=0.3512 ICIR_ann≈4.367 n=740
-RankIC h=20: mean=0.4109 std=0.2877 ICIR_ann≈5.069 n=730
-ICIR_daily = mean/std * sqrt(252) = 4.654
+=== RankIC / ICIR / decay (strong) ===
+RankIC h=1: mean=0.1119 std=0.3832 ICIR_ann≈4.636 n=748
+RankIC h=5: mean=0.2376 std=0.3871 ICIR_ann≈4.358 n=744
+RankIC h=10: mean=0.3206 std=0.3651 ICIR_ann≈4.407 n=739
+RankIC h=20: mean=0.4297 std=0.3161 ICIR_ann≈4.825 n=729
+overlapping-window note: for h>1, overlapping fwd sums inflate IC autocorr and shrink naive ICIR SE; mean IC is less biased — use non-overlapping IC or Newey–West on the IC series
 decaying_alpha_foil RankIC h=1: mean=0.5995
 decaying_alpha_foil RankIC h=5: mean=0.3449
 decaying_alpha_foil RankIC h=10: mean=0.1813
 decaying_alpha_foil RankIC h=20: mean=0.0440
-teach: static risk loading → mean RankIC can RISE with cumulative horizon; decaying alpha FALLS — both are 'IC decay' lessons
 chart /workspace/Quant-trading-learn/public/p4/ic_decay.png
 
-=== quintile portfolios (Alphalens-style long-short) ===
-LS gross_SR=4.465 net_SR=3.734 mean_turn=0.9349 NAV_net=34.4183
+=== strong vs weak panel (side-by-side) ===
+STRONG panel is an INFLATED teaching setting so FM/t>3 recover cleanly;
+WEAK panel (MU_WEAK) targets RankIC ~0.02-0.05 — closer to live single-factor magnitudes.
+strong MU=0.0025 RankIC=0.1119 ICIR=4.636 gross_SR=4.495 net_SR=3.668 turn=1.0586
+weak   MU=0.0010 RankIC=0.0431 ICIR=1.769 gross_SR=1.619 net_SR=0.792 turn=1.0586
+teach: real single factors are WEAK; costs can wipe net SR even when gross>0; combining many weak signals is why multi-factor exists
+chart /workspace/Quant-trading-learn/public/p4/strong_vs_weak.png
+
+=== quintile portfolios (strong; Alphalens-style) ===
+LS gross_SR=4.495 net_SR=3.668 mean_turn=1.0586 NAV_net=32.4026
 cost model: P2 10 bps one-way + √impact with LAGGEDrolling σ (VOL_LB=20, shift(1), expanding warm-up)
 
-=== Fama–MacBeth (single-factor CS slopes) ===
-FM_daily mean_gamma=0.002119 t_iid=7.771 t_NeweyWest_L5=7.314 n=749
-FM_monthly mean_gamma=0.043795 t_iid=7.893 t_NeweyWest_L3=10.984 n_months=34
-FF3 (1993): Mkt-Rf, SMB, HML. FF5 (2015): + RMW, CMA. Lab FM uses the single planted factor.
+=== Fama–MacBeth (strong panel) ===
+FM_daily mean_gamma=0.002141 t_iid=7.818 t_NeweyWest_L5=7.191 n=748
+FM_monthly mean_gamma=0.044716 t_iid=6.368 t_NeweyWest_L3=7.069 n_months=34
+FF3 (1993): Mkt-Rf, SMB, HML. FF5 (2015): + RMW, CMA.
 
 === factor zoo / Harvey–Liu–Zhu (2016) multiple testing ===
-random_factors=200 frac_|t|>2=0.045 frac_|t|>3=0.000
-true_factor_FM_daily_t=7.771 FM_monthly_t=7.893 (monthly should clear t>3 with planted premium)
-Harvey et al. 2016: with a zoo of published factors, new claims should clear ~t>3, not t≈2
+random_factors=200
+observed frac_|t|>2=0.0600 (12.0 of 200)  null_expectation≈0.0455 (≈9.1 of 200; N(0,1) two-sided)
+observed frac_|t|>3=0.0000 (0.0 of 200)  null_expectation≈0.0027 (≈0.5 of 200; N(0,1) two-sided)
+teach: observed ~6.0% at |t|>2 is RIGHT IN LINE with pure noise (~4.55%); HLZ 2016 raise the bar to ~t>3 because the published zoo already spent the t≈2 budget
+true_factor_FM_daily_t=7.818 FM_monthly_t=6.368 (strong planted clears t>3; weak often would not)
 
 === crowding / decay foil ===
-factor_rank_autocorr_lag1_mean=0.8666
-teach: high rank AC → lower theoretical turnover, but crowding if books converge; IC decay caps horizon
+factor_rank_autocorr_lag1_mean=0.8809
 
 === Alphalens/Qlib-style workflow (pandas) ===
-steps: (1) clean factor + forward returns (2) RankIC series (3) quantile returns (4) turnover
-optional API map: alphalens.utils.get_clean_factor_and_forward_returns → tears.create_information_tear_sheet / create_returns_tear_sheet
-Qlib: DataHandlerLP + CSZScoreNorm / CSZFillna processors ≈ winsorize+z+neutralize here; Alpha158 is a feature set ref
-chart /workspace/Quant-trading-learn/public/p4/factor_ic_nav.png
-quantile_ann_means {'Q1': -0.9227, 'Q2': -0.4565, 'Q3': -0.1818, 'Q4': 0.0594, 'Q5': 0.5694}
+steps: (1) clean factor + forward returns (2) RankIC (3) quantile returns (4) turnover
+optional API map: alphalens.utils.get_clean_factor_and_forward_returns → tears.create_*_tear_sheet
+Qlib: DataHandlerLP + CSZScoreNorm / CSZFillna ≈ winsorize+z+neutralize(log_mcap.shift(1))
+quantile_ann_means {'Q1': -0.9291, 'Q2': -0.4252, 'Q3': -0.1036, 'Q4': 0.1736, 'Q5': 0.5747}
 chart /workspace/Quant-trading-learn/public/p4/quantile_bars.png
-disclaimer: synthetic panel with planted beta_true + MU_TRUE — learning only, not investment advice
+disclaimer: strong panel MU is inflated for teaching; weak panel is the realistic foil — learning only
 ```
 
 ## Common mistakes / pitfalls
 
-1. Skipping neutralization then calling industry exposure “alpha.”
-2. Celebrating gross quantile curves before the shared cost model.
-3. Treating t>2 as a discovery after mining dozens of factors (Harvey et al. 2016).
-4. Confusing rising cumulative RankIC (static risk loading) with a decaying trading signal.
-5. Full-sample volatility inside impact costs (look-ahead).
-6. Same-bar fills or forward returns aligned on `t` instead of `t+1`.
+1. Skipping neutralization then calling industry exposure "alpha."
+2. Treating the inflated strong panel as a live RankIC benchmark.
+3. Celebrating gross curves before the shared cost model (esp. on weak signals).
+4. Treating t>2 as a discovery after mining dozens of factors — compare to the ~4.55% null.
+5. Using same-day mcap in neutralization (lookahead).
+6. Reading ICIR from overlapping windows without NW / non-overlap.
 
 ## Practice (1:1)
 
-1. **ex1** — `ic(factor, fwd)` Spearman RankIC series + ICIR.
+1. **ex1** — `ic(factor, fwd)` Spearman RankIC + ICIR.
 2. **ex2** — Quintile L/S NAV net of shared costs.
-3. **ex3** — Scrambled / random-factor control and compare t-stats.
-4. **ex4** — IC vs horizon chart (risk premium vs decaying foil).
-5. **done1** — Mini-report: recovery corr + IC + quantiles + null zoo.
+3. **ex3** — Scrambled / random-factor control vs null expectation table.
+4. **ex4** — IC vs horizon chart + strong/weak table.
+5. **done1** — Mini-report: recovery + strong/weak + IC + quantiles + null zoo.
 
 ## Quiz
 
 <Quiz id="q1-ic" question="Spearman RankIC measures?" options={["Time-series autocorrelation of returns", "Cross-sectional rank agreement of factor vs forward returns", "Only the Sharpe of Q5", "Bid-ask bounce"]} answer={1} explanation="IC is cross-sectional rank correlation vs forward returns." />
-<Quiz id="q2-neut" question="Industry + mcap neutralization mainly does what?" options={["Guarantees positive Sharpe", "Removes linear industry/size contamination so residual can track the intended loading", "Deletes turnover", "Replaces Newey–West"]} answer={1} explanation="Regression residual vs industry dummies + log mcap." />
-<Quiz id="q3-hlz" question="Harvey–Liu–Zhu (2016) argue new factors should roughly clear?" options={["t>1", "t>2 always enough", "About t>3 given the factor zoo / multiple testing", "Only R²>0.9"]} answer={2} explanation="Multiple-testing hurdle ~t>3, not conventional t≈2." />
-<Quiz id="q4-fm" question="Fama–MacBeth (1973) estimates risk premia by?" options={["Only a single pooled panel OLS with no time mean", "Period-by-period cross-sectional slopes, then time-series mean/t-stat of those slopes", "Only PCA on returns", "Only sorting without regression"]} answer={1} explanation="CS each period, then TS mean of gammas." />
-<Quiz id="q5-decay" question="On a planted static risk loading, mean RankIC vs cumulative forward horizons often?" options={["Must fall monotonically", "Can rise as signal accumulates, while a decaying alpha foil falls", "Is always zero", "Equals turnover"]} answer={1} explanation="Lab shows rising cumulative IC vs falling decaying-alpha foil." />
-<Quiz id="q6-alphalens" question="Alphalens-style first cleaning step is closest to?" options={["get_clean_factor_and_forward_returns then tear sheets", "Only plot prices", "Shuffle the calendar", "Drop all shorts"]} answer={0} explanation="Official docs: clean factor + forward returns, then tears." />
+<Quiz id="q2-neut" question="Neutralization must use which mcap timing?" options={["Same-day log_mcap", "log_mcap.shift(1) known at t", "Next-day mcap", "Full-sample average mcap"]} answer={1} explanation="Prior-day mcap only — matches the no-lookahead text." />
+<Quiz id="q3-hlz" question="Harvey–Liu–Zhu (2016) argue new factors should roughly clear?" options={["t>1", "t>2 always enough", "About t>3 given the factor zoo / multiple testing", "Only R²>0.9"]} answer={2} explanation="Multiple-testing hurdle ~t>3; |t|>2 ~4.55% under pure noise." />
+<Quiz id="q4-weak" question="Why show a weak RankIC panel beside the strong one?" options={["To hide costs", "Real factors are weak; costs can wipe net SR; combining many weak signals matters", "To delete FM", "To force daily rebalance"]} answer={1} explanation="Strong MU is inflated teaching; weak is the live-like foil." />
+<Quiz id="q5-overlap" question="Overlapping multi-day IC windows mainly?" options={["Bias mean IC upward a lot", "Inflate IC autocorrelation and ICIR SE issues; fix with non-overlap or Newey–West", "Remove turnover", "Replace neutralization"]} answer={1} explanation="Mean IC less affected; inference needs non-overlap or NW." />
+<Quiz id="q6-zoo" question="Observed ~4.5–6% of random factors with |t|>2 means?" options={["Alpha is real", "Right in line with the ~4.55% N(0,1) null — not a discovery", "t>2 beats HLZ", "Costs are zero"]} answer={1} explanation="Matches pure-noise rate; HLZ push toward t>3." />
 
 ## Done when
 
-IC + quantile L/S + null-factor zoo report, with neutralization recovery and look-ahead notes.
+IC + quantile L/S + null-factor zoo report, with strong/weak table, lagged-mcap neutralization, and look-ahead notes.
 
 **Sources:** Fama–MacBeth 1973 JPE 81; Fama–French 1993 JFE 33; Fama–French 2015 JFE 116; Harvey–Liu–Zhu 2016 RFS 29(1); Alphalens Reloaded docs; Qlib DataHandlerLP/Alpha158; AFML Factor Mirage; @alin_alphapilot IC-first; quant-wiki foil.
 
 <Summary>
-**Takeaways**: construct → IC/decay → quantiles+costs → FM → t>3 zoo.  
-**Next**: factor-portfolio-lab (turnover, combo honesty).
+**Takeaways**: construct → IC/decay → strong vs weak → quantiles+costs → FM → t>3 zoo.  
+**Next**: factor-portfolio-lab (turnover, combo honesty on weak signals).
 </Summary>

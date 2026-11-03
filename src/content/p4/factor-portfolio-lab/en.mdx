@@ -1,56 +1,70 @@
 ## Learning goals
 
-This lesson (~**7 hours**: 2h concepts + 4.5h lab + 0.5h quiz) turns a cleaned factor into a **portfolio experiment**: neutralization before/after, single vs equal-weight multi-factor honesty, turnover–cost schedules, and crowding. Prereq: `factor-workflow`.
+This lesson (~**7 hours**: 2h concepts + 4.5h lab + 0.5h quiz) turns a cleaned factor into a **portfolio experiment**: neutralization before/after, single vs EW multi-factor honesty, turnover–cost schedules, crowding, and **strong vs weak** panels. Prereq: `factor-workflow`.
 
 **Goals:** estimate factor-portfolio turnover; sketch size/industry neutralization impact; compare single vs EW multi-factor.
 
-**Must-teach:** combining factors does not auto-raise tradeability; turnover and the shared cost model decide net returns; before/after neutralization contrast; crowding and decay.
+**Must-teach:** combining factors does not auto-raise tradeability; turnover and the shared cost model decide net returns; before/after neutralization; crowding and decay; weak signals need cost control and honest combination.
 
 <Callout type="info" title="Learning only — not investment advice">
-Same planted 200×750 panel. The nuisance `raw_factor2` has **no** premium — blending it should hurt, not help.
+Same planted covariates. **`MU_STRONG=0.0025` is inflated teaching**; **`MU_WEAK=0.0010`** is the realistic RankIC foil. The nuisance `raw_factor2` has **no** premium.
 </Callout>
 
 ## Parameters
 
-- Reuse P4-01 panel + cached neutralized true factor; second raw factor = noise loading + industry tint
+- Reuse P4-01 dual panels; neutralize with **`log_mcap.shift(1)`**
 - Quintile L/S; hold schedules 1/5/10/20 days; costs = P2 10 bps + lagged √impact
-- Look-ahead: `shift(1)` weights; `factor[t]` → return[`t+1`]
+- Overlapping IC windows inflate IC autocorr / ICIR SE (not mean IC) — non-overlap or Newey–West
 
 ## Neutralization before / after
 
-Lab RankIC mean: before ≈ **0.085** → after ≈ **0.111**. Nuisance factor after neut ≈ **0.003** (~0). Time-series mean of neutralized factor recovers `beta_true` at corr ≈ **0.97**.
+Strong RankIC: before ≈ **0.076** → after ≈ **0.112**. Nuisance after neut ≈ **−0.003**. Covariates: industry + **lagged** mcap only.
 
 ![IC before/after](/p4/ic_before_after.png)
 
+## Strong vs weak (portfolio metrics)
+
+| Panel | MU | RankIC | ICIR | gross SR | net SR | mean turn |
+|-------|-----|--------|------|----------|--------|-----------|
+| strong (inflated) | 0.0025 | ≈0.112 | ≈4.64 | ≈4.50 | ≈3.67 | ≈1.06 |
+| weak (realistic) | 0.0010 | ≈0.043 | ≈1.77 | ≈1.62 | ≈0.79 | ≈1.06 |
+
+Weak RankIC is the live-like case: **costs often erase most of the gross edge**. Multi-factor research exists to stack many such weak signals — not to average in null noise.
+
+![Portfolio strong vs weak](/p4/portfolio_strong_vs_weak.png)
+
 ## Single vs EW multi-factor
 
-| Spec | net SR | mean turn | RankIC |
-|------|--------|-----------|--------|
-| true_only | ≈3.73 | ≈0.93 | ≈0.111 |
-| nuisance_only | ≈−7.11 | ≈1.56 | ≈0.003 |
-| ew_true+nuisance | ≈3.09 | ≈1.32 | ≈0.081 |
+**Strong:** true_only net SR ≈ **3.67** vs EW+nuisance ≈ **3.09** (IC 0.112→0.079).
 
-Blending a null factor **dilutes** IC and net SR while raising turnover. Combining ≠ free lunch.
+**Weak:** true_only net SR ≈ **0.79** vs EW+nuisance ≈ **0.23** — blending a null factor hurts more when the edge is already thin.
 
 ![NAV compare](/p4/portfolio_nav_compare.png)
 
 ## Turnover–cost table
 
-Holding the same quintile weights for 5–20 days cuts mean turnover from ≈0.93 to ≈0.05 and lifts net SR on **this** sticky planted signal. Expected-value tradeoff: freshness vs cost drag. Live signals with fast IC decay may prefer shorter holds.
+| Hold | strong net SR | weak net SR | mean turn |
+|------|---------------|-------------|-----------|
+| 1d | ≈3.67 | ≈0.79 | ≈1.06 |
+| 5d | ≈4.29 | ≈1.42 | ≈0.21 |
+| 10d | ≈4.36 | ≈1.50 | ≈0.10 |
+| 20d | ≈4.23 | ≈1.39 | ≈0.05 |
+
+On **weak** signals, cutting turnover is often the difference between net>0 and net≈0.
 
 ## Crowding foil
 
-Long-leg HHI mean ≈ **0.025** (equal weight in ~40 names) with rank AC1 ≈ **0.87**. Sticky, overlapping books across funds are the crowding channel — even when your backtest looks clean in isolation.
+Long-leg HHI ≈ **0.025**, rank AC1 ≈ **0.88**. Sticky overlapping books across funds are the crowding channel.
 
 ## Expected-value framing
 
-Gross SR of a planted factor is not a product. Net of the shared cost model, plus an honest null-factor blend test, is the minimum bar before any “multi-factor upgrade” claim.
+Gross SR on an inflated MU is not a product. Net of the shared cost model on the **weak** panel, plus an honest null-blend test, is the minimum bar before any multi-factor upgrade claim.
 
 ## Look-ahead warnings
 
-- Do not neutralize with future mcap or next-day industry assignments.
-- Freeze/hold logic must not peek at future ranks inside the hold window.
-- Impact σ lagged only.
+- Neutralize with `log_mcap.shift(1)` only.
+- Freeze/hold logic must not peek at future ranks.
+- Impact σ lagged; overlapping IC → non-overlap or NW for ICIR SE.
 
 ## Python lab
 
@@ -60,66 +74,83 @@ Gross SR of a planted factor is not a product. Net of the shared cost model, plu
 
 ```text
 === parameters ===
-reuse panel 200x750; true factor + nuisance raw_factor2 (noise loading)
-look-ahead: shift(1) weights; lagged impact vol; factor[t] → fwd from t+1
-cost model shared with P2/P3/P4-01: 10 bps one-way + √impact
+reuse 200x750; true factor + nuisance raw_factor2
+MU_STRONG=0.0025 (inflated teaching) MU_WEAK=0.001 (realistic-weak foil)
+look-ahead: shift(1) weights; lagged impact vol; neutralize uses log_mcap.shift(1)
+cost model: P2 10 bps one-way + √impact
+overlapping IC windows inflate IC autocorr / ICIR SE (not mean IC) — use non-overlap or NW
 
-=== neutralization before / after ===
-true_factor RankIC mean before_neut=0.0845 after=0.1105
-nuisance_factor RankIC mean after_neut=0.0029 (should be ~0)
-recovery corr after_neut=0.9726
+=== neutralization before / after (strong; lagged mcap) ===
+true_factor RankIC mean before_neut=0.0761 after=0.1119
+nuisance_factor RankIC mean after_neut=-0.0027 (should be ~0)
+recovery corr after_neut=0.9663
+neutralize covariates: industry (static) + log_mcap.shift(1) only — no same-day mcap
 
-=== single vs equal-weight multi-factor ===
-true_only                gross_SR=4.465 net_SR=3.734 turn=0.9349 NAV=34.418 IC=0.1105
-nuisance_only            gross_SR=0.873 net_SR=-7.112 turn=1.5619 NAV=0.340 IC=0.0029
-ew_true_plus_nuisance    gross_SR=4.509 net_SR=3.093 turn=1.3169 NAV=8.481 IC=0.0810
-teach: blending a null nuisance factor dilutes IC and net SR — combining ≠ free lunch
+=== strong vs weak (side-by-side portfolio metrics) ===
+strong MU=0.0025 RankIC=0.1119 ICIR=4.636 gross_SR=4.495 net_SR=3.668 turn=1.0586
+weak   MU=0.0010 RankIC=0.0431 ICIR=1.769 gross_SR=1.619 net_SR=0.792 turn=1.0586
+teach: weak RankIC is the live-like case; costs often erase net edge — multi-factor combination exists to stack weak signals
 
-=== turnover–cost table (rebalance cadence) ===
-hold= 1d mean_turn=0.9349 net_SR=3.734 NAV=34.418
-hold= 5d mean_turn=0.1919 net_SR=4.380 NAV=63.965
-hold=10d mean_turn=0.0943 net_SR=4.440 NAV=68.570
-hold=20d mean_turn=0.0509 net_SR=4.474 NAV=73.174
-teach: lower turnover cuts cost drag; expected-value tradeoff vs signal freshness
+=== single vs equal-weight multi-factor (strong) ===
+true_only                gross_SR=4.495 net_SR=3.668 turn=1.0586 NAV=32.403 IC=0.1119
+nuisance_only            gross_SR=-1.429 net_SR=-8.500 turn=1.3895 NAV=0.273 IC=-0.0027
+ew_true_plus_nuisance    gross_SR=4.497 net_SR=3.085 turn=1.3009 NAV=8.293 IC=0.0788
+teach: blending a null nuisance dilutes IC/net SR — combining ≠ free lunch; combine *informed* weak factors
+
+=== multi-factor honesty on WEAK panel ===
+weak_true_only               gross_SR=1.619 net_SR=0.792 turn=1.0586 IC=0.0431
+weak_ew_true_plus_nuisance   gross_SR=1.637 net_SR=0.225 turn=1.3009 IC=0.0306
+
+=== turnover–cost table (strong true factor) ===
+hold= 1d mean_turn=1.0586 net_SR=3.668 NAV=32.403
+hold= 5d mean_turn=0.2107 net_SR=4.289 NAV=59.940
+hold=10d mean_turn=0.1035 net_SR=4.360 NAV=63.125
+hold=20d mean_turn=0.0533 net_SR=4.230 NAV=53.796
+
+=== turnover–cost table (WEAK true factor) ===
+hold= 1d mean_turn=1.0586 net_SR=0.792 NAV=1.863
+hold= 5d mean_turn=0.2107 net_SR=1.422 NAV=3.483
+hold=10d mean_turn=0.1035 net_SR=1.501 NAV=3.748
+hold=20d mean_turn=0.0533 net_SR=1.392 NAV=3.333
+teach: on weak signals, cutting turnover is often the difference between net>0 and net≈0
 
 === crowding foil ===
-long_leg_HHI_mean=0.02500 rank_AC1=0.8666
-teach: high AC + concentrated books → crowding risk if many funds hold the same names
-chart /workspace/Quant-trading-learn/public/p4/portfolio_nav_compare.png
+long_leg_HHI_mean=0.02497 rank_AC1=0.8809
+chart /workspace/Quant-trading-learn/public/p4/portfolio_strong_vs_weak.png
 chart /workspace/Quant-trading-learn/public/p4/ic_before_after.png
-disclaimer: synthetic planted panel — learning only, not investment advice
+disclaimer: strong MU inflated for teaching; weak panel is the realistic foil — learning only
 ```
 
 ## Common mistakes / pitfalls
 
-1. Equal-weighting every candidate factor without a null control.
-2. Ignoring turnover when declaring a multi-factor “improvement.”
-3. Neutralizing with future information.
-4. Assuming high rank AC always means low crowding (it can mean everyone holds the same book).
+1. Equal-weighting every candidate without a null control (worse on weak panels).
+2. Ignoring turnover when RankIC is only a few percent.
+3. Neutralizing with same-day mcap.
+4. Treating the strong panel as the live baseline.
 5. Reporting only gross NAVs.
 
 ## Practice (1:1)
 
-1. **ex1** — RankIC before/after neutralization.
-2. **ex2** — EW multi-factor vs true-only table.
-3. **ex3** — Turnover–cost table across hold schedules.
-4. **done1** — Factor→portfolio mini-report (net SR + turn + null blend).
+1. **ex1** — RankIC before/after neutralization (lagged mcap).
+2. **ex2** — EW multi-factor vs true-only on strong **and** weak.
+3. **ex3** — Turnover–cost table for both panels.
+4. **done1** — Factor→portfolio mini-report with strong/weak table.
 
 ## Quiz
 
-<Quiz id="q1-why-neut" question="Main purpose of industry/size neutralization here?" options={["Maximize turnover", "Strip linear industry/size so residual tracks the intended signal", "Replace transaction costs", "Guarantee t>3"]} answer={1} explanation="Residualize contamination." />
-<Quiz id="q2-combo" question="Equal-weighting a true factor with a null nuisance factor typically?" options={["Always raises net SR", "Dilutes IC/net SR and can raise turnover", "Deletes look-ahead", "Removes the need for costs"]} answer={1} explanation="Lab: combo net SR and IC fall vs true-only." />
-<Quiz id="q3-turn" question="On a sticky planted signal, lengthening the hold window mainly?" options={["Raises mean turnover", "Cuts turnover and cost drag (EV tradeoff vs freshness)", "Forces t<2", "Removes neutralization"]} answer={1} explanation="Hold 1→20d: turn 0.93→0.05 in the lab." />
+<Quiz id="q1-why-neut" question="Main purpose of industry/size neutralization here?" options={["Maximize turnover", "Strip linear industry/size so residual tracks the intended signal", "Replace transaction costs", "Guarantee t>3"]} answer={1} explanation="Residualize contamination with lagged mcap." />
+<Quiz id="q2-combo" question="Equal-weighting a true factor with a null nuisance factor typically?" options={["Always raises net SR", "Dilutes IC/net SR and can raise turnover — worse when the factor is already weak", "Deletes look-ahead", "Removes the need for costs"]} answer={1} explanation="Weak panel: net SR 0.79 → 0.23 when blending null." />
+<Quiz id="q3-turn" question="On a weak planted signal, lengthening the hold window mainly?" options={["Raises mean turnover", "Cuts turnover and cost drag so net SR can survive", "Forces t<2", "Removes neutralization"]} answer={1} explanation="Weak hold 1→10d: net SR 0.79→1.50 in the lab." />
 <Quiz id="q4-crowd" question="High factor rank autocorr warns that?" options={["Costs are zero", "Books may stay concentrated and crowd if many funds agree", "ICIR is infinite", "FM is invalid"]} answer={1} explanation="Sticky ranks ↔ overlapping holdings risk." />
-<Quiz id="q5-cost" question="Net returns after the shared cost model matter because?" options={["Gross SR already includes fees", "Tradeability is decided after turnover×bps and impact", "Neutralization deletes costs", "Only OOS dates pay costs"]} answer={1} explanation="Costs scale with turnover." />
+<Quiz id="q5-strong" question="The strong MU panel is best read as?" options={["A live Sharpe target", "An inflated teaching setting; judge realism on the weak panel", "Proof costs never matter", "A reason to skip HLZ"]} answer={1} explanation="Lessons state strong is inflated; weak is the foil." />
 
 ## Done when
 
-Factor→portfolio mini-report with neutralization contrast, combo honesty, and turnover–cost table.
+Factor→portfolio mini-report with neutralization contrast, strong/weak table, combo honesty, and turnover–cost table.
 
 **Sources:** P4-01 citations; Qlib portfolio/backtest optional; shared P2 cost stack.
 
 <Summary>
-**Takeaways**: neutralize, don’t blindly combine, costs×turnover, crowding.  
+**Takeaways**: neutralize with lagged mcap, don’t blindly combine, costs×turnover on weak signals, crowding.  
 **Next**: P5 ML anti-leakage (when written).
 </Summary>
