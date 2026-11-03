@@ -1,24 +1,32 @@
 === controlled comparison parameters ===
-universe: AAA for single-name; Y_coin/BBB for pairs; fill=next-open via shift(1); Rf=0
-costs: one-way stack 10.0 bps (+ √impact for single-name); pairs 2× stack
-OOS: last 30% bars
-baseline: dual_MA 10 30
-cite: JoinQuant research ethos — same interrogation for every strategy
-cite: quants.md open library (read 2026-11-04) — many cards print Sharpe≤0; use as foils not proof
+universe: AAA single-name; Y_coin/BBB pairs foil; fill=shift(1); Rf=0
+ONE cost model: one_way_bps 10.0 + √impact×turnover; pairs n_legs=2
+OOS: last 30%; baseline dual_MA 10 30
+trial_count N=4 strategies in this lab (explicit — feeds DSR)
+cite: P2 backtest-traps Bailey–LdP DSR; JoinQuant interrogation ethos
+cite: quants.md as hypothesis foil only
+further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quotes
 
-=== comparison table (net of costs) ===
-        strategy  IS_net_SR  OOS_net_SR  net_NAV  turnover   maxDD  beats_baseline_OOS
-baseline_dual_MA    -0.4310     -1.6906   0.8889    0.0333 -0.1910               False
-ts_momentum_skip    -0.1330     -1.6733   0.9695    0.0133 -0.1237                True
-mean_reversion_z    -0.6546     -2.8499   0.8256    0.0233 -0.2144               False
-   pairs_rolling     0.4439     -0.4528   1.0108    0.0502 -0.0583                True
+=== comparison table (ONE cost model; net of costs) ===
+        strategy  IS_net_SR  OOS_net_SR  net_NAV  turnover   maxDD  n_legs  beats_baseline_OOS
+baseline_dual_MA    -0.4310     -1.6906   0.8889    0.0333 -0.1910       1               False
+ts_momentum_skip    -0.1330     -1.6733   0.9695    0.0133 -0.1237       1                True
+mean_reversion_z    -0.6546     -2.8499   0.8256    0.0233 -0.2144       1               False
+   pairs_rolling     0.4222     -0.4732   1.0094    0.0500 -0.0590       2                True
+
+=== DSR on best OOS strategy (link P2 backtest-traps) ===
+best_strategy=pairs_rolling
+N_trials=4
+raw_SR_trials=[-0.04149, -0.007451, -0.083337, 0.010783] sigma_SR=0.041425
+sr_daily=0.010783 sr_ann=0.1712
+SR_star_Emax=0.043584 DSR=0.284076 n_obs=299
+formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson)
+teach: even the horse-race winner must clear a multiple-testing bar — see P2 DSR vs N
 
 === judgment ===
 baseline_OOS_net_SR=-1.6906
 any_complex_beats_baseline_OOS=True
-rule: if no — keep the simple baseline; complexity needs OOS proof under identical assumptions
-hidden_assumptions_controlled: universe, costs, shift(1), Rf, OOS cut
-quants.md foil: open dashboards can show +CAGR with Sharpe≈0 or negative — headline Return ≠ edge
+rule: complexity needs OOS proof under identical cost/fill assumptions + survive DSR(N)
 
 chart /workspace/Quant-trading-learn/public/p3/strategy_compare_nav.png
-disclaimer: synthetic panel; learning only — not a claim any strategy works live
+disclaimer: synthetic; learning only — not live claims

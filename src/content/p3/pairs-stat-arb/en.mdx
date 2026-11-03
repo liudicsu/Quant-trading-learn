@@ -1,111 +1,130 @@
 ## Learning goals
 
-This lesson (~**10 hours**: 4h concepts + 5h lab + 1h write-up) builds a **pairs** residual, compares **static vs rolling hedge ratios**, and separates **correlation from cointegration intuition**. Prereq: `mean-reversion`.
+This lesson (~**10 hours**: 4h concepts + 5h lab + 1h write-up) builds **Engle–Granger** pairs, compares static vs rolling hedges, and demonstrates the **in-sample vs rolling cointegration** pitfall. Prereq: `mean-reversion`.
 
-**Goals:** rolling-beta spread; discuss broken legs.
+**Goals:** rolling-beta spread; discuss broken legs; EG two-step with MacKinnon note.
 
-**Must-teach:** high correlation is not enough; cointegration intuition; re-estimate hedge ratios.
+**Must-teach:** high correlation ≠ tradeable; cointegration intuition; re-estimate hedge ratios; do not trust a single full-sample coint p-value.
 
 <Callout type="info" title="Learning only — not investment advice">
-Synthetic cointegrated foil Y_coin vs BBB — not a production stat-arb book.
+Synthetic cointegrated foil — not a production stat-arb book.
 </Callout>
 
 ## Parameters
 
-- y = 50 + 1.2·BBB + AR(1) residual (seed=7); x = BBB
-- Rolling OLS window=**40**; z_lb=**20**; enter |z|&gt;**2**; exit |z|&lt;**0.5**
-- Costs: **2×** one-way stack (both legs); positions `shift(1)`
-- OOS: last 30%
+- Pair A: Y_coin = 50 + 1.2·BBB + AR(1) residual (seed=7) — designed cointegrated
+- Pair B: Y_drift = same + linear drift — breaks cointegration while keeping high return corr
+- Also AAA/BBB raw panel foil; ROLL=40; z_lb=20; enter |z|&gt;2; exit |z|&lt;0.5
+- Costs: **same P2 model** with `n_legs=2` (bps stack + √impact)
 
-## Sources
+## Engle–Granger two-step
 
-- Stern Dhar syllabus **spreads / pairs** session ([PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)).
-- Curriculum **Canvas m8** pairs template.
-- Niche foil: [quants.md](https://quants.md/) **W13 Pairs Ratio Z Score** / **W14 Pairs Hedge Ratio** dashboards (read 2026-11-04) print Sharpe near 0 / negative — open examples are hypotheses, not proof.
+1. **OLS hedge:** `y = α + β x + u`
+2. **ADF on residual u.** The null is “no cointegration.” Important: **residual-based critical values differ from a plain ADF** on a raw series — use **MacKinnon** tables (what `statsmodels.tsa.stattools.coint` reports). Applying `adfuller` p-values directly to EG residuals is **anti-conservative**.
 
-## Correlation ≠ tradeable
+Lab also computes a **hand ADF t-stat** on Δu = a + φ u_(t-1) + γ Δu_(t-1) + e and compares φ’s t to `coint` / `adfuller`.
 
-Lab: return correlation of the cointegrated foil ≈ **0.98**, and a **drifting intercept foil** can keep similarly high correlation while residual std blows up (**0.73 → 4.50**). You need an approximately **stationary residual**, not just high corr.
+### Full-sample results (key numbers)
 
-## Static vs rolling hedge
+| pair | β | coint p (MacKinnon) | plain ADF p on resid | hand t_φ |
+| --- | ---: | ---: | ---: | ---: |
+| Y_coin/BBB | 1.215 | **0.00052** | 0.00026 | −4.44 |
+| Y_drift/BBB | 1.363 | **0.972** | 0.914 | −0.38 |
+| AAA/BBB | 0.123 | 0.829 | 0.633 | −1.29 |
 
-Static β≈**1.22**; rolling mean β≈**1.23**. Net of two-leg costs: static net SR≈**−0.48** (NAV≈0.96); rolling net SR≈**0.19** (NAV≈1.01). OOS still harsh (rolling OOS≈**−0.45**) — report it.
+Y_coin rejects; Y_drift and AAA fail — as designed.
 
-![Pairs NAV](/p3/pairs_nav.png)
+## Rolling cointegration pitfall
 
-## Broken-leg / shock note
+Window=80 rolling `coint` p-values: Y_coin median p≈**0.16**, frac(p&lt;0.05)≈**0.36**; Y_drift median≈**0.66**, frac≈**0.01**. A single full-sample pass can hide windows that flip in/out of cointegration — **never check EG only once in-sample**.
 
-If one leg gaps on idiosyncratic news, a frozen hedge leaves residual beta; rolling adapts with lag=ROLL. Expect a burst of wideners / stop-outs before β re-learns. Lab: mean |β_roll−β_static| over last 60 bars ≈ **0.07** on this foil (larger after a true break).
+![Pairs](/p3/pairs_nav.png)
 
-## Look-ahead warnings
+## Static vs rolling hedge + costs
 
-- OLS window at t uses only past bars `[t−w, t)`.
-- β used in today’s PnL must be lagged (`shift(1)`).
-- Do not pick the pair because the full-sample residual “looked stationary” after you already saw the test window.
+With shared 2-leg costs+impact: static net SR≈**−0.50**; rolling ≈**0.56** (OOS still reported honestly). Broken-leg note: after an idiosyncratic gap, static β leaves residual exposure; rolling adapts with lag=ROLL.
+
+## Further reading (no quotes)
+
+Ernest P. Chan, *Algorithmic Trading: Winning Strategies and Their Rationale*, John Wiley & Sons, 2013 (hardcover ISBN 978-1-118-46014-6).
+
+## Niche foil
+
+[quants.md](https://quants.md/) W13/W14 pairs dashboards — often Sharpe≈0; hypotheses only. Pine packs are **not** part of this curriculum.
 
 ## Python lab
 
-Script: `examples/p3/03_pairs_stat_arb.py`.
+`examples/p3/03_pairs_stat_arb.py` (needs `statsmodels`)
 
 ### Real run output
 
 ```text
 === parameters ===
-pair synthetic Y_coin vs BBB (cointegrated foil); rolling OLS window 40 z_lb 20
-enter |z|> 2.0 exit |z|< 0.5 ; dollar-neutral ≈ long y short beta*x
-look-ahead: beta/z use past windows only; positions shift(1)
-cite: Stern Dhar pairs session; Canvas m8; quants.md W13/W14 pairs as open foils (metrics often near 0)
+pairs: (A) Y_coin/BBB cointegrated foil; (B) Y_drift/BBB broken/non-coint foil
+also report AAA/BBB as a raw-panel foil
+rolling OLS 40 z_lb 20 enter |z|> 2.0 exit |z|< 0.5
+costs: shared P2 model with n_legs=2 (stack + √impact)
+cite: Engle–Granger two-step; MacKinnon residual-based critical values
+cite: Stern pairs; Canvas m8; quants.md W13/W14 foils
+further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quotes
 
-=== corr vs cointegration intuition ===
-corr_returns_coint_pair=0.980
-corr_returns_drift_foil=0.980 (can stay high while levels walk apart)
-resid_std_coint=0.730 resid_std_drift=4.495
-beta_static=1.2154 beta_roll_mean=1.2333
-teach: high return correlation ≠ tradeable; need (approx) stationary residual / cointegration intuition
+=== Engle–Granger two-step (full sample) ===
+step1: OLS y = alpha + beta x + u
+step2: test residual u for unit root; p-values from coint() use MacKinnon EG tables
+pitfall: adfuller(p) on residuals uses *plain* ADF null tables — anti-conservative vs EG
+Y_coin/BBB: beta=1.2152 coint_p=0.0005188 coint_t=-4.721 crit5=-3.357 adf_plain_p=0.0002577 hand_t=-4.435
+Y_drift/BBB: beta=1.3633 coint_p=0.9723 coint_t=-0.372 crit5=-3.357 adf_plain_p=0.9136 hand_t=-0.378
+AAA/BBB: beta=0.1230 coint_p=0.8293 coint_t=-1.301 crit5=-3.357 adf_plain_p=0.6332 hand_t=-1.291
 
-=== static vs rolling hedge ===
-static  gross=0.064 net=-0.475 NAV=0.9554 turn=0.0803 OOS=-2.493
-rolling gross=0.657 net=0.192 NAV=1.0108 turn=0.0502 OOS=-0.453
+compare: Y_coin should reject unit root in residual (small coint_p); Y_drift / AAA often fail
 
-=== shock scenario (broken leg) ===
-If one leg gaps on idiosyncratic news, static hedge leaves residual beta; rolling adapts with lag=ROLL.
-scenario_note: after a structural break, expect a burst of stop-outs / widener before beta re-learns.
-demo: |beta_roll - beta_static| mean last 60 bars = 0.0737
+=== rolling cointegration p-values (window=80) ===
+Y_coin rolling p: median=0.1555 frac_p<0.05=0.355
+Y_drift rolling p: median=0.6646 frac_p<0.05=0.009
+pitfall: a single full-sample coint_p can look fine while rolling windows flip in/out of cointegration
+
+=== static vs rolling hedge (Y_coin, net costs n_legs=2) ===
+static  net_SR=-0.499 NAV=0.9533 turn=0.0800 OOS=-2.517
+rolling net_SR=0.560 NAV=1.0344 turn=0.0433 OOS=1.745
+
+=== shock / broken-leg note ===
+After an idiosyncratic gap, static hedge leaves residual beta; rolling adapts with lag=ROLL.
+|beta_roll-beta_static| mean last 60 = 0.0737
 
 chart /workspace/Quant-trading-learn/public/p3/pairs_nav.png
-disclaimer: synthetic pair; learning only — quants.md W13/W14 show real open examples can print near-zero Sharpe
+disclaimer: synthetic; learning only
 ```
 
 ## Common mistakes / pitfalls
 
-1. Trading high corr without checking residual stability.
-2. Estimating β on the full sample including test.
-3. Costing only one leg.
-4. Ignoring structural breaks / corporate actions on a leg.
-5. Reading quants.md headline Return% as an edge certificate.
+1. Trading high corr without EG / residual stationarity.
+2. Using plain ADF critical values on EG residuals.
+3. Checking cointegration only once on the full sample.
+4. Costing one leg only (lab forces n_legs=2).
+5. Estimating β including the test window.
 
 ## Practice (1:1)
 
-1. **ex1** — rolling spread + z; **done when** chart/series print.
-2. **ex2** — static vs rolling table; **done when** both net SR print.
-3. **ex3** — shock/broken-leg paragraph.
+1. **ex1** — EG table for both pairs (coint p + hand t).
+2. **ex2** — static vs rolling net SR.
+3. **ex3** — rolling p-value pitfall paragraph + chart.
 4. **done1** — costed pairs notebook filed.
 
 ## Quiz
 
-<Quiz id="q1-corr" question="High return correlation alone means?" options={["Guaranteed stationary spread", "Not enough — need residual/cointegration intuition", "Zero costs", "Automatic OOS edge"]} answer={1} explanation="Corr ≠ tradeable." />
-<Quiz id="q2-roll" question="Why re-estimate the hedge ratio?" options={["To use future prices", "Relationships drift; static β goes stale", "To remove Rf", "To delete z-scores"]} answer={1} explanation="Rolling β." />
-<Quiz id="q3-leg" question="A broken leg mainly causes?" options={["Lower ADV only", "Residual beta / hedge error after a shock", "Higher Rf", "Free fills"]} answer={1} explanation="Idiosyncratic gap." />
-<Quiz id="q4-cost" question="Pairs costs should usually?" options={["Ignore one leg", "Charge both legs (≈2× one-way stack here)", "Use only impact", "Use only borrow"]} answer={1} explanation="Two-leg friction." />
-<Quiz id="q5-foil" question="Open strategy dashboards with Sharpe≈0 are best used as?" options={["Live mandates", "Hypothesis foils under your own costs/OOS", "Proof of alpha", "Substitutes for stops"]} answer={1} explanation="quants.md ethos in this course." />
+<Quiz id="q1-eg" question="Engle–Granger step 2 tests?" options={["The hedge β only", "Whether the OLS residual is stationary (cointegration)", "Only ADV", "Only Rf"]} answer={1} explanation="ADF/coint on residual." />
+<Quiz id="q2-mac" question="Why not use plain ADF p-values on EG residuals?" options={["They are identical always", "Residual-based critical values differ (MacKinnon); plain tables are anti-conservative", "ADF is illegal", "Only for weekly data"]} answer={1} explanation="MacKinnon EG tables." />
+<Quiz id="q3-roll" question="Rolling coint p-values teach that?" options={["Full-sample p is enough", "Relationships can flip across windows", "Costs vanish", "β is constant"]} answer={1} explanation="In-sample-only pitfall." />
+<Quiz id="q4-corr" question="High return correlation alone means?" options={["Guaranteed cointegration", "Not enough for a tradeable spread", "Zero costs", "Automatic OOS edge"]} answer={1} explanation="Corr ≠ coint." />
+<Quiz id="q5-legs" question="Pairs costs in this lab use?" options={["n_legs=1", "n_legs=2 with stack + √impact", "No impact ever", "Only borrow"]} answer={1} explanation="Shared cost model." />
 
 ## Done when
 
-- Costed pairs notebook + static/rolling + shock note + quizzes  
+EG for two pairs + rolling p demo + costed notebook + quizzes (≈10h depth).
 
-**Sources:** Stern pairs; Canvas m8; quants.md W13/W14 foils.
+**Sources:** Engle–Granger / MacKinnon via statsmodels; Stern pairs; Canvas m8; quants.md W13/W14.
 
 <Summary>
-**Takeaways**: rolling hedge, corr≠coint, broken legs, two-leg costs.  
-**Next**: strategy compare lab.
+**Takeaways**: EG+MacKinnon, rolling coint pitfall, rolling hedge, 2-leg costs.  
+**Next**: strategy compare + DSR.
 </Summary>

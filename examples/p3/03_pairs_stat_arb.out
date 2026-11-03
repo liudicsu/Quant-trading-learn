@@ -1,24 +1,34 @@
 === parameters ===
-pair synthetic Y_coin vs BBB (cointegrated foil); rolling OLS window 40 z_lb 20
-enter |z|> 2.0 exit |z|< 0.5 ; dollar-neutral ≈ long y short beta*x
-look-ahead: beta/z use past windows only; positions shift(1)
-cite: Stern Dhar pairs session; Canvas m8; quants.md W13/W14 pairs as open foils (metrics often near 0)
+pairs: (A) Y_coin/BBB cointegrated foil; (B) Y_drift/BBB broken/non-coint foil
+also report AAA/BBB as a raw-panel foil
+rolling OLS 40 z_lb 20 enter |z|> 2.0 exit |z|< 0.5
+costs: shared P2 model with n_legs=2 (stack + √impact)
+cite: Engle–Granger two-step; MacKinnon residual-based critical values
+cite: Stern pairs; Canvas m8; quants.md W13/W14 foils
+further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quotes
 
-=== corr vs cointegration intuition ===
-corr_returns_coint_pair=0.980
-corr_returns_drift_foil=0.980 (can stay high while levels walk apart)
-resid_std_coint=0.730 resid_std_drift=4.495
-beta_static=1.2154 beta_roll_mean=1.2333
-teach: high return correlation ≠ tradeable; need (approx) stationary residual / cointegration intuition
+=== Engle–Granger two-step (full sample) ===
+step1: OLS y = alpha + beta x + u
+step2: test residual u for unit root; p-values from coint() use MacKinnon EG tables
+pitfall: adfuller(p) on residuals uses *plain* ADF null tables — anti-conservative vs EG
+Y_coin/BBB: beta=1.2152 coint_p=0.0005188 coint_t=-4.721 crit5=-3.357 adf_plain_p=0.0002577 hand_t=-4.435
+Y_drift/BBB: beta=1.3633 coint_p=0.9723 coint_t=-0.372 crit5=-3.357 adf_plain_p=0.9136 hand_t=-0.378
+AAA/BBB: beta=0.1230 coint_p=0.8293 coint_t=-1.301 crit5=-3.357 adf_plain_p=0.6332 hand_t=-1.291
 
-=== static vs rolling hedge ===
-static  gross=0.064 net=-0.475 NAV=0.9554 turn=0.0803 OOS=-2.493
-rolling gross=0.657 net=0.192 NAV=1.0108 turn=0.0502 OOS=-0.453
+compare: Y_coin should reject unit root in residual (small coint_p); Y_drift / AAA often fail
 
-=== shock scenario (broken leg) ===
-If one leg gaps on idiosyncratic news, static hedge leaves residual beta; rolling adapts with lag=ROLL.
-scenario_note: after a structural break, expect a burst of stop-outs / widener before beta re-learns.
-demo: |beta_roll - beta_static| mean last 60 bars = 0.0737
+=== rolling cointegration p-values (window=80) ===
+Y_coin rolling p: median=0.1555 frac_p<0.05=0.355
+Y_drift rolling p: median=0.6646 frac_p<0.05=0.009
+pitfall: a single full-sample coint_p can look fine while rolling windows flip in/out of cointegration
+
+=== static vs rolling hedge (Y_coin, net costs n_legs=2) ===
+static  net_SR=-0.499 NAV=0.9533 turn=0.0800 OOS=-2.517
+rolling net_SR=0.560 NAV=1.0344 turn=0.0433 OOS=1.745
+
+=== shock / broken-leg note ===
+After an idiosyncratic gap, static hedge leaves residual beta; rolling adapts with lag=ROLL.
+|beta_roll-beta_static| mean last 60 = 0.0737
 
 chart /workspace/Quant-trading-learn/public/p3/pairs_nav.png
-disclaimer: synthetic pair; learning only — quants.md W13/W14 show real open examples can print near-zero Sharpe
+disclaimer: synthetic; learning only

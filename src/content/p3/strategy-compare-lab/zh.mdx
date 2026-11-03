@@ -1,113 +1,126 @@
 ## 学习目标
 
-本课（约 **5 学时**：框架 1h + 报告 3.5h + 测验 0.5h）做**受控对照**：同一宇宙约定、成本、成交规则与 OOS 切分。复杂策略必须胜过**简单基准**。前置：P3 前三课。
+本课（约 **5 学时**：框架 1h + 报告 3.5h + 测验 0.5h）在**同一成本模型**（配对含冲击）下做受控赛马，并把赢家连回 P2 `backtest-traps` 的 **DSR（显式试验数 N）**。前置：P3 前三课。
 
-**课内目标：** 三策略并排报告；相对基准判定。
+**课内目标：** 三策略（+基准）报告；相对基准判定；计算 DSR(N)。
 
-**必须教会：** 控制隐藏假设；简单是基准线。
+**必须教会：** 控制隐藏假设；简单是基准线；用 DSR 处理多重试错。
 
 <Callout type="info" title="学习用途 — 非投资建议">
-合成面板结果，不构成对任一行为交易建议。
+合成结果，不构成对任一行为交易授权。
 </Callout>
 
-## 受控假设
+## 受控假设（同一成本模型）
 
-- 单标的宇宙：AAA；配对：合成 Y_coin / BBB
-- 成交：`shift(1)` 次日开盘；Rf=0
-- 成本：单边 10 bps（单标的另加 √冲击）；配对 2× 堆叠
-- OOS：最后 30% bar
-- **基准：** 双均线 (10,30)
-
-## 来源
-
-- 聚宽研究气质（审讯室）：对每个策略问同样的问题。
-- 课程 Canvas 对照精神。
-- 小众：把 [quants.md](https://quants.md/) 开放倾倒只当**假设来源**——许多卡片 Return 为正但夏普≤0（2026-11-04 已读）。
+- 单标的 AAA；配对 Y_coin/BBB
+- 成交 `shift(1)`；Rf=0；OOS 最后 30%
+- **每一行**：P2 单边 **10 bps** 堆叠 + √冲击×换手；配对 **`n_legs=2`**
+- 基准：双均线 (10,30)
+- **N = 4** 显式试验：基准、TSMOM-skip、MR-z、pairs-rolling
 
 ## 对照表（实验）
 
-| 策略 | IS 净夏普 | OOS 净夏普 | 净净值 | 是否胜过基准 OOS |
-| --- | ---: | ---: | ---: | --- |
-| baseline_dual_MA | −0.43 | −1.69 | 0.89 | — |
-| ts_momentum_skip | −0.13 | −1.67 | 0.97 | 勉强是 |
-| mean_reversion_z | −0.65 | −2.85 | 0.83 | 否 |
-| pairs_rolling | +0.44 | −0.45 | 1.01 | 是（OOS 仍弱） |
+| 策略 | IS 净夏普 | OOS 净夏普 | 净净值 | n_legs | 胜过基准 OOS？ |
+| --- | ---: | ---: | ---: | ---: | --- |
+| baseline_dual_MA | −0.43 | −1.69 | 0.89 | 1 | — |
+| ts_momentum_skip | −0.13 | −1.67 | 0.97 | 1 | 勉强 |
+| mean_reversion_z | −0.65 | −2.85 | 0.83 | 1 | 否 |
+| pairs_rolling | +0.42 | −0.47 | 1.01 | 2 | 是（OOS 仍≤0） |
 
-**判定：** 本玩具上 pairs 与 ts_mom 的 OOS 高于双均线，但**所有 OOS 夏普 ≤0**。胜过糟糕基准不是实盘授权——在复杂策略既相对获胜又通过你预先承诺的绝对门槛前，保住简单线。
+## 最佳 OOS 策略的 DSR（连回 P2）
 
-![对照净值](/p3/strategy_compare_nav.png)
+按 OOS 净夏普最优：**pairs_rolling**。由 N 个原始日频夏普得到 σ_SR≈**0.041**。N=**4** 时：
 
-## 隐藏假设清单
+- SR_daily≈**0.0108**（年化≈0.17）
+- SR* = E[max SR]≈**0.0436**
+- **DSR≈0.284**
 
-宇宙、成本模型、成交时点、Rf、OOS 切分、配对是否使用构造对照必须相同或显式声明。偷偷改一项就使赛马无效。
+即使相对赢家也未通过严格多重试错门槛——与 `backtest-traps` 中 Bailey & López de Prado 精神一致。
 
-## 前视 / 诚实
+![对照](/p3/strategy_compare_nav.png)
 
-- 勿偷看 OOS 后再改写 IS 规则来“选赢家”。
-- 开放网站的标题 CAGR ≠ 你的成本下的优势。
+## 判定
+
+胜过糟糕基准不是实盘授权。在复杂策略既相对获胜又通过预先承诺的绝对/DSR 规则前，保住简单线。
+
+## 延伸阅读（不引述正文）
+
+Ernest P. Chan，《Algorithmic Trading: Winning Strategies and Their Rationale》，John Wiley & Sons，2013（精装 ISBN 978-1-118-46014-6）。
+
+## 小众对照
+
+[quants.md](https://quants.md/) 倾倒 = 仅假设。Pine **已从**本课程小众地图中**移除**。
 
 ## Python 实验
 
-脚本：`examples/p3/04_strategy_compare_lab.py`。
+`examples/p3/04_strategy_compare_lab.py`
 
 ### 实际运行输出
 
 ```text
 === controlled comparison parameters ===
-universe: AAA for single-name; Y_coin/BBB for pairs; fill=next-open via shift(1); Rf=0
-costs: one-way stack 10.0 bps (+ √impact for single-name); pairs 2× stack
-OOS: last 30% bars
-baseline: dual_MA 10 30
-cite: JoinQuant research ethos — same interrogation for every strategy
-cite: quants.md open library (read 2026-11-04) — many cards print Sharpe≤0; use as foils not proof
+universe: AAA single-name; Y_coin/BBB pairs foil; fill=shift(1); Rf=0
+ONE cost model: one_way_bps 10.0 + √impact×turnover; pairs n_legs=2
+OOS: last 30%; baseline dual_MA 10 30
+trial_count N=4 strategies in this lab (explicit — feeds DSR)
+cite: P2 backtest-traps Bailey–LdP DSR; JoinQuant interrogation ethos
+cite: quants.md as hypothesis foil only
+further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quotes
 
-=== comparison table (net of costs) ===
-        strategy  IS_net_SR  OOS_net_SR  net_NAV  turnover   maxDD  beats_baseline_OOS
-baseline_dual_MA    -0.4310     -1.6906   0.8889    0.0333 -0.1910               False
-ts_momentum_skip    -0.1330     -1.6733   0.9695    0.0133 -0.1237                True
-mean_reversion_z    -0.6546     -2.8499   0.8256    0.0233 -0.2144               False
-   pairs_rolling     0.4439     -0.4528   1.0108    0.0502 -0.0583                True
+=== comparison table (ONE cost model; net of costs) ===
+        strategy  IS_net_SR  OOS_net_SR  net_NAV  turnover   maxDD  n_legs  beats_baseline_OOS
+baseline_dual_MA    -0.4310     -1.6906   0.8889    0.0333 -0.1910       1               False
+ts_momentum_skip    -0.1330     -1.6733   0.9695    0.0133 -0.1237       1                True
+mean_reversion_z    -0.6546     -2.8499   0.8256    0.0233 -0.2144       1               False
+   pairs_rolling     0.4222     -0.4732   1.0094    0.0500 -0.0590       2                True
+
+=== DSR on best OOS strategy (link P2 backtest-traps) ===
+best_strategy=pairs_rolling
+N_trials=4
+raw_SR_trials=[-0.04149, -0.007451, -0.083337, 0.010783] sigma_SR=0.041425
+sr_daily=0.010783 sr_ann=0.1712
+SR_star_Emax=0.043584 DSR=0.284076 n_obs=299
+formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson)
+teach: even the horse-race winner must clear a multiple-testing bar — see P2 DSR vs N
 
 === judgment ===
 baseline_OOS_net_SR=-1.6906
 any_complex_beats_baseline_OOS=True
-rule: if no — keep the simple baseline; complexity needs OOS proof under identical assumptions
-hidden_assumptions_controlled: universe, costs, shift(1), Rf, OOS cut
-quants.md foil: open dashboards can show +CAGR with Sharpe≈0 or negative — headline Return ≠ edge
+rule: complexity needs OOS proof under identical cost/fill assumptions + survive DSR(N)
 
 chart /workspace/Quant-trading-learn/public/p3/strategy_compare_nav.png
-disclaimer: synthetic panel; learning only — not a claim any strategy works live
+disclaimer: synthetic; learning only — not live claims
 ```
 
 ## 常见错误 / 陷阱
 
-1. 各策略用不同成本模型。
-2. 庆祝 OOS 失败的 IS 赢家。
-3. 没有预先声明的基准。
-4. 把开放库 Return% 当记分板。
+1. 各行成本模型不同（尤其漏掉配对冲击）。
+2. 算 DSR 前无显式 N。
+3. 庆祝 OOS 失败的 IS 赢家。
+4. 无预先声明的基准。
 5. 加参数直到 IS 好看。
 
 ## 练习（1:1）
 
-1. **ex1** — 三策略（+基准）报告表。
-2. **ex2** — 点名基准并用 OOS 净夏普判定胜/负。
-3. **done1** — 对照报告入库。
+1. **ex1** — 含 n_legs 列的表。
+2. **ex2** — 点名基准；用 OOS 判定胜/负。
+3. **done1** — 报告含 N、最佳名、DSR。
 
 ## 测验
 
-<Quiz id="q1-ctrl" question="受控策略对照必须共享？" options={["只有图颜色", "宇宙/成本/成交/OOS 切分（或声明差异）", "只有券商名", "只有 GPU 类型"]} answer={1} explanation="隐藏假设。" />
-<Quiz id="q2-base" question="简单基准存在是为了？" options={["装饰幻灯片", "迫使复杂性证明增量 OOS 价值", "去掉成本", "保证盈利"]} answer={1} explanation="简单是要被超越的线。" />
-<Quiz id="q3-oos" question="OOS 上胜过负夏普基准意味着？" options={["实盘 Alpha 认证", "仅相对获胜——仍需绝对决策规则", "成本可选", "前视无妨"]} answer={1} explanation="相对 ≠ 授权。" />
-<Quiz id="q4-open" question="quants.md 类开放倾倒在此用作？" options={["券商委托", "假设对照", "官方基准", "无风险利率"]} answer={1} explanation="仅灵感。" />
-<Quiz id="q5-complex" question="若复杂性在相同假设下 OOS 落败，你应？" options={["照样上线", "保住简单基准", "删除基准", "隐藏成本"]} answer={1} explanation="必须教会。" />
+<Quiz id="q1-cost" question="本课配对行必须使用？" options={["更便宜的成本模型", "同一堆叠+冲击模型且 n_legs=2", "无成本", "只计佣金"]} answer={1} explanation="同一成本模型。" />
+<Quiz id="q2-n" question="此处试验数 N 是？" options={["永远为 1", "赛马中的策略个数（4）", "只是数据长度", "ADV"]} answer={1} explanation="显式 N=4。" />
+<Quiz id="q3-dsr" question="DSR 连回？" options={["只有 Pine 脚本", "P2 Bailey–LdP 多重试错 / backtest-traps", "只有 Rf", "只有图"]} answer={1} explanation="Deflated Sharpe。" />
+<Quiz id="q4-base" question="简单基准存在是为了？" options={["装饰幻灯片", "迫使复杂性证明增量 OOS 价值", "去掉 DSR", "保证盈利"]} answer={1} explanation="必须教会。" />
+<Quiz id="q5-win" question="若最佳 OOS 夏普仍≤0 且 DSR 偏低，你应？" options={["直接实盘", "保持怀疑；勿把相对获胜当授权", "隐藏 N", "丢掉成本"]} answer={1} explanation="诚实判定。" />
 
 ## 完成标准
 
-- 对照报告入库 + 相对基准判定 + 测验  
+对照报告 + N + DSR + 测验。
 
-**来源：** 聚宽审讯气质；Canvas 对照精神；quants.md 对照。
+**来源：** 聚宽气质；Canvas 对照；P2 DSR；quants.md 对照。
 
 <Summary>
-**要点**：受控赛马、简单基准、诚实 OOS。  
-**P3 收束**：下一阶段是因子研究（P4）——不在本批次。
+**要点**：同一成本模型、显式 N、赢家 DSR。  
+**P3 收束** — 停止；本批次不开始 P4。
 </Summary>

@@ -43,8 +43,11 @@ print("LB_FULL", LB_FULL, "SKIP", SKIP, "→ mom window ends at t-1-SKIP, starts
 print("dual_MA", MA_FAST, MA_SLOW, "vol_target", VOL_TARGET, "vol_lb", VOL_LB)
 print("costs:", COST_NOTE)
 print("look-ahead: all positions use shift(1); mom uses only past returns")
-print("cite: Jegadeesh & Titman 1993 JF relative-strength J/K; 12-1 = skip recent month (industry practice)")
-print("cite: NYU Stern Dhar Trading Strategies syllabus — trend → counter-trend → pairs")
+print("cite: Jegadeesh & Titman 1993 JF — CROSS-SECTIONAL relative strength (winners vs losers)")
+print("cite: Moskowitz, Ooi & Pedersen 2012 JFE 104(2) — TIME SERIES momentum (own past return sign)")
+print("contrast: CS ranks peers; TSMOM is +1/−1 on an asset's own excess return over 1–12m (then partial reversal)")
+print("cite: NYU Stern Dhar syllabus — trend → counter-trend → pairs")
+print("further_reading: Ernest P. Chan, Algorithmic Trading: Winning Strategies and Their Rationale, Wiley 2013 (ISBN 978-1-118-46014-6)")
 
 # --- Dual MA on AAA ---
 aaa = px["AAA_adj"]
@@ -90,7 +93,7 @@ cs_net = cs_gross - cs_to * bps  # simplified stack; no impact for multi-leg toy
 
 # OOS
 train_idx, test_idx = oos_split(r_aaa.dropna().index, 0.7)
-print("\n=== dual-MA vs TS-mom (AAA, net of costs) ===")
+print("\n=== dual-MA vs TSMOM (Moskowitz-style own-return) vs CS (JT-style ranks) ===")
 for label, st, net, to in [
     ("dual_MA", dual_st, dual_net, dual_to),
     ("ts_mom_skip", ts_st, ts_net, ts_to),

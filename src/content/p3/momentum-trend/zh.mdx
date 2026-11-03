@@ -1,10 +1,10 @@
 ## 学习目标
 
-本课（约 **8 学时**：概念 3h + 实验 4.5h + 测验 0.5h）对照**双均线趋势**、带跳过窗的**时序动量**（12-1 精神）、**截面玩具**与 **10% 波动目标**——全部扣除 P2 成本。前置：`engines-vectorized-event`。
+本课（约 **8 学时**：概念 3h + 实验 4.5h + 测验 0.5h）对照**时序动量（TSMOM）**与**截面动量**，并配双均线趋势、波动目标与 P2 成本。前置：`engines-vectorized-event`。
 
-**课内目标：** 双均线 vs 简化动量；报告换手与分年结果。
+**课内目标：** 双均线 vs 简化动量；报告换手与分年。
 
-**必须教会：** 跳过最近窗口减弱短期反转偏差；拥挤与换手侵蚀优势。
+**必须教会：** 跳过近窗减弱短期反转；拥挤/换手侵蚀优势；**TSMOM ≠ 截面动量**。
 
 <Callout type="info" title="学习用途 — 非投资建议">
 合成约 1 年面板 + 缩放回看窗，不宣称动量实盘有效。
@@ -12,45 +12,55 @@
 
 ## 参数
 
-- 面板：AAA/BBB/CCC 日频 2022-01-03 → 2023-02-24（n=300）
-- 双均线：快=**10**，慢=**30**；时序动量：LB_FULL=**60**，SKIP=**5**（短面板上的 12-1 *精神*，非字面月）
-- 波动目标：年化 **10%**，vol_lb=**20**，杠杆上限 2
-- 成本：P2 四件套单边 **10 bps** + √冲击×换手；Rf=0；`position=shift(1)`
-- OOS：最后 **30%** bar
+- 面板 AAA/BBB/CCC，2022-01-03 → 2023-02-24（n=300）
+- 双均线 10/30；TSMOM 回看 LB=**60**，SKIP=**5**（短面板上的 12-1 *精神*）
+- 波动目标年化 10%，vol_lb=20；成本 = P2 单边 10 bps + √冲击×换手；`shift(1)`；OOS 最后 30%
 
-## 经典来源（已读并用于正文）
+## TSMOM vs 截面（经典论文）
 
-- **Jegadeesh & Titman（1993）《JF》** — 相对强度 J/K；跳过一周的变体规避买卖价差/短期反转（[PDF](https://bauer.uh.edu/rsusmel/phd/jegadeesh-titman93.pdf)）。业界 **12-1** 把跳过延伸到近一月。
-- **NYU Stern Dhar《Trading Strategies》大纲** — 趋势 → 反趋势 → 价差/配对（[PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)）。
-- 课程 **Canvas m6** 动量模板（内部地图）。
+**截面（Jegadeesh & Titman 1993，《JF》）：** 按过去 J 月收益排名；做多赢家/做空输家并持有 K 月。相对同伴的相对强度。跳过一周的变体降低买卖价差/短期反转噪声；业界 **12-1** 跳过最近一月出于同一动机（[PDF](https://bauer.uh.edu/rsusmel/phd/jegadeesh-titman93.pdf)）。
 
-## 小众对照
+**时序（Moskowitz, Ooi & Pedersen 2012，《JFE》104(2)，228–250 页）：** 每个品种按其**自身**过去超额收益交易（通常过去 1–12 个月），而不是截面排名。他们在 58 个高流动性期货（股指、外汇、商品、债券）上记录 TSMOM；约一年持续后出现**部分反转**；分散的 TSMOM 组合对标准因子暴露很小，并在极端市场表现突出。投机者似乎以对冲者为代价赚取 TSMOM（[RePEc/摘要](https://ideas.repec.org/a/eee/jfinec/v104y2012i2p228-250.html)；AQR 摘要）。
 
-- **[quants.md](https://quants.md/)** 开放策略库（QuantJourney，Apache-2.0）——许多趋势/动量卡片夏普接近 0 或为负；只作**假设来源**，不作证明。TradingView Pine 策略包**本批次未独立重读**，不作断言。
+**实验映射：** AAA 过去收益符号 = **TSMOM 对照**；在 `AAA, BBB, CCC` 中多最强/空最弱 = **截面玩具**（名字太少，不能当机构截面）。
 
-## 双均线 vs 时序动量
+## 双均线、TSMOM、波动目标
 
-均用次日开盘成交（`shift(1)`）。全样本净夏普：双均线 ≈ **−0.66**，TS-mom-skip ≈ **−0.12**，波动目标 ≈ **−0.08**。OOS 净夏普在本玩具上仍为负——诚实评价，不是庆功。
+次日开盘成交。全样本净夏普：双均线 ≈ **−0.66**，TSMOM-skip ≈ **−0.12**，波动目标 ≈ **−0.08**。本玩具 OOS 仍为负——诚实评价。
 
 ![动量净值](/p3/momentum_nav.png)
 
-## 跳过近月的动机（即使玩具样本不同意）
 
-在**本**短合成面板上，不跳过可能打印更高的样本内净夏普。这**不能**否定 JT/业界的设计动机：跳过减少短期反转/微观结构污染。**期望值框架：** 跳过是降偏设计，不是每个样本的保证。
+## 期望值框架（补强）
+
+Moskowitz–Ooi–Pedersen 强调的是**品种自身**过去 1–12 月超额收益的可预测性，以及约一年后的部分反转；Jegadeesh–Titman 强调的是**截面相对**强弱。两者可以共存：分解研究表明，正的自协方差是两类动量利润的重要共同来源，但实现与风险暴露并不相同。课内玩具样本太短，不能复现论文中的跨资产显著性——我们只借用定义与对照，不做实盘外推。
+
+换手与拥挤：同一信号被更多资本追逐时，成交冲击与滑点上升，期望净优势被侵蚀。这就是为何必须报告换手，并沿用 P2 的四件套成本，而不是只展示毛净值。
+
+## 跳过近窗的动机
+
+在**本**短面板上，不跳过可能样本内更优。这不能否定 JT/Moskowitz 的设计动机：跳过降低微观结构/短窗反转污染。期望值框架——降偏，不是单样本保证。
 
 ## 截面与分年
 
-三标的多空截面只是**玩具**（实验 CS 净夏普≈0.50）——真实截面需要宽宇宙。TS-mom-skip 分年净夏普：2022 ≈ **−0.13**；2023 不完整 → NaN。
+三标的截面净夏普≈0.50 只是玩具。TSMOM-skip 分年：2022 ≈ −0.13；2023 不完整 → NaN。
 
 ## 前视警告
 
-- 动量分数只能用过去收益（此处：结束于 t−SKIP）。
-- 勿用当日收盘既排名又成交。
-- 波动缩放用 `shift(1)`，避免用当日波动给当日成交定仓。
+- 形成窗结束于 t−SKIP；勿用成交当日排名。
+- 波动缩放用 `shift(1)`。
 
-## Python 实验（已本地运行）
+## 延伸阅读（不引述正文）
 
-脚本：`examples/p3/01_momentum_trend.py`。
+Ernest P. Chan，《Algorithmic Trading: Winning Strategies and Their Rationale》，John Wiley & Sons，2013（精装 ISBN 978-1-118-46014-6）。
+
+## 小众对照
+
+[quants.md](https://quants.md/) 开放趋势卡片（QuantJourney）——许多夏普≤0；只作假设倾倒。**本课程不使用 TradingView Pine 策略包。**
+
+## Python 实验
+
+`examples/p3/01_momentum_trend.py`
 
 ### 实际运行输出
 
@@ -61,10 +71,13 @@ LB_FULL 60 SKIP 5 → mom window ends at t-1-SKIP, starts t-1-SKIP-LB_FULL
 dual_MA 10 30 vol_target 0.1 vol_lb 20
 costs: P2 four-part stack 10 bps one-way + √impact × turnover
 look-ahead: all positions use shift(1); mom uses only past returns
-cite: Jegadeesh & Titman 1993 JF relative-strength J/K; 12-1 = skip recent month (industry practice)
-cite: NYU Stern Dhar Trading Strategies syllabus — trend → counter-trend → pairs
+cite: Jegadeesh & Titman 1993 JF — CROSS-SECTIONAL relative strength (winners vs losers)
+cite: Moskowitz, Ooi & Pedersen 2012 JFE 104(2) — TIME SERIES momentum (own past return sign)
+contrast: CS ranks peers; TSMOM is +1/−1 on an asset's own excess return over 1–12m (then partial reversal)
+cite: NYU Stern Dhar syllabus — trend → counter-trend → pairs
+further_reading: Ernest P. Chan, Algorithmic Trading: Winning Strategies and Their Rationale, Wiley 2013 (ISBN 978-1-118-46014-6)
 
-=== dual-MA vs TS-mom (AAA, net of costs) ===
+=== dual-MA vs TSMOM (Moskowitz-style own-return) vs CS (JT-style ranks) ===
 dual_MA              gross_SR=-0.588 net_SR=-0.659 net_NAV=0.8889 maxDD=-0.191 turn=0.0333 OOS_net_SR=-1.691
 ts_mom_skip          gross_SR=-0.090 net_SR=-0.118 net_NAV=0.9695 maxDD=-0.124 turn=0.0133 OOS_net_SR=-1.673
 ts_mom_no_skip       gross_SR=0.260 net_SR=0.232 net_NAV=1.0268 maxDD=-0.086 turn=0.0133 OOS_net_SR=nan
@@ -93,34 +106,34 @@ disclaimer: synthetic panel; learning only — not live performance claims
 
 ## 常见错误 / 陷阱
 
-1. 在 1 年玩具上字面套 12 个月却不声明缩放。
-2. 未扣 P2 成本就庆祝毛曲线。
-3. 把 3 个名字的截面当成机构证据。
-4. 把「本样本跳过更差」当成「跳过是错的」。
+1. 把 TSMOM 与截面当成同一因子。
+2. 在 1 年玩具上字面套 12 个月却不声明缩放。
+3. 未扣成本就庆祝毛曲线。
+4. 三名字截面当成机构证据。
 5. 形成窗混入当日价格。
 
-## 练习（与清单 1:1）
+## 练习（1:1）
 
-1. **ex1** — 双均线 vs 时序动量表；**完成标准**：两套净夏普+换手。
-2. **ex2** — 10% 波动目标；**完成标准**：缩放净值/夏普打印。
-3. **ex3** — 分年表；**完成标准**：年份行出现（NaN 需解释）。
-4. **done1** — 两套含成本动量结果含 OOS 列。
+1. **ex1** — 双均线 vs TSMOM 表（净夏普+换手）。
+2. **ex2** — 10% 波动目标。
+3. **ex3** — 分年表（解释 NaN）。
+4. **done1** — 两套含成本动量 + OOS。
 
 ## 测验
 
-<Quiz id="q1-121" question="12-1 动量为何跳过最近一月？" options={["为提高换手", "减弱短期反转/微观结构噪声", "强制周频再平衡", "去掉无风险利率"]} answer={1} explanation="JT 跳过一周 / 业界 12-1 动机。" />
-<Quiz id="q2-tscs" question="时序与截面动量主要差别？" options={["券商选择", "自身过去收益符号 vs 截面相对排名", "只有无风险利率", "只有画图库"]} answer={1} explanation="TS=自身；CS=相对同伴。" />
-<Quiz id="q3-turn" question="更高换手主要伤害来自？" options={["提高 Rf", "每个 bps 成本乘以 |Δposition|", "删除 OOS", "修复前视"]} answer={1} explanation="成本随换手放大。" />
-<Quiz id="q4-oos" question="公平的 OOS 检查应？" options={["把测试 bar 放进训练", "冻结规则并报告扣成本的留出窗", "只展示毛净值", "丢掉所有亏损年"]} answer={1} explanation="诚实 OOS + 成本。" />
-<Quiz id="q5-ev" question="若跳过在短玩具样本上更差，你应？" options={["宣告 JT 错误", "保留期望值/降偏动机并要求更多证据", "删除成本", "改同日成交"]} answer={1} explanation="设计动机 ≠ 单样本保证。" />
+<Quiz id="q1-tsmom" question="Moskowitz–Ooi–Pedersen（2012）TSMOM 主要使用？" options={["只做截面赢家/输家排名", "各资产自身过去收益符号/趋势", "只有盈余惊喜", "只有买卖价差反弹"]} answer={1} explanation="自身收益的时序动量。" />
+<Quiz id="q2-jt" question="Jegadeesh–Titman（1993）主要是？" options={["单一期货上的 TSMOM", "截面相对强度", "配对协整", "Kelly 仓位"]} answer={1} explanation="赢家对输家排名。" />
+<Quiz id="q3-skip" question="为何跳过最近窗口？" options={["提高换手", "减弱短期反转/微观结构噪声", "强制周频再平衡", "去掉 Rf"]} answer={1} explanation="JT 跳过一周 / 12-1 动机。" />
+<Quiz id="q4-turn" question="更高换手主要伤害来自？" options={["提高 Rf", "每个 bps × |Δposition|", "删除 OOS", "修复前视"]} answer={1} explanation="成本随换手放大。" />
+<Quiz id="q5-ev" question="若跳过在短玩具样本上更差？" options={["宣告论文错误", "保留期望值/降偏动机并要求更多证据", "丢掉成本", "改同日成交"]} answer={1} explanation="设计 ≠ 单样本保证。" />
 
 ## 完成标准
 
-- 两套含成本动量 + 换手 + 分年 + 测验  
+两套含成本动量 + TSMOM vs 截面对照 + 测验。
 
-**来源：** Jegadeesh & Titman 1993；Stern Dhar 大纲；Canvas m6；quants.md（对照）。Pine 包本批未读，已丢弃。
+**来源：** Moskowitz–Ooi–Pedersen 2012；Jegadeesh–Titman 1993；Stern 大纲；Canvas m6；quants.md 对照。
 
 <Summary>
-**要点**：双均线 vs TS/CS、跳过动机、波动目标、成本+OOS 诚实。  
-**下一课**：均值回归。
+**要点**：TSMOM vs 截面、跳过动机、波动目标、成本+OOS。  
+**下一课**：均值回归（半衰期）。
 </Summary>

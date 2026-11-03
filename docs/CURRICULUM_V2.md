@@ -80,7 +80,7 @@
 | P0 | 聚宽零基础 Python；QuantStart Python 清单 | JoinQuant W01 风格 | — |
 | P1 | QuantStart；NYU MATH-GA 2708；Stern metrics | Canvas m1–m3；手册教程 | — |
 | P2 | JoinQuant 审讯室；AFML；VectorBT/Zipline；QuantStart | Canvas m4–m5；@AfuOnTheWay；@RoundtableSpace；@pyquantnews | Nautilus 同构；Quant-Arena 密封 hold-out 精神 |
-| P3 | Chan；Stern；Canvas m6–m8 | Pine/quants.md 对照样本；QuantJourney | — |
+| P3 | Stern；Canvas m6–m8；JT；Moskowitz et al. 2012 | quants.md 对照样本；QuantJourney | further reading: Chan Algorithmic Trading (Wiley 2013) |
 | P4 | AFML；Factor Mirage；Qlib Alpha；@alin_alphapilot | Canvas m9；quant-wiki | LLM alpha mining（练习在 P8） |
 | P5 | AFML CV/labeling；ML4T；Qlib Quick Start | Canvas m10；@quantscience_；ML4T 帖 | Qlib 深度模型可选对照 |
 | P6 | QuantStart VaR/Kelly/execution；NYU TCA；UChicago FINM | Canvas m11–m12；@sera00111 | — |
@@ -98,7 +98,7 @@
 | Factor Mirage | @lopezdeprado | classic | `factor-workflow` |
 | IC 优先于规则堆砌 | @alin_alphapilot | classic | `factor-workflow` |
 | 回测好实盘亏三坑 | @AfuOnTheWay | classic | `backtest-traps` |
-| 动量/均值回归/配对 | Chan；Canvas m6–m8；Stern | classic | `P3` |
+| 动量/均值回归/配对 | Canvas m6–m8；Stern；JT 1993；Moskowitz et al. 2012 | classic | `P3` |
 | VectorBT | vectorbt.dev | classic | `engines-vectorized-event` |
 | Zipline Reloaded | zipline.ml4trading.io；@_zheergen | classic | `engines-vectorized-event` |
 | Backtrader | @pyquantnews | classic | `engines-vectorized-event` |
@@ -109,7 +109,6 @@
 | XQuant Learning Spec+AI 先跑再补 | @_zheergen/2114885286039789576 | niche | `python-pandas-timeseries + frontier-llm-agents` |
 | Awesome Systematic Trading / 开源合集 | paperswithbacktest/awesome-systematic-trading | niche | `markets-language` |
 | Crypto 工具链 Binance Vision/CCXT/资金费率 | @sera00111 | niche | `data-cleaning + frontier-tsfm-altdata-crypto` |
-| TradingView Pine 策略包 | @_zheergen；Alorse | niche | `momentum-trend / mean-reversion / strategy-compare-lab` |
 | quants.md + QuantJourney | @_zheergen | niche | `strategy-compare-lab` |
 | Algo Trading Cookbook 配套仓 | @_zheergen；Packt | niche | `engines-vectorized-event / paper-trading-infra` |
 | Qbot 本地一体 | @BTCqzy1 | niche | `engines-vectorized-event / paper-trading-infra` |
@@ -425,7 +424,7 @@
   - 时序vs截面
 - **Completion criteria:**
   - 两套动量结果含成本。
-- **Method tags:** classic: Canvas m6; Chan momentum; Stern trend | niche: Pine/quants.md trend samples as foils; QuantJourney browse critically
+- **Method tags:** classic: Canvas m6; JT 1993; Moskowitz–Ooi–Pedersen 2012; Stern trend | niche: quants.md trend samples as foils; QuantJourney browse critically | further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
 #### `mean-reversion` — 均值回归 / Mean reversion
 - **Hours:** 7h · **Difficulty:** 3/5 · **Basis:** 2.5h concepts + 4h labs + 0.5h quiz
@@ -446,7 +445,7 @@
   - 为何再估计阈值
 - **Completion criteria:**
   - 回归notebook+失效讨论。
-- **Method tags:** classic: Canvas m7; Chan MR; Stern counter-trend | niche: Pine reversal samples as overfitting foils
+- **Method tags:** classic: Canvas m7; Stern counter-trend; OU/AR(1) half-life | niche: quants.md reversal samples as foils | further reading: Chan Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
 #### `pairs-stat-arb` — 配对与统计套利入门 / Pairs & intro statistical arb
 - **Hours:** 10h · **Difficulty:** 3/5 · **Basis:** 4h concepts + 5h lab + 1h write-up
@@ -468,7 +467,7 @@
   - 为何滚动估计
 - **Completion criteria:**
   - 含成本配对notebook。
-- **Method tags:** classic: Canvas m8; Chan pairs; Stern spreads
+- **Method tags:** classic: Canvas m8; Stern spreads; Engle–Granger/MacKinnon | niche: quants.md W13/W14 | further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
 #### `strategy-compare-lab` — 策略对照实验 / Strategy comparison lab
 - **Hours:** 5h · **Difficulty:** 3/5 · **Basis:** 1h framing + 3.5h report + 0.5h quiz
@@ -487,7 +486,7 @@
   - 对照实验要素
 - **Completion criteria:**
   - 对照报告入库。
-- **Method tags:** classic: Canvas comparison spirit; JoinQuant research rules | niche: Critique open strategy dumps (quants.md/Pine) as hypothesis sources only
+- **Method tags:** classic: Canvas comparison spirit; JoinQuant research rules | niche: Critique open strategy dumps (quants.md) as hypothesis sources only | further reading: Chan Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
 ### P4 · 因子研究（Factor research）— 21h / 2 课
 

@@ -4,10 +4,13 @@ LB_FULL 60 SKIP 5 → mom window ends at t-1-SKIP, starts t-1-SKIP-LB_FULL
 dual_MA 10 30 vol_target 0.1 vol_lb 20
 costs: P2 four-part stack 10 bps one-way + √impact × turnover
 look-ahead: all positions use shift(1); mom uses only past returns
-cite: Jegadeesh & Titman 1993 JF relative-strength J/K; 12-1 = skip recent month (industry practice)
-cite: NYU Stern Dhar Trading Strategies syllabus — trend → counter-trend → pairs
+cite: Jegadeesh & Titman 1993 JF — CROSS-SECTIONAL relative strength (winners vs losers)
+cite: Moskowitz, Ooi & Pedersen 2012 JFE 104(2) — TIME SERIES momentum (own past return sign)
+contrast: CS ranks peers; TSMOM is +1/−1 on an asset's own excess return over 1–12m (then partial reversal)
+cite: NYU Stern Dhar syllabus — trend → counter-trend → pairs
+further_reading: Ernest P. Chan, Algorithmic Trading: Winning Strategies and Their Rationale, Wiley 2013 (ISBN 978-1-118-46014-6)
 
-=== dual-MA vs TS-mom (AAA, net of costs) ===
+=== dual-MA vs TSMOM (Moskowitz-style own-return) vs CS (JT-style ranks) ===
 dual_MA              gross_SR=-0.588 net_SR=-0.659 net_NAV=0.8889 maxDD=-0.191 turn=0.0333 OOS_net_SR=-1.691
 ts_mom_skip          gross_SR=-0.090 net_SR=-0.118 net_NAV=0.9695 maxDD=-0.124 turn=0.0133 OOS_net_SR=-1.673
 ts_mom_no_skip       gross_SR=0.260 net_SR=0.232 net_NAV=1.0268 maxDD=-0.086 turn=0.0133 OOS_net_SR=nan

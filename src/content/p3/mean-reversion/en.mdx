@@ -1,82 +1,87 @@
 ## Learning goals
 
-This lesson (~**7 hours**: 2.5h concepts + 4h labs + 0.5h quiz) builds a **z-score mean-reversion** rule, compares **with/without stops**, and lists **invalidation** conditions — especially failure in trends. Prereq: `momentum-trend`.
+This lesson (~**7 hours**: 2.5h concepts + 4h labs + 0.5h quiz) adds **OU/AR(1) half-life**, a **z-score** rule with stops, and an invalidation list. Prereq: `momentum-trend`.
 
-**Goals:** implement z rules; write an invalidation list.
+**Goals:** implement z rules; write an invalidation list; choose lookback from half-life.
 
-**Must-teach:** in strong trends, reversion dies by repeated stops; thresholds must be re-estimated.
+**Must-teach:** trends kill reversion via repeated stops; re-estimate thresholds; **z[t] may only change position from t+1**.
 
 <Callout type="info" title="Learning only — not investment advice">
-Toy z-thresholds on a synthetic series — not a live market-making system.
+Toy thresholds on a synthetic series — not a live market-making system.
 </Callout>
 
 ## Parameters
 
-- z_lb=**20**; enter z&lt;**−2**; exit z≥**0**; stop=**3%** from entry
-- Trend-failure foil: synthetic **+0.15%/day** drift overlay
-- Costs: P2 10 bps one-way + √impact × turnover; `shift(1)` entries
-- OOS: last 30%
+- Half-life from AR(1); lab sets `Z_LB ≈ 1.5 × HL` (clipped to [10,60])
+- Enter z&lt;−2; exit z≥0; stop 3% from entry
+- Trend foil: +0.15%/day drift; costs = P2 model; OOS last 30%
 
-## Sources
+## Half-life (AR(1) / OU)
 
-- Stern Dhar syllabus **counter-trend** session after trend ([PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)).
-- Curriculum **Canvas m7** MR template.
-- Niche: open reversal dumps (e.g. quants.md RSI/Bollinger cards) often look neat in-sample — treat as foils. Pine packs unread this batch → dropped.
+Fit **Δx_t = a + b x_(t-1) + ε**. If −1 &lt; b &lt; 0:
 
-## z-score rule
+`half_life = −ln(2) / ln(1+b)`
 
-Compute rolling mean/std of price; z=(p−μ)/σ. Long when z&lt;−2, flat when z≥0. Positions enter next bar.
+**OU form:** `dx = κ(θ − x) dt + σ dW` with `κ ≈ −ln(1+b)` per bar, so `half_life = ln(2)/κ` (same number).
 
-## Stops A/B
+Lab on AAA: b≈**−0.0123**, κ≈**0.0124**, **HL≈55.8 bars** → Z_LB=**60**, holding hint≈40. Large HL ≈ near unit root → fade edges are slow/fragile.
 
-Lab (original panel): no-stop net SR≈**−1.32** (NAV≈0.83); with-stop net SR≈**−1.36** (NAV≈0.89, stop_exits=**5**). Stops change the path — they are not free optionality.
+## z-score + no look-ahead
+
+Intent after close[t] is stored; `position[t] = intent[t−1]`. **ASSERT** passes: a z-exit at close[t] leaves `position[t]=1` and flats from t+1. Price stops may still flatten the same bar (path-dependent).
+
+## Stops A/B & trend failure
+
+No-stop net SR≈**−1.97**; with-stop ≈**−1.10** (stop_exits=**4**). Drift foil keeps punishing fades.
 
 ![MR NAV](/p3/mean_reversion_nav.png)
 
-## Trend failure
+## Re-estimate & invalidation
 
-On a **+0.15%/day drift foil**, the same long-only fade keeps hitting stops (lab stop_exits on foil, net SR≈**−0.62**). Must-teach: persistent trends punish mean reversion via repeated stop-outs.
+Train q05/q50 vs fixed ±2. Invalidation: repeated stops in trends; full-sample thresholds; gaps; whipsaw costs; HL→∞.
 
-## Re-estimate thresholds
+## Further reading (no quotes)
 
-Train-only quantiles: entry q05≈**−1.84**, exit q50≈**−0.15** vs fixed −2/0. Freeze train estimates for test — do not refit on the full sample.
-
-## Look-ahead warnings
-
-- Rolling z at t may not use t+1 prices.
-- Stop fills need an intrabar rule (here: min(open,close) with open=prev close) — pure close-to-close vectors understate gap risk.
-- Invalidation list is part of the deliverable, not optional prose.
+Ernest P. Chan, *Algorithmic Trading: Winning Strategies and Their Rationale*, John Wiley & Sons, 2013 (hardcover ISBN 978-1-118-46014-6).
 
 ## Python lab
 
-Script: `examples/p3/02_mean_reversion.py`.
+`examples/p3/02_mean_reversion.py`
 
 ### Real run output
 
 ```text
 === parameters ===
-z_lb 20 enter z< -2.0 exit z>= 0.0 stop 0.03
-trend filter MA 50 (price>MA = trend regime for failure demo)
-look-ahead: z uses rolling past; positions shift(1); stop uses same-bar low proxy = min(open,close) with open=prev close
-cite: Stern Dhar syllabus session on counter-trend; Canvas m7 MR template
+enter z< -2.0 exit z>= 0.0 stop 0.03
+look-ahead rule: z[t] may only change position from t+1 onward (asserted)
+cite: Stern Dhar counter-trend; Canvas m7; OU/AR(1) half-life for lookback choice
+further_reading: Ernest P. Chan, Algorithmic Trading: Winning Strategies and Their Rationale, Wiley 2013 (ISBN 978-1-118-46014-6) — no quotes
+
+=== AR(1) / OU half-life ===
+model: dx = a + b * x_(t-1) + eps
+OU link: kappa ≈ -ln(1+b) per bar; half_life = ln(2)/kappa = -ln(2)/ln(1+b)
+a=0.932778 b=-0.012340 kappa=0.012417
+half_life_bars=55.82 n=299
+rule: z_lookback ≈ 1.5 * HL → Z_LB=60; holding_hint ≈ 1 * HL → 40 bars
+teach: if HL is very large (near unit root), fade strategies are slow/fragile
+ASSERT_z_exit_no_lookahead: OK (z[t] changes position only from t+1)
+stop_exits=4
 
 === A/B stops (original panel) ===
-no_stop  net_SR=-1.323 NAV=0.8256 turn=0.0233 OOS=-2.850
-with_stop net_SR=-1.355 NAV=0.8854 turn=0.0400 stop_exits=5 OOS=-3.946
+no_stop  net_SR=-1.972 NAV=0.7719 turn=0.0033 OOS=-3.539
+with_stop net_SR=-1.104 NAV=0.9118 turn=0.0300 stop_exits=4 OOS=-1.852
 
 === trend-failure foil (synthetic +0.15%/day drift) ===
-mr_on_trend net_SR=-0.616 NAV=0.9542 stop_exits=2
-teach: in a persistent uptrend, long-only fade-the-dip keeps stopping out — stops rise, edge dies
+mr_on_trend net_SR=-0.231 NAV=0.9839 stop_exits=1
 invalidation_list:
- 1) repeated stops in a one-way trend (see drift foil)
- 2) z thresholds estimated on full sample (must re-estimate OOS / rolling)
- 3) gap through stop (open<<stop) — vector close path understates
+ 1) repeated stops in a one-way trend
+ 2) z thresholds estimated on full sample
+ 3) gap through stop — close-only understates
  4) cost+turnover after whipsaw
- 5) structural break: window mean no longer mean-reverting
+ 5) HL → ∞ (unit-root) — mean reversion thesis invalid
 
 === threshold re-estimate (train quantiles) ===
-train_entry_q05=-1.844 train_exit_q50=-0.152 (vs fixed -2.0/0.0)
-teach: fixed textbook ±2 is a starting foil — re-estimate on train, freeze for test
+train_entry_q05=-1.825 train_exit_q50=0.522
 
 chart /workspace/Quant-trading-learn/public/p3/mean_reversion_nav.png
 disclaimer: synthetic; learning only
@@ -84,34 +89,34 @@ disclaimer: synthetic; learning only
 
 ## Common mistakes / pitfalls
 
-1. No stop and no invalidation discussion.
-2. Estimating ±2 on the full sample including test.
-3. Claiming MR “works in trends” without a failure foil.
-4. Ignoring turnover after whipsaws.
-5. Treating stop_exits=0 as proof of safety.
+1. Using z[t] to change position[t] (look-ahead).
+2. Ignoring half-life when picking lookback.
+3. No stop / no invalidation list.
+4. Estimating ±2 on the full sample including test.
+5. Claiming MR works in strong trends without a failure foil.
 
 ## Practice (1:1)
 
-1. **ex1** — z&lt;−2 / z≥0 path; **done when** net SR prints.
-2. **ex2** — stop A/B; **done when** both NAVs + stop_exits print.
-3. **ex3** — invalidation list (≥5 bullets).
-4. **done1** — notebook + failure discussion filed.
+1. **ex1** — z path with assert.
+2. **ex2** — stop A/B + stop_exits.
+3. **ex3** — invalidation list ≥5 + half-life → Z_LB note.
+4. **done1** — notebook + failure discussion.
 
 ## Quiz
 
-<Quiz id="q1-trend" question="In a strong one-way trend, long-only MR often fails by?" options={["Zero commissions", "Repeated stop-outs / adverse fades", "Higher Rf", "Lower ADV"]} answer={1} explanation="Trend-failure foil." />
-<Quiz id="q2-reest" question="Why re-estimate z thresholds on train only?" options={["To use future data", "To avoid leaking test information into the rule", "To maximize turnover", "To delete stops"]} answer={1} explanation="Freeze for OOS." />
-<Quiz id="q3-stop" question="A stop fill is hard in close-only vectors because?" options={["Fees vanish", "The fill depends on intrabar path / gaps", "Hashes break", "Rf must be 1"]} answer={1} explanation="Path dependence." />
-<Quiz id="q4-inv" question="An invalidation list should include?" options={["Only logo colors", "Regime breaks, threshold drift, gap risk, cost/whipsaw", "Only the broker UI theme", "Only GPU model names"]} answer={1} explanation="Operational failure modes." />
-<Quiz id="q5-ev" question="Textbook ±2 is best treated as?" options={["A live mandate", "A starting foil to be re-estimated", "A proof of edge", "A substitute for costs"]} answer={1} explanation="Re-estimate on train." />
+<Quiz id="q1-hl" question="Given Δx=a+b x_(t-1)+ε with b∈(−1,0), half-life is?" options={["-ln(2)/ln(1+b)", "b/a", "Only σ", "√(Q/ADV)"]} answer={0} explanation="OU/AR(1) half-life." />
+<Quiz id="q2-la" question="z at close[t] may change the position starting?" options={["At t (same bar)", "From t+1 onward", "Only at month-end", "Never"]} answer={1} explanation="Asserted no look-ahead." />
+<Quiz id="q3-trend" question="In a one-way trend, long-only MR often fails by?" options={["Zero fees", "Repeated stop-outs", "Higher Rf", "Lower ADV"]} answer={1} explanation="Trend foil." />
+<Quiz id="q4-re" question="Re-estimate z thresholds on?" options={["Full sample incl. test", "Train only, then freeze", "Only OOS", "Random days"]} answer={1} explanation="No leakage." />
+<Quiz id="q5-ou" question="In the OU link, κ per bar is approximately?" options={["-ln(1+b)", "1+b", "Only a", "Sharpe"]} answer={0} explanation="κ≈−ln(1+b)." />
 
 ## Done when
 
-- MR notebook with stops + invalidation + quizzes  
+Half-life → lookback + z assert + stops + quizzes.
 
-**Sources:** Stern counter-trend; Canvas m7; quants.md as foil. Pine dropped (unread).
+**Sources:** Stern counter-trend; Canvas m7; quants.md foil.
 
 <Summary>
-**Takeaways**: z rules, stops, trend failure, re-estimate.  
-**Next**: pairs.
+**Takeaways**: half-life, z no-lookahead, stops, invalidation.  
+**Next**: pairs (Engle–Granger).
 </Summary>

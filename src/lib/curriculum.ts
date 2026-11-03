@@ -624,6 +624,7 @@ const phase_P3_lessons: Lesson[] = [
     mustTeach: [
       { zh: "跳过近窗减弱短期反转（期望值动机）。", en: "Skip-window dampens short-term reversal (EV motive)." },
       { zh: "拥挤与换手侵蚀优势。", en: "Crowding/turnover erode edges." },
+      { zh: "TSMOM（Moskowitz et al.）≠ 截面动量（JT）。", en: "TSMOM (Moskowitz et al.) ≠ cross-sectional momentum (JT)." },
     ],
     exercises: [
       { zh: "双均线vs动量净夏普表。", en: "Dual-MA vs mom net-SR table." },
@@ -639,8 +640,8 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "两套动量结果含成本与 OOS。", en: "Two momentum results net of costs with OOS." },
     ],
     methodTags: {
-      classic: ["Canvas m6", "Jegadeesh-Titman 1993", "Stern trend"],
-      niche: ["quants.md trend cards as foils (Pine packs unread — dropped)"],
+      classic: ["Canvas m6", "Jegadeesh-Titman 1993", "Moskowitz-Ooi-Pedersen 2012 TSMOM", "Stern trend", "Further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)"],
+      niche: ["quants.md trend cards as foils"],
       frontier: [],
     },
     tasks: [
@@ -667,6 +668,7 @@ const phase_P3_lessons: Lesson[] = [
     mustTeach: [
       { zh: "强趋势中回归易反复止损。", en: "In trends reversion dies by repeated stops." },
       { zh: "阈值再估计。", en: "Re-estimate thresholds." },
+      { zh: "半衰期选回看/持有；z[t] 仅从 t+1 改仓。", en: "Half-life sets lookback/hold; z[t] changes position only from t+1." },
     ],
     exercises: [
       { zh: "z<-2/z>0 路径。", en: "z<-2 / z>=0 path." },
@@ -682,8 +684,8 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "回归notebook+失效讨论。", en: "MR notebook + failure discussion." },
     ],
     methodTags: {
-      classic: ["Canvas m7", "Stern counter-trend"],
-      niche: ["quants.md reversal cards as foils (Pine unread — dropped)"],
+      classic: ["Canvas m7", "Stern counter-trend", "OU/AR(1) half-life", "Further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)"],
+      niche: ["quants.md reversal cards as foils"],
       frontier: [],
     },
     tasks: [
@@ -709,8 +711,8 @@ const phase_P3_lessons: Lesson[] = [
     ],
     mustTeach: [
       { zh: "高相关不足够。", en: "High corr insufficient." },
-      { zh: "协整直觉。", en: "Cointegration intuition." },
-      { zh: "对冲比再估计。", en: "Re-estimate hedge ratios." },
+      { zh: "Engle–Granger 两步 + MacKinnon 临界值。", en: "Engle–Granger two-step + MacKinnon critical values." },
+      { zh: "对冲比再估计；勿只做一次全样本协整。", en: "Re-estimate hedge; do not check coint only once in-sample." },
     ],
     exercises: [
       { zh: "滚动价差与z。", en: "Rolling spread and z." },
@@ -726,7 +728,7 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "含成本配对notebook。", en: "Costed pairs notebook." },
     ],
     methodTags: {
-      classic: ["Canvas m8", "Stern spreads"],
+      classic: ["Canvas m8", "Stern spreads", "Engle-Granger / MacKinnon", "Further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)"],
       niche: ["quants.md W13/W14 pairs foils"],
       frontier: [],
     },
@@ -752,8 +754,8 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "判定是否胜过基准。", en: "Judge vs baseline." },
     ],
     mustTeach: [
-      { zh: "控制隐藏假设。", en: "Control hidden assumptions." },
-      { zh: "简单是基准线。", en: "Simple is the baseline." },
+      { zh: "控制隐藏假设；统一成本（配对含冲击）。", en: "Control hidden assumptions; one cost model (pairs include impact)." },
+      { zh: "简单是基准线；显式 N 上算 DSR。", en: "Simple is the baseline; DSR with explicit trial count N." },
     ],
     exercises: [
       { zh: "三策略(+基准)报告。", en: "Three-strategy (+baseline) report." },
@@ -767,7 +769,7 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "对照报告入库。", en: "Comparison report filed." },
     ],
     methodTags: {
-      classic: ["Canvas comparison spirit", "JoinQuant research rules"],
+      classic: ["Canvas comparison spirit", "JoinQuant research rules", "Bailey-LdP DSR via P2", "Further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)"],
       niche: ["Critique quants.md dumps as hypothesis sources only"],
       frontier: [],
     },

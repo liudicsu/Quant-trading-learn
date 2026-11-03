@@ -1,111 +1,130 @@
 ## 学习目标
 
-本课（约 **10 学时**：概念 4h + 实验 5h + 写作成文 1h）构建**配对残差**，对照**静态 vs 滚动对冲比**，并区分**相关与协整直觉**。前置：`mean-reversion`。
+本课（约 **10 学时**：概念 4h + 实验 5h + 写作成文 1h）实现 **Engle–Granger** 配对，对照静态 vs 滚动对冲，并演示**样本内一次协整 vs 滚动协整**陷阱。前置：`mean-reversion`。
 
-**课内目标：** 滚动 beta 价差；讨论腿断裂。
+**课内目标：** 滚动 beta 价差；讨论腿断裂；EG 两步法 + MacKinnon 说明。
 
-**必须教会：** 高相关不够；协整直觉；对冲比要再估计。
+**必须教会：** 高相关 ≠ 可交易；协整直觉；对冲比再估计；不要只信一次全样本 coint p 值。
 
 <Callout type="info" title="学习用途 — 非投资建议">
-合成协整对照 Y_coin vs BBB，不是生产级统计套利账簿。
+合成协整对照，不是生产级统计套利账簿。
 </Callout>
 
 ## 参数
 
-- y = 50 + 1.2·BBB + AR(1) 残差（seed=7）；x = BBB
-- 滚动 OLS 窗=**40**；z_lb=**20**；开仓 |z|&gt;**2**；平仓 |z|&lt;**0.5**
-- 成本：**2×** 单边堆叠（双腿）；仓位 `shift(1)`
-- OOS：最后 30%
+- 配对 A：Y_coin = 50 + 1.2·BBB + AR(1) 残差（seed=7）——设计为协整
+- 配对 B：Y_drift = 同上 + 线性漂移——打破协整但收益相关仍可很高
+- 另报 AAA/BBB 原始面板对照；ROLL=40；z_lb=20；开仓 |z|&gt;2；平仓 |z|&lt;0.5
+- 成本：**同一 P2 模型**，`n_legs=2`（bps 堆叠 + √冲击）
 
-## 来源
+## Engle–Granger 两步法
 
-- Stern Dhar 大纲**价差/配对**课次（[PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)）。
-- 课程 **Canvas m8** 配对模板。
-- 小众对照：[quants.md](https://quants.md/) **W13 / W14** 配对看板（2026-11-04 已读）夏普接近 0/负——开放样本是假设，不是证明。
+1. **OLS 对冲：** `y = α + β x + u`
+2. **对残差 u 做 ADF。** 原假设是「无协整」。要点：**残差检验的临界值不同于对原始序列的普通 ADF**——应使用 **MacKinnon** 表（`statsmodels.tsa.stattools.coint` 所报）。把 `adfuller` 的 p 值直接用在 EG 残差上会**过于宽松（反保守）**。
 
-## 相关 ≠ 可交易
+实验还**手算** ADF：Δu = a + φ u_(t-1) + γ Δu_(t-1) + e，把 φ 的 t 与 `coint` / `adfuller` 对照。
 
-实验：协整对照的收益相关 ≈ **0.98**，而**漂移截距对照**仍可保持相近高相关，但残差标准差炸开（**0.73 → 4.50**）。你需要近似**平稳残差**，不只是高相关。
+### 全样本结果（关键数字）
 
-## 静态 vs 滚动对冲
+| 配对 | β | coint p（MacKinnon） | 残差普通 ADF p | 手算 t_φ |
+| --- | ---: | ---: | ---: | ---: |
+| Y_coin/BBB | 1.215 | **0.00052** | 0.00026 | −4.44 |
+| Y_drift/BBB | 1.363 | **0.972** | 0.914 | −0.38 |
+| AAA/BBB | 0.123 | 0.829 | 0.633 | −1.29 |
 
-静态 β≈**1.22**；滚动均值 β≈**1.23**。双腿成本后：静态净夏普≈**−0.48**（净值≈0.96）；滚动净夏普≈**0.19**（净值≈1.01）。OOS 仍严苛（滚动 OOS≈**−0.45**）——照实报告。
+Y_coin 拒绝单位根；Y_drift 与 AAA 失败——符合设计。
 
-![配对净值](/p3/pairs_nav.png)
+## 滚动协整陷阱
 
-## 腿断裂 / 冲击说明
+窗=80 的滚动 `coint` p：Y_coin 中位 p≈**0.16**，frac(p&lt;0.05)≈**0.36**；Y_drift 中位≈**0.66**，frac≈**0.01**。一次全样本通过可能掩盖窗内反复进出协整——**切勿只在样本内检查一次 EG**。
 
-若一条腿因特质新闻跳空，冻结对冲留下残差 beta；滚动以 ROLL 为滞后适应。断裂后预期一波扩宽/止损，直到 β 重新学会。实验：近 60 根 |β_roll−β_static| 均值 ≈ **0.07**（真断裂时会更大）。
+![配对](/p3/pairs_nav.png)
 
-## 前视警告
+## 静态 vs 滚动对冲 + 成本
 
-- 时刻 t 的 OLS 窗只用过去 `[t−w, t)`。
-- 当日盈亏所用 β 必须滞后（`shift(1)`）。
-- 勿因「看过测试窗后全样本残差显得平稳」才选对。
+共享双腿成本+冲击：静态净夏普≈**−0.50**；滚动≈**0.56**（OOS 照实报告）。断腿说明：特质跳空后静态 β 留下残差暴露；滚动以 ROLL 为滞后适应。
+
+## 延伸阅读（不引述正文）
+
+Ernest P. Chan，《Algorithmic Trading: Winning Strategies and Their Rationale》，John Wiley & Sons，2013（精装 ISBN 978-1-118-46014-6）。
+
+## 小众对照
+
+[quants.md](https://quants.md/) W13/W14 配对看板——常夏普≈0；仅假设。Pine 包**不是**本课程内容。
 
 ## Python 实验
 
-脚本：`examples/p3/03_pairs_stat_arb.py`。
+`examples/p3/03_pairs_stat_arb.py`（需要 `statsmodels`）
 
 ### 实际运行输出
 
 ```text
 === parameters ===
-pair synthetic Y_coin vs BBB (cointegrated foil); rolling OLS window 40 z_lb 20
-enter |z|> 2.0 exit |z|< 0.5 ; dollar-neutral ≈ long y short beta*x
-look-ahead: beta/z use past windows only; positions shift(1)
-cite: Stern Dhar pairs session; Canvas m8; quants.md W13/W14 pairs as open foils (metrics often near 0)
+pairs: (A) Y_coin/BBB cointegrated foil; (B) Y_drift/BBB broken/non-coint foil
+also report AAA/BBB as a raw-panel foil
+rolling OLS 40 z_lb 20 enter |z|> 2.0 exit |z|< 0.5
+costs: shared P2 model with n_legs=2 (stack + √impact)
+cite: Engle–Granger two-step; MacKinnon residual-based critical values
+cite: Stern pairs; Canvas m8; quants.md W13/W14 foils
+further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quotes
 
-=== corr vs cointegration intuition ===
-corr_returns_coint_pair=0.980
-corr_returns_drift_foil=0.980 (can stay high while levels walk apart)
-resid_std_coint=0.730 resid_std_drift=4.495
-beta_static=1.2154 beta_roll_mean=1.2333
-teach: high return correlation ≠ tradeable; need (approx) stationary residual / cointegration intuition
+=== Engle–Granger two-step (full sample) ===
+step1: OLS y = alpha + beta x + u
+step2: test residual u for unit root; p-values from coint() use MacKinnon EG tables
+pitfall: adfuller(p) on residuals uses *plain* ADF null tables — anti-conservative vs EG
+Y_coin/BBB: beta=1.2152 coint_p=0.0005188 coint_t=-4.721 crit5=-3.357 adf_plain_p=0.0002577 hand_t=-4.435
+Y_drift/BBB: beta=1.3633 coint_p=0.9723 coint_t=-0.372 crit5=-3.357 adf_plain_p=0.9136 hand_t=-0.378
+AAA/BBB: beta=0.1230 coint_p=0.8293 coint_t=-1.301 crit5=-3.357 adf_plain_p=0.6332 hand_t=-1.291
 
-=== static vs rolling hedge ===
-static  gross=0.064 net=-0.475 NAV=0.9554 turn=0.0803 OOS=-2.493
-rolling gross=0.657 net=0.192 NAV=1.0108 turn=0.0502 OOS=-0.453
+compare: Y_coin should reject unit root in residual (small coint_p); Y_drift / AAA often fail
 
-=== shock scenario (broken leg) ===
-If one leg gaps on idiosyncratic news, static hedge leaves residual beta; rolling adapts with lag=ROLL.
-scenario_note: after a structural break, expect a burst of stop-outs / widener before beta re-learns.
-demo: |beta_roll - beta_static| mean last 60 bars = 0.0737
+=== rolling cointegration p-values (window=80) ===
+Y_coin rolling p: median=0.1555 frac_p<0.05=0.355
+Y_drift rolling p: median=0.6646 frac_p<0.05=0.009
+pitfall: a single full-sample coint_p can look fine while rolling windows flip in/out of cointegration
+
+=== static vs rolling hedge (Y_coin, net costs n_legs=2) ===
+static  net_SR=-0.499 NAV=0.9533 turn=0.0800 OOS=-2.517
+rolling net_SR=0.560 NAV=1.0344 turn=0.0433 OOS=1.745
+
+=== shock / broken-leg note ===
+After an idiosyncratic gap, static hedge leaves residual beta; rolling adapts with lag=ROLL.
+|beta_roll-beta_static| mean last 60 = 0.0737
 
 chart /workspace/Quant-trading-learn/public/p3/pairs_nav.png
-disclaimer: synthetic pair; learning only — quants.md W13/W14 show real open examples can print near-zero Sharpe
+disclaimer: synthetic; learning only
 ```
 
 ## 常见错误 / 陷阱
 
-1. 只看高相关不看残差稳定性。
-2. 在含测试的全样本上估 β。
-3. 只计一条腿的成本。
-4. 忽视腿上的结构突变/公司行为。
-5. 把 quants.md 标题 Return% 当成优势证书。
+1. 只看高相关不做 EG/残差平稳。
+2. 对 EG 残差用普通 ADF 临界值。
+3. 只在全样本检查一次协整。
+4. 只计一条腿成本（实验强制 n_legs=2）。
+5. 估 β 时混入测试窗。
 
 ## 练习（1:1）
 
-1. **ex1** — 滚动价差 + z；**完成标准**：序列/图打印。
-2. **ex2** — 静态 vs 滚动表；**完成标准**：两净夏普。
-3. **ex3** — 冲击/断腿段落。
+1. **ex1** — 两对 EG 表（coint p + 手算 t）。
+2. **ex2** — 静态 vs 滚动净夏普。
+3. **ex3** — 滚动 p 陷阱段 + 图。
 4. **done1** — 含成本配对 notebook 入库。
 
 ## 测验
 
-<Quiz id="q1-corr" question="仅有高收益相关意味着？" options={["保证平稳价差", "不够——还要残差/协整直觉", "零成本", "自动 OOS 优势"]} answer={1} explanation="相关 ≠ 可交易。" />
-<Quiz id="q2-roll" question="为何再估计对冲比？" options={["为了用未来价格", "关系会漂；静态 β 会过期", "去掉 Rf", "删除 z"]} answer={1} explanation="滚动 β。" />
-<Quiz id="q3-leg" question="腿断裂主要导致？" options={["只是 ADV 下降", "冲击后的残差 beta / 对冲误差", "更高 Rf", "免费成交"]} answer={1} explanation="特质跳空。" />
-<Quiz id="q4-cost" question="配对成本通常应？" options={["忽略一条腿", "计双腿（此处≈2×单边堆叠）", "只计冲击", "只计借券"]} answer={1} explanation="双腿摩擦。" />
-<Quiz id="q5-foil" question="夏普≈0 的开放策略看板最好当作？" options={["实盘指令", "在自有成本/OOS 下的假设对照", "Alpha 证明", "止损替代"]} answer={1} explanation="本课程对 quants.md 的用法。" />
+<Quiz id="q1-eg" question="Engle–Granger 第二步检验？" options={["只检验对冲 β", "OLS 残差是否平稳（协整）", "只有 ADV", "只有 Rf"]} answer={1} explanation="对残差做 ADF/coint。" />
+<Quiz id="q2-mac" question="为何不能对 EG 残差直接用普通 ADF p？" options={["它们永远相同", "残差临界值不同（MacKinnon）；普通表反保守", "ADF 非法", "只适用于周频"]} answer={1} explanation="MacKinnon EG 表。" />
+<Quiz id="q3-roll" question="滚动 coint p 说明？" options={["全样本 p 就够", "关系可在不同窗口翻转", "成本消失", "β 恒定"]} answer={1} explanation="仅样本内一次的陷阱。" />
+<Quiz id="q4-corr" question="仅有高收益相关意味着？" options={["保证协整", "不足以构成可交易价差", "零成本", "自动 OOS 优势"]} answer={1} explanation="相关 ≠ 协整。" />
+<Quiz id="q5-legs" question="本课配对成本使用？" options={["n_legs=1", "n_legs=2 且含堆叠+√冲击", "永不计冲击", "只计借券"]} answer={1} explanation="统一成本模型。" />
 
 ## 完成标准
 
-- 含成本配对 notebook + 静态/滚动 + 冲击说明 + 测验  
+两对 EG + 滚动 p 演示 + 含成本 notebook + 测验（约 10h 深度）。
 
-**来源：** Stern 配对；Canvas m8；quants.md W13/W14 对照。
+**来源：** Engle–Granger / MacKinnon（statsmodels）；Stern 配对；Canvas m8；quants.md W13/W14。
 
 <Summary>
-**要点**：滚动对冲、相关≠协整、断腿、双腿成本。  
-**下一课**：策略对照实验。
+**要点**：EG+MacKinnon、滚动协整陷阱、滚动对冲、双腿成本。  
+**下一课**：策略对照 + DSR。
 </Summary>
