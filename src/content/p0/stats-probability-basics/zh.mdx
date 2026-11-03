@@ -81,12 +81,19 @@ fig.savefig("public/p0/returns_hist.png")
 
 ## p 值误用：数值走读
 
-原假设 H0：某条「随机符号仓位」规则的日均盈亏均值为 0。  
-在 **100 次**随机试验里挑出 |Sharpe| 最大的一次，再算双侧正态近似 p 值——本课输出约 **p≈0.0013**，|Sharpe|≈3.22。
+参数（与脚本一致）：**n=252** 日，年化因子 **√252**，阈值 **|SR|>2**，多重检验演示种子 **7**，每次 **100** 条随机符号规则。
 
-若你**只展示这一次**并宣称「p 小于 0.01，策略显著」，就是误用：显著性阈值没有为「已搜索 100 条规则」付账。这正是多重检验 / 回测过拟合要打的脸（AFML）。诚实做法至少包括：事先登记假设、报告试验次数、样本外或组合惩罚。
+在原假设下，若日频主动收益近似 IID 且 SR_ann = mean/std×√252 的标准差约等于 1，则 **P(|Z|>2)≈4.55%**，即每 100 次大约应有 **4–5** 次越过阈值。种子 **7** 是偏极端的一次抽取，给出了 **10** 次（见下方多种子扫描：200 个种子的均值约 **4.40**、标准差约 **2.15**，而种子 7 打到了扫描中的最大值 10）。
+
+原假设 H0：某条「随机符号仓位」规则的日均盈亏均值为 0。  
+在这 **100** 次里挑出 |Sharpe| 最大的一次，再算双侧正态近似 p 值——本课输出约 **p≈0.0013**，|Sharpe|≈3.22。
+
+若你**只展示这一次**并宣称「p 小于 0.01，策略显著」，就是误用：显著性预算没有为「已搜索 100 条规则」付账。这正是多重检验 / 回测过拟合要打的脸（AFML）。诚实做法至少包括：事先登记假设、报告试验次数、样本外或组合惩罚。
 
 ## 完整多重检验循环（课内展示）
+
+固定：`n=252`，`Sharpe = mean/std*sqrt(252)`，阈值 `|Sharpe|>2`，演示种子 `7`（另见脚本对 200 个种子的扫描）。
+
 
 ```python
 rng_mt = np.random.default_rng(7)
@@ -128,13 +135,22 @@ rolling_63_corr_tail
 Freq: B
 saved_plot public/p0/returns_hist.png
 
-=== multiple testing toy ===
+=== multiple testing parameters ===
+n 252
+ann_factor_sqrt252 15.874508
+threshold_abs_SR 2.0
+trials_per_seed 100
+demo_seed 7
+null_P_abs_Z_gt_2 0.0455
+null_expected_false_hits_per_100 4.55
+
+=== multiple testing toy (seed 7) ===
 trials 100
 false_hits_|Sharpe|>2 10
 max_abs_sharpe 3.222
 mean_abs_sharpe 0.854
 
-=== p-value misuse walk-through (best of 100 trials) ===
+=== p-value misuse walk-through (best of 100 trials, seed 7) ===
 H0: mean daily pnl of this random-sign rule is 0
 best_trial_index 2
 best_sharpe -3.2217
@@ -142,9 +158,18 @@ t_stat_mean0 -3.2217
 two_sided_normal_p_approx 0.001274
 misuse_note: a small p on the *selected* best trial is not evidence of a real edge; you already searched 100 rules (multiple testing / backtest overfitting — see AFML, López de Prado 2018).
 iid_note: financial returns often violate IID (volatility clustering); IID-based p-values then overstate significance.
+seed7_note: under the null ~4.55 hits/100 are expected; seed 7 is an extreme draw that produced 10.
+
+=== false-hit sweep over many seeds ===
+n_seeds 200
+mean_false_hits 4.395
+std_false_hits 2.152
+min_false_hits 0
+max_false_hits 10
+seed7_false_hits 10
 ```
 
-解读：全样本相关约 **0.27**，63 日滚动相关在样本末段可到 **0.38–0.40**——相关会漂。100 次随机仓位里有 **10** 次 |Sharpe|>2，最大绝对值约 **3.22**；对该「最佳」试验算出的小 p 值**不能**证明真实优势。
+解读：全样本相关约 **0.27**，63 日滚动相关在样本末段可到 **0.38–0.40**——相关会漂。参数为 n=252、√252 年化、|SR|>2、种子 7、每种子 100 次；零假设下期望约 **4.55** 次假阳性，种子 7 抽到 **10** 次（偏极端）。200 个种子扫描：均值假阳性 **4.395**、标准差 **2.152**（min 0 / max 10）。对该「最佳」试验算出的小 p 值**不能**证明真实优势。
 
 ## 常见错误 / 陷阱
 

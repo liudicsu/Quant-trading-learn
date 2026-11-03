@@ -14,13 +14,22 @@ rolling_63_corr_tail
 Freq: B
 saved_plot public/p0/returns_hist.png
 
-=== multiple testing toy ===
+=== multiple testing parameters ===
+n 252
+ann_factor_sqrt252 15.874508
+threshold_abs_SR 2.0
+trials_per_seed 100
+demo_seed 7
+null_P_abs_Z_gt_2 0.0455
+null_expected_false_hits_per_100 4.55
+
+=== multiple testing toy (seed 7) ===
 trials 100
 false_hits_|Sharpe|>2 10
 max_abs_sharpe 3.222
 mean_abs_sharpe 0.854
 
-=== p-value misuse walk-through (best of 100 trials) ===
+=== p-value misuse walk-through (best of 100 trials, seed 7) ===
 H0: mean daily pnl of this random-sign rule is 0
 best_trial_index 2
 best_sharpe -3.2217
@@ -28,3 +37,12 @@ t_stat_mean0 -3.2217
 two_sided_normal_p_approx 0.001274
 misuse_note: a small p on the *selected* best trial is not evidence of a real edge; you already searched 100 rules (multiple testing / backtest overfitting — see AFML, López de Prado 2018).
 iid_note: financial returns often violate IID (volatility clustering); IID-based p-values then overstate significance.
+seed7_note: under the null ~4.55 hits/100 are expected; seed 7 is an extreme draw that produced 10.
+
+=== false-hit sweep over many seeds ===
+n_seeds 200
+mean_false_hits 4.395
+std_false_hits 2.152
+min_false_hits 0
+max_false_hits 10
+seed7_false_hits 10

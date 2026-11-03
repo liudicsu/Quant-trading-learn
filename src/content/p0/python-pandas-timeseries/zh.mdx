@@ -80,9 +80,9 @@ outer = pd.concat([a, b], axis=1, join="outer")
 | --- | --- | --- |
 | `dropna` | 丢掉缺失日 | 样本变短，滚动窗口对齐改变 |
 | `ffill` | 用前一有效值填 | **发明假报价**（停牌日假装有成交） |
-| `interpolate(method="time")` | 按时间插值 | 发明一条平滑路径，仍不是真实成交 |
+| `interpolate(method="time")` | 按时间插值 | **用到之后才知道的价格填空（前瞻）**；绝不能喂给信号；回测里只允许 ffill 或丢行 |
 
-脚本打印的均值收益：`dropna≈0.006005`，`ffill≈0.004913`，`interpolate≈0.004909`。没有「唯一正确」填法——要按研究问题选择，并写进数据文档。
+脚本打印的均值收益：`dropna≈0.006005`，`ffill≈0.004913`，`interpolate≈0.004909`。`interpolate(method="time")` 会同时使用**缺口两侧（含更晚）**的已知价，因此是 **look-ahead**：演示可以，**绝不能**把插值结果送进信号；回测里只允许 `ffill`（仅用过去）或丢行（`dropna`）。
 
 ## 4. 收益、滚动窗口与作图
 
@@ -180,7 +180,7 @@ date
 dropna: n=10 mean_ret=0.006005 n_ret_nonnull=9
 ffill: n=12 mean_ret=0.004913 n_ret_nonnull=11
 interpolate: n=12 mean_ret=0.004909 n_ret_nonnull=11
-tradeoffs: dropna shortens the sample and changes overlapping windows; ffill invents flat prices on missing days (fake prints); time-interpolate invents a smooth path between known prints — neither is 'true' volume.
+tradeoffs: dropna shortens the sample and changes overlapping windows; ffill invents flat prices on missing days (fake prints) using only PAST prints; time-interpolate(method='time') fills gaps using BOTH earlier AND later known prices (look-ahead) — never feed interpolated prices into signals; in backtests only ffill or dropping rows is allowed.
 
 === returns & MA3 ===
                  ret         ma3
@@ -222,10 +222,11 @@ ASSERTS_OK
 ## 常见错误 / 陷阱
 
 1. **`reindex` 后盲目 `ffill`**：把停牌空档填成假成交价，再算收益。
-2. **按行号 merge 而不是按日期 align**：不同日历会静默错位。
-3. **行循环改价格却忘记交易日历**：优先向量化，但仍要检查 `NaN` 位置。
-4. **信号未 `shift` 就乘当日收益**：经典 lookahead。
-5. **不写断言**：dtype 变成 object、重复日期索引，错误拖到很后面才爆。
+2. **`interpolate(method="time")` 当信号输入**：它用**更晚**的已知价填缺口，是前瞻；回测只许 `ffill` 或丢行。
+3. **按行号 merge 而不是按日期 align**：不同日历会静默错位。
+4. **行循环改价格却忘记交易日历**：优先向量化，但仍要检查 `NaN` 位置。
+5. **信号未 `shift` 就乘当日收益**：经典 lookahead。
+6. **不写断言**：dtype 变成 object、重复日期索引，错误拖到很后面才爆。
 
 ## 练习（与任务清单 1:1）
 

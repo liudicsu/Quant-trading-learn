@@ -58,8 +58,10 @@ for name, s in methods.items():
 # Trade-off notes (also printed for the lesson paste)
 print(
     "tradeoffs: dropna shortens the sample and changes overlapping windows; "
-    "ffill invents flat prices on missing days (fake prints); "
-    "time-interpolate invents a smooth path between known prints — neither is 'true' volume."
+    "ffill invents flat prices on missing days (fake prints) using only PAST prints; "
+    "time-interpolate(method='time') fills gaps using BOTH earlier AND later known prices "
+    "(look-ahead) — never feed interpolated prices into signals; "
+    "in backtests only ffill or dropping rows is allowed."
 )
 
 # --- 4) returns, rolling, plot ---

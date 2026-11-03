@@ -80,9 +80,9 @@ Plant two `NaN` closes (iloc 3 and 7), then compare methods:
 | --- | --- | --- |
 | `dropna` | Drop missing days | Shorter sample; rolling windows shift |
 | `ffill` | Forward-fill last print | **Invented quotes** on halt days |
-| `interpolate(method="time")` | Time interpolation | Invents a smooth path — still not real volume |
+| `interpolate(method="time")` | Time interpolation | **Fills gaps using later known prices (look-ahead)**; never feed into signals; in backtests only ffill or dropping rows |
 
-Printed mean returns: `dropna≈0.006005`, `ffill≈0.004913`, `interpolate≈0.004909`. There is no universal “correct” fill — choose for the research question and document it.
+Printed mean returns: `dropna≈0.006005`, `ffill≈0.004913`, `interpolate≈0.004909`. `interpolate(method="time")` uses **both earlier and later** known prices, so it is **look-ahead**: fine for demos, **never** feed interpolated prices into signals; in backtests only `ffill` (past-only) or dropping rows (`dropna`) is allowed.
 
 ## 4. Returns, rolling windows, and a plot
 
@@ -180,7 +180,7 @@ date
 dropna: n=10 mean_ret=0.006005 n_ret_nonnull=9
 ffill: n=12 mean_ret=0.004913 n_ret_nonnull=11
 interpolate: n=12 mean_ret=0.004909 n_ret_nonnull=11
-tradeoffs: dropna shortens the sample and changes overlapping windows; ffill invents flat prices on missing days (fake prints); time-interpolate invents a smooth path between known prints — neither is 'true' volume.
+tradeoffs: dropna shortens the sample and changes overlapping windows; ffill invents flat prices on missing days (fake prints) using only PAST prints; time-interpolate(method='time') fills gaps using BOTH earlier AND later known prices (look-ahead) — never feed interpolated prices into signals; in backtests only ffill or dropping rows is allowed.
 
 === returns & MA3 ===
                  ret         ma3
@@ -222,10 +222,11 @@ ASSERTS_OK
 ## Common mistakes / pitfalls
 
 1. **Blind `ffill` after `reindex`**: fake prints on halt days pollute returns.
-2. **Row-number merges instead of date align**: silent calendar skew.
-3. **Row loops that ignore the session calendar**: prefer vectorized ops; still audit `NaN`s.
-4. **Multiplying an unshifted signal by same-day returns**: classic lookahead.
-5. **No asserts**: object dtypes and duplicate dates fail far downstream.
+2. **Feeding `interpolate(method="time")` into signals**: it fills gaps with **later** known prices (look-ahead); backtests may only `ffill` or drop rows.
+3. **Row-number merges instead of date align**: silent calendar skew.
+4. **Row loops that ignore the session calendar**: prefer vectorized ops; still audit `NaN`s.
+5. **Multiplying an unshifted signal by same-day returns**: classic lookahead.
+6. **No asserts**: object dtypes and duplicate dates fail far downstream.
 
 ## Practice (1:1 with the checklist)
 

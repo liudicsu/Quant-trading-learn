@@ -68,23 +68,44 @@ def sharpe(x: pd.Series) -> float:
     return float("nan") if s == 0 else float(x.mean() / s * np.sqrt(252))
 
 
-# Dedicated RNG for the multiple-testing loop (reproducible, independent of r_a draws)
-rng_mt = np.random.default_rng(7)
-false_hits = 0
-sharpes = []
-pnls = []
-for i in range(100):
-    noise = rng_mt.normal(size=n)
-    pos = np.sign(noise)
-    pnl = pos * r_a.values
-    sh = sharpe(pd.Series(pnl))
-    sharpes.append(sh)
-    pnls.append(pnl)
-    if abs(sh) > 2:
-        false_hits += 1
+def count_false_hits(r_values: np.ndarray, seed: int, trials: int = 100, thr: float = 2.0) -> tuple[int, list[float], list[np.ndarray]]:
+    rng_mt = np.random.default_rng(seed)
+    false_hits = 0
+    sharpes: list[float] = []
+    pnls: list[np.ndarray] = []
+    for _ in range(trials):
+        noise = rng_mt.normal(size=len(r_values))
+        pos = np.sign(noise)
+        pnl = pos * r_values
+        sh = sharpe(pd.Series(pnl))
+        sharpes.append(sh)
+        pnls.append(pnl)
+        if abs(sh) > thr:
+            false_hits += 1
+    return false_hits, sharpes, pnls
 
-print("\n=== multiple testing toy ===")
-print("trials", 100)
+
+# Parameters for the multiple-testing toy (stated in the lesson)
+N = n  # 252
+ANN = float(np.sqrt(252))
+THR = 2.0
+SEED_DEMO = 7
+TRIALS = 100
+# Under H0 with IID-ish noise, SR_ann = mean/std*√252 has sd ≈ 1, so P(|Z|>2) ≈ 4.55%
+null_p = float(erfc(THR / sqrt(2.0)))  # two-sided normal
+print("\n=== multiple testing parameters ===")
+print("n", N)
+print("ann_factor_sqrt252", round(ANN, 6))
+print("threshold_abs_SR", THR)
+print("trials_per_seed", TRIALS)
+print("demo_seed", SEED_DEMO)
+print("null_P_abs_Z_gt_2", round(null_p, 6))
+print("null_expected_false_hits_per_100", round(null_p * TRIALS, 2))
+
+false_hits, sharpes, pnls = count_false_hits(r_a.values, SEED_DEMO, TRIALS, THR)
+
+print("\n=== multiple testing toy (seed 7) ===")
+print("trials", TRIALS)
 print("false_hits_|Sharpe|>2", false_hits)
 print("max_abs_sharpe", round(max(abs(s) for s in sharpes if s == s), 3))
 print("mean_abs_sharpe", round(float(np.nanmean(np.abs(sharpes))), 3))
@@ -94,7 +115,7 @@ best_pnl = pd.Series(pnls[best_i])
 best_sh = sharpes[best_i]
 t_stat = float(best_pnl.mean() / (best_pnl.std(ddof=1) / np.sqrt(n)))
 p_approx = float(erfc(abs(t_stat) / sqrt(2.0)))
-print("\n=== p-value misuse walk-through (best of 100 trials) ===")
+print("\n=== p-value misuse walk-through (best of 100 trials, seed 7) ===")
 print("H0: mean daily pnl of this random-sign rule is 0")
 print("best_trial_index", best_i)
 print("best_sharpe", round(float(best_sh), 4))
@@ -108,3 +129,20 @@ print(
     "iid_note: financial returns often violate IID (volatility clustering); "
     "IID-based p-values then overstate significance."
 )
+print(
+    "seed7_note: under the null ~4.55 hits/100 are expected; seed 7 is an extreme draw that produced 10."
+)
+
+# Many seeds: average false-hit count and spread
+N_SEEDS = 200
+hit_counts = np.array(
+    [count_false_hits(r_a.values, seed=s, trials=TRIALS, thr=THR)[0] for s in range(N_SEEDS)],
+    dtype=float,
+)
+print("\n=== false-hit sweep over many seeds ===")
+print("n_seeds", N_SEEDS)
+print("mean_false_hits", round(float(hit_counts.mean()), 3))
+print("std_false_hits", round(float(hit_counts.std(ddof=1)), 3))
+print("min_false_hits", int(hit_counts.min()))
+print("max_false_hits", int(hit_counts.max()))
+print("seed7_false_hits", false_hits)
