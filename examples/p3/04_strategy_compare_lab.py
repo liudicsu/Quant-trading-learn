@@ -137,29 +137,39 @@ tab = pd.DataFrame(rows)
 print("\n=== comparison table (ONE cost model; net of costs) ===")
 print(tab.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
 
-# Best by OOS net SR among all N trials
+# Best by OOS net SR among all N trials — DSR MUST use the SAME OOS series that made the choice
 best_idx = int(tab["OOS_net_SR"].astype(float).fillna(-999).idxmax())
 best_name = tab.loc[best_idx, "strategy"]
-# dict(bundle) fails - bundle is list of tuples
-best_net = {n: net for n, net, _ in bundle}[best_name]
+best_oos_sr_ann = float(tab.loc[best_idx, "OOS_net_SR"])
+nets = {n: net for n, net, _ in bundle}
+best_oos = nets[best_name].reindex(test).dropna()
 
-# Cross-trial σ_SR from the N raw (non-annualized) daily Sharpes — same spirit as P2 traps lab
+# Cross-trial σ_SR from the N raw daily Sharpes on the SAME OOS window (not full sample)
 raw_srs = []
-for _, net, _ in bundle:
-    x = net.dropna()
+for name, net, _ in bundle:
+    x = net.reindex(test).dropna()
     s = x.std(ddof=1)
     raw_srs.append(float(x.mean() / s) if len(x) > 2 and s > 0 else float("nan"))
 raw_srs = np.array(raw_srs, dtype=float)
 sigma_sr = float(np.nanstd(raw_srs, ddof=1))
 mu_sr = 0.0
-dsr = deflated_sharpe(best_net.dropna(), n_trials=N_TRIALS, mu_sr=mu_sr, sigma_sr=max(sigma_sr, 1e-8))
+dsr = deflated_sharpe(best_oos, n_trials=N_TRIALS, mu_sr=mu_sr, sigma_sr=max(sigma_sr, 1e-8))
+
+# Assert: daily SR * sqrt(252) matches the table OOS annualized SR used for selection
+from _common import ANN
+sr_ann_from_daily = dsr["sr_daily"] * ANN
+assert abs(sr_ann_from_daily - best_oos_sr_ann) < 1e-9, (
+    f"DSR series mismatch: sr_daily*sqrt(252)={sr_ann_from_daily} vs table OOS_net_SR={best_oos_sr_ann}"
+)
 print("\n=== DSR on best OOS strategy (link P2 backtest-traps) ===")
+print("rule: DSR uses the SAME OOS net-return series that produced OOS_net_SR / the choice — never mix full-sample PnL with an OOS ranking")
 print(f"best_strategy={best_name}")
 print(f"N_trials={N_TRIALS}")
-print(f"raw_SR_trials={np.round(raw_srs, 6).tolist()} sigma_SR={sigma_sr:.6f}")
-print(f"sr_daily={dsr['sr_daily']:.6f} sr_ann={dsr['sr_ann']:.4f}")
-print(f"SR_star_Emax={dsr['SR_star']:.6f} DSR={dsr['DSR']:.6f} n_obs={dsr['n_obs']}")
-print("formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson)")
+print(f"OOS_raw_SR_trials={np.round(raw_srs, 6).tolist()} sigma_SR_OOS={sigma_sr:.6f}")
+print(f"sr_daily={dsr['sr_daily']:.6f} sr_ann={dsr['sr_ann']:.4f} table_OOS_net_SR={best_oos_sr_ann:.4f}")
+print(f"ASSERT_sr_daily_times_sqrt252_matches_table_OOS_SR: OK (diff={abs(sr_ann_from_daily-best_oos_sr_ann):.2e})")
+print(f"SR_star_Emax={dsr['SR_star']:.6f} DSR={dsr['DSR']:.6f} n_obs_OOS={dsr['n_obs']}")
+print("formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson) on OOS bars only")
 print("teach: even the horse-race winner must clear a multiple-testing bar — see P2 DSR vs N")
 
 base_oos = float(tab.loc[tab.strategy == "baseline_dual_MA", "OOS_net_SR"].iloc[0])

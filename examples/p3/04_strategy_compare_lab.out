@@ -15,12 +15,14 @@ mean_reversion_z    -0.6546     -2.8499   0.8256    0.0233 -0.2144       1      
    pairs_rolling     0.4222     -0.4732   1.0094    0.0500 -0.0590       2                True
 
 === DSR on best OOS strategy (link P2 backtest-traps) ===
+rule: DSR uses the SAME OOS net-return series that produced OOS_net_SR / the choice — never mix full-sample PnL with an OOS ranking
 best_strategy=pairs_rolling
 N_trials=4
-raw_SR_trials=[-0.04149, -0.007451, -0.083337, 0.010783] sigma_SR=0.041425
-sr_daily=0.010783 sr_ann=0.1712
-SR_star_Emax=0.043584 DSR=0.284076 n_obs=299
-formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson)
+OOS_raw_SR_trials=[-0.106497, -0.105409, -0.179524, -0.029806] sigma_SR_OOS=0.061128
+sr_daily=-0.029806 sr_ann=-0.4732 table_OOS_net_SR=-0.4732
+ASSERT_sr_daily_times_sqrt252_matches_table_OOS_SR: OK (diff=0.00e+00)
+SR_star_Emax=0.064314 DSR=0.188737 n_obs_OOS=90
+formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson) on OOS bars only
 teach: even the horse-race winner must clear a multiple-testing bar — see P2 DSR vs N
 
 === judgment ===

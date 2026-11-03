@@ -29,15 +29,16 @@
 
 ## 最佳 OOS 策略的 DSR（连回 P2）
 
-按 OOS 净夏普最优：**pairs_rolling**。由 N 个原始日频夏普得到 σ_SR≈**0.041**。N=**4** 时：
+**规则：** DSR 必须用你**据以选赢家、并填入表中 `OOS_net_SR` 的同一段样本外净收益序列**来算。在 OOS 排名之后却拿全样本 PnL 去算 DSR 是 bug——会把 `sr_daily` 的符号弄反，并伪造多重试错“通过”。
 
-- SR_daily≈**0.0108**（年化≈0.17）
-- SR* = E[max SR]≈**0.0436**
-- **DSR≈0.284**
+实验（已修）：按 OOS 最优 = **pairs_rolling**，表内 OOS 夏普 ≈ **−0.47**。仅在该 OOS 窗上：
 
-即使相对赢家也未通过严格多重试错门槛——与 `backtest-traps` 中 Bailey & López de Prado 精神一致。
+- `sr_daily` ≈ **−0.0298**（与 −0.47 年化一致，为负）
+- `sr_daily × √252` **断言等于**表中 `OOS_net_SR`
+- 由 **N=4 段 OOS** 原始日频夏普得到 `σ_SR` ≈ **0.061**
+- SR* = E[max SR] ≈ **0.0643**；**DSR ≈ 0.189**（远低于 0.5）
 
-![对照](/p3/strategy_compare_nav.png)
+即使相对 OOS「赢家」也未通过严格的 Bailey–López de Prado 门槛——与 `backtest-traps` 精神一致。
 
 ## 判定
 
@@ -75,12 +76,14 @@ mean_reversion_z    -0.6546     -2.8499   0.8256    0.0233 -0.2144       1      
    pairs_rolling     0.4222     -0.4732   1.0094    0.0500 -0.0590       2                True
 
 === DSR on best OOS strategy (link P2 backtest-traps) ===
+rule: DSR uses the SAME OOS net-return series that produced OOS_net_SR / the choice — never mix full-sample PnL with an OOS ranking
 best_strategy=pairs_rolling
 N_trials=4
-raw_SR_trials=[-0.04149, -0.007451, -0.083337, 0.010783] sigma_SR=0.041425
-sr_daily=0.010783 sr_ann=0.1712
-SR_star_Emax=0.043584 DSR=0.284076 n_obs=299
-formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson)
+OOS_raw_SR_trials=[-0.106497, -0.105409, -0.179524, -0.029806] sigma_SR_OOS=0.061128
+sr_daily=-0.029806 sr_ann=-0.4732 table_OOS_net_SR=-0.4732
+ASSERT_sr_daily_times_sqrt252_matches_table_OOS_SR: OK (diff=0.00e+00)
+SR_star_Emax=0.064314 DSR=0.188737 n_obs_OOS=90
+formula: DSR = PSR(SR̂, SR*=E[max SR under N trials], n, skew, kurt_Pearson) on OOS bars only
 teach: even the horse-race winner must clear a multiple-testing bar — see P2 DSR vs N
 
 === judgment ===
@@ -99,6 +102,7 @@ disclaimer: synthetic; learning only — not live claims
 3. 庆祝 OOS 失败的 IS 赢家。
 4. 无预先声明的基准。
 5. 加参数直到 IS 好看。
+6. 用 OOS 夏普选完赢家后，却在全样本序列上算 DSR（序列不一致）。
 
 ## 练习（1:1）
 
