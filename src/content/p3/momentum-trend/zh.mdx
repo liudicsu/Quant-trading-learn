@@ -1,9 +1,126 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **8 学时**：概念 3h + 实验 4.5h + 测验 0.5h）对照**双均线趋势**、带跳过窗的**时序动量**（12-1 精神）、**截面玩具**与 **10% 波动目标**——全部扣除 P2 成本。前置：`engines-vectorized-event`。
+
+**课内目标：** 双均线 vs 简化动量；报告换手与分年结果。
+
+**必须教会：** 跳过最近窗口减弱短期反转偏差；拥挤与换手侵蚀优势。
+
+<Callout type="info" title="学习用途 — 非投资建议">
+合成约 1 年面板 + 缩放回看窗，不宣称动量实盘有效。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 面板：AAA/BBB/CCC 日频 2022-01-03 → 2023-02-24（n=300）
+- 双均线：快=**10**，慢=**30**；时序动量：LB_FULL=**60**，SKIP=**5**（短面板上的 12-1 *精神*，非字面月）
+- 波动目标：年化 **10%**，vol_lb=**20**，杠杆上限 2
+- 成本：P2 四件套单边 **10 bps** + √冲击×换手；Rf=0；`position=shift(1)`
+- OOS：最后 **30%** bar
+
+## 经典来源（已读并用于正文）
+
+- **Jegadeesh & Titman（1993）《JF》** — 相对强度 J/K；跳过一周的变体规避买卖价差/短期反转（[PDF](https://bauer.uh.edu/rsusmel/phd/jegadeesh-titman93.pdf)）。业界 **12-1** 把跳过延伸到近一月。
+- **NYU Stern Dhar《Trading Strategies》大纲** — 趋势 → 反趋势 → 价差/配对（[PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)）。
+- 课程 **Canvas m6** 动量模板（内部地图）。
+
+## 小众对照
+
+- **[quants.md](https://quants.md/)** 开放策略库（QuantJourney，Apache-2.0）——许多趋势/动量卡片夏普接近 0 或为负；只作**假设来源**，不作证明。TradingView Pine 策略包**本批次未独立重读**，不作断言。
+
+## 双均线 vs 时序动量
+
+均用次日开盘成交（`shift(1)`）。全样本净夏普：双均线 ≈ **−0.66**，TS-mom-skip ≈ **−0.12**，波动目标 ≈ **−0.08**。OOS 净夏普在本玩具上仍为负——诚实评价，不是庆功。
+
+![动量净值](/p3/momentum_nav.png)
+
+## 跳过近月的动机（即使玩具样本不同意）
+
+在**本**短合成面板上，不跳过可能打印更高的样本内净夏普。这**不能**否定 JT/业界的设计动机：跳过减少短期反转/微观结构污染。**期望值框架：** 跳过是降偏设计，不是每个样本的保证。
+
+## 截面与分年
+
+三标的多空截面只是**玩具**（实验 CS 净夏普≈0.50）——真实截面需要宽宇宙。TS-mom-skip 分年净夏普：2022 ≈ **−0.13**；2023 不完整 → NaN。
+
+## 前视警告
+
+- 动量分数只能用过去收益（此处：结束于 t−SKIP）。
+- 勿用当日收盘既排名又成交。
+- 波动缩放用 `shift(1)`，避免用当日波动给当日成交定仓。
+
+## Python 实验（已本地运行）
+
+脚本：`examples/p3/01_momentum_trend.py`。
+
+### 实际运行输出
+
+```text
+=== parameters ===
+panel 2022-01-03 → 2023-02-24 n 300
+LB_FULL 60 SKIP 5 → mom window ends at t-1-SKIP, starts t-1-SKIP-LB_FULL
+dual_MA 10 30 vol_target 0.1 vol_lb 20
+costs: P2 four-part stack 10 bps one-way + √impact × turnover
+look-ahead: all positions use shift(1); mom uses only past returns
+cite: Jegadeesh & Titman 1993 JF relative-strength J/K; 12-1 = skip recent month (industry practice)
+cite: NYU Stern Dhar Trading Strategies syllabus — trend → counter-trend → pairs
+
+=== dual-MA vs TS-mom (AAA, net of costs) ===
+dual_MA              gross_SR=-0.588 net_SR=-0.659 net_NAV=0.8889 maxDD=-0.191 turn=0.0333 OOS_net_SR=-1.691
+ts_mom_skip          gross_SR=-0.090 net_SR=-0.118 net_NAV=0.9695 maxDD=-0.124 turn=0.0133 OOS_net_SR=-1.673
+ts_mom_no_skip       gross_SR=0.260 net_SR=0.232 net_NAV=1.0268 maxDD=-0.086 turn=0.0133 OOS_net_SR=nan
+ts_mom_vol_target    gross_SR=-0.010 net_SR=-0.080 net_NAV=0.9922 maxDD=-0.048 turn=0.0104 OOS_net_SR=-1.673
+
+=== CS long/short (3-name toy) ===
+cs_net_SR=0.497 cs_NAV=1.0838 mean_turn=0.0900 OOS_net_SR=0.913
+teach: with 3 synthetic names CS is a toy — real CS needs a broad universe
+
+=== by-year net Sharpe (TS mom skip) ===
+date
+2022   -0.127049
+2023         NaN
+mean_by_year -0.12704883291837588
+
+=== skip vs no-skip (must-teach) ===
+skip_net_SR=-0.118 no_skip_net_SR=0.232 delta=-0.350
+note: on THIS short synthetic panel no-skip can win — that does not refute the JT/industry motive:
+  JT 1993 skip-a-week variants avoid bid-ask/short-term reversal; 12-1 skips recent month for the same reason.
+  Expected-value framing: skip is a bias-reduction design choice, not a guarantee on every sample.
+crowding/turnover: higher turnover erodes edge — compare dual turn vs ts turn above
+
+chart /workspace/Quant-trading-learn/public/p3/momentum_nav.png
+disclaimer: synthetic panel; learning only — not live performance claims
+```
+
+## 常见错误 / 陷阱
+
+1. 在 1 年玩具上字面套 12 个月却不声明缩放。
+2. 未扣 P2 成本就庆祝毛曲线。
+3. 把 3 个名字的截面当成机构证据。
+4. 把「本样本跳过更差」当成「跳过是错的」。
+5. 形成窗混入当日价格。
+
+## 练习（与清单 1:1）
+
+1. **ex1** — 双均线 vs 时序动量表；**完成标准**：两套净夏普+换手。
+2. **ex2** — 10% 波动目标；**完成标准**：缩放净值/夏普打印。
+3. **ex3** — 分年表；**完成标准**：年份行出现（NaN 需解释）。
+4. **done1** — 两套含成本动量结果含 OOS 列。
+
+## 测验
+
+<Quiz id="q1-121" question="12-1 动量为何跳过最近一月？" options={["为提高换手", "减弱短期反转/微观结构噪声", "强制周频再平衡", "去掉无风险利率"]} answer={1} explanation="JT 跳过一周 / 业界 12-1 动机。" />
+<Quiz id="q2-tscs" question="时序与截面动量主要差别？" options={["券商选择", "自身过去收益符号 vs 截面相对排名", "只有无风险利率", "只有画图库"]} answer={1} explanation="TS=自身；CS=相对同伴。" />
+<Quiz id="q3-turn" question="更高换手主要伤害来自？" options={["提高 Rf", "每个 bps 成本乘以 |Δposition|", "删除 OOS", "修复前视"]} answer={1} explanation="成本随换手放大。" />
+<Quiz id="q4-oos" question="公平的 OOS 检查应？" options={["把测试 bar 放进训练", "冻结规则并报告扣成本的留出窗", "只展示毛净值", "丢掉所有亏损年"]} answer={1} explanation="诚实 OOS + 成本。" />
+<Quiz id="q5-ev" question="若跳过在短玩具样本上更差，你应？" options={["宣告 JT 错误", "保留期望值/降偏动机并要求更多证据", "删除成本", "改同日成交"]} answer={1} explanation="设计动机 ≠ 单样本保证。" />
+
+## 完成标准
+
+- 两套含成本动量 + 换手 + 分年 + 测验  
+
+**来源：** Jegadeesh & Titman 1993；Stern Dhar 大纲；Canvas m6；quants.md（对照）。Pine 包本批未读，已丢弃。
+
+<Summary>
+**要点**：双均线 vs TS/CS、跳过动机、波动目标、成本+OOS 诚实。  
+**下一课**：均值回归。
+</Summary>

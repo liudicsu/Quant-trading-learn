@@ -1,9 +1,111 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**10 hours**: 4h concepts + 5h lab + 1h write-up) builds a **pairs** residual, compares **static vs rolling hedge ratios**, and separates **correlation from cointegration intuition**. Prereq: `mean-reversion`.
+
+**Goals:** rolling-beta spread; discuss broken legs.
+
+**Must-teach:** high correlation is not enough; cointegration intuition; re-estimate hedge ratios.
+
+<Callout type="info" title="Learning only — not investment advice">
+Synthetic cointegrated foil Y_coin vs BBB — not a production stat-arb book.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- y = 50 + 1.2·BBB + AR(1) residual (seed=7); x = BBB
+- Rolling OLS window=**40**; z_lb=**20**; enter |z|&gt;**2**; exit |z|&lt;**0.5**
+- Costs: **2×** one-way stack (both legs); positions `shift(1)`
+- OOS: last 30%
+
+## Sources
+
+- Stern Dhar syllabus **spreads / pairs** session ([PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)).
+- Curriculum **Canvas m8** pairs template.
+- Niche foil: [quants.md](https://quants.md/) **W13 Pairs Ratio Z Score** / **W14 Pairs Hedge Ratio** dashboards (read 2026-11-04) print Sharpe near 0 / negative — open examples are hypotheses, not proof.
+
+## Correlation ≠ tradeable
+
+Lab: return correlation of the cointegrated foil ≈ **0.98**, and a **drifting intercept foil** can keep similarly high correlation while residual std blows up (**0.73 → 4.50**). You need an approximately **stationary residual**, not just high corr.
+
+## Static vs rolling hedge
+
+Static β≈**1.22**; rolling mean β≈**1.23**. Net of two-leg costs: static net SR≈**−0.48** (NAV≈0.96); rolling net SR≈**0.19** (NAV≈1.01). OOS still harsh (rolling OOS≈**−0.45**) — report it.
+
+![Pairs NAV](/p3/pairs_nav.png)
+
+## Broken-leg / shock note
+
+If one leg gaps on idiosyncratic news, a frozen hedge leaves residual beta; rolling adapts with lag=ROLL. Expect a burst of wideners / stop-outs before β re-learns. Lab: mean |β_roll−β_static| over last 60 bars ≈ **0.07** on this foil (larger after a true break).
+
+## Look-ahead warnings
+
+- OLS window at t uses only past bars `[t−w, t)`.
+- β used in today’s PnL must be lagged (`shift(1)`).
+- Do not pick the pair because the full-sample residual “looked stationary” after you already saw the test window.
+
+## Python lab
+
+Script: `examples/p3/03_pairs_stat_arb.py`.
+
+### Real run output
+
+```text
+=== parameters ===
+pair synthetic Y_coin vs BBB (cointegrated foil); rolling OLS window 40 z_lb 20
+enter |z|> 2.0 exit |z|< 0.5 ; dollar-neutral ≈ long y short beta*x
+look-ahead: beta/z use past windows only; positions shift(1)
+cite: Stern Dhar pairs session; Canvas m8; quants.md W13/W14 pairs as open foils (metrics often near 0)
+
+=== corr vs cointegration intuition ===
+corr_returns_coint_pair=0.980
+corr_returns_drift_foil=0.980 (can stay high while levels walk apart)
+resid_std_coint=0.730 resid_std_drift=4.495
+beta_static=1.2154 beta_roll_mean=1.2333
+teach: high return correlation ≠ tradeable; need (approx) stationary residual / cointegration intuition
+
+=== static vs rolling hedge ===
+static  gross=0.064 net=-0.475 NAV=0.9554 turn=0.0803 OOS=-2.493
+rolling gross=0.657 net=0.192 NAV=1.0108 turn=0.0502 OOS=-0.453
+
+=== shock scenario (broken leg) ===
+If one leg gaps on idiosyncratic news, static hedge leaves residual beta; rolling adapts with lag=ROLL.
+scenario_note: after a structural break, expect a burst of stop-outs / widener before beta re-learns.
+demo: |beta_roll - beta_static| mean last 60 bars = 0.0737
+
+chart /workspace/Quant-trading-learn/public/p3/pairs_nav.png
+disclaimer: synthetic pair; learning only — quants.md W13/W14 show real open examples can print near-zero Sharpe
+```
+
+## Common mistakes / pitfalls
+
+1. Trading high corr without checking residual stability.
+2. Estimating β on the full sample including test.
+3. Costing only one leg.
+4. Ignoring structural breaks / corporate actions on a leg.
+5. Reading quants.md headline Return% as an edge certificate.
+
+## Practice (1:1)
+
+1. **ex1** — rolling spread + z; **done when** chart/series print.
+2. **ex2** — static vs rolling table; **done when** both net SR print.
+3. **ex3** — shock/broken-leg paragraph.
+4. **done1** — costed pairs notebook filed.
+
+## Quiz
+
+<Quiz id="q1-corr" question="High return correlation alone means?" options={["Guaranteed stationary spread", "Not enough — need residual/cointegration intuition", "Zero costs", "Automatic OOS edge"]} answer={1} explanation="Corr ≠ tradeable." />
+<Quiz id="q2-roll" question="Why re-estimate the hedge ratio?" options={["To use future prices", "Relationships drift; static β goes stale", "To remove Rf", "To delete z-scores"]} answer={1} explanation="Rolling β." />
+<Quiz id="q3-leg" question="A broken leg mainly causes?" options={["Lower ADV only", "Residual beta / hedge error after a shock", "Higher Rf", "Free fills"]} answer={1} explanation="Idiosyncratic gap." />
+<Quiz id="q4-cost" question="Pairs costs should usually?" options={["Ignore one leg", "Charge both legs (≈2× one-way stack here)", "Use only impact", "Use only borrow"]} answer={1} explanation="Two-leg friction." />
+<Quiz id="q5-foil" question="Open strategy dashboards with Sharpe≈0 are best used as?" options={["Live mandates", "Hypothesis foils under your own costs/OOS", "Proof of alpha", "Substitutes for stops"]} answer={1} explanation="quants.md ethos in this course." />
+
+## Done when
+
+- Costed pairs notebook + static/rolling + shock note + quizzes  
+
+**Sources:** Stern pairs; Canvas m8; quants.md W13/W14 foils.
+
+<Summary>
+**Takeaways**: rolling hedge, corr≠coint, broken legs, two-leg costs.  
+**Next**: strategy compare lab.
+</Summary>

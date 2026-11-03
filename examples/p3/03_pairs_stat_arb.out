@@ -1,0 +1,24 @@
+=== parameters ===
+pair synthetic Y_coin vs BBB (cointegrated foil); rolling OLS window 40 z_lb 20
+enter |z|> 2.0 exit |z|< 0.5 ; dollar-neutral ≈ long y short beta*x
+look-ahead: beta/z use past windows only; positions shift(1)
+cite: Stern Dhar pairs session; Canvas m8; quants.md W13/W14 pairs as open foils (metrics often near 0)
+
+=== corr vs cointegration intuition ===
+corr_returns_coint_pair=0.980
+corr_returns_drift_foil=0.980 (can stay high while levels walk apart)
+resid_std_coint=0.730 resid_std_drift=4.495
+beta_static=1.2154 beta_roll_mean=1.2333
+teach: high return correlation ≠ tradeable; need (approx) stationary residual / cointegration intuition
+
+=== static vs rolling hedge ===
+static  gross=0.064 net=-0.475 NAV=0.9554 turn=0.0803 OOS=-2.493
+rolling gross=0.657 net=0.192 NAV=1.0108 turn=0.0502 OOS=-0.453
+
+=== shock scenario (broken leg) ===
+If one leg gaps on idiosyncratic news, static hedge leaves residual beta; rolling adapts with lag=ROLL.
+scenario_note: after a structural break, expect a burst of stop-outs / widener before beta re-learns.
+demo: |beta_roll - beta_static| mean last 60 bars = 0.0737
+
+chart /workspace/Quant-trading-learn/public/p3/pairs_nav.png
+disclaimer: synthetic pair; learning only — quants.md W13/W14 show real open examples can print near-zero Sharpe

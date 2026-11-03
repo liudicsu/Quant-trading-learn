@@ -1,9 +1,117 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **7 学时**：概念 2.5h + 实验 4h + 测验 0.5h）实现 **z-score 均值回归**，对照**有/无止损**，并写出**失效清单**——尤其趋势市失效。前置：`momentum-trend`。
+
+**课内目标：** 实现 z 规则；写失效清单。
+
+**必须教会：** 强趋势中回归易被反复止损打死；阈值必须再估计。
+
+<Callout type="info" title="学习用途 — 非投资建议">
+合成序列上的玩具阈值，不是实盘做市系统。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- z_lb=**20**；开仓 z&lt;**−2**；平仓 z≥**0**；止损相对入场 **3%**
+- 趋势失效对照：合成每日 **+0.15%** 漂移叠加
+- 成本：P2 单边 10 bps + √冲击×换手；`shift(1)` 入场
+- OOS：最后 30%
+
+## 来源
+
+- Stern Dhar 大纲中趋势之后的**反趋势**课次（[PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)）。
+- 课程 **Canvas m7** 回归模板。
+- 小众：开放反转样本（如 quants.md RSI/布林卡片）样本内常好看——只作对照。Pine 本批未读 → 丢弃。
+
+## z-score 规则
+
+滚动均值/标准差；z=(p−μ)/σ。z&lt;−2 做多，z≥0 平仓。次 bar 入场。
+
+## 止损 A/B
+
+原面板：无止损净夏普≈**−1.32**（净值≈0.83）；有止损≈**−1.36**（净值≈0.89，stop_exits=**5**）。止损改变路径——不是免费期权。
+
+![回归净值](/p3/mean_reversion_nav.png)
+
+## 趋势失效
+
+在 **+0.15%/日漂移对照**上，同一只做多抄底会反复触止损（对照净夏普≈**−0.62**）。必须教会：持久趋势通过反复止损惩罚均值回归。
+
+## 再估计阈值
+
+仅用训练集分位：开仓 q05≈**−1.84**，平仓 q50≈**−0.15**（相对固定 −2/0）。冻结训练估计再测测试集——勿用全样本重拟合。
+
+## 前视警告
+
+- 时刻 t 的滚动 z 不得用 t+1 价格。
+- 止损成交需要日内规则（此处：min(open,close)，open=昨收）——纯收盘向量低估跳空。
+- 失效清单是交付物，不是可选散文。
+
+## Python 实验
+
+脚本：`examples/p3/02_mean_reversion.py`。
+
+### 实际运行输出
+
+```text
+=== parameters ===
+z_lb 20 enter z< -2.0 exit z>= 0.0 stop 0.03
+trend filter MA 50 (price>MA = trend regime for failure demo)
+look-ahead: z uses rolling past; positions shift(1); stop uses same-bar low proxy = min(open,close) with open=prev close
+cite: Stern Dhar syllabus session on counter-trend; Canvas m7 MR template
+
+=== A/B stops (original panel) ===
+no_stop  net_SR=-1.323 NAV=0.8256 turn=0.0233 OOS=-2.850
+with_stop net_SR=-1.355 NAV=0.8854 turn=0.0400 stop_exits=5 OOS=-3.946
+
+=== trend-failure foil (synthetic +0.15%/day drift) ===
+mr_on_trend net_SR=-0.616 NAV=0.9542 stop_exits=2
+teach: in a persistent uptrend, long-only fade-the-dip keeps stopping out — stops rise, edge dies
+invalidation_list:
+ 1) repeated stops in a one-way trend (see drift foil)
+ 2) z thresholds estimated on full sample (must re-estimate OOS / rolling)
+ 3) gap through stop (open<<stop) — vector close path understates
+ 4) cost+turnover after whipsaw
+ 5) structural break: window mean no longer mean-reverting
+
+=== threshold re-estimate (train quantiles) ===
+train_entry_q05=-1.844 train_exit_q50=-0.152 (vs fixed -2.0/0.0)
+teach: fixed textbook ±2 is a starting foil — re-estimate on train, freeze for test
+
+chart /workspace/Quant-trading-learn/public/p3/mean_reversion_nav.png
+disclaimer: synthetic; learning only
+```
+
+## 常见错误 / 陷阱
+
+1. 无止损也无失效讨论。
+2. 在含测试的全样本上估计 ±2。
+3. 无失效对照就声称「趋势里回归也行」。
+4. 忽视来回打脸后的换手成本。
+5. 把 stop_exits=0 当成安全证明。
+
+## 练习（1:1）
+
+1. **ex1** — z&lt;−2 / z≥0 路径；**完成标准**：净夏普打印。
+2. **ex2** — 止损 A/B；**完成标准**：两净值 + stop_exits。
+3. **ex3** — 失效清单（≥5 条）。
+4. **done1** — notebook + 失效讨论入库。
+
+## 测验
+
+<Quiz id="q1-trend" question="强单边趋势里，只做多的回归常因何失效？" options={["佣金为零", "反复止损 / 逆向抄底", "更高 Rf", "更低 ADV"]} answer={1} explanation="趋势失效对照。" />
+<Quiz id="q2-reest" question="为何只在训练集再估计 z 阈值？" options={["为了用未来数据", "避免把测试信息泄漏进规则", "为了最大化换手", "为了删除止损"]} answer={1} explanation="冻结后做 OOS。" />
+<Quiz id="q3-stop" question="纯收盘向量难写止损是因为？" options={["费用消失", "成交取决于日内路径/跳空", "哈希损坏", "Rf 必须为 1"]} answer={1} explanation="路径依赖。" />
+<Quiz id="q4-inv" question="失效清单应包含？" options={["只有 Logo 颜色", "机制切换、阈值漂移、跳空、成本/来回打脸", "只有券商 UI 主题", "只有 GPU 型号"]} answer={1} explanation="可操作失效模式。" />
+<Quiz id="q5-ev" question="教科书 ±2 最好当作？" options={["实盘指令", "待再估计的起点对照", "优势证明", "成本替代"]} answer={1} explanation="训练集再估计。" />
+
+## 完成标准
+
+- 含止损的回归 notebook + 失效讨论 + 测验  
+
+**来源：** Stern 反趋势；Canvas m7；quants.md 对照。Pine 未读已丢弃。
+
+<Summary>
+**要点**：z 规则、止损、趋势失效、再估计。  
+**下一课**：配对。
+</Summary>

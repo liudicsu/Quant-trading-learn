@@ -1,9 +1,131 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**8 hours**: 3h concepts + 4.5h labs + 0.5h quiz) compares **dual moving-average trend**, **time-series momentum** with a skip window (12-1 spirit), a **cross-sectional toy**, and **10% vol targeting** — all net of P2 costs. Prereq: `engines-vectorized-event`.
+
+**Goals:** dual-MA vs simplified momentum; report turnover and by-year results.
+
+**Must-teach:** skipping the most recent window dampens short-term reversal bias; crowding and turnover erode edges.
+
+<Callout type="info" title="Learning only — not investment advice">
+Synthetic ~1y panel with scaled lookbacks — not a claim that momentum works live.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Panel: AAA/BBB/CCC daily 2022-01-03 → 2023-02-24 (n=300)
+- Dual MA: fast=**10**, slow=**30**; TS mom: LB_FULL=**60**, SKIP=**5** (12-1 *spirit* on a short panel, not literal months)
+- Vol target: **10%** ann, vol_lb=**20**, scale clip ≤2
+- Costs: P2 four-part stack **10 bps** one-way + √impact × turnover; Rf=0; `position=shift(1)`
+- OOS: last **30%** of bars
+
+## Classic sources (read & used)
+
+- **Jegadeesh & Titman (1993), *JF*** — relative-strength J/K strategies; skip-a-week variants avoid bid-ask / short-term reversal effects ([PDF](https://bauer.uh.edu/rsusmel/phd/jegadeesh-titman93.pdf)). Industry **12-1** extends that skip idea to the recent month.
+- **NYU Stern Dhar *Trading Strategies* syllabus** — sequence trend → counter-trend → spreads/pairs ([PDF](https://web-docs.stern.nyu.edu/ioms/SYLLABI/Dhar_MULT-UB.0035_Fall13.pdf)).
+- Curriculum **Canvas m6** momentum template (internal map).
+
+## Niche foil
+
+- **[quants.md](https://quants.md/)** open library (QuantJourney, Apache-2.0) — many trend/momentum cards print Sharpe near 0 or negative; use as **hypothesis dumps**, not proof. Pine strategy packs were **not independently re-read this batch** and are dropped from claims.
+
+## Dual-MA vs TS momentum
+
+Both use next-open fills (`shift(1)`). Lab net Sharpes (full sample): dual-MA ≈ **−0.66**, TS-mom-skip ≈ **−0.12**, vol-targeted TS ≈ **−0.08**. OOS net SR remain negative on this toy — honest evaluation, not a victory lap.
+
+![Momentum NAV](/p3/momentum_nav.png)
+
+## Skip-month motive (even when the toy disagrees)
+
+On **this** short synthetic panel, no-skip can print a higher in-sample net SR than skip. That does **not** refute the JT/industry design motive: skip reduces contamination from short-term reversal / microstructure. **Expected-value framing:** skip is a bias-reduction choice, not a guarantee on every sample.
+
+## Cross-section & by-year
+
+3-name CS long/short is a **toy** (lab CS net SR≈0.50) — real CS needs a broad universe. By-year net SR for TS-mom-skip: 2022 ≈ **−0.13**; 2023 incomplete → NaN.
+
+## Look-ahead warnings
+
+- Momentum score must use only past returns (here: end at t−SKIP).
+- Never rank with the same bar’s close you trade.
+- Vol scale uses `shift(1)` so today’s vol does not size today’s fill.
+
+## Python lab (run locally)
+
+Script: `examples/p3/01_momentum_trend.py`.
+
+```bash
+source .venv/bin/activate
+python examples/p3/01_momentum_trend.py
+```
+
+### Real run output
+
+```text
+=== parameters ===
+panel 2022-01-03 → 2023-02-24 n 300
+LB_FULL 60 SKIP 5 → mom window ends at t-1-SKIP, starts t-1-SKIP-LB_FULL
+dual_MA 10 30 vol_target 0.1 vol_lb 20
+costs: P2 four-part stack 10 bps one-way + √impact × turnover
+look-ahead: all positions use shift(1); mom uses only past returns
+cite: Jegadeesh & Titman 1993 JF relative-strength J/K; 12-1 = skip recent month (industry practice)
+cite: NYU Stern Dhar Trading Strategies syllabus — trend → counter-trend → pairs
+
+=== dual-MA vs TS-mom (AAA, net of costs) ===
+dual_MA              gross_SR=-0.588 net_SR=-0.659 net_NAV=0.8889 maxDD=-0.191 turn=0.0333 OOS_net_SR=-1.691
+ts_mom_skip          gross_SR=-0.090 net_SR=-0.118 net_NAV=0.9695 maxDD=-0.124 turn=0.0133 OOS_net_SR=-1.673
+ts_mom_no_skip       gross_SR=0.260 net_SR=0.232 net_NAV=1.0268 maxDD=-0.086 turn=0.0133 OOS_net_SR=nan
+ts_mom_vol_target    gross_SR=-0.010 net_SR=-0.080 net_NAV=0.9922 maxDD=-0.048 turn=0.0104 OOS_net_SR=-1.673
+
+=== CS long/short (3-name toy) ===
+cs_net_SR=0.497 cs_NAV=1.0838 mean_turn=0.0900 OOS_net_SR=0.913
+teach: with 3 synthetic names CS is a toy — real CS needs a broad universe
+
+=== by-year net Sharpe (TS mom skip) ===
+date
+2022   -0.127049
+2023         NaN
+mean_by_year -0.12704883291837588
+
+=== skip vs no-skip (must-teach) ===
+skip_net_SR=-0.118 no_skip_net_SR=0.232 delta=-0.350
+note: on THIS short synthetic panel no-skip can win — that does not refute the JT/industry motive:
+  JT 1993 skip-a-week variants avoid bid-ask/short-term reversal; 12-1 skips recent month for the same reason.
+  Expected-value framing: skip is a bias-reduction design choice, not a guarantee on every sample.
+crowding/turnover: higher turnover erodes edge — compare dual turn vs ts turn above
+
+chart /workspace/Quant-trading-learn/public/p3/momentum_nav.png
+disclaimer: synthetic panel; learning only — not live performance claims
+```
+
+## Common mistakes / pitfalls
+
+1. Literal 12-month windows on a 1-year toy panel without stating the scale.
+2. Celebrating gross curves before P2 costs.
+3. Treating CS on 3 names as institutional evidence.
+4. Confusing “skip lost on this sample” with “skip is wrong.”
+5. Using same-bar prices in the formation window you trade.
+
+## Practice (1:1 with the checklist)
+
+1. **ex1** — dual-MA vs TS-mom table; **done when** both net SR + turnover print.
+2. **ex2** — 10% vol target; **done when** scaled NAV/SR print.
+3. **ex3** — by-year table; **done when** year rows appear (NaN explained if any).
+4. **done1** — two momentum results net of costs with OOS column.
+
+## Quiz
+
+<Quiz id="q1-121" question="Why skip the most recent month in 12-1 momentum?" options={["To increase turnover", "To dampen short-term reversal / microstructure noise", "To force weekly rebalance", "To remove the risk-free rate"]} answer={1} explanation="JT skip-a-week / industry 12-1 motive." />
+<Quiz id="q2-tscs" question="Time-series vs cross-sectional momentum differs mainly in?" options={["Broker choice", "Absolute past return sign vs relative rank across names", "Only the risk-free rate", "Only the chart library"]} answer={1} explanation="TS = own past; CS = rank vs peers." />
+<Quiz id="q3-turn" question="Higher turnover mainly hurts because?" options={["It raises Rf", "Every bps cost is multiplied by |Δposition|", "It deletes OOS", "It fixes look-ahead"]} answer={1} explanation="Costs scale with turnover." />
+<Quiz id="q4-oos" question="A fair OOS check should?" options={["Reuse test bars in training", "Freeze rules and report a held-out window net of costs", "Only show gross NAV", "Drop all losing years"]} answer={1} explanation="Honest OOS + costs." />
+<Quiz id="q5-ev" question="If skip underperforms on a short toy sample, you should?" options={["Declare JT false", "Keep the EV/bias-reduction motive and demand more evidence", "Delete costs", "Switch to same-bar fills"]} answer={1} explanation="Design motive ≠ single-sample guarantee." />
+
+## Done when
+
+- Two momentum specs net of costs + turnover + by-year + quizzes  
+
+**Sources:** Jegadeesh & Titman 1993; Stern Dhar syllabus; Canvas m6; quants.md (foil). Pine packs dropped (unread this batch).
+
+<Summary>
+**Takeaways**: dual-MA vs TS/CS mom, skip motive, vol target, costs+OOS honesty.  
+**Next**: mean-reversion.
+</Summary>

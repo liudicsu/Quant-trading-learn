@@ -1,0 +1,26 @@
+=== parameters ===
+z_lb 20 enter z< -2.0 exit z>= 0.0 stop 0.03
+trend filter MA 50 (price>MA = trend regime for failure demo)
+look-ahead: z uses rolling past; positions shift(1); stop uses same-bar low proxy = min(open,close) with open=prev close
+cite: Stern Dhar syllabus session on counter-trend; Canvas m7 MR template
+
+=== A/B stops (original panel) ===
+no_stop  net_SR=-1.323 NAV=0.8256 turn=0.0233 OOS=-2.850
+with_stop net_SR=-1.355 NAV=0.8854 turn=0.0400 stop_exits=5 OOS=-3.946
+
+=== trend-failure foil (synthetic +0.15%/day drift) ===
+mr_on_trend net_SR=-0.616 NAV=0.9542 stop_exits=2
+teach: in a persistent uptrend, long-only fade-the-dip keeps stopping out — stops rise, edge dies
+invalidation_list:
+ 1) repeated stops in a one-way trend (see drift foil)
+ 2) z thresholds estimated on full sample (must re-estimate OOS / rolling)
+ 3) gap through stop (open<<stop) — vector close path understates
+ 4) cost+turnover after whipsaw
+ 5) structural break: window mean no longer mean-reverting
+
+=== threshold re-estimate (train quantiles) ===
+train_entry_q05=-1.844 train_exit_q50=-0.152 (vs fixed -2.0/0.0)
+teach: fixed textbook ±2 is a starting foil — re-estimate on train, freeze for test
+
+chart /workspace/Quant-trading-learn/public/p3/mean_reversion_nav.png
+disclaimer: synthetic; learning only

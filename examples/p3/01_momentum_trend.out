@@ -1,0 +1,34 @@
+=== parameters ===
+panel 2022-01-03 → 2023-02-24 n 300
+LB_FULL 60 SKIP 5 → mom window ends at t-1-SKIP, starts t-1-SKIP-LB_FULL
+dual_MA 10 30 vol_target 0.1 vol_lb 20
+costs: P2 four-part stack 10 bps one-way + √impact × turnover
+look-ahead: all positions use shift(1); mom uses only past returns
+cite: Jegadeesh & Titman 1993 JF relative-strength J/K; 12-1 = skip recent month (industry practice)
+cite: NYU Stern Dhar Trading Strategies syllabus — trend → counter-trend → pairs
+
+=== dual-MA vs TS-mom (AAA, net of costs) ===
+dual_MA              gross_SR=-0.588 net_SR=-0.659 net_NAV=0.8889 maxDD=-0.191 turn=0.0333 OOS_net_SR=-1.691
+ts_mom_skip          gross_SR=-0.090 net_SR=-0.118 net_NAV=0.9695 maxDD=-0.124 turn=0.0133 OOS_net_SR=-1.673
+ts_mom_no_skip       gross_SR=0.260 net_SR=0.232 net_NAV=1.0268 maxDD=-0.086 turn=0.0133 OOS_net_SR=nan
+ts_mom_vol_target    gross_SR=-0.010 net_SR=-0.080 net_NAV=0.9922 maxDD=-0.048 turn=0.0104 OOS_net_SR=-1.673
+
+=== CS long/short (3-name toy) ===
+cs_net_SR=0.497 cs_NAV=1.0838 mean_turn=0.0900 OOS_net_SR=0.913
+teach: with 3 synthetic names CS is a toy — real CS needs a broad universe
+
+=== by-year net Sharpe (TS mom skip) ===
+date
+2022   -0.127049
+2023         NaN
+mean_by_year -0.12704883291837588
+
+=== skip vs no-skip (must-teach) ===
+skip_net_SR=-0.118 no_skip_net_SR=0.232 delta=-0.350
+note: on THIS short synthetic panel no-skip can win — that does not refute the JT/industry motive:
+  JT 1993 skip-a-week variants avoid bid-ask/short-term reversal; 12-1 skips recent month for the same reason.
+  Expected-value framing: skip is a bias-reduction design choice, not a guarantee on every sample.
+crowding/turnover: higher turnover erodes edge — compare dual turn vs ts turn above
+
+chart /workspace/Quant-trading-learn/public/p3/momentum_nav.png
+disclaimer: synthetic panel; learning only — not live performance claims
