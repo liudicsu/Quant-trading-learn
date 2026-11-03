@@ -29,7 +29,7 @@ export interface Lesson {
   doneWhen: L10n[];
   methodTags: { classic: string[]; niche: string[]; frontier: string[] };
   tasks: Task[];
-  /** Site body status: P0 written in this batch; others stubs. */
+  /** Site body status: P0–P4 written; P5+ stubs. */
   status: "ready" | "outline";
 }
 
@@ -784,7 +784,7 @@ const phase_P3_lessons: Lesson[] = [
 const phase_P4_lessons: Lesson[] = [
   {
     slug: "factor-workflow",
-    status: "outline",
+    status: "ready",
     title: { zh: "因子研究工作流", en: "Factor research workflow" },
     summary: { zh: "IC、分层、衰减、中性化直觉；拒绝堆参数。", en: "IC, quantiles, decay, neutralization; reject parameter stacking." },
     hours: 14,
@@ -798,9 +798,11 @@ const phase_P4_lessons: Lesson[] = [
       { zh: "真/假因子对照。", en: "True vs null factor." },
     ],
     mustTeach: [
-      { zh: "IC=截面排序一致性。", en: "IC=cross-sectional rank agreement." },
-      { zh: "因子海市蜃楼与虚假发现。", en: "Factor mirage / false discoveries." },
-      { zh: "从经济假设出发。", en: "Start from economic hypothesis." },
+      { zh: "IC=截面排序一致性；RankIC / ICIR / IC 衰减。", en: "IC=cross-sectional rank agreement; RankIC / ICIR / IC decay." },
+      { zh: "因子构建：去极值、z 标准化、行业与市值中性化。", en: "Construction: winsorize, z-score, industry and mcap neutralization." },
+      { zh: "分层多空 + 换手成本；Fama–MacBeth（及 FF3/FF5 文献）。", en: "Quantile L/S + turnover/costs; Fama–MacBeth (+ FF3/FF5 literature)." },
+      { zh: "因子海市蜃楼与多重检验（Harvey–Liu–Zhu t>3）。", en: "Factor mirage & multiple testing (Harvey–Liu–Zhu t>3)." },
+      { zh: "从经济假设出发；Alphalens/Qlib 风格工作流。", en: "Start from economic hypothesis; Alphalens/Qlib-style workflow." },
     ],
     exercises: [
       { zh: "ic(factor,fwd)。", en: "ic(factor,fwd)." },
@@ -831,7 +833,7 @@ const phase_P4_lessons: Lesson[] = [
   },
   {
     slug: "factor-portfolio-lab",
-    status: "outline",
+    status: "ready",
     title: { zh: "因子到组合实验", en: "Factor-to-portfolio lab" },
     summary: { zh: "换手、简单中性化、多因子合成诚实评估。", en: "Turnover, simple neutralization, honest multi-factor combo." },
     hours: 7,
@@ -846,7 +848,8 @@ const phase_P4_lessons: Lesson[] = [
     ],
     mustTeach: [
       { zh: "合成不自动提高可交易性。", en: "Combining ≠ auto tradeability." },
-      { zh: "换手与成本再决定净收益。", en: "Turnover/costs decide net returns." },
+      { zh: "换手与成本再决定净收益（共享成本模型）。", en: "Turnover/costs decide net returns (shared cost model)." },
+      { zh: "中性化前后对照；拥挤与衰减。", en: "Before/after neutralization; crowding and decay." },
     ],
     exercises: [
       { zh: "中性化前后IC。", en: "IC before/after neutralization." },

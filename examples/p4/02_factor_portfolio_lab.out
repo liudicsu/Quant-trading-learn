@@ -1,0 +1,29 @@
+=== parameters ===
+reuse panel 200x750; true factor + nuisance raw_factor2 (noise loading)
+look-ahead: shift(1) weights; lagged impact vol; factor[t] → fwd from t+1
+cost model shared with P2/P3/P4-01: 10 bps one-way + √impact
+
+=== neutralization before / after ===
+true_factor RankIC mean before_neut=0.0845 after=0.1105
+nuisance_factor RankIC mean after_neut=0.0029 (should be ~0)
+recovery corr after_neut=0.9726
+
+=== single vs equal-weight multi-factor ===
+true_only                gross_SR=4.465 net_SR=3.734 turn=0.9349 NAV=34.418 IC=0.1105
+nuisance_only            gross_SR=0.873 net_SR=-7.112 turn=1.5619 NAV=0.340 IC=0.0029
+ew_true_plus_nuisance    gross_SR=4.509 net_SR=3.093 turn=1.3169 NAV=8.481 IC=0.0810
+teach: blending a null nuisance factor dilutes IC and net SR — combining ≠ free lunch
+
+=== turnover–cost table (rebalance cadence) ===
+hold= 1d mean_turn=0.9349 net_SR=3.734 NAV=34.418
+hold= 5d mean_turn=0.1919 net_SR=4.380 NAV=63.965
+hold=10d mean_turn=0.0943 net_SR=4.440 NAV=68.570
+hold=20d mean_turn=0.0509 net_SR=4.474 NAV=73.174
+teach: lower turnover cuts cost drag; expected-value tradeoff vs signal freshness
+
+=== crowding foil ===
+long_leg_HHI_mean=0.02500 rank_AC1=0.8666
+teach: high AC + concentrated books → crowding risk if many funds hold the same names
+chart /workspace/Quant-trading-learn/public/p4/portfolio_nav_compare.png
+chart /workspace/Quant-trading-learn/public/p4/ic_before_after.png
+disclaimer: synthetic planted panel — learning only, not investment advice

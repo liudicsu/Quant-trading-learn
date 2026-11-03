@@ -1,9 +1,189 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **14 学时**：概念 5h + 实验 7h + 写作 2h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
+
+**课内目标：** 实现 Spearman IC；构建分层多空；对照真/假因子。
+
+**必须教会：** IC=截面排序一致性；RankIC / ICIR / IC 衰减；去极值 + z 标准化 + 行业/市值中性化；分层多空 + 换手成本；Fama–MacBeth（及 FF3/FF5 文献）；因子海市蜃楼与 Harvey–Liu–Zhu t>3；从经济假设出发；用纯 pandas 实现 Alphalens/Qlib 风格流程。
+
+<Callout type="info" title="学习用途 — 非投资建议">
+合成 200×750 面板，**植入** `beta_true` 与夸大溢价 `MU_TRUE=0.0025`，便于核对回收/IC/FM。不宣称任何实盘因子有效。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 面板：**200 资产 × 750** 交易日；**10 个行业**；对数市值
+- DGP：`r = beta_true f_true + beta_mkt f_mkt + beta_size f_size + 行业 + 噪声`
+- `f_true` 日均 = **0.0025**（教学尺度溢价）；原始因子 = `beta_true` + 0.4·行业 + 0.25·规模 + 噪声
+- 去极值 p=1%；截面 z；对行业哑变量 + 对数市值回归取残差；再 z
+- 成本：P2 栈 — 单边 **10 bps** + √冲击；冲击 σ = **滞后**滚动标准差（VOL_LB=20，`shift(1)`，扩展窗口预热）
+- 前瞻：因子 `t` 预测从 `t+1` 起的收益；组合权重经 `shift(1)` 进场
+
+## 因子构建
+
+截面去极值、标准化，再对行业与对数市值做**残差中性化**，使清洗后的因子回收植入载荷，而非行业/市值污染。
+
+实验回收（相对 `beta_true` 的平均截面相关）：原始 ≈ **0.71** → 仅 z ≈ **0.71** → 中性化后 ≈ **0.92**。提升主要来自中性化。
+
+## IC、RankIC、ICIR、衰减
+
+**RankIC** = 因子[`t`] 与远期收益的 Spearman 相关。**ICIR** ≈ mean(IC)/std(IC)·√(252/h)。
+
+实验（中性化后）：RankIC h=1 均值 ≈ **0.111**，ICIR_daily ≈ **4.65**。对**静态风险载荷**，累积远期窗口上平均 RankIC 可上升；对照的**衰减 alpha** 从约 0.60（h=1）降到约 0.04（h=20）。二者都是“IC 随期限”的课——勿混淆。
+
+![IC 衰减](/p4/ic_decay.png)
+
+## 分层多空 + 成本
+
+Alphalens 风格：每日五分位；多 Q5 / 空 Q1 等权；套用共享成本模型。
+
+实验：毛夏普 ≈ **4.47**，净夏普 ≈ **3.73**，平均换手 ≈ **0.93**，分位年化收益 Q1→Q5 近似 −0.92 … +0.57。即便信号是植入的，成本拖累仍真实存在。
+
+![因子 IC 与净值](/p4/factor_ic_nav.png)
+
+![分层柱状图](/p4/quantile_bars.png)
+
+## Fama–MacBeth 与 FF3/FF5
+
+**Fama & MacBeth（1973，《JPE》81(3)，607–636）：** 每期截面回归收益对载荷，再对斜率做时间序列均值与 t（可选 Newey–West）。
+
+**Fama & French（1993，《JFE》33(1)，3–56）：** FF3 = Mkt−Rf、SMB、HML。**Fama & French（2015，《JFE》116(1)，1–22）：** FF5 = FF3 + RMW + CMA。
+
+实验 FM：日度 γ 均值 ≈ **0.00212**，t_iid ≈ **7.77**，t_NW(L5) ≈ **7.31**；月度 t_iid ≈ **7.89**。引用已对照 RePEc/期刊记录核对。
+
+## 因子动物园与 Harvey–Liu–Zhu（2016）
+
+**Harvey, Liu & Zhu（2016，《RFS》29(1)，5–68），“…and the Cross-Section of Expected Returns”：** 在已发表因子动物园的广泛多重检验下，新因子应大致过 **t > 3**，而非习惯上的 t≈2。
+
+实验：**200** 个随机截面因子 → |`t`|>2 比例 ≈ **0.045**，|`t`|>3 比例 ≈ **0.000**；植入真因子 FM t ≈ **7.8**。在大量试验中 t≈2 的“发现”不够。
+
+## 拥挤与衰减
+
+因子秩一阶自相关 ≈ **0.87**：秩粘性降低理论换手，但若许多组合收敛到同一持仓则抬升**拥挤**风险。声称多周持有前先看 IC 期限图。
+
+## Alphalens / Qlib 风格流程（pandas）
+
+Alphalens Reloaded 官方文档（[alphalens.ml4trading.io](https://alphalens.ml4trading.io/)）：`get_clean_factor_and_forward_returns` → 信息/收益/换手 tear sheet。本课用纯 pandas 实现同一步骤；若已安装可映射到 `alphalens-reloaded`。
+
+Qlib（[DataHandlerLP 处理器](https://qlib.readthedocs.io/en/latest/component/data.html)）：`CSZScoreNorm`、`CSZFillna`、Alpha158 特征集 — 概念上对应此处的去极值/z/中性化。
+
+## 小众 / 前沿
+
+- **小众（对照）：** [quant-wiki](https://github.com/LLMQuant/quant-wiki) 因子图谱 — 当地图浏览，不当已验证 alpha。
+- **前沿延后到 P8：** LLM/智能体公式化挖因子（RD-Agent、Chain-of-Alpha 等）。本课不重跑；正文不收录无法核验的“基于智能体挖因子”主张。
+
+## 期望值框架
+
+植入溢价是为了让你能**审计回收**。实盘研究应从经济假设出发，报告试验次数 N，并把动物园下的 t≈2 视为弱证据。可交易性由成本与换手后的净结果决定——仅有毛夏普不成产品。
+
+## 前瞻警告
+
+- 勿把当日收益写进当日就交易的因子。
+- 中性化协变量须在 `t` 已知（行业、滞后市值）。
+- 冲击 σ 必须**滞后**（禁止全样本标准差）。
+- 远期收益对齐：因子[`t`] ↔ 收益[`t+1 ... t+h`]。
+
+## Python 实验
+
+`examples/p4/01_factor_workflow.py`
+
+### 真实运行输出
+
+```text
+=== parameters ===
+panel 200 assets x 750 days; industries 10
+DGP: r = beta_true*f_true + beta_mkt*f_mkt + beta_size*f_size + industry + noise
+f_true has planted daily premium MU_TRUE=0.0025 (~63% ann per unit beta; exaggerated for teaching clarity)
+raw_factor = beta_true + 0.4*industry + 0.25*size_loading + noise  (nuisance contamination)
+look-ahead: factor[t] vs forward returns starting t+1; LS weights use shift(1); impact vol lagged
+cite: Fama & MacBeth 1973 JPE 81(3) 607-636 — cross-section then time-series mean of slopes
+cite: Fama & French 1993 JFE 33(1) 3-56 — Mkt-Rf, SMB, HML (FF3)
+cite: Fama & French 2015 JFE 116(1) 1-22 — FF5 = FF3 + RMW + CMA
+cite: Harvey, Liu & Zhu 2016 RFS 29(1) 5-68 — '...and the Cross-Section of Expected Returns'; t>3
+cite: Alphalens Reloaded docs (alphalens.ml4trading.io) — get_clean_factor_and_forward_returns + tear sheets
+cite: Qlib DataHandlerLP processors CSZScoreNorm / CSZFillna / Alpha158 (qlib.readthedocs.io)
+niche: quant-wiki factor taxonomy as foil only; frontier LLM formulaic mining deferred to P8 (not re-run)
+
+=== factor construction ===
+mean_cs_corr(raw, beta_true)=0.7120
+mean_cs_corr(z_only, beta_true)=0.7082
+mean_cs_corr(neutralized, beta_true)=0.9194
+teach: industry+mcap residualization lifts recovery of the planted loading
+
+=== RankIC / ICIR / decay ===
+RankIC h=1: mean=0.1105 std=0.3768 ICIR_ann≈4.654 n=749
+RankIC h=5: mean=0.2268 std=0.3671 ICIR_ann≈4.386 n=745
+RankIC h=10: mean=0.3055 std=0.3512 ICIR_ann≈4.367 n=740
+RankIC h=20: mean=0.4109 std=0.2877 ICIR_ann≈5.069 n=730
+ICIR_daily = mean/std * sqrt(252) = 4.654
+decaying_alpha_foil RankIC h=1: mean=0.5995
+decaying_alpha_foil RankIC h=5: mean=0.3449
+decaying_alpha_foil RankIC h=10: mean=0.1813
+decaying_alpha_foil RankIC h=20: mean=0.0440
+teach: static risk loading → mean RankIC can RISE with cumulative horizon; decaying alpha FALLS — both are 'IC decay' lessons
+chart /workspace/Quant-trading-learn/public/p4/ic_decay.png
+
+=== quintile portfolios (Alphalens-style long-short) ===
+LS gross_SR=4.465 net_SR=3.734 mean_turn=0.9349 NAV_net=34.4183
+cost model: P2 10 bps one-way + √impact with LAGGEDrolling σ (VOL_LB=20, shift(1), expanding warm-up)
+
+=== Fama–MacBeth (single-factor CS slopes) ===
+FM_daily mean_gamma=0.002119 t_iid=7.771 t_NeweyWest_L5=7.314 n=749
+FM_monthly mean_gamma=0.043795 t_iid=7.893 t_NeweyWest_L3=10.984 n_months=34
+FF3 (1993): Mkt-Rf, SMB, HML. FF5 (2015): + RMW, CMA. Lab FM uses the single planted factor.
+
+=== factor zoo / Harvey–Liu–Zhu (2016) multiple testing ===
+random_factors=200 frac_|t|>2=0.045 frac_|t|>3=0.000
+true_factor_FM_daily_t=7.771 FM_monthly_t=7.893 (monthly should clear t>3 with planted premium)
+Harvey et al. 2016: with a zoo of published factors, new claims should clear ~t>3, not t≈2
+
+=== crowding / decay foil ===
+factor_rank_autocorr_lag1_mean=0.8666
+teach: high rank AC → lower theoretical turnover, but crowding if books converge; IC decay caps horizon
+
+=== Alphalens/Qlib-style workflow (pandas) ===
+steps: (1) clean factor + forward returns (2) RankIC series (3) quantile returns (4) turnover
+optional API map: alphalens.utils.get_clean_factor_and_forward_returns → tears.create_information_tear_sheet / create_returns_tear_sheet
+Qlib: DataHandlerLP + CSZScoreNorm / CSZFillna processors ≈ winsorize+z+neutralize here; Alpha158 is a feature set ref
+chart /workspace/Quant-trading-learn/public/p4/factor_ic_nav.png
+quantile_ann_means {'Q1': -0.9227, 'Q2': -0.4565, 'Q3': -0.1818, 'Q4': 0.0594, 'Q5': 0.5694}
+chart /workspace/Quant-trading-learn/public/p4/quantile_bars.png
+disclaimer: synthetic panel with planted beta_true + MU_TRUE — learning only, not investment advice
+```
+
+## 常见错误 / 陷阱
+
+1. 不做中性化就把行业暴露叫作“alpha”。
+2. 在共享成本模型之前欢呼毛分层曲线。
+3. 挖了几十个因子后仍把 t>2 当发现（Harvey 等 2016）。
+4. 把静态风险载荷下上升的累积 RankIC 当成衰减交易信号。
+5. 冲击成本里用全样本波动（前瞻）。
+6. 同 bar 成交，或远期收益对齐在 `t` 而非 `t+1`。
+
+## 练习（1:1）
+
+1. **ex1** — `ic(factor, fwd)` Spearman RankIC 序列 + ICIR。
+2. **ex2** — 五分位多空净值（共享成本后）。
+3. **ex3** — 打乱/随机因子对照并比较 t。
+4. **ex4** — IC–期限图（风险溢价 vs 衰减对照）。
+5. **done1** — 小报告：回收相关 + IC + 分层 + 空因子动物园。
+
+## 测验
+
+<Quiz id="q1-ic" question="Spearman RankIC 度量的是？" options={["收益的时序自相关", "因子与远期收益的截面排序一致性", "仅 Q5 的夏普", "买卖价差反弹"]} answer={1} explanation="IC 是相对远期收益的截面秩相关。" />
+<Quiz id="q2-neut" question="行业+市值中性化主要做什么？" options={["保证正夏普", "去掉线性行业/规模污染，使残差跟踪目标载荷", "消灭换手", "替代 Newey–West"]} answer={1} explanation="对行业哑变量+对数市值回归取残差。" />
+<Quiz id="q3-hlz" question="Harvey–Liu–Zhu（2016）认为新因子大致应过？" options={["t>1", "t>2 总是够", "在因子动物园/多重检验下约 t>3", "只要 R²>0.9"]} answer={2} explanation="多重检验门槛约 t>3，而非习惯 t≈2。" />
+<Quiz id="q4-fm" question="Fama–MacBeth（1973）估计风险溢价靠？" options={["仅一次混合面板 OLS、不做时间均值", "逐期截面斜率，再对斜率做时间序列均值/t", "仅对收益做 PCA", "只排序不做回归"]} answer={1} explanation="每期截面，再对 gamma 做时序均值。" />
+<Quiz id="q5-decay" question="植入静态风险载荷时，相对累积远期窗口的平均 RankIC 常常？" options={["必须单调下降", "可随信号累积上升，而衰减 alpha 对照下降", "恒为 0", "等于换手"]} answer={1} explanation="实验显示累积 IC 上升 vs 衰减对照下降。" />
+<Quiz id="q6-alphalens" question="Alphalens 风格的第一步清洗最接近？" options={["get_clean_factor_and_forward_returns 再 tear sheet", "只画价格", "打乱日历", "去掉所有空头"]} answer={0} explanation="官方文档：清洗因子+远期收益，再 tears。" />
+
+## 完成标准
+
+IC + 分层多空 + 空因子动物园报告，含中性化回收与前瞻说明。
+
+**来源：** Fama–MacBeth 1973 JPE 81；Fama–French 1993 JFE 33；Fama–French 2015 JFE 116；Harvey–Liu–Zhu 2016 RFS 29(1)；Alphalens Reloaded 文档；Qlib DataHandlerLP/Alpha158；AFML Factor Mirage；@alin_alphapilot IC 优先；quant-wiki 对照。
+
+<Summary>
+**要点**：构建 → IC/衰减 → 分层+成本 → FM → t>3 动物园。  
+**下一课**：factor-portfolio-lab（换手、合成诚实性）。
+</Summary>

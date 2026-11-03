@@ -1,9 +1,125 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **7 学时**：概念 2h + 实验 4.5h + 测验 0.5h）把清洗后的因子做成**组合实验**：中性化前后对照、单因子 vs 等权多因子诚实性、换手–成本表、拥挤。前置：`factor-workflow`。
+
+**课内目标：** 估计因子组合换手；示意市值/行业中性化影响；对照单因子与等权多因子。
+
+**必须教会：** 合成不会自动提高可交易性；换手与共享成本模型决定净收益；中性化前后对照；拥挤与衰减。
+
+<Callout type="info" title="学习用途 — 非投资建议">
+同一植入 200×750 面板。滋扰因子 `raw_factor2`**没有**溢价——掺进去应受损而非受益。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 复用 P4-01 面板 + 缓存的中性化真因子；第二原始因子 = 噪声载荷 + 行业着色
+- 五分位多空；持有节奏 1/5/10/20 日；成本 = P2 10 bps + 滞后 √冲击
+- 前瞻：`shift(1)` 权重；因子[`t`] → 收益[`t+1`]
+
+## 中性化前后
+
+实验 RankIC 均值：前 ≈ **0.085** → 后 ≈ **0.111**。滋扰因子中性化后 ≈ **0.003**（近 0）。中性化因子的时序截面均值与 `beta_true` 相关 ≈ **0.97**。
+
+![中性化前后 IC](/p4/ic_before_after.png)
+
+## 单因子 vs 等权多因子
+
+| 设定 | 净夏普 | 平均换手 | RankIC |
+|------|--------|----------|--------|
+| 仅真因子 | ≈3.73 | ≈0.93 | ≈0.111 |
+| 仅滋扰 | ≈−7.11 | ≈1.56 | ≈0.003 |
+| 等权真+滋扰 | ≈3.09 | ≈1.32 | ≈0.081 |
+
+掺入空因子会**稀释** IC 与净夏普并抬升换手。合成 ≠ 免费午餐。
+
+![净值对照](/p4/portfolio_nav_compare.png)
+
+## 换手–成本表
+
+把同一五分位权重持有 5–20 日，平均换手从 ≈0.93 降到 ≈0.05，并在**本**粘性植入信号上抬升净夏普。期望值权衡：新鲜度 vs 成本拖累。IC 衰减快的实盘信号可能更偏短持有。
+
+## 拥挤对照
+
+多头腿 HHI 均值 ≈ **0.025**（约 40 只等权）且秩 AC1 ≈ **0.87**。基金间粘性、重叠持仓才是拥挤通道——即便你的回测在隔离状态下看起来干净。
+
+## 期望值框架
+
+植入因子的毛夏普不是产品。共享成本后的净结果，外加诚实的空因子合成测试，才是宣称“多因子升级”前的最低门槛。
+
+## 前瞻警告
+
+- 勿用未来市值或次日行业归属做中性化。
+- 持有/冻结逻辑不得在持有窗内偷看未来排名。
+- 冲击 σ 仅用滞后值。
+
+## Python 实验
+
+`examples/p4/02_factor_portfolio_lab.py`
+
+### 真实运行输出
+
+```text
+=== parameters ===
+reuse panel 200x750; true factor + nuisance raw_factor2 (noise loading)
+look-ahead: shift(1) weights; lagged impact vol; factor[t] → fwd from t+1
+cost model shared with P2/P3/P4-01: 10 bps one-way + √impact
+
+=== neutralization before / after ===
+true_factor RankIC mean before_neut=0.0845 after=0.1105
+nuisance_factor RankIC mean after_neut=0.0029 (should be ~0)
+recovery corr after_neut=0.9726
+
+=== single vs equal-weight multi-factor ===
+true_only                gross_SR=4.465 net_SR=3.734 turn=0.9349 NAV=34.418 IC=0.1105
+nuisance_only            gross_SR=0.873 net_SR=-7.112 turn=1.5619 NAV=0.340 IC=0.0029
+ew_true_plus_nuisance    gross_SR=4.509 net_SR=3.093 turn=1.3169 NAV=8.481 IC=0.0810
+teach: blending a null nuisance factor dilutes IC and net SR — combining ≠ free lunch
+
+=== turnover–cost table (rebalance cadence) ===
+hold= 1d mean_turn=0.9349 net_SR=3.734 NAV=34.418
+hold= 5d mean_turn=0.1919 net_SR=4.380 NAV=63.965
+hold=10d mean_turn=0.0943 net_SR=4.440 NAV=68.570
+hold=20d mean_turn=0.0509 net_SR=4.474 NAV=73.174
+teach: lower turnover cuts cost drag; expected-value tradeoff vs signal freshness
+
+=== crowding foil ===
+long_leg_HHI_mean=0.02500 rank_AC1=0.8666
+teach: high AC + concentrated books → crowding risk if many funds hold the same names
+chart /workspace/Quant-trading-learn/public/p4/portfolio_nav_compare.png
+chart /workspace/Quant-trading-learn/public/p4/ic_before_after.png
+disclaimer: synthetic planted panel — learning only, not investment advice
+```
+
+## 常见错误 / 陷阱
+
+1. 无空对照就把候选因子等权合成。
+2. 宣称多因子“改进”却不看换手。
+3. 用未来信息中性化。
+4. 以为高秩自相关一定等于低拥挤（也可能是大家拿一样的票）。
+5. 只报毛净值。
+
+## 练习（1:1）
+
+1. **ex1** — 中性化前后 RankIC。
+2. **ex2** — 等权多因子 vs 仅真因子表。
+3. **ex3** — 不同持有节奏的换手–成本表。
+4. **done1** — 因子→组合小报告（净夏普 + 换手 + 空合成）。
+
+## 测验
+
+<Quiz id="q1-why-neut" question="此处行业/市值中性化的主要目的？" options={["最大化换手", "去掉线性行业/规模，使残差跟踪目标信号", "替代交易成本", "保证 t>3"]} answer={1} explanation="对污染做残差化。" />
+<Quiz id="q2-combo" question="把真因子与空滋扰因子等权合成通常会？" options={["总是抬升净夏普", "稀释 IC/净夏普并可能抬升换手", "消除前瞻", "不再需要成本"]} answer={1} explanation="实验：合成净夏普与 IC 低于仅真因子。" />
+<Quiz id="q3-turn" question="在粘性植入信号上拉长持有窗主要会？" options={["抬升平均换手", "降低换手与成本拖累（相对新鲜度的期望值权衡）", "迫使 t<2", "取消中性化"]} answer={1} explanation="持有 1→20 日：换手 0.93→0.05。" />
+<Quiz id="q4-crowd" question="因子秩自相关很高时警示？" options={["成本为零", "若许多基金看法一致，持仓可能持续集中并拥挤", "ICIR 无穷", "FM 无效"]} answer={1} explanation="粘性秩 ↔ 重叠持仓风险。" />
+<Quiz id="q5-cost" question="共享成本模型后的净收益重要是因为？" options={["毛夏普已含费用", "可交易性由换手×bps 与冲击决定", "中性化消灭成本", "只有 OOS 日期付成本"]} answer={1} explanation="成本随换手缩放。" />
+
+## 完成标准
+
+因子→组合小报告：中性化对照、合成诚实性、换手–成本表。
+
+**来源：** P4-01 文献；Qlib 组合/回测可选；共享 P2 成本栈。
+
+<Summary>
+**要点**：中性化、勿盲目合成、成本×换手、拥挤。  
+**下一阶段**：P5 机器学习防泄漏（待写）。
+</Summary>
