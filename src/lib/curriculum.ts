@@ -29,7 +29,7 @@ export interface Lesson {
   doneWhen: L10n[];
   methodTags: { classic: string[]; niche: string[]; frontier: string[] };
   tasks: Task[];
-  /** Site body status: P0–P6 written; P7+ stubs. */
+  /** Site body status: P0–P7 written; P8+ stubs. */
   status: "ready" | "outline";
 }
 
@@ -1128,34 +1128,40 @@ const phase_P6_lessons: Lesson[] = [
 const phase_P7_lessons: Lesson[] = [
   {
     slug: "paper-trading-infra",
-    status: "outline",
+    status: "ready",
     title: { zh: "纸面交易与迷你基建", en: "Paper trading & mini infra" },
-    summary: { zh: "信号→目标→日志；≥5日；冻结版本。", en: "Signal→target→log; ≥5 days; freeze version." },
+    summary: {
+      zh: "合成数据纸面闭环：日志/对账/漂移、实盘−回测缺口分解、熔断演示（无券商下单）。",
+      en: "Synthetic paper loop: logs/recon/drift, live−BT gap decomposition, kill demos (no broker orders).",
+    },
     hours: 10,
     difficulty: 3,
     skippable: false,
     hourBasis: "3h design + 6h running/logging + 1h template",
     prereqs: ["risk-systems-lab"],
     goals: [
-      { zh: "CSV纸面撮合。", en: "CSV paper matching." },
-      { zh: "出日报。", en: "Emit daily reports." },
-      { zh: "解释纸面验流程。", en: "Explain paper validates process." },
+      { zh: "CSV/模拟撮合与冻结版本。", en: "CSV/sim matching with frozen version." },
+      { zh: "出日报并对账。", en: "Emit daily logs and reconcile." },
+      { zh: "数值分解实盘−回测缺口。", en: "Numerically decompose live−backtest gaps." },
     ],
     mustTeach: [
-      { zh: "纸面期间不按盈亏改规则。", en: "Don't edit rules for P&L during paper." },
-      { zh: "对账与异常日志。", en: "Reconciliation and anomaly logs." },
+      { zh: "纸面期间不按盈亏改规则；冻结版本。", en: "Don't edit rules for P&L; freeze version." },
+      { zh: "对账与异常日志；滑点/成交/延迟/数据缺口分解。", en: "Reconciliation; slippage/fills/latency/data gap decomposition." },
+      { zh: "熔断是工程；本站无真实券商下单代码。", en: "Kill switches are engineering; no real broker order code." },
     ],
     exercises: [
-      { zh: "CSV撮合。", en: "CSV matching." },
-      { zh: "5日日志。", en: "5-day logs." },
+      { zh: "≥5日纸面日志。", en: "≥5-day paper logs." },
+      { zh: "摩擦阶梯表。", en: "Friction ladder table." },
+      { zh: "熔断单元演示。", en: "Kill-switch unit demo." },
       { zh: "日报模板。", en: "Daily template." },
     ],
     quizTopics: [
       { zh: "纸面验证什么", en: "What paper validates" },
       { zh: "为何冻结版本", en: "Why freeze versions" },
+      { zh: "缺口分解", en: "Gap decomposition" },
     ],
     doneWhen: [
-      { zh: "≥5日日志包。", en: "≥5-day log pack." },
+      { zh: "≥5日日志包+缺口表+熔断演示。", en: "≥5-day log pack + gap table + kill demo." },
     ],
     methodTags: {
       classic: ["Canvas m13", "JoinQuant W08", "QuantStart paper-before-live"],
@@ -1163,17 +1169,21 @@ const phase_P7_lessons: Lesson[] = [
       frontier: [],
     },
     tasks: [
-      { id: "ex1", text: { zh: "CSV撮合。", en: "CSV matching." } },
-      { id: "ex2", text: { zh: "5日日志。", en: "5-day logs." } },
-      { id: "ex3", text: { zh: "日报模板。", en: "Daily template." } },
-      { id: "done1", text: { zh: "≥5日日志包。", en: "≥5-day log pack." } },
+      { id: "ex1", text: { zh: "≥5日纸面日志。", en: "≥5-day paper logs." } },
+      { id: "ex2", text: { zh: "摩擦阶梯表。", en: "Friction ladder table." } },
+      { id: "ex3", text: { zh: "熔断单元演示。", en: "Kill-switch unit demo." } },
+      { id: "ex4", text: { zh: "日报模板。", en: "Daily template." } },
+      { id: "done1", text: { zh: "≥5日日志包+缺口表+熔断演示。", en: "≥5-day log pack + gap table + kill demo." } },
     ],
   },
   {
     slug: "compliance-ethics",
-    status: "outline",
+    status: "ready",
     title: { zh: "合规、风险心态与研究伦理", en: "Compliance, risk mindset & research ethics" },
-    summary: { zh: "先生存；学习≠投顾；拒绝选择性汇报。", en: "Survive first; learning≠advisory; refuse selective reporting." },
+    summary: {
+      zh: "中美程序化/接入/卖空/保证金与加密官方状态；非法律意见；研究伦理。",
+      en: "CN/US programmatic, access, short sale, margin & crypto official status; not legal advice; research ethics.",
+    },
     hours: 4,
     difficulty: 2,
     skippable: false,
@@ -1185,23 +1195,26 @@ const phase_P7_lessons: Lesson[] = [
       { zh: "拆穿保证夏普话术。", en: "Debunk guaranteed-Sharpe pitches." },
     ],
     mustTeach: [
-      { zh: "本站学习材料非投资建议。", en: "Site materials are not investment advice." },
-      { zh: "不懂则零仓位。", en: "Zero size if you don't understand." },
+      { zh: "本站学习材料非投资建议；不懂则零仓位。", en: "Site materials are not investment advice; zero size if unclear." },
+      { zh: "只引用已抓取官方文本并标注核验日期。", en: "Cite fetched official texts with date checked." },
+      { zh: "证监会2024程序化规定；沪深细则高频300/20000；15c3-5；Reg SHO；4210/Notice26-10；15-09；银发237号；SEC/CFTC工作人员声明。", en: "CSRC 2024 programmatic rules; SSE/SZSE HFT 300/20000; 15c3-5; Reg SHO; 4210/Notice26-10; 15-09; PBoC 237; SEC/CFTC staff statement." },
     ],
     exercises: [
       { zh: "风险一页。", en: "Risk page." },
       { zh: "三次失败。", en: "Three failures." },
       { zh: "话术审计。", en: "Pitch audit." },
+      { zh: "官方来源表。", en: "Official-source table." },
     ],
     quizTopics: [
       { zh: "选择性汇报危害", en: "Harm of selective reporting" },
       { zh: "学习与受监管业务边界", en: "Learning vs regulated advice" },
+      { zh: "官方文本核验", en: "Official-text verification" },
     ],
     doneWhen: [
       { zh: "伦理清单勾选完成。", en: "Ethics checklist complete." },
     ],
     methodTags: {
-      classic: ["Canvas m14", "AFML scientific ethics"],
+      classic: ["Canvas m14", "AFML scientific ethics", "CSRC/SSE/SZSE", "SEC 15c3-5", "FINRA 15-09/26-10"],
       niche: [],
       frontier: ["LLM/agent research must obey same ethics/hold-out (link P8)"],
     },
@@ -1209,6 +1222,7 @@ const phase_P7_lessons: Lesson[] = [
       { id: "ex1", text: { zh: "风险一页。", en: "Risk page." } },
       { id: "ex2", text: { zh: "三次失败。", en: "Three failures." } },
       { id: "ex3", text: { zh: "话术审计。", en: "Pitch audit." } },
+      { id: "ex4", text: { zh: "官方来源表。", en: "Official-source table." } },
       { id: "done1", text: { zh: "伦理清单勾选完成。", en: "Ethics checklist complete." } },
     ],
   },

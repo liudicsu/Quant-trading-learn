@@ -1,9 +1,109 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**10 hours**: 3h design + 6h running/logging + 1h template) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
+
+**Goals:** CSV/sim paper matching; emit daily logs; explain what paper validates (process, not alpha).
+
+**Must-teach:** freeze the strategy version during paper; do not edit rules for P&L; reconciliation and anomaly logs; decompose live−backtest gaps (slippage, fills, latency, data); kill switches are engineering. **No real broker order code** — this site stays learning-only.
+
+<Callout type="info" title="Learning only — not investment advice">
+Synthetic bars and simulated fills. Nothing here connects to a live broker.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Synth series: 400 business days; signal `sign(mom20)`; vol-target 10% ann.; frozen `VERSION=mom20_vt_v1.0.0`
+- Research foil: next-close fill, cost `5 bps · |Δw|`
+- Paper foil: open fill, latency 1–2 bars, slip `2 + 8·|Δw|` bps, ~8% partial fills
+- Kill rules: data gap → flat; DD soft at 4% / hard kill at 8%; gross ≤ 1.5
+
+## Paper loop (no broker)
+
+`examples/p7/01_paper_trading_loop.py` runs ≥360 sessions: each day logs version, target, position, equity, DD, and notes. Fills and kill events write to CSV under `examples/p7/data/`.
+
+**What paper validates:** wiring (signal→size→fill→ledger), kill behaviour, logging discipline — **not** that the signal has edge.
+
+![Paper equity](/p7/paper_equity.png)
+
+## Reconciliation and drift
+
+Lab recon absolute error ≈ 0 between ledger and equity series. Drift foil: Spearman(mom20, fwd_ret) early ≈ −0.13 vs late ≈ −0.09 (delta ≈ +0.04) — monitor distribution shift even when IC is weak.
+
+## Live vs backtest gap (numeric)
+
+Same signal; only frictions change (close-to-close returns held fixed in the ladder):
+
+| Stage | cum return (lab) | gap vs research |
+|-------|------------------|-----------------|
+| research_bt | ≈ −0.030 | — |
+| +latency | ≈ +0.015 | timing can go either way on a path |
+| +slip | ≈ −0.008 | structural cost |
+| +partial | ≈ −0.016 | missed/partial fills |
+
+Structural: research 5 bps·\|Δw\|; paper mean slip on turns ≈ 3 bps in this low-turnover foil (schedule still `2+8·|Δw|`); partial scales cost ×1/0.85.
+
+![Gap ladder](/p7/live_bt_gap.png)
+
+## Kill switches (code demo)
+
+Unit demo triggers:
+
+- `dd=-0.01` → ok
+- `dd=-0.05` → `dd_derisk` (size scaled)
+- `dd=-0.09` → `dd_kill` (flat)
+- `gap=True` → `data_gap`
+- `target=2.5` → `gross_clip` to 1.5
+
+## Look-ahead warnings
+
+- Signals from past closes only; never size with same-bar future return
+- Paper fills use open / delayed bars — do not silently upgrade to research fills mid-test
+- Freeze `VERSION` for the whole paper window
+
+## Python lab
+
+`examples/p7/01_paper_trading_loop.py`
+
+### Real run output
+
+```
+sessions=360 version=mom20_vt_v1.0.0 final_equity≈0.93
+kill reasons include dd_derisk; unit demo fires dd_kill / data_gap / gross_clip
+cum_return research_bt≈-0.030 +latency≈+0.015 +slip≈-0.008 +partial≈-0.016
+```
+
+## Common mistakes / pitfalls
+
+1. Editing signal rules after seeing paper P&amp;L.
+2. Calling paper SR “live proof.”
+3. Mixing research fills into the paper ledger.
+4. No recon between fills CSV and equity.
+5. Shipping broker API keys or order routers in the learning repo.
+
+## Practice (1:1)
+
+1. **ex1** — CSV/sim matching for ≥5 days with frozen version.
+2. **ex2** — Daily log + recon check (abs error ~0).
+3. **ex3** — Reproduce the friction ladder with stated params.
+4. **ex4** — Kill-switch unit cases (gap / DD / gross).
+5. **done1** — ≥5-day log pack + gap table + kill demo.
+
+## Quiz
+
+<Quiz id="p7pt-q1" question="During paper trading you should?" options={["Tune rules daily for P&L", "Freeze the strategy version and log anomalies", "Switch to broker APIs immediately", "Drop kill switches"]} answer={1} explanation="Paper tests process under a frozen protocol." />
+<Quiz id="p7pt-q2" question="Live−backtest gaps are mainly from?" options={["Only Sharpe math", "Slippage, fills, latency, and data differences", "Random seeds alone", "Kelly fraction"]} answer={1} explanation="Decompose frictions with a numeric ladder." />
+<Quiz id="p7pt-q3" question="This site’s paper lab includes?" options={["Real broker order routing", "Simulated fills only — no broker order code", "Live crypto withdrawals", "Unfrozen nightly rewrites"]} answer={1} explanation="Learning-only; no broker connectivity." />
+<Quiz id="p7pt-q4" question="A data_gap kill should?" options={["Increase leverage", "Flatten / pause orders", "Ignore stale bars", "Refit the model"]} answer={1} explanation="Engineering brake on bad data." />
+<Quiz id="p7pt-q5" question="Reconciliation checks?" options={["Twitter sentiment", "Ledger equity vs replay from fills/logs", "Only train loss", "VWAP charts"]} answer={1} explanation="Catch booking bugs before claiming results." />
+<Quiz id="p7pt-q6" question="Drift metrics in the lab use?" options={["Accuracy only", "Early vs late Spearman(mom, fwd_ret)", "Kelly f*", "VaR α"]} answer={1} explanation="Simple distribution-shift foil on the signal." />
+
+## Done when
+
+≥5-day (lab: 360) log pack, friction gap table, kill-switch demo, frozen version string in every row.
+
+**Sources:** Canvas m13; JoinQuant W08 paper-before-live ethos; QuantStart paper notes; P6 risk kill patterns.
+
+<Summary>
+**Takeaways**: freeze version → log everything → reconcile → decompose gaps → kill on gap/DD/gross.  
+**Next**: compliance-ethics (CN/US/crypto official rules — not legal advice).
+</Summary>

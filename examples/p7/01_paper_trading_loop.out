@@ -1,0 +1,29 @@
+=== parameters ===
+synthetic 1-asset daily series; paper loop ≥10 sessions; NO broker APIs
+frozen strategy version: signal=sign(mom20); target=vol_scaled; costs from shared model
+look-ahead: signals use only past closes; fills use next open (+latency foil)
+
+=== research backtest (optimistic fills) ===
+
+=== paper loop (simulated fills; no broker) ===
+sessions=360 version=mom20_vt_v1.0.0 final_equity=0.9291
+kill_events=325 reasons={'dd_derisk': 325}
+recon_abs_err≈0.00e+00 (ledger vs series; expect ~0)
+drift: Spearman(mom20, fwd_ret) early=-0.130 late=-0.087 delta=0.044
+
+=== live vs backtest gap decomposition (same signal, different frictions) ===
+stated foil params: research fill=next close, cost=5bps·|Δw|; paper fill=open+latency, slip=2+8·|Δw| bps, 8% partial fills
+cum_return research_bt=-0.0301 +latency=0.0146 +slip=-0.0079 +partial=-0.0157
+gap_vs_bt: latency=0.0447 | slip=-0.0225 | partial=-0.0078 | total=0.0143
+structural: research_cost=5.0 bps·|Δw|; paper_mean_slip_bps_on_turns=3.01; partial scales cost ×1/0.85
+paper_loop_cum≈-0.0705 (includes partial fills + kill switches; not equal to D)
+chart /workspace/Quant-trading-learn/public/p7/paper_equity.png
+chart /workspace/Quant-trading-learn/public/p7/live_bt_gap.png
+
+=== kill-switch unit demo ===
+input dd=-0.01 gap=False target=0.8 → action=ok sized=0.800 (expect ok)
+input dd=-0.05 gap=False target=0.8 → action=dd_derisk sized=0.600 (expect dd_derisk)
+input dd=-0.09 gap=False target=0.8 → action=dd_kill sized=0.000 (expect dd_kill)
+input dd=-0.01 gap=True target=0.8 → action=data_gap sized=0.000 (expect data_gap)
+input dd=-0.01 gap=False target=2.5 → action=gross_clip sized=1.500 (expect gross_clip)
+disclaimer: synthetic paper loop — learning only; no broker connectivity
