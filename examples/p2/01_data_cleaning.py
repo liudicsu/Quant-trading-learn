@@ -64,8 +64,17 @@ ret = df["AAA_adj"].pct_change()
 sig = (df["AAA_adj"] > df["AAA_adj"].rolling(10).mean()).astype(int)
 honest = sig.shift(1) * ret
 peek = sig * ret.shift(-1)
-print("panel_nav_honest_shift1", round(float((1 + honest.fillna(0)).cumprod().iloc[-1]), 6))
-print("panel_nav_signal_times_next_ret", round(float((1 + peek.fillna(0)).cumprod().iloc[-1]), 6))
+nav_h=round(float((1 + honest.fillna(0)).cumprod().iloc[-1]), 6)
+nav_p=round(float((1 + peek.fillna(0)).cumprod().iloc[-1]), 6)
+print("panel_nav_honest_shift1", nav_h)
+print("panel_nav_signal_times_next_ret", nav_p)
+print(
+    "equality_why: honest = shift(1)*ret and peek = signal*ret.shift(-1) are the SAME "
+    "PnL stream shifted by one bar (identical non-NA products, different timestamps); "
+    "equal NAV is NOT evidence that peek is look-ahead-free — both use next-period returns "
+    "aligned to a prior signal; same-bar signal*ret WOULD be look-ahead."
+)
+print("equal_nav", nav_h == nav_p)
 
 print("\n=== reindex + missingness assert ===")
 cal = pd.bdate_range(df.index.min(), df.index.max())

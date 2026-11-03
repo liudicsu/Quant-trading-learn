@@ -35,6 +35,8 @@ tue_row_price_after_bug 100.5
 teach: Tue's row now carries Wed's close — one-day timezone/session mislabel embeds look-ahead.
 panel_nav_honest_shift1 0.818344
 panel_nav_signal_times_next_ret 0.818344
+equality_why: honest = shift(1)*ret and peek = signal*ret.shift(-1) are the SAME PnL stream shifted by one bar (identical non-NA products, different timestamps); equal NAV is NOT evidence that peek is look-ahead-free — both use next-period returns aligned to a prior signal; same-bar signal*ret WOULD be look-ahead.
+equal_nav True
 
 === reindex + missingness assert ===
 calendar_rows 300 panel_rows 300 missing_after_reindex 0

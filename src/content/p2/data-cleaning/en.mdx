@@ -40,7 +40,12 @@ Across the split, raw return ≈ **-50.8%**, adj ≈ **-1.6%**. Research must de
 
 - [Binance Vision](https://data.binance.vision/) hosts bulk historical market files; [sera00111’s tooling note](https://x.com/sera00111/status/2108332340753969191) says minute/hour research can start from Vision and CCXT-style free entry points, and to choose data granularity after you know the strategy.
 - [OpenBB quantitative docs](https://docs.openbb.co/odp/python/extensions/data-processing/quantitative) describe `obb.quantitative` stats/factor tools on **already aligned** series — they assume you fixed timestamps first.
-- [PyQuant News API example post](https://x.com/pyquantnews/status/2109990383828471949) (same thread also names yfinance and IBApi) lists concrete market-data APIs as an index of where to pull data, not as a strategy.
+- [PyQuant News “45 APIs for finance”](https://x.com/pyquantnews/status/2116517809920327801) introduces a list of finance data APIs (not just prices) and points to the [public-apis finance section on GitHub](https://github.com/public-apis/public-apis#finance) as the grab-link — treat it as a **source map**, not a strategy.
+
+
+## Why `panel_nav_honest_shift1` equals `signal × next_ret`
+
+Those two NAV prints are equal because they are the **same PnL products shifted by one timestamp**: `shift(1)×ret` vs `signal×ret.shift(-1)`. Equal NAV is **not** a look-ahead test — both already use next-period returns with a prior signal. Same-bar `signal×ret` would be look-ahead. (See lab print `equality_why`.)
 
 ## Python lab (run locally)
 
@@ -86,6 +91,8 @@ tue_row_price_after_bug 100.5
 teach: Tue's row now carries Wed's close — one-day timezone/session mislabel embeds look-ahead.
 panel_nav_honest_shift1 0.818344
 panel_nav_signal_times_next_ret 0.818344
+equality_why: honest = shift(1)*ret and peek = signal*ret.shift(-1) are the SAME PnL stream shifted by one bar (identical non-NA products, different timestamps); equal NAV is NOT evidence that peek is look-ahead-free — both use next-period returns aligned to a prior signal; same-bar signal*ret WOULD be look-ahead.
+equal_nav True
 
 === reindex + missingness assert ===
 calendar_rows 300 panel_rows 300 missing_after_reindex 0

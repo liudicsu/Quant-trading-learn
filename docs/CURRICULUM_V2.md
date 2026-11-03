@@ -330,12 +330,12 @@
   - PIT含义
 - **Completion criteria:**
   - 管线可复跑+说明书。
-- **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; JoinQuant data | niche: @pyquantnews finance API notes; OpenBB quantitative docs; Binance Vision + @sera00111 crypto data notes | frontier: Alt-data awareness; deeper in P8
+- **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; JoinQuant data | niche: @pyquantnews 45 APIs (2116517809920327801); OpenBB quantitative docs; Binance Vision + @sera00111 crypto data notes | frontier: Alt-data awareness; deeper in P8
 
 #### `backtest-traps` — 回测陷阱与过拟合审讯 / Backtest traps & overfitting interrogation
 - **Hours:** 16h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 9h multi-labs + 2h write-up — HEAVY
 - **Prereqs:** `data-cleaning`, `stats-probability-basics`
-- **Summary:** 前瞻、幸存者、过拟合、walk-forward、试验次数。
+- **Summary:** 前瞻、walk-forward、PSR/DSR、试验次数、幸存者回顾。
 - **Goals:**
   - 作弊vs诚实对照。
   - 样本外/walk-forward。
@@ -355,12 +355,12 @@
   - walk-forward目的
 - **Completion criteria:**
   - 陷阱报告含对照与OOS。
-- **Method tags:** classic: Canvas m5; JoinQuant审讯室; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out
+- **Method tags:** classic: Canvas m5; JoinQuant审讯室; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | classic+: Bailey-LdP 2012 PSR / 2014 DSR; AFML ch.7/14 | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out
 
 #### `costs-in-backtest` — 成本写入回测 / Costs in the backtest
 - **Hours:** 6h · **Difficulty:** 3/5 · **Basis:** 2h concepts + 3.5h coding + 0.5h quiz
 - **Prereqs:** `backtest-traps`
-- **Summary:** 佣金+滑点净收益；成本阶梯。
+- **Summary:** 四段成本+√冲击；堆叠分解与容量。
 - **Goals:**
   - 实现换手成本公式。
   - ≥3档成本敏感。

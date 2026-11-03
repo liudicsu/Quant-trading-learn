@@ -10,7 +10,7 @@ Phases P0–P9 from knowledge dependencies (`src/lib/curriculum.ts`, `docs/CURRI
 
 Routes: `/[locale]/phase/<phaseSlug>/<lessonSlug>`.
 
-**This batch:** full bodies for all **P0** lessons (zh+en). Other phases are outline stubs.
+**Written so far:** full bodies for **P0–P2** (zh+en). Later phases are outline stubs.
 
 ## Develop
 
@@ -18,7 +18,17 @@ Routes: `/[locale]/phase/<phaseSlug>/<lessonSlug>`.
 npm ci && npm run dev
 ```
 
-P0 labs: `examples/p0/`.
+P0 labs: `examples/p0/`. P1/P2 labs: `examples/p1/`, `examples/p2/`.
+
+Python labs need:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+`matplotlib` is required for P2 charts (`public/p2/*.png`).
 
 ## Pages
 

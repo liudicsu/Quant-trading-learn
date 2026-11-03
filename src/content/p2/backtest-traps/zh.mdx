@@ -1,60 +1,107 @@
 ## 学习目标
 
-本课（约 **16 学时**：概念 5h + 多实验 9h + 写作 2h，**重课**）建立回测审讯：作弊 vs 诚实、网格过拟合、冻结后再看 hold-out、记录试验次数。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **16 学时**：概念 5h + 多实验 9h + 写作 2h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
-**课内目标：** 作弊/诚实对照；样本外/walk-forward 精神；记录失败与试验次数。
+**课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
-**必须教会：** 未 shift 用当日收益 = 前瞻；多重试错制造虚假发现；冻结规则后再看样本外。
+**必须教会：** 未 shift 的同日收益=前瞻；多重试错制造虚假发现；冻结规则后再看样本外；DSR 随 N 下降。
 
 <Callout type="warn" title="学习用途">
-合成资产。审讯的是流程，不是荐股。
+玩具信号与合成面板，不是实盘策略或业绩承诺。
 </Callout>
 
 ## 参数
 
-- 资产 AAA_adj；n≈299；Rf=0；年化 √252  
-- MA 网格 windows=5…40 step 5（共 8 次试验）  
-- Hold-out：末 **80** 日；随机规则扫描 50 seeds × 30 trials，阈值 |SR|>1.5  
+- 面板 `AAA_adj`，约 **299** 日收益；Rf=0；年化 √252
+- 均线窗 `{5,10,…,40}`；诚实仓位 `position = signal.shift(1)`
+- Walk-forward：训练 **80** / 测试 **20** / 步长 **20**
+- 假阳性零假设：50 种子 × 30 条随机 ±1 规则；阈值 |SR_ann|>1.5
+- PSR/DSR：Bailey & López de Prado **2012**（PSR）、**2014**（DSR）；AFML 第 7/14 章精神
 
-## 作弊 vs 诚实均线
+## 作弊 vs 诚实（前瞻）
 
-同 bar（无 shift）夏普可到 **~5.3**、净值 **~2.29**；`shift(1)` 诚实路径夏普 **负**。定义：用今日收盘做信号并吃今日收盘收益 = lookahead。
+同一 MA10：**作弊**用当日收盘进信号并赚当日收益；**诚实**把仓位右移一日。实验：作弊夏普≈**5.27** / 净值≈**2.29**，诚实≈**−1.12** / **0.82**。
 
-## 网格过拟合
+## 回顾：幸存者偏差与数据挖掘
 
-样本内挑最大夏普的窗，样本外常崩。本课 best_train_w=35，train SR≈0.18，test SR≈−1.90。
+交叉链接：[数据与清洗](/phase/data-honest-backtests/data-cleaning)。
 
-## 冻结后再 hold-out
+- **幸存者：** 今日成分 ≠ 历史可投资宇宙——只回放幸存者会抬高均值（数值演示在 data-cleaning）。
+- **数据挖掘：** 在大量未登记试验 / 全样本窥视后再挑规则。Walk-forward、试验日志与 DSR 用来暴露代价。
 
-先在发展段选窗，再在从未参与选择的末段评分——呼应密封评估精神。
+## Walk-forward 实验
 
-<Callout type="info" title="密封 hold-out 精神（已读论文）">
-[Quant-Arena (arXiv:2610.30113)](https://arxiv.org/abs/2610.30113) 要求模型只在 2022–2023 研究窗口拿反馈，**冻结一条策略**后，在密封的 2024 年评估。本课用「发展段选参 → 末段 hold-out」练同一纪律（教学简化，不是复现该基准）。
+每个训练段上选最优均线窗，再在下一段测试（测试段内不重选）。
+
+实验摘要（10 折）：训练夏普均值≈**0.25**，测试均值≈**−0.89**，测试中位数≈**−1.75**，测试夏普>0 的比例≈**0.30**。逐折表见下方运行输出。
+
+## 假阳性均值 2.78 的上下文
+
+n=**299** 时，零假设下年化夏普的标准误 ≈ √(252/299) ≈ **0.918**，故 P(|SR|>1.5) ≈ **0.102**；30 次试验期望命中 ≈ **3.07**。实验室 Monte Carlo 的 mean_false_hits≈**2.78**（50 种子）与之接近；离散 ±1 符号相对高斯噪声会有小偏差。
+
+## 概率夏普比（PSR）
+
+Bailey & López de Prado（2012）《The Sharpe Ratio Efficient Frontier》，非年化 SR̂ 与阈值 SR\*：
+
+
+```text
+\widehat{PSR}(SR^*)=\Phi\left(\frac{(\hat{SR}-SR^*)\sqrt{n-1}}{\sqrt{1-\gamma_3\hat{SR}+\frac{\gamma_4-1}{4}\hat{SR}^2}}\right)
+```
+
+
+γ₃=偏度，γ₄=**Pearson 峰度**（非 excess）。负偏/厚尾增大不确定性（分母变大 → PSR 下降）。
+
+## 紧缩夏普比（DSR）
+
+Bailey & López de Prado（2014）《The Deflated Sharpe Ratio》：DSR 是把阈值换成**多重试错下期望最大夏普**的 PSR。零均值、跨试验 σ_SR 时：
+
+
+```text
+E[\max SR]\approx \sigma_{SR}\Big[(1-\gamma)\Phi^{-1}(1-\tfrac1N)+\gamma\,\Phi^{-1}(1-\tfrac1{Ne})\Big]
+```
+
+
+γ≈0.5772（Euler–Mascheroni）。`mathrm{DSR}=widehat{PSR}(SR^*=E[max])`。**N** 增大 → E[max] 上升 → **DSR 下降**。
+
+实验（训练最优 w=35）：PSR(0)≈**0.42**；DSR 从 N=1 的 ≈**0.42** 降到 N=200 的 ≈**0.06**。图：`/p2/dsr_vs_N.png`。
+
+![DSR 随 N](/p2/dsr_vs_N.png)
+
+## 可选：Purged + Embargo CV（AFML 第 7 章）
+
+若标签窗口与测试重叠，就 **purge** 这些训练样本；再加 **embargo** 间隔，降低序列相关泄漏。实验草图：label_horizon=1，embargo=3 → purged 训练 149 vs 朴素 150。
+
+## 密封 hold-out 精神
+
+<Callout type="info" title="密封 hold-out（已读论文）">
+[Quant-Arena (arXiv:2610.30113)](https://arxiv.org/abs/2610.30113) 只在较早窗口给反馈，**冻结一条策略**后再密封评估后期。本课 freeze-then-holdout / walk-forward 练同一纪律（教学简化）。
 </Callout>
-
-## 试验次数与假阳性
-
-50 个种子上，30 次随机仓位里 |SR|>1.5 的次数均值约 **2.78**（std≈1.38）——噪声也会「显著」，所以要记账。
 
 ## Python 实验（已本地运行）
 
-脚本：`examples/p2/02_backtest_traps.py`。
+脚本：`examples/p2/02_backtest_traps.py`（需 `pip install -r requirements.txt`）。
 
 ### 实际运行输出
 
 ```text
 === parameters ===
 n 299 ann_sqrt252 15.874508 asset=AAA_adj Rf=0
+sources: Bailey-LdP 2012 SRE Frontier (PSR); Bailey-LdP 2014 DSR; AFML ch.7/14
 
 === MA10 cheat vs honest ===
 cheat_same_bar_sharpe 5.2663 nav 2.290582
 honest_shift1_sharpe -1.1193 nav 0.818344
 lookahead_def: using today's close in the signal while earning today's close-to-close return.
 
+=== recap: survivorship & data snooping (see data-cleaning) ===
+survivorship: today's members != historical universe — replaying only survivors inflates means.
+snooping: choosing rules after peeking at full-sample ranks / many unlabeled trials.
+cross_link: /phase/data-honest-backtests/data-cleaning
+
 === parameter grid (honest shift1) ===
 windows [5, 10, 15, 20, 25, 30, 35, 40]
-best_train_w 35 sharpe_train 0.1801 sharpe_test -1.9025
-mean_train_sharpe -0.3252 mean_test_sharpe -1.8011
+best_train_w 35 sharpe_train 0.1796 sharpe_test -1.9121
+mean_train_sharpe -0.3244 mean_test_sharpe -1.8102
 teach: picking max in-sample Sharpe after many trials overstates OOS — log trial counts.
 
 === freeze-then-holdout ===
@@ -64,47 +111,100 @@ sharpe_develop 0.1717
 sharpe_holdout -2.1282
 quant_arena_spirit: research feedback only on an earlier window; freeze one rule; score a sealed later window (arXiv:2610.30113).
 
-=== random-rule false hits (50 seeds × 30 trials, thr |SR|>1.5) ===
+=== walk-forward (rolling train/test) ===
+params: train_len 80 test_len 20 step 20 windows [5, 10, 15, 20, 25, 30, 35, 40]
+per_window_table
+ fold train_start  train_end test_start   test_end  best_w  sharpe_train  sharpe_test
+    0  2022-01-04 2022-04-25 2022-04-26 2022-05-23      15       -2.5778       0.2497
+    1  2022-02-01 2022-05-23 2022-05-24 2022-06-20      40        0.5422       1.3865
+    2  2022-03-01 2022-06-20 2022-06-21 2022-07-18      40        0.8898      -2.3970
+    3  2022-03-29 2022-07-18 2022-07-19 2022-08-15      40        0.5014       4.0868
+    4  2022-04-26 2022-08-15 2022-08-16 2022-09-12      15        2.3064      -5.5471
+    5  2022-05-24 2022-09-12 2022-09-13 2022-10-10      25        1.1467      -1.7534
+    6  2022-06-21 2022-10-10 2022-10-11 2022-11-07      15        0.5130          NaN
+    7  2022-07-19 2022-11-07 2022-11-08 2022-12-05      15        0.6701          NaN
+    8  2022-08-16 2022-12-05 2022-12-06 2023-01-02      20       -1.0805      -2.2653
+    9  2022-09-13 2023-01-02 2023-01-03 2023-01-30      20       -0.4595          NaN
+summary_n_folds 10
+summary_mean_train_sr 0.2452
+summary_mean_test_sr -0.8914
+summary_median_test_sr -1.7534
+summary_frac_test_positive 0.3
+
+=== random-rule false hits + null SE check ===
+n_returns 299
+SE_ann_SR_under_null ≈ √(252/n) = 0.918046
+P(|SR_ann|>1.5) under Normal null ≈ 0.102279
+expected_hits_per_30_trials ≈ 3.0684
 mean_false_hits 2.78 std_false_hits 1.375
-null_note: under noise, some seeds look 'significant' — record trials.
+context: Monte Carlo mean_false_hits≈ 2.78 vs Normal-null expectation≈ 3.068 (close; discrete ±1 signs add slight difference).
+
+=== PSR / DSR (Bailey & López de Prado) ===
+selected_w 35 n_obs 299
+SR_raw -0.011938 SR_ann -0.1895
+skew_gamma3 -0.5624 kurtosis_gamma4_pearson 9.811
+PSR(SR*=0) 0.4181
+N_trials_grid 8 V[SR_raw_trials] 0.000792
+DSR_vs_N_table (SR* = E[max SR] under null; grows with N → DSR falls)
+  N  E_max_SR_raw      DSR
+  1      0.000000 0.418103
+  2      0.014626 0.322743
+  5      0.033559 0.215367
+  8      0.041056 0.179369
+ 10      0.044309 0.165004
+ 20      0.053486 0.128602
+ 30      0.058345 0.111768
+ 50      0.064055 0.094077
+100      0.071211 0.074935
+200      0.077822 0.060036
+formula_note: DSR = PSR(SR̂, SR*=E[max], n, γ3, γ4); E[max]=σ_SR*[(1-γ)Φ^{-1}(1-1/N)+γ Φ^{-1}(1-1/(N e))] (Bailey-LdP 2014).
+saved_plot public/p2/dsr_vs_N.png
+
+=== optional: purged + embargo CV sketch (AFML ch.7) ===
+label_horizon 1 embargo_bars 3
+naive_train_n 150 purged_train_n 149
+test_after_embargo_n 40
+teach: purge drops train samples whose labels overlap the test window; embargo adds a gap so serial dependence does not leak.
 
 === failure log template ===
 date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
-2026-11-04 | MA grid | 8 windows | train SR see above | holdout SR see above | IS≠OOS | shrink search / pre-register
+2026-11-04 | MA walk-forward | 8 windows × 10 folds | mean_train=0.245 | mean_test=-0.891 | IS≠OOS / DSR falls with N | shrink search / pre-register / sealed hold-out
 ASSERTS_OK
 ```
 
 ## 常见错误 / 陷阱
 
-1. 同 bar 成交当诚实。  
-2. 搜完参数只贴最好曲线。  
-3. 用测试集调参。  
-4. 不记试验次数。  
-5. 把密封集反馈泄漏回研发。
+1. 把同日成交标成「研究」。
+2. 报告多次试验中最好的一次却不写 N。
+3. 把两种诚实对齐的相等净值误当成「无前瞻」证明。
+4. 只用今日指数成分「验证」历史。
+5. 未读论文假设就把 PSR/DSR 阈值当实盘规则（IID/平稳遍历、试验独立性）。
 
 ## 练习（与任务清单 1:1）
 
-1. **ex1**：均线作弊/诚实；**完成标准**：两套夏普/净值与课内一致。  
-2. **ex2**：参数网格；**完成标准**：打印 best train 窗与 test SR。  
-3. **ex3**：末段 hold-out；**完成标准**：冻结 w + holdout SR。  
-4. **ex4**：失败日志模板一行；**完成标准**：含 trials 与 fail_reason。  
-5. **ex5**：解释为何记录试验次数；**完成标准**：联系假阳性均值。
+1. **ex1**：均线作弊/诚实；**完成标准**：两套夏普/净值与课内一致。
+2. **ex2**：Walk-forward 表；**完成标准**：逐折行 + 训练/测试均值夏普。
+3. **ex3**：PSR/DSR 随 N；**完成标准**：表 + `dsr_vs_N.png` 且 DSR 随 N 下降。
+4. **ex4**：假阳性零假设上下文；**完成标准**：SE≈0.918、期望≈3.07 与 mean_false_hits 一并写出。
+5. **ex5**：幸存者/数据挖掘回顾并链到 data-cleaning；**完成标准**：两点 + 交叉链接。
+6. **ex6**：（可选）purge/embargo 说明；**完成标准**：打印 purge/embargo 计数。
 
 ## 测验
 
-<Quiz id="q1-lh" question="未 shift 用当日收益主要是？" options={["更稳", "lookahead", "更低换手", "PIT"]} answer={1} explanation="信息与收益窗口重叠。" />
-<Quiz id="q2-trials" question="记录试验次数为了？" options={["好看", "打折多重比较下的虚假发现", "提高胜率", "取消成本"]} answer={1} explanation="试得越多越易撞运气。" />
-<Quiz id="q3-wf" question="冻结后再看 hold-out 的目的？" options={["提高 IS 夏普", "模拟密封评估，降低调参泄漏", "必须用月频", "去掉哈希"]} answer={1} explanation="与 Quant-Arena 密封精神同向。" />
-<Quiz id="q4-grid" question="只展示网格中最好 IS 结果会？" options={["更诚实", "过拟合叙事", "消除 Beta", "定义 PIT"]} answer={1} explanation="选择偏差。" />
-<Quiz id="q5-fail" question="失败日志至少应有？" options={["只有截图", "假设/试验次数/OOS/原因", "券商账号", "实盘下单"]} answer={1} explanation="可审计的审讯记录。" />
+<Quiz id="q1-la" question="未 shift 的同日 signal×收益是？" options={["无害", "前瞻", "PSR 必需", "哈希检查"]} answer={1} explanation="当日收盘同时进信号与收益。" />
+<Quiz id="q2-wf" question="Walk-forward 主要防止？" options={["一切成本", "单一冻结 OOS 之外，还轮换训练/测试以压测稳定性", "哈希", "买卖价差"]} answer={1} explanation="滚动折暴露不稳定赢家。" />
+<Quiz id="q3-psr" question="PSR 调整夏普检验时考虑？" options={["只费用", "样本长度与收益偏度/峰度", "只 ADV", "只 UTC"]} answer={1} explanation="Bailey & López de Prado 2012。" />
+<Quiz id="q4-dsr" question="独立试验数 N 增大时，固定入选规则的 DSR 通常？" options={["升到 1", "下降，因为 E[max SR] 上升", "与 N 无关", "等于胜率"]} answer={1} explanation="Bailey & López de Prado 2014。" />
+<Quiz id="q5-null" question="n=299、SE≈0.92、P(|SR|>1.5)≈0.10 时，30 次零假设试验期望约？" options={["0 次", "约 3 次", "30 次", "299 次"]} answer={1} explanation="30×0.102≈3.07；实验 MC≈2.78。" />
+<Quiz id="q6-surv" question="本阶段幸存者偏差指？" options={["用哈希", "只测今天仍在市的名字", "用次日开盘成交", "付佣金"]} answer={1} explanation="交叉链接 data-cleaning。" />
 
 ## 完成标准
 
-- 陷阱报告含对照与 OOS + 测验  
+- Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** classic — Canvas m5；AFML backtest-as-CV 精神。frontier — Quant-Arena arXiv:2610.30113（密封 hold-out）。已从大纲移除无法在本批核验的 XQuant 标签。
+**来源：** classic — Canvas m5；AFML 第 7/14 章。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。frontier — Quant-Arena arXiv:2610.30113。
 
 <Summary>
-**要点**：lookahead 对照、网格过拟合、冻结 hold-out、试验记账。  
-**下一课**：把成本写入回测。
+**要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  
+**下一课**：把成本写入回测（四段分解 + 容量）。
 </Summary>

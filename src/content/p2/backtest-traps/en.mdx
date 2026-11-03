@@ -1,60 +1,107 @@
 ## Learning goals
 
-This lesson (~**16 hours**: 5h concepts + 9h labs + 2h write-up — **heavy**) builds backtest interrogation: cheat vs honest, grid overfitting, freeze-then-hold-out, and trial logging. Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**16 hours**: 5h concepts + 9h multi-labs + 2h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
-**Goals:** cheat/honest controls; OOS/walk-forward spirit; log failures and trial counts.
+**Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
-**Must-teach:** same-bar return without shift = look-ahead; many trials create false discoveries; freeze rules before OOS.
+**Must-teach:** same-bar return without shift = look-ahead; multiple trials create false discoveries; freeze rules before OOS; DSR falls as N grows.
 
 <Callout type="warn" title="Learning only">
-Synthetic asset. Interrogate process — not stock tips.
+Toy signals and synthetic panel — not a live strategy or performance claim.
 </Callout>
 
 ## Parameters
 
-- Asset AAA_adj; n≈299; Rf=0; ann √252  
-- MA grid windows 5…40 step 5 (8 trials)  
-- Hold-out: last **80** days; random-rule sweep 50 seeds × 30 trials, thr |SR|>1.5  
+- Panel `AAA_adj`, n≈**299** daily returns; Rf=0; ann √252
+- MA windows `{5,10,…,40}`; honest `position = signal.shift(1)`
+- Walk-forward: train **80** / test **20** / step **20**
+- False-hit null: 50 seeds × 30 random ±1 rules; threshold |SR_ann|>1.5
+- PSR/DSR: Bailey & López de Prado **2012** (PSR) and **2014** (DSR); AFML ch.7/14 spirit
 
-## Cheat vs honest MA
+## Cheat vs honest (look-ahead)
 
-Same-bar (no shift) Sharpe can hit **~5.3** with NAV **~2.29**; honest `shift(1)` Sharpe is **negative**. Definition: today’s close in the signal earning today’s close-to-close return = look-ahead.
+Same MA10 rule: **cheat** uses today’s close in the signal **and** today’s close-to-close return; **honest** shifts the position by one day. Lab: cheat Sharpe≈**5.27** / NAV≈**2.29** vs honest≈**−1.12** / **0.82**.
 
-## Grid overfitting
+## Recap: survivorship & data snooping
 
-The window that maximizes IS Sharpe often collapses OOS. Here best_train_w=35, train SR≈0.18, test SR≈−1.90.
+Cross-link: [data-cleaning](/phase/data-honest-backtests/data-cleaning).
 
-## Freeze then hold-out
+- **Survivorship:** today’s listed names ≠ the historical investable universe — replaying only survivors inflates means (numeric demo lives in data-cleaning).
+- **Data snooping:** choosing a rule after many unlabeled full-sample peeks / rank picks. Walk-forward + trial logs + DSR exist to make that cost visible.
 
-Select on a develop block, score a final window that never entered selection — sealed-evaluation spirit.
+## Walk-forward lab
 
-<Callout type="info" title="Sealed hold-out spirit (paper read)">
-[Quant-Arena (arXiv:2610.30113)](https://arxiv.org/abs/2610.30113) lets models take feedback only on 2022–2023, then **freezes one strategy** for sealed 2024 assessment. This lesson practices the same discipline with develop→hold-out (a teaching simplification, not a reproduction of that benchmark).
+Rolling windows pick the best MA length on each **train** block, then score the next **test** block without refitting inside the test.
+
+Lab summary (10 folds): mean train SR≈**0.25**, mean test SR≈**−0.89**, median test≈**−1.75**, fraction of test SR>0 ≈**0.30**. Per-fold table is in the run output below.
+
+## False hits under the null (context for mean_false_hits≈2.78)
+
+With n=**299** returns, under a Normal null the SE of the **annualized** Sharpe is ≈ √(252/299) ≈ **0.918**. Then P(|SR|>1.5) ≈ **0.102**, so among **30** trials the expected hit count is ≈ **3.07**. The lab’s Monte Carlo mean_false_hits≈**2.78** (50 seeds) sits close to that; the small gap is expected from ±1 discrete signs vs Gaussian noise.
+
+## Probabilistic Sharpe Ratio (PSR)
+
+From Bailey & López de Prado (2012), *The Sharpe Ratio Efficient Frontier*, with non-annualized SR̂ and benchmark SR\*:
+
+
+```text
+\widehat{PSR}(SR^*)=\Phi\left(\frac{(\hat{SR}-SR^*)\sqrt{n-1}}{\sqrt{1-\gamma_3\hat{SR}+\frac{\gamma_4-1}{4}\hat{SR}^2}}\right)
+```
+
+
+where γ₃=skewness, γ₄=**Pearson kurtosis** (not excess). Negative skew / fat tails inflate uncertainty (larger denominator → lower PSR).
+
+## Deflated Sharpe Ratio (DSR)
+
+From Bailey & López de Prado (2014), *The Deflated Sharpe Ratio*: DSR is a **PSR whose threshold is the expected maximum SR under multiple testing**. Under a null with mean 0 and cross-trial σ_SR:
+
+
+```text
+E[\max SR]\approx \sigma_{SR}\Big[(1-\gamma)\Phi^{-1}(1-\tfrac1N)+\gamma\,\Phi^{-1}(1-\tfrac1{Ne})\Big]
+```
+
+
+with Euler–Mascheroni γ≈0.5772. Then `mathrm{DSR}=widehat{PSR}(SR^*=E[max])`. As **N** grows, E[max] rises and **DSR falls** — even for a fixed selected trial.
+
+Lab (selected train-best w=35): PSR(0)≈**0.42**; DSR drops from ≈**0.42** (N=1) toward ≈**0.06** (N=200). Chart: `/p2/dsr_vs_N.png`.
+
+![DSR vs N](/p2/dsr_vs_N.png)
+
+## Optional: purged + embargo CV (AFML ch.7)
+
+If labels use a horizon that overlaps the test window, **purge** those train rows; then add an **embargo** gap so serial dependence does not leak across the cut. Lab sketch: label_horizon=1, embargo=3 → purged train 149 vs naive 150.
+
+## Sealed hold-out spirit
+
+<Callout type="info" title="Sealed hold-out (paper read)">
+[Quant-Arena (arXiv:2610.30113)](https://arxiv.org/abs/2610.30113) lets models take feedback only on an earlier window, then **freezes one strategy** for sealed later assessment. This lesson’s freeze-then-holdout / walk-forward practice the same discipline (teaching simplification).
 </Callout>
-
-## Trial counts and false hits
-
-Across 50 seeds, mean count of |SR|>1.5 among 30 random rules ≈ **2.78** (std≈1.38) — noise looks “significant,” so log trials.
 
 ## Python lab (run locally)
 
-Script: `examples/p2/02_backtest_traps.py`.
+Script: `examples/p2/02_backtest_traps.py` (needs `pip install -r requirements.txt`).
 
 ### Real run output
 
 ```text
 === parameters ===
 n 299 ann_sqrt252 15.874508 asset=AAA_adj Rf=0
+sources: Bailey-LdP 2012 SRE Frontier (PSR); Bailey-LdP 2014 DSR; AFML ch.7/14
 
 === MA10 cheat vs honest ===
 cheat_same_bar_sharpe 5.2663 nav 2.290582
 honest_shift1_sharpe -1.1193 nav 0.818344
 lookahead_def: using today's close in the signal while earning today's close-to-close return.
 
+=== recap: survivorship & data snooping (see data-cleaning) ===
+survivorship: today's members != historical universe — replaying only survivors inflates means.
+snooping: choosing rules after peeking at full-sample ranks / many unlabeled trials.
+cross_link: /phase/data-honest-backtests/data-cleaning
+
 === parameter grid (honest shift1) ===
 windows [5, 10, 15, 20, 25, 30, 35, 40]
-best_train_w 35 sharpe_train 0.1801 sharpe_test -1.9025
-mean_train_sharpe -0.3252 mean_test_sharpe -1.8011
+best_train_w 35 sharpe_train 0.1796 sharpe_test -1.9121
+mean_train_sharpe -0.3244 mean_test_sharpe -1.8102
 teach: picking max in-sample Sharpe after many trials overstates OOS — log trial counts.
 
 === freeze-then-holdout ===
@@ -64,47 +111,100 @@ sharpe_develop 0.1717
 sharpe_holdout -2.1282
 quant_arena_spirit: research feedback only on an earlier window; freeze one rule; score a sealed later window (arXiv:2610.30113).
 
-=== random-rule false hits (50 seeds × 30 trials, thr |SR|>1.5) ===
+=== walk-forward (rolling train/test) ===
+params: train_len 80 test_len 20 step 20 windows [5, 10, 15, 20, 25, 30, 35, 40]
+per_window_table
+ fold train_start  train_end test_start   test_end  best_w  sharpe_train  sharpe_test
+    0  2022-01-04 2022-04-25 2022-04-26 2022-05-23      15       -2.5778       0.2497
+    1  2022-02-01 2022-05-23 2022-05-24 2022-06-20      40        0.5422       1.3865
+    2  2022-03-01 2022-06-20 2022-06-21 2022-07-18      40        0.8898      -2.3970
+    3  2022-03-29 2022-07-18 2022-07-19 2022-08-15      40        0.5014       4.0868
+    4  2022-04-26 2022-08-15 2022-08-16 2022-09-12      15        2.3064      -5.5471
+    5  2022-05-24 2022-09-12 2022-09-13 2022-10-10      25        1.1467      -1.7534
+    6  2022-06-21 2022-10-10 2022-10-11 2022-11-07      15        0.5130          NaN
+    7  2022-07-19 2022-11-07 2022-11-08 2022-12-05      15        0.6701          NaN
+    8  2022-08-16 2022-12-05 2022-12-06 2023-01-02      20       -1.0805      -2.2653
+    9  2022-09-13 2023-01-02 2023-01-03 2023-01-30      20       -0.4595          NaN
+summary_n_folds 10
+summary_mean_train_sr 0.2452
+summary_mean_test_sr -0.8914
+summary_median_test_sr -1.7534
+summary_frac_test_positive 0.3
+
+=== random-rule false hits + null SE check ===
+n_returns 299
+SE_ann_SR_under_null ≈ √(252/n) = 0.918046
+P(|SR_ann|>1.5) under Normal null ≈ 0.102279
+expected_hits_per_30_trials ≈ 3.0684
 mean_false_hits 2.78 std_false_hits 1.375
-null_note: under noise, some seeds look 'significant' — record trials.
+context: Monte Carlo mean_false_hits≈ 2.78 vs Normal-null expectation≈ 3.068 (close; discrete ±1 signs add slight difference).
+
+=== PSR / DSR (Bailey & López de Prado) ===
+selected_w 35 n_obs 299
+SR_raw -0.011938 SR_ann -0.1895
+skew_gamma3 -0.5624 kurtosis_gamma4_pearson 9.811
+PSR(SR*=0) 0.4181
+N_trials_grid 8 V[SR_raw_trials] 0.000792
+DSR_vs_N_table (SR* = E[max SR] under null; grows with N → DSR falls)
+  N  E_max_SR_raw      DSR
+  1      0.000000 0.418103
+  2      0.014626 0.322743
+  5      0.033559 0.215367
+  8      0.041056 0.179369
+ 10      0.044309 0.165004
+ 20      0.053486 0.128602
+ 30      0.058345 0.111768
+ 50      0.064055 0.094077
+100      0.071211 0.074935
+200      0.077822 0.060036
+formula_note: DSR = PSR(SR̂, SR*=E[max], n, γ3, γ4); E[max]=σ_SR*[(1-γ)Φ^{-1}(1-1/N)+γ Φ^{-1}(1-1/(N e))] (Bailey-LdP 2014).
+saved_plot public/p2/dsr_vs_N.png
+
+=== optional: purged + embargo CV sketch (AFML ch.7) ===
+label_horizon 1 embargo_bars 3
+naive_train_n 150 purged_train_n 149
+test_after_embargo_n 40
+teach: purge drops train samples whose labels overlap the test window; embargo adds a gap so serial dependence does not leak.
 
 === failure log template ===
 date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
-2026-11-04 | MA grid | 8 windows | train SR see above | holdout SR see above | IS≠OOS | shrink search / pre-register
+2026-11-04 | MA walk-forward | 8 windows × 10 folds | mean_train=0.245 | mean_test=-0.891 | IS≠OOS / DSR falls with N | shrink search / pre-register / sealed hold-out
 ASSERTS_OK
 ```
 
 ## Common mistakes / pitfalls
 
-1. Treating same-bar fills as honest.  
-2. Posting only the best grid curve.  
-3. Tuning on the test set.  
-4. No trial log.  
-5. Leaking sealed-set feedback into R&D.
+1. Same-bar fills labeled “research.”
+2. Reporting the best of many trials without N.
+3. Interpreting equal honest NAV tricks as anti-look-ahead proof.
+4. Ignoring survivorship while “fixing” on today’s index members.
+5. Treating PSR/DSR thresholds as live trading rules without reading the papers’ assumptions (IID / stationary ergodic returns, independent trials).
 
 ## Practice (1:1 with the checklist)
 
-1. **ex1** — MA cheat/honest; **done when** both Sharpe/NAV match the lesson.  
-2. **ex2** — parameter grid; **done when** best train window and test SR print.  
-3. **ex3** — final hold-out; **done when** frozen w + holdout SR print.  
-4. **ex4** — one failure-log row; **done when** trials and fail_reason appear.  
-5. **ex5** — why log trial counts; **done when** linked to the false-hit mean.
+1. **ex1** — MA cheat/honest; **done when** both Sharpe/NAV match the lesson.
+2. **ex2** — Walk-forward table; **done when** per-fold rows + mean train/test SR print.
+3. **ex3** — PSR/DSR vs N; **done when** table + `dsr_vs_N.png` exist and DSR falls with N.
+4. **ex4** — False-hit null context; **done when** SE≈0.918, expected≈3.07, and mean_false_hits are stated together.
+5. **ex5** — Survivorship/snooping recap + link to data-cleaning; **done when** both appear with the cross-link.
+6. **ex6** — (Optional) purged/embargo note; **done when** purge/embargo counts print.
 
 ## Quiz
 
-<Quiz id="q1-lh" question="Same-bar return without shift is mainly?" options={["More stable", "Look-ahead", "Lower turnover", "PIT"]} answer={1} explanation="Information overlaps the return window." />
-<Quiz id="q2-trials" question="Logging trial counts helps?" options={["Cosmetics", "Discount false discoveries under multiple testing", "Raise win rate", "Cancel costs"]} answer={1} explanation="More tries → more lucky extremes." />
-<Quiz id="q3-wf" question="Freeze-then-hold-out aims to?" options={["Raise IS Sharpe", "Mimic sealed evaluation and cut tuning leakage", "Force monthly bars", "Drop hashes"]} answer={1} explanation="Same spirit as Quant-Arena’s sealed year." />
-<Quiz id="q4-grid" question="Showing only the best IS grid cell?" options={["More honest", "Overfit storytelling", "Removes Beta", "Defines PIT"]} answer={1} explanation="Selection bias." />
-<Quiz id="q5-fail" question="A failure log should at least have?" options={["Screenshots only", "Hypothesis/trials/OOS/reason", "Broker login", "Live orders"]} answer={1} explanation="Auditable interrogation." />
+<Quiz id="q1-la" question="Same-bar signal×return without shift is?" options={["Harmless", "Look-ahead", "Required by PSR", "A hash check"]} answer={1} explanation="Today’s close in both signal and return." />
+<Quiz id="q2-wf" question="Walk-forward mainly prevents?" options={["All costs", "Single frozen OOS only once; it also rotates train/test to stress stability", "Hashes", "Bid-ask"]} answer={1} explanation="Rolling folds expose unstable winners." />
+<Quiz id="q3-psr" question="PSR adjusts the SR test for?" options={["Only fees", "Sample length plus skew/kurtosis of returns", "Only ADV", "Only UTC"]} answer={1} explanation="Bailey & López de Prado 2012." />
+<Quiz id="q4-dsr" question="As independent trials N grow, DSR of a fixed selected trial usually?" options={["Rises to 1", "Falls because E[max SR] rises", "Ignores N", "Equals win rate"]} answer={1} explanation="Bailey & López de Prado 2014." />
+<Quiz id="q5-null" question="With n=299, SE≈√(252/299)≈0.92, P(|SR|>1.5)≈0.10 means 30 null trials expect about?" options={["0 hits", "~3 hits", "30 hits", "299 hits"]} answer={1} explanation="30×0.102≈3.07; lab MC≈2.78." />
+<Quiz id="q6-surv" question="Survivorship bias in this phase means?" options={["Using hashes", "Testing only names that still exist today", "Using next-open fills", "Paying commission"]} answer={1} explanation="Cross-link data-cleaning." />
 
 ## Done when
 
-- Trap report with controls + OOS + quizzes  
+- Walk-forward summary + PSR/DSR vs N + false-hit context + quizzes
 
-**Sources:** classic — Canvas m5; AFML backtest-as-CV spirit. frontier — Quant-Arena arXiv:2610.30113. Dropped unverifiable XQuant niche tags this batch.
+**Sources:** classic — Canvas m5; AFML ch.7/14. Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113.
 
 <Summary>
-**Takeaways**: look-ahead controls, grid overfitting, freeze/hold-out, trial logs.  
-**Next**: wire costs into the backtest.
+**Takeaways**: walk-forward tables, trial counts, PSR/DSR vs N, null false-hit math, survivorship/snooping recap.  
+**Next**: write costs into the backtest (four parts + capacity).
 </Summary>

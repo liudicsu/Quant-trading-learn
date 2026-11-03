@@ -38,9 +38,14 @@
 
 ## 延伸：数据入口（已阅读来源）
 
-- [Binance Vision](https://data.binance.vision/) 提供可批量下载的历史行情文件；[sera00111 的工具笔记](https://x.com/sera00111/status/2108332340753969191)写到：分钟/小时级研究可先用 Vision 与 CCXT 等免费入口，先定策略再决定要不要买更细的订单簿数据。
-- [OpenBB quantitative 文档](https://docs.openbb.co/odp/python/extensions/data-processing/quantitative) 说明 `obb.quantitative` 如何在**已对齐的**序列上做摘要/滚动/因子回归——它假设你先把数据时点弄对。
-- [PyQuant News 的 API 举例帖](https://x.com/pyquantnews/status/2109990383828471949)（同线程还列了 yfinance、IBApi）把具体行情 API 点名列出，适合当「从哪拉数」的索引，而不是策略本身。
+- [Binance Vision](https://data.binance.vision/) 提供可批量下载的历史行情；[sera00111 的工具笔记](https://x.com/sera00111/status/2108332340753969191)写到：分钟/小时级研究可先用 Vision 与 CCXT 等免费入口，先定策略再决定要不要更细的订单簿数据。
+- [OpenBB quantitative 文档](https://docs.openbb.co/odp/python/extensions/data-processing/quantitative) 说明 `obb.quantitative` 在**已对齐**序列上做统计/因子——假设你先把时点弄对。
+- [PyQuant News「45 个金融 API」帖](https://x.com/pyquantnews/status/2116517809920327801)介绍的是一批金融数据 API（不只是价格），并指向 GitHub [public-apis 的 finance 分区](https://github.com/public-apis/public-apis#finance)——当作**数据源地图**，不是策略。
+
+
+## 为何 `panel_nav_honest_shift1` 与 `signal × next_ret` 相等
+
+两段净值相等，是因为它们是**同一串 PnL 乘积、时间戳错开一格**：`shift(1)×ret` 与 `signal×ret.shift(-1)`。相等**不能**当「无前瞻」证明——两者都已用「先验信号 + 下期收益」。真正的前瞻是同日 `signal×ret`。见实验打印的 `equality_why`。
 
 ## Python 实验（已本地运行）
 
@@ -86,6 +91,8 @@ tue_row_price_after_bug 100.5
 teach: Tue's row now carries Wed's close — one-day timezone/session mislabel embeds look-ahead.
 panel_nav_honest_shift1 0.818344
 panel_nav_signal_times_next_ret 0.818344
+equality_why: honest = shift(1)*ret and peek = signal*ret.shift(-1) are the SAME PnL stream shifted by one bar (identical non-NA products, different timestamps); equal NAV is NOT evidence that peek is look-ahead-free — both use next-period returns aligned to a prior signal; same-bar signal*ret WOULD be look-ahead.
+equal_nav True
 
 === reindex + missingness assert ===
 calendar_rows 300 panel_rows 300 missing_after_reindex 0

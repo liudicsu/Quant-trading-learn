@@ -1,86 +1,149 @@
 ## Learning goals
 
-This lesson (~**6 hours**: 2h concepts + 3.5h coding + 0.5h quiz) wires commission/slippage into a formula and runs ≥3 cost tiers. Prereq: `backtest-traps`.
+This lesson (~**6 hours**: 2h concepts + 3.5h coding + 0.5h quiz) splits friction into **four parts**, adds a **square-root impact** capacity demo, and keeps the combined bps ladder. Prereq: `backtest-traps`.
 
-**Goals:** implement turnover cost formula; ≥3 cost tiers.
+**Goals:** implement each cost with a numeric example; stacked breakdown; capital capacity chart.
 
-**Must-teach:** zero-cost curves ≠ live evidence; explicit vs implicit costs.
+**Must-teach:** zero-cost ≠ live evidence; commission vs half-spread vs slippage vs impact.
 
 <Callout type="info" title="Learning only — not investment advice">
-Toy bps. Not an exchange fee schedule.
+Toy bps and a pedagogical √ impact — not a broker schedule or guaranteed TCA.
 </Callout>
 
 ## Parameters
 
-- MA=10, `position=shift(1)`, Rf=0, √252  
-- Formula: `net = pos*ret − turnover * one_way_bps/1e4`  
-- Ladder: 0/5/10/20/40 bps  
+- MA10, `position=shift(1)`, Rf=0, √252
+- Commission **2 bps** one-way; half-spread **5 bps**; slippage **3 bps**
+- Impact: `k * sigma * sqrt(Q/ADV)` with k=**0.10**, ADV=**1e6** shares, σ from the panel
+- Base capital **USD 1e6** for the stacked path; capacity grid from **USD 1e5`** to **USD 5e7`**
 
-## Explicit vs implicit
+## Four parts (each with a number)
 
-Explicit: commission-like bps you can write down. Implicit: spread/impact etc., approximated here by the same bps ladder — a reminder that some frictions remain unmodeled.
+1. **Commission** — explicit fee: 2 bps → 0.0002 return one-way.
+2. **Half bid–ask spread** — crossing half the quote: 5 bps → 0.0005.
+3. **Slippage** — extra adverse move beyond half-spread: 3 bps → 0.0003.
+4. **Market impact (square-root)** — pedagogical `k * sigma * sqrt(Q/ADV)`. For Q/ADV=0.05 and σ≈0.0147: impact≈**0.000329** (~3.3 bps).
 
-## Cost ladder
+<Callout type="info" title="Citation: Almgren et al. 2005">
+[Almgren, Thum, Hauptmann & Li (2005), *Direct Estimation of Equity Market Impact*](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf) discuss the square-root candidate for temporary impact and, on their Citigroup desk sample, prefer a **3/5** power in participation rate (rejecting exact β=1/2 at 95%). This lesson still teaches the common **√** reduced form for capacity intuition and cites that paper for the empirical debate.
+</Callout>
 
-Even the zero-cost Sharpe is negative here; higher bps make Sharpe and NAV worse — turnover amplifies every step.
+Demo total one-way (2+5+3 bps + √ impact) ≈ **13.3 bps**.
+
+## Stacked path breakdown
+
+On the MA10 path at USD 1e6 capital, cumulative cost sums (return units) ≈ commission **0.0108**, half-spread **0.027**, slippage **0.0162**, impact **0.0097**. NAV falls: gross **0.818** → net-all-four **0.768**. Chart: `/p2/cost_breakdown.png`.
+
+![Cost breakdown](/p2/cost_breakdown.png)
+
+## Combined bps ladder (continuity)
+
+Holding a single combined one-way bps × turnover (no separate √ term): Sharpe goes **−1.12 → −2.34** as bps go 0→40. Chart: `/p2/cost_ladder.png`.
 
 ![Cost ladder](/p2/cost_ladder.png)
+
+## Capacity sensitivity
+
+Because impact ∝ √(Q/ADV) and Q scales with capital, larger books pay more impact. Lab table: at USD 1e5` net Sharpe≈**−1.45**; at USD 5e7` ≈**−1.83**. Chart: `/p2/capacity_sensitivity.png`.
+
+![Capacity](/p2/capacity_sensitivity.png)
 
 ## Python lab (run locally)
 
 Script: `examples/p2/03_costs_in_backtest.py`.
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python examples/p2/03_costs_in_backtest.py
+```
 
 ### Real run output
 
 ```text
 === parameters ===
 n 299 MA=10 position=shift(1) Rf=0 ann=sqrt(252)
-cost_formula: net = pos*ret - turnover * one_way_bps/1e4
-explicit_costs: commission-like bps; implicit: spread/impact approximated in bps ladder
+commission_bps 2.0
+half_spread_bps 5.0
+slippage_bps 3.0
+impact_model: k*sigma*sqrt(Q/ADV) with k= 0.1
+ADV_shares 1000000.0 sigma_daily 0.014717 price 67.2253
+cite: Almgren et al. 2005 Direct Estimation of Equity Market Impact (√ candidate; empirical β≈0.6)
 
-=== cost ladder ===
+=== four-part numeric example (single trade Q/ADV=0.05) ===
+commission_one_way_ret 0.0002 (2.0 bps)
+half_spread_one_way_ret 0.0005 (5.0 bps)
+slippage_one_way_ret 0.0003 (3.0 bps)
+impact_one_trade_ret 0.000329 = 0.1*0.0147*sqrt(0.05)
+total_one_way_demo_bps 13.29
+
+=== stacked path totals (capital=$1000000) ===
+gross_nav 0.818344
+minus_commission_nav 0.809535
+minus_comm_spread_nav 0.787917
+minus_comm_spread_slip_nav 0.775219
+net_all_four_nav 0.767719
+mean_daily_turnover 0.180602
+sum_commission_ret 0.0108
+sum_half_spread_ret 0.027
+sum_slippage_ret 0.0162
+sum_impact_ret 0.009693
+sharpe_gross -1.1193 sharpe_net_all_four -1.4905
+saved_plot public/p2/cost_breakdown.png
+
+=== cost ladder (combined one-way bps proxy, no separate impact) ===
  bps  sharpe  final_nav  ann_ret
    0 -1.1193     0.8183  -0.1588
    5 -1.2775     0.7965  -0.1816
   10 -1.4345     0.7752  -0.2043
   20 -1.7441     0.7343  -0.2498
   40 -2.3405     0.6588  -0.3409
-teach: zero-cost curve ≠ live evidence; turnover amplifies every bps.
 saved_plot public/p2/cost_ladder.png
+teach: zero-cost curve ≠ live evidence; turnover amplifies every bps.
+
+=== capacity sensitivity (vary capital; impact ∝ sqrt(Q/ADV)) ===
+ capital  mean_Q_over_ADV  sum_impact_bps  sharpe_net  final_nav
+  100000         0.000269           30.65     -1.4522     0.7728
+  500000         0.001343           68.54     -1.4741     0.7699
+ 1000000         0.002687           96.93     -1.4905     0.7677
+ 5000000         0.013433          216.73     -1.5595     0.7585
+10000000         0.026865          306.51     -1.6110     0.7517
+50000000         0.134326          685.37     -1.8263     0.7237
+saved_plot public/p2/capacity_sensitivity.png
 ASSERTS_OK
 ```
 
 ## Common mistakes / pitfalls
 
-1. Posting zero-cost curves only.  
-2. Ignoring turnover.  
-3. Treating toy bps as official venue fees.  
-4. Rewriting the signal after seeing costs (leakage).  
-5. Not stating Rf/annualization.
+1. Posting zero-cost equity curves as live evidence.
+2. Collapsing spread, slippage, and impact into one unlabeled “cost.”
+3. Treating toy bps as an exchange’s official tariff.
+4. Scaling capital without rescaling Q/ADV in the impact term.
+5. Changing the signal after seeing the cost ladder (leakage).
 
 ## Practice (1:1 with the checklist)
 
-1. **ex1** — wire net returns; **done when** the formula matches the script.  
-2. **ex2** — cost ladder chart; **done when** PNG is under `public/p2/`.  
-3. **ex3** — interpret ≥3 tiers; **done when** three sentences note monotone worsening.  
-4. **ex4** — one explicit and one implicit example; **done when** both appear.  
-5. **ex5** — why zero-cost ≠ live evidence; **done when** ≥2 sentences.
+1. **ex1** — Four-part formulas; **done when** each part has a numeric one-way example.
+2. **ex2** — Stacked breakdown chart; **done when** `cost_breakdown.png` exists.
+3. **ex3** — Combined bps ladder; **done when** ≥3 tiers show monotone worsening.
+4. **ex4** — Capacity table + chart; **done when** Sharpe falls as capital rises.
+5. **ex5** — Cite Almgren et al. 2005 √ vs 3/5 note; **done when** one accurate sentence appears.
 
 ## Quiz
 
-<Quiz id="q1-zero" question="Main issue with zero-cost backtest curves?" options={["Too slow", "Not live evidence", "Illegal", "No hash"]} answer={1} explanation="Missing frictions." />
-<Quiz id="q2-to" question="Turnover enters the formula as?" options={["Ignored", "turnover×bps subtracted from returns", "Added only to price", "Beta only"]} answer={1} explanation="Lesson net-return definition." />
-<Quiz id="q3-imp" question="An implicit cost example?" options={["Stated commission rate", "Impact/spread not fully modeled", "Rf", "SHA256"]} answer={1} explanation="Implicit = hard-to-invoice friction." />
-<Quiz id="q4-lad" question="As the cost ladder rises, usually?" options={["Sharpe must rise", "Net performance worsens", "MDD vanishes", "Trial count resets"]} answer={1} explanation="Lesson numbers worsen monotonically." />
-<Quiz id="q5-dec" question="When to freeze the signal definition?" options={["After freely editing post-ladder", "Before the cost experiment", "Never", "Only live"]} answer={1} explanation="Anti-leakage." />
+<Quiz id="q1-four" question="Which is the explicit tariff-like term in this lesson?" options={["Half-spread", "Commission", "Sqrt impact", "ADV"]} answer={1} explanation="Commission is the explicit fee." />
+<Quiz id="q2-sqrt" question="Pedagogical impact here scales with?" options={["Q/ADV linearly only", "k·σ·√(Q/ADV)", "Only Rf", "Only win rate"]} answer={1} explanation="Square-root form in the lab." />
+<Quiz id="q3-alm" question="Almgren et al. 2005 on temporary impact vs exact √?" options={["Proved √ is exact always", "Preferred ≈3/5 power on their sample; √ remains a common reduced form", "Banned all impact models", "Ignored volatility"]} answer={1} explanation="They reject β=1/2 at 95% for that desk dataset." />
+<Quiz id="q4-cap" question="Larger capital with √ impact usually?" options={["Raises net Sharpe here", "Increases impact drag and worsens net Sharpe", "Removes commission", "Fixes look-ahead"]} answer={1} explanation="Capacity table." />
+<Quiz id="q5-zero" question="Zero-cost backtest curves are?" options={["Live proof", "Not live evidence", "Required by PSR", "ADV estimates"]} answer={1} explanation="Missing frictions." />
 
 ## Done when
 
-- Net-of-cost main backtest runs + chart + quizzes  
+- Four-part net path + breakdown + capacity chart + quizzes
 
-**Sources:** classic — Canvas costs; QuantStart/NYU TCA themes.
+**Sources:** classic — Canvas costs; QuantStart/NYU TCA themes. Impact — Almgren et al. 2005 ([PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)).
 
 <Summary>
-**Takeaways**: net formula, cost ladder, zero-cost is not evidence.  
+**Takeaways**: commission, half-spread, slippage, √ impact, capacity.  
 **Next**: vectorized vs event-driven engine assumptions.
 </Summary>

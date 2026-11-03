@@ -1,86 +1,149 @@
 ## 学习目标
 
-本课（约 **6 学时**：概念 2h + 编码 3.5h + 测验 0.5h）把佣金/滑点写成公式，并做 ≥3 档成本敏感。前置：`backtest-traps`。
+本课（约 **6 学时**：概念 2h + 编码 3.5h + 测验 0.5h）把摩擦拆成**四段**，加上**平方根冲击**的容量演示，并保留合并 bps 阶梯。前置：`backtest-traps`。
 
-**课内目标：** 实现换手成本公式；≥3 档成本敏感。
+**课内目标：** 每段成本有数值例子；堆叠分解图；资金容量图。
 
-**必须教会：** 零成本曲线 ≠ 实盘论据；显性 vs 隐性成本。
+**必须教会：** 零成本 ≠ 实盘论据；佣金 / 半价差 / 滑点 / 冲击。
 
 <Callout type="info" title="学习用途 · 非投资建议">
-bps 玩具。非券商费率表。
+玩具 bps 与教学用 √ 冲击，不是券商价目表或保证 TCA。
 </Callout>
 
 ## 参数
 
-- MA=10，`position=shift(1)`，Rf=0，√252  
-- 成本公式：`net = pos*ret − turnover * one_way_bps/1e4`  
-- 阶梯：0/5/10/20/40 bps  
+- MA10，`position=shift(1)`，Rf=0，√252
+- 佣金单边 **2 bps**；半价差 **5 bps**；滑点 **3 bps**
+- 冲击：`k * sigma * sqrt(Q/ADV)`，k=**0.10**，ADV=**1e6** 股，σ 取自面板
+- 堆叠路径基准资金 **USD 1e6**；容量网格 **USD 1e5–5e7**
 
-## 显性 vs 隐性
+## 四段（各带数字）
 
-显性：可写成 bps 的佣金类扣减。隐性：价差/冲击等，本课用同一 bps 阶梯近似，提醒「还有没建模的部分」。
+1. **佣金** — 显性费用：2 bps → 单边收益 0.0002。
+2. **买卖价差一半** — 吃半价差：5 bps → 0.0005。
+3. **滑点** — 半价差之外的额外不利变动：3 bps → 0.0003。
+4. **市场冲击（平方根）** — 教学形式 `k * sigma * sqrt(Q/ADV)`。Q/ADV=0.05、σ≈0.0147 时冲击≈**0.000329**（约 3.3 bps）。
 
-## 成本阶梯
+<Callout type="info" title="引用：Almgren 等 2005">
+[Almgren, Thum, Hauptmann & Li（2005）《Direct Estimation of Equity Market Impact》](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf) 讨论了临时冲击的平方根候选，并在其 Citigroup 样本上更偏好参与率的 **3/5** 幂（在 95% 水平上拒绝精确 β=1/2）。本课仍用常见的 **√** 简化式做容量直觉，并引用该文说明实证争论。
+</Callout>
 
-零成本夏普已为负；随着 bps 上升，夏普与净值进一步变差——换手放大每一档成本。
+演示单边合计（2+5+3 bps + √ 冲击）≈ **13.3 bps**。
+
+## 路径堆叠分解
+
+USD 1e6 资金的 MA10 路径上，累计成本（收益单位）约：佣金 **0.0108**、半价差 **0.027**、滑点 **0.0162**、冲击 **0.0097**。净值：毛 **0.818** → 四段净 **0.768**。图：`/p2/cost_breakdown.png`。
+
+![成本分解](/p2/cost_breakdown.png)
+
+## 合并 bps 阶梯（延续）
+
+单一合并单边 bps×换手（不含单独 √ 项）：bps 从 0→40 时夏普 **−1.12 → −2.34**。图：`/p2/cost_ladder.png`。
 
 ![成本阶梯](/p2/cost_ladder.png)
+
+## 容量敏感性
+
+冲击 ∝ √(Q/ADV) 且 Q 随资金放大，更大簿记付更多冲击。实验表：USD 1e5` 净夏普≈**−1.45**；USD 5e7` ≈**−1.83**。图：`/p2/capacity_sensitivity.png`。
+
+![容量](/p2/capacity_sensitivity.png)
 
 ## Python 实验（已本地运行）
 
 脚本：`examples/p2/03_costs_in_backtest.py`。
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python examples/p2/03_costs_in_backtest.py
+```
 
 ### 实际运行输出
 
 ```text
 === parameters ===
 n 299 MA=10 position=shift(1) Rf=0 ann=sqrt(252)
-cost_formula: net = pos*ret - turnover * one_way_bps/1e4
-explicit_costs: commission-like bps; implicit: spread/impact approximated in bps ladder
+commission_bps 2.0
+half_spread_bps 5.0
+slippage_bps 3.0
+impact_model: k*sigma*sqrt(Q/ADV) with k= 0.1
+ADV_shares 1000000.0 sigma_daily 0.014717 price 67.2253
+cite: Almgren et al. 2005 Direct Estimation of Equity Market Impact (√ candidate; empirical β≈0.6)
 
-=== cost ladder ===
+=== four-part numeric example (single trade Q/ADV=0.05) ===
+commission_one_way_ret 0.0002 (2.0 bps)
+half_spread_one_way_ret 0.0005 (5.0 bps)
+slippage_one_way_ret 0.0003 (3.0 bps)
+impact_one_trade_ret 0.000329 = 0.1*0.0147*sqrt(0.05)
+total_one_way_demo_bps 13.29
+
+=== stacked path totals (capital=$1000000) ===
+gross_nav 0.818344
+minus_commission_nav 0.809535
+minus_comm_spread_nav 0.787917
+minus_comm_spread_slip_nav 0.775219
+net_all_four_nav 0.767719
+mean_daily_turnover 0.180602
+sum_commission_ret 0.0108
+sum_half_spread_ret 0.027
+sum_slippage_ret 0.0162
+sum_impact_ret 0.009693
+sharpe_gross -1.1193 sharpe_net_all_four -1.4905
+saved_plot public/p2/cost_breakdown.png
+
+=== cost ladder (combined one-way bps proxy, no separate impact) ===
  bps  sharpe  final_nav  ann_ret
    0 -1.1193     0.8183  -0.1588
    5 -1.2775     0.7965  -0.1816
   10 -1.4345     0.7752  -0.2043
   20 -1.7441     0.7343  -0.2498
   40 -2.3405     0.6588  -0.3409
-teach: zero-cost curve ≠ live evidence; turnover amplifies every bps.
 saved_plot public/p2/cost_ladder.png
+teach: zero-cost curve ≠ live evidence; turnover amplifies every bps.
+
+=== capacity sensitivity (vary capital; impact ∝ sqrt(Q/ADV)) ===
+ capital  mean_Q_over_ADV  sum_impact_bps  sharpe_net  final_nav
+  100000         0.000269           30.65     -1.4522     0.7728
+  500000         0.001343           68.54     -1.4741     0.7699
+ 1000000         0.002687           96.93     -1.4905     0.7677
+ 5000000         0.013433          216.73     -1.5595     0.7585
+10000000         0.026865          306.51     -1.6110     0.7517
+50000000         0.134326          685.37     -1.8263     0.7237
+saved_plot public/p2/capacity_sensitivity.png
 ASSERTS_OK
 ```
 
 ## 常见错误 / 陷阱
 
-1. 只贴零成本曲线。  
-2. 忽略换手。  
-3. 把玩具 bps 当成某交易所官方费率。  
-4. 先看成本后再改信号定义（泄漏）。  
-5. 不声明 Rf/年化。
+1. 把零成本曲线当实盘证据。
+2. 把价差、滑点、冲击糊成未标注的「成本」。
+3. 把玩具 bps 当成交易所官费。
+4. 放大资金却不重算 Q/ADV 冲击项。
+5. 看完成本阶梯再改信号（泄漏）。
 
 ## 练习（与任务清单 1:1）
 
-1. **ex1**：写入净收益函数；**完成标准**：公式与脚本一致。  
-2. **ex2**：成本阶梯图；**完成标准**：PNG 在 `public/p2/`。  
-3. **ex3**：解读 ≥3 档；**完成标准**：三句说明单调变差。  
-4. **ex4**：区分显性/隐性各一例；**完成标准**：两例。  
-5. **ex5**：说明为何零成本 ≠ 实盘论据；**完成标准**：≥2 句。
+1. **ex1**：四段公式；**完成标准**：每段有单边数值例子。
+2. **ex2**：堆叠分解图；**完成标准**：存在 `cost_breakdown.png`。
+3. **ex3**：合并 bps 阶梯；**完成标准**：≥3 档单调变差。
+4. **ex4**：容量表 + 图；**完成标准**：资金上升时净夏普变差。
+5. **ex5**：引用 Almgren 等 2005 的 √ vs 3/5 说明；**完成标准**：一句准确表述。
 
 ## 测验
 
-<Quiz id="q1-zero" question="零成本回测曲线主要问题？" options={["太慢", "不能当实盘论据", "非法", "无哈希"]} answer={1} explanation="缺摩擦。" />
-<Quiz id="q2-to" question="换手进入公式的方式？" options={["忽略", "turnover×bps 从收益扣除", "只加到价格", "只改 Beta"]} answer={1} explanation="课内净收益定义。" />
-<Quiz id="q3-imp" question="隐性成本例子？" options={["明示佣金率", "冲击/价差等未完全建模部分", "Rf", "SHA256"]} answer={1} explanation="隐性=难直接开票的摩擦。" />
-<Quiz id="q4-lad" question="成本阶梯上升时通常？" options={["夏普必升", "净表现变差", "MDD 消失", "试验次数归零"]} answer={1} explanation="本课数字单调变差。" />
-<Quiz id="q5-dec" question="应在何时固定信号定义？" options={["看完成本阶梯后随意改", "成本实验前冻结", "永远不冻结", "只在实盘改"]} answer={1} explanation="防泄漏。" />
+<Quiz id="q1-four" question="本课哪一项最像明示费率？" options={["半价差", "佣金", "平方根冲击", "ADV"]} answer={1} explanation="佣金是显性费用。" />
+<Quiz id="q2-sqrt" question="教学冲击随什么缩放？" options={["只对 Q/ADV 线性", "k·σ·√(Q/ADV)", "只 Rf", "只胜率"]} answer={1} explanation="课内平方根形式。" />
+<Quiz id="q3-alm" question="Almgren 等 2005 对精确 √ 临时冲击？" options={["证明 √ 永远精确", "在其样本上更偏好约 3/5 幂；√ 仍是常见简化", "禁止一切冲击模型", "忽略波动率"]} answer={1} explanation="该桌样本在 95% 水平拒绝 β=1/2。" />
+<Quiz id="q4-cap" question="√ 冲击下更大资金通常？" options={["提高净夏普", "加大冲击拖累、净夏普变差", "取消佣金", "修复前瞻"]} answer={1} explanation="容量表。" />
+<Quiz id="q5-zero" question="零成本回测曲线是？" options={["实盘证明", "不能当实盘论据", "PSR 必需", "ADV 估计"]} answer={1} explanation="缺摩擦。" />
 
 ## 完成标准
 
-- 成本后主回测可运行 + 图 + 测验  
+- 四段净路径 + 分解图 + 容量图 + 测验
 
-**来源：** classic — Canvas costs；QuantStart/NYU TCA 主题。
+**来源：** classic — Canvas costs；QuantStart/NYU TCA 主题。冲击 — Almgren 等 2005（[PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)）。
 
 <Summary>
-**要点**：净收益公式、成本阶梯、零成本不是证据。  
+**要点**：佣金、半价差、滑点、√ 冲击、容量。  
 **下一课**：向量化与事件驱动引擎假设。
 </Summary>
