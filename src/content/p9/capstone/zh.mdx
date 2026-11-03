@@ -1,9 +1,183 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本结业课（约 **24 学时**：设计/数据 6h + 回测/OOS 10h + 纸面 4h + 写作 4h）是一条**端到端诚实小策略**，串起此前所有阶段：假设 → PIT 数据 → 带**共享成本模型**的 walk-forward → **DSR 计入全部试错且用与决策相同的序列** → 风险仓位/硬限制 → 执行/TCA 估计 → 纸面计划（**独立账本对账** + 注入差错）与合规清单 → 研究报告模板，外加一份给**你自己的结业包**用的**评分量规**。前置：`paper-trading-infra`、`compliance-ethics`、`factor-workflow`、`portfolio-risk-sizing`。
+
+**课内目标：** 交付可复现研究包；含成本敏感与密封 OOS；附纸面日志与限制条款。
+
+**必须教会：** 评分看**诚实与工程**，不看是否“赚钱”；可选前沿失败附录不得重开密封 hold-out，也不得缩小 N。
+
+<Callout type="info" title="仅供学习 — 非投资建议">
+仅合成面板与模拟成交。无实盘券商下单。下文数字来自 `examples/p9/01_capstone_e2e.py` 的教学 foil，不是市场证据。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 面板：**50 资产 × 600** 日；弱滞后 `slow` 驱动；PIT as-of 滞后 **= 2**
+- 共享成本（P2/P4/P8 精神）：单向 **10 bps** + `IMPACT_K=0.1 · σ_lag · √turn`
+- Walk-forward：训练 **240** 日 / 测试 **60** 日 / 步长 **60**；embargo **5**；标签 **h=1**
+- 密封 OOS：研究窗之后末 **120** 日
+- 候选库 **N_TRIALS=6**（含 LEAK/噪声——全部计入）
+- 风险：波动目标年化 **10%**；`MAX_GROSS=1.5`；`MAX_NET=0.3`；`DD_KILL=8%`
+- TCA 玩具：名义 $100 万，ADV $500 万，参与率 10%；冲击用滞后 σ
+- 纸面：冻结 `VERSION=capstone_mom10_vt_v1.0.0`；独立券商账本；一次注入的部分成交缺失
+
+## 阶段地图（直觉 → 公式 → 数值）
+
+### 1) 假设
+
+动代码前先写一页：主张、原假设、PIT 规则、决策规则、「非建议」声明。实验产物：`examples/p9/data/hypothesis.json`。
+
+**直觉：** 不可能失败的假设不是假设。
+
+**本课决策规则：** 仅当密封 OOS 日均截面 RankIC &gt; 0 **且** 在**同一条**用于决策的净 PnL 序列上 DSR(N=全部试错) 达标时才保留。
+
+### 2) PIT 数据
+
+t 日特征只能用截至 t 收盘已知的信息。实验构造：
+
+- `slow_lag1` — 诚实滞后状态
+- `asof_lag2` — 带报告延迟的另类数据
+- `rev_final_LEAK` — 把「最终修订」当成更早可用
+- `slow_raw_noshift_LEAK` — 同日前瞻
+
+**公式（标签）：** y(i,t) = r(i,t+1)（一日前瞻；切勿用偷看 t+1 的特征拟合 y_t）。
+
+### 3) 诚实 walk-forward + 共享成本
+
+每折：在带 embargo 的训练集上选择，在测试集上用**滞后一期**权重乘收益：
+
+<Formula label="含共享成本的净损益">
+Π(t) = Σ_i w(i,t−1)·r(i,t) − c(t)
+c(t) = τ(t)·10bps + 0.1·σ(t−1)·√τ(t)
+τ(t) = Σ_i |w(i,t) − w(i,t−1)|
+</Formula>
+
+**数值（实验）：** 每候选约 6 折；embargo=5。
+
+### 4) DSR 计入全部试错 — 与决策同一序列
+
+Bailey &amp; López de Prado（2014 JPM）：Deflated Sharpe Ratio 把 Probabilistic Sharpe 的阈值按 **N** 次试错的期望最大 SR 上调。
+
+**直觉：** 零优势零假设下，N 次里的「最好」看起来像运气；DSR 问你的选中 SR 是否越过这道运气门槛。
+
+**期望值语境：** 实验在选中净序列上打印 DSR(N=6)=**0.000**，而**同一序列**上不诚实的 DSR(N=1) foil ≈**0.156**。靠缩小 N 虚增信心属于评分不及格。
+
+![各候选密封 OOS IC](/p9/capstone_sealed_ic.png)
+
+### 5) 风险仓位 / 硬限制
+
+用**滞后**代理波动把组合波动目标定为年化 10%；施加总敞口/净敞口上限与回撤熔断。实验密封路径：net_SR≈**−1.79**，maxDD≈**−0.10** → DD 熔断**会触发**（工程开关，不是「alpha 证明」）。
+
+![仓位后密封净值](/p9/capstone_sized_nav.png)
+
+### 6) 执行 / TCA 估计
+
+Perold（1988）实施缺口：方向 × (均价 − 到达价) / 到达价。Almgren–Chriss 直觉：临时冲击约 σ·√参与率；玩具里永久冲击 ≈ 临时的一半。
+
+**实验数字：** 临时≈**37.95** bps，永久≈**18.97** bps，实现 IS≈**8.43** bps + 价差 2 + 费用 1 → **TCA≈11.43 bps**。冲击须用**事前/滞后** σ——绝不用同日实现波动率。
+
+### 7) 纸面计划 + 独立账本
+
+整段纸面窗口冻结 `VERSION`。在与策略权益列表分离的券商账本上，**只从成交增量**重建仓位。实验注入 `INJECTED_PARTIAL_MISS`；对账**必须**检出 abs_diff&gt;0（日期 **2025-02-27**，abs_diff=**0.20**）。把序列和自己比永远是 0，学不到东西。
+
+![纸面权益](/p9/capstone_paper_equity.png)
+
+### 8) 合规清单
+
+实验 CSV 检查：仅供学习声明；无实盘下单；PIT 已记录；**DSR 计入全部试错**；DSR 用决策序列；版本已冻结；对账检出差错；知晓 FINRA Notice **26-10**（PDT 继任规则，**2026-06-04** 生效）；无伪造引用。
+
+### 9) 研究报告模板
+
+`examples/p9/data/research_report.json` 由本次运行自动填充。你自己的包应镜像其章节：假设、数据/PIT、成本、试错 N、选择、密封 OOS、DSR、风险、TCA、纸面/对账、局限、免责声明。
+
+## 关键实验结果（须与 `.out` 一致）
+
+诚实库选中：**`asof_lag2`** — 研究 OOF IC≈**+0.0467**；密封 IC≈**+0.0458**；密封 net_SR≈**−1.484**；**DSR(N=6)=0.000**（N=1 foil≈0.156）。共享成本后 IC 为正而净 SR 为负是常见诚实结果——成本与换手很重要。
+
+## Python 实验
+
+`examples/p9/01_capstone_e2e.py`
+
+### 真实运行输出
+
+```text
+=== parameters ===
+offline / synthetic only — no broker, no paid API
+panel: 50 assets × 600 sessions; weak lagged slow driver; PIT as-of lag=2
+shared cost model: 10 bps one-way + IMPACT_K=0.1·σ·√turn (same spirit as P2/P4/P8)
+walk-forward: train 240d / test 60d / step 60d; embargo=5; label h=1
+...
+explicit N_TRIALS=6 (every scored candidate counts; DSR uses this N on the decision series)
+...
+selected=asof_lag2  (LEAK foils excluded from selection but INCLUDED in N=6)
+asof_lag2              sealed_IC=+0.0458 net_SR=-1.484 DSR(N=6)=0.000 <-- SELECTED
+teach: DSR on SELECTED series with N=6 → 0.000; same series with dishonest N=1 → 0.156
+...
+implementation_shortfall≈8.43 bps  +spread 2.0 +fee 1.0 → TCA≈11.43 bps
+...
+BREAK DETECTED on 2025-02-27 abs_diff=0.2000 note=INJECTED_PARTIAL_MISS; assert detected=True
+...
+DONE capstone lab 01
+```
+
+## 常见错误 / 陷阱
+
+1. 试了很多信号却用 **N=1** 报 DSR。
+2. DSR 算在与 keep/reject 决策不同的序列上。
+3. 拼接最终修订 / 同日特征（LEAK foil 很好看，是作弊）。
+4. 纸面「对账」把账本和自己比。
+5. 看到纸面盈亏后改信号规则。
+6. 可选前沿附录重开密封年或忽略成本。
+7. 把成本后的正 RankIC 当成优势证明。
+8. 用同日实现波动率给冲击定标（前瞻）。
+
+## 练习（与清单 1:1）
+
+1. **ex1** — 写一页假设（主张、H0、PIT、决策规则、免责）。**完成标准：** 字段与实验简报五要素一致。
+2. **ex2** — 跑含成本 walk-forward；贴折表 + 共享成本参数。**完成标准：** 写明 embargo 与 10 bps+冲击，且折数≥1。
+3. **ex3** — 报告密封 OOS IC、净 SR，以及决策序列上的 **DSR(N=全部)**；并给出 N=1 foil。**完成标准：** 两条 DSR 数字来自同一 PnL 路径。
+4. **ex4** — 波动目标 + 硬限制仓位；写明 DD 熔断是否会触发。**完成标准：** 上限与 maxDD 为数值。
+5. **ex5** — 用滞后 σ 做 TCA 玩具；给出 IS 与总 TCA bps。**完成标准：** 参与率与 σ 来源写清。
+6. **ex6** — ≥5 日（实验：65 会话）纸面 + 独立账本；证明注入差错被检出。**完成标准：** 打印日期 + abs_diff。
+7. **ex7** — 填研究报告模板 + 按下表自评。**完成标准：** 每个 Must 行为 Pass，或写明 Gap 与修复计划。
+8. **done1** — 结业包通过全部 **Must** 量规行（诚实/工程——不要求盈利）。
+
+## 评分量规（学习者自己的结业包）
+
+| 行 | 权重 | Must / Bonus | 通过标准 |
+|----|------|--------------|----------|
+| 假设清晰 | 10 | Must | 主张、H0、PIT、决策规则、免责齐全 |
+| PIT / 反前瞻 | 15 | Must | 无最终修订拼接；shift 有记录 |
+| 回测含共享成本 | 10 | Must | 成本参数写明并应用 |
+| Walk-forward + embargo | 10 | Must | 折方案与 embargo 为数值 |
+| DSR 用 N=全部且决策序列 | 15 | Must | N 计入每次试错；DSR 路径=决策路径 |
+| 风险限制 | 10 | Must | 波动目标 + 总/净/DD 规则写明 |
+| TCA / 执行估计 | 5 | Must | 含滞后 σ 的 IS 或调度成本 |
+| 纸面 + 独立对账 | 10 | Must | 演示差错检出 |
+| 合规清单 | 5 | Must | 仅供学习 + 知晓交易场所规则 |
+| 书面报告 | 5 | Must | 模板章节完整 |
+| 可选前沿失败附录 | 5 | Bonus | 负结果可接受；不得削弱 Must |
+| 「盈利夏普」 | 0 | — | **不计分** — 诚实 &gt; 盈利 |
+
+**通过：** 全部 Must 行 Pass。Bonus 不能挽救 Must 失败。
+
+## 测验
+
+<Quiz id="p9-q1" question="为何 DSR 必须用 N=全部试错？" options={["为了最大化夏普", "H0 下 N 次中的最好会被抬高；N 用于消除选择偏差", "监管永远禁止 N=1", "因此可以不要成本"]} answer={1} explanation="Bailey–LdP DSR 校正多重检验/选择偏差。" />
+<Quiz id="p9-q2" question="DSR 必须算在？" options={["另一条随机策略", "与 keep/reject 决策所用的同一条净 PnL 序列", "仅 LEAK foil", "仅成本前毛收益"]} answer={1} explanation="与决策同一序列——混用序列是常见作弊。" />
+<Quiz id="p9-q3" question="独立账本对账指？" options={["把权益和自己比", "在分离的券商账本上从成交重建仓位并检出差错", "忽略部分成交", "只画净值"]} answer={1} explanation="实验注入部分缺失并断言检出。" />
+<Quiz id="p9-q4" question="密封 RankIC 为正但成本后净 SR 为负说明？" options={["立刻实盘", "仅有 IC 不足以在成本/换手后称优势", "成本可省略", "DSR 需要 N=0"]} answer={1} explanation="实验选中 asof_lag2：IC≈+0.046 但 net_SR≈−1.48。" />
+<Quiz id="p9-q5" question="结业评分优先？" options={["夏普最高者胜", "诚实与工程；不要求盈利", "LEAK foil 越多越好", "报告越短越好"]} answer={1} explanation="量规权重在 PIT、DSR(N)、对账——不是盈利。" />
+<Quiz id="p9-q6" question="TCA 定标中的前瞻是？" options={["使用滞后/事前 σ", "用同日实现 σ 设定冲击", "写明参与率", "记录到达价"]} answer={1} explanation="冲击只能用交易前已知信息。" />
+<Quiz id="p9-q7" question="本课对 FINRA Notice 26-10？" options={["永远无关", "PDT 继任规则意识——2026-06-04 生效；了解交易场所规则", "保证零售盈利", "取代 DSR"]} answer={1} explanation="合规清单条目——学习意识，非法律意见。" />
+
+## 完成标准
+
+结业包通过全部 **Must** 量规行：假设、PIT、成本、walk-forward、决策序列上的 DSR(N=全部)、风险限制、TCA、纸面+对账、合规、书面报告。盈利既非必要也非充分。
+
+**来源（已阅读并写入正文）：** Bailey &amp; López de Prado 2014 *Journal of Portfolio Management* 40(5) 94–107（DSR）；López de Prado *Advances in Financial Machine Learning*（purged CV / embargo）；Perold 1988 *Financial Analysts Journal*（实施缺口）；Almgren &amp; Chriss 最优执行直觉（临时/永久冲击）；FINRA Notice 26-10（PDT 继任，2026-06-04 生效）；先前阶段共享成本模型与纸面对账模式（P2/P4/P7）。
+
+<Summary>
+**要点**：诚实的包可以 IC 为正、在 N 与成本后 DSR 失败、检出账本差错，却仍然**及格**——因为分数看流程，不看盈亏。  
+**下一步**：无——课程在 P9 结束。可按大纲回看薄弱阶段。
+</Summary>

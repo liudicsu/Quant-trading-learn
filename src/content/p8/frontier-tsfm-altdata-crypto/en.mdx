@@ -15,7 +15,7 @@ Offline mocks for TSFM, funding ledgers, and GMX-style OI. No exchange keys, no 
 - Same synthetic CS panel as lab 01; IS 400d / sealed OOS 120d
 - TSFM demo: naive RW, AR(1), mock shared-ridge “TSFM head”, strong CS baseline
 - Funding toy: $100k notional, +1 bp / 8h × 3 / day; regime-shift foil
-- Eval: mean daily CS RankIC + DSR(**N=3**) + shared costs
+- Eval: mean daily CS RankIC + DSR(**N=4**, includes `strong_CS`) + shared costs
 
 ## TSFM finance eval (follow-up on P5)
 
@@ -33,7 +33,9 @@ Treat sentiment, filings, web scrapes like any other feature: **as-of timestamps
 
 - **[CCXT](https://docs.ccxt.com/)** — unified CEX API surface (tickers, OHLCV, funding). Lab writes a **CCXT-shaped** funding CSV offline (`symbol`, `fundingRate`, `markPrice`, …) — structure reference only.
 - **Funding carry (numeric):** $100k long perp, +1 bp per 8h → ≈ **−$30/day**, ≈ **$900 / 30d**, ≈ **1095 bps/year** if the rate never moves. Regime foil flips the sign — constant-rate ann. is a teaching foil, not a forecast.
-- **[GMX fees docs](https://docs.gmx.io/docs/trading/fees/)** — dominant side pays minority; funding tied to OI imbalance; accrues per second, settles on modify/close. Lab prints a toy `savedFundingFactorPerSecond` from OI imbalance.
+- **[GMX fees docs](https://docs.gmx.io/docs/trading/fees/)** — dominant side pays minority; funding tied to OI imbalance; **funding accrues continuously** (per-second). Settlement on modify/close is mainly **borrow-fee / position-fee** mechanics (accrued funding is also applied then — do not overstate “settle on close” as the funding story). Lab prints a toy `savedFundingFactorPerSecond` from OI imbalance.
+- **[OpenBB Open Data Platform](https://openbb.co/blog/openbb-releases-open-data-platform/)** — open-source **data aggregation** (“connect once, consume everywhere”: Python / REST / MCP). Name it as a PIT-friendly aggregation pattern; this course still uses offline mocks only.
+- **[Trading Strategy GMX/CCXT adapters](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt)** — CCXT-compatible GMX interface (`eth_defi.gmx.ccxt`) plus FreqTrade middleware. Structure reference for on-chain adapters; no live keys here.
 - **[@sera00111 tooling note](https://x.com/sera00111/status/2108332340753969191)** (P2-verified): minute/hour research can start from [Binance Vision](https://data.binance.vision/) + CCXT-style free entry; choose grain **after** you know the strategy.
 
 ![Funding regime foil](/p8/funding_regime.png)
@@ -96,7 +98,7 @@ regime-shift foil ... cum_funding_pnl_long=$450.00
 
 TSFM caution memo + alt-data timing one-pager (with funding/on-chain risk bullets).
 
-**Sources (read and used above):** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578); P5 also cites 2412.09880, 2606.27100; [CCXT docs](https://docs.ccxt.com/); [GMX fees](https://docs.gmx.io/docs/trading/fees/); [@sera00111](https://x.com/sera00111/status/2108332340753969191); [Nautilus architecture](https://nautilustrader.io/docs/latest/concepts/architecture/); [Binance Vision](https://data.binance.vision/).
+**Sources (read and used above):** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578); P5 also cites 2412.09880, 2606.27100; [CCXT docs](https://docs.ccxt.com/); [GMX fees](https://docs.gmx.io/docs/trading/fees/); [OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/); [Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt); [@sera00111](https://x.com/sera00111/status/2108332340753969191); [Nautilus architecture](https://nautilustrader.io/docs/latest/concepts/architecture/); [Binance Vision](https://data.binance.vision/).
 
 <Summary>
 **Takeaways**: TSFMs need the same purge/costs/DSR; funding is a regime-sensitive carry, not free alpha; Nautilus keeps strategy code identical — fills still differ.  

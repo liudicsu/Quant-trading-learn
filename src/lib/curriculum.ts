@@ -29,7 +29,7 @@ export interface Lesson {
   doneWhen: L10n[];
   methodTags: { classic: string[]; niche: string[]; frontier: string[] };
   tasks: Task[];
-  /** Site body status: P0–P8 written; P9 stub. */
+  /** Site body status: P0–P9 written. */
   status: "ready" | "outline";
 }
 
@@ -1264,7 +1264,7 @@ const phase_P8_lessons: Lesson[] = [
     methodTags: {
       classic: [],
       niche: ["XQuant Spec+AI run-first as motivation only (@_zheergen)"],
-      frontier: ["microsoft/RD-Agent + R&D-Agent(Q) NeurIPS 2025 / arXiv:2505.15155", "Chain-of-Alpha arXiv:2508.06312", "LLM+MCTS arXiv:2505.11122", "Quant-Arena arXiv:2610.30113"],
+      frontier: ["microsoft/RD-Agent + R&D-Agent(Q) NeurIPS 2025 / arXiv:2505.15155", "Chain-of-Alpha arXiv:2508.06312", "LLM+MCTS arXiv:2505.11122", "Quant-Arena arXiv:2610.30113", "Glasserman&Lin arXiv:2309.17322", "Lopez-Lira/Tang/Zhu arXiv:2504.14765"],
     },
     tasks: [
       { id: "ex1", text: { zh: "读RD-Agent/Qlib说明写半页风险清单。", en: "Read RD-Agent/Qlib notes; half-page risk list." } },
@@ -1323,9 +1323,9 @@ const phase_P8_lessons: Lesson[] = [
 const phase_P9_lessons: Lesson[] = [
   {
     slug: "capstone",
-    status: "outline",
+    status: "ready",
     title: { zh: "结业项目：诚实的小策略", en: "Capstone: an honest small strategy" },
-    summary: { zh: "假设→数据→信号→含成本回测→样本外→仓位→纸面；可选前沿负结果附录。", en: "Hypothesis→data→signal→costed backtest→OOS→sizing→paper; optional frontier failure appendix." },
+    summary: { zh: "假设→PIT→含成本walk-forward→DSR(N=全部)→仓位→TCA→纸面对账→合规→报告模板与量规。", en: "Hypothesis→PIT→costed walk-forward→DSR(N=all)→sizing→TCA→paper recon→compliance→report template+rubric." },
     hours: 24,
     difficulty: 5,
     skippable: false,
@@ -1333,39 +1333,45 @@ const phase_P9_lessons: Lesson[] = [
     prereqs: ["paper-trading-infra", "compliance-ethics", "factor-workflow", "portfolio-risk-sizing"],
     goals: [
       { zh: "交付可复现研究包。", en: "Deliver reproducible research pack." },
-      { zh: "含成本敏感与样本外。", en: "Include cost sensitivity and OOS." },
-      { zh: "附纸面日志与限制条款。", en: "Attach paper logs and limitations." },
+      { zh: "含成本敏感与密封样本外及DSR(N)。", en: "Include cost sensitivity, sealed OOS, and DSR(N)." },
+      { zh: "附纸面独立对账、合规清单与量规自评。", en: "Attach paper independent recon, compliance checklist, rubric self-score." },
     ],
     mustTeach: [
       { zh: "评分看诚实与工程不看是否赚钱。", en: "Grade honesty and engineering, not profits." },
+      { zh: "DSR须计入全部试错且用决策同一序列。", en: "DSR must count all trials on the decision series." },
       { zh: "可选前沿附录不得削弱核心纪律。", en: "Optional frontier appendix must not weaken core discipline." },
     ],
     exercises: [
-      { zh: "一页假设。", en: "One-page hypothesis." },
-      { zh: "含成本+shift回测。", en: "Costed+shifted backtest." },
-      { zh: "OOS/walk-forward。", en: "OOS/walk-forward." },
-      { zh: "≥5日纸面。", en: "≥5-day paper." },
-      { zh: "量规自评。", en: "Rubric self-score." },
+      { zh: "一页假设（含PIT与决策规则）。", en: "One-page hypothesis (PIT+decision rule)." },
+      { zh: "含成本+embargo的walk-forward。", en: "Costed walk-forward with embargo." },
+      { zh: "密封OOS+DSR(N=全部)及N=1对照。", en: "Sealed OOS+DSR(N=all) and N=1 foil." },
+      { zh: "仓位限制与TCA估计。", en: "Sizing limits and TCA estimate." },
+      { zh: "≥5日纸面+独立账本检出注入差错。", en: "≥5-day paper+independent ledger detects injected break." },
+      { zh: "量规自评（Must全过）。", en: "Rubric self-score (all Must pass)." },
       { zh: "（可选）前沿失败对照附录。", en: "(Optional) frontier failure appendix." },
     ],
     quizTopics: [
+      { zh: "DSR的N与决策序列", en: "DSR N and decision series" },
+      { zh: "独立账本对账", en: "Independent ledger reconciliation" },
+      { zh: "量规看诚实不看盈利", en: "Rubric grades honesty not profits" },
     ],
     doneWhen: [
-      { zh: "结业包通过自评量规全部达标。", en: "Capstone pack meets all pass rubric rows." },
+      { zh: "结业包通过自评量规全部Must行。", en: "Capstone pack meets all Must rubric rows." },
     ],
     methodTags: {
-      classic: ["Canvas capstone", "JoinQuant综合+模拟"],
+      classic: ["Canvas capstone", "JoinQuant综合+模拟", "Bailey–LdP 2014 DSR", "Perold 1988 IS"],
       niche: ["Open strategy libs sparingly as hypothesis inspiration only"],
       frontier: ["Optional negative-result appendix on RD-Agent/TSFM/on-chain signal"],
     },
     tasks: [
-      { id: "ex1", text: { zh: "一页假设。", en: "One-page hypothesis." } },
-      { id: "ex2", text: { zh: "含成本+shift回测。", en: "Costed+shifted backtest." } },
-      { id: "ex3", text: { zh: "OOS/walk-forward。", en: "OOS/walk-forward." } },
-      { id: "ex4", text: { zh: "≥5日纸面。", en: "≥5-day paper." } },
-      { id: "ex5", text: { zh: "量规自评。", en: "Rubric self-score." } },
-      { id: "ex6", text: { zh: "（可选）前沿失败对照附录。", en: "(Optional) frontier failure appendix." } },
-      { id: "done1", text: { zh: "结业包通过自评量规全部达标。", en: "Capstone pack meets all pass rubric rows." } },
+      { id: "ex1", text: { zh: "一页假设（含PIT与决策规则）；完成标准：五要素齐全。", en: "One-page hypothesis (PIT+decision rule); done when five fields present." } },
+      { id: "ex2", text: { zh: "含成本+embargo的walk-forward；完成标准：参数与折表写出。", en: "Costed walk-forward with embargo; done when params and fold table written." } },
+      { id: "ex3", text: { zh: "密封OOS+DSR(N=全部)及N=1对照；完成标准：同一PnL路径两数。", en: "Sealed OOS+DSR(N=all) and N=1 foil; done when both numbers share one PnL path." } },
+      { id: "ex4", text: { zh: "仓位限制与TCA估计；完成标准：上限/maxDD与TCA bps为数值。", en: "Sizing limits and TCA estimate; done when caps/maxDD and TCA bps are numeric." } },
+      { id: "ex5", text: { zh: "≥5日纸面+独立账本检出注入差错；完成标准：日期与abs_diff。", en: "≥5-day paper+independent ledger detects injected break; done when date+abs_diff printed." } },
+      { id: "ex6", text: { zh: "量规自评（Must全过）；完成标准：每Must行Pass或Gap+修复计划。", en: "Rubric self-score (all Must pass); done when each Must is Pass or Gap+fix." } },
+      { id: "ex7", text: { zh: "（可选）前沿失败对照附录；完成标准：不削弱Must行。", en: "(Optional) frontier failure appendix; done when Must rows stay intact." } },
+      { id: "done1", text: { zh: "结业包通过自评量规全部Must行。", en: "Capstone pack meets all Must rubric rows." } },
     ],
   },
 ];

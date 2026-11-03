@@ -3,6 +3,7 @@ offline mocks only — no LLM API, no network at runtime
 eval: purged OOS mean daily CS RankIC + DSR(N) + shared 10bps+impact costs
 cite: RD-Agent(Q) arXiv:2505.15155; Lopez-Lira&Tang arXiv:2304.07619
 cite: LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113
+cite look-ahead/memorization critiques: Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765
 Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN by arXiv admins; drop detailed claims
 
 === mock RD-Agent(Q) loop (Research → Development → Co-STEER-style keep/reject) ===

@@ -752,7 +752,7 @@
   - 密封hold-out是什么
 - **Completion criteria:**
   - 前沿风险清单+更新研究守则。
-- **Method tags:** niche: XQuant Spec+AI run-first as motivation only (@_zheergen) | frontier: microsoft/RD-Agent + R&D-Agent(Q) NeurIPS 2025 / arXiv:2505.15155; Chain-of-Alpha arXiv:2508.06312; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113
+- **Method tags:** niche: XQuant Spec+AI run-first as motivation only (@_zheergen) | frontier: microsoft/RD-Agent + R&D-Agent(Q) NeurIPS 2025 / arXiv:2505.15155; Chain-of-Alpha arXiv:2508.06312; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113; Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765
 
 #### `frontier-tsfm-altdata-crypto` — 前沿：时序基础模型 · 另类数据 · Crypto/链上 / Frontier: TSFMs · alt-data · crypto/on-chain
 - **Hours:** 8h · **Difficulty:** 4/5 · **Basis:** 4h paper/docs + 3h design exercises + 1h optional pull
@@ -787,24 +787,26 @@
 #### `capstone` — 结业项目：诚实的小策略 / Capstone: an honest small strategy
 - **Hours:** 24h · **Difficulty:** 5/5 · **Basis:** 6h design/data + 10h backtest/OOS + 4h paper + 4h writing — project
 - **Prereqs:** `paper-trading-infra`, `compliance-ethics`, `factor-workflow`, `portfolio-risk-sizing`
-- **Summary:** 假设→数据→信号→含成本回测→样本外→仓位→纸面；可选前沿负结果附录。
+- **Summary:** 假设→PIT→含成本walk-forward→DSR(N=全部)→仓位→TCA→纸面对账→合规→报告模板与量规。
 - **Goals:**
   - 交付可复现研究包。
-  - 含成本敏感与样本外。
-  - 附纸面日志与限制条款。
+  - 含成本敏感与密封样本外及DSR(N)。
+  - 附纸面独立对账、合规清单与量规自评。
 - **Must-teach:**
   - 评分看诚实与工程不看是否赚钱。
+  - DSR须计入全部试错且用决策同一序列。
   - 可选前沿附录不得削弱核心纪律。
 - **Exercises:**
-  - 一页假设。
-  - 含成本+shift回测。
-  - OOS/walk-forward。
-  - ≥5日纸面。
-  - 量规自评。
+  - 一页假设（含PIT与决策规则）。
+  - 含成本+embargo的walk-forward。
+  - 密封OOS+DSR(N=全部)及N=1对照。
+  - 仓位限制与TCA估计。
+  - ≥5日纸面+独立账本检出注入差错。
+  - 量规自评（Must全过）。
   - （可选）前沿失败对照附录。
 - **Completion criteria:**
-  - 结业包通过自评量规全部达标。
-- **Method tags:** classic: Canvas capstone; JoinQuant综合+模拟 | niche: Open strategy libs sparingly as hypothesis inspiration only | frontier: Optional negative-result appendix on RD-Agent/TSFM/on-chain signal
+  - 结业包通过自评量规全部Must行。
+- **Method tags:** classic: Canvas capstone; JoinQuant综合+模拟; Bailey–LdP 2014 DSR; Perold 1988 IS | niche: Open strategy libs sparingly as hypothesis inspiration only | frontier: Optional negative-result appendix on RD-Agent/TSFM/on-chain signal
 
 ## 6. 可选工具阅读顺序（OPTIONAL）
 

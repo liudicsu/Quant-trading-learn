@@ -1,0 +1,10 @@
+item,ok,note
+learning_only_disclaimer,True,site + report state not investment advice
+no_live_broker_orders,True,paper/sim only in this curriculum
+pit_timestamps_documented,True,as-of lag=2; LEAK foils labelled
+all_trials_counted_in_DSR,True,N=6 includes LEAK/noise
+dsr_on_decision_series,True,same net PnL series as selection
+version_frozen_in_paper,True,capstone_mom10_vt_v1.0.0
+independent_ledger_recon,True,injected break detected
+finra_26_10_awareness,True,PDT successor effective 2026-06-04 — know your venue rules
+no_fabricated_citations,True,every niche/frontier cite verified

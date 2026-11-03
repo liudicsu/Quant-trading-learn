@@ -1,0 +1,102 @@
+=== parameters ===
+offline / synthetic only — no broker, no paid API
+panel: 50 assets × 600 sessions; weak lagged slow driver; PIT as-of lag=2
+shared cost model: 10 bps one-way + IMPACT_K=0.1·σ·√turn (same spirit as P2/P4/P8)
+walk-forward: train 240d / test 60d / step 60d; embargo=5; label h=1
+look-ahead: signals use shift(1); costs use lagged σ; never join final revision as day-0
+cite: Bailey & López de Prado 2014 JPM 40(5) 94–107 — Deflated Sharpe Ratio
+cite: AFML (LdP) purged CV / embargo; Perold 1988 FAJ — implementation shortfall
+cite: Almgren–Chriss 2000/01 optimal execution intuition; FINRA Notice 26-10 (PDT successor)
+
+=== 1) hypothesis (research brief) ===
+  name: slow_momentum_cs_v1
+  claim: Cross-sectional ranks of a slow mean-reverting state (lagged 1 day) weakly predict next-day residual returns.
+  null: H0: mean daily CS RankIC of lagged slow vs fwd1 = 0 after costs and multiple testing.
+  pit_rule: Feature at t uses only information known by close t (slow.shift(1)); as-of alt foil uses lag=2.
+  decision_rule: Keep candidate only if sealed OOS mean CS RankIC > 0 AND DSR(N=all_trials) on the SAME net series used for the decision.
+  not_advice: Learning exercise on synthetic data — not investment advice.
+
+=== 2) candidate bank (ALL count toward N) ===
+explicit N_TRIALS=6 (every scored candidate counts; DSR uses this N on the decision series)
+
+=== 3) walk-forward backtest (shared cost model) ===
+folds per candidate ≈ 6; embargo=5
+
+=== 4) sealed OOS evaluation + DSR(N=ALL) on decision series ===
+research OOF mean CS IC (honest bank):
+  asof_lag2        IC=+0.0467
+  slow_lag1        IC=+0.0466
+  noise            IC=+0.0120
+  mom20            IC=-0.0058
+selected=asof_lag2  (LEAK foils excluded from selection but INCLUDED in N=6)
+slow_lag1              sealed_IC=+0.0508 net_SR=-0.201 DSR(N=6)=0.000
+asof_lag2              sealed_IC=+0.0458 net_SR=-1.484 DSR(N=6)=0.000 <-- SELECTED
+rev_final_LEAK         sealed_IC=+0.0519 net_SR=-0.679 DSR(N=6)=0.000
+mom20                  sealed_IC=-0.0037 net_SR=-2.796 DSR(N=6)=0.000
+noise                  sealed_IC=-0.0172 net_SR=-13.755 DSR(N=6)=0.000
+slow_raw_noshift_LEAK  sealed_IC=+0.0528 net_SR=0.586 DSR(N=6)=0.000
+teach: DSR on SELECTED series with N=6 → 0.000; same series with dishonest N=1 → 0.156
+expected-value context: under H0, max SR across N trials is >0; DSR deflates for that.
+
+=== 5) risk sizing / hard limits ===
+vol_target=10% ann; MAX_GROSS=1.5; MAX_NET=0.3; DD_KILL=0.08
+sealed sized net_SR=-1.794 maxDD=-0.103 mean_gross=1.500
+DD kill would have fired on sealed path? True (engineering switch, not alpha)
+
+=== 6) execution / TCA estimate (Perold IS intuition) ===
+notional=$1000000 ADV=$5000000 participation=10%
+temp_impact≈37.95 bps  permanent≈18.97 bps  (toy; σ=0.012)
+implementation_shortfall≈8.43 bps  +spread 2.0 +fee 1.0 → TCA≈11.43 bps
+look-ahead warning: do not size impact with same-bar realized σ; use lagged/ex-ante σ.
+
+=== 7) paper-trading plan + independent-ledger reconciliation ===
+sessions=65 version=capstone_mom10_vt_v1.0.0 final_equity≈0.979
+BREAK DETECTED on 2025-02-27 abs_diff=0.2000 note=INJECTED_PARTIAL_MISS; assert detected=True
+
+=== 8) compliance / ethics checklist (learning) ===
+  [OK] learning_only_disclaimer — site + report state not investment advice
+  [OK] no_live_broker_orders — paper/sim only in this curriculum
+  [OK] pit_timestamps_documented — as-of lag=2; LEAK foils labelled
+  [OK] all_trials_counted_in_DSR — N=6 includes LEAK/noise
+  [OK] dsr_on_decision_series — same net PnL series as selection
+  [OK] version_frozen_in_paper — capstone_mom10_vt_v1.0.0
+  [OK] independent_ledger_recon — injected break detected
+  [OK] finra_26_10_awareness — PDT successor effective 2026-06-04 — know your venue rules
+  [OK] no_fabricated_citations — every niche/frontier cite verified
+
+=== 9) research report template (auto-filled from lab) ===
+{
+  "selection": {
+    "best": "asof_lag2",
+    "research_IC": 0.04674269707883153
+  },
+  "sealed_oos": {
+    "name": "asof_lag2",
+    "sealed_IC": 0.0457501992393596,
+    "sealed_IC_t": 3.158958223863055,
+    "net_SR": -1.4837379524509433,
+    "DSR_N_all": 1.1968260411835046e-51,
+    "mean_turn": 0.6783333333333332,
+    "leak": false
+  },
+  "dsr": {
+    "N": 6,
+    "DSR": 1.1968260411835046e-51,
+    "DSR_if_N1_foil": 0.1560083034494078
+  },
+  "tca_bps": 11.43246748705866,
+  "paper": {
+    "version": "capstone_mom10_vt_v1.0.0",
+    "sessions": 65,
+    "break_detected": true
+  }
+}
+
+=== limitations / failure modes ===
+- Counting only the winner as N=1 inflates DSR — always use ALL trials.
+- Joining final revisions as day-0 is look-ahead (rev_final_LEAK foil).
+- Paper validates wiring/recon/kills — not alpha.
+- Grading rubric scores honesty/engineering, not whether SR>0.
+
+wrote /workspace/Quant-trading-learn/public/p9/capstone_sealed_ic.png /workspace/Quant-trading-learn/public/p9/capstone_sized_nav.png /workspace/Quant-trading-learn/public/p9/capstone_paper_equity.png
+DONE capstone lab 01

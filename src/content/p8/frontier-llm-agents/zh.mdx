@@ -37,7 +37,7 @@
 
 ## LLM 情绪（Lopez-Lira &amp; Tang 2023）
 
-[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619)（Lopez-Lira &amp; Tang）表明：在**知识截止日期之后**的标题上，GPT 分数可预测反应/漂移——且随采用上升收益下降。实验构造离线 `mock_sentiment`（PIT）与窥视下一收益的 **LEAK** 对照（截止日期/记忆类比）。LEAK IC ≈ +0.67 是警告，不是策略。
+[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619)（Lopez-Lira &amp; Tang）表明：在**知识截止日期之后**的标题上，GPT 分数可预测反应/漂移——且随采用上升收益下降。实验构造离线 `mock_sentiment`（PIT）与窥视下一收益的 **LEAK** 对照（截止日期/记忆类比）。LEAK IC ≈ +0.67 是警告，不是策略。后续批判把同一问题写严：[Glasserman &amp; Lin（arXiv:2309.17322）](https://arxiv.org/abs/2309.17322) 用标题匿名化度量前瞻 vs 分心；[Lopez-Lira、Tang &amp; Zhu（arXiv:2504.14765）](https://arxiv.org/abs/2504.14765) 证明截止前「预测」在记忆下不可识别。
 
 ![Agent vs 诚实因子净值](/p8/agent_vs_honest_nav.png)
 
@@ -64,7 +64,7 @@ mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 ...
 
 ## 局限 / 失败模式
 
-- **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会显得很美。
+- **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会显得很美（见 Glasserman &amp; Lin 2309.17322；Lopez-Lira/Tang/Zhu 2504.14765）。
 - **试错膨胀：** agent 轮次必须在 DSR 中写明 **N**；论文表 ≠ 你的密封 OOS。
 - **IS 保留规则**过拟合；密封年必须保持密封。
 - **已撤回论文：** Chain-of-Alpha — 只记存在+撤回，不写进流水线。
@@ -90,7 +90,7 @@ mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 ...
 
 前沿风险清单 + 更新研究守则（密封 OOS、显式 N、不依赖已撤回 PDF）。
 
-**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**已撤回** — 仅警示）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023；niche：@_zheergen Spec+AI 仅动机。
+**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**已撤回** — 仅警示）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322) Glasserman &amp; Lin 前瞻/分心；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765) Lopez-Lira/Tang/Zhu 记忆不可识别；niche：@_zheergen Spec+AI 仅动机。
 
 <Summary>
 **要点**：agent 放大试错 → 更严 DSR/密封 OOS；mock ≠ API；撤回论文只做脚注不做流水线。  

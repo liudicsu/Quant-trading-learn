@@ -1,0 +1,8 @@
+{
+  "name": "slow_momentum_cs_v1",
+  "claim": "Cross-sectional ranks of a slow mean-reverting state (lagged 1 day) weakly predict next-day residual returns.",
+  "null": "H0: mean daily CS RankIC of lagged slow vs fwd1 = 0 after costs and multiple testing.",
+  "pit_rule": "Feature at t uses only information known by close t (slow.shift(1)); as-of alt foil uses lag=2.",
+  "decision_rule": "Keep candidate only if sealed OOS mean CS RankIC > 0 AND DSR(N=all_trials) on the SAME net series used for the decision.",
+  "not_advice": "Learning exercise on synthetic data \u2014 not investment advice."
+}

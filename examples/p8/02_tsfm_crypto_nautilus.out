@@ -3,22 +3,24 @@ offline only — mock TSFM / mock funding ledger; no CCXT live calls at runtime
 eval: purged OOS mean daily CS RankIC + DSR(N) + shared costs
 cite: arXiv:2511.18578 Re(Visiting) TSFM in Finance — zero-shot often weak vs ensembles
 cite: CCXT docs https://docs.ccxt.com/ ; GMX fees https://docs.gmx.io/docs/trading/fees/
+cite: OpenBB Open Data Platform (aggregation); Trading Strategy GMX/CCXT adapters
 cite: @sera00111 Vision+CCXT note (P2-verified); Nautilus architecture docs
 
 === TSFM evaluation follow-up (P5 cites → offline demo) ===
 paper finding (2511.18578): off-the-shelf zero-shot TSFMs often lag strong finance baselines;
 domain pretrain/fine-tune may help but still needs anti-lookahead + costs.
-naive_RW     IS_CS_IC=+0.0111 IS_net_SR=-8.638 DSR(N=3)=0.000 | sealed_OOS_IC=+0.0076 OOS_net_SR=-9.723
-AR1          IS_CS_IC=+0.0462 IS_net_SR=-3.191 DSR(N=3)=0.000 | sealed_OOS_IC=-0.0017 OOS_net_SR=-6.604
-mock_TSFM    IS_CS_IC=+0.0002 IS_net_SR=-9.277 DSR(N=3)=0.000 | sealed_OOS_IC=-0.0088 OOS_net_SR=-8.909
-strong_CS    IS_CS_IC=+0.0320 IS_net_SR=-0.991 DSR(N=3)=0.000 | sealed_OOS_IC=+0.0154 OOS_net_SR=-2.171
+naive_RW     IS_CS_IC=+0.0111 IS_net_SR=-8.638 DSR(N=4)=0.000 | sealed_OOS_IC=+0.0076 OOS_net_SR=-9.723
+AR1          IS_CS_IC=+0.0462 IS_net_SR=-3.191 DSR(N=4)=0.000 | sealed_OOS_IC=-0.0017 OOS_net_SR=-6.604
+mock_TSFM    IS_CS_IC=+0.0002 IS_net_SR=-9.277 DSR(N=4)=0.000 | sealed_OOS_IC=-0.0088 OOS_net_SR=-8.909
+strong_CS    IS_CS_IC=+0.0320 IS_net_SR=-0.991 DSR(N=4)=0.000 | sealed_OOS_IC=+0.0154 OOS_net_SR=-2.171
 teach: mock_TSFM is a tiny shared linear head — NOT Chronos weights; compares protocol only.
 paper-aligned caution: zero-shot / generic TSFM often ≤ strong traditional baselines on daily excess.
 
 === perpetual funding carry (numeric toy; offline) ===
 CEX funding (CCXT-shaped): longs pay shorts when funding>0 (typical premium).
 GMX (docs.gmx.io/docs/trading/fees): dominant side pays minority; rate from OI imbalance;
-fees accrue per second and settle on position modify/close.
+funding accrues continuously (per-second); do NOT overstate modify/close as the funding story.
+settlement on modify/close is mainly borrow-fee + position-fee mechanics (funding also settles then).
 notional=$100000 funding_8h=0.0100% (longs pay)
 daily_funding_pnl_long=-30.00 USD  (negative = pay)
 30d_funding_cost_long=$900.00

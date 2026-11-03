@@ -15,7 +15,7 @@ TSFM、资金费率账本、GMX 风格 OI 均为离线 mock。无交易所密钥
 - 与 lab 01 相同的合成截面；IS 400 日 / 密封 OOS 120 日
 - TSFM 对照：朴素随机游走、AR(1)、mock 共享 ridge「TSFM 头」、强截面基准
 - 资金费率玩具：$10 万名义、+1 bp / 8h × 每天 3 次；制度切换对照
-- 评价：日均截面 RankIC + DSR(**N=3**) + 共享成本
+- 评价：日均截面 RankIC + DSR(**N=4**，含 `strong_CS`) + 共享成本
 
 ## TSFM 金融评测（承接 P5）
 
@@ -33,7 +33,9 @@ TSFM、资金费率账本、GMX 风格 OI 均为离线 mock。无交易所密钥
 
 - **[CCXT](https://docs.ccxt.com/)** — 统一 CEX API（ticker、OHLCV、funding）。实验离线写出 **CCXT 形状**的资金费率 CSV（`symbol`、`fundingRate`、`markPrice`…）——仅结构参考。
 - **资金费率套利（数值）：** 多头永续 $10 万、每 8h +1 bp → 约 **−$30/日**、约 **$900/30 日**、若费率不变约 **1095 bps/年**。制度切换对照会改符号——常值年化只是教学 foil。
-- **[GMX 费用文档](https://docs.gmx.io/docs/trading/fees/)** — 优势方付给少数方；费率与 OI 失衡相关；按秒累积，在仓位修改/平仓时结算。实验用 OI 失衡打印玩具 `savedFundingFactorPerSecond`。
+- **[GMX 费用文档](https://docs.gmx.io/docs/trading/fees/)** — 优势方付给少数方；费率与 OI 失衡相关；**资金费率按秒连续累积**。修改/平仓时的结算主要是**借币费 / 开平仓仓位费**机制（累积资金费率也会在那时入账——不要把「平仓才结算」说成资金费率的全部故事）。实验用 OI 失衡打印玩具 `savedFundingFactorPerSecond`。
+- **[OpenBB Open Data Platform](https://openbb.co/blog/openbb-releases-open-data-platform/)** — 开源**数据聚合**（一次接入、多端消费：Python / REST / MCP）。作为 PIT 友好聚合模式点名；本课仍只用离线 mock。
+- **[Trading Strategy GMX/CCXT 适配器](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt)** — CCXT 兼容 GMX 接口（`eth_defi.gmx.ccxt`）及 FreqTrade 中间件。链上适配结构参考；此处无实盘密钥。
 - **[@sera00111 工具笔记](https://x.com/sera00111/status/2108332340753969191)**（P2 已核验）：分钟/小时研究可从 [Binance Vision](https://data.binance.vision/) + CCXT 类免费入口起步；**先定策略再选粒度**。
 
 ![资金费率制度切换](/p8/funding_regime.png)
@@ -93,7 +95,7 @@ ann_carry_cost_long≈1095.0 bps/year if rate stays constant
 
 TSFM 谨慎备忘 + 另类数据时点一页纸（含资金费率/链上风险条目）。
 
-**来源（已阅读并写入正文）：** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578)；P5 亦引 2412.09880、2606.27100；[CCXT 文档](https://docs.ccxt.com/)；[GMX 费用](https://docs.gmx.io/docs/trading/fees/)；[@sera00111](https://x.com/sera00111/status/2108332340753969191)；[Nautilus 架构](https://nautilustrader.io/docs/latest/concepts/architecture/)；[Binance Vision](https://data.binance.vision/)。
+**来源（已阅读并写入正文）：** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578)；P5 亦引 2412.09880、2606.27100；[CCXT 文档](https://docs.ccxt.com/)；[GMX 费用](https://docs.gmx.io/docs/trading/fees/)；[OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/)；[Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt)；[@sera00111](https://x.com/sera00111/status/2108332340753969191)；[Nautilus 架构](https://nautilustrader.io/docs/latest/concepts/architecture/)；[Binance Vision](https://data.binance.vision/)。
 
 <Summary>
 **要点**：TSFM 仍要 purge/成本/DSR；资金费率是制度敏感套利而非免费 alpha；Nautilus 保持策略代码同构——成交仍会不同。  

@@ -37,7 +37,7 @@ Stable companion: [LLM+MCTS formulaic mining](https://arxiv.org/abs/2505.11122) 
 
 ## LLM sentiment (Lopez-Lira &amp; Tang 2023)
 
-[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619) (Lopez-Lira &amp; Tang) shows GPT scores on **post-knowledge-cutoff** headlines can predict reactions/drift — and that edge shrinks as adoption rises. Lab builds an offline `mock_sentiment` (PIT) vs a **LEAK** foil that peeks at next returns (cutoff/memorization analogue). LEAK IC ≈ +0.67 is a warning, not a strategy.
+[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619) (Lopez-Lira &amp; Tang) shows GPT scores on **post-knowledge-cutoff** headlines can predict reactions/drift — and that edge shrinks as adoption rises. Lab builds an offline `mock_sentiment` (PIT) vs a **LEAK** foil that peeks at next returns (cutoff/memorization analogue). LEAK IC ≈ +0.67 is a warning, not a strategy. Later critiques make the same point rigorous: [Glasserman &amp; Lin (arXiv:2309.17322)](https://arxiv.org/abs/2309.17322) measure look-ahead vs distraction via headline anonymization; [Lopez-Lira, Tang &amp; Zhu (arXiv:2504.14765)](https://arxiv.org/abs/2504.14765) prove pre-cutoff “forecasts” are non-identified under memorization.
 
 ![Agent vs honest NAV](/p8/agent_vs_honest_nav.png)
 
@@ -53,6 +53,7 @@ offline mocks only — no LLM API, no network at runtime
 eval: purged OOS mean daily CS RankIC + DSR(N) + shared 10bps+impact costs
 cite: RD-Agent(Q) arXiv:2505.15155; Lopez-Lira&Tang arXiv:2304.07619
 cite: LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113
+cite look-ahead/memorization critiques: Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765
 Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN by arXiv admins; drop detailed claims
 
 === mock RD-Agent(Q) loop (Research → Development → Co-STEER-style keep/reject) ===
@@ -76,7 +77,7 @@ Verified on arXiv: entry exists but admin comment says version removed
 
 ## Limitations / failure modes
 
-- **Training cutoff / memorization:** pre-cutoff headlines are not forecasts; LEAK foils look amazing.
+- **Training cutoff / memorization:** pre-cutoff headlines are not forecasts; LEAK foils look amazing (see Glasserman &amp; Lin 2309.17322; Lopez-Lira/Tang/Zhu 2504.14765).
 - **Trial inflation:** agent rounds need explicit **N** in DSR; paper tables ≠ your sealed OOS.
 - **IS keep rules** overfit; sealed years must stay sealed.
 - **Withdrawn papers:** Chain-of-Alpha — cite existence + withdrawal, drop unstable claims.
@@ -102,7 +103,7 @@ Verified on arXiv: entry exists but admin comment says version removed
 
 Frontier risk list + updated research rules (sealed OOS, explicit N, no withdrawn-PDF dependence).
 
-**Sources (read and used above):** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q); [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent); [arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha (**withdrawn** — caution only); [arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS; [arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena; [arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023; niche: @_zheergen Spec+AI motivation only.
+**Sources (read and used above):** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q); [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent); [arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha (**withdrawn** — caution only); [arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS; [arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena; [arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023; [arXiv:2309.17322](https://arxiv.org/abs/2309.17322) Glasserman &amp; Lin look-ahead/distraction; [arXiv:2504.14765](https://arxiv.org/abs/2504.14765) Lopez-Lira/Tang/Zhu memorization non-identification; niche: @_zheergen Spec+AI motivation only.
 
 <Summary>
 **Takeaways**: agents multiply trials → stricter DSR/sealed OOS; mocks ≠ APIs; withdrawn papers get a footnote not a pipeline.  

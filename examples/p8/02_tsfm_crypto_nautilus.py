@@ -37,6 +37,7 @@ print("offline only — mock TSFM / mock funding ledger; no CCXT live calls at r
 print("eval: purged OOS mean daily CS RankIC + DSR(N) + shared costs")
 print("cite: arXiv:2511.18578 Re(Visiting) TSFM in Finance — zero-shot often weak vs ensembles")
 print("cite: CCXT docs https://docs.ccxt.com/ ; GMX fees https://docs.gmx.io/docs/trading/fees/")
+print("cite: OpenBB Open Data Platform (aggregation); Trading Strategy GMX/CCXT adapters")
 print("cite: @sera00111 Vision+CCXT note (P2-verified); Nautilus architecture docs")
 
 rets, slow, meta = make_panel(n_days=520, n_assets=40, seed=SEED)
@@ -99,7 +100,7 @@ for a in rets.columns:
     Xa = np.column_stack([lags[L][a].values for L in LAGS])
     mock_tsfm[a] = Xa @ w
 
-N_TRIALS_TSFM = 3  # naive, AR, mock_tsfm
+N_TRIALS_TSFM = 4  # naive, AR, mock_tsfm, strong_CS (all scored)
 
 
 def score_pred(tag: str, pred: pd.DataFrame, n_trials: int) -> dict:
@@ -147,7 +148,8 @@ print("paper-aligned caution: zero-shot / generic TSFM often ≤ strong traditio
 print("\n=== perpetual funding carry (numeric toy; offline) ===")
 print("CEX funding (CCXT-shaped): longs pay shorts when funding>0 (typical premium).")
 print("GMX (docs.gmx.io/docs/trading/fees): dominant side pays minority; rate from OI imbalance;")
-print("fees accrue per second and settle on position modify/close.")
+print("funding accrues continuously (per-second); do NOT overstate modify/close as the funding story.")
+print("settlement on modify/close is mainly borrow-fee + position-fee mechanics (funding also settles then).")
 
 # Toy: 8h funding on BTC perp
 notional = 100_000.0  # USD

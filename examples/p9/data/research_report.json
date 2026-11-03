@@ -1,0 +1,68 @@
+{
+  "title": "Capstone: honest CS slow-state signal (synthetic)",
+  "hypothesis": {
+    "name": "slow_momentum_cs_v1",
+    "claim": "Cross-sectional ranks of a slow mean-reverting state (lagged 1 day) weakly predict next-day residual returns.",
+    "null": "H0: mean daily CS RankIC of lagged slow vs fwd1 = 0 after costs and multiple testing.",
+    "pit_rule": "Feature at t uses only information known by close t (slow.shift(1)); as-of alt foil uses lag=2.",
+    "decision_rule": "Keep candidate only if sealed OOS mean CS RankIC > 0 AND DSR(N=all_trials) on the SAME net series used for the decision.",
+    "not_advice": "Learning exercise on synthetic data \u2014 not investment advice."
+  },
+  "data": {
+    "n_assets": 50,
+    "n_days": 600,
+    "pit_lag": 2,
+    "seed": 9
+  },
+  "costs": {
+    "one_way_bps": 10.0,
+    "impact_k": 0.1
+  },
+  "trials": {
+    "N_TRIALS": 6,
+    "names": [
+      "slow_lag1",
+      "asof_lag2",
+      "rev_final_LEAK",
+      "mom20",
+      "noise",
+      "slow_raw_noshift_LEAK"
+    ]
+  },
+  "selection": {
+    "best": "asof_lag2",
+    "research_IC": 0.04674269707883153
+  },
+  "sealed_oos": {
+    "name": "asof_lag2",
+    "sealed_IC": 0.0457501992393596,
+    "sealed_IC_t": 3.158958223863055,
+    "net_SR": -1.4837379524509433,
+    "DSR_N_all": 1.1968260411835046e-51,
+    "mean_turn": 0.6783333333333332,
+    "leak": false
+  },
+  "dsr": {
+    "N": 6,
+    "DSR": 1.1968260411835046e-51,
+    "DSR_if_N1_foil": 0.1560083034494078
+  },
+  "risk": {
+    "vol_target_ann": 0.1,
+    "max_gross": 1.5,
+    "max_net": 0.3,
+    "dd_kill": 0.08
+  },
+  "tca_bps": 11.43246748705866,
+  "paper": {
+    "version": "capstone_mom10_vt_v1.0.0",
+    "sessions": 65,
+    "break_detected": true
+  },
+  "limitations": [
+    "Synthetic DGP \u2014 numbers are teaching foils, not market evidence.",
+    "Weak planted alpha; after shared costs net SR often fails DSR.",
+    "Optional frontier appendix must not reopen sealed OOS."
+  ],
+  "disclaimer": "Learning only \u2014 not investment advice."
+}

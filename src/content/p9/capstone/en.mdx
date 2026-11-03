@@ -1,9 +1,183 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This capstone (~**24 hours**: 6h design/data + 10h backtest/OOS + 4h paper + 4h writing) is an **end-to-end honest small strategy** that stitches every prior phase: hypothesis → PIT data → walk-forward with the **shared cost model** → **DSR counting ALL trials on the same series used for the decision** → risk sizing/limits → execution/TCA estimate → paper plan with **independent-ledger reconciliation** (injected break) and a compliance checklist → a written research-report template, plus a **grading rubric** for *your* pack. Prereqs: `paper-trading-infra`, `compliance-ethics`, `factor-workflow`, `portfolio-risk-sizing`.
+
+**Goals:** deliver a reproducible research pack; include cost sensitivity and sealed OOS; attach paper logs and limitations.
+
+**Must-teach:** grade **honesty and engineering**, not whether the strategy “makes money”; an optional frontier failure appendix must not reopen a sealed hold-out or shrink N.
+
+<Callout type="info" title="Learning only — not investment advice">
+Synthetic panel and simulated fills only. No live broker orders. Numbers below are teaching foils from `examples/p9/01_capstone_e2e.py`, not market evidence.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Panel: **50 assets × 600** sessions; weak lagged `slow` driver; PIT as-of lag **= 2**
+- Shared costs (P2/P4/P8 spirit): **10 bps** one-way + `IMPACT_K=0.1 · σ_lag · √turn`
+- Walk-forward: train **240d** / test **60d** / step **60d**; embargo **5**; label horizon **h=1**
+- Sealed OOS: last **120** sessions after research window
+- Candidate bank **N_TRIALS=6** (includes LEAK/noise — all count)
+- Risk: vol-target **10%** ann.; `MAX_GROSS=1.5`; `MAX_NET=0.3`; `DD_KILL=8%`
+- TCA toy: notional $1M, ADV $5M, participation 10%; lagged σ for impact
+- Paper: frozen `VERSION=capstone_mom10_vt_v1.0.0`; independent broker ledger; one injected partial miss
+
+## Stage map (intuition → formula → number)
+
+### 1) Hypothesis
+
+Write a one-page brief before touching code: claim, null, PIT rule, decision rule, and a “not advice” line. Lab artefact: `examples/p9/data/hypothesis.json`.
+
+**Intuition:** a hypothesis that cannot fail is not a hypothesis.
+
+**Decision rule used here:** keep only if sealed OOS mean daily CS RankIC &gt; 0 **and** DSR(N=all trials) on the **same** net PnL series used for that decision.
+
+### 2) PIT data
+
+Feature at day t may use only information known by close t. Lab builds:
+
+- `slow_lag1` — honest lagged state
+- `asof_lag2` — alt-data with reporting lag
+- `rev_final_LEAK` — joins a “final” revision as if available earlier
+- `slow_raw_noshift_LEAK` — same-bar look-ahead
+
+**Formula (label):** y(i,t) = r(i,t+1) (one-day forward; never fit on y_t with features that peek at t+1).
+
+### 3) Honest walk-forward + shared costs
+
+For each fold, fit/select on train with embargo, evaluate on test with weights **shifted one day** before multiplying returns:
+
+<Formula label="Net PnL with shared costs">
+Π(t) = Σ_i w(i,t−1)·r(i,t) − c(t)
+c(t) = τ(t)·10bps + 0.1·σ(t−1)·√τ(t)
+τ(t) = Σ_i |w(i,t) − w(i,t−1)|
+</Formula>
+
+**Numeric (lab):** ≈6 folds per candidate; embargo=5.
+
+### 4) DSR counts ALL trials — same series as the decision
+
+Bailey &amp; López de Prado (2014 JPM): Deflated Sharpe Ratio adjusts the Probabilistic Sharpe Ratio threshold for the expected maximum SR among **N** trials.
+
+**Intuition:** under a zero-edge null, the *best* of N looks lucky; DSR asks whether your selected SR clears that luck threshold.
+
+**Expected-value context:** lab prints DSR(N=6)=**0.000** on the selected net series, while the dishonest foil DSR(N=1) on the **same** series is ≈**0.156**. Inflating confidence by shrinking N is a grading fail.
+
+![Sealed OOS IC by candidate](/p9/capstone_sealed_ic.png)
+
+### 5) Risk sizing / limits
+
+Vol-target the book to 10% ann. with **lagged** proxy vol; enforce gross/net caps and a DD kill. Lab sealed sized path: net_SR≈**−1.79**, maxDD≈**−0.10** → DD kill **would fire** (engineering, not “alpha proof”).
+
+![Sized sealed NAV](/p9/capstone_sized_nav.png)
+
+### 6) Execution / TCA estimate
+
+Perold (1988) implementation shortfall: side × (avg fill − arrival) / arrival. Almgren–Chriss intuition: temporary impact scales like σ·√participation; permanent ≈ half temporary in the toy.
+
+**Lab numbers:** temp≈**37.95** bps, permanent≈**18.97** bps, realized IS≈**8.43** bps + spread 2 + fee 1 → **TCA≈11.43 bps**. Use **ex-ante / lagged** σ — never same-bar realized σ to size impact.
+
+### 7) Paper plan + independent ledger
+
+Freeze `VERSION` for the whole paper window. Rebuild positions from **fill deltas only** on a broker ledger separate from the strategy equity list. Lab injects `INJECTED_PARTIAL_MISS`; reconcile **must** detect abs_diff&gt;0 (date **2025-02-27**, abs_diff=**0.20**). Comparing a series to itself always yields zero and teaches nothing.
+
+![Paper equity](/p9/capstone_paper_equity.png)
+
+### 8) Compliance checklist
+
+Lab CSV checks: learning-only disclaimer; no live orders; PIT documented; **all trials in DSR**; DSR on decision series; version frozen; recon break detected; FINRA Notice **26-10** awareness (PDT successor effective **2026-06-04**); no fabricated citations.
+
+### 9) Research report template
+
+`examples/p9/data/research_report.json` is auto-filled from the run. Your own pack should mirror its sections: hypothesis, data/PIT, costs, trials N, selection, sealed OOS, DSR, risk, TCA, paper/recon, limitations, disclaimer.
+
+## Key lab results (must match `.out`)
+
+Selected (honest bank): **`asof_lag2`** — research OOF IC≈**+0.0467**; sealed IC≈**+0.0458**; sealed net_SR≈**−1.484**; **DSR(N=6)=0.000** (N=1 foil≈0.156). Positive IC with negative net SR after shared costs is a common honest outcome — costs and turnover matter.
+
+## Python lab
+
+`examples/p9/01_capstone_e2e.py`
+
+### Real run output
+
+```text
+=== parameters ===
+offline / synthetic only — no broker, no paid API
+panel: 50 assets × 600 sessions; weak lagged slow driver; PIT as-of lag=2
+shared cost model: 10 bps one-way + IMPACT_K=0.1·σ·√turn (same spirit as P2/P4/P8)
+walk-forward: train 240d / test 60d / step 60d; embargo=5; label h=1
+...
+explicit N_TRIALS=6 (every scored candidate counts; DSR uses this N on the decision series)
+...
+selected=asof_lag2  (LEAK foils excluded from selection but INCLUDED in N=6)
+asof_lag2              sealed_IC=+0.0458 net_SR=-1.484 DSR(N=6)=0.000 <-- SELECTED
+teach: DSR on SELECTED series with N=6 → 0.000; same series with dishonest N=1 → 0.156
+...
+implementation_shortfall≈8.43 bps  +spread 2.0 +fee 1.0 → TCA≈11.43 bps
+...
+BREAK DETECTED on 2025-02-27 abs_diff=0.2000 note=INJECTED_PARTIAL_MISS; assert detected=True
+...
+DONE capstone lab 01
+```
+
+## Common mistakes / pitfalls
+
+1. Reporting DSR with **N=1** after shopping many signals.
+2. Computing DSR on a different series than the one that drove the keep/reject decision.
+3. Joining final revisions / same-bar features (LEAK foils look great; they are cheating).
+4. Paper “recon” that compares a ledger to itself.
+5. Editing signal rules after seeing paper P&amp;L.
+6. Optional frontier appendix that re-opens the sealed year or ignores costs.
+7. Treating positive RankIC as proof of edge after costs.
+8. Sizing impact with same-bar realized volatility (look-ahead).
+
+## Practice (1:1 with checklist)
+
+1. **ex1** — Write a one-page hypothesis (claim, H0, PIT rule, decision rule, disclaimer). **Done when:** JSON/markdown matches the five fields in the lab brief.
+2. **ex2** — Run (or re-run) the costed walk-forward; paste fold table + shared cost parameters. **Done when:** embargo and 10 bps + impact are stated and folds ≥1.
+3. **ex3** — Report sealed OOS IC, net SR, and **DSR(N=all)** on the decision series; show the N=1 foil. **Done when:** both DSR numbers appear with the same PnL path.
+4. **ex4** — Size with vol target + hard limits; state whether DD kill would fire. **Done when:** caps and maxDD are numeric.
+5. **ex5** — TCA toy with lagged σ; quote IS and total TCA bps. **Done when:** participation and σ source are explicit.
+6. **ex6** — ≥5-day (lab: 65-session) paper with independent ledger; prove an injected break is detected. **Done when:** date + abs_diff printed.
+7. **ex7** — Fill the research-report template + self-score the rubric below. **Done when:** every Must row is Pass or an explicit Gap with a fix plan.
+8. **done1** — Capstone pack meets all **Must** rubric rows (honesty/engineering — profits not required).
+
+## Grading rubric (learner’s own capstone)
+
+| Row | Weight | Must / Bonus | Pass criterion |
+|-----|--------|--------------|----------------|
+| Hypothesis clarity | 10 | Must | Claim, H0, PIT, decision rule, disclaimer present |
+| PIT / anti-lookahead | 15 | Must | No final-revision joins; shifts documented |
+| Shared costs in backtest | 10 | Must | Same cost model parameters stated and applied |
+| Walk-forward + embargo | 10 | Must | Fold scheme + embargo numeric |
+| DSR with N=all on decision series | 15 | Must | N counts every trial; DSR path = decision path |
+| Risk limits | 10 | Must | Vol target + gross/net/DD rules stated |
+| TCA / execution estimate | 5 | Must | IS or schedule cost with lagged σ |
+| Paper + independent recon | 10 | Must | Break detection demonstrated |
+| Compliance checklist | 5 | Must | Learning-only + venue-rule awareness |
+| Written report | 5 | Must | Template sections complete |
+| Optional frontier failure appendix | 5 | Bonus | Negative result OK; must not weaken Must rows |
+| “Profitable SR” | 0 | — | **Not graded** — honesty &gt; profits |
+
+**Pass:** all Must rows Pass. Bonus cannot rescue a Must fail.
+
+## Quiz
+
+<Quiz id="p9-q1" question="Why must DSR use N = all trials?" options={["To maximize Sharpe", "Under H0 the best of N is inflated; N deflates selection bias", "Regulators ban N=1 forever", "It removes the need for costs"]} answer={1} explanation="Bailey–LdP DSR corrects for multiple testing / selection bias." />
+<Quiz id="p9-q2" question="DSR must be computed on?" options={["A random other strategy", "The same net PnL series used for the keep/reject decision", "Only the LEAK foil", "Gross returns before costs only"]} answer={1} explanation="Same series as the decision — mixed series is a common cheat." />
+<Quiz id="p9-q3" question="Independent ledger reconciliation means?" options={["Compare equity to itself", "Rebuild positions from fills on a separate broker ledger and detect breaks", "Ignore partial fills", "Only plot NAV"]} answer={1} explanation="Lab injects a partial miss and asserts detection." />
+<Quiz id="p9-q4" question="Positive sealed RankIC with negative net SR after costs teaches?" options={["Always trade it live", "IC alone is not edge after costs/turnover", "Costs are optional", "DSR needs N=0"]} answer={1} explanation="Lab selected asof_lag2: IC≈+0.046 but net_SR≈−1.48." />
+<Quiz id="p9-q5" question="Capstone grading prioritizes?" options={["Highest SR wins", "Honesty and engineering; profits are not required", "Most LEAK foils", "Shortest report"]} answer={1} explanation="Rubric weight on PIT, DSR(N), recon — not profits." />
+<Quiz id="p9-q6" question="Look-ahead in TCA sizing is?" options={["Using lagged/ex-ante σ", "Using same-bar realized σ to set impact", "Stating participation", "Logging arrival price"]} answer={1} explanation="Impact must use information available before the trade." />
+<Quiz id="p9-q7" question="FINRA Notice 26-10 in this curriculum?" options={["Irrelevant forever", "PDT successor awareness — effective 2026-06-04; know venue rules", "Guarantees retail profits", "Replaces DSR"]} answer={1} explanation="Compliance checklist item — learning awareness, not legal advice." />
+
+## Done when
+
+Capstone pack passes every **Must** rubric row: hypothesis, PIT, costs, walk-forward, DSR(N=all) on the decision series, risk limits, TCA, paper+recon, compliance, written report. Profits are neither necessary nor sufficient.
+
+**Sources (read and used above):** Bailey &amp; López de Prado 2014 *Journal of Portfolio Management* 40(5) 94–107 (DSR); López de Prado *Advances in Financial Machine Learning* (purged CV / embargo); Perold 1988 *Financial Analysts Journal* (implementation shortfall); Almgren &amp; Chriss optimal-execution intuition (temporary/permanent impact); FINRA Notice 26-10 (PDT successor effective 2026-06-04); prior phases’ shared cost model and paper-recon pattern (P2/P4/P7).
+
+<Summary>
+**Takeaways**: an honest pack can show positive IC, fail DSR after N and costs, detect a ledger break, and still **pass** — because the grade is process, not P&amp;L.  
+**Next**: none — curriculum complete at P9. Revisit weak phases via the outline.
+</Summary>
