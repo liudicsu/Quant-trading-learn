@@ -1,0 +1,33 @@
+=== parameters ===
+alpha=0.05 VaR; lookback L=252 for hist/param; MC paths=5000; Kupiec LR on exceptions
+all risk estimates use only past returns (shift so day-t VaR uses data through t-1)
+cite: Kupiec 1995 J. Derivatives — Techniques for verifying the accuracy of risk measurement models
+cite: Artzner et al. 1999 Math. Finance — Coherent measures of risk (CVaR/ES motivation)
+cite: lag all estimates — no look-ahead into same-day PnL
+
+=== VaR backtest (Kupiec) ===
+n=1247 hist_exceptions=73 rate=0.0585 (target 0.05) LR=1.820 p=0.177
+n=1247 para_exceptions=67 rate=0.0537 (target 0.05) LR=0.357 p=0.550
+mean_hist_VaR=0.0270 mean_CVaR=0.0337 CVaR>=VaR check=0.83
+MC_t5 VaR=0.0298 CVaR=0.0423
+
+=== stress tests (scenario PnL) ===
+stress equity_-10pct: book_pnl=-0.0525
+stress rates_+100bp_proxy: book_pnl=-0.0325
+stress vol_spike_corr1: book_pnl=-0.0800
+
+=== drawdown control (lagged) ===
+uncontrolled maxDD=-0.750 controlled maxDD=-0.200 mean_exposure=0.040 days_flat=0
+
+=== concentration & leverage limits ===
+book0: max_w=0.292 gross=1.000 (limits w<=0.3 gross<=1.5)
+book1: max_w=0.294 gross=1.000 (limits w<=0.3 gross<=1.5)
+book2: max_w=0.300 gross=1.000 (limits w<=0.3 gross<=1.5)
+book3: max_w=0.297 gross=1.000 (limits w<=0.3 gross<=1.5)
+book4: max_w=0.300 gross=1.000 (limits w<=0.3 gross<=1.5)
+chart /workspace/Quant-trading-learn/public/p6/var_backtest.png
+
+=== lab checklist: gap analysis & secrets hygiene (teach) ===
+gap: map each risk limit to an owner, metric, breach action, and lagged data source
+secrets: no API keys in notebooks; rotate; least privilege; separate paper vs live credentials
+disclaimer: educational simulations — not a production risk system or trading advice

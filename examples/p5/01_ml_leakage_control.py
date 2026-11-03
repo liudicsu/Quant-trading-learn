@@ -98,6 +98,37 @@ print("\n=== LEAK demos (inflated) vs CLEAN purged ===")
 Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.3, random_state=0, shuffle=True)
 pred_sh = fit_predict(ridge_factory, Xtr, ytr, Xte, "train")
 m_shuffle = summarize("LEAK shuffle_split", pred_sh, yte)
+print("note on shuffle: on a PANEL, shuffle mixes same-day assets across folds.")
+print("  With a WEAK CS signal, that does NOT reliably inflate mean daily CS RankIC")
+print("  (here shuffle +0.035 < purged +0.040) — noise dominates; use clearer leaks below.")
+
+# CLEAR LEAK (i): standardize on FULL sample (train+test) then purged-style time OOF still sees test moments
+oof_fullscale = pd.Series(np.nan, index=X.index)
+sc_full = StandardScaler().fit(X)  # LEAK: full-sample moments
+for tr_d, te_d in purged_kfold_indices(uniq_dates, N_FOLDS, HORIZON, EMBARGO):
+    mtr, mte = dates.isin(set(tr_d)), dates.isin(set(te_d))
+    if mtr.sum() < 200 or mte.sum() < 50:
+        continue
+    model = Ridge(1.0).fit(sc_full.transform(X.loc[mtr]), y.loc[mtr])
+    oof_fullscale.loc[mte] = model.predict(sc_full.transform(X.loc[mte]))
+oof_fullscale = oof_fullscale.dropna()
+m_fullscale = summarize("LEAK full_sample_scaler", oof_fullscale, y.loc[oof_fullscale.index])
+
+# CLEAR LEAK (ii): feature = noisy forward return (label leak)
+rng_leak = np.random.default_rng(7)
+X_leak = X.copy()
+X_leak["fwd_leak"] = y + rng_leak.normal(0, y.std(ddof=1) * 0.3, size=len(y))
+oof_yleak = pd.Series(np.nan, index=X.index)
+for tr_d, te_d in purged_kfold_indices(uniq_dates, N_FOLDS, HORIZON, EMBARGO):
+    mtr, mte = dates.isin(set(tr_d)), dates.isin(set(te_d))
+    if mtr.sum() < 200 or mte.sum() < 50:
+        continue
+    sc = StandardScaler().fit(X_leak.loc[mtr])
+    model = Ridge(1.0).fit(sc.transform(X_leak.loc[mtr]), y.loc[mtr])
+    oof_yleak.loc[mte] = model.predict(sc.transform(X_leak.loc[mte]))
+oof_yleak = oof_yleak.dropna()
+m_yleak = summarize("LEAK noisy_fwd_feature", oof_yleak, y.loc[oof_yleak.index])
+print("teach: noisy forward-return feature → IC jumps well above oracle/purged (label leakage)")
 
 # unpurged shuffled KFold OOF
 oof_unp = pd.Series(np.nan, index=X.index)
@@ -159,8 +190,10 @@ m_over_te = summarize("overfit_GBM OOS", pred_te, y.loc[mte])
 print("\n=== SIDE-BY-SIDE TABLE (primary = mean daily CS RankIC) ===")
 rows = [
     ("oracle_beta_true", m_oracle["mean_ic"], m_oracle["t_stat"], m_oracle["ICIR"], "upper bound"),
-    ("LEAK unpurged_KFold", m_unp["mean_ic"], m_unp["t_stat"], m_unp["ICIR"], "pipeline illusion"),
-    ("LEAK shuffle_split", m_shuffle["mean_ic"], m_shuffle["t_stat"], m_shuffle["ICIR"], "pipeline illusion"),
+    ("LEAK noisy_fwd_feat", m_yleak["mean_ic"], m_yleak["t_stat"], m_yleak["ICIR"], "label leak >> oracle"),
+    ("LEAK full_sample_scaler", m_fullscale["mean_ic"], m_fullscale["t_stat"], m_fullscale["ICIR"], "scaler leak"),
+    ("LEAK unpurged_KFold", m_unp["mean_ic"], m_unp["t_stat"], m_unp["ICIR"], "mild CV leak"),
+    ("LEAK shuffle_split", m_shuffle["mean_ic"], m_shuffle["t_stat"], m_shuffle["ICIR"], "weak/noisy on panel"),
     ("purged_ridge", m_ridge["mean_ic"], m_ridge["t_stat"], m_ridge["ICIR"], "weak signal recovered"),
     ("purged_GBM", m_gbm["mean_ic"], m_gbm["t_stat"], m_gbm["ICIR"], "weak signal recovered"),
     ("overfit_GBM_OOS", m_over_te["mean_ic"], m_over_te["t_stat"], m_over_te["ICIR"], "train high / OOS collapse"),
@@ -169,13 +202,13 @@ print(f"{'model':22s} {'mean_CS_IC':>10} {'t':>8} {'ICIR':>8}  note")
 for name, ic, tstat, icir, note in rows:
     print(f"{name:22s} {ic:+10.4f} {tstat:8.2f} {icir:8.2f}  {note}")
 print("teach three cases:")
-print("  (a) ILLUSION: leak protocols inflate IC (unpurged/shuffle) without a real OOS edge")
+print("  (a) ILLUSION: clear leaks (fwd feature / full-sample scaler) inflate IC well above purged; shuffle alone may NOT on a weak panel")
 print("  (b) WEAK RECOVERABLE: purged ridge/GBM still recover mean CS IC ~ +0.04 on this planted weak panel")
 print("  (c) REAL BUT COST-WIPED: see lab 02 — positive IC can still yield net SR≤0 after shared costs")
 print(f"verify: purged_ridge mean daily CS IC = {m_ridge['mean_ic']:.4f} (reviewer ~+0.040)")
 
 # Charts
-fig, ax = plt.subplots(figsize=(9, 4))
+fig, ax = plt.subplots(figsize=(11, 4))
 names = [r[0] for r in rows]
 ics = [r[1] for r in rows]
 colors = ["#2e7d32", "#c45911", "#c45911", "#1f4e79", "#1f4e79", "#7b2d8e"]

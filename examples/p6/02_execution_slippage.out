@@ -1,0 +1,50 @@
+=== parameters ===
+liquidation: X0=1e6 shares over T=1 day, N=10 slices; σ daily=0.02; temp impact η; perm γ
+cite: Almgren & Chriss 2000/2001 Journal of Risk 3(2) pp.5–39 — Optimal execution of portfolio transactions
+cite: Perold 1988 JPM 14(3) — The implementation shortfall: paper vs reality
+cite: TWAP/VWAP as schedule benchmarks (industry TCA); arrival-price IS decomposition
+look-ahead: schedules use only ex-ante volume/price forecasts; post-trade report uses realized path
+
+=== Almgren–Chriss efficient frontier (λ sweep) ===
+lambda=1.0e-08 kappa=0.0020 E_cost=1050000.00 risk_std=12409.67
+lambda=2.8e-08 kappa=0.0034 E_cost=1050000.00 risk_std=12409.67
+lambda=8.1e-08 kappa=0.0057 E_cost=1050000.00 risk_std=12409.65
+lambda=2.3e-07 kappa=0.0096 E_cost=1050000.00 risk_std=12409.61
+lambda=6.6e-07 kappa=0.0162 E_cost=1050000.00 risk_std=12409.49
+lambda=1.9e-06 kappa=0.0274 E_cost=1050000.01 risk_std=12409.14
+lambda=5.3e-06 kappa=0.0462 E_cost=1050000.10 risk_std=12408.16
+lambda=1.5e-05 kappa=0.0780 E_cost=1050000.81 risk_std=12405.38
+lambda=4.3e-05 kappa=0.1316 E_cost=1050006.56 risk_std=12397.45
+lambda=1.2e-04 kappa=0.2221 E_cost=1050052.87 risk_std=12374.99
+lambda=3.5e-04 kappa=0.3748 E_cost=1050421.49 risk_std=12311.91
+lambda=1.0e-03 kappa=0.6325 E_cost=1053257.97 risk_std=12139.23
+chart /workspace/Quant-trading-learn/public/p6/ac_frontier.png
+
+=== TWAP vs VWAP schedules ===
+TWAP slice: [100000. 100000. 100000.] ...
+VWAP slice: [160793.8 124130.7  91889.6  67959.5  55226.5  55226.5  67959.5  91889.6
+ 124130.7 160793.8]
+teach: TWAP ignores volume; VWAP matches expected volume profile
+
+=== implementation shortfall (Perold 1988) ===
+arrival=100.00 paper_value=100000000 realized=98841568 IS=1158432 IS_bps=115.8
+post-trade: decompose IS ≈ delay + trading (impact) components under arrival-price benchmark
+
+=== limit vs market: fill probability vs adverse selection ===
+market mean_cost=0.0200 limit mean_pnl=-0.0278 fill_rate=0.56
+teach: limits improve price conditional on fill but add non-fill + adverse-selection risk
+
+=== slippage / TCA mini report (arrival-price benchmark) ===
+ slice      shares  exec_px      mid  slip_bps
+     1 100113.9653  98.9989 100.0000  100.1140
+     2 100077.9697  98.9914  99.9922  100.8605
+     3 100045.9773  98.9769  99.9774  102.3108
+     4 100017.9867  98.9492  99.9494  105.0762
+     5  99993.9969  98.9012  99.9012  109.8790
+     6  99974.0068  98.8571  99.8569  114.2889
+     7  99958.0157  98.8001  99.7997  119.9928
+     8  99946.0229  98.7268  99.7262  127.3223
+     9  99938.0280  98.6505  99.6499  134.9480
+    10  99934.0307  98.5629  99.5622  143.7141
+mean_slip_bps=115.85 participation≈0.10 max_slice
+disclaimer: toy paths — learning only, not a broker TCA

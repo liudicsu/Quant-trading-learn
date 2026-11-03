@@ -1,9 +1,103 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **7 学时**：概念 2.5h + 实验 4h + 测验 0.5h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+
+**课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
+
+**必须教会：** TWAP vs VWAP；Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) — 成本–风险有效前沿、闭式轨迹、风险厌恶（λ）扫描；Perold 1988 *JPM* 14(3) 实施缺口；限价 vs 市价的成交概率与逆向选择玩具；以**到达价**为基准的滑点监控与事后报告。
+
+<Callout type="info" title="仅供学习 — 非投资建议">
+玩具路径与线性冲击——不是券商 TCA 或实盘算法。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 清仓：`X0 = 1e6` 股，`T = 1` 日，`N = 10` 片；日波动 `σ = 0.02`；临时冲击 `η = 1e-6`；永久 `γ = 1e-7`；`S0 = 100`
+- AC：`κ ≈ √(λ σ² / η)`；剩余仓位 `x(t) = X0 · sinh(κ(T−t)) / sinh(κT)`
+- λ 扫描：`logspace(-8, -3, 12)` → 前沿 `(E[cost], risk std)`
+- 日程：TWAP 均匀；VWAP 匹配 U 形预期成交量
+- 限价玩具：半价差 0.02，目标改善 0.05，成交概率 ≈ 0.55，2000 次模拟
+
+## TWAP 与 VWAP
+
+**TWAP** 按时间均匀切分——忽略成交量分布。**VWAP** 匹配预期成交量（此处 U 形：开盘/收盘更重）。实验 VWAP 两翼峰值 ≈ 1.61e5，TWAP 恒为 1.00e5。日程只用**事前**成交量预测。
+
+## Almgren & Chriss（2000/2001）
+
+Almgren & Chriss（*Journal of Risk* 3(2)，pp. 5–39；2000 年 12 月工作稿 / 2001 年刊）在股份尚未卖完时，最小化期望成本并对价格波动风险加罚。线性临时/永久冲击下，成本–风险**有效前沿**可显式构造；更高风险厌恶 λ → 更大 κ → 更快（「紧急」）清仓。
+
+实验 λ 扫描从耐心（冲击溢价低、库存风险高）到紧急（期望冲击成本高、风险低）。绘制耐心 / 均衡 / 紧急三条轨迹。
+
+![AC 前沿](/p6/ac_frontier.png)
+
+![AC 轨迹](/p6/ac_trajectories.png)
+
+**期望值语境：** AC 优化的是执行窗口上的*交易员效用*——不声称 alpha。λ 来自台桌风险承受，而非回测夏普。
+
+## 实施缺口（Perold 1988）
+
+Perold（*Journal of Portfolio Management* 14(3)，pp. 4–9）把**实施缺口**定义为纸面组合（决策/到达价）减去实际成交。实验卖出程序：到达价 100，纸面 1e8，实现 ≈ 9.88e7，**IS ≈ 1.16e6（约 116 bps）**。事后按到达价基准分解延迟 vs 交易（冲击）。
+
+## 限价 vs 市价（玩具）
+
+市价为即时性支付半价差（实验均成本 0.02）。限价在*成交条件*下改善价格，但引入未成交风险，以及当成交聚集在不利于你的方向时的**逆向选择**。实验：成交率 ≈ 0.56，限价均 PnL ≈ −0.028——限价不是免费优势。
+
+## 滑点监控 / TCA 小报告
+
+到达价基准：`slip_bps = 1e4 · (arrival − exec_px) / arrival`。实验均滑点 ≈ 116 bps；单片最大参与率 ≈ 0.10。导出 `examples/p6/data/tca_report.csv`。
+
+## 前瞻警告
+
+- 日程与 AC 轨迹只用事前 σ、成交量与冲击参数
+- 事后 TCA 可用实现路径——但不得在无清晰模拟协议下把实现成交喂回*决策*日程
+- 在同一条评估路径上拟合 η、γ 属于循环论证
+
+## Python 实验
+
+`examples/p6/02_execution_slippage.py`
+
+### 真实运行输出
+
+```
+TWAP slice: [100000. 100000. 100000.] ...
+VWAP slice: [160793.8 ... 160793.8]  # U-shape
+arrival=100.00 IS≈1158432 IS_bps≈115.8
+market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
+mean_slip_bps≈115.85 participation≈0.10 max_slice
+```
+
+## 常见错误 / 陷阱
+
+1. 回测以中间价成交且无日程/冲击。
+2. 在评估路径上拟合 η、γ（前瞻标定）。
+3. 把跑赢 VWAP 当成 alpha 而非日程基准噪声。
+4. 挂限价时忽略逆向选择。
+5. 未声明基准就把到达价 IS 与收盘对收盘 PnL 混用。
+
+## 练习（1:1）
+
+1. **ex1** — 构造 TWAP 与 VWAP；限制每片参与率。
+2. **ex2** — AC λ 扫描；画前沿与三条轨迹。
+3. **ex3** — 对卖出程序算 Perold IS；分解延迟 vs 交易。
+4. **ex4** — 限价 vs 市价玩具；报告成交率与逆向分量。
+5. **done1** — 主配置中的执行一页纸（日程、λ、基准、上限）。
+
+## 测验
+
+<Quiz id="p6ex-q1" question="Almgren–Chriss 有效前沿权衡的是？" options={["Alpha vs beta", "期望执行成本 vs 库存风险", "仅 VaR vs CVaR", "TWAP vs VWAP 费用"]} answer={1} explanation="在给定地平线上最小化 E[cost] + λ·Var。" />
+<Quiz id="p6ex-q2" question="闭式剩余仓位使用？" options={["仅随机游走", "x(t) ∝ sinh(κ(T−t))/sinh(κT)，κ≈√(λσ²/η)", "永远均分", "仅 VWAP 权重"]} answer={1} explanation="线性冲击 → 双曲轨迹。" />
+<Quiz id="p6ex-q3" question="Perold 实施缺口比较的是？" options={["收盘 vs 开盘", "纸面（到达/决策）价值 vs 实际成交", "仅买一卖一", "VaR vs 压力"]} answer={1} explanation="到达价思想下的纸面 vs 现实。" />
+<Quiz id="p6ex-q4" question="TWAP 与 VWAP 的差别在于 TWAP？" options={["匹配成交量分布", "忽略成交量、按时间均匀切分", "总是最小化 IS", "只用限价单"]} answer={1} explanation="TWAP 时间均匀；VWAP 跟随预期成交量。" />
+<Quiz id="p6ex-q5" question="玩具中限价相对市价主要增加？" options={["保证更好 PnL", "未成交风险与逆向选择风险", "零滑点", "更高 κ"]} answer={1} explanation="成交是概率性的，且在中间价逆向移动时有偏。" />
+<Quiz id="p6ex-q6" question="实验报告中到达价 slip_bps？" options={["恒为零", "玩具卖出路径均值约 116 bps", "自动等于 VWAP", "是 Kelly 分数"]} answer={1} explanation="到达价基准下的事后 TCA。" />
+
+## 完成标准
+
+执行假设（日程、参与率上限、AC λ 或启发式、IS 基准）写入共用主配置——研究与纸面交易使用同一模型。
+
+**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）。
+
+<Summary>
+**要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  
+**下一课**：risk-systems-lab（VaR/CVaR、Kupiec、压力、回撤熔断、密钥）。
+</Summary>

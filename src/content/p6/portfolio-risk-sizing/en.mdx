@@ -1,9 +1,117 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**14 hours**: 5h concepts + 7h labs + 2h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+
+**Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
+
+**Must-teach:** sizing is a strategy layer; half-Kelly (or more conservative) as a growth–drawdown trade-off (Kelly 1956; Thorp handbook ch.); vol targeting with **lagged** vol; inverse-vol and ERC risk parity; Markowitz 1952 MV + Michaud “error maximization”; DeMiguel, Garlappi & Uppal 2009 (1/N hard to beat OOS); Ledoit & Wolf 2004 JPM “Honey…” *and* JMVA 88(2) well-conditioned estimator (sklearn `LedoitWolf`) compared OOS.
+
+<Callout type="info" title="Learning only — not investment advice">
+Synthetic 10-asset panel. Numbers teach methodology — not a live allocation product.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Panel: **10** assets × **1000** business days; common factor + idio noise (`examples/p6/_common.py`)
+- Kelly toy: Bernoulli `p=0.55`, even-money → `f* = 2p−1 = 0.10`; 500 paths × 500 bets; full / half / 2×
+- Vol target: 10% ann.; `σ_t` = rolling 20d std **shifted by 1**; weight enters next bar
+- Risk parity: 120d trailing window ending at `t−1`; inverse-vol and iterative ERC
+- MV walk-forward: estimate window **250d**, hold **21d**; long-only project; sample Σ vs `LedoitWolf` vs 1/N
+
+## Kelly and fractional Kelly
+
+Kelly (1956, *Bell System Technical Journal*) maximises expected log wealth. For an even-money bet with win probability `p`, `f* = 2p − 1`. Thorp (handbook chapter, e.g. 2006) emphasises **fractional Kelly**: over-betting destroys growth; half-Kelly trades some growth for materially smaller drawdowns.
+
+Lab (`examples/p6/01_portfolio_risk_sizing.py`):
+
+| Policy | f | median log growth | ruin rate (&lt;1% wealth) | median max DD |
+|--------|---|-------------------|--------------------------|---------------|
+| full Kelly | 0.10 | ≈ +2.50 | 0.00 | ≈ −0.80 |
+| **half Kelly** | 0.05 | ≈ +1.88 | 0.00 | ≈ **−0.53** |
+| 2× Kelly | 0.20 | ≈ **−0.07** | ≈ **0.16** | ≈ −1.00 |
+
+**Expected-value context:** full Kelly maximises *median asymptotic growth* under a known edge — not comfort, not VaR, not institutional mandate. With a **noisy estimated** edge, full Kelly is an unsafe upper bound.
+
+![Kelly paths](/p6/kelly_paths.png)
+
+## Volatility targeting
+
+Scale exposure so that `w_t · σ̂_{t−1} ≈ σ_target`. Lab: raw ann. vol ≈ 0.27 → vol-targeted ≈ 0.11. Look-ahead rule: estimate vol on past returns only; apply weight on the **next** bar.
+
+## Risk parity: inverse-vol and ERC
+
+- **Inverse-vol:** `w_i ∝ 1/σ_i` (ignores correlations).
+- **ERC (equal risk contribution):** choose `w` so each asset’s `w_i · ∂σ_p/∂w_i` is equal (Maillard–Roncalli–Teiletche style). Lab iterative ERC drives last-day RC std ≈ 0.
+
+Lab OOS Sharpe (synthetic, negative-drift foil): inv-vol ≈ −0.21, ERC ≈ −0.12, equal-weight ≈ −0.31. Point is the **risk budget**, not a promised SR.
+
+## Mean-variance, estimation error, 1/N, Ledoit–Wolf
+
+Markowitz (1952, *Journal of Finance*) gives the classic MV programme. Michaud (1989) warns that optimisers are **error maximisers** — they overweight the noisiest μ/Σ entries. DeMiguel, Garlappi & Uppal (2009, *RFS* 22(5)) show many optimised rules fail to beat **1/N** out of sample.
+
+Ledoit & Wolf publish two 2004 papers used here:
+
+1. **JPM 30(4)** — “Honey, I Shrunk the Sample Covariance Matrix” (constant-correlation target; portfolio IR motivation).
+2. **JMVA 88(2)** — well-conditioned large-dimensional shrinkage (the family behind sklearn `LedoitWolf`).
+
+Lab walk-forward OOS Sharpe: sample MV ≈ −0.215, LedoitWolf MV ≈ −0.211, 1/N ≈ −0.461; mean shrinkage intensity ≈ **0.036**. On *this* panel MV beats 1/N — DeMiguel’s result is “often,” not “always.” Shrinkage still improves conditioning of Σ.
+
+![MV vs 1/N](/p6/mv_vs_1n.png)
+
+## Look-ahead warnings
+
+- Vol, cov, and μ for day-t decisions use data through `t−1` only
+- Walk-forward test block never leaks into the estimate window
+- Kelly `p` in production is **estimated** — treat `f*` as a noisy ceiling
+
+## Python lab
+
+`examples/p6/01_portfolio_risk_sizing.py`
+
+### Real run output
+
+```
+Bernoulli edge: p=0.55 even-money → f*=0.100
+Kelly_full   f=0.100 median_log_growth=2.504 ruin_rate=0.000 median_maxDD=-0.803
+Kelly_half   f=0.050 median_log_growth=1.876 ruin_rate=0.000 median_maxDD=-0.534
+Kelly_double f=0.200 median_log_growth=-0.069 ruin_rate=0.156 median_maxDD=-0.995
+inv_vol_SR=-0.208 ERC_SR=-0.120 equal_weight_SR=-0.310
+OOS_SR mv=-0.215 LedoitWolf=-0.211 1/N=-0.461
+mean_shrinkage_intensity=0.036
+```
+
+## Common mistakes / pitfalls
+
+1. Full Kelly on a noisy estimated edge.
+2. Using same-bar vol for today’s weight (look-ahead).
+3. Calling inverse-vol “ERC” when correlations are ignored.
+4. In-sample MV charts as proof of OOS skill.
+5. Treating 1/N as universally optimal rather than a tough benchmark (DeMiguel et al.).
+
+## Practice (1:1)
+
+1. **ex1** — Fixed vs vol-target vs DD brake on one asset; report realised vol and max DD.
+2. **ex2** — Kelly full / half / 2× simulation; table growth, ruin, DD.
+3. **ex3** — Inverse-vol vs ERC vs EW; show RC dispersion.
+4. **ex4** — Walk-forward MV vs LedoitWolf vs 1/N; record shrinkage intensity.
+5. **done1** — Sizing comparison table + one-page risk preference (half-Kelly rationale).
+
+## Quiz
+
+<Quiz id="p6prs-q1" question="For even-money bets with win probability p, Kelly f* equals?" options={["p", "2p − 1", "1 − p", "p / (1 − p)"]} answer={1} explanation="f* = 2p − 1 for b = 1." />
+<Quiz id="p6prs-q2" question="In the lab, 2× Kelly mainly shows?" options={["Higher median growth and lower DD", "Negative median log growth and material ruin", "Identical paths to half-Kelly", "Zero volatility"]} answer={1} explanation="Over-betting: growth collapses and ruin appears." />
+<Quiz id="p6prs-q3" question="Half-Kelly relative to full Kelly?" options={["Always maximises growth", "Trades some growth for smaller drawdowns (Thorp)", "Ignores the edge", "Requires shorting"]} answer={1} explanation="Fractional Kelly is the practical growth–DD trade-off." />
+<Quiz id="p6prs-q4" question="DeMiguel, Garlappi & Uppal (2009) emphasise that?" options={["Sample MV always wins OOS", "1/N is a hard OOS benchmark for many optimised rules", "Kelly replaces MV", "VaR implies ERC"]} answer={1} explanation="Optimised rules often fail to beat naive 1/N OOS." />
+<Quiz id="p6prs-q5" question="Ledoit & Wolf 2004 JPM “Honey…” proposes?" options={["Discarding covariance", "Shrinkage of the sample covariance toward a structured target", "Only PCA risk models", "Full Kelly sizing"]} answer={1} explanation="Shrink Σ = δF + (1−δ)S with estimated intensity." />
+<Quiz id="p6prs-q6" question="Vol targeting must use?" options={["Same-bar realised σ", "Lagged volatility so weights enter the next bar", "Future option IV only", "Full-sample σ"]} answer={1} explanation="No look-ahead: σ̂ from the past, trade next bar." />
+
+## Done when
+
+Sizing comparison table (Kelly / vol-target / RP / MV–LW–1/N) plus a risk-preference page stating why you cap below full Kelly.
+
+**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11.
+
+<Summary>
+**Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; MV needs shrinkage and an honest 1/N foil.  
+**Next**: execution-slippage (TWAP/VWAP, Almgren–Chriss, implementation shortfall).
+</Summary>

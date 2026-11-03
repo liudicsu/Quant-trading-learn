@@ -1,9 +1,103 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**7 hours**: 2.5h concepts + 4h experiments + 0.5h quiz) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
+
+**Goals:** add participation / schedule discipline; write a one-page execution sheet tied to the shared cost model.
+
+**Must-teach:** TWAP vs VWAP; Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) — cost–risk efficient frontier, closed-form trajectory, risk-aversion (λ) sweep; Perold 1988 *JPM* 14(3) implementation shortfall; limit vs market fill-probability vs adverse-selection toy; slippage monitoring with an **arrival-price** benchmark and a post-trade report.
+
+<Callout type="info" title="Learning only — not investment advice">
+Toy paths and linear impact — not a broker TCA or live algo.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Liquidation: `X0 = 1e6` shares over `T = 1` day, `N = 10` slices; daily `σ = 0.02`; temporary `η = 1e-6`; permanent `γ = 1e-7`; `S0 = 100`
+- AC: `κ ≈ √(λ σ² / η)`; remaining shares `x(t) = X0 · sinh(κ(T−t)) / sinh(κT)`
+- λ sweep: `logspace(-8, -3, 12)` → frontier `(E[cost], risk std)`
+- Schedules: TWAP equal slices; VWAP matches a U-shaped expected volume profile
+- Limit toy: half-spread 0.02, target edge 0.05, fill_p ≈ 0.55, 2000 sims
+
+## TWAP and VWAP
+
+**TWAP** spreads quantity evenly in time — ignores the volume profile. **VWAP** matches expected volume (here a U-shape: heavier open/close). Lab VWAP slices peak ≈ 1.61e5 at the wings vs TWAP 1.00e5 flat. Schedules use **ex-ante** volume forecasts only.
+
+## Almgren & Chriss (2000/2001)
+
+Almgren & Chriss (*Journal of Risk* 3(2), pp. 5–39; Dec 2000 working paper / 2001 issue) minimise expected cost plus a risk penalty from price volatility while shares remain. With linear temporary/permanent impact the **efficient frontier** of cost vs risk is explicit; higher risk-aversion λ → larger κ → faster (“urgent”) liquidation.
+
+Lab λ sweep moves from patient (low E premium, higher inventory risk) to urgent (higher expected impact cost, lower risk). Trajectories for patient / balanced / urgent λ are plotted.
+
+![AC frontier](/p6/ac_frontier.png)
+
+![AC trajectories](/p6/ac_trajectories.png)
+
+**Expected-value context:** AC optimises a *trader utility* over the execution window — it does not claim alpha. Choose λ from desk risk tolerance, not from backtest SR.
+
+## Implementation shortfall (Perold 1988)
+
+Perold (*Journal of Portfolio Management* 14(3), pp. 4–9) defines **implementation shortfall** as paper portfolio (decision / arrival price) minus realised execution. Lab sell programme: arrival 100, paper 1e8, realised ≈ 9.88e7, **IS ≈ 1.16e6 (~116 bps)**. Decompose delay vs trading (impact) under the arrival-price benchmark for post-trade review.
+
+## Limit vs market (toy)
+
+Market orders pay the half-spread for immediacy (lab mean cost 0.02). Limits improve price *conditional on fill* but add non-fill risk and **adverse selection** when fills cluster on moves against you. Lab: fill rate ≈ 0.56, limit mean PnL ≈ −0.028 under a simple adverse foil — limits are not free edge.
+
+## Slippage monitoring / TCA mini-report
+
+Arrival-price benchmark per slice: `slip_bps = 1e4 · (arrival − exec_px) / arrival`. Lab mean slip ≈ 116 bps; max slice participation ≈ 0.10. Export `examples/p6/data/tca_report.csv`.
+
+## Look-ahead warnings
+
+- Schedules and AC trajectories use only ex-ante σ, volume, and impact params
+- Post-trade TCA may use the realised path — never feed realised fills back into the *decision* schedule without a clear sim protocol
+- Impact parameters fitted on the same path you evaluate are circular
+
+## Python lab
+
+`examples/p6/02_execution_slippage.py`
+
+### Real run output
+
+```
+TWAP slice: [100000. 100000. 100000.] ...
+VWAP slice: [160793.8 ... 160793.8]  # U-shape
+arrival=100.00 IS≈1158432 IS_bps≈115.8
+market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
+mean_slip_bps≈115.85 participation≈0.10 max_slice
+```
+
+## Common mistakes / pitfalls
+
+1. Backtesting fills at mid with zero schedule / impact.
+2. Fitting η, γ on the evaluation path (look-ahead calibration).
+3. Treating VWAP beat as alpha rather than schedule benchmark noise.
+4. Ignoring adverse selection when quoting limits.
+5. Mixing arrival-price IS with close-to-close PnL without stating the benchmark.
+
+## Practice (1:1)
+
+1. **ex1** — Build TWAP and VWAP schedules; cap participation per slice.
+2. **ex2** — AC λ sweep; plot frontier and three trajectories.
+3. **ex3** — Compute Perold IS on a sell programme; decompose delay vs trading.
+4. **ex4** — Limit vs market toy; report fill rate and adverse component.
+5. **done1** — Execution one-pager in the main config (schedule, λ, benchmarks, caps).
+
+## Quiz
+
+<Quiz id="p6ex-q1" question="Almgren–Chriss efficient frontier trades off?" options={["Alpha vs beta", "Expected execution cost vs inventory risk", "VaR vs CVaR only", "TWAP vs VWAP fees"]} answer={1} explanation="Minimise E[cost] + λ·Var for a given horizon." />
+<Quiz id="p6ex-q2" question="Closed-form remaining shares use?" options={["Random walk only", "x(t) ∝ sinh(κ(T−t))/sinh(κT) with κ≈√(λσ²/η)", "Equal shares always", "Only VWAP weights"]} answer={1} explanation="Linear impact → hyperbolic trajectory." />
+<Quiz id="p6ex-q3" question="Perold implementation shortfall compares?" options={["Close vs open", "Paper (arrival/decision) value vs realised execution", "Bid vs ask only", "VaR vs stress"]} answer={1} explanation="Paper vs reality under the arrival-price idea." />
+<Quiz id="p6ex-q4" question="TWAP differs from VWAP because TWAP?" options={["Matches volume profile", "Ignores volume and splits evenly in time", "Always minimises IS", "Uses only limit orders"]} answer={1} explanation="TWAP is time-uniform; VWAP follows expected volume." />
+<Quiz id="p6ex-q5" question="Limit orders vs market in the toy mainly add?" options={["Guaranteed better PnL", "Non-fill risk and adverse-selection risk", "Zero slippage", "Higher κ"]} answer={1} explanation="Fills are probabilistic and biased when the mid moves against you." />
+<Quiz id="p6ex-q6" question="Arrival-price slip_bps in the lab report is?" options={["Always zero", "≈116 bps mean on the toy sell path", "Equal to VWAP automatically", "A Kelly fraction"]} answer={1} explanation="Post-trade TCA under arrival benchmark." />
+
+## Done when
+
+Execution assumptions (schedule, participation caps, AC λ or heuristic, IS benchmark) live in the shared main config — same model research and paper trading use.
+
+**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche).
+
+<Summary>
+**Takeaways**: schedule consciously; AC gives a cost–risk frontier; measure IS vs arrival; limits are not free.  
+**Next**: risk-systems-lab (VaR/CVaR, Kupiec, stress, DD brakes, secrets).
+</Summary>

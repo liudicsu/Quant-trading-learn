@@ -1,9 +1,114 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**5 hours**: 1.5h concepts + 3h labs + 0.5h quiz) engineers **hard risk controls**: VaR/CVaR (historical, parametric, MC), Kupiec exception backtests, stress scenarios, lagged drawdown brakes, concentration and leverage limits, plus a gap/secrets checklist. Prereqs: `portfolio-risk-sizing`, `execution-slippage`.
+
+**Goals:** refuse or de-risk on stale/gap data; demonstrate a DD kill / scale-down; self-check that secrets stay out of git.
+
+**Must-teach:** VaR/CVaR with **lagged** windows (no look-ahead into same-day PnL); historical / parametric / Monte Carlo; Kupiec (1995) unconditional coverage LR; stress tests; drawdown control rules; concentration and leverage limits; kill switches are engineering, not forecasts; secrets hygiene.
+
+<Callout type="info" title="Learning only — not investment advice">
+Educational simulations — not a production risk system or trading advice.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- α = 0.05 VaR/CVaR; lookback `L = 252`; MC: 5000 Student-t(5) paths calibrated to lagged window
+- Day-t VaR uses returns through `t−1` only
+- DD rule on the **controlled** book: soft 10% / hard 20% (lagged); linear de-risk between soft and kill
+- Concentration: `w_i ≤ 0.30`; gross leverage ≤ 1.5
+- Kupiec LR ~ χ²(1) on exception counts
+
+## VaR and CVaR (lagged)
+
+- **Historical:** −quantile_α of the past window
+- **Parametric:** −(μ + σ Φ⁻¹(α)) from the same lagged window
+- **MC:** simulate from a fat-tailed foil (Student-t), read VaR/CVaR from the simulated loss distribution
+- **CVaR / ES:** mean loss beyond the VaR threshold (Artzner et al. 1999 motivate coherent risk measures; CVaR is the practical ES foil here)
+
+Lab: mean hist VaR ≈ 0.027, mean CVaR ≈ 0.034; MC_t5 VaR ≈ 0.030, CVaR ≈ 0.042. CVaR ≥ VaR on most days (check rate ≈ 0.83; ties/empty tails explain the rest).
+
+## Kupiec exception backtest
+
+Kupiec (1995, *Journal of Derivatives* 3(2)) gives a likelihood-ratio test for whether the exception rate equals the nominal α (**unconditional coverage**). Lab on n = 1247:
+
+| Model | exceptions | rate | LR | p-value |
+|-------|------------|------|----|---------|
+| historical 95% | 73 | 0.0585 | 1.82 | 0.177 |
+| parametric 95% | 67 | 0.0537 | 0.36 | 0.550 |
+
+Neither rejects α = 5% at conventional levels on this path — still report the test, do not treat a non-reject as a guarantee.
+
+![VaR backtest](/p6/var_backtest.png)
+
+## Stress tests
+
+Scenario PnL on a toy equal book: equity −10% → −5.25%; rates +100bp proxy → −3.25%; vol-spike corr→1 → −8.0%. Stress is **not** a probability — it is a board-level narrative check.
+
+## Drawdown control (lagged)
+
+Decide exposure at t from controlled equity DD through t−1. Lab: uncontrolled max DD ≈ −0.75 → controlled max DD ≈ −0.20 (hard kill). Mean exposure falls because the rule stays partially de-risked after deep paths — that is the point of a brake.
+
+## Concentration and leverage limits
+
+Project raw weights: clip `w_i ≤ 0.30`, renormalise, then scale gross to ≤ 1.5. Lab books satisfy max_w ≤ 0.30 and gross = 1.0 after projection.
+
+## Gap analysis and secrets hygiene
+
+Map each limit → owner, metric, breach action, lagged data source. Secrets: no API keys in notebooks; rotate; least privilege; separate paper vs live credentials; scan before commit.
+
+## Look-ahead warnings
+
+- Never compute today’s VaR with today’s return in the window
+- DD brakes must use yesterday’s equity high-water
+- Stress shocks are hypothetical — do not backfill them as if they were realised α
+
+## Python lab
+
+`examples/p6/03_risk_systems_lab.py`
+
+### Real run output
+
+```
+n=1247 hist_exceptions=73 rate=0.0585 LR=1.820 p=0.177
+n=1247 para_exceptions=67 rate=0.0537 LR=0.357 p=0.550
+mean_hist_VaR=0.0270 mean_CVaR=0.0337
+MC_t5 VaR=0.0298 CVaR=0.0423
+uncontrolled maxDD≈-0.750 controlled maxDD≈-0.200
+book0: max_w≤0.30 gross≤1.5 after projection
+```
+
+## Common mistakes / pitfalls
+
+1. Same-day returns inside the VaR window (look-ahead).
+2. Treating VaR as a loss *promise* rather than a quantile under a model.
+3. Skipping Kupiec / exception logs because “it looks fine.”
+4. DD rule that reads tomorrow’s equity.
+5. Committing `.env` / API keys with the notebook.
+
+## Practice (1:1)
+
+1. **ex1** — Gap / stale feed → pause orders (config flag demo).
+2. **ex2** — Lagged DD soft/hard scale-down; compare max DD.
+3. **ex3** — Hist/param/MC VaR + Kupiec table; CVaR check.
+4. **ex4** — Concentration + leverage projection on random books.
+5. **done1** — Three hard-constraint demos pass + secrets self-check.
+
+## Quiz
+
+<Quiz id="p6rs-q1" question="Day-t VaR window must end at?" options={["t inclusive", "t−1 (lagged)", "t+1", "Full sample"]} answer={1} explanation="No look-ahead into same-day PnL." />
+<Quiz id="p6rs-q2" question="Kupiec (1995) unconditional coverage tests?" options={["Whether mean returns are zero", "Whether exception rate matches nominal α", "Whether CVaR equals VaR", "Whether Kelly f* is 1"]} answer={1} explanation="LR test on hit rate vs α." />
+<Quiz id="p6rs-q3" question="CVaR relative to VaR at the same α?" options={["Always smaller", "Mean loss beyond VaR — typically ≥ VaR", "Ignores the tail", "Equals volatility"]} answer={1} explanation="Expected shortfall beyond the quantile." />
+<Quiz id="p6rs-q4" question="A DD kill switch is primarily?" options={["An alpha forecast", "An engineering hard constraint on exposure", "A substitute for VaR", "A VWAP schedule"]} answer={1} explanation="Controls risk when losses accumulate — not a predictor." />
+<Quiz id="p6rs-q5" question="Stress tests in this lesson?" options={["Replace Kupiec", "Apply narrative shocks to the book and read PnL", "Estimate μ for Kelly", "Shuffle the panel"]} answer={1} explanation="Board-level scenario PnL, not a probability model." />
+<Quiz id="p6rs-q6" question="Secrets hygiene requires?" options={["Commit API keys for reproducibility", "Keep keys out of git; rotate; least privilege; separate paper/live", "Hard-code passwords in MDX", "Email keys to the class"]} answer={1} explanation="Operational safety checklist." />
+
+## Done when
+
+Three hard-constraint demos (gap pause, DD de-risk, concentration/leverage) pass, with a Kupiec table and a secrets self-check logged.
+
+**Sources (read and used above):** Kupiec 1995 *Journal of Derivatives* 3(2); Artzner et al. 1999 *Mathematical Finance* (coherent risk); industry VaR/ES practice; Canvas m13 bits; ML4T ops notes; Cookbook/Qbot config ideas (niche).
+
+<Summary>
+**Takeaways**: lag every risk estimate; backtest exceptions (Kupiec); stress + DD + limits are engineering; keep secrets out of the repo.  
+**Next**: P7 paper-trading-infra (signal → target → log).
+</Summary>

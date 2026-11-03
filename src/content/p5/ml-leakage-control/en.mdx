@@ -34,13 +34,19 @@ Assets and regimes differ in volatility. A flat ±2% barrier is hit constantly b
 
 **Pooled Spearman** stacks every (date, asset) row into one correlation — it mixes serial dependence with cross-sectional ranking and can even **disagree in sign** with the daily CS mean (lab: purged ridge pooled ≈ −0.008 while mean daily CS IC ≈ **+0.040**).
 
+## Why shuffle may not inflate IC here
+
+On a **panel**, row-shuffle mixes same-day names across folds. With a **weak** cross-sectional signal, that scrambling does not reliably raise mean daily CS RankIC — here shuffle ≈+0.035 sits **below** purged ridge ≈+0.040 because noise dominates. Use clearer leaks: (i) full-sample standardization (often subtle) and especially (ii) a feature that is a noisy copy of the forward label (lab IC ≈+0.93 ≫ oracle ≈+0.10).
+
 ## Side-by-side: oracle / leaked / purged / overfit
 
 | Model | mean daily CS RankIC | t | ICIR | Note |
 |-------|----------------------|---|------|------|
 | oracle `beta_true` | ≈ **+0.099** | ≈6.3 | ≈3.7 | upper bound |
-| LEAK unpurged KFold | ≈ **+0.052** | ≈6.0 | ≈3.6 | pipeline illusion |
-| LEAK shuffle split | ≈ +0.035 | ≈2.8 | ≈1.7 | pipeline illusion |
+| LEAK noisy fwd feature | ≈ **+0.93** | huge | huge | label leak ≫ oracle |
+| LEAK full-sample scaler | ≈ +0.040 | ≈4.6 | ≈2.7 | often subtle on CS features |
+| LEAK unpurged KFold | ≈ **+0.052** | ≈6.0 | ≈3.6 | mild CV leak |
+| LEAK shuffle split | ≈ +0.035 | ≈2.8 | ≈1.7 | may NOT inflate on a weak panel |
 | **purged ridge** | ≈ **+0.040** | ≈4.6 | ≈2.7 | weak signal recovered |
 | purged GBM | ≈ +0.034 | ≈4.7 | ≈2.8 | weak signal recovered |
 | overfit GBM OOS | ≈ +0.021 (train ≈0.34) | ≈1.7 | ≈1.9 | train high / OOS collapse |
@@ -55,7 +61,7 @@ Verified: purged ridge mean daily CS IC ≈ **+0.0398** (matches reviewer ~+0.04
 
 ## Three cases (do not collapse them)
 
-1. **(a) Pipeline illusion** — unpurged / shuffle protocols inflate IC (here unpurged CS IC ≈0.052 > purged ≈0.040) without a trustworthy OOS design.
+1. **(a) Pipeline illusion** — clear label leaks explode IC (noisy fwd ≈+0.93 ≫ oracle); unpurged CV mildly inflates (≈0.052 > purged ≈0.040). Panel shuffle alone may fail to inflate a weak CS signal.
 2. **(b) Weak but recoverable** — after purge+embargo, ridge/GBM still recover ~**+0.04** mean CS IC on this planted weak panel (oracle ~0.10 is the ceiling).
 3. **(c) Real IC, costs wipe net SR** — lab 02: purged ridge IC ≈+0.04 yet **net SR ≈ −0.38** under the shared cost stack (high turnover). Positive IC ≠ tradeable edge.
 
@@ -112,6 +118,12 @@ oracle_beta_true             mean_daily_CS_RankIC=+0.0991 t=6.29 ICIR=3.71 n_day
 
 === LEAK demos (inflated) vs CLEAN purged ===
 LEAK shuffle_split           mean_daily_CS_RankIC=+0.0345 t=2.82 ICIR=1.68 n_days=708  | pooled_Spearman=+0.0615 (counterexample)
+note on shuffle: on a PANEL, shuffle mixes same-day assets across folds.
+  With a WEAK CS signal, that does NOT reliably inflate mean daily CS RankIC
+  (here shuffle +0.035 < purged +0.040) — noise dominates; use clearer leaks below.
+LEAK full_sample_scaler      mean_daily_CS_RankIC=+0.0398 t=4.64 ICIR=2.73 n_days=726  | pooled_Spearman=-0.0076 (counterexample)
+LEAK noisy_fwd_feature       mean_daily_CS_RankIC=+0.9252 t=740.74 ICIR=436.41 n_days=726  | pooled_Spearman=+0.9526 (counterexample)
+teach: noisy forward-return feature → IC jumps well above oracle/purged (label leakage)
 LEAK unpurged_KFold          mean_daily_CS_RankIC=+0.0518 t=6.03 ICIR=3.55 n_days=726  | pooled_Spearman=+0.0654 (counterexample)
 CLEAN purged_ridge           mean_daily_CS_RankIC=+0.0398 t=4.64 ICIR=2.73 n_days=726  | pooled_Spearman=-0.0076 (counterexample)
 CLEAN purged_GBM(lightgbm)   mean_daily_CS_RankIC=+0.0336 t=4.69 ICIR=2.77 n_days=726  | pooled_Spearman=+0.0105 (counterexample)
@@ -123,13 +135,15 @@ overfit_GBM OOS              mean_daily_CS_RankIC=+0.0211 t=1.73 ICIR=1.86 n_day
 === SIDE-BY-SIDE TABLE (primary = mean daily CS RankIC) ===
 model                  mean_CS_IC        t     ICIR  note
 oracle_beta_true          +0.0991     6.29     3.71  upper bound
-LEAK unpurged_KFold       +0.0518     6.03     3.55  pipeline illusion
-LEAK shuffle_split        +0.0345     2.82     1.68  pipeline illusion
+LEAK noisy_fwd_feat       +0.9252   740.74   436.41  label leak >> oracle
+LEAK full_sample_scaler    +0.0398     4.64     2.73  scaler leak
+LEAK unpurged_KFold       +0.0518     6.03     3.55  mild CV leak
+LEAK shuffle_split        +0.0345     2.82     1.68  weak/noisy on panel
 purged_ridge              +0.0398     4.64     2.73  weak signal recovered
 purged_GBM                +0.0336     4.69     2.77  weak signal recovered
 overfit_GBM_OOS           +0.0211     1.73     1.86  train high / OOS collapse
 teach three cases:
-  (a) ILLUSION: leak protocols inflate IC (unpurged/shuffle) without a real OOS edge
+  (a) ILLUSION: clear leaks (fwd feature / full-sample scaler) inflate IC well above purged; shuffle alone may NOT on a weak panel
   (b) WEAK RECOVERABLE: purged ridge/GBM still recover mean CS IC ~ +0.04 on this planted weak panel
   (c) REAL BUT COST-WIPED: see lab 02 — positive IC can still yield net SR≤0 after shared costs
 verify: purged_ridge mean daily CS IC = 0.0398 (reviewer ~+0.040)

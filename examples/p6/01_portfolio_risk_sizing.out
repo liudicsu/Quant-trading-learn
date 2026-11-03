@@ -1,0 +1,33 @@
+=== parameters ===
+panel: 10 assets × 1000 days synthetic; look-ahead: all vol/cov use shift(1) / expanding train only
+cite: Kelly 1956 Bell System Tech. J. — fortune's formula / growth-optimal bet
+cite: Thorp 2006 — The Kelly criterion in blackjack, sports betting, and the stock market (handbook ch.)
+cite: Markowitz 1952 JOF — Portfolio Selection
+cite: Michaud 1989 — The Markowitz optimization enigma (estimation error / 'error maximization')
+cite: DeMiguel, Garlappi & Uppal 2009 RFS 22(5) — Optimal vs naive diversification; 1/N hard to beat OOS
+cite: Ledoit & Wolf 2004 JPM — 'Honey, I Shrunk the Sample Covariance Matrix'
+cite: Ledoit & Wolf 2004 JMVA 88(2) — well-conditioned shrinkage (sklearn LedoitWolf)
+panel (1000, 10)
+
+=== Kelly / fractional Kelly simulation ===
+Bernoulli edge: p=0.55 even-money → f*=0.100
+Kelly_full   f=0.100 median_log_growth=2.504 ruin_rate=0.000 median_maxDD=-0.803
+Kelly_half   f=0.050 median_log_growth=1.876 ruin_rate=0.000 median_maxDD=-0.534
+Kelly_double f=0.200 median_log_growth=-0.069 ruin_rate=0.156 median_maxDD=-0.995
+teach: over-betting (2×Kelly) raises ruin / DD; half-Kelly trades growth for smaller drawdowns (Thorp)
+
+=== volatility targeting (lagged vol) ===
+raw_SR=-1.015 vol_target_SR=-1.014 realized_ann_vol_raw=0.272 vt=0.106
+look-ahead: vol uses shift(1); weights enter next bar
+
+=== risk parity: inverse-vol and ERC (equal risk contribution) ===
+inv_vol_SR=-0.208 ERC_SR=-0.120 equal_weight_SR=-0.310
+ERC last-day RC std=0.000009 (near 0 ⇒ equal risk); inv-vol ignores correlations
+
+=== mean-variance vs 1/N vs Ledoit–Wolf shrinkage (OOS) ===
+OOS_SR mv=-0.215 LedoitWolf=-0.211 1/N=-0.461
+mean_shrinkage_intensity=0.036
+teach: estimation error (Michaud) can make sample-MV lose to 1/N OOS (DeMiguel et al. 2009); shrinkage helps condition Σ
+chart /workspace/Quant-trading-learn/public/p6/kelly_paths.png
+chart /workspace/Quant-trading-learn/public/p6/mv_vs_1n.png
+disclaimer: synthetic panel — learning only, not investment advice

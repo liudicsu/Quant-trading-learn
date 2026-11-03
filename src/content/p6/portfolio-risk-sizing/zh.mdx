@@ -1,9 +1,117 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **14 学时**：概念 5h + 实验 7h + 写作 2h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+
+**课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
+
+**必须教会：** 仓位是策略层；半 Kelly（或更保守）作为增长–回撤权衡（Kelly 1956；Thorp 手册章节）；用**滞后**波动做波动目标；逆波动与 ERC 风险平价；Markowitz 1952 MV + Michaud「误差最大化」；DeMiguel, Garlappi & Uppal 2009（1/N 样本外难超越）；Ledoit & Wolf 2004 JPM “Honey…” **与** JMVA 88(2) 良态估计（sklearn `LedoitWolf`）的样本外对照。
+
+<Callout type="info" title="仅供学习 — 非投资建议">
+合成 10 资产面板。数字用于方法论——不是实盘配置产品。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 面板：**10** 资产 × **1000** 交易日；共同因子 + 特质噪声（`examples/p6/_common.py`）
+- Kelly 玩具：Bernoulli `p=0.55`，赔率 1:1 → `f* = 2p−1 = 0.10`；500 条路径 × 500 注；满 / 半 / 2×
+- 波动目标：年化 10%；`σ_t` = 20 日滚动标准差 **shift(1)**；权重下一根 K 线生效
+- 风险平价：截至 `t−1` 的 120 日窗口；逆波动与迭代 ERC
+- MV 滚动：估计窗 **250** 日，持有 **21** 日；多头投影；样本 Σ vs `LedoitWolf` vs 1/N
+
+## Kelly 与分数 Kelly
+
+Kelly（1956，*Bell System Technical Journal*）最大化期望对数财富。赔率 1:1、胜率 `p` 时，`f* = 2p − 1`。Thorp（手册章节，约 2006）强调**分数 Kelly**：过度下注摧毁增长；半 Kelly 用部分增长换显著更小的回撤。
+
+实验（`examples/p6/01_portfolio_risk_sizing.py`）：
+
+| 策略 | f | 中位对数增长 | 破产率（财富&lt;1%） | 中位最大回撤 |
+|------|---|--------------|---------------------|--------------|
+| 满 Kelly | 0.10 | ≈ +2.50 | 0.00 | ≈ −0.80 |
+| **半 Kelly** | 0.05 | ≈ +1.88 | 0.00 | ≈ **−0.53** |
+| 2× Kelly | 0.20 | ≈ **−0.07** | ≈ **0.16** | ≈ −1.00 |
+
+**期望值语境：** 满 Kelly 在**已知**优势下最大化渐近增长中位数——不是舒适度、不是 VaR、不是机构mandate。优势若是**噪声估计**，满 Kelly 只是不安全的上界。
+
+![Kelly 路径](/p6/kelly_paths.png)
+
+## 波动目标
+
+缩放敞口使 `w_t · σ̂_{t−1} ≈ σ_target`。实验：原始年化波动 ≈ 0.27 → 目标后 ≈ 0.11。前瞻规则：只用过去收益估波动；权重作用于**下一根**K线。
+
+## 风险平价：逆波动与 ERC
+
+- **逆波动：** `w_i ∝ 1/σ_i`（忽略相关）。
+- **ERC（等风险贡献）：** 使各资产 `w_i · ∂σ_p/∂w_i` 相等（Maillard–Roncalli–Teiletche 风格）。实验迭代 ERC 使末日 RC 标准差 ≈ 0。
+
+实验样本外夏普（合成、负漂移示意）：逆波动 ≈ −0.21，ERC ≈ −0.12，等权 ≈ −0.31。重点是**风险预算**，不是承诺夏普。
+
+## 均值方差、估计误差、1/N、Ledoit–Wolf
+
+Markowitz（1952，*Journal of Finance*）给出经典 MV。Michaud（1989）警告优化器是**误差最大化者**——最噪声的 μ/Σ 项权重最大。DeMiguel, Garlappi & Uppal（2009，*RFS* 22(5)）表明许多优化规则样本外打不赢 **1/N**。
+
+Ledoit & Wolf 2004 两篇本文都用：
+
+1. **JPM 30(4)** — “Honey, I Shrunk the Sample Covariance Matrix”（常相关目标；组合 IR 动机）。
+2. **JMVA 88(2)** — 高维良态收缩（sklearn `LedoitWolf` 一族）。
+
+实验滚动样本外夏普：样本 MV ≈ −0.215，LedoitWolf MV ≈ −0.211，1/N ≈ −0.461；平均收缩强度 ≈ **0.036**。本面板上 MV 优于 1/N——DeMiguel 的结论是「经常」而非「永远」。收缩仍改善 Σ 条件数。
+
+![MV vs 1/N](/p6/mv_vs_1n.png)
+
+## 前瞻警告
+
+- 用于日 t 决策的波动、协方差、μ 只用到 `t−1`
+- 滚动测试块不得泄漏进估计窗
+- 实务中 Kelly 的 `p` 是**估计值**——把 `f*` 当作噪声上界
+
+## Python 实验
+
+`examples/p6/01_portfolio_risk_sizing.py`
+
+### 真实运行输出
+
+```
+Bernoulli edge: p=0.55 even-money → f*=0.100
+Kelly_full   f=0.100 median_log_growth=2.504 ruin_rate=0.000 median_maxDD=-0.803
+Kelly_half   f=0.050 median_log_growth=1.876 ruin_rate=0.000 median_maxDD=-0.534
+Kelly_double f=0.200 median_log_growth=-0.069 ruin_rate=0.156 median_maxDD=-0.995
+inv_vol_SR=-0.208 ERC_SR=-0.120 equal_weight_SR=-0.310
+OOS_SR mv=-0.215 LedoitWolf=-0.211 1/N=-0.461
+mean_shrinkage_intensity=0.036
+```
+
+## 常见错误 / 陷阱
+
+1. 在噪声估计优势上使用满 Kelly。
+2. 用当日波动算当日权重（前瞻）。
+3. 忽略相关却把逆波动叫成「ERC」。
+4. 用样本内 MV 曲线证明样本外能力。
+5. 把 1/N 当成万能最优，而非强硬基准（DeMiguel 等）。
+
+## 练习（1:1）
+
+1. **ex1** — 固定仓 / 波动目标 / 回撤熔断；报告实现波动与最大回撤。
+2. **ex2** — Kelly 满 / 半 / 2× 模拟；表列增长、破产、回撤。
+3. **ex3** — 逆波动 vs ERC vs 等权；展示 RC 离散度。
+4. **ex4** — 滚动 MV vs LedoitWolf vs 1/N；记录收缩强度。
+5. **done1** — 仓位对照表 + 一页风险偏好（半 Kelly 理由）。
+
+## 测验
+
+<Quiz id="p6prs-q1" question="赔率 1:1、胜率 p 时，Kelly f* 等于？" options={["p", "2p − 1", "1 − p", "p / (1 − p)"]} answer={1} explanation="b = 1 时 f* = 2p − 1。" />
+<Quiz id="p6prs-q2" question="实验中 2× Kelly 主要说明？" options={["更高中位增长且更小回撤", "中位对数增长为负且出现显著破产", "与半 Kelly 路径相同", "波动为零"]} answer={1} explanation="过度下注：增长崩溃并出现破产。" />
+<Quiz id="p6prs-q3" question="半 Kelly 相对满 Kelly？" options={["永远最大化增长", "用部分增长换更小回撤（Thorp）", "忽略优势", "必须做空"]} answer={1} explanation="分数 Kelly 是实务上的增长–回撤权衡。" />
+<Quiz id="p6prs-q4" question="DeMiguel, Garlappi & Uppal（2009）强调？" options={["样本 MV 样本外总赢", "1/N 是许多优化规则的强硬样本外基准", "Kelly 取代 MV", "VaR 蕴含 ERC"]} answer={1} explanation="优化规则经常打不赢朴素 1/N。" />
+<Quiz id="p6prs-q5" question="Ledoit & Wolf 2004 JPM “Honey…” 提出？" options={["丢掉协方差", "把样本协方差向结构化目标收缩", "只用 PCA 风险模型", "满 Kelly 仓位"]} answer={1} explanation="Σ̂ = δF + (1−δ)S，并估计收缩强度。" />
+<Quiz id="p6prs-q6" question="波动目标必须使用？" options={["当日实现 σ", "滞后波动，使权重在下一根 K 线生效", "仅用未来期权 IV", "全样本 σ"]} answer={1} explanation="无前瞻：用过去估 σ̂，下一根再交易。" />
+
+## 完成标准
+
+仓位对照表（Kelly / 波动目标 / RP / MV–LW–1/N）+ 一页风险偏好，写明为何把仓位压在满 Kelly 之下。
+
+**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11。
+
+<Summary>
+**要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；MV 需要收缩并以 1/N 作诚实对照。  
+**下一课**：execution-slippage（TWAP/VWAP、Almgren–Chriss、实施缺口）。
+</Summary>
