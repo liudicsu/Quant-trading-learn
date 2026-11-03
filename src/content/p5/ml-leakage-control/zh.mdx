@@ -1,64 +1,71 @@
 ## 学习目标
 
-本课（约 **14 学时**：AFML 概念 5h + 实验 7h + 写作 2h — 重课）建立金融 **防泄漏 ML**：标签、带 embargo 的 purged CV、仅训练集拟合的 scaler，以及过拟合陷阱。前置：`factor-workflow`、`backtest-traps`。
+本课（约 **14 学时**：AFML 概念 5h + 实验 7h + 写作 2h — 重课）建立金融 **防泄漏 ML**：波动率缩放标签、带 embargo 的 purged CV，以及正确的 IC 指标。前置：`factor-workflow`、`backtest-traps`。
 
-**课内目标：** 演示 shuffle 泄漏；时间切分与因果特征；用 IC 而非准确率评价。
+**课内目标：** 演示 shuffle / 未 purge 泄漏；时间切分与因果特征；用**日度截面 RankIC 均值**评价（非准确率，亦非以混合 Spearman 作主指标）。
 
-**必须教会：** 失败常在管线；禁止时序 shuffle；完整 purged K-fold + embargo（AFML ch.7）；scaler 仅 fit 训练折；远期/三重势垒/元标签（AFML ch.3）并检查前瞻；用 IC / 净 SR / DSR 打分。
+**必须教会：** 失败常在管线；禁止时序 shuffle；完整 purged K-fold + embargo（AFML ch.7）；仅训练折 fit scaler；远期 / **波动率缩放**三重势垒 / 元标签（AFML ch.3）；分清三种故事——泄漏幻觉、可回收弱信号、成本抹掉净夏普。
 
 <Callout type="info" title="学习用途 — 非投资建议">
-使用 P4 **弱**面板（`MU_WEAK=0.001`）抽样 50 只。数字用来说明管线漏洞——不是实盘 ML 优势。
+P4 **弱**面板（`MU_WEAK=0.001`），50 只子样本。数字用于方法论——不是实盘 ML 产品。
 </Callout>
 
 ## 参数
 
 - 面板：P4 弱，**50** 资产 × 750 日；`HORIZON=5`；`N_FOLDS=5`；`EMBARGO=5`
-- 特征（时点 `t`）：`mom_1/5/10/20`、`vol_5/20`、`rank_mom20`，仅用 ≤ `t` 的收益
-- 标签：远期求和 `t+1..t+h`；三重势垒 `pt=sl=0.02`、垂直 `h`；相对 `sign(mom_20)` 的元标签
-- 演示模型：Ridge；过拟合陷阱 = `HistGradientBoostingRegressor` + 40 噪声特征
-- 评价：**RankIC**（非准确率）
+- 特征（时点 `t`）：`mom_*`、`vol_*`、`rank_mom20`，收益 ≤ `t`
+- **三重势垒（AFML ch.3）：** `pt = sl = k·σ_t`，`k=1`，`σ_t` = **滞后 EWMA** 波动（`span=20`，`shift(1)`）——**不是**固定 2%
+- **主指标：** 各日截面 Spearman RankIC 的均值；报告 **t** 与 **ICIR**。混合（pooled）Spearman 仅作**反例**（混淆时序与截面变异）。
 
-## 标签（AFML ch.3）
+## 为何固定 2% 带宽是错的
 
-**远期收益：** `fwd_ret[t] = sum(rets[t+1..t+h])`。
+资产与制度的波动不同。统一 ±2% 势垒会被高波噪声频繁触及、低波名字几乎从不触及，于是标签变成**由波动驱动**而非信息驱动。AFML 用因果波动估计缩放水平势垒，使每个名字/时点有可比门槛。实验中 `tb_pt` 约 0.7%–4.1%（中位 ≈1.9%）。
 
-**三重势垒：** 从 `t+1` 起走路径；触及 +pt / −sl 或垂直 `h`。
+## 标签与前瞻
 
-**元标签：** 主模型方向来自 `mom_20[t]`；`meta_y=1` 当且仅当与势垒结果同向（做/不做）。
+- `fwd_ret[t] = sum(rets[t+1..t+h])`
+- 波动缩放 TB 从 `t+1` 走路径；`σ_t` 只用过去收益
+- 元标签：当 `sign(mom_20[t])` 与势垒方向一致时才交易
+- Purge 去掉标签跨度与测试块重叠的训练行（+ embargo）
 
-**前瞻审计：** 特征止于 `t`；势垒只读未来路径作为 `y`；随后 purge 去掉标签跨度与测试块重叠的训练行。
+## 主指标
 
-## 泄漏控制（AFML ch.7）
+**日度截面 RankIC 均值** = 对每个交易日 t，在当日截面上算 Spearman(pred, y)，再对 t 平均。
 
-| 协议 | RankIC（实验） | 角色 |
-|------|----------------|------|
-| Shuffle 切分 | ≈0.062 | **泄漏** — 禁止 |
-| 全局 scaler（训+测） | ≈0.010 | **泄漏** 模式 |
-| 未 purge 的打乱 KFold | ≈0.065 | **泄漏** — 标签重叠 |
-| 仅训练 scaler + 时间切分 | ≈0.010 | 更干净 |
-| **Purged K-fold + embargo** | ≈−0.008 | **干净** |
-| 扩展 walk-forward | ≈0.015 | **干净** |
+**混合 Spearman** 把所有 (date, asset) 行堆成一个相关——混淆序列依赖与截面排序，甚至可与日度截面均值**符号相反**（实验：purged ridge 混合 ≈ −0.008，而日度截面均值 ≈ **+0.040**）。
 
-Purge 去掉标签跨度 `[t+1,t+h]` 与测试块重叠的训练时点；embargo 再去掉测试结束后的 `EMBARGO` 根 K 线。Scaler **只**在训练折上 fit。
+## 并排对照：oracle / 泄漏 / purged / 过拟合
 
-![泄漏 vs 干净](/p5/leak_vs_clean_ic.png)
+| 模型 | 日度截面 RankIC 均值 | t | ICIR | 说明 |
+|------|----------------------|---|------|------|
+| oracle `beta_true` | ≈ **+0.099** | ≈6.3 | ≈3.7 | 上界 |
+| LEAK 未 purge KFold | ≈ **+0.052** | ≈6.0 | ≈3.6 | 管线幻觉 |
+| LEAK shuffle | ≈ +0.035 | ≈2.8 | ≈1.7 | 管线幻觉 |
+| **purged ridge** | ≈ **+0.040** | ≈4.6 | ≈2.7 | 弱信号被回收 |
+| purged GBM | ≈ +0.034 | ≈4.7 | ≈2.8 | 弱信号被回收 |
+| 过拟合 GBM OOS | ≈ +0.021（训练 ≈0.34） | ≈1.7 | ≈1.9 | 训练高 / OOS 塌缩 |
 
-## 过拟合陷阱
+核实：purged ridge 日度截面 IC 均值 ≈ **+0.0398**（与审阅 ~+0.040 一致）。
 
-深度 GBM + **40 个噪声特征**：训练 RankIC ≈ **0.40**，OOS RankIC ≈ **0.01**。高样本内 IC 不是优势——记下试验次数。
+![并排](/p5/side_by_side_ic.png)
+
+![泄漏 vs purged](/p5/leak_vs_clean_ic.png)
 
 ![过拟合陷阱](/p5/overfit_trap_ic.png)
 
-## 期望值框架
+## 三种情形（勿混为一谈）
 
-弱面板上诚实的 purged IC 接近 0 才是正确答案。Shuffle/未 purge CV 抬高的 IC 是**管线海市蜃楼**，与 P2 回测陷阱同族。
+1. **(a) 管线幻觉** — 未 purge / shuffle 抬高 IC（此处未 purge ≈0.052 > purged ≈0.040），并无可信 OOS 设计。
+2. **(b) 弱但可回收** — purge+embargo 后，ridge/GBM 仍回收约 **+0.04** 的截面 IC（oracle ~0.10 为天花板）。
+3. **(c) 有真实 IC，成本抹掉净夏普** — 见实验 02：purged ridge IC ≈+0.04，但共享成本下 **净夏普 ≈ −0.38**。IC>0 ≠ 可交易优势。
+
+Purged IC 接近 0 表示“在该协议下无线性可回收信号”——**不是**放之四海皆准的“正确答案”。本面板上 purged 答案是**小的正 IC**。
 
 ## 前瞻警告
 
-- 特征不得吃进同 bar 标签。
-- Scaler 不得看见测试折。
-- CV 不得保留与测试时段标签重叠的训练样本。
-- 元标签若势垒跨过折边界仍需 purge。
+- `σ_t` 必须滞后；势垒只走未来收益
+- Scaler 仅在训练折 fit
+- 按标签跨度重叠 purge；测试块后加 embargo
 
 ## Python 实验
 
@@ -69,77 +76,101 @@ Purge 去掉标签跨度 `[t+1,t+h]` 与测试块重叠的训练时点；embargo
 ```text
 === parameters ===
 P4 WEAK panel subsample n_assets=50; HORIZON=5; N_FOLDS=5; EMBARGO=5
-features: mom_1/5/10/20, vol_5/20, rank_mom20 — built from returns ≤ t; label uses t+1..t+h
-labels: forward sum; AFML ch.3 triple-barrier (pt=sl=2%, max_h=5); meta-label vs mom_20 side
-cite: López de Prado, Advances in Financial Machine Learning (Wiley) ch.3 labels, ch.7 purged CV
-look-ahead: features end at t; TB/meta inspect only future path for y; purge removes label-span overlap
-eval: RankIC (NOT accuracy); shared P2/P4 cost model deferred to lab 02 for portfolios
+TB: AFML ch.3 vol-scaled bands pt=sl=k*sigma_t with k=1.0, sigma=lagged EWMA span=20
+PRIMARY metric: mean daily cross-sectional RankIC (+ t-stat / ICIR)
+pooled Spearman is a COUNTEREXAMPLE (mixes time-series + cross-sectional variation)
+cite: López de Prado AFML ch.3 (vol-scaled barriers), ch.7 (purged CV)
+look-ahead: features ≤ t; sigma_t = EWMA.shift(1); labels walk t+1..; purge on label-span overlap
 MU_WEAK=0.001 panel (750, 50)
 rows=36300 features=['mom_1', 'mom_5', 'mom_10', 'mom_20', 'vol_20', 'vol_5', 'rank_mom20']
 
 === label construction look-ahead audit ===
-fwd_ret[t] = sum(rets[t+1..t+h]) — no feature uses rets after t
-TB: walk path from t+1; vertical at h; pt/sl=0.02 — y uses future returns only
-meta_y: 1 iff sign(mom_20[t]) agrees with tb_side[t] — primary side from feature at t only
+fwd_ret[t] = sum(rets[t+1..t+h])
+TB: pt=sl=1.0*sigma_t per asset/time; sigma from lagged EWMA — NOT fixed 2%
+why fixed 2% is wrong: high-vol names hit barriers by noise; low-vol almost never touch → labels become vol-driven
+tb_pt (vol-scaled) describe:
+count    36300.000000
+mean         0.019024
+std          0.004294
+min          0.006899
+25%          0.015851
+50%          0.018611
+75%          0.021778
+max          0.040924
 tb_side value counts:
 tb_side
--1.0    18623
- 1.0    17677
-meta_y mean (hit rate)=0.515
+-1.0    18641
+ 1.0    17659
+meta_y mean (hit rate)=0.513
 
-=== LEAK demos vs clean handling ===
-LEAK shuffle_split RankIC=0.0615  (FORBIDDEN on time series)
-LEAK global_scaler RankIC=0.0095
-CLEAN train_only_scaler RankIC=0.0095
-LEAK unpurged_shuffled_KFold RankIC=0.0654
-CLEAN purged_KFold+embargo RankIC=-0.0076
-teach: failures are usually in the pipeline — shuffle / global scale / unpurged CV inflate IC
+=== PRIMARY metric note ===
+mean daily CS RankIC = average over dates of Spearman(pred, y) within that day's cross-section
+pooled Spearman stacks all (date,asset) rows — confounds TS persistence with CS ranking
 
-=== walk-forward (expanding, train-only scaler) ===
-walk_forward RankIC=0.0145
+=== oracle upper bound (beta_true as score) ===
+oracle_beta_true             mean_daily_CS_RankIC=+0.0991 t=6.29 ICIR=3.71 n_days=726  | pooled_Spearman=+0.0837 (counterexample)
 
-=== OVERFIT TRAP: deep GBM + many noise features ===
-overfit_trap train_RankIC=0.4001 OOS_RankIC=0.0098
-overfit_trap train_mean_daily_CS_IC=0.3445 OOS_mean_daily_CS_IC=0.0211
-teach: high train IC + noise features + deep tree ≠ OOS edge; record trial count
+=== LEAK demos (inflated) vs CLEAN purged ===
+LEAK shuffle_split           mean_daily_CS_RankIC=+0.0345 t=2.82 ICIR=1.68 n_days=708  | pooled_Spearman=+0.0615 (counterexample)
+LEAK unpurged_KFold          mean_daily_CS_RankIC=+0.0518 t=6.03 ICIR=3.55 n_days=726  | pooled_Spearman=+0.0654 (counterexample)
+CLEAN purged_ridge           mean_daily_CS_RankIC=+0.0398 t=4.64 ICIR=2.73 n_days=726  | pooled_Spearman=-0.0076 (counterexample)
+CLEAN purged_GBM(lightgbm)   mean_daily_CS_RankIC=+0.0336 t=4.69 ICIR=2.77 n_days=726  | pooled_Spearman=+0.0105 (counterexample)
+
+=== OVERFIT trap (deep GBM + 40 noise features) ===
+overfit_GBM train            mean_daily_CS_RankIC=+0.3445 t=41.67 ICIR=29.35 n_days=508  | pooled_Spearman=+0.4001 (counterexample)
+overfit_GBM OOS              mean_daily_CS_RankIC=+0.0211 t=1.73 ICIR=1.86 n_days=218  | pooled_Spearman=+0.0098 (counterexample)
+
+=== SIDE-BY-SIDE TABLE (primary = mean daily CS RankIC) ===
+model                  mean_CS_IC        t     ICIR  note
+oracle_beta_true          +0.0991     6.29     3.71  upper bound
+LEAK unpurged_KFold       +0.0518     6.03     3.55  pipeline illusion
+LEAK shuffle_split        +0.0345     2.82     1.68  pipeline illusion
+purged_ridge              +0.0398     4.64     2.73  weak signal recovered
+purged_GBM                +0.0336     4.69     2.77  weak signal recovered
+overfit_GBM_OOS           +0.0211     1.73     1.86  train high / OOS collapse
+teach three cases:
+  (a) ILLUSION: leak protocols inflate IC (unpurged/shuffle) without a real OOS edge
+  (b) WEAK RECOVERABLE: purged ridge/GBM still recover mean CS IC ~ +0.04 on this planted weak panel
+  (c) REAL BUT COST-WIPED: see lab 02 — positive IC can still yield net SR≤0 after shared costs
+verify: purged_ridge mean daily CS IC = 0.0398 (reviewer ~+0.040)
+chart /workspace/Quant-trading-learn/public/p5/side_by_side_ic.png
 chart /workspace/Quant-trading-learn/public/p5/leak_vs_clean_ic.png
-chart /workspace/Quant-trading-learn/public/p5/overfit_trap_ic.png
-saved /workspace/Quant-trading-learn/examples/p5/data/ml_frame.pkl
-disclaimer: synthetic weak panel — learning only, not investment advice
+saved artifacts for lab 02
+disclaimer: synthetic weak panel — learning only
 ```
 
 ## 常见错误 / 陷阱
 
-1. 打乱时序面板行。
-2. 在全样本上 fit StandardScaler。
-3. 不做 purge/embargo 的 sklearn KFold。
-4. 为噪声深度树的训练 IC 欢呼。
-5. 用准确率代替 IC / 净 SR。
+1. 固定百分比势垒，把波动写成标签。
+2. 把混合 Spearman 当头条 IC。
+3. 宣称“purged IC≈0 永远正确”，却忽略可回收弱信号。
+4. 打乱行 / 未 purge KFold / 全局 scaler。
+5. 为噪声深度树的训练 IC 欢呼。
 
 ## 练习（1:1）
 
-1. **ex1** — Shuffle vs 时间切分 RankIC 表。
-2. **ex2** — 修复三处泄漏（shuffle、scaler、未 purge CV）。
-3. **ex3** — 用 RankIC 评价预测（非准确率）。
-4. **ex4** — 为过拟合陷阱记录试验次数。
-5. **done1** — 防泄漏 notebook + 试验日志。
+1. **ex1** — Shuffle vs 时间切分（**日度截面 RankIC 均值**）。
+2. **ex2** — 修复三处泄漏；对照 purged ridge。
+3. **ex3** — 用日度截面 IC 打分（混合作反例）。
+4. **ex4** — 过拟合陷阱训练 vs OOS 日度截面 IC。
+5. **done1** — 防泄漏 notebook + 并排表 + 试验日志。
 
 ## 测验
 
-<Quiz id="q1-shuffle" question="为何禁止打乱面板行？" options={["会变慢", "会把未来信息混进训练/测试切口", "会去掉成本", "会修复 purge"]} answer={1} explanation="时间顺序才是 hold-out；shuffle 把未来混入训练。" />
-<Quiz id="q2-purge" question="Purged CV 主要去掉什么？" options={["所有空头", "标签跨度与测试块重叠的训练样本", "仅 NaN", "只去掉 embargo"]} answer={1} explanation="AFML ch.7：按标签跨度重叠 purge；其后是 embargo。" />
-<Quiz id="q3-meta" question="元标签回答哪个问题？" options={["只要夏普", "是否承接主模型方向的交易", "无风险利率", "如何 shuffle"]} answer={1} explanation="方向来自主模型；元标签决定做不做。" />
-<Quiz id="q4-scaler" question="Scaler 可以在哪里 fit？" options={["训练+测试一起", "仅训练折", "仅测试折", "永远全样本"]} answer={1} explanation="仅训练折 fit，避免归一化泄漏。" />
-<Quiz id="q5-overfit" question="噪声特征下训练 IC 0.40 而 OOS IC≈0.01 说明？" options={["立刻上线", "样本内拟合≠OOS 优势；记录试验", "准确率够了", "可跳过 purge"]} answer={1} explanation="弱面板上的经典过拟合陷阱。" />
-<Quiz id="q6-metric" question="此处更偏好的评价是？" options={["只要准确率", "RankIC（以及随后净 SR / DSR）", "只要训练损失", "打乱数据上的 R²"]} answer={1} explanation="排序/经济意义优先于分类准确率。" />
+<Quiz id="q1-metric" question="本课主 IC 指标是？" options={["准确率", "日度截面 RankIC 均值（+ t / ICIR）", "只要混合 Spearman", "训练损失"]} answer={1} explanation="日度截面 RankIC 为主；混合是反例。" />
+<Quiz id="q2-tb" question="AFML 风格水平势垒应？" options={["对所有名字固定 ±2%", "按滞后个股波动缩放为 k·σ_t", "只要次日开盘", "全样本 σ"]} answer={1} explanation="波动缩放避免波动驱动的标签。" />
+<Quiz id="q3-purge" question="本弱面板上 purged ridge 日度截面 IC 均值大约？" options={["永远精确为 0", "约 +0.04 — 弱信号被回收", "永远为负", "等于准确率"]} answer={1} explanation="实验核实 ~+0.0398。" />
+<Quiz id="q4-cases" question="未 purge IC 高于 purged IC 主要说明？" options={["免费 alpha", "情形 (a)：泄漏造成的管线幻觉", "只是情形 (c)", "oracle 上界"]} answer={1} explanation="泄漏协议抬高 IC，并无诚实 OOS 设计。" />
+<Quiz id="q5-pooled" question="混合 Spearman 被降级是因为？" options={["更快", "混淆时序与截面变异", "需要 GPU", "替代 DSR"]} answer={1} explanation="把序列持续性与截面排序搅在一起。" />
+<Quiz id="q6-overfit" question="训练截面 IC~0.34 而 OOS~0.02 说明？" options={["上线", "样本内拟合≠OOS 优势；记录试验", "跳过 purge", "固定 2% 没问题"]} answer={1} explanation="噪声特征下的过拟合陷阱。" />
 
 ## 完成标准
 
-防泄漏 notebook + 试验日志，含 purge/embargo 与前瞻说明。
+防泄漏 notebook：波动缩放 TB、并排表、三种情形叙述。
 
-**来源：** López de Prado AFML ch.3/7；P4 弱面板；Canvas m10；ML4T 防泄漏精神。
+**来源：** AFML ch.3/7；P4 弱面板；Canvas m10。
 
 <Summary>
-**要点**：标签 → purge/embargo → 仅训练缩放 → IC 非准确率。  
-**下一课**：modern-ml-pipelines（ridge/GBM、重要度、Qlib 镜像）。
+**要点**：波动缩放标签 → 日度截面 IC → purge 回收弱信号 → 分清泄漏/回收/成本抹平。  
+**下一课**：modern-ml-pipelines（情形 c、重要度、Qlib 镜像）。
 </Summary>

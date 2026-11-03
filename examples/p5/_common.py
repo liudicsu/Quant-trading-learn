@@ -137,30 +137,55 @@ def forward_label(rets: pd.DataFrame, h: int = HORIZON) -> pd.Series:
     s = out.stack(); s.index = s.index.set_names(["date", "asset"]); return s.rename("fwd_ret")
 
 
+TB_K = 1.0  # pt = sl = TB_K * sigma_t (AFML ch.3 vol-scaled)
+VOL_SPAN = 20  # EWMA / rolling window for daily vol
+
+
+def lagged_ewma_vol(rets: pd.DataFrame, span: int = VOL_SPAN) -> pd.DataFrame:
+    """Per-asset daily vol from EWMA of squared returns, then shift(1) — known at t."""
+    var = rets.pow(2).ewm(span=span, min_periods=max(5, span // 2), adjust=False).mean()
+    return np.sqrt(var).shift(1)
+
+
 def triple_barrier_labels(
-    rets: pd.DataFrame, pt: float = 0.02, sl: float = 0.02, max_h: int = HORIZON
+    rets: pd.DataFrame,
+    k: float = TB_K,
+    max_h: int = HORIZON,
+    vol: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
-    """AFML ch.3 triple-barrier (simplified on cumulative path from t+1).
-    Returns side in {-1,0,1} and touch time. Vertical barrier at max_h.
-    Look-ahead: barriers applied on future path only; decision at t uses no future feature.
+    """AFML ch.3 triple-barrier with volatility-scaled horizontal bands.
+
+    For each asset/time t: pt = sl = k * sigma_t, where sigma_t is lagged EWMA vol.
+    Fixed 2% bands are wrong: high-vol names hit barriers by noise, low-vol names
+    almost never touch — labels become vol-driven rather than information-driven.
+    Look-ahead: sigma_t uses only past returns (shift 1); path walk uses t+1.. only.
     """
+    if vol is None:
+        vol = lagged_ewma_vol(rets)
     n_t, n_a = rets.shape
     side = np.zeros((n_t, n_a))
     touch = np.full((n_t, n_a), np.nan)
+    pt_used = np.full((n_t, n_a), np.nan)
     R = rets.values
+    S = vol.values
     for i in range(n_t - max_h):
         for j in range(n_a):
+            sig = S[i, j]
+            if not np.isfinite(sig) or sig <= 0:
+                continue
+            pt = sl = float(k * sig)
+            pt_used[i, j] = pt
             cum = 0.0
             hit = 0
-            for k in range(1, max_h + 1):
-                cum += R[i + k, j]
+            for step in range(1, max_h + 1):
+                cum += R[i + step, j]
                 if cum >= pt:
                     hit = 1
-                    touch[i, j] = k
+                    touch[i, j] = step
                     break
                 if cum <= -sl:
                     hit = -1
-                    touch[i, j] = k
+                    touch[i, j] = step
                     break
             if hit == 0:
                 hit = 1 if cum > 0 else (-1 if cum < 0 else 0)
@@ -168,10 +193,11 @@ def triple_barrier_labels(
             side[i, j] = hit
     side_df = pd.DataFrame(side, index=rets.index, columns=rets.columns)
     touch_df = pd.DataFrame(touch, index=rets.index, columns=rets.columns)
-    side_s = side_df.stack(); touch_s = touch_df.stack()
-    side_s.index = side_s.index.set_names(["date", "asset"])
-    touch_s.index = touch_s.index.set_names(["date", "asset"])
-    return pd.DataFrame({"tb_side": side_s, "tb_touch": touch_s})
+    pt_df = pd.DataFrame(pt_used, index=rets.index, columns=rets.columns)
+    side_s = side_df.stack(); touch_s = touch_df.stack(); pt_s = pt_df.stack()
+    for s in (side_s, touch_s, pt_s):
+        s.index = s.index.set_names(["date", "asset"])
+    return pd.DataFrame({"tb_side": side_s, "tb_touch": touch_s, "tb_pt": pt_s})
 
 
 def meta_labels(primary_side: pd.Series, tb: pd.DataFrame) -> pd.Series:
@@ -182,15 +208,23 @@ def meta_labels(primary_side: pd.Series, tb: pd.DataFrame) -> pd.Series:
     return y
 
 
-def make_ml_frame(rets: pd.DataFrame) -> pd.DataFrame:
+def make_ml_frame(rets: pd.DataFrame, meta: pd.DataFrame | None = None, raw: pd.DataFrame | None = None) -> pd.DataFrame:
     X = features_long(rets)
     y_fwd = forward_label(rets, HORIZON)
-    tb = triple_barrier_labels(rets)
-    # primary side = sign of mom_20 feature (as of t)
+    vol = lagged_ewma_vol(rets)
+    tb = triple_barrier_labels(rets, vol=vol)
     primary = np.sign(X["mom_20"]).replace(0, np.nan)
-    meta = meta_labels(primary, tb)
-    df = X.join(y_fwd, how="inner").join(tb, how="left").join(meta, how="left")
-    df = df.dropna(subset=["mom_5", "vol_20", "fwd_ret"])
+    meta_y = meta_labels(primary, tb)
+    df = X.join(y_fwd, how="inner").join(tb, how="left").join(meta_y, how="left")
+    # oracle columns (upper bound): beta_true and raw_factor (as-of t, CS)
+    if meta is not None and "beta_true" in meta.columns:
+        beta = meta["beta_true"]
+        df["oracle_beta"] = df.index.get_level_values("asset").map(beta)
+    if raw is not None:
+        raw_s = raw.stack()
+        raw_s.index = raw_s.index.set_names(["date", "asset"])
+        df["oracle_raw"] = raw_s.reindex(df.index)
+    df = df.dropna(subset=["mom_5", "vol_20", "fwd_ret", "tb_side"])
     return df
 
 
@@ -221,17 +255,37 @@ def purged_kfold_indices(dates, n_folds: int, label_horizon: int, embargo: int):
     return folds
 
 
-def spearman_ic_series(pred: pd.Series, y: pd.Series) -> float:
+def pooled_spearman(pred: pd.Series, y: pd.Series) -> float:
+    """COUNTEREXAMPLE metric: pools all (date,asset) pairs — mixes TS + CS variation."""
     df = pd.concat([pred, y], axis=1).dropna()
     if len(df) < 30:
         return float("nan")
     return float(df.iloc[:, 0].corr(df.iloc[:, 1], method="spearman"))
 
 
+# backward-compatible alias (labs should prefer mean_daily_cs_ic)
+spearman_ic_series = pooled_spearman
+
+
 def daily_cs_ic(pred: pd.Series, y: pd.Series) -> pd.Series:
+    """PRIMARY: Spearman RankIC within each date (cross-section), then series over time."""
     df = pd.concat([pred.rename("p"), y.rename("y")], axis=1).dropna()
-    ics = df.groupby(level=0).apply(lambda g: g["p"].corr(g["y"], method="spearman") if len(g) >= 10 else np.nan)
+    ics = df.groupby(level=0).apply(
+        lambda g: g["p"].corr(g["y"], method="spearman") if len(g) >= 10 else np.nan
+    )
     return ics.dropna()
+
+
+def mean_daily_cs_ic(pred: pd.Series, y: pd.Series) -> dict:
+    """Primary scorecard: mean daily CS RankIC, t-stat, ICIR."""
+    ics = daily_cs_ic(pred, y)
+    if len(ics) < 5:
+        return {"mean_ic": float("nan"), "std_ic": float("nan"), "t_stat": float("nan"), "ICIR": float("nan"), "n_days": len(ics), "ics": ics}
+    mu = float(ics.mean())
+    sd = float(ics.std(ddof=1))
+    t = mu / (sd / np.sqrt(len(ics))) if sd > 0 else float("nan")
+    icir = mu / (sd + 1e-12) * ANN
+    return {"mean_ic": mu, "std_ic": sd, "t_stat": float(t), "ICIR": float(icir), "n_days": len(ics), "ics": ics}
 
 
 def pred_to_ls_pnl(pred: pd.Series, rets: pd.DataFrame) -> tuple[pd.Series, pd.Series]:

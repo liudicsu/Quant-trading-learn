@@ -1,21 +1,21 @@
 Background dataset has 500 samples but max_samples=100. Subsampling to 100 samples for SHAP value computation. To use all samples, set max_samples=500 when initializing the masker.
 === parameters ===
-reuse lab01 frame rows=36300 HORIZON=5 purged folds=5 embargo=5
-LightGBM available=True; SHAP available=True
-eval: RankIC + net SR (shared cost) + DSR over configs — NOT accuracy
-cite: Qlib docs — Alpha158 handler + LGBModel (qlib.contrib.model.gbdt) workflow
-cite: AFML ch.10 bet sizing from predicted probabilities
-frontier: arXiv:2511.18578 Re(Visiting) TSFMs in Finance — zero-shot Chronos/TimesFM underperform LightGBM/CatBoost on excess returns
-frontier: arXiv:2412.09880 — baseline TimesFM unsatisfactory on price prediction before finance fine-tune
-frontier: arXiv:2606.27100 — TSFM gains vs random walk small/sparse on equity returns
-LLM agents deferred to P8
+reuse lab01 frame; PRIMARY metric = mean daily CS RankIC (+ t / ICIR)
+LightGBM=True; SHAP=True
+eval: mean daily CS RankIC + net SR (shared costs) + DSR — NOT accuracy, NOT pooled Spearman as primary
+cite: Qlib Alpha158 + LGBModel docs; AFML ch.10 bet sizing
+frontier: arXiv:2511.18578, 2412.09880, 2606.27100 (TSFM finance evals); LLM agents → P8
+TB labels are vol-scaled (k*sigma_t); fixed 2% bands rejected — see lab 01
 
-=== baselines: Ridge vs LightGBM (purged OOF) ===
-ridge  RankIC=-0.0076 net_SR=-0.383 turn=1.3381 DSR=0.000
-gbm    RankIC=0.0105 net_SR=-1.470 turn=1.7279 DSR=0.000 backend=lightgbm
-DSR uses n_trials=4 (= configs tried: ridge, gbm, +2 foils below)
-ridge_alpha0.01  RankIC=-0.0076 net_SR=-0.383 DSR=0.000
-ridge_alpha100   RankIC=-0.0076 net_SR=-0.394 DSR=0.000
+=== baselines under PRIMARY metric ===
+ridge    mean_CS_IC=+0.0398 t=4.64 ICIR=2.73 | pooled=-0.0076 (counterexample) | net_SR=-0.383 turn=1.3381 DSR=0.000
+gbm      mean_CS_IC=+0.0336 t=4.69 ICIR=2.77 | pooled=+0.0105 (counterexample) | net_SR=-1.470 turn=1.7279 DSR=0.000
+ridge_a0.01  mean_CS_IC=+0.0398 net_SR=-0.383 DSR=0.000
+ridge_a100   mean_CS_IC=+0.0397 net_SR=-0.394 DSR=0.000
+
+=== case (c): weak signal recovered but costs wipe net SR ===
+purged_ridge mean_CS_IC=+0.0398 (signal recovered) but net_SR=-0.383 after shared 10bps+impact costs (turn=1.338)
+teach: (a) leak illusion ≠ (b) recoverable weak IC ≠ (c) IC>0 with net SR≤0 after costs
 
 === feature importance: MDI / MDA / SHAP + substitution ===
 MDI top:
@@ -27,7 +27,7 @@ mom_5         160
 vol_5         139
 mom_20_dup    134
 mom_1          99
-MDA (purged test fold) top:
+MDA top:
 rank_mom20    5.917103e-05
 mom_10        1.640829e-05
 vol_20        1.223840e-05
@@ -36,7 +36,7 @@ mom_20_dup    8.984225e-06
 mom_1         2.475101e-06
 mom_5        -8.287955e-07
 vol_5        -3.292902e-06
-substitution: MDI mom_20=197.0000 mom_20_dup=134.0000 — correlated duplicates SPLIT importance (substitution effect)
+substitution: MDI mom_20=197.0000 mom_20_dup=134.0000
 SHAP mean(|value|) top:
 mom_20        0.004467
 mom_10        0.002399
@@ -46,24 +46,13 @@ vol_20        0.001519
 mom_1         0.000779
 mom_5         0.000711
 vol_5         0.000611
-chart /workspace/Quant-trading-learn/public/p5/shap_importance.png
-chart /workspace/Quant-trading-learn/public/p5/mdi_mda_importance.png
 
-=== probability calibration + AFML ch.10 bet sizing ===
-raw_prob mean=0.514 meta_base_rate=0.515
-calibration: reliability curve raw vs isotonic (Platt/logit also common; we show isotonic)
-bet_sizing net_SR=-0.917 turn=0.1752
-teach: size from calibrated probs, not raw scores; bad calibration → bad Kelly-like bets
-chart /workspace/Quant-trading-learn/public/p5/calibration_reliability.png
+=== calibration + AFML ch.10 bet sizing ===
+raw_prob mean=0.512 meta_base_rate=0.513
+bet_sizing mean_CS_IC=+0.0044 net_SR=-0.933 turn=0.1702
 
-=== Qlib-style workflow (plain pandas equivalent) ===
-Qlib pattern (from official docs): Alpha158 DataHandler → DatasetH segments → LGBModel.fit → SignalRecord
-pandas equivalent here:
-  1) features_long ≈ Alpha158 processors (mom/vol/rank; CSZScoreNorm ↔ StandardScaler on train fold)
-  2) purged segments ≈ DatasetH train/valid/test without label overlap
-  3) LGBMRegressor/Ridge ≈ LGBModel
-  4) pred_to_ls_pnl ≈ portfolio analysis from scores
-We do NOT claim Qlib install in this lab; cite docs and mirror the stages.
+=== Qlib-style workflow (pandas) ===
+Qlib: Alpha158 → DatasetH → LGBModel → SignalRecord (official docs)
+pandas: features_long ≈ Alpha158; purged folds ≈ segments; LGBM/Ridge ≈ LGBModel; pred_to_ls_pnl ≈ portfolio
 chart /workspace/Quant-trading-learn/public/p5/ridge_vs_gbm.png
-chart /workspace/Quant-trading-learn/public/p5/pipeline_nav.png
-disclaimer: weak synthetic panel — learning only; TSFM papers cited, not re-run here
+disclaimer: weak synthetic panel — learning only

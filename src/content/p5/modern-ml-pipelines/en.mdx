@@ -1,78 +1,45 @@
 ## Learning goals
 
-This lesson (~**8 hours**: 3h architecture + 4h mini-pipeline + 1h optional Qlib) builds a **reproducible ML quant pipeline**: ridge vs GBM under purged CV, importance (MDI/MDA/SHAP), calibration and bet sizing, and a Qlib-style Alpha158 + LGBModel mirror in pandas. Prereqs: `ml-leakage-control`, `data-cleaning`.
+This lesson (~**8 hours**) builds a reproducible ML quant pipeline under the **mean daily CS RankIC** primary metric: ridge vs GBM, importance, calibration/sizing, and a Qlib-style mirror. Prereqs: `ml-leakage-control`, `data-cleaning`.
 
-**Goals:** feature→model→prediction→simple portfolio sketch; trees/linear before deep nets; optional Qlib workflow reading.
-
-**Must-teach:** versionable pipelines beat flashy models; Qlib Data/Model/Portfolio/Analysis; MDI/MDA/SHAP + substitution; calibration + AFML ch.10 sizing; public data ≠ edge; zero-shot TSFMs often trail trees (verified papers).
+**Must-teach:** versionable pipelines; Qlib Alpha158 + LGBModel pandas equivalent; MDI/MDA/SHAP + substitution; calibration + AFML ch.10 sizing; case **(c)** — recovered IC can still have net SR≤0 after costs; TSFM citations (verified).
 
 <Callout type="info" title="Learning only — not investment advice">
-Same weak-panel frame as lab 01. Net SR can be negative — that is an honest outcome under purge + costs.
+Same weak-panel frame and **vol-scaled** triple-barrier labels as lab 01. Positive IC with negative net SR is an honest outcome.
 </Callout>
 
 ## Parameters
 
-- Purged OOF: `N_FOLDS=5`, `HORIZON=5`, `EMBARGO=5`; train-only `StandardScaler`
-- Models: Ridge (`alpha` in `{0.01,1,100}`); LightGBM (fallback: HistGBM)
-- Portfolio: CS quintile L/S + shared P2/P4 cost stack
-- DSR: Bailey–LdP with `n_trials=4` (= configs tried)
-- SHAP: used if `shap` imports (lab reports honestly otherwise)
+- Primary metric: **mean daily CS RankIC** (+ t / ICIR); pooled Spearman only as counterexample
+- Purged OOF from lab 01; shared P2/P4 costs; DSR with `n_trials=4`
+- LightGBM if installed (else HistGBM); SHAP if installed
 
-## Ridge vs GBM (IC / net SR / DSR)
+## Case (c): IC recovered, costs wipe net SR
 
-| Config | RankIC | net SR | DSR |
-|--------|--------|--------|-----|
-| ridge | ≈−0.008 | ≈−0.38 | ≈0.00 |
-| lightgbm | ≈0.011 | ≈−1.47 | ≈0.00 |
-| ridge α=0.01 / 100 | ≈−0.008 | ≈−0.38 / −0.39 | ≈0.00 |
+| Config | mean daily CS RankIC | net SR | DSR |
+|--------|----------------------|--------|-----|
+| purged ridge | ≈ **+0.040** | ≈ **−0.38** | ≈0 |
+| purged GBM | ≈ +0.034 | ≈ −1.47 | ≈0 |
 
-**Not accuracy.** On this weak panel, purged OOS IC is near zero and costs keep net SR ≤ 0 — the pipeline still did its job.
+This is **not** “purged IC should be ~0.” It is: **(b)** the weak signal is visible under purge, and **(c)** turnover×costs erase the net edge. Contrast with lab 01 **(a)** leak illusions that inflate IC without honest OOS design.
 
 ![Ridge vs GBM](/p5/ridge_vs_gbm.png)
 
-![Pipeline NAV](/p5/pipeline_nav.png)
+![NAV](/p5/pipeline_nav.png)
 
-## Feature importance and substitution
+## Importance, calibration, Qlib, TSFM
 
-Fit on a purged train fold; MDA on the purged test fold. Add `mom_20_dup = mom_20 + noise`.
+MDI/MDA/SHAP with `mom_20_dup` show the **substitution effect**. Reliability curve: raw vs isotonic; size from calibrated probs (AFML ch.10).
 
-Lab: MDI splits mass between `mom_20` and `mom_20_dup` (**substitution effect**). MDA/SHAP similarly share credit — correlated duplicates dilute single-feature scores.
+Qlib docs: Alpha158 → DatasetH → LGBModel → SignalRecord — mirrored in pandas.
 
-![MDI vs MDA](/p5/mdi_mda_importance.png)
+Frontier (cited, not re-run): arXiv:2511.18578, 2412.09880, 2606.27100. LLM agents → P8.
+
+![MDI MDA](/p5/mdi_mda_importance.png)
 
 ![SHAP](/p5/shap_importance.png)
 
-## Calibration and bet sizing (AFML ch.10)
-
-Meta-label probabilities from logistic regression (purged OOF). Reliability curve: raw vs **isotonic** (Platt/logit also common). Size ∝ `(2p−1)+` times primary side — size from **calibrated** probs, not raw scores.
-
 ![Calibration](/p5/calibration_reliability.png)
-
-## Qlib-style workflow (pandas)
-
-Official Qlib docs: `Alpha158` DataHandler → `DatasetH` segments → `LGBModel.fit` → `SignalRecord` ([model docs](https://qlib.readthedocs.io/en/latest/component/model.html)).
-
-Plain-pandas mirror: feature stack ≈ Alpha158; purged segments ≈ DatasetH; LightGBM/Ridge ≈ LGBModel; `pred_to_ls_pnl` ≈ portfolio from scores. This lab cites the docs and mirrors stages — it does not require a local Qlib install.
-
-## Frontier: TSFMs / transformers (verified)
-
-We **cite**, do not re-train, these 2024–2026 evaluations (arXiv checked):
-
-- **arXiv:2511.18578** *Re(Visiting) Time Series Foundation Models in Finance* — zero-shot Chronos/TimesFM underperform CatBoost/LightGBM on daily excess returns; fine-tuning often fails to close the gap.
-- **arXiv:2412.09880** *Financial Fine-tuning a Large Time Series Model* — baseline TimesFM unsatisfactory on price prediction before finance continual pre-training.
-- **arXiv:2606.27100** *Pretrained Time-Series Foundation Models for Financial Return Forecasting* — ranking wins possible, but gains vs random walk are small/sparse.
-
-**LLM agents stay in P8.** Same anti-leakage protocol would still apply to any deep sequence model.
-
-## Expected-value framing
-
-A versioned purged pipeline that reports near-zero IC on a weak panel is more valuable than an unpurged GBM with pretty accuracy. DSR with explicit `n_trials` keeps config shopping honest.
-
-## Look-ahead warnings
-
-- Train-only scalers and purged folds (from lesson 01) remain mandatory.
-- Importance computed with test-fold leakage is invalid — MDA uses the purged test fold only after train fit.
-- Calibration isotonic fit must not peek at the evaluation slice.
 
 ## Python lab
 
@@ -83,22 +50,22 @@ A versioned purged pipeline that reports near-zero IC on a weak panel is more va
 ```text
 Background dataset has 500 samples but max_samples=100. Subsampling to 100 samples for SHAP value computation. To use all samples, set max_samples=500 when initializing the masker.
 === parameters ===
-reuse lab01 frame rows=36300 HORIZON=5 purged folds=5 embargo=5
-LightGBM available=True; SHAP available=True
-eval: RankIC + net SR (shared cost) + DSR over configs — NOT accuracy
-cite: Qlib docs — Alpha158 handler + LGBModel (qlib.contrib.model.gbdt) workflow
-cite: AFML ch.10 bet sizing from predicted probabilities
-frontier: arXiv:2511.18578 Re(Visiting) TSFMs in Finance — zero-shot Chronos/TimesFM underperform LightGBM/CatBoost on excess returns
-frontier: arXiv:2412.09880 — baseline TimesFM unsatisfactory on price prediction before finance fine-tune
-frontier: arXiv:2606.27100 — TSFM gains vs random walk small/sparse on equity returns
-LLM agents deferred to P8
+reuse lab01 frame; PRIMARY metric = mean daily CS RankIC (+ t / ICIR)
+LightGBM=True; SHAP=True
+eval: mean daily CS RankIC + net SR (shared costs) + DSR — NOT accuracy, NOT pooled Spearman as primary
+cite: Qlib Alpha158 + LGBModel docs; AFML ch.10 bet sizing
+frontier: arXiv:2511.18578, 2412.09880, 2606.27100 (TSFM finance evals); LLM agents → P8
+TB labels are vol-scaled (k*sigma_t); fixed 2% bands rejected — see lab 01
 
-=== baselines: Ridge vs LightGBM (purged OOF) ===
-ridge  RankIC=-0.0076 net_SR=-0.383 turn=1.3381 DSR=0.000
-gbm    RankIC=0.0105 net_SR=-1.470 turn=1.7279 DSR=0.000 backend=lightgbm
-DSR uses n_trials=4 (= configs tried: ridge, gbm, +2 foils below)
-ridge_alpha0.01  RankIC=-0.0076 net_SR=-0.383 DSR=0.000
-ridge_alpha100   RankIC=-0.0076 net_SR=-0.394 DSR=0.000
+=== baselines under PRIMARY metric ===
+ridge    mean_CS_IC=+0.0398 t=4.64 ICIR=2.73 | pooled=-0.0076 (counterexample) | net_SR=-0.383 turn=1.3381 DSR=0.000
+gbm      mean_CS_IC=+0.0336 t=4.69 ICIR=2.77 | pooled=+0.0105 (counterexample) | net_SR=-1.470 turn=1.7279 DSR=0.000
+ridge_a0.01  mean_CS_IC=+0.0398 net_SR=-0.383 DSR=0.000
+ridge_a100   mean_CS_IC=+0.0397 net_SR=-0.394 DSR=0.000
+
+=== case (c): weak signal recovered but costs wipe net SR ===
+purged_ridge mean_CS_IC=+0.0398 (signal recovered) but net_SR=-0.383 after shared 10bps+impact costs (turn=1.338)
+teach: (a) leak illusion ≠ (b) recoverable weak IC ≠ (c) IC>0 with net SR≤0 after costs
 
 === feature importance: MDI / MDA / SHAP + substitution ===
 MDI top:
@@ -110,7 +77,7 @@ mom_5         160
 vol_5         139
 mom_20_dup    134
 mom_1          99
-MDA (purged test fold) top:
+MDA top:
 rank_mom20    5.917103e-05
 mom_10        1.640829e-05
 vol_20        1.223840e-05
@@ -119,7 +86,7 @@ mom_20_dup    8.984225e-06
 mom_1         2.475101e-06
 mom_5        -8.287955e-07
 vol_5        -3.292902e-06
-substitution: MDI mom_20=197.0000 mom_20_dup=134.0000 — correlated duplicates SPLIT importance (substitution effect)
+substitution: MDI mom_20=197.0000 mom_20_dup=134.0000
 SHAP mean(|value|) top:
 mom_20        0.004467
 mom_10        0.002399
@@ -129,60 +96,49 @@ vol_20        0.001519
 mom_1         0.000779
 mom_5         0.000711
 vol_5         0.000611
-chart /workspace/Quant-trading-learn/public/p5/shap_importance.png
-chart /workspace/Quant-trading-learn/public/p5/mdi_mda_importance.png
 
-=== probability calibration + AFML ch.10 bet sizing ===
-raw_prob mean=0.514 meta_base_rate=0.515
-calibration: reliability curve raw vs isotonic (Platt/logit also common; we show isotonic)
-bet_sizing net_SR=-0.917 turn=0.1752
-teach: size from calibrated probs, not raw scores; bad calibration → bad Kelly-like bets
-chart /workspace/Quant-trading-learn/public/p5/calibration_reliability.png
+=== calibration + AFML ch.10 bet sizing ===
+raw_prob mean=0.512 meta_base_rate=0.513
+bet_sizing mean_CS_IC=+0.0044 net_SR=-0.933 turn=0.1702
 
-=== Qlib-style workflow (plain pandas equivalent) ===
-Qlib pattern (from official docs): Alpha158 DataHandler → DatasetH segments → LGBModel.fit → SignalRecord
-pandas equivalent here:
-  1) features_long ≈ Alpha158 processors (mom/vol/rank; CSZScoreNorm ↔ StandardScaler on train fold)
-  2) purged segments ≈ DatasetH train/valid/test without label overlap
-  3) LGBMRegressor/Ridge ≈ LGBModel
-  4) pred_to_ls_pnl ≈ portfolio analysis from scores
-We do NOT claim Qlib install in this lab; cite docs and mirror the stages.
+=== Qlib-style workflow (pandas) ===
+Qlib: Alpha158 → DatasetH → LGBModel → SignalRecord (official docs)
+pandas: features_long ≈ Alpha158; purged folds ≈ segments; LGBM/Ridge ≈ LGBModel; pred_to_ls_pnl ≈ portfolio
 chart /workspace/Quant-trading-learn/public/p5/ridge_vs_gbm.png
-chart /workspace/Quant-trading-learn/public/p5/pipeline_nav.png
-disclaimer: weak synthetic panel — learning only; TSFM papers cited, not re-run here
+disclaimer: weak synthetic panel — learning only
 ```
 
 ## Common mistakes / pitfalls
 
-1. Picking the model by accuracy or train loss.
-2. Ignoring DSR / trial count across alphas and trees.
-3. Reading MDI without a correlated-duplicate check.
-4. Sizing bets from uncalibrated probabilities.
-5. Treating zero-shot TSFMs as free alpha without reading the finance evals.
+1. Headline pooled Spearman instead of mean daily CS IC.
+2. Reading negative net SR as “no signal” when CS IC is still ~+0.04.
+3. Skipping substitution checks on importance.
+4. Sizing from uncalibrated probabilities.
+5. Mythologizing zero-shot TSFMs.
 
 ## Practice (1:1)
 
-1. **ex1** — LightGBM vs ridge table (IC, net SR, DSR).
-2. **ex2** — Read Qlib Alpha158+LGBModel config mapping.
-3. **ex3** — Leakage checklist on the pipeline.
-4. **done1** — Reproducible mini-pipeline + checklist.
+1. **ex1** — Ridge vs GBM table (mean CS IC, net SR, DSR).
+2. **ex2** — Map Qlib Alpha158+LGBModel stages.
+3. **ex3** — Leakage checklist + case (a)/(b)/(c) labels.
+4. **done1** — Mini-pipeline report with cost-wipe discussion.
 
 ## Quiz
 
-<Quiz id="q1-order" question="Sensible pipeline order?" options={["Portfolio then raw CSV shuffle", "Features → purged fit → predict → portfolio / costs", "SHAP before any label", "TSFM then skip purge"]} answer={1} explanation="Data/model/pred/portfolio with anti-leak controls." />
-<Quiz id="q2-simple" question="Why try ridge/trees before deep nets?" options={["They always win live", "Stronger baselines under the same purge/cost protocol; deep models still need anti-leak", "Sklearn forbids deep nets", "Qlib bans them"]} answer={1} explanation="Baselines first; TSFM papers show zero-shot often trails trees." />
-<Quiz id="q3-sub" question="Correlated duplicate features mainly cause?" options={["Perfect purge", "Substitution: importance splits across duplicates", "Zero turnover", "Infinite DSR"]} answer={1} explanation="MDI/SHAP share credit between mom_20 and mom_20_dup." />
-<Quiz id="q4-cal" question="Bet sizing should use?" options={["Raw uncalibrated scores only", "Calibrated probabilities (reliability / isotonic or Platt)", "Only MDI ranks", "Shuffled accuracy"]} answer={1} explanation="AFML ch.10 spirit: size from trustworthy probs." />
-<Quiz id="q5-tsfm" question="arXiv:2511.18578 finds zero-shot Chronos/TimesFM on excess returns?" options={["Dominate LightGBM always", "Generally underperform strong tree ensembles until domain pre-training", "Remove the need for purge", "Prove LLM agents"]} answer={1} explanation="Verified finance TSFM eval — cite, don't mythologize." />
-<Quiz id="q6-qlib" question="Alpha158 + LGBModel in Qlib maps closest to?" options={["Only plotting prices", "Feature handler + segmented dataset + GBM scores", "Unpurged shuffle CV", "P8 agents"]} answer={1} explanation="Official docs workflow mirrored in pandas here." />
+<Quiz id="q1-casec" question="Purged ridge IC≈+0.04 with net SR≈−0.38 means?" options={["No signal exists", "Case (c): weak signal recovered but costs wipe net SR", "Always a leak", "Oracle failed"]} answer={1} explanation="IC and net SR answer different questions." />
+<Quiz id="q2-metric" question="Primary metric carried from lesson 01?" options={["Accuracy", "Mean daily CS RankIC", "Only pooled Spearman", "Train MSE"]} answer={1} explanation="Same primary metric across P5." />
+<Quiz id="q3-sub" question="mom_20 and mom_20_dup both get MDI mass because?" options={["Purge failed", "Substitution among correlated features", "Costs are zero", "SHAP is off"]} answer={1} explanation="Duplicates split importance." />
+<Quiz id="q4-cal" question="Bet sizing should use?" options={["Raw scores only", "Calibrated probabilities", "Only MDI", "Shuffled accuracy"]} answer={1} explanation="AFML ch.10 spirit." />
+<Quiz id="q5-qlib" question="Alpha158 + LGBModel maps to?" options={["Price plots only", "Feature handler + segments + GBM scores", "Unpurged shuffle", "P8 agents"]} answer={1} explanation="Official Qlib workflow mirrored in pandas." />
+<Quiz id="q6-tsfm" question="arXiv:2511.18578 on zero-shot Chronos/TimesFM?" options={["Always beat LightGBM", "Generally underperform tree ensembles on excess returns", "Removes purge", "Proves agents"]} answer={1} explanation="Verified finance TSFM evaluation." />
 
 ## Done when
 
-Reproducible mini-pipeline + leakage checklist with IC/netSR/DSR table.
+Mini-pipeline + checklist stating cases (a)/(b)/(c) with numbers.
 
-**Sources:** Qlib model/Alpha158 docs; AFML ch.10; Bailey–LdP DSR; arXiv:2511.18578, 2412.09880, 2606.27100; LightGBM; SHAP (if installed).
+**Sources:** Qlib docs; AFML ch.10; Bailey–LdP DSR; arXiv:2511.18578, 2412.09880, 2606.27100.
 
 <Summary>
-**Takeaways**: purged baselines → importance/substitution → calibrate/size → Qlib mirror; TSFMs cited not worshipped.  
-**Next**: P6 risk/sizing (when written).
+**Takeaways**: daily CS IC primary; purge recovers weak signal; costs can still wipe net SR; Qlib mirror; TSFMs cited.  
+**Next**: P6 (not in this batch).
 </Summary>

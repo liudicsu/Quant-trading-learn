@@ -1,64 +1,71 @@
 ## Learning goals
 
-This lesson (~**14 hours**: 5h AFML concepts + 7h labs + 2h write-up — HEAVY) builds **anti-leakage ML** for finance: labels, purged CV with embargo, train-only scalers, and an overfitting trap. Prereqs: `factor-workflow`, `backtest-traps`.
+This lesson (~**14 hours**: 5h AFML concepts + 7h labs + 2h write-up — HEAVY) builds **anti-leakage ML** for finance: vol-scaled labels, purged CV with embargo, and the right IC metric. Prereqs: `factor-workflow`, `backtest-traps`.
 
-**Goals:** demo shuffle leakage; time-split with shifted/causal features; evaluate with IC not accuracy.
+**Goals:** demo shuffle / unpurged leakage; time-split with causal features; score with **mean daily cross-sectional RankIC** (not accuracy, not pooled Spearman as primary).
 
-**Must-teach:** failures are usually in the pipeline; never shuffle time; full purged K-fold + embargo (AFML ch.7); scalers fit on the train fold only; forward / triple-barrier / meta-labels (AFML ch.3) with look-ahead checks; score with IC / net SR / DSR.
+**Must-teach:** failures are often in the pipeline; never shuffle time; full purged K-fold + embargo (AFML ch.7); train-only scalers; forward / vol-scaled triple-barrier / meta-labels (AFML ch.3); three distinct stories — leak illusion, weak recoverable signal, cost-wiped net SR.
 
 <Callout type="info" title="Learning only — not investment advice">
-Uses the P4 **weak** panel (`MU_WEAK=0.001`) subsampled to 50 names. Numbers illustrate pipeline bugs — not a live ML edge.
+P4 **weak** panel (`MU_WEAK=0.001`), 50-name subsample. Numbers teach methodology — not a live ML product.
 </Callout>
 
 ## Parameters
 
 - Panel: P4 weak, **50** assets × 750 days; `HORIZON=5`; `N_FOLDS=5`; `EMBARGO=5`
-- Features (as of `t`): `mom_1/5/10/20`, `vol_5/20`, `rank_mom20` from returns ≤ `t`
-- Labels: forward sum `t+1..t+h`; triple-barrier `pt=sl=0.02`, vertical `h`; meta-label vs `sign(mom_20)`
-- Models in demos: Ridge; overfit trap = `HistGradientBoostingRegressor` + 40 noise features
-- Eval: **RankIC** (not accuracy)
+- Features as of `t`: `mom_*`, `vol_*`, `rank_mom20` from returns ≤ `t`
+- **Triple-barrier (AFML ch.3):** `pt = sl = k·σ_t` with `k=1`, `σ_t` = **lagged EWMA** vol (`span=20`, `shift(1)`) — **not** fixed 2%
+- **Primary metric:** mean over days of cross-sectional Spearman RankIC; report **t-stat** and **ICIR**. Pooled Spearman is only a **counterexample** (mixes time-series and cross-sectional variation).
 
-## Labels (AFML ch.3)
+## Why fixed 2% bands are wrong
 
-**Forward return:** `fwd_ret[t] = sum(rets[t+1..t+h])`.
+Assets and regimes differ in volatility. A flat ±2% barrier is hit constantly by noisy high-vol names and almost never by quiet low-vol names, so the label distribution becomes **vol-driven** rather than information-driven. AFML scales horizontal barriers by a causal volatility estimate so each name/time gets a comparable hurdle. Lab `tb_pt` spans ~0.7%–4.1% across the panel (median ≈1.9%).
 
-**Triple-barrier:** walk the path from `t+1`; hit +pt / −sl or vertical at `h`. Lab sides ≈ balanced.
+## Labels and look-ahead
 
-**Meta-labeling:** primary side from `mom_20[t]`; `meta_y=1` iff side agrees with barrier outcome (trade or skip).
+- `fwd_ret[t] = sum(rets[t+1..t+h])`
+- Vol-scaled TB walks the path from `t+1`; `σ_t` uses only past returns
+- Meta-label: trade iff `sign(mom_20[t])` agrees with barrier side
+- Purge removes train rows whose label span overlaps the test block (+ embargo)
 
-**Look-ahead audit:** features stop at `t`; barriers read only the future path for `y`; purge later removes train rows whose label span overlaps the test block.
+## Primary metric
 
-## Leakage control (AFML ch.7)
+**Mean daily CS RankIC** = average_t Spearman(pred_t, y_t) within the cross-section on day t.
 
-| Protocol | RankIC (lab) | Role |
-|----------|--------------|------|
-| Shuffle split | ≈0.062 | **LEAK** — forbidden |
-| Global scaler on train+test | ≈0.010 | **LEAK** pattern |
-| Unpurged shuffled KFold | ≈0.065 | **LEAK** — label overlap |
-| Train-only scaler + time split | ≈0.010 | cleaner |
-| **Purged K-fold + embargo** | ≈−0.008 | **CLEAN** |
-| Walk-forward expanding | ≈0.015 | **CLEAN** |
+**Pooled Spearman** stacks every (date, asset) row into one correlation — it mixes serial dependence with cross-sectional ranking and can even **disagree in sign** with the daily CS mean (lab: purged ridge pooled ≈ −0.008 while mean daily CS IC ≈ **+0.040**).
 
-Purge drops train times whose label span `[t+1, t+h]` overlaps the test block; embargo removes `EMBARGO` bars after the test end. Scalers fit **only** on the train fold.
+## Side-by-side: oracle / leaked / purged / overfit
 
-![Leak vs clean](/p5/leak_vs_clean_ic.png)
+| Model | mean daily CS RankIC | t | ICIR | Note |
+|-------|----------------------|---|------|------|
+| oracle `beta_true` | ≈ **+0.099** | ≈6.3 | ≈3.7 | upper bound |
+| LEAK unpurged KFold | ≈ **+0.052** | ≈6.0 | ≈3.6 | pipeline illusion |
+| LEAK shuffle split | ≈ +0.035 | ≈2.8 | ≈1.7 | pipeline illusion |
+| **purged ridge** | ≈ **+0.040** | ≈4.6 | ≈2.7 | weak signal recovered |
+| purged GBM | ≈ +0.034 | ≈4.7 | ≈2.8 | weak signal recovered |
+| overfit GBM OOS | ≈ +0.021 (train ≈0.34) | ≈1.7 | ≈1.9 | train high / OOS collapse |
 
-## Overfit trap
+Verified: purged ridge mean daily CS IC ≈ **+0.0398** (matches reviewer ~+0.040).
 
-Deep GBM + **40 noise features**: train RankIC ≈ **0.40**, OOS RankIC ≈ **0.01** (daily CS IC train ≈0.34 vs OOS ≈0.02). High in-sample IC is not an edge — log the trial count.
+![Side by side](/p5/side_by_side_ic.png)
+
+![Leak vs purged](/p5/leak_vs_clean_ic.png)
 
 ![Overfit trap](/p5/overfit_trap_ic.png)
 
-## Expected-value framing
+## Three cases (do not collapse them)
 
-On a weak panel, honest purged IC near zero is the right answer. Inflated IC from shuffle/unpurged CV is a **pipeline mirage**, same family of mistakes as P2 backtest traps.
+1. **(a) Pipeline illusion** — unpurged / shuffle protocols inflate IC (here unpurged CS IC ≈0.052 > purged ≈0.040) without a trustworthy OOS design.
+2. **(b) Weak but recoverable** — after purge+embargo, ridge/GBM still recover ~**+0.04** mean CS IC on this planted weak panel (oracle ~0.10 is the ceiling).
+3. **(c) Real IC, costs wipe net SR** — lab 02: purged ridge IC ≈+0.04 yet **net SR ≈ −0.38** under the shared cost stack (high turnover). Positive IC ≠ tradeable edge.
+
+A purged IC near zero would mean “no recoverable linear signal under this protocol” — **not** the universal “correct answer.” On this panel the purged answer is a **small positive** IC.
 
 ## Look-ahead warnings
 
-- No same-bar label leakage into features.
-- No scaler fit that sees the test fold.
-- No CV fold that keeps train labels overlapping test times.
-- Meta-labels still need purge if the barrier span crosses the fold edge.
+- `σ_t` must be lagged; barriers walk only future returns
+- Scalers fit on the train fold only
+- Purge on label-span overlap; embargo after the test block
 
 ## Python lab
 
@@ -69,77 +76,101 @@ On a weak panel, honest purged IC near zero is the right answer. Inflated IC fro
 ```text
 === parameters ===
 P4 WEAK panel subsample n_assets=50; HORIZON=5; N_FOLDS=5; EMBARGO=5
-features: mom_1/5/10/20, vol_5/20, rank_mom20 — built from returns ≤ t; label uses t+1..t+h
-labels: forward sum; AFML ch.3 triple-barrier (pt=sl=2%, max_h=5); meta-label vs mom_20 side
-cite: López de Prado, Advances in Financial Machine Learning (Wiley) ch.3 labels, ch.7 purged CV
-look-ahead: features end at t; TB/meta inspect only future path for y; purge removes label-span overlap
-eval: RankIC (NOT accuracy); shared P2/P4 cost model deferred to lab 02 for portfolios
+TB: AFML ch.3 vol-scaled bands pt=sl=k*sigma_t with k=1.0, sigma=lagged EWMA span=20
+PRIMARY metric: mean daily cross-sectional RankIC (+ t-stat / ICIR)
+pooled Spearman is a COUNTEREXAMPLE (mixes time-series + cross-sectional variation)
+cite: López de Prado AFML ch.3 (vol-scaled barriers), ch.7 (purged CV)
+look-ahead: features ≤ t; sigma_t = EWMA.shift(1); labels walk t+1..; purge on label-span overlap
 MU_WEAK=0.001 panel (750, 50)
 rows=36300 features=['mom_1', 'mom_5', 'mom_10', 'mom_20', 'vol_20', 'vol_5', 'rank_mom20']
 
 === label construction look-ahead audit ===
-fwd_ret[t] = sum(rets[t+1..t+h]) — no feature uses rets after t
-TB: walk path from t+1; vertical at h; pt/sl=0.02 — y uses future returns only
-meta_y: 1 iff sign(mom_20[t]) agrees with tb_side[t] — primary side from feature at t only
+fwd_ret[t] = sum(rets[t+1..t+h])
+TB: pt=sl=1.0*sigma_t per asset/time; sigma from lagged EWMA — NOT fixed 2%
+why fixed 2% is wrong: high-vol names hit barriers by noise; low-vol almost never touch → labels become vol-driven
+tb_pt (vol-scaled) describe:
+count    36300.000000
+mean         0.019024
+std          0.004294
+min          0.006899
+25%          0.015851
+50%          0.018611
+75%          0.021778
+max          0.040924
 tb_side value counts:
 tb_side
--1.0    18623
- 1.0    17677
-meta_y mean (hit rate)=0.515
+-1.0    18641
+ 1.0    17659
+meta_y mean (hit rate)=0.513
 
-=== LEAK demos vs clean handling ===
-LEAK shuffle_split RankIC=0.0615  (FORBIDDEN on time series)
-LEAK global_scaler RankIC=0.0095
-CLEAN train_only_scaler RankIC=0.0095
-LEAK unpurged_shuffled_KFold RankIC=0.0654
-CLEAN purged_KFold+embargo RankIC=-0.0076
-teach: failures are usually in the pipeline — shuffle / global scale / unpurged CV inflate IC
+=== PRIMARY metric note ===
+mean daily CS RankIC = average over dates of Spearman(pred, y) within that day's cross-section
+pooled Spearman stacks all (date,asset) rows — confounds TS persistence with CS ranking
 
-=== walk-forward (expanding, train-only scaler) ===
-walk_forward RankIC=0.0145
+=== oracle upper bound (beta_true as score) ===
+oracle_beta_true             mean_daily_CS_RankIC=+0.0991 t=6.29 ICIR=3.71 n_days=726  | pooled_Spearman=+0.0837 (counterexample)
 
-=== OVERFIT TRAP: deep GBM + many noise features ===
-overfit_trap train_RankIC=0.4001 OOS_RankIC=0.0098
-overfit_trap train_mean_daily_CS_IC=0.3445 OOS_mean_daily_CS_IC=0.0211
-teach: high train IC + noise features + deep tree ≠ OOS edge; record trial count
+=== LEAK demos (inflated) vs CLEAN purged ===
+LEAK shuffle_split           mean_daily_CS_RankIC=+0.0345 t=2.82 ICIR=1.68 n_days=708  | pooled_Spearman=+0.0615 (counterexample)
+LEAK unpurged_KFold          mean_daily_CS_RankIC=+0.0518 t=6.03 ICIR=3.55 n_days=726  | pooled_Spearman=+0.0654 (counterexample)
+CLEAN purged_ridge           mean_daily_CS_RankIC=+0.0398 t=4.64 ICIR=2.73 n_days=726  | pooled_Spearman=-0.0076 (counterexample)
+CLEAN purged_GBM(lightgbm)   mean_daily_CS_RankIC=+0.0336 t=4.69 ICIR=2.77 n_days=726  | pooled_Spearman=+0.0105 (counterexample)
+
+=== OVERFIT trap (deep GBM + 40 noise features) ===
+overfit_GBM train            mean_daily_CS_RankIC=+0.3445 t=41.67 ICIR=29.35 n_days=508  | pooled_Spearman=+0.4001 (counterexample)
+overfit_GBM OOS              mean_daily_CS_RankIC=+0.0211 t=1.73 ICIR=1.86 n_days=218  | pooled_Spearman=+0.0098 (counterexample)
+
+=== SIDE-BY-SIDE TABLE (primary = mean daily CS RankIC) ===
+model                  mean_CS_IC        t     ICIR  note
+oracle_beta_true          +0.0991     6.29     3.71  upper bound
+LEAK unpurged_KFold       +0.0518     6.03     3.55  pipeline illusion
+LEAK shuffle_split        +0.0345     2.82     1.68  pipeline illusion
+purged_ridge              +0.0398     4.64     2.73  weak signal recovered
+purged_GBM                +0.0336     4.69     2.77  weak signal recovered
+overfit_GBM_OOS           +0.0211     1.73     1.86  train high / OOS collapse
+teach three cases:
+  (a) ILLUSION: leak protocols inflate IC (unpurged/shuffle) without a real OOS edge
+  (b) WEAK RECOVERABLE: purged ridge/GBM still recover mean CS IC ~ +0.04 on this planted weak panel
+  (c) REAL BUT COST-WIPED: see lab 02 — positive IC can still yield net SR≤0 after shared costs
+verify: purged_ridge mean daily CS IC = 0.0398 (reviewer ~+0.040)
+chart /workspace/Quant-trading-learn/public/p5/side_by_side_ic.png
 chart /workspace/Quant-trading-learn/public/p5/leak_vs_clean_ic.png
-chart /workspace/Quant-trading-learn/public/p5/overfit_trap_ic.png
-saved /workspace/Quant-trading-learn/examples/p5/data/ml_frame.pkl
-disclaimer: synthetic weak panel — learning only, not investment advice
+saved artifacts for lab 02
+disclaimer: synthetic weak panel — learning only
 ```
 
 ## Common mistakes / pitfalls
 
-1. Shuffling rows of a time-series panel.
-2. Fitting StandardScaler on the full sample.
-3. Sklearn KFold without purge/embargo on label horizons.
-4. Celebrating train IC from noisy deep trees.
-5. Scoring with accuracy instead of IC / net SR.
+1. Fixed % barriers that encode volatility, not information.
+2. Using pooled Spearman as the headline IC.
+3. Declaring “purged IC≈0 is always correct” when a weak signal is recoverable.
+4. Shuffling rows / unpurged KFold / global scalers.
+5. Celebrating train IC from noisy deep trees.
 
 ## Practice (1:1)
 
-1. **ex1** — Shuffle vs time split RankIC table.
-2. **ex2** — Repair three leaks (shuffle, scaler, unpurged CV).
-3. **ex3** — Score predictions with RankIC (not accuracy).
-4. **ex4** — Log trial count for the overfit trap.
-5. **done1** — Anti-leak notebook + trial log.
+1. **ex1** — Shuffle vs time split with **mean daily CS RankIC**.
+2. **ex2** — Repair three leaks; compare to purged ridge.
+3. **ex3** — Score with daily CS IC (show pooled as counterexample).
+4. **ex4** — Overfit trap train vs OOS daily CS IC.
+5. **done1** — Anti-leak notebook + side-by-side table + trial log.
 
 ## Quiz
 
-<Quiz id="q1-shuffle" question="Why is shuffling panel rows forbidden?" options={["It slows sklearn", "It leaks future information across the train/test cut", "It removes costs", "It fixes purge"]} answer={1} explanation="Time order is the hold-out; shuffle mixes future into train." />
-<Quiz id="q2-purge" question="Purged CV mainly removes what?" options={["All short positions", "Train samples whose label span overlaps the test block", "Only NaNs", "The embargo only"]} answer={1} explanation="AFML ch.7: purge on label-span overlap; embargo follows." />
-<Quiz id="q3-meta" question="Meta-labeling answers which question?" options={["Only the Sharpe", "Whether to take the primary side's trade", "The risk-free rate", "How to shuffle"]} answer={1} explanation="Side from primary; meta decides trade-or-not." />
-<Quiz id="q4-scaler" question="Where may a scaler be fit?" options={["Train+test together", "Train fold only", "Test fold only", "Full sample always"]} answer={1} explanation="Train-only fit prevents test leakage into normalization." />
-<Quiz id="q5-overfit" question="Train IC 0.40 with OOS IC ~0.01 after noise features means?" options={["Deploy immediately", "In-sample fit ≠ OOS edge; record trials", "Accuracy is enough", "Skip purge"]} answer={1} explanation="Classic overfit trap on a weak panel." />
-<Quiz id="q6-metric" question="Preferred evaluation here?" options={["Accuracy only", "RankIC (and later net SR / DSR)", "Training loss only", "R² on shuffled data"]} answer={1} explanation="Ranking / economics over classification accuracy." />
+<Quiz id="q1-metric" question="Primary IC metric in this lesson?" options={["Accuracy", "Mean of daily cross-sectional RankIC (+ t / ICIR)", "Only pooled Spearman", "Train loss"]} answer={1} explanation="Daily CS RankIC is primary; pooled is a counterexample." />
+<Quiz id="q2-tb" question="AFML-style horizontal barriers should be?" options={["Fixed ±2% for all names", "Scaled by lagged per-asset volatility k·σ_t", "Next-day open only", "Full-sample σ"]} answer={1} explanation="Vol-scaled bands avoid vol-driven labels." />
+<Quiz id="q3-purge" question="Purged ridge mean daily CS IC on this weak panel is about?" options={["Exactly zero always", "Around +0.04 — weak signal recovered", "Always negative", "Equal to accuracy"]} answer={1} explanation="Lab verifies ~+0.0398." />
+<Quiz id="q4-cases" question="Unpurged IC above purged IC mainly illustrates?" options={["Free alpha", "Case (a): pipeline illusion from leakage", "Case (c) only", "Oracle bound"]} answer={1} explanation="Leak protocols inflate IC without honest OOS design." />
+<Quiz id="q5-pooled" question="Pooled Spearman is demoted because it?" options={["Is faster", "Mixes time-series and cross-sectional variation", "Needs GPU", "Replaces DSR"]} answer={1} explanation="It confounds TS persistence with CS ranking." />
+<Quiz id="q6-overfit" question="Train CS IC ~0.34 with OOS ~0.02 means?" options={["Deploy", "In-sample fit ≠ OOS edge; log trials", "Skip purge", "Fixed 2% is fine"]} answer={1} explanation="Overfit trap with noise features." />
 
 ## Done when
 
-Anti-leak notebook + trial log with purge/embargo and look-ahead notes.
+Anti-leak notebook with vol-scaled TB, side-by-side table, and the three-case narrative.
 
-**Sources:** López de Prado AFML ch.3/7; P4 weak panel; Canvas m10; ML4T anti-leak spirit.
+**Sources:** AFML ch.3/7; P4 weak panel; Canvas m10.
 
 <Summary>
-**Takeaways**: labels → purge/embargo → train-only scale → IC not accuracy.  
-**Next**: modern-ml-pipelines (ridge/GBM, importance, Qlib mirror).
+**Takeaways**: vol-scaled labels → daily CS IC → purge recovers weak signal → don’t confuse leak / recover / cost-wipe.  
+**Next**: modern-ml-pipelines (costs wipe case c, importance, Qlib mirror).
 </Summary>
