@@ -11,22 +11,27 @@ export interface Lesson {
   slug: string;
   title: L10n;
   summary: L10n;
-  minutes: number;
-  resources: string[];
+  hours: number;
+  difficulty: number;
+  skippable: boolean;
+  skipNote?: L10n;
+  hourBasis: string;
+  prereqs: string[];
+  goals: L10n[];
+  mustTeach: L10n[];
+  exercises: L10n[];
+  quizTopics: L10n[];
+  doneWhen: L10n[];
+  methodTags: { classic: string[]; niche: string[]; frontier: string[] };
   tasks: Task[];
-  objectives?: L10n[];
-  prereqs?: string[];
-  mustTeach?: L10n[];
-  pitfalls?: L10n[];
   status: LessonStatus;
 }
 
-export interface Month {
-  id: number;
+export interface Phase {
+  id: string;
   slug: string;
   title: L10n;
   goal: L10n;
-  topics: L10n[];
-  milestones: L10n[];
+  cluster: string;
   lessons: Lesson[];
 }

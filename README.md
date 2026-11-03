@@ -1,33 +1,29 @@
 # Quant Trading Learn · 量化交易学习
 
-Self-contained, bilingual (中文 `/zh`, English `/en`) site for quantitative trading **research methods**.
+Self-contained bilingual site (中文 `/zh`, English `/en`) for quantitative **research methods**.
 
 **Learning only — not investment advice.**
 
-Scaffold UX mirrors [Hardware-learning](https://github.com/liudicsu/Hardware-learning).
+## Curriculum V2
 
-## Curriculum status (Batch A)
+Phases P0–P9 from knowledge dependencies (`src/lib/curriculum.ts`, `docs/CURRICULUM_V2.md`).
 
-`src/lib/curriculum.ts` is a **placeholder** outline for navigation. It will be rearranged by content later.
+Routes: `/[locale]/phase/<phaseSlug>/<lessonSlug>`.
 
-Reference research files (not imported by the app):
-
-- `docs/CURRICULUM_RESEARCH.md`
-- `src/lib/curriculum.draft.ts`
-
-Sample lesson with full zh/en body: **`prep-python-pandas`**.
+**This batch:** full bodies for all **P0** lessons (zh+en). Other phases are outline stubs.
 
 ## Develop
 
 ```bash
-npm ci
-npm run dev
+npm ci && npm run dev
 ```
 
-## Pages export
+P0 labs: `examples/p0/`.
+
+## Pages
 
 ```bash
 PAGES_BASE_PATH=/Quant-trading-learn npm run build
 ```
 
-Workflow template: `docs/deploy/pages.yml` (also `.github/workflows/pages.yml` when workflow scope allows).
+https://liudicsu.github.io/Quant-trading-learn/

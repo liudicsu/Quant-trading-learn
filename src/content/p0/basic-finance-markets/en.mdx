@@ -1,0 +1,103 @@
+## Learning goals
+
+Build pre-research finance literacy: intuitive differences among spot, futures, and ETFs; how long/short and leverage reshape P&amp;L paths; simple versus compound NAV; and why evaluation needs an **investable, reproducible benchmark**. If you can already explain these cleanly, test out. This lesson teaches **research vocabulary**, not stock tips or order placement.
+
+<Callout type="warn" title="Not investment advice">
+No recommendations of names or leverage. The leverage toy ignores financing costs.
+</Callout>
+
+## Intuition
+
+- **Spot** — exposure to the instrument itself (broker books aside); P&amp;L roughly tracks price.  
+- **Futures** — standardized forwards with expiry and margin; extra mechanics versus “buy shares.”  
+- **ETFs** — fund shares on a basket; often used as a **tradable benchmark** proxy.  
+- **Long** benefits when prices rise; **short** when prices fall (locate/borrow frictions exist — awareness only here).  
+- **Leverage** amplifies equity swings; paths hurt more in drawdowns.  
+- **Benchmark** — “alpha” is relative; prefer investable, reproducible benchmarks chosen up front.
+
+**No free lunch**: higher expected return usually pairs with risk, cost, or hidden constraints.
+
+## Formulas
+
+Per-period simple return r_t.  
+**Compound NAV** from 1:
+
+<Formula label="Compound equity">
+NAV_T = ∏_(t=1)^T (1 + r_t)
+</Formula>
+
+**Arithmetic cumulation (simple-style teaching contrast):** 1 + \sum r_t.  
+**Leverage toy** (no financing): \(NAV_L_T = product (1 + L * r_t)\).
+
+## Worked numeric example
+
+Returns +10\% then −10\%: compound finish 1.1 × 0.9 = 0.99. A “zero average return” story misses path dependence.
+
+## Python lab (run locally)
+
+Script: `examples/p0/03_basic_finance.py`.
+
+```python
+import pandas as pd
+rets = pd.Series([0.01, -0.02, 0.015, 0.01, -0.005])
+simple_nav = 1 + rets.cumsum()
+compound_nav = (1 + rets).cumprod()
+lev_nav = (1 + 2.0 * rets).cumprod()  # 2x, no financing
+```
+
+### Real run output
+
+```text
+=== simple vs compound NAV ===
+       r  simple_nav  compound_nav
+0  0.010       1.010      1.010000
+1 -0.020       0.990      0.989800
+2  0.015       1.005      1.004647
+3  0.010       1.015      1.014693
+4 -0.005       1.010      1.009620
+
+=== leverage toy (2x, no financing) ===
+       r  unlev_nav  lev2_nav
+0  0.010   1.010000  1.020000
+1 -0.020   0.989800  0.979200
+2  0.015   1.004647  1.008576
+3  0.010   1.014693  1.028748
+4 -0.005   1.009620  1.018460
+final_unlev 1.00962
+final_lev2 1.01846
+```
+
+Final unlevered compound NAV ≈ **1.00962**; 2x toy ≈ **1.01846**. Real leverage adds financing, liquidation, and gap risk — **not** a reason to lever up.
+
+## Common mistakes / pitfalls
+
+1. Treating futures/ETFs as tiny stocks while ignoring expiry, premium/discount, tracking error.  
+2. Discussing shorts without frictions/squeeze asymmetry.  
+3. Mixing simple and compound storytelling in comparisons.  
+4. Choosing benchmarks after seeing results.  
+5. Promoting the teaching leverage toy as a sizing advice.
+
+## Practice
+
+1. **ex1** — Change the return path; rebuild simple vs compound tables.  
+2. **ex2** — Write a paragraph: research market + a reproducible benchmark idea (no stock tips).  
+3. **done1** — One-pager: market/benchmark definition, frequency, known frictions.
+
+## Quiz
+
+<Quiz id="q1-etf" question="Why are ETFs often used as benchmark proxies in research?" options={["Zero tracking error", "They often give tradable, reproducible basket exposure", "Regulators allow only one benchmark", "ETFs cannot be shorted"]} answer={1} explanation="Investability/reproducibility matter; tracking error still exists." />
+<Quiz id="q2-short" question="If price falls, a short position (teaching intuition) usually?" options={["Must liquidate", "May profit (frictions/risk remain)", "Matches long P&amp;L", "Is illegal"]} answer={1} explanation="Shorts benefit from declines in the basic story, with real-world frictions." />
+<Quiz id="q3-lev" question="What important reality does the 2x toy omit?" options={["Calendars", "Financing, liquidation, gaps", "Pandas version", "Compounding definition"]} answer={1} explanation="The toy only multiplies by L." />
+<Quiz id="q4-comp" question="After +10% then −10%, compound NAV equals?" options={["1.00", "0.99", "1.01", "1.10"]} answer={1} explanation="1.1×0.9=0.99." />
+<Quiz id="q5-bench" question="A good research benchmark should primarily be?" options={["Hard to beat after the fact", "Investable, reproducible, pre-specified", "Zero volatility", "A single stock"]} answer={1} explanation="Pre-commitment and reproducibility keep “alpha” honest." />
+
+## Done when
+
+- `03_basic_finance.py` runs  
+- You can explain spot/futures/ETF, long/short, leverage, compounding, benchmarks  
+- One-pager + quizzes done  
+
+<Summary>
+**Takeaways**: instrument intuition, compound paths, leverage is not free, benchmark discipline.  
+**End of P0**: three test-out lessons; next is P1 market language & measurement.
+</Summary>

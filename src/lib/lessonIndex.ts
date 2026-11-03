@@ -1,10 +1,10 @@
-import { months } from "./curriculum";
-import type { Lesson, Month } from "./types";
+import { phases } from "./curriculum";
+import type { Lesson, Phase } from "./types";
 
-export function findLessonBySlug(slug: string): { month: Month; lesson: Lesson } | undefined {
-  for (const month of months) {
-    const lesson = month.lessons.find((l) => l.slug === slug);
-    if (lesson) return { month, lesson };
+export function findLessonBySlug(slug: string): { phase: Phase; lesson: Lesson } | undefined {
+  for (const phase of phases) {
+    const lesson = phase.lessons.find((l) => l.slug === slug);
+    if (lesson) return { phase, lesson };
   }
   return undefined;
 }
@@ -12,5 +12,5 @@ export function findLessonBySlug(slug: string): { month: Month; lesson: Lesson }
 export function lessonHref(slug: string): string {
   const found = findLessonBySlug(slug);
   if (!found) throw new Error(`Unknown lesson slug "${slug}"`);
-  return `/month/${found.month.slug}/${slug}`;
+  return `/phase/${found.phase.slug}/${slug}`;
 }

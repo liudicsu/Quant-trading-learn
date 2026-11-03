@@ -1,0 +1,177 @@
+## 学习目标
+
+本课建立量化研究的最小 pandas 时间序列工作流：把 CSV/表变成 `DatetimeIndex`，算收益与滚动统计，并用断言守住可复现输入。程序员若已能独立完成「CSV→DatetimeIndex→pct_change→rolling→画图」，可通过测验跳过。
+
+<Callout type="info" title="学习用途 · 非投资建议">
+示例使用**合成离线数据**，只演示语法与陷阱。不构成买卖建议。
+</Callout>
+
+## 直觉：时间索引是第一公民
+
+金融表如果只按「第几行」对齐，就很容易把**明天的价格**不小心接到今天的信号上。时间索引（`DatetimeIndex`）强迫你显式回答：这一行代表哪个交易日的哪一个字段？两个序列合并时，是按日期对齐，还是按位置硬拼？
+
+**错位 = 隐性前瞻（lookahead）**：例如用「明日收盘」判断「今日该不该持仓」。回测曲线会变漂亮，但研究结论是假的。
+
+## 公式
+
+简单收益：
+
+<Formula label="相邻收盘价的相对变化">
+r_t = P_t / P_(t-1) − 1
+</Formula>
+
+长度为 w 的简单移动平均：
+
+<Formula label="滚动均值">
+MA_t(w) = (P_t + P_(t-1) + … + P_(t−w+1)) / w
+</Formula>
+
+## 手算小例子
+
+取三天收盘 100, 101, 100.5：
+
+- r_2 = 101/100 - 1 = 0.01
+- r_3 = 100.5/101 - 1 ≈ -0.00495
+- MA_3 在第三天：(100+101+100.5)/3 = 100.5
+
+## Python 实验（已本地运行）
+
+仓库脚本：`examples/p0/01_pandas_timeseries.py`（合成 OHLC，无网络）。
+
+```python
+import pandas as pd
+
+idx = pd.bdate_range("2024-01-02", periods=8)
+close = pd.Series(
+    [100.0, 101.0, 100.5, 102.0, 101.5, 103.0, 104.0, 103.5],
+    index=idx,
+    name="close",
+)
+ohlc = pd.DataFrame({
+    "open": close.shift(1).fillna(close.iloc[0]),
+    "high": close + 0.5,
+    "low": close - 0.5,
+    "close": close,
+})
+ret = ohlc["close"].pct_change()
+ma3 = ohlc["close"].rolling(3).mean()
+good_signal = (ohlc["close"] > ma3).astype(int)
+position = good_signal.shift(1)
+bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # 故意用未来收盘
+```
+
+### 实际运行输出（节选）
+
+```text
+=== OHLC head ===
+             open   high    low  close
+2024-01-02  100.0  100.5   99.5  100.0
+2024-01-03  100.0  101.5  100.5  101.0
+2024-01-04  101.0  101.0  100.0  100.5
+2024-01-05  100.5  102.5  101.5  102.0
+2024-01-08  102.0  102.0  101.0  101.5
+2024-01-09  101.5  103.5  102.5  103.0
+2024-01-10  103.0  104.5  103.5  104.0
+2024-01-11  104.0  104.0  103.0  103.5
+
+=== returns & MA3 ===
+                 ret         ma3
+2024-01-02       NaN         NaN
+2024-01-03  0.010000         NaN
+2024-01-04 -0.004950  100.500000
+2024-01-05  0.014925  101.166667
+2024-01-08 -0.004902  101.333333
+2024-01-09  0.014778  102.166667
+2024-01-10  0.009709  102.833333
+2024-01-11 -0.004808  103.500000
+
+=== signals (1=above MA3) ===
+            good_signal  position_shift1  bad_lookahead
+2024-01-02            0              NaN              0
+2024-01-03            0              0.0              0
+2024-01-04            0              0.0              1
+2024-01-05            1              0.0              1
+2024-01-08            1              1.0              1
+2024-01-09            1              1.0              1
+2024-01-10            1              1.0              1
+2024-01-11            0              1.0              0
+
+ASSERTS_OK
+misaligned_days 1
+```
+
+解读：
+
+- `pct_change` **首行为 NaN**——没有「前一日」可比。
+- `good_signal` 用当日收盘相对 MA3；`position_shift1` 把决策推到下一期，避免「收盘才知道的信息吃当日收益」。
+- `bad_lookahead` 用 `shift(-1)` 偷看明日收盘；本段合成数据上有 **1** 天与诚实信号不一致（`misaligned_days 1`）。
+
+三条断言在脚本末尾：索引类型、数值 dtype、首行 NaN。全部通过则打印 `ASSERTS_OK`。
+
+## 常见错误 / 陷阱
+
+1. **`reindex` 后盲目 `ffill`**：把停牌空档填成「假成交价」，再算收益，等于发明了并不存在的报价。  
+2. **按行号 `merge` 而不是按日期 `align`/`join`**：两个来源的日历不同时会静默错位。  
+3. **行循环改价格却忘记时区/交易日历**：向量化 `pct_change`/`rolling` 更不易漏边界，但仍要检查 `NaN` 位置。  
+4. **信号未 `shift` 就乘当日收益**：经典 lookahead。  
+5. **不写断言**：dtype 变成 object、重复日期索引，错误会拖到很后面才爆。
+
+## 练习（对应课页任务清单）
+
+1. **ex1**：用脚本中的假 OHLC 自己重算 `ret` 与 `ma3`，核对输出表。  
+2. **ex2**：保留 `bad_lookahead`，改成更长序列，统计错位天数。  
+3. **ex3**：再加至少一条断言（例如：索引单调、无重复日期）。  
+4. **done1**：整理成可复现小 notebook/脚本，他人克隆后零配置能跑出 `ASSERTS_OK`。
+
+## 测验
+
+<Quiz
+  id="q1-index"
+  question="为什么量化表更推荐 DatetimeIndex，而不是只用 0..n 行号？"
+  options={["更快", "强制按日历对齐，减少静默错位与前瞻", "pandas 不允许整数索引", "可以自动下载行情"]}
+  answer={1}
+  explanation="时间索引让对齐规则显式化；行号拼接最容易把不同日历的数据拼错。"
+/>
+
+<Quiz
+  id="q2-pct"
+  question="对收盘价序列做 pct_change 后，第一行通常是？"
+  options={["0", "1", "NaN", "与第二行相同"]}
+  answer={2}
+  explanation="没有前一期价格时无法定义简单收益，故为 NaN。"
+/>
+
+<Quiz
+  id="q3-ffill"
+  question="reindex 到完整交易日后立刻 ffill 收盘价，最大风险是？"
+  options={["内存变大", "把缺失日填成假报价，污染收益与信号", "一定会报错", "夏普必然下降"]}
+  answer={1}
+  explanation="前向填充会假装停牌日也有成交价，属于数据谎言。"
+/>
+
+<Quiz
+  id="q4-shift"
+  question="日频上 position = signal.shift(1) 的主要动机？"
+  options={["加速 rolling", "用上一期已知信号决定本期仓位，降低同日收盘偷看", "自动扣手续费", "去掉所有 NaN"]}
+  answer={1}
+  explanation="shift(1) 是常见的信息时点对齐；它不保证盈利。"
+/>
+
+<Quiz
+  id="q5-lookahead"
+  question="close.shift(-1) > ma 当作「今日」信号，问题是？"
+  options={["语法错误", "使用了未来收盘信息（lookahead）", "MA 窗口必须是偶数", "相关会变 0"]}
+  answer={1}
+  explanation="shift(-1) 指向未来行，是教学里典型的偷看写法。"
+/>
+
+## 完成标准
+
+- 本地跑通 `examples/p0/01_pandas_timeseries.py` 并看到 `ASSERTS_OK`  
+- 能解释错位/ffill/`shift` 三类陷阱  
+- 完成本页 ≥5 题测验与任务清单  
+
+<Summary>
+**要点**：时间索引、向量化收益/滚动、断言、防前瞻。  
+**下一课**：统计与概率——均值方差分位、相关噪声、多重比较假阳性。
+</Summary>

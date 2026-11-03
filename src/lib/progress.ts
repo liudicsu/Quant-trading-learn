@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { lessonKey } from "@/lib/curriculum";
-import type { Month } from "@/lib/types";
+import type { Phase } from "@/lib/types";
 
 export interface LessonProgress {
   done: boolean;
@@ -13,7 +13,7 @@ export interface ProgressState {
   quizzes: Record<string, boolean>;
 }
 
-export interface MonthStats {
+export interface PhaseStats {
   doneLessons: number;
   totalLessons: number;
   doneTasks: number;
@@ -30,7 +30,6 @@ const EMPTY: ProgressState = Object.freeze({
 });
 
 const listeners = new Set<() => void>();
-
 let cached: ProgressState | undefined;
 let cachedRaw: string | null | undefined;
 
@@ -55,7 +54,6 @@ function parseProgress(raw: string): ProgressState {
     return EMPTY;
   }
   if (!isRecord(data)) return EMPTY;
-
   const lessons: Record<string, LessonProgress> = {};
   if (isRecord(data.lessons)) {
     for (const [key, value] of Object.entries(data.lessons)) {
@@ -65,7 +63,6 @@ function parseProgress(raw: string): ProgressState {
       lessons[key] = doneAt ? { done, doneAt } : { done };
     }
   }
-
   return {
     lessons,
     tasks: booleanRecord(data.tasks),
@@ -139,11 +136,8 @@ export function setLessonDone(key: string, done: boolean): void {
 export function toggleTask(taskKey: string): void {
   update((previous) => {
     const tasks = { ...previous.tasks };
-    if (tasks[taskKey]) {
-      delete tasks[taskKey];
-    } else {
-      tasks[taskKey] = true;
-    }
+    if (tasks[taskKey]) delete tasks[taskKey];
+    else tasks[taskKey] = true;
     return { ...previous, tasks };
   });
 }
@@ -151,11 +145,8 @@ export function toggleTask(taskKey: string): void {
 export function setQuizCorrect(quizKey: string, correct: boolean): void {
   update((previous) => {
     const quizzes = { ...previous.quizzes };
-    if (correct) {
-      quizzes[quizKey] = true;
-    } else {
-      delete quizzes[quizKey];
-    }
+    if (correct) quizzes[quizKey] = true;
+    else delete quizzes[quizKey];
     return { ...previous, quizzes };
   });
 }
@@ -176,24 +167,21 @@ export function useHydrated(): boolean {
   return useSyncExternalStore(noopSubscribe, hydratedSnapshot, serverHydratedSnapshot);
 }
 
-export function monthProgressStats(progress: ProgressState, month: Month): MonthStats {
+export function phaseProgressStats(progress: ProgressState, phase: Phase): PhaseStats {
   let doneLessons = 0;
   let doneTasks = 0;
   let totalTasks = 0;
-
-  for (const lesson of month.lessons) {
-    const key = lessonKey(month.id, lesson.slug);
+  for (const lesson of phase.lessons) {
+    const key = lessonKey(phase.id, lesson.slug);
     if (progress.lessons[key]?.done) doneLessons += 1;
     totalTasks += lesson.tasks.length;
     for (const task of lesson.tasks) {
       if (progress.tasks[`${key}#${task.id}`]) doneTasks += 1;
     }
   }
-
-  const totalLessons = month.lessons.length;
+  const totalLessons = phase.lessons.length;
   const total = totalLessons + totalTasks;
   const percent = total === 0 ? 0 : Math.round(((doneLessons + doneTasks) / total) * 100);
-
   return { doneLessons, totalLessons, doneTasks, totalTasks, percent };
 }
 

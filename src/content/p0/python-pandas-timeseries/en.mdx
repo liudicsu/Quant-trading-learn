@@ -1,0 +1,177 @@
+## Learning goals
+
+Build the smallest pandas time-series workflow for quant research: turn a table into a `DatetimeIndex`, compute returns and rolling stats, and protect reproducibility with asserts. If you can already do CSV→DatetimeIndex→pct_change→rolling→plot on your own, you may test out.
+
+<Callout type="info" title="Learning only — not investment advice">
+Examples use **synthetic offline data** to show syntax and traps. They are not trade recommendations.
+</Callout>
+
+## Intuition: the time index is first-class
+
+If a finance table is aligned only by row number, it is easy to attach **tomorrow’s price** to today’s signal by accident. A `DatetimeIndex` forces an explicit answer: which session does this row belong to? When two series merge, do they align by calendar or by position?
+
+**Misalignment = silent lookahead**: e.g. using tomorrow’s close to decide today’s position. Equity curves look better; the science is fake.
+
+## Formulas
+
+Simple return:
+
+<Formula label="Relative change between adjacent closes">
+r_t = P_t / P_(t-1) − 1
+</Formula>
+
+Simple moving average of window w:
+
+<Formula label="Rolling mean">
+MA_t(w) = (P_t + P_(t-1) + … + P_(t−w+1)) / w
+</Formula>
+
+## Worked numeric example
+
+Closes 100, 101, 100.5:
+
+- r_2 = 101/100 - 1 = 0.01
+- r_3 = 100.5/101 - 1 ≈ -0.00495
+- Third-day \(MA_3 = (100+101+100.5)/3 = 100.5\)
+
+## Python lab (actually run locally)
+
+Script: `examples/p0/01_pandas_timeseries.py` (synthetic OHLC, no network).
+
+```python
+import pandas as pd
+
+idx = pd.bdate_range("2024-01-02", periods=8)
+close = pd.Series(
+    [100.0, 101.0, 100.5, 102.0, 101.5, 103.0, 104.0, 103.5],
+    index=idx,
+    name="close",
+)
+ohlc = pd.DataFrame({
+    "open": close.shift(1).fillna(close.iloc[0]),
+    "high": close + 0.5,
+    "low": close - 0.5,
+    "close": close,
+})
+ret = ohlc["close"].pct_change()
+ma3 = ohlc["close"].rolling(3).mean()
+good_signal = (ohlc["close"] > ma3).astype(int)
+position = good_signal.shift(1)
+bad_signal = (ohlc["close"].shift(-1) > ma3).astype(int)  # peek at future close
+```
+
+### Real run output
+
+```text
+=== OHLC head ===
+             open   high    low  close
+2024-01-02  100.0  100.5   99.5  100.0
+2024-01-03  100.0  101.5  100.5  101.0
+2024-01-04  101.0  101.0  100.0  100.5
+2024-01-05  100.5  102.5  101.5  102.0
+2024-01-08  102.0  102.0  101.0  101.5
+2024-01-09  101.5  103.5  102.5  103.0
+2024-01-10  103.0  104.5  103.5  104.0
+2024-01-11  104.0  104.0  103.0  103.5
+
+=== returns & MA3 ===
+                 ret         ma3
+2024-01-02       NaN         NaN
+2024-01-03  0.010000         NaN
+2024-01-04 -0.004950  100.500000
+2024-01-05  0.014925  101.166667
+2024-01-08 -0.004902  101.333333
+2024-01-09  0.014778  102.166667
+2024-01-10  0.009709  102.833333
+2024-01-11 -0.004808  103.500000
+
+=== signals (1=above MA3) ===
+            good_signal  position_shift1  bad_lookahead
+2024-01-02            0              NaN              0
+2024-01-03            0              0.0              0
+2024-01-04            0              0.0              1
+2024-01-05            1              0.0              1
+2024-01-08            1              1.0              1
+2024-01-09            1              1.0              1
+2024-01-10            1              1.0              1
+2024-01-11            0              1.0              0
+
+ASSERTS_OK
+misaligned_days 1
+```
+
+Notes:
+
+- First `pct_change` value is **NaN** — no previous close.
+- `position_shift1` delays the decision one bar so you do not spend same-day close information on same-day return.
+- `bad_lookahead` uses `shift(-1)`; on this toy path it disagrees on **1** day (`misaligned_days 1`).
+
+Three asserts at the end check index type, numeric dtype, and the leading NaN. Success prints `ASSERTS_OK`.
+
+## Common mistakes / pitfalls
+
+1. **Blind `ffill` after `reindex`** — invents quotes on halt days and pollutes returns.  
+2. **Row-number merges** instead of calendar `align`/`join`.  
+3. **Python row loops** that skip calendar edge cases; prefer vectorized ops, still inspect NaNs.  
+4. **No `shift` on signals** before multiplying by same-bar returns.  
+5. **No asserts** — object dtypes and duplicate dates fail late and loudly.
+
+## Practice (wired to the task checklist)
+
+1. **ex1** — Recompute `ret` and `ma3` from the fake OHLC; match the table.  
+2. **ex2** — Keep `bad_lookahead` on a longer series; count mismatched days.  
+3. **ex3** — Add another assert (monotonic index / no duplicate dates).  
+4. **done1** — Ship a zero-config script/notebook that prints `ASSERTS_OK`.
+
+## Quiz
+
+<Quiz
+  id="q1-index"
+  question="Why prefer a DatetimeIndex over bare 0..n row numbers for quant tables?"
+  options={["It is always faster", "It forces calendar alignment and reduces silent misalignment/lookahead", "Pandas forbids integer indexes", "It auto-downloads prices"]}
+  answer={1}
+  explanation="A time index makes alignment rules explicit; positional joins quietly break when calendars differ."
+/>
+
+<Quiz
+  id="q2-pct"
+  question="After pct_change on closes, the first row is usually?"
+  options={["0", "1", "NaN", "Equal to the second row"]}
+  answer={2}
+  explanation="There is no previous price, so the simple return is undefined (NaN)."
+/>
+
+<Quiz
+  id="q3-ffill"
+  question="Biggest risk of reindexing to all business days then immediately ffill closes?"
+  options={["Larger memory", "Fabricating quotes on missing days and poisoning returns/signals", "It always errors", "Sharpe must fall"]}
+  answer={1}
+  explanation="Forward-fill pretends halted days still traded."
+/>
+
+<Quiz
+  id="q4-shift"
+  question="Main motive for position = signal.shift(1) on daily bars?"
+  options={["Speed up rolling", "Use last period’s known signal for this period’s position to reduce same-close peeking", "Subtract commissions", "Drop all NaNs"]}
+  answer={1}
+  explanation="shift(1) is a common timing alignment; it does not guarantee profits."
+/>
+
+<Quiz
+  id="q5-lookahead"
+  question="Using close.shift(-1) > ma as a “today” signal is wrong because?"
+  options={["Syntax error", "It uses future close information (lookahead)", "MA windows must be even", "Correlation becomes zero"]}
+  answer={1}
+  explanation="shift(-1) points to the future row — a classic peek."
+/>
+
+## Done when
+
+- `examples/p0/01_pandas_timeseries.py` prints `ASSERTS_OK` locally  
+- You can explain misalignment, ffill, and shift traps  
+- Quizzes and checklist tasks are finished  
+
+<Summary>
+**Takeaways**: time index, vectorized returns/rolling, asserts, anti-lookahead.  
+**Next**: statistics — mean/variance/quantiles, noisy correlation, multiple-testing false positives.
+</Summary>

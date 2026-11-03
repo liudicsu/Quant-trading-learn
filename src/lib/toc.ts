@@ -4,7 +4,6 @@ import { isValidElement, type ReactNode } from "react";
 
 export type TocItem = { id: string; text: string };
 
-/** Slug shared by the TOC (from MDX source) and the rendered <h2> (from React children). */
 export function slugify(text: string): string {
   return (
     text
@@ -17,7 +16,6 @@ export function slugify(text: string): string {
   );
 }
 
-/** Plain text of inline markdown: drops `code` ticks, **bold**, *em*, <strong>, [links](url). */
 function stripInline(md: string): string {
   return md
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
@@ -34,9 +32,16 @@ export function nodeText(node: ReactNode): string {
   return "";
 }
 
-/** Reads `## ` headings (outside code fences) from a lesson's MDX source at build time. */
-export async function lessonToc(monthId: number, slug: string, locale: string): Promise<TocItem[]> {
-  const file = path.join(process.cwd(), "src", "content", `m${monthId}`, slug, `${locale}.mdx`);
+/** Content lives under src/content/<phaseIdLower>/<slug>/<locale>.mdx */
+export async function lessonToc(phaseId: string, slug: string, locale: string): Promise<TocItem[]> {
+  const file = path.join(
+    process.cwd(),
+    "src",
+    "content",
+    phaseId.toLowerCase(),
+    slug,
+    `${locale}.mdx`,
+  );
   const src = await readFile(file, "utf8").catch(() => "");
   const items: TocItem[] = [];
   let fence = false;

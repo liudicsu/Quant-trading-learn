@@ -6,7 +6,7 @@
   },
   "nav": {
     "home": "Home",
-    "roadmap": "Outline",
+    "roadmap": "Phases",
     "curriculum": "Curriculum",
     "about": "About",
     "language": "Language",
@@ -18,12 +18,12 @@
     "title": "From programmer to systematic trading research",
     "lead": "Self-contained lessons: prep → markets & data → backtests → strategies & factors → risk & execution → capstone. Progress stays in your browser.",
     "disclaimer": "This site teaches research methods and engineering workflow only. No buy/sell advice, stock tips, or live-trading order tutorials. Code snippets are educational.",
-    "start": "Start sample lesson",
+    "start": "Start P0 lesson 1",
     "continue": "Continue",
     "outline": "Full outline",
-    "roadmap": "Placeholder roadmap (TBD rearrange)",
+    "roadmap": "Ten phases (dependency clusters)",
     "lessons": "{count} lessons",
-    "hours": "~{n} h",
+    "hours": "{n} h",
     "howTitle": "How to use this site",
     "how1Title": "Read",
     "how1": "Each lesson has goals, explanation, formulas, and Python demos; external links are optional.",
@@ -32,7 +32,7 @@
     "how3Title": "Honest research",
     "how3": "Focus on traps, costs, and out-of-sample thinking before clever strategies.",
     "progressLocal": "Progress is stored only in this browser (localStorage) and is never uploaded.",
-    "placeholderNote": "Batch A: placeholder outline (will be rearranged by content); sample lesson is Prep: Python & pandas. Research draft is reference-only in the repo."
+    "placeholderNote": "Curriculum V2: phases from knowledge dependencies. This batch writes all of P0; other lessons are stubs."
   },
   "lesson": {
     "lesson": "Lesson {n}",
@@ -52,12 +52,12 @@
     "noPrereqs": "No prerequisites — start here.",
     "summary": "Lesson summary",
     "stubBody": "Full body will be written in a later batch.",
-    "backToMonth": "Back to month overview",
-    "finishMonth": "View month milestones"
+    "backToMonth": "Back to phase",
+    "finishMonth": "Continue in this phase"
   },
   "curriculum": {
     "title": "Curriculum outline",
-    "lead": "Placeholder outline grouped by month for navigation only; formal schedule will be rearranged by content. curriculum.draft.ts does not drive this page.",
+    "lead": "V2 outline grouped by phases P0–P9. Phases come from dependency clusters, not calendar months.",
     "phase": "Phase"
   },
   "quiz": {
@@ -104,18 +104,33 @@
     "collapse": "Collapse"
   },
   "month": {
-    "label": "Month {n}",
-    "goal": "Month goal",
+    "label": "{id}",
+    "goal": "Phase goal",
     "lessons": "Lessons",
-    "milestones": "Milestones",
-    "milestonesLead": "By month end you should be able to:",
-    "topics": "Topics",
-    "progress": "Month progress",
-    "minutes": "~{n} min",
+    "milestones": "Completion hints",
+    "topics": "Cluster",
+    "progress": "Phase progress",
+    "hours": "~{n} h",
     "back": "Back to outline",
-    "start": "Start this month",
-    "stats": "{lessons} lessons · ~{hours} h · {tasks} tasks",
+    "start": "Start this phase",
+    "stats": "{lessons} lessons · {hours} h · {tasks} tasks",
     "statusReady": "Body ready",
-    "statusOutline": "Outline stub"
+    "statusOutline": "Outline stub",
+    "skippable": "Test-out OK"
+  },
+  "phase": {
+    "label": "{id}",
+    "goal": "Phase goal",
+    "lessons": "Lessons",
+    "milestones": "Completion hints",
+    "topics": "Cluster",
+    "progress": "Phase progress",
+    "hours": "~{n} h",
+    "back": "Back to outline",
+    "start": "Start this phase",
+    "stats": "{lessons} lessons · {hours} h · {tasks} tasks",
+    "statusReady": "Body ready",
+    "statusOutline": "Outline stub",
+    "skippable": "Test-out OK"
   }
 }

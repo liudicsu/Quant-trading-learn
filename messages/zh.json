@@ -6,7 +6,7 @@
   },
   "nav": {
     "home": "首页",
-    "roadmap": "大纲",
+    "roadmap": "阶段",
     "curriculum": "课程大纲",
     "about": "关于",
     "language": "语言",
@@ -18,12 +18,12 @@
     "title": "从程序员到系统化交易研究",
     "lead": "自包含课稿：预备知识 → 市场与数据 → 回测 → 策略与因子 → 风控与执行 → 结业。进度只保存在你的浏览器里。",
     "disclaimer": "本站仅用于学习量化研究方法与工程流程，不提供买卖建议、荐股或实盘下单教程。任何示例代码均为教学片段。",
-    "start": "从示例课开始",
+    "start": "从 P0 第一课开始",
     "continue": "继续学习",
     "outline": "查看完整大纲",
-    "roadmap": "占位路线（待重排）",
+    "roadmap": "十个阶段（依赖簇）",
     "lessons": "{count} 节课",
-    "hours": "约 {n} 小时",
+    "hours": "{n} h",
     "howTitle": "怎么用这个网站",
     "how1Title": "读讲解",
     "how1": "每节课给出目标、讲解、公式与 Python 示意；外链仅作可选延伸。",
@@ -32,7 +32,7 @@
     "how3Title": "诚实研究",
     "how3": "强调回测陷阱、成本与样本外——先学流程，再谈策略。",
     "progressLocal": "进度仅保存在本浏览器（localStorage），不会上传。",
-    "placeholderNote": "Batch A：大纲为占位结构（将按内容重排）；示例课为「预备：Python 与 pandas」。研究草稿仅作仓库内参考，不驱动站点。"
+    "placeholderNote": "大纲 V2：按知识依赖分阶段。本批写满 P0；其余课为占位正文。"
   },
   "lesson": {
     "lesson": "第 {n} 课",
@@ -52,12 +52,12 @@
     "noPrereqs": "无需前置课程，从这里开始。",
     "summary": "本课小结",
     "stubBody": "正文将在后续批次填写。",
-    "backToMonth": "返回本月概览",
-    "finishMonth": "查看本月里程碑"
+    "backToMonth": "返回本阶段",
+    "finishMonth": "查看本阶段下一课"
   },
   "curriculum": {
     "title": "课程大纲",
-    "lead": "占位大纲，按月分组仅便于导航；正式课表稍后按内容重排。研究稿 curriculum.draft.ts 不驱动本页。",
+    "lead": "按阶段（P0–P9）分组的 V2 大纲。阶段由依赖簇导出，不是月历格子。",
     "phase": "阶段"
   },
   "quiz": {
@@ -104,18 +104,33 @@
     "collapse": "收起"
   },
   "month": {
-    "label": "第 {n} 月",
-    "goal": "本月目标",
+    "label": "{id}",
+    "goal": "阶段目标",
     "lessons": "课程",
-    "milestones": "本月里程碑",
-    "milestonesLead": "本月末你应能做到：",
-    "topics": "本月主题",
-    "progress": "本月进度",
-    "minutes": "约 {n} 分钟",
+    "milestones": "完成标准提示",
+    "topics": "知识簇",
+    "progress": "本阶段进度",
+    "hours": "约 {n} 学时",
     "back": "返回大纲",
-    "start": "开始本月",
-    "stats": "{lessons} 节课 · 约 {hours} 小时 · {tasks} 个任务",
+    "start": "开始本阶段",
+    "stats": "{lessons} 节课 · {hours} 学时 · {tasks} 个任务",
     "statusReady": "已写正文",
-    "statusOutline": "大纲占位"
+    "statusOutline": "大纲占位",
+    "skippable": "可测验跳过"
+  },
+  "phase": {
+    "label": "{id}",
+    "goal": "阶段目标",
+    "lessons": "课程",
+    "milestones": "完成标准提示",
+    "topics": "知识簇",
+    "progress": "本阶段进度",
+    "hours": "约 {n} 学时",
+    "back": "返回大纲",
+    "start": "开始本阶段",
+    "stats": "{lessons} 节课 · {hours} 学时 · {tasks} 个任务",
+    "statusReady": "已写正文",
+    "statusOutline": "大纲占位",
+    "skippable": "可测验跳过"
   }
 }

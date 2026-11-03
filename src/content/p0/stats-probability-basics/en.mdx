@@ -1,0 +1,105 @@
+## Learning goals
+
+With pandas time series in place, build statistical intuition for return research: mean/variance/quantiles, correlation versus sample noise, and why trying many rules produces false “significance.” If you already know distributions, correlation pitfalls, p-value misuse, and multiple testing, you may test out.
+
+<Callout type="info" title="Learning only">
+Synthetic RNG experiments — not live strategy evaluation and not stock tips.
+</Callout>
+
+## Intuition
+
+- **Mean** centers; **variance/std** spreads. Financial returns are often heavy-tailed, so “mean ± 1 std” is not the whole story.  
+- **Quantiles** (5%/95%) speak about tails without assuming normality.  
+- **Correlation** summarizes linear co-movement; short samples are noisy; rolling correlation drifts.  
+- **IID often fails** in markets: volatility clusters; regimes break.  
+- **Many trials**: among 100 random rules, a few will look great in-sample — that is multiple comparison, not discovery.
+
+## Formulas
+
+Sample variance with (n-1) degrees of freedom:
+
+<Formula label="Unbiased sample variance">
+s^2 = sum_i (x_i - mean)^2 / (n - 1)
+</Formula>
+
+Std s = sqrt(s^2).  
+A teaching Sharpe (zero rf) on daily returns:
+
+<Formula label="Annualized Sharpe sketch">
+Sharpe ≈ mean(r) / std(r) * sqrt(252)
+</Formula>
+
+## Worked numeric example
+
+Returns 0.01, -0.02, 0.015: mean ≈ 0.00167; sample variance uses sum of squared deviations over 2; std is the square root.
+
+## Python lab (run locally)
+
+Script: `examples/p0/02_stats_probability.py` (fixed numpy seed, offline).
+
+```python
+import numpy as np, pandas as pd
+rng = np.random.default_rng(42)
+n = 252
+r_a = pd.Series(rng.normal(0.0004, 0.01, n), index=pd.bdate_range("2023-01-02", periods=n))
+r_b = 0.3 * r_a + pd.Series(rng.normal(0, 0.01, n), index=r_a.index)
+# 100 trials: random sign positions; count |Sharpe|>2
+```
+
+### Real run output
+
+```text
+=== summary stats (a) ===
+{'mean': -8.370182923358801e-05, 'var': 8.791401392017147e-05, 'std': 0.009376247326098618, 'q05': -0.01411631978767748, 'q50': -0.0006621647108214935, 'q95': 0.016293006921201513}
+
+full_sample_corr 0.2711
+rolling_63_corr_tail
+2023-12-13    0.3253
+2023-12-14    0.4036
+2023-12-15    0.3971
+2023-12-18    0.4010
+2023-12-19    0.3811
+Freq: B
+
+=== multiple testing toy ===
+trials 100
+count_|Sharpe|>2 3
+max_abs_sharpe 2.848
+mean_abs_sharpe 0.761
+```
+
+Full-sample corr ≈ **0.27**, while 63-day rolling corr near the end sits around **0.38–0.40** — correlation drifts. In 100 random-position trials, **3** still clear |Sharpe|>2, with max abs ≈ **2.85**. Reporting only the best trial misleads.
+
+## Common mistakes / pitfalls
+
+1. Treating one lucky in-sample Sharpe as a repeatable edge.  
+2. Assuming IID normality despite clustered volatility.  
+3. Confusing variance with std (different units).  
+4. Estimating correlation on tiny windows without uncertainty.  
+5. Reading correlation as causation.
+
+## Practice
+
+1. **ex1** — Histogram `r_a`; match printed quantiles.  
+2. **ex2** — Compare full vs rolling correlation; write three observations.  
+3. **ex3** — Change seed/trial count; watch `|Sharpe|>2` counts.  
+4. **done1** — Deliver the false-positive output plus a short conclusion.
+
+## Quiz
+
+<Quiz id="q1-var" question="How are sample std and sample variance related?" options={["Identical", "Std is the square root of variance", "Variance is the square root of std", "Unrelated"]} answer={1} explanation="s = √(s²)." />
+<Quiz id="q2-iid" question="Why do people say financial returns often are not IID?" options={["Too few sessions", "Volatility clusters and distributions shift across regimes", "Pandas cannot correlate", "Sharpe is illegal"]} answer={1} explanation="Clustering and structural breaks break IID." />
+<Quiz id="q3-corr" question="A correlation of 0.27 means?" options={["Causation", "A noisy summary of linear co-movement", "It will be 0.27 next year", "Risk-free arbitrage"]} answer={1} explanation="Corr ≠ causation; estimates move with sample and window." />
+<Quiz id="q4-multi" question="Seeing |Sharpe|>2 in a few of 100 random strategies mainly shows?" options={["Random strategies work", "False positives appear under multiple testing — do not show only the lucky run", "Sharpe is wrong", "Leverage is required"]} answer={1} explanation="More trials → more extremes by chance." />
+<Quiz id="q5-sharpe" question="The √252 in the teaching Sharpe sketch comes from?" options={["Days in a month", "A rough factor to annualize daily volatility", "A mandatory regulatory formula", "Ticker length"]} answer={1} explanation="Under crude assumptions, volatility scales with the square root of time." />
+
+## Done when
+
+- `02_stats_probability.py` runs  
+- You can explain the false-positive demo  
+- Quizzes and tasks complete  
+
+<Summary>
+**Takeaways**: descriptive stats, noisy correlation, discount many trials.  
+**Next**: basic finance — long/short, leverage, compounding, benchmarks (process, not tips).
+</Summary>
