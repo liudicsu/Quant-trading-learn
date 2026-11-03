@@ -48,6 +48,6 @@ teach: limits improve price conditional on fill but add non-fill + adverse-selec
      9  99938.0280  98.9307  99.9300          106.9335       103.1251         98.4403
     10  99934.0307  98.9230  99.9224          107.6983       103.8902         99.2058
 benchmarks (volume-weighted): arrival/Perold=103.84 bps | interval_VWAP=100.03 bps | close=95.35 bps
-note: unweighted mean arrival_slip=103.84 bps ≠ Perold; use volume-weighted (=IS)
-interval_VWAP=99.9615 close=99.9142 participation_max=0.10
+note: on nearly equal slice sizes, unweighted mean arrival_slip=103.84 bps ≈ volume-weighted Perold=103.84; they diverge only when slice sizes differ — always prefer volume-weighted (=IS)
+interval_VWAP(planned weights)=99.9615 close=99.9142 participation_max=0.10
 disclaimer: toy paths — learning only, not a broker TCA

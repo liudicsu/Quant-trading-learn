@@ -1,9 +1,98 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **8 学时**：导读 4h + 批判练习 3h + 守则改写 1h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
+
+**课内目标：** 陈述 RD-Agent(Q) 闭环；列出 LLM 挖因子失败模式；设计密封样本外验收。
+
+**必须教会：** 自动化放大试错 → 更需多重检验；论文指标 ≠ 你的可复现优势；Agent 输出须进同一陷阱审讯。
+
+<Callout type="info" title="仅供学习 — 非投资建议">
+仅 **离线 mock**。运行时不调用 ChatGPT/Claude/任何付费 API。实验从不实盘下单。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- 合成截面：40 资产 × 520 日；弱潜因子 + 滞后 `slow` 驱动
+- Agent IS 窗口 400 日；**密封 OOS** 末 120 日（冻结后只打开一次）
+- 主指标：**日均截面 RankIC**；DSR 带**显式 N**；共享成本（10 bps + 冲击）
+- Mock 代替 LLM；公式库 =「Development」产物
+
+## RD-Agent(Q)（已读论文）
+
+[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155)（NeurIPS 2025）是面向因子–模型联合优化的**数据中心多智能体**框架：将流程拆成 **Research**（目标对齐提示、假设→任务）与 **Development**（实现并反馈）。工程主页见 Microsoft [RD-Agent](https://github.com/microsoft/RD-Agent)。自动化**放大**假设数量——因此 purge OOS、成本与 DSR(N) 更重要，而非更次要。
+
+实验 `examples/p8/01_llm_agents_offline.py` 用公式库 + IS 保留规则（`mean_CS_IC > 0.01`）模拟闭环。该规则会把**噪声**和弱真因子一起留下——正是过拟合故事。
+
+![Mock RD-Agent 提案](/p8/rdagent_proposals.png)
+
+## 密封 hold-out（Quant-Arena 精神）
+
+[Quant-Arena](https://arxiv.org/abs/2610.30113) 检验 LLM agent 能否跑完研究闭环且在研究期**之外**仍有效。协议：IS 结束后**冻结**因子列表；密封年**只打开一次**；偷看后再挖无效。实验打印 `agent_kept` 与 `honest_slow` 的密封 OOS IC。
+
+稳定对照：[LLM+MCTS 公式化挖掘](https://arxiv.org/abs/2505.11122)——同样要过陷阱审讯。
+
+## Chain-of-Alpha — 已核验撤回
+
+[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **在 arXiv 上存在**，但管理员注释称版本已**移除**（提交者当时无权同意许可）。**放弃双链细节主张**；不要依赖不稳定 PDF。优先 RD-Agent(Q)、LLM+MCTS、Quant-Arena。
+
+## LLM 情绪（Lopez-Lira &amp; Tang 2023）
+
+[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619)（Lopez-Lira &amp; Tang）表明：在**知识截止日期之后**的标题上，GPT 分数可预测反应/漂移——且随采用上升收益下降。实验构造离线 `mock_sentiment`（PIT）与窥视下一收益的 **LEAK** 对照（截止日期/记忆类比）。LEAK IC ≈ +0.67 是警告，不是策略。
+
+![Agent vs 诚实因子净值](/p8/agent_vs_honest_nav.png)
+
+## Python 实验
+
+`examples/p8/01_llm_agents_offline.py`
+
+### 真实运行输出
+
+```text
+=== parameters ===
+offline mocks only — no LLM API, no network at runtime
+...
+kept factors after agent loop: ['noise_A', 'slow_lag1']
+explicit trial count N_TRIALS_AGENT=8 (for DSR)
+
+agent_kept       purged_OOF_IC=+0.0299 IS_net_SR=-6.646 DSR(N=8)=0.000 | sealed_OOS_IC=+0.0161 OOS_net_SR=-7.707 OOS_DSR=0.000
+honest_slow      purged_OOF_IC=+0.0320 IS_net_SR=-0.991 DSR(N=1)=0.107 | sealed_OOS_IC=+0.0154 OOS_net_SR=-2.171 OOS_DSR=0.067
+
+mock_sentiment_PIT     post_cutoff mean_CS_IC=+0.0011 ...
+mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 ...
+=== Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===
+```
+
+## 局限 / 失败模式
+
+- **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会显得很美。
+- **试错膨胀：** agent 轮次必须在 DSR 中写明 **N**；论文表 ≠ 你的密封 OOS。
+- **IS 保留规则**过拟合；密封年必须保持密封。
+- **已撤回论文：** Chain-of-Alpha — 只记存在+撤回，不写进流水线。
+- Niche 动机仅参考：XQuant Spec+AI（@_zheergen）——仍要同一套陷阱。
+
+## 练习（1:1）
+
+1. **ex1** — 读 RD-Agent(Q)/RD-Agent 说明，写半页风险清单（截止、N、成本、密封 OOS）。
+2. **ex2** — 对一个 LLM 因子写空假设+成本审讯提纲（含 DSR N）。
+3. **ex3** — 用「冻结后再测密封年」改写研究守则（Quant-Arena 精神）。
+4. **done1** — 前沿风险清单 + 更新后的研究守则。
+
+## 测验
+
+<Quiz id="p8llm-q1" question="为何 LLM/agent 闭环提高过拟合风险？" options={["不再需要 OOS", "放大试错/假设数但零假设不变", "保证更高夏普", "禁止 DSR"]} answer={1} explanation="自动化放大多重检验问题。" />
+<Quiz id="p8llm-q2" question="密封 hold-out 指？" options={["每周重用 IS", "冻结选择后对留出期只评估一次", "在测试年拟合", "去掉成本"]} answer={1} explanation="Quant-Arena 精神：冻结后只打开一次。" />
+<Quiz id="p8llm-q3" question="本课对 Chain-of-Alpha arXiv:2508.06312？" options={["必须实现的主论文", "存在但已撤回——放弃细节主张", "证明双链总有效", "取代 RD-Agent"]} answer={1} explanation="已核验被 arXiv 管理员撤回。" />
+<Quiz id="p8llm-q4" question="Lopez-Lira & Tang 强调打分对象是？" options={["仅截止前标题", "知识截止日期之后的标题", "无新闻的随机代码", "仅 L2"]} answer={1} explanation="截止后设计是其预测主张的核心。" />
+<Quiz id="p8llm-q5" question="实验 LEAK 情绪对照教会？" options={["总是交易 GPT 分数", "截止/记忆可伪造巨大 IC", "成本可省略", "DSR 永远 N=1"]} answer={1} explanation="诚实 PIT 路径 vs 前瞻类比。" />
+<Quiz id="p8llm-q6" question="RD-Agent(Q) 阶段包括？" options={["仅实盘路由", "Research 假设再 Development 实现并反馈", "删除 purge 窗", "跳过伦理"]} answer={1} explanation="Research ↔ Development 联合优化闭环。" />
+
+## 完成标准
+
+前沿风险清单 + 更新研究守则（密封 OOS、显式 N、不依赖已撤回 PDF）。
+
+**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**已撤回** — 仅警示）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023；niche：@_zheergen Spec+AI 仅动机。
+
+<Summary>
+**要点**：agent 放大试错 → 更严 DSR/密封 OOS；mock ≠ API；撤回论文只做脚注不做流水线。  
+**下一课**：`frontier-tsfm-altdata-crypto`（TSFM 谨慎结论、资金费率/链上、Nautilus 同构代码）。
+</Summary>

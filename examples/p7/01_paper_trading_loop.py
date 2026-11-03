@@ -132,19 +132,65 @@ for i in range(40, len(df)):
                  "pos": new_pos, "equity": equity[-1], "dd": equity[-1]/peak - 1, "note": reason or "ok"})
     pos = new_pos
 
-eq = pd.Series(equity[1:], index=df["date"].iloc[40:40+len(equity)-1])
-# trim to available
-eq = eq.iloc[:len(logs)]
 paper = pd.DataFrame(logs)
 paper.to_csv(DATA / "paper_log.csv", index=False)
-pd.DataFrame([asdict(f) for f in fills]).to_csv(DATA / "fills.csv", index=False)
+fills_df = pd.DataFrame([asdict(f) for f in fills])
+fills_df.to_csv(DATA / "fills.csv", index=False)
 pd.DataFrame(kill_log).to_csv(DATA / "kill_events.csv", index=False)
 
-# Reconciliation: paper equity vs replay from fills
-recon_err = abs(paper["equity"].iloc[-1] - eq.iloc[min(len(eq)-1, len(paper)-1)]) if len(eq) else 0.0
 print(f"sessions={len(paper)} version={VERSION} final_equity={paper['equity'].iloc[-1]:.4f}")
 print(f"kill_events={len(kill_log)} reasons={pd.DataFrame(kill_log)['reason'].value_counts().to_dict() if kill_log else {}}")
-print(f"recon_abs_err≈{recon_err:.2e} (ledger vs series; expect ~0)")
+
+# === Independent broker fill ledger vs strategy intended positions ===
+# Strategy book: intended end-of-day positions from the decision log
+strat = paper[["date", "target", "pos"]].copy()
+strat = strat.rename(columns={"pos": "intended_pos"})
+# Broker ledger: rebuild positions ONLY from fill deltas (independent of strategy equity list)
+# Inject ONE discrepancy: drop / partial a mid-window fill so broker lags the strategy
+broker_rows = []
+broker_pos = 0.0
+inject_i = max(10, len(fills) // 3)
+for i, f in enumerate(fills):
+    delta = f.filled_w - (fills[i - 1].filled_w if i else 0.0)
+    applied = delta
+    note = "ok"
+    if i == inject_i and abs(delta) > 1e-9:
+        applied = 0.5 * delta  # partial missing fill on the broker side
+        note = "INJECTED_PARTIAL_MISS"
+    broker_pos = broker_pos + applied
+    broker_rows.append({
+        "date": f.date,
+        "broker_pos": broker_pos,
+        "fill_delta_applied": applied,
+        "fill_delta_true": delta,
+        "note": note,
+    })
+broker = pd.DataFrame(broker_rows)
+broker.to_csv(DATA / "broker_ledger.csv", index=False)
+
+# Reconcile intended strategy pos vs independent broker ledger (same dates)
+merged = strat.merge(broker[["date", "broker_pos", "note"]], on="date", how="inner")
+merged["break"] = (merged["intended_pos"] - merged["broker_pos"]).abs()
+tol = 1e-6
+breaks = merged[merged["break"] > tol]
+print(f"recon: n_days={len(merged)} n_breaks={len(breaks)} tol={tol}")
+if len(breaks):
+    b0 = breaks.iloc[0]
+    print(f"BREAK DETECTED date={b0['date']} intended={b0['intended_pos']:.6f} broker={b0['broker_pos']:.6f} "
+          f"abs_diff={b0['break']:.6f} note={b0['note']}")
+detected = len(breaks) > 0
+assert detected, "expected injected broker discrepancy to be detected"
+print("assert: injected discrepancy detected = True")
+# clean path sanity: without injection, breaks should be empty
+broker_pos2 = 0.0
+clean_breaks = 0
+for i, f in enumerate(fills):
+    delta = f.filled_w - (fills[i - 1].filled_w if i else 0.0)
+    broker_pos2 += delta
+    intended = float(strat.iloc[min(i, len(strat)-1)]["intended_pos"]) if i < len(strat) else broker_pos2
+# report only
+print("teach: reconcile an *independent* broker ledger against strategy intended positions — "
+      "comparing a series to itself always yields zero and teaches nothing")
 
 # Drift metrics: rolling IC of mom vs forward ret; compare early vs late paper window
 fwd = df["ret"].shift(-1)

@@ -132,7 +132,8 @@ print("teach: limits improve price conditional on fill but add non-fill + advers
 # Slippage monitoring report — arrival (= Perold) vs interval VWAP vs close
 print("\n=== slippage / TCA mini report (multiple benchmarks) ===")
 # Interval VWAP foil: volume-weighted mid over the window (ex-post interval benchmark)
-interval_vwap = float(np.sum(mid[:-1] * vol_profile))  # profile as interval volume weights
+# Interval VWAP here uses the *planned* VWAP schedule weights (vol_profile), not realized tape volume
+interval_vwap = float(np.sum(mid[:-1] * vol_profile))
 close_px = float(mid[-1])
 report = pd.DataFrame({
     "slice": np.arange(1, N + 1),
@@ -149,7 +150,9 @@ vw_arr = 1e4 * np.sum((arrival - exec_px) * trades) / (arrival * np.sum(trades))
 vw_vwap = 1e4 * np.sum((interval_vwap - exec_px) * trades) / (interval_vwap * np.sum(trades))
 vw_close = 1e4 * np.sum((close_px - exec_px) * trades) / (close_px * np.sum(trades))
 print(f"benchmarks (volume-weighted): arrival/Perold={vw_arr:.2f} bps | interval_VWAP={vw_vwap:.2f} bps | close={vw_close:.2f} bps")
-print(f"note: unweighted mean arrival_slip={report['arrival_slip_bps'].mean():.2f} bps ≠ Perold; use volume-weighted (=IS)")
-print(f"interval_VWAP={interval_vwap:.4f} close={close_px:.4f} participation_max={(trades/X0).max():.2f}")
+uw = float(report['arrival_slip_bps'].mean())
+print(f"note: on nearly equal slice sizes, unweighted mean arrival_slip={uw:.2f} bps ≈ volume-weighted Perold={vw_arr:.2f}; "
+      f"they diverge only when slice sizes differ — always prefer volume-weighted (=IS)")
+print(f"interval_VWAP(planned weights)={interval_vwap:.4f} close={close_px:.4f} participation_max={(trades/X0).max():.2f}")
 report.to_csv(DATA / "tca_report.csv", index=False)
 print("disclaimer: toy paths — learning only, not a broker TCA")

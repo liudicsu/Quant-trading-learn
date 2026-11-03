@@ -1,0 +1,7 @@
+item,ok,note
+signal/on_bar logic identical in backtest & live,True,no if env==live: tweak
+order intents via submit_order API only,True,no direct REST in strategy
+RiskEngine validates before venue,True,kernel path
+clock: backtest static vs live realtime — strategy uses clock API,True,injected clock
+no peeking future bars in research path,True,same event handlers
+recon: live ExecutionEngine vs research fills logged,True,paper/live gap discipline

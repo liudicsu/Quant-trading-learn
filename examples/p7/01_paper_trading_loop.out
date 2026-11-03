@@ -8,7 +8,10 @@ look-ahead: signals use only past closes; fills use next open (+latency foil)
 === paper loop (simulated fills; no broker) ===
 sessions=360 version=mom20_vt_v1.0.0 final_equity=0.9291
 kill_events=325 reasons={'dd_derisk': 325}
-recon_abs_err≈0.00e+00 (ledger vs series; expect ~0)
+recon: n_days=360 n_breaks=240 tol=1e-06
+BREAK DETECTED date=2024-08-13 intended=-0.035916 broker=-0.035494 abs_diff=0.000422 note=INJECTED_PARTIAL_MISS
+assert: injected discrepancy detected = True
+teach: reconcile an *independent* broker ledger against strategy intended positions — comparing a series to itself always yields zero and teaches nothing
 drift: Spearman(mom20, fwd_ret) early=-0.130 late=-0.087 delta=0.044
 
 === live vs backtest gap decomposition (same signal, different frictions) ===

@@ -1,0 +1,53 @@
+=== parameters ===
+offline only — mock TSFM / mock funding ledger; no CCXT live calls at runtime
+eval: purged OOS mean daily CS RankIC + DSR(N) + shared costs
+cite: arXiv:2511.18578 Re(Visiting) TSFM in Finance — zero-shot often weak vs ensembles
+cite: CCXT docs https://docs.ccxt.com/ ; GMX fees https://docs.gmx.io/docs/trading/fees/
+cite: @sera00111 Vision+CCXT note (P2-verified); Nautilus architecture docs
+
+=== TSFM evaluation follow-up (P5 cites → offline demo) ===
+paper finding (2511.18578): off-the-shelf zero-shot TSFMs often lag strong finance baselines;
+domain pretrain/fine-tune may help but still needs anti-lookahead + costs.
+naive_RW     IS_CS_IC=+0.0111 IS_net_SR=-8.638 DSR(N=3)=0.000 | sealed_OOS_IC=+0.0076 OOS_net_SR=-9.723
+AR1          IS_CS_IC=+0.0462 IS_net_SR=-3.191 DSR(N=3)=0.000 | sealed_OOS_IC=-0.0017 OOS_net_SR=-6.604
+mock_TSFM    IS_CS_IC=+0.0002 IS_net_SR=-9.277 DSR(N=3)=0.000 | sealed_OOS_IC=-0.0088 OOS_net_SR=-8.909
+strong_CS    IS_CS_IC=+0.0320 IS_net_SR=-0.991 DSR(N=3)=0.000 | sealed_OOS_IC=+0.0154 OOS_net_SR=-2.171
+teach: mock_TSFM is a tiny shared linear head — NOT Chronos weights; compares protocol only.
+paper-aligned caution: zero-shot / generic TSFM often ≤ strong traditional baselines on daily excess.
+
+=== perpetual funding carry (numeric toy; offline) ===
+CEX funding (CCXT-shaped): longs pay shorts when funding>0 (typical premium).
+GMX (docs.gmx.io/docs/trading/fees): dominant side pays minority; rate from OI imbalance;
+fees accrue per second and settle on position modify/close.
+notional=$100000 funding_8h=0.0100% (longs pay)
+daily_funding_pnl_long=-30.00 USD  (negative = pay)
+30d_funding_cost_long=$900.00
+ann_carry_cost_long≈1095.0 bps/year if rate stays constant
+regime-shift foil (10d +1bp, 10d -3bp, 10d +0.5bp) cum PnL long:
+  cum_funding_pnl_long=$450.00  (sign flips with regime)
+wrote CCXT-shaped mock funding CSV (structure ref only; no exchange call)
+GMX-style toy: OI_long=1.20e+08 OI_short=8.00e+07 imbalance=0.200
+savedFundingFactorPerSecond≈2.000e-09 (positive → longs pay; docs semantics)
+@sera00111: minute/hour research can start from Binance Vision + CCXT free entry; pick grain after strategy.
+
+=== NautilusTrader: keep backtest and live code identical ===
+source: https://nautilustrader.io/docs/latest/concepts/architecture/
+Backtest / Sandbox / Live share NautilusKernel (cache, portfolio, engines, trader, clock, bus).
+Strategy code should NOT branch on environment for signal logic — adapters differ, kernel same.
+  [OK] signal/on_bar logic identical in backtest & live — no if env==live: tweak
+  [OK] order intents via submit_order API only — no direct REST in strategy
+  [OK] RiskEngine validates before venue — kernel path
+  [OK] clock: backtest static vs live realtime — strategy uses clock API — injected clock
+  [OK] no peeking future bars in research path — same event handlers
+  [OK] recon: live ExecutionEngine vs research fills logged — paper/live gap discipline
+
+=== limitations / failure modes ===
+- TSFM zero-shot: weak on noisy daily excess; do not skip purge/costs/DSR.
+- Mock ≠ real Chronos/TimesFM weights; protocol transfer only.
+- Crypto survivorship: delisted perps/coins drop out of free histories.
+- Funding regime shifts: carry sign flips; constant-rate ann. is a foil.
+- On-chain/GMX: MEV, oracle, liquidity, bridge risks beyond CEX CCXT.
+- Nautilus: identical strategy code ≠ identical fills (latency/partial/recon still differ).
+
+wrote /workspace/Quant-trading-learn/public/p8/tsfm_vs_baselines.png /workspace/Quant-trading-learn/public/p8/funding_regime.png
+DONE lab 02

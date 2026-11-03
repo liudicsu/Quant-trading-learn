@@ -1,0 +1,10 @@
+{
+  "N_TRIALS_AGENT": 8,
+  "kept": [
+    "noise_A",
+    "slow_lag1"
+  ],
+  "agent_sealed_OOS_IC": 0.01611301180885112,
+  "honest_sealed_OOS_IC": 0.015375155690794144,
+  "chain_of_alpha": "withdrawn_drop_detailed_claims"
+}

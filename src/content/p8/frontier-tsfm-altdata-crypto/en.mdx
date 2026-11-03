@@ -1,9 +1,104 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**8 hours**: 4h papers/docs + 3h design exercises + 1h optional structure lab) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
+
+**Goals:** summarize cautious TSFM daily excess-return findings; design alt-data PIT/lag checks; explain CEX CCXT vs on-chain adapter risks.
+
+**Must-teach:** zero-shot TSFMs often lag strong traditional baselines; domain pretrain still needs anti-lookahead; alt-data timestamps/revisions are first-order; funding/on-chain ≠ free alpha.
+
+<Callout type="info" title="Learning only — not investment advice">
+Offline mocks for TSFM, funding ledgers, and GMX-style OI. No exchange keys, no live CCXT calls at runtime.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Same synthetic CS panel as lab 01; IS 400d / sealed OOS 120d
+- TSFM demo: naive RW, AR(1), mock shared-ridge “TSFM head”, strong CS baseline
+- Funding toy: $100k notional, +1 bp / 8h × 3 / day; regime-shift foil
+- Eval: mean daily CS RankIC + DSR(**N=3**) + shared costs
+
+## TSFM finance eval (follow-up on P5)
+
+[Re(Visiting) Time Series Foundation Models in Finance](https://arxiv.org/abs/2511.18578) is the verified large-scale study cited in P5: off-the-shelf zero-shot TSFMs (Chronos/TimesFM-class) are often **weak vs strong finance baselines** on daily excess returns; fine-tune / domain pretrain can help but still need leakage controls. Lab `02_tsfm_crypto_nautilus.py` compares protocols offline — the mock is a **tiny shared linear head**, not real Chronos weights.
+
+![TSFM mock vs baselines](/p8/tsfm_vs_baselines.png)
+
+Lab sealed-OOS mean CS IC (illustrative): `strong_CS ≈ +0.015` &gt; `naive_RW ≈ +0.008` &gt; `AR1 ≈ −0.002` &gt; `mock_TSFM ≈ −0.009`. Net SR after shared costs stays negative — honest case (c) again.
+
+## Alt-data PIT / lag
+
+Treat sentiment, filings, web scrapes like any other feature: **as-of timestamps**, revision histories, and embargoes. Reuse the Lopez-Lira post-cutoff idea from the sibling lesson; never join a “final” restated field as if it were available on day 0.
+
+## Crypto / on-chain: CCXT, funding, GMX, @sera00111
+
+- **[CCXT](https://docs.ccxt.com/)** — unified CEX API surface (tickers, OHLCV, funding). Lab writes a **CCXT-shaped** funding CSV offline (`symbol`, `fundingRate`, `markPrice`, …) — structure reference only.
+- **Funding carry (numeric):** $100k long perp, +1 bp per 8h → ≈ **−$30/day**, ≈ **$900 / 30d**, ≈ **1095 bps/year** if the rate never moves. Regime foil flips the sign — constant-rate ann. is a teaching foil, not a forecast.
+- **[GMX fees docs](https://docs.gmx.io/docs/trading/fees/)** — dominant side pays minority; funding tied to OI imbalance; accrues per second, settles on modify/close. Lab prints a toy `savedFundingFactorPerSecond` from OI imbalance.
+- **[@sera00111 tooling note](https://x.com/sera00111/status/2108332340753969191)** (P2-verified): minute/hour research can start from [Binance Vision](https://data.binance.vision/) + CCXT-style free entry; choose grain **after** you know the strategy.
+
+![Funding regime foil](/p8/funding_regime.png)
+
+## NautilusTrader: identical backtest &amp; live code
+
+[NautilusTrader architecture](https://nautilustrader.io/docs/latest/concepts/architecture/): **Backtest / Sandbox / Live** share one **`NautilusKernel`** (cache, portfolio, data/exec/risk engines, trader, clock, message bus). Adapters differ; **strategy signal logic should not branch on environment**. Lab checklist: same `on_bar` / `submit_order` path, injected clock, RiskEngine before venue, recon still required (identical code ≠ identical fills).
+
+## Python lab
+
+`examples/p8/02_tsfm_crypto_nautilus.py`
+
+### Real run output
+
+```text
+=== TSFM evaluation follow-up (P5 cites → offline demo) ===
+naive_RW     IS_CS_IC=+0.0111 ... | sealed_OOS_IC=+0.0076 ...
+AR1          IS_CS_IC=+0.0462 ... | sealed_OOS_IC=-0.0017 ...
+mock_TSFM    IS_CS_IC=+0.0002 ... | sealed_OOS_IC=-0.0088 ...
+strong_CS    IS_CS_IC=+0.0320 ... | sealed_OOS_IC=+0.0154 ...
+
+=== perpetual funding carry (numeric toy; offline) ===
+notional=$100000 funding_8h=0.0100% (longs pay)
+daily_funding_pnl_long=-30.00 USD
+30d_funding_cost_long=$900.00
+ann_carry_cost_long≈1095.0 bps/year if rate stays constant
+regime-shift foil ... cum_funding_pnl_long=$450.00
+
+=== NautilusTrader: keep backtest and live code identical ===
+  [OK] signal/on_bar logic identical in backtest & live
+  [OK] order intents via submit_order API only
+  ...
+```
+
+## Limitations / failure modes
+
+- Zero-shot TSFM on noisy daily excess often loses to strong CS/tree baselines.
+- Mock ≠ published Chronos/TimesFM checkpoints.
+- **Crypto survivorship:** delisted perps/coins vanish from free histories.
+- **Funding regime shifts** flip carry; bridges/MEV/oracle/liquidity risks sit outside CEX CCXT.
+- Nautilus identical kernel ≠ identical latency, partial fills, or recon outcomes.
+
+## Practice (1:1)
+
+1. **ex1** — From 2511.18578 (or lab), list **5** reasons not to go naive-live with a zero-shot TSFM.
+2. **ex2** — Design lag/revision rules for a fake sentiment series (PIT join key + embargo).
+3. **ex3** — (Optional structure) sketch a CCXT `fetchFundingRateHistory`-shaped table; use the lab mock, no keys.
+4. **done1** — One-page TSFM caution memo + alt-data timing rules.
+
+## Quiz
+
+<Quiz id="p8ts-q1" question="arXiv:2511.18578 on zero-shot Chronos/TimesFM in finance?" options={["Always beat LightGBM", "Often weak vs strong traditional baselines on daily excess", "Removes purge needs", "Proves free funding alpha"]} answer={1} explanation="Verified cautious finance TSFM evaluation." />
+<Quiz id="p8ts-q2" question="Alt-data first-order risk is?" options={["Plot colors", "Timestamps and revisions / PIT availability", "Variable names", "GPU brand"]} answer={1} explanation="As-of and revision control." />
+<Quiz id="p8ts-q3" question="Positive CEX funding usually means?" options={["Shorts pay longs always", "Longs pay shorts (premium)", "Fees are zero", "Oracles halt"]} answer={1} explanation="Classic perpetual premium funding." />
+<Quiz id="p8ts-q4" question="NautilusTrader Backtest vs Live share?" options={["Nothing", "NautilusKernel (engines/cache/bus/trader)", "Only CSV loaders", "Only cloud GPUs"]} answer={1} explanation="Official architecture: common kernel." />
+<Quiz id="p8ts-q5" question="Lab funding 1095 bps/year assumes?" options={["Rate never changes", "Perfect foresight of regimes", "Zero notional", "No 8h prints"]} answer={0} explanation="Constant-rate foil; regime shift changes PnL sign." />
+<Quiz id="p8ts-q6" question="@sera00111 crypto toolchain note suggests?" options={["Always buy tick L3 first", "Start from Vision/CCXT-scale data; pick grain after the strategy", "Skip costs", "Ignore survivorship"]} answer={1} explanation="P2-verified niche tooling advice." />
+
+## Done when
+
+TSFM caution memo + alt-data timing one-pager (with funding/on-chain risk bullets).
+
+**Sources (read and used above):** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578); P5 also cites 2412.09880, 2606.27100; [CCXT docs](https://docs.ccxt.com/); [GMX fees](https://docs.gmx.io/docs/trading/fees/); [@sera00111](https://x.com/sera00111/status/2108332340753969191); [Nautilus architecture](https://nautilustrader.io/docs/latest/concepts/architecture/); [Binance Vision](https://data.binance.vision/).
+
+<Summary>
+**Takeaways**: TSFMs need the same purge/costs/DSR; funding is a regime-sensitive carry, not free alpha; Nautilus keeps strategy code identical — fills still differ.  
+**Next**: P9 capstone (honest small strategy). This phase stops at P8.
+</Summary>

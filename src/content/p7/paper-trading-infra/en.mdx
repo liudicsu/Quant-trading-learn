@@ -27,7 +27,9 @@ Synthetic bars and simulated fills. Nothing here connects to a live broker.
 
 ## Reconciliation and drift
 
-Lab recon absolute error ≈ 0 between ledger and equity series. Drift foil: Spearman(mom20, fwd_ret) early ≈ −0.13 vs late ≈ −0.09 (delta ≈ +0.04) — monitor distribution shift even when IC is weak.
+**Independent broker ledger:** rebuild positions only from fill deltas, separately from the strategy equity list. Lab injects one **partial miss** on the broker side; reconcile against strategy intended positions and **assert the break is detected** (date printed with abs_diff &gt; 0). Comparing a series to itself always yields zero and teaches nothing.
+
+Drift foil: Spearman(mom20, fwd_ret) early ≈ −0.13 vs late ≈ −0.09 (delta ≈ +0.04).
 
 ## Live vs backtest gap (numeric)
 
@@ -68,7 +70,8 @@ Unit demo triggers:
 
 ```
 sessions=360 version=mom20_vt_v1.0.0 final_equity≈0.93
-kill reasons include dd_derisk; unit demo fires dd_kill / data_gap / gross_clip
+BREAK DETECTED … INJECTED_PARTIAL_MISS; assert detected=True
+kill unit demo: dd_derisk / dd_kill / data_gap / gross_clip
 cum_return research_bt≈-0.030 +latency≈+0.015 +slip≈-0.008 +partial≈-0.016
 ```
 

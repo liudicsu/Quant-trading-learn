@@ -44,9 +44,11 @@ Market orders pay the half-spread for immediacy (lab mean cost 0.02). Limits imp
 
 ## Slippage monitoring / TCA mini-report
 
-**Identity:** the *volume-weighted* arrival-price slippage equals Perold IS in bps — `Σ (arrival − exec)·n / (arrival·X0)`. It is **not** a second independent ~104 bps result. An *unweighted* mean of per-slice slip differs slightly and should not be quoted as IS.
+**Identity:** the *volume-weighted* arrival-price slippage equals Perold IS in bps — `Σ (arrival − exec)·n / (arrival·X0)`. Always report that quantity as IS.
 
-Lab volume-weighted benchmarks on the same fills: **arrival/Perold ≈ 103.8 bps**, **interval VWAP ≈ 100.0 bps**, **close ≈ 95.4 bps**. Export `examples/p6/data/tca_report.csv`.
+On this path slice sizes are nearly equal, so the unweighted mean of per-slice arrival slips **coincides** with the volume-weighted Perold number (~103.8 bps). They diverge only when slice sizes differ — do not treat “unweighted ≠ Perold” as a universal claim.
+
+**Interval VWAP** here uses the **planned** VWAP schedule weights (`vol_profile`), not realized tape volume. Lab volume-weighted benchmarks: **arrival/Perold ≈ 103.8 bps**, **planned-weight interval VWAP ≈ 100.0 bps**, **close ≈ 95.4 bps**. Export `examples/p6/data/tca_report.csv`.
 
 ## Look-ahead warnings
 
@@ -64,8 +66,9 @@ Lab volume-weighted benchmarks on the same fills: **arrival/Perold ≈ 103.8 bps
 TWAP slice: [100000. 100000. 100000.] ...
 VWAP slice: [160793.8 ... 160793.8]  # U-shape
 arrival=100.00 IS≈1038421 IS_bps≈103.8
-volume_weighted_arrival_slip_bps=103.8  (== IS_bps)
-benchmarks: arrival/Perold=103.84 | interval_VWAP=100.03 | close=95.35
+volume_weighted_arrival_slip_bps=103.8 (== IS_bps)
+note: unweighted≈VW when slices nearly equal; interval_VWAP uses planned weights
+benchmarks: arrival/Perold=103.84 | planned_interval_VWAP=100.03 | close=95.35
 market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 ```
 

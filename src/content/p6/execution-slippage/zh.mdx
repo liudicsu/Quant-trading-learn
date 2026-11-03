@@ -44,9 +44,11 @@ Perold（*Journal of Portfolio Management* 14(3)，pp. 4–9）把**实施缺口
 
 ## 滑点监控 / TCA 小报告
 
-**恒等式：** *成交量加权*到达价滑点在 bps 上等于 Perold IS——`Σ (arrival − exec)·n / (arrival·X0)`。它**不是**第二个独立的约 104 bps 结果。片均（未加权）滑点略有差别，不应当作 IS 引用。
+**恒等式：** *成交量加权*到达价滑点在 bps 上等于 Perold IS——`Σ (arrival − exec)·n / (arrival·X0)`。请始终用该量作为 IS。
 
-同一成交上的成交量加权基准：**到达价/Perold ≈ 103.8 bps**，**区间 VWAP ≈ 100.0 bps**，**收盘 ≈ 95.4 bps**。导出 `examples/p6/data/tca_report.csv`。
+本路径切片规模几乎相等，故片均（未加权）到达价滑点与成交量加权 Perold **数值重合**（约 103.8 bps）。仅当切片规模不同时两者才会分叉——不要把「未加权 ≠ Perold」写成普适结论。
+
+此处的**区间 VWAP**使用的是**计划** VWAP 日程权重（`vol_profile`），不是实现成交量。成交量加权基准：**到达价/Perold ≈ 103.8 bps**，**计划权重区间 VWAP ≈ 100.0 bps**，**收盘 ≈ 95.4 bps**。导出 `examples/p6/data/tca_report.csv`。
 
 ## 前瞻警告
 
@@ -64,8 +66,9 @@ Perold（*Journal of Portfolio Management* 14(3)，pp. 4–9）把**实施缺口
 TWAP slice: [100000. 100000. 100000.] ...
 VWAP slice: [160793.8 ... 160793.8]  # U-shape
 arrival=100.00 IS≈1038421 IS_bps≈103.8
-volume_weighted_arrival_slip_bps=103.8  (== IS_bps)
-benchmarks: arrival/Perold=103.84 | interval_VWAP=100.03 | close=95.35
+volume_weighted_arrival_slip_bps=103.8 (== IS_bps)
+note: unweighted≈VW when slices nearly equal; interval_VWAP uses planned weights
+benchmarks: arrival/Perold=103.84 | planned_interval_VWAP=100.03 | close=95.35
 market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 ```
 

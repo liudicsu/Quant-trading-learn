@@ -1,9 +1,110 @@
-## Body placeholder
+## Learning goals
 
-<Callout type="warn" title="Coming in a later batch">
-The V2 outline for this lesson is fixed; the full body will be written later. Learning only — not investment advice.
+This lesson (~**8 hours**: 4h guided reading + 3h critical exercises + 1h rules rewrite) treats **LLM / multi-agent quant R&D** as a *frontier* under the same anti-leakage and multiple-testing discipline as P4–P5 — never as a shortcut. Prereqs: `factor-workflow`, `ml-leakage-control`, `modern-ml-pipelines`, `compliance-ethics`.
+
+**Goals:** state the RD-Agent(Q) loop; list LLM factor-mining failure modes; design a sealed-OOS acceptance bar.
+
+**Must-teach:** automation amplifies trials → stricter multiple testing; paper metrics ≠ your reproducible edge; agent outputs enter the same trap interrogation.
+
+<Callout type="info" title="Learning only — not investment advice">
+Offline **mocks** only. No ChatGPT/Claude/API calls at runtime. Labs never place live orders.
 </Callout>
 
-## For now
+## Parameters
 
-Finish all three **P0** lessons first. The task checklist on this page is ready for planning.
+- Synthetic CS panel: 40 assets × 520 sessions; weak latent + lagged `slow` driver
+- Agent IS window 400d; **sealed OOS** last 120d (freeze then open once)
+- Primary: **mean daily CS RankIC**; DSR with **explicit N**; shared costs (10 bps + impact)
+- Mocks stand in for LLMs; formula bank = “Development” artefacts
+
+## RD-Agent(Q) (read the paper)
+
+[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155) (NeurIPS 2025) is a **data-centric multi-agent** framework for factor–model co-optimization. It splits work into a **Research** stage (goal-aligned prompts, hypotheses → tasks) and a **Development** stage that implements and feeds results back. Microsoft’s [RD-Agent](https://github.com/microsoft/RD-Agent) repo is the engineering home. Automation **multiplies** hypotheses — so purged OOS, costs, and DSR(N) get *more* important, not less.
+
+Lab `examples/p8/01_llm_agents_offline.py` mocks the loop with a formula bank + IS keep rule (`mean_CS_IC > 0.01`). That rule **keeps noise** alongside the weak true factor — exactly the overfitting story.
+
+![Mock RD-Agent proposals](/p8/rdagent_proposals.png)
+
+## Sealed hold-out (Quant-Arena spirit)
+
+[Quant-Arena](https://arxiv.org/abs/2610.30113) benchmarks whether LLM agents can finish the research loop and still work **beyond** the research period. Teach the protocol: **freeze** the factor list after IS; open a sealed year **once**; no re-mining after a peek. Lab prints sealed OOS IC for `agent_kept` vs `honest_slow`.
+
+Stable companion: [LLM+MCTS formulaic mining](https://arxiv.org/abs/2505.11122) — still subject to the same interrogation.
+
+## Chain-of-Alpha — verified withdrawn
+
+[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **exists on arXiv** but carries an admin comment that the version was **removed** (submitter lacked rights to agree to the license). **Drop detailed dual-chain claims**; do not depend on an unstable PDF. Prefer RD-Agent(Q), LLM+MCTS, Quant-Arena.
+
+## LLM sentiment (Lopez-Lira &amp; Tang 2023)
+
+[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619) (Lopez-Lira &amp; Tang) shows GPT scores on **post-knowledge-cutoff** headlines can predict reactions/drift — and that edge shrinks as adoption rises. Lab builds an offline `mock_sentiment` (PIT) vs a **LEAK** foil that peeks at next returns (cutoff/memorization analogue). LEAK IC ≈ +0.67 is a warning, not a strategy.
+
+![Agent vs honest NAV](/p8/agent_vs_honest_nav.png)
+
+## Python lab
+
+`examples/p8/01_llm_agents_offline.py`
+
+### Real run output
+
+```text
+=== parameters ===
+offline mocks only — no LLM API, no network at runtime
+eval: purged OOS mean daily CS RankIC + DSR(N) + shared 10bps+impact costs
+cite: RD-Agent(Q) arXiv:2505.15155; Lopez-Lira&Tang arXiv:2304.07619
+cite: LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113
+Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN by arXiv admins; drop detailed claims
+
+=== mock RD-Agent(Q) loop (Research → Development → Co-STEER-style keep/reject) ===
+...
+kept factors after agent loop: ['noise_A', 'slow_lag1']
+explicit trial count N_TRIALS_AGENT=8 (for DSR)
+
+=== purged / sealed OOS evaluation (same framework as P4/P5) ===
+agent_kept       purged_OOF_IC=+0.0299 IS_net_SR=-6.646 DSR(N=8)=0.000 | sealed_OOS_IC=+0.0161 OOS_net_SR=-7.707 OOS_DSR=0.000
+honest_slow      purged_OOF_IC=+0.0320 IS_net_SR=-0.991 DSR(N=1)=0.107 | sealed_OOS_IC=+0.0154 OOS_net_SR=-2.171 OOS_DSR=0.067
+
+=== mock Lopez-Lira & Tang (2023) headline sentiment (offline) ===
+mock_sentiment_PIT     post_cutoff mean_CS_IC=+0.0011 t=0.12 net_SR=-12.015 DSR(N=2)=0.000
+mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 t=125.99 net_SR=48.362 DSR(N=2)=1.000
+teach: LEAK foil inflates IC (cutoff/memorization analogue); PIT mock is the honest path.
+
+=== Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===
+Verified on arXiv: entry exists but admin comment says version removed
+(submitter lacked rights to agree to the license). DROP detailed dual-chain claims.
+```
+
+## Limitations / failure modes
+
+- **Training cutoff / memorization:** pre-cutoff headlines are not forecasts; LEAK foils look amazing.
+- **Trial inflation:** agent rounds need explicit **N** in DSR; paper tables ≠ your sealed OOS.
+- **IS keep rules** overfit; sealed years must stay sealed.
+- **Withdrawn papers:** Chain-of-Alpha — cite existence + withdrawal, drop unstable claims.
+- Niche motivation only: XQuant Spec+AI run-first (@_zheergen) — still needs the same traps.
+
+## Practice (1:1)
+
+1. **ex1** — Read RD-Agent(Q) / RD-Agent notes; half-page risk list (cutoff, N-trials, costs, sealed OOS).
+2. **ex2** — Null + cost interrogation outline for one LLM-proposed factor (include DSR N).
+3. **ex3** — Rewrite your research rules with freeze-then-sealed-year (Quant-Arena spirit).
+4. **done1** — Frontier risk list + updated research rules committed to your notes.
+
+## Quiz
+
+<Quiz id="p8llm-q1" question="Why do LLM/agent loops raise overfitting risk?" options={["They remove the need for OOS", "They multiply trials/hypotheses without changing the null", "They guarantee higher Sharpe", "They ban DSR"]} answer={1} explanation="Automation amplifies the multiple-testing problem." />
+<Quiz id="p8llm-q2" question="A sealed hold-out means?" options={["Reuse IS every week", "Freeze selection then evaluate a held-out period once", "Fit on the test year", "Drop costs"]} answer={1} explanation="Quant-Arena spirit: freeze then open once." />
+<Quiz id="p8llm-q3" question="Chain-of-Alpha arXiv:2508.06312 in this curriculum?" options={["Primary must-implement paper", "Exists but withdrawn — drop detailed claims", "Proves dual-chain always works", "Replaces RD-Agent"]} answer={1} explanation="Verified withdrawn by arXiv admins." />
+<Quiz id="p8llm-q4" question="Lopez-Lira & Tang emphasize scoring?" options={["Only pre-cutoff headlines", "Post-knowledge-cutoff headlines", "Random tickers without news", "Intraday L2 only"]} answer={1} explanation="Post-cutoff design is central to their forecast claim." />
+<Quiz id="p8llm-q5" question="Lab LEAK sentiment foil teaches?" options={["Always trade GPT scores", "Cutoff/memorization can fake huge IC", "Costs are optional", "DSR needs N=1 always"]} answer={1} explanation="Honest PIT path vs look-ahead analogue." />
+<Quiz id="p8llm-q6" question="RD-Agent(Q) stages include?" options={["Only live broker routing", "Research hypotheses then Development implementation with feedback", "Deleting purge windows", "Skipping ethics"]} answer={1} explanation="Research ↔ Development co-optimization loop." />
+
+## Done when
+
+Frontier risk list + updated research rules (sealed OOS, explicit N, no withdrawn-PDF dependence).
+
+**Sources (read and used above):** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q); [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent); [arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha (**withdrawn** — caution only); [arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS; [arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena; [arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023; niche: @_zheergen Spec+AI motivation only.
+
+<Summary>
+**Takeaways**: agents multiply trials → stricter DSR/sealed OOS; mocks ≠ APIs; withdrawn papers get a footnote not a pipeline.  
+**Next**: `frontier-tsfm-altdata-crypto` (TSFM caution, funding/on-chain, Nautilus identical code).
+</Summary>

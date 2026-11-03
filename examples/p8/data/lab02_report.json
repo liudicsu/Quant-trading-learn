@@ -1,0 +1,9 @@
+{
+  "tsfm_paper": "arXiv:2511.18578",
+  "mock_vs_strong_OOS_IC": {
+    "mock_TSFM": -0.008841660491588762,
+    "strong_CS": 0.015375155690794144
+  },
+  "funding_ann_carry_bps_long": 1095.0,
+  "nautilus": "shared NautilusKernel across Backtest/Sandbox/Live"
+}

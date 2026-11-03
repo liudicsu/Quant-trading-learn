@@ -29,7 +29,7 @@ export interface Lesson {
   doneWhen: L10n[];
   methodTags: { classic: string[]; niche: string[]; frontier: string[] };
   tasks: Task[];
-  /** Site body status: P0–P7 written; P8+ stubs. */
+  /** Site body status: P0–P8 written; P9 stub. */
   status: "ready" | "outline";
 }
 
@@ -1231,7 +1231,7 @@ const phase_P7_lessons: Lesson[] = [
 const phase_P8_lessons: Lesson[] = [
   {
     slug: "frontier-llm-agents",
-    status: "outline",
+    status: "ready",
     title: { zh: "前沿：LLM / 多智能体量化研发", en: "Frontier: LLM / multi-agent quant R&D" },
     summary: { zh: "RD-Agent(Q)、公式化alpha挖掘、Quant-Arena：批判性试用，不替代防泄漏。", en: "RD-Agent(Q), formulaic alpha mining, Quant-Arena: critical trials — never replace anti-leakage." },
     hours: 8,
@@ -1275,7 +1275,7 @@ const phase_P8_lessons: Lesson[] = [
   },
   {
     slug: "frontier-tsfm-altdata-crypto",
-    status: "outline",
+    status: "ready",
     title: { zh: "前沿：时序基础模型 · 另类数据 · Crypto/链上", en: "Frontier: TSFMs · alt-data · crypto/on-chain" },
     summary: { zh: "Chronos/TimesFM金融评测的谨慎结论；另类数据；CCXT/资金费率/链上。", en: "Cautious Chronos/TimesFM finance results; alt-data; CCXT/funding/on-chain." },
     hours: 8,

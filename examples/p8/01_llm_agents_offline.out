@@ -1,0 +1,60 @@
+=== parameters ===
+offline mocks only — no LLM API, no network at runtime
+eval: purged OOS mean daily CS RankIC + DSR(N) + shared 10bps+impact costs
+cite: RD-Agent(Q) arXiv:2505.15155; Lopez-Lira&Tang arXiv:2304.07619
+cite: LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113
+Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN by arXiv admins; drop detailed claims
+
+=== mock RD-Agent(Q) loop (Research → Development → Co-STEER-style keep/reject) ===
+real paper: Research sets goal-aligned prompts/hypotheses; Development implements;
+factor–model co-optimization with iterative feedback (NeurIPS 2025 / arXiv:2505.15155).
+here: a formula bank stands in for LLM proposals; bandit keeps top by IS IC (danger!).
+IS days=400 sealed_OOS days=120 (freeze then open once)
+
+-- Research round 1: mock LLM proposes 3 hypotheses --
+  propose mom5         IS_mean_CS_IC=-0.0022 t=-0.20 → reject_weak_IS
+  propose noise_A      IS_mean_CS_IC=+0.0149 t=1.79 → keep_IS_ic>0.01
+  propose rev5         IS_mean_CS_IC=+0.0022 t=0.20 → reject_weak_IS
+
+-- Research round 2: mock LLM proposes 3 hypotheses --
+  propose mom20        IS_mean_CS_IC=+0.0051 t=0.45 → reject_weak_IS
+  propose slow_lag1    IS_mean_CS_IC=+0.0320 t=4.20 → keep_IS_ic>0.01
+  propose vol20        IS_mean_CS_IC=+0.0049 t=0.42 → reject_weak_IS
+
+-- Research round 3: mock LLM proposes 2 hypotheses --
+  propose mom5_x_vol   IS_mean_CS_IC=-0.0009 t=-0.09 → reject_weak_IS
+  propose noise_B      IS_mean_CS_IC=+0.0014 t=0.18 → reject_weak_IS
+
+kept factors after agent loop: ['noise_A', 'slow_lag1']
+explicit trial count N_TRIALS_AGENT=8 (for DSR)
+
+=== purged / sealed OOS evaluation (same framework as P4/P5) ===
+agent_kept       purged_OOF_IC=+0.0299 IS_net_SR=-6.646 DSR(N=8)=0.000 | sealed_OOS_IC=+0.0161 OOS_net_SR=-7.707 OOS_DSR=0.000
+honest_slow      purged_OOF_IC=+0.0320 IS_net_SR=-0.991 DSR(N=1)=0.107 | sealed_OOS_IC=+0.0154 OOS_net_SR=-2.171 OOS_DSR=0.067
+
+=== Quant-Arena spirit (arXiv:2610.30113) ===
+freeze factor list AFTER IS loop; evaluate sealed hold-out ONCE; no peeking / re-mining.
+frozen_kept=['noise_A', 'slow_lag1']
+sealed_OOS_IC agent=+0.0161 vs honest=+0.0154
+
+=== mock Lopez-Lira & Tang (2023) headline sentiment (offline) ===
+paper: GPT scores on post-knowledge-cutoff headlines predict reactions/drift (arXiv:2304.07619).
+here: synthetic 'headlines' → mock_sentiment in [-1,1]; NO ChatGPT call.
+mock_sentiment_PIT     post_cutoff mean_CS_IC=+0.0011 t=0.12 net_SR=-12.015 DSR(N=2)=0.000
+mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 t=125.99 net_SR=48.362 DSR(N=2)=1.000
+teach: LEAK foil inflates IC (cutoff/memorization analogue); PIT mock is the honest path.
+
+=== Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===
+Verified on arXiv: entry exists but admin comment says version removed
+(submitter lacked rights to agree to license). DROP detailed dual-chain claims.
+Prefer stable cites: RD-Agent(Q), LLM+MCTS (2505.11122), Quant-Arena (2610.30113).
+
+=== limitations / failure modes (must-read) ===
+- LLM training cutoff / memorization: scores on pre-cutoff headlines are not forecasts.
+- Agent loops multiply trials → DSR needs explicit N; paper metrics ≠ your OOS edge.
+- IS keep rules (IC>threshold) overfit; sealed hold-out must stay sealed.
+- Formula banks / CoT traces can look interpretable while mining noise.
+- Chain-of-Alpha withdrawn: do not rely on unstable PDFs.
+
+wrote /workspace/Quant-trading-learn/public/p8/rdagent_proposals.png /workspace/Quant-trading-learn/public/p8/agent_vs_honest_nav.png
+DONE lab 01

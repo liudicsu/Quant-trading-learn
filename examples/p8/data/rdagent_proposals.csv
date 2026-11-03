@@ -1,0 +1,9 @@
+name,formula,is_ic,kept,reason
+mom5,"rolling_sum(ret,5)",-0.0022068717190668395,False,reject_weak_IS
+noise_A,gaussian_noise(),0.014930581613508442,True,keep_IS_ic>0.01
+rev5,"-rolling_sum(ret,5)",0.0022068717190668395,False,reject_weak_IS
+mom20,"rolling_sum(ret,20)",0.005081916355202318,False,reject_weak_IS
+slow_lag1,"lag(slow,1)",0.03204352344275323,True,keep_IS_ic>0.01
+vol20,"-rolling_std(ret,20)",0.004938125698640395,False,reject_weak_IS
+mom5_x_vol,mom5/(vol20+eps),-0.0009065705435976236,False,reject_weak_IS
+noise_B,gaussian_noise(),0.0014221388367729858,False,reject_weak_IS
