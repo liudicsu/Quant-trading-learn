@@ -1,9 +1,188 @@
-## 正文占位
+## 学习目标
 
-<Callout type="warn" title="后续批次撰写">
-本课大纲已定（V2），正文将在后续批次填写。学习用途，非投资建议。
+本课（约 **8 学时**：架构 3h + 小流水线 4h + 可选 Qlib 1h）搭建**可复现 ML 量化流水线**：purged CV 下 ridge vs GBM、重要度（MDI/MDA/SHAP）、校准与下注，以及 Qlib 风格 Alpha158 + LGBModel 的 pandas 镜像。前置：`ml-leakage-control`、`data-cleaning`。
+
+**课内目标：** 特征→模型→预测→简单组合草图；先树/线性再深度；可选阅读 Qlib 工作流。
+
+**必须教会：** 可版本化流水线重于花哨模型；Qlib Data/Model/Portfolio/Analysis；MDI/MDA/SHAP 与替代效应；校准 + AFML ch.10 下注；公开数据≠优势；零样本 TSFM 常弱于树模型（已核验论文）。
+
+<Callout type="info" title="学习用途 — 非投资建议">
+与实验 01 同一弱面板。净夏普可为负——在 purge + 成本下这是诚实结果。
 </Callout>
 
-## 现阶段
+## 参数
 
-请先完成 **P0** 全部三课。本课任务清单已挂在课页底部，可提前勾选规划。
+- Purged OOF：`N_FOLDS=5`，`HORIZON=5`，`EMBARGO=5`；仅训练 `StandardScaler`
+- 模型：Ridge（`alpha∈{0.01,1,100}`）；LightGBM（回退 HistGBM）
+- 组合：截面五分位多空 + 共享 P2/P4 成本
+- DSR：Bailey–LdP，`n_trials=4`（= 尝试的配置数）
+- SHAP：若可 import 则使用（否则如实说明）
+
+## Ridge vs GBM（IC / 净 SR / DSR）
+
+| 配置 | RankIC | 净夏普 | DSR |
+|------|--------|--------|-----|
+| ridge | ≈−0.008 | ≈−0.38 | ≈0.00 |
+| lightgbm | ≈0.011 | ≈−1.47 | ≈0.00 |
+| ridge α=0.01 / 100 | ≈−0.008 | ≈−0.38 / −0.39 | ≈0.00 |
+
+**不是准确率。** 弱面板上 purged OOS IC 接近 0，成本使净夏普 ≤ 0——流水线仍尽了本分。
+
+![Ridge vs GBM](/p5/ridge_vs_gbm.png)
+
+![流水线净值](/p5/pipeline_nav.png)
+
+## 特征重要度与替代效应
+
+在 purged 训练折上拟合；MDA 在 purged 测试折上计算。加入 `mom_20_dup = mom_20 + noise`。
+
+实验：MDI 在 `mom_20` 与 `mom_20_dup` 之间**分摊**（替代效应）。MDA/SHAP 同样分功——相关重复会稀释单特征分数。
+
+![MDI vs MDA](/p5/mdi_mda_importance.png)
+
+![SHAP](/p5/shap_importance.png)
+
+## 校准与下注（AFML ch.10）
+
+元标签概率来自逻辑回归（purged OOF）。可靠性曲线：原始 vs **isotonic**（Platt/logit 亦常见）。仓位 ∝ `(2p−1)+` × 主方向——用**校准后**概率下注，而非原始分数。
+
+![校准](/p5/calibration_reliability.png)
+
+## Qlib 风格工作流（pandas）
+
+官方文档：`Alpha158` → `DatasetH` → `LGBModel.fit` → `SignalRecord`（[模型文档](https://qlib.readthedocs.io/en/latest/component/model.html)）。
+
+pandas 镜像：特征栈 ≈ Alpha158；purged 片段 ≈ DatasetH；LightGBM/Ridge ≈ LGBModel；`pred_to_ls_pnl` ≈ 由分数做组合。本课引用文档并镜像阶段——不要求本地安装 Qlib。
+
+## 前沿：TSFM / Transformer（已核验）
+
+**引用**而非重训以下 2024–2026 评价（已核 arXiv）：
+
+- **arXiv:2511.18578** *Re(Visiting) Time Series Foundation Models in Finance* — 零样本 Chronos/TimesFM 在日超额收益上弱于 CatBoost/LightGBM；微调常难填平差距。
+- **arXiv:2412.09880** *Financial Fine-tuning a Large Time Series Model* — 基线 TimesFM 在价格预测上表现不佳，需金融持续预训练。
+- **arXiv:2606.27100** *Pretrained Time-Series Foundation Models for Financial Return Forecasting* — 或有排名优势，相对随机游走的增益小且稀疏。
+
+**LLM 智能体留到 P8。** 任何深度序列模型仍须同一套防泄漏协议。
+
+## 期望值框架
+
+在弱面板上报告接近 0 的 purged IC 的可版本化流水线，比未 purge、准确率漂亮的 GBM 更有价值。带显式 `n_trials` 的 DSR 让配置挑选保持诚实。
+
+## 前瞻警告
+
+- 实验 01 的仅训练 scaler 与 purged 折仍强制。
+- 带测试泄漏的重要度无效——MDA 仅在训练拟合后的 purged 测试折上做。
+- Isotonic 校准不得偷看评价切片。
+
+## Python 实验
+
+`examples/p5/02_modern_ml_pipelines.py`
+
+### 真实运行输出
+
+```text
+Background dataset has 500 samples but max_samples=100. Subsampling to 100 samples for SHAP value computation. To use all samples, set max_samples=500 when initializing the masker.
+=== parameters ===
+reuse lab01 frame rows=36300 HORIZON=5 purged folds=5 embargo=5
+LightGBM available=True; SHAP available=True
+eval: RankIC + net SR (shared cost) + DSR over configs — NOT accuracy
+cite: Qlib docs — Alpha158 handler + LGBModel (qlib.contrib.model.gbdt) workflow
+cite: AFML ch.10 bet sizing from predicted probabilities
+frontier: arXiv:2511.18578 Re(Visiting) TSFMs in Finance — zero-shot Chronos/TimesFM underperform LightGBM/CatBoost on excess returns
+frontier: arXiv:2412.09880 — baseline TimesFM unsatisfactory on price prediction before finance fine-tune
+frontier: arXiv:2606.27100 — TSFM gains vs random walk small/sparse on equity returns
+LLM agents deferred to P8
+
+=== baselines: Ridge vs LightGBM (purged OOF) ===
+ridge  RankIC=-0.0076 net_SR=-0.383 turn=1.3381 DSR=0.000
+gbm    RankIC=0.0105 net_SR=-1.470 turn=1.7279 DSR=0.000 backend=lightgbm
+DSR uses n_trials=4 (= configs tried: ridge, gbm, +2 foils below)
+ridge_alpha0.01  RankIC=-0.0076 net_SR=-0.383 DSR=0.000
+ridge_alpha100   RankIC=-0.0076 net_SR=-0.394 DSR=0.000
+
+=== feature importance: MDI / MDA / SHAP + substitution ===
+MDI top:
+vol_20        213
+rank_mom20    201
+mom_10        198
+mom_20        197
+mom_5         160
+vol_5         139
+mom_20_dup    134
+mom_1          99
+MDA (purged test fold) top:
+rank_mom20    5.917103e-05
+mom_10        1.640829e-05
+vol_20        1.223840e-05
+mom_20        1.097413e-05
+mom_20_dup    8.984225e-06
+mom_1         2.475101e-06
+mom_5        -8.287955e-07
+vol_5        -3.292902e-06
+substitution: MDI mom_20=197.0000 mom_20_dup=134.0000 — correlated duplicates SPLIT importance (substitution effect)
+SHAP mean(|value|) top:
+mom_20        0.004467
+mom_10        0.002399
+mom_20_dup    0.001897
+rank_mom20    0.001733
+vol_20        0.001519
+mom_1         0.000779
+mom_5         0.000711
+vol_5         0.000611
+chart /workspace/Quant-trading-learn/public/p5/shap_importance.png
+chart /workspace/Quant-trading-learn/public/p5/mdi_mda_importance.png
+
+=== probability calibration + AFML ch.10 bet sizing ===
+raw_prob mean=0.514 meta_base_rate=0.515
+calibration: reliability curve raw vs isotonic (Platt/logit also common; we show isotonic)
+bet_sizing net_SR=-0.917 turn=0.1752
+teach: size from calibrated probs, not raw scores; bad calibration → bad Kelly-like bets
+chart /workspace/Quant-trading-learn/public/p5/calibration_reliability.png
+
+=== Qlib-style workflow (plain pandas equivalent) ===
+Qlib pattern (from official docs): Alpha158 DataHandler → DatasetH segments → LGBModel.fit → SignalRecord
+pandas equivalent here:
+  1) features_long ≈ Alpha158 processors (mom/vol/rank; CSZScoreNorm ↔ StandardScaler on train fold)
+  2) purged segments ≈ DatasetH train/valid/test without label overlap
+  3) LGBMRegressor/Ridge ≈ LGBModel
+  4) pred_to_ls_pnl ≈ portfolio analysis from scores
+We do NOT claim Qlib install in this lab; cite docs and mirror the stages.
+chart /workspace/Quant-trading-learn/public/p5/ridge_vs_gbm.png
+chart /workspace/Quant-trading-learn/public/p5/pipeline_nav.png
+disclaimer: weak synthetic panel — learning only; TSFM papers cited, not re-run here
+```
+
+## 常见错误 / 陷阱
+
+1. 靠准确率或训练损失选模型。
+2. 忽略跨 alpha/树的 DSR / 试验数。
+3. 不做相关重复检查就读 MDI。
+4. 用未校准概率下注。
+5. 不读金融评价就把零样本 TSFM 当免费 alpha。
+
+## 练习（1:1）
+
+1. **ex1** — LightGBM vs ridge 表（IC、净 SR、DSR）。
+2. **ex2** — 阅读 Qlib Alpha158+LGBModel 配置映射。
+3. **ex3** — 流水线泄漏检查清单。
+4. **done1** — 可复现小流水线 + 检查清单。
+
+## 测验
+
+<Quiz id="q1-order" question="合理的流水线顺序？" options={["先组合再打乱 CSV", "特征 → purged 拟合 → 预测 → 组合/成本", "先 SHAP 再标签", "先 TSFM 并跳过 purge"]} answer={1} explanation="在防泄漏控制下：数据/模型/预测/组合。" />
+<Quiz id="q2-simple" question="为何先试 ridge/树再深度网络？" options={["它们实盘总赢", "同一 purge/成本协议下的更强基线；深度模型仍需防泄漏", "sklearn 禁止深度网", "Qlib 禁止"]} answer={1} explanation="先基线；TSFM 论文显示零样本常弱于树。" />
+<Quiz id="q3-sub" question="相关重复特征主要导致？" options={["完美 purge", "替代效应：重要度在重复间分摊", "零换手", "无穷 DSR"]} answer={1} explanation="MDI/SHAP 在 mom_20 与 mom_20_dup 间分功。" />
+<Quiz id="q4-cal" question="下注应使用？" options={["只要原始未校准分数", "校准后的概率（可靠性/isotonic 或 Platt）", "只要 MDI 排名", "打乱准确率"]} answer={1} explanation="AFML ch.10 精神：用可信概率决定仓位。" />
+<Quiz id="q5-tsfm" question="arXiv:2511.18578 发现零样本 Chronos/TimesFM 在超额收益上？" options={["总是碾压 LightGBM", "总体弱于强树集成，直至领域预训练", "不再需要 purge", "证明了 LLM 智能体"]} answer={1} explanation="已核验的金融 TSFM 评价——引用，不神话。" />
+<Quiz id="q6-qlib" question="Qlib 中 Alpha158 + LGBModel 最接近？" options={["只画价格", "特征 handler + 分段数据集 + GBM 分数", "未 purge 的 shuffle CV", "P8 智能体"]} answer={1} explanation="官方文档工作流，本课用 pandas 镜像。" />
+
+## 完成标准
+
+可复现小流水线 + 泄漏检查清单，含 IC/净SR/DSR 表。
+
+**来源：** Qlib 模型/Alpha158 文档；AFML ch.10；Bailey–LdP DSR；arXiv:2511.18578、2412.09880、2606.27100；LightGBM；SHAP（若已装）。
+
+<Summary>
+**要点**：purged 基线 → 重要度/替代 → 校准/下注 → Qlib 镜像；TSFM 引用而非膜拜。  
+**下一阶段**：P6 风险/仓位（待写）。
+</Summary>

@@ -68,3 +68,5 @@ examples/p4/data/cache/
 examples/p4/data/strong/
 examples/p4/data/weak/
 examples/p4/data/strong_vs_weak.csv
+
+examples/p5/data/

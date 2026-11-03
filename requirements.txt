@@ -4,3 +4,6 @@ pandas>=2.1
 scipy>=1.11
 matplotlib>=3.8
 statsmodels>=0.14
+scikit-learn>=1.4
+lightgbm>=4.0
+# shap optional — install if available; labs degrade gracefully

@@ -563,7 +563,9 @@
 - **Must-teach:**
   - 失败常在管线。
   - 禁止时序shuffle。
-  - purge/embargo直觉。
+  - 完整 purged K-fold + embargo（标签跨度重叠 purge；AFML ch.7）；scaler 仅 fit 训练折。
+  - 标签：远期收益、三重势垒、元标签（AFML ch.3）；检查前瞻。
+  - 用 IC / 净 SR / DSR 评价，而非准确率。
   - 元标签：先方向再是否交易。
 - **Exercises:**
   - 随机vs时间切分。
@@ -588,8 +590,9 @@
   - （可选）跑通Qlib quickstart思路。
 - **Must-teach:**
   - 流水线可版本化比花哨模型重要。
-  - Qlib：Data/Model/Portfolio/Analysis。
-  - 公开数据≠可交易优势。
+  - Qlib：Data/Model/Portfolio/Analysis（Alpha158 + LGBModel；pandas 等价）。
+  - 特征重要度 MDI/MDA/SHAP 与相关重复的替代效应；概率校准与 AFML ch.10 下注。
+  - 公开数据≠可交易优势；TSFM 零样本在收益上常弱于树模型（须核验论文）。
 - **Exercises:**
   - LightGBM/线性截面排序小实验。
   - （可选）读Qlib workflow配置。

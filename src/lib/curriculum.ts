@@ -29,7 +29,7 @@ export interface Lesson {
   doneWhen: L10n[];
   methodTags: { classic: string[]; niche: string[]; frontier: string[] };
   tasks: Task[];
-  /** Site body status: P0–P4 written; P5+ stubs. */
+  /** Site body status: P0–P5 written; P6+ stubs. */
   status: "ready" | "outline";
 }
 
@@ -880,7 +880,7 @@ const phase_P4_lessons: Lesson[] = [
 const phase_P5_lessons: Lesson[] = [
   {
     slug: "ml-leakage-control",
-    status: "outline",
+    status: "ready",
     title: { zh: "机器学习防泄漏", en: "ML anti-leakage" },
     summary: { zh: "时间切分、特征shift、标签直觉、purge/embargo、元标签、试验次数。", en: "Time splits, feature shifts, labels, purge/embargo, meta-labeling, trial counts." },
     hours: 14,
@@ -894,10 +894,10 @@ const phase_P5_lessons: Lesson[] = [
       { zh: "用IC而非仅准确率评价。", en: "Evaluate with IC not accuracy alone." },
     ],
     mustTeach: [
-      { zh: "失败常在管线。", en: "Failures often in pipelines." },
-      { zh: "禁止时序shuffle。", en: "No shuffling time series." },
-      { zh: "purge/embargo直觉。", en: "Purge/embargo intuition." },
-      { zh: "元标签：先方向再是否交易。", en: "Meta-labeling: side then trade-or-not." },
+      { zh: "失败常在管线；禁止时序 shuffle。", en: "Failures often in pipelines; never shuffle time." },
+      { zh: "完整 purged K-fold + embargo；scaler 仅 fit 训练折。", en: "Full purged K-fold + embargo; scalers fit on train fold only." },
+      { zh: "标签：远期收益、三重势垒、元标签（AFML ch.3）。", en: "Labels: forward returns, triple-barrier, meta-labeling (AFML ch.3)." },
+      { zh: "用 IC/净SR/DSR 评价，而非准确率。", en: "Evaluate with IC / net SR / DSR, not accuracy." },
     ],
     exercises: [
       { zh: "随机vs时间切分。", en: "Random vs time split." },
@@ -928,7 +928,7 @@ const phase_P5_lessons: Lesson[] = [
   },
   {
     slug: "modern-ml-pipelines",
-    status: "outline",
+    status: "ready",
     title: { zh: "现代ML量化流水线（Qlib等）", en: "Modern ML quant pipelines (Qlib et al.)" },
     summary: { zh: "简单模型打底的可复现流水线；可选Qlib；不神话深度学习。", en: "Reproducible pipelines with simple models; optional Qlib; no DL mythology." },
     hours: 8,
@@ -943,8 +943,9 @@ const phase_P5_lessons: Lesson[] = [
     ],
     mustTeach: [
       { zh: "流水线可版本化比花哨模型重要。", en: "Versioned pipelines > flashy models." },
-      { zh: "Qlib：Data/Model/Portfolio/Analysis。", en: "Qlib: Data/Model/Portfolio/Analysis." },
-      { zh: "公开数据≠可交易优势。", en: "Public data ≠ tradeable edge." },
+      { zh: "Qlib Alpha158 + LGBModel；pandas 等价。", en: "Qlib Alpha158 + LGBModel; pandas equivalent." },
+      { zh: "MDI/MDA/SHAP 与相关重复的替代效应；校准与下注。", en: "MDI/MDA/SHAP + substitution; calibration and bet sizing." },
+      { zh: "公开数据≠可交易优势；TSFM 零样本常弱于树模型。", en: "Public data ≠ edge; zero-shot TSFMs often trail trees." },
     ],
     exercises: [
       { zh: "LightGBM/线性截面排序小实验。", en: "LightGBM/linear CS-rank mini-exp." },
