@@ -33,7 +33,7 @@ Stable companion: [LLM+MCTS formulaic mining](https://arxiv.org/abs/2505.11122) 
 
 ## Chain-of-Alpha — verified withdrawn
 
-[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **exists on arXiv** but carries an admin comment that the version was **removed** (submitter lacked rights to agree to the license). **Drop detailed dual-chain claims**; do not depend on an unstable PDF. Prefer RD-Agent(Q), LLM+MCTS, Quant-Arena.
+[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **exists on arXiv** but is **withdrawn** (arXiv banner: withdrawn by Lang Cao). **Drop detailed dual-chain claims**; do not depend on an unstable PDF. Prefer RD-Agent(Q), LLM+MCTS, Quant-Arena.
 
 ## LLM sentiment (Lopez-Lira &amp; Tang 2023)
 
@@ -54,7 +54,7 @@ eval: purged OOS mean daily CS RankIC + DSR(N) + shared 10bps+impact costs
 cite: RD-Agent(Q) arXiv:2505.15155; Lopez-Lira&Tang arXiv:2304.07619
 cite: LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113
 cite look-ahead/memorization critiques: Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765
-Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN by arXiv admins; drop detailed claims
+Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN (arXiv: withdrawn by Lang Cao); drop detailed claims
 
 === mock RD-Agent(Q) loop (Research → Development → Co-STEER-style keep/reject) ===
 ...
@@ -71,11 +71,11 @@ mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 t=125.99 net_SR=48.362 DSR
 teach: LEAK foil inflates IC (cutoff/memorization analogue); PIT mock is the honest path.
 
 === Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===
-Verified on arXiv: entry exists but admin comment says version removed
-(submitter lacked rights to agree to the license). DROP detailed dual-chain claims.
+Verified on arXiv: entry exists but is withdrawn (banner: withdrawn by Lang Cao).
+DROP detailed dual-chain claims; do not depend on an unstable PDF.
 ```
 
-## Limitations / failure modes
+## Common mistakes / pitfalls
 
 - **Training cutoff / memorization:** pre-cutoff headlines are not forecasts; LEAK foils look amazing (see Glasserman &amp; Lin 2309.17322; Lopez-Lira/Tang/Zhu 2504.14765).
 - **Trial inflation:** agent rounds need explicit **N** in DSR; paper tables ≠ your sealed OOS.
@@ -94,7 +94,7 @@ Verified on arXiv: entry exists but admin comment says version removed
 
 <Quiz id="p8llm-q1" question="Why do LLM/agent loops raise overfitting risk?" options={["They remove the need for OOS", "They multiply trials/hypotheses without changing the null", "They guarantee higher Sharpe", "They ban DSR"]} answer={1} explanation="Automation amplifies the multiple-testing problem." />
 <Quiz id="p8llm-q2" question="A sealed hold-out means?" options={["Reuse IS every week", "Freeze selection then evaluate a held-out period once", "Fit on the test year", "Drop costs"]} answer={1} explanation="Quant-Arena spirit: freeze then open once." />
-<Quiz id="p8llm-q3" question="Chain-of-Alpha arXiv:2508.06312 in this curriculum?" options={["Primary must-implement paper", "Exists but withdrawn — drop detailed claims", "Proves dual-chain always works", "Replaces RD-Agent"]} answer={1} explanation="Verified withdrawn by arXiv admins." />
+<Quiz id="p8llm-q3" question="Chain-of-Alpha arXiv:2508.06312 in this curriculum?" options={["Primary must-implement paper", "Exists but withdrawn — drop detailed claims", "Proves dual-chain always works", "Replaces RD-Agent"]} answer={1} explanation="Verified withdrawn on arXiv (banner: withdrawn by Lang Cao)." />
 <Quiz id="p8llm-q4" question="Lopez-Lira & Tang emphasize scoring?" options={["Only pre-cutoff headlines", "Post-knowledge-cutoff headlines", "Random tickers without news", "Intraday L2 only"]} answer={1} explanation="Post-cutoff design is central to their forecast claim." />
 <Quiz id="p8llm-q5" question="Lab LEAK sentiment foil teaches?" options={["Always trade GPT scores", "Cutoff/memorization can fake huge IC", "Costs are optional", "DSR needs N=1 always"]} answer={1} explanation="Honest PIT path vs look-ahead analogue." />
 <Quiz id="p8llm-q6" question="RD-Agent(Q) stages include?" options={["Only live broker routing", "Research hypotheses then Development implementation with feedback", "Deleting purge windows", "Skipping ethics"]} answer={1} explanation="Research ↔ Development co-optimization loop." />

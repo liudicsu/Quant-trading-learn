@@ -38,7 +38,7 @@ print("eval: purged OOS mean daily CS RankIC + DSR(N) + shared 10bps+impact cost
 print("cite: RD-Agent(Q) arXiv:2505.15155; Lopez-Lira&Tang arXiv:2304.07619")
 print("cite: LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113")
 print("cite look-ahead/memorization critiques: Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765")
-print("Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN by arXiv admins; drop detailed claims")
+print("Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN (arXiv: withdrawn by Lang Cao); drop detailed claims")
 
 rets, slow, meta = make_panel()
 y1 = forward_label_wide(rets, h=1)
@@ -222,8 +222,8 @@ print("teach: LEAK foil inflates IC (cutoff/memorization analogue); PIT mock is 
 
 # ---------- Chain-of-Alpha note ----------
 print("\n=== Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===")
-print("Verified on arXiv: entry exists but admin comment says version removed")
-print("(submitter lacked rights to agree to license). DROP detailed dual-chain claims.")
+print("Verified on arXiv: entry exists but is withdrawn (banner: withdrawn by Lang Cao).")
+print("DROP detailed dual-chain claims; do not depend on an unstable PDF.")
 print("Prefer stable cites: RD-Agent(Q), LLM+MCTS (2505.11122), Quant-Arena (2610.30113).")
 
 # ---------- Plots + exports ----------

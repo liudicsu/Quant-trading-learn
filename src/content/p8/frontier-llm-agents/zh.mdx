@@ -33,7 +33,7 @@
 
 ## Chain-of-Alpha — 已核验撤回
 
-[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **在 arXiv 上存在**，但管理员注释称版本已**移除**（提交者当时无权同意许可）。**放弃双链细节主张**；不要依赖不稳定 PDF。优先 RD-Agent(Q)、LLM+MCTS、Quant-Arena。
+[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **在 arXiv 上存在**，但已**撤回**（arXiv 横幅：由 Lang Cao 撤回）。**放弃双链细节主张**；不要依赖不稳定 PDF。优先 RD-Agent(Q)、LLM+MCTS、Quant-Arena。
 
 ## LLM 情绪（Lopez-Lira &amp; Tang 2023）
 
@@ -62,7 +62,7 @@ mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 ...
 === Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===
 ```
 
-## 局限 / 失败模式
+## 常见错误 / 陷阱
 
 - **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会显得很美（见 Glasserman &amp; Lin 2309.17322；Lopez-Lira/Tang/Zhu 2504.14765）。
 - **试错膨胀：** agent 轮次必须在 DSR 中写明 **N**；论文表 ≠ 你的密封 OOS。
@@ -81,7 +81,7 @@ mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 ...
 
 <Quiz id="p8llm-q1" question="为何 LLM/agent 闭环提高过拟合风险？" options={["不再需要 OOS", "放大试错/假设数但零假设不变", "保证更高夏普", "禁止 DSR"]} answer={1} explanation="自动化放大多重检验问题。" />
 <Quiz id="p8llm-q2" question="密封 hold-out 指？" options={["每周重用 IS", "冻结选择后对留出期只评估一次", "在测试年拟合", "去掉成本"]} answer={1} explanation="Quant-Arena 精神：冻结后只打开一次。" />
-<Quiz id="p8llm-q3" question="本课对 Chain-of-Alpha arXiv:2508.06312？" options={["必须实现的主论文", "存在但已撤回——放弃细节主张", "证明双链总有效", "取代 RD-Agent"]} answer={1} explanation="已核验被 arXiv 管理员撤回。" />
+<Quiz id="p8llm-q3" question="本课对 Chain-of-Alpha arXiv:2508.06312？" options={["必须实现的主论文", "存在但已撤回——放弃细节主张", "证明双链总有效", "取代 RD-Agent"]} answer={1} explanation="已核验 arXiv 上已撤回（横幅：由 Lang Cao 撤回）。" />
 <Quiz id="p8llm-q4" question="Lopez-Lira & Tang 强调打分对象是？" options={["仅截止前标题", "知识截止日期之后的标题", "无新闻的随机代码", "仅 L2"]} answer={1} explanation="截止后设计是其预测主张的核心。" />
 <Quiz id="p8llm-q5" question="实验 LEAK 情绪对照教会？" options={["总是交易 GPT 分数", "截止/记忆可伪造巨大 IC", "成本可省略", "DSR 永远 N=1"]} answer={1} explanation="诚实 PIT 路径 vs 前瞻类比。" />
 <Quiz id="p8llm-q6" question="RD-Agent(Q) 阶段包括？" options={["仅实盘路由", "Research 假设再 Development 实现并反馈", "删除 purge 窗", "跳过伦理"]} answer={1} explanation="Research ↔ Development 联合优化闭环。" />
