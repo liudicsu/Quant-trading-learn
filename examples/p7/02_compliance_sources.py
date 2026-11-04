@@ -112,6 +112,14 @@ SOURCES = [
     "fetch": "OK",
     "verified": "Staff statement 2025-09-02 (not Commission rule); view that law does not prohibit registered exchanges facilitating certain spot crypto products; explicitly non-binding.",
   },
+  {
+    "id": "hkex_nb_program_trading_2026",
+    "title": "Northbound Program Trading Reporting (Stock Connect)",
+    "issuer": "HKEX / SSE / SZSE",
+    "url": "https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en",
+    "fetch": "OK",
+    "verified": "Mainland NB Program Trading Reporting Requirements effective 2026-01-12; ECP submissions from 2026-01-12; existing investors transition to 2026-04-10; thresholds include automation / fast order rate / many stocks+turnover / customized software (SSE/SZSE separate).",
+  },
 ]
 
 print("=== official sources checklist (checked Asia/Shanghai 2026-11-04) ===")

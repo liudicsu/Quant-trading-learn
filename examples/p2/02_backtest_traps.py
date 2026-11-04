@@ -399,4 +399,63 @@ fig.savefig(OUT_DIR / "cpcv_sr_dist.png", dpi=120)
 plt.close(fig)
 print("saved_plot public/p2/cpcv_sr_dist.png")
 print("reuse_note: ml-leakage-control reuses this combinatorial idea when scoring many purged folds")
+
+
+# ---------- One-switch decision-time leakage (arXiv:2605.23959) ----------
+# Teaching foil only: hold data/model/costs fixed; toggle ONE protocol rule.
+print("\n=== one-switch decision-time leakage (arXiv:2605.23959 When Alpha Disappears) ===")
+print("cite: Zhang et al. arXiv:2605.23959 — TEMP_CENTER and EXEC_OPEN dominate Leakage Gain")
+rng_sw = np.random.default_rng(42)
+# Synthetic daily OHLCV-like path for one name
+n_sw = 400
+eps = rng_sw.normal(0, 0.01, n_sw)
+close = 100 * np.exp(np.cumsum(eps))
+open_ = np.r_[close[0], close[:-1]] * (1 + rng_sw.normal(0, 0.001, n_sw))
+# Clean: trailing 5d mean of past closes only; enter next open; label next-open return
+trail = pd.Series(close).rolling(5, min_periods=5).mean().shift(1)  # known by close t using t and earlier only via shift after mean of past
+# Actually trailing mean at t using close[t-4..t] then trade at open[t+1]
+trail_clean = pd.Series(close).rolling(5, min_periods=5).mean()
+# signal at close t -> position from open t+1 to open t+2
+sig_clean = trail_clean.diff()  # momentum of trailing mean
+pos_clean = np.sign(sig_clean).shift(1)  # decide after close, hold next day open-to-open
+r_oo = pd.Series(open_).pct_change().shift(-1)  # open[t+1]/open[t]-1 aligned to t
+pnl_clean = (pos_clean * r_oo).dropna()
+
+# TEMP_CENTER: centered 5d mean uses future closes around t
+def centered_mean(x, w=5):
+    s = pd.Series(x)
+    # centered window: for index t use [t-2..t+2]
+    return s.rolling(w, center=True, min_periods=w).mean()
+
+trail_center = centered_mean(close, 5)
+sig_center = trail_center.diff()
+pos_center = np.sign(sig_center).shift(1)
+pnl_center = (pos_center * r_oo).dropna()
+
+# EXEC_OPEN: use same-day close information while assuming same-day open fill (infeasible)
+# signal uses close[t] but position is applied to open[t]->open[t+1] return (as if filled at open t)
+sig_exec = pd.Series(close).pct_change()  # uses close[t] vs close[t-1]
+pos_exec = np.sign(sig_exec)  # NO shift — pretends we traded the open using the close
+r_open_same = pd.Series(open_).pct_change().shift(-1)  # from open t to open t+1, indexed at t
+# Align: at decision "open t" we illegally use close t
+pnl_exec = (pos_exec * r_open_same).dropna()
+
+def sr_ann(x):
+    x = pd.Series(x).dropna()
+    if len(x) < 10 or x.std(ddof=1) == 0:
+        return float("nan")
+    return float(x.mean() / x.std(ddof=1) * np.sqrt(252))
+
+sr_c = sr_ann(pnl_clean)
+sr_tc = sr_ann(pnl_center)
+sr_eo = sr_ann(pnl_exec)
+lg_tc = sr_tc - sr_c
+lg_eo = sr_eo - sr_c
+print(f"CLEAN SR@toy≈{sr_c:.3f}")
+print(f"TEMP_CENTER SR≈{sr_tc:.3f}  LeakageGain_SR≈{lg_tc:+.3f}  (centered rolling uses future)")
+print(f"EXEC_OPEN   SR≈{sr_eo:.3f}  LeakageGain_SR≈{lg_eo:+.3f}  (close info + same-day open fill)")
+print("teach: chronological train/test split alone is NOT enough — decision-time semantics matter.")
+print("paper: TEMP_CENTER & EXEC_OPEN dominate; NORM_GLOBAL / STRUCT_GRAPH / EXEC_CLOSE often weak.")
+print("diagnostic only — large LG is protocol inflation under infeasible rules, not deployable alpha.")
+
 print("ASSERTS_OK")

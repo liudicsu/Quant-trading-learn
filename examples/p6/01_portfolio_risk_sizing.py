@@ -299,3 +299,32 @@ ax.grid(True, axis="y", alpha=0.3)
 fig.tight_layout(); fig.savefig(PUBLIC / "hrp_vs_erc.png", dpi=120); plt.close()
 print("chart", PUBLIC / "hrp_dendrogram.png")
 print("chart", PUBLIC / "hrp_vs_erc.png")
+
+
+print("\n=== no-trade region / cost-in-CV spirit (Brandt–Santa-Clara–Valkanov RFS 2009 + Detzel bridge) ===")
+print("cite: Brandt/Santa-Clara/Valkanov RFS 2009 parametric portfolio policies — hypersphere no-trade boundary")
+print("cite bridge: Detzel–Novy-Marx–Velikov JF 2023 — costs change which models/factors win")
+# Toy 3-asset target vs hold; no-trade if MSE distance <= k^2
+w_target = np.array([0.50, 0.30, 0.20])
+w_hold = np.array([0.46, 0.33, 0.21])
+k = 0.05  # radius
+dist2 = float(np.mean((w_target - w_hold) ** 2))
+trade = dist2 > k ** 2
+# If outside, trade only to boundary (partial), not all the way to target
+direction = w_target - w_hold
+norm = np.linalg.norm(direction) + 1e-12
+# boundary point along the line at distance k * sqrt(N) in RMSE sense
+# For teaching: if trade, move to hold + direction * (1 - k/rmse)
+rmse = np.sqrt(dist2)
+if trade:
+    scale = 1.0 - (k / rmse)
+    w_new = w_hold + scale * direction
+else:
+    w_new = w_hold.copy()
+turn_full = float(np.abs(w_target - w_hold).sum())
+turn_nt = float(np.abs(w_new - w_hold).sum())
+print(f"rmse(hold,target)={rmse:.4f}  k={k:.4f}  inside_no_trade={not trade}")
+print(f"turnover_if_full_rebalance={turn_full:.4f}  turnover_with_no_trade_policy={turn_nt:.4f}")
+print("teach: near the target, first-order costs beat second-order utility gains — stay put.")
+print("cost-in-CV spirit: choose k / turnover penalty INSIDE validation, not after peeking at OOS.")
+

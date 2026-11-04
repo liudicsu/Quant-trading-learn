@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**15 hours**: 5h concepts + 7h labs + 2h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
+This lesson (~**18 hours**: 5h concepts + 7h labs + 2h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
 
 **Goals:** implement Spearman IC; build quantile long–short; contrast true vs null factors.
 
@@ -76,6 +76,21 @@ Lab: **200** random CS factors on the strong panel.
 | \|t\|>3 | ≈0.0% (0 of 200) | ≈**0.27%** (≈**0.54** of 200) |
 
 The observed ~4.5–6% rate at \|t\|>2 is **right in line with pure noise**. That is why HLZ raise the bar toward **t>3**: the industry already spent the t≈2 budget.
+
+## Cost-aware factor ranking (Detzel–Novy-Marx–Velikov)
+
+[Model Comparison with Transaction Costs](https://doi.org/10.1111/jofi.13225) (Detzel, Novy-Marx & Velikov, *Journal of Finance* 2023) shows that **ignoring trading costs biases tests toward high-turnover factors / models**. Gross Sharpe crowns can reverse once costs enter.
+
+Lab toy (no look-ahead; same lagged information, different turnover):
+
+```text
+slow_factor  turnover≈0.506  gross_SR≈-0.119  net_SR@10bps≈-1.929
+fast_factor  turnover≈3.197  gross_SR≈0.363  net_SR@10bps≈-11.368
+ranking_by_gross_picks=fast  ranking_by_net_picks=slow
+```
+
+**Teach:** cost-blind gross rankings bias toward high-turnover signals; net-of-cost rankings can reverse. Paper: after costs, FF5 (especially cash-profitability variants) beats high-cost q / six-factor style comparisons on their design.
+
 
 ## Crowding and decay
 
@@ -206,11 +221,13 @@ disclaimer: strong panel MU is inflated for teaching; weak panel is the realisti
 <Quiz id="q5-overlap" question="Overlapping multi-day IC windows mainly?" options={["Bias mean IC upward a lot", "Inflate IC autocorrelation and ICIR SE issues; fix with non-overlap or Newey–West", "Remove turnover", "Replace neutralization"]} answer={1} explanation="Mean IC less affected; inference needs non-overlap or NW." />
 <Quiz id="q6-zoo" question="Observed ~4.5–6% of random factors with |t|>2 means?" options={["Alpha is real", "Right in line with the ~4.55% N(0,1) null — not a discovery", "t>2 beats HLZ", "Costs are zero"]} answer={1} explanation="Matches pure-noise rate; HLZ push toward t>3." />
 
+<Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov (JF 2023) main caution?" options={["Always prefer highest turnover", "Ignoring costs biases model/factor comparisons toward high-cost factors", "Costs never change rankings", "Only crypto matters"]} answer={1} explanation="DOI 10.1111/jofi.13225." />
+
 ## Done when
 
 IC + quantile L/S + null-factor zoo report, with strong/weak table, lagged-mcap neutralization, and look-ahead notes.
 
-**Sources:** Fama–MacBeth 1973 JPE 81; Fama–French 1993 JFE 33; Fama–French 2015 JFE 116; Harvey–Liu–Zhu 2016 RFS 29(1); Alphalens Reloaded docs; Qlib DataHandlerLP/Alpha158; AFML Factor Mirage; @alin_alphapilot IC-first; quant-wiki foil.
+**Sources:** Fama–MacBeth 1973 JPE 81; Fama–French 1993 JFE 33; Fama–French 2015 JFE 116; Harvey–Liu–Zhu 2016 RFS 29(1); Alphalens Reloaded docs; Qlib DataHandlerLP/Alpha158; AFML Factor Mirage; @alin_alphapilot IC-first; quant-wiki foil Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225);
 
 <Summary>
 **Takeaways**: construct → IC/decay → strong vs weak → quantiles+costs → FM → t>3 zoo.  

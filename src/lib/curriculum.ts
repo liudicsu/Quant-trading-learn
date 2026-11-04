@@ -459,10 +459,10 @@ const phase_P2_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "回测陷阱与过拟合审讯", en: "Backtest traps & overfitting interrogation" },
     summary: { zh: "前瞻、walk-forward、PSR/DSR、试验次数、幸存者回顾。", en: "Lookahead,walk-forward,PSR/DSR,trial counts,survivorship recap." },
-    hours: 18,
+    hours: 21,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 10h multi-labs (incl CPCV toy) + 3h write-up — HEAVY",
+    hourBasis: "5h concepts + 12h multi-labs (CPCV + one-switch) + 4h write-up — HEAVY",
     prereqs: ["data-cleaning", "stats-probability-basics"],
     goals: [
       { zh: "作弊vs诚实对照。", en: "Cheat vs honest controls." },
@@ -474,6 +474,7 @@ const phase_P2_lessons: Lesson[] = [
       { zh: "多重试错制造虚假发现；记录 N。", en: "Multiple trials → false discoveries; log N." },
       { zh: "冻结规则后再看样本外；walk-forward 表。", en: "Freeze rules before OOS; walk-forward table." },
       { zh: "PSR/DSR：DSR 随试验数 N 下降。", en: "PSR/DSR: DSR falls as trial count N grows." },
+      { zh: "TEMP_CENTER/EXEC_OPEN 一键泄漏增益（arXiv:2605.23959）。", en: "TEMP_CENTER/EXEC_OPEN one-switch Leakage Gain (arXiv:2605.23959)." },
     ],
     exercises: [
       { zh: "均线作弊/诚实；完成标准：两套夏普/净值与课内一致。", en: "MA cheat/honest; done when both Sharpe/NAV match the lesson." },
@@ -495,7 +496,7 @@ const phase_P2_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m5", "JoinQuant审讯室", "AFML ch.7/14", "Bailey-LdP 2012 PSR", "Bailey-LdP 2014 DSR", "@AfuOnTheWay三坑"],
       niche: [],
-      frontier: ["Quant-Arena sealed hold-out (arXiv:2610.30113)"],
+      frontier: ["Quant-Arena sealed hold-out (arXiv:2610.30113)", "When Alpha Disappears one-switch (arXiv:2605.23959)"],
     },
     tasks: [
       { id: "ex1", text: { zh: "均线作弊/诚实；完成标准：两套夏普/净值与课内一致。", en: "MA cheat/honest; done when both Sharpe/NAV match the lesson." } },
@@ -787,7 +788,7 @@ const phase_P4_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "因子研究工作流", en: "Factor research workflow" },
     summary: { zh: "IC、分层、衰减、中性化直觉；拒绝堆参数。", en: "IC, quantiles, decay, neutralization; reject parameter stacking." },
-    hours: 15,
+    hours: 18,
     difficulty: 4,
     skippable: false,
     hourBasis: "5h concepts + 7h labs + 2h write-up + 1h crowding→LLM bridge — HEAVY",
@@ -821,7 +822,7 @@ const phase_P4_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m9", "AFML/Factor Mirage", "@alin_alphapilot IC-first", "Qlib Alpha158 ref"],
       niche: ["quant-wiki factor map (@bkdgiffug)"],
-      frontier: ["LLM formulaic alpha mining after this; formalized in P8"],
+      frontier: ["LLM formulaic alpha mining after this; formalized in P8", "Detzel–Novy-Marx–Velikov JF 2023 DOI 10.1111/jofi.13225"],
     },
     tasks: [
       { id: "ex1", text: { zh: "ic(factor,fwd)。", en: "ic(factor,fwd)." } },
@@ -883,7 +884,7 @@ const phase_P5_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "机器学习防泄漏", en: "ML anti-leakage" },
     summary: { zh: "时间切分、purge/embargo、分数差分、样本唯一性、完整元标签过滤、CPCV 复用提示。", en: "Time splits, purge/embargo, fracdiff, sample uniqueness, full meta-label filter, CPCV reuse note." },
-    hours: 20,
+    hours: 21,
     difficulty: 5,
     skippable: false,
     hourBasis: "6h AFML concepts + 11h labs (fracdiff/uniqueness/meta/CPCV note) + 3h write-up — HEAVY",
@@ -982,7 +983,7 @@ const phase_P6_lessons: Lesson[] = [
       zh: "Kelly/半Kelly、波动目标、逆波动与ERC、HRP层级风险平价、MV vs 1/N、Ledoit–Wolf。",
       en: "Kelly/half-Kelly, vol targeting, inv-vol & ERC, HRP, MV vs 1/N, Ledoit–Wolf.",
     },
-    hours: 17,
+    hours: 20,
     difficulty: 4,
     skippable: false,
     hourBasis: "5h concepts + 9h labs (incl HRP) + 3h writing — HEAVY",
@@ -1184,7 +1185,7 @@ const phase_P7_lessons: Lesson[] = [
       zh: "中美程序化/接入/卖空/保证金与加密官方状态；非法律意见；研究伦理。",
       en: "CN/US programmatic, access, short sale, margin & crypto official status; not legal advice; research ethics.",
     },
-    hours: 6,
+    hours: 8,
     difficulty: 2,
     skippable: false,
     hourBasis: "3h reading + 2h writing + 1h quiz",
@@ -1234,10 +1235,10 @@ const phase_P8_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "前沿：LLM / 多智能体量化研发", en: "Frontier: LLM / multi-agent quant R&D" },
     summary: { zh: "RD-Agent(Q)、公式化alpha挖掘、Quant-Arena：批判性试用，不替代防泄漏。", en: "RD-Agent(Q), formulaic alpha mining, Quant-Arena: critical trials — never replace anti-leakage." },
-    hours: 11,
+    hours: 16,
     difficulty: 5,
     skippable: false,
-    hourBasis: "5h guided reading + 4h critical exercises + 1h rules rewrite + 1h sealed leaderboard — HEAVY",
+    hourBasis: "5h reading + 6h critical exercises (five sins/FINSABER/OpenPM) + 2h rules + 3h sealed leaderboard — HEAVY",
     prereqs: ["factor-workflow", "ml-leakage-control", "modern-ml-pipelines", "compliance-ethics"],
     goals: [
       { zh: "陈述RD-Agent(Q)闭环。", en: "State RD-Agent(Q) loop." },
@@ -1264,7 +1265,7 @@ const phase_P8_lessons: Lesson[] = [
     methodTags: {
       classic: [],
       niche: ["XQuant Spec+AI run-first as motivation only (@_zheergen)"],
-      frontier: ["microsoft/RD-Agent + R&D-Agent(Q) NeurIPS 2025 / arXiv:2505.15155", "Chain-of-Alpha arXiv:2508.06312", "LLM+MCTS arXiv:2505.11122", "Quant-Arena arXiv:2610.30113", "Glasserman&Lin arXiv:2309.17322", "Lopez-Lira/Tang/Zhu arXiv:2504.14765"],
+      frontier: ["microsoft/RD-Agent + R&D-Agent(Q) arXiv:2505.15155 (NeurIPS 2025 only as arXiv comment — verify proceedings)", "Chain-of-Alpha arXiv:2508.06312", "LLM+MCTS arXiv:2505.11122", "Quant-Arena arXiv:2610.30113", "Glasserman&Lin arXiv:2309.17322", "Lopez-Lira/Tang/Zhu arXiv:2504.14765", "Five sins arXiv:2602.14233", "FINSABER arXiv:2505.07078", "OpenPM arXiv:2608.09988"],
     },
     tasks: [
       { id: "ex1", text: { zh: "读RD-Agent/Qlib说明写半页风险清单。", en: "Read RD-Agent/Qlib notes; half-page risk list." } },
@@ -1278,10 +1279,10 @@ const phase_P8_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "前沿：时序基础模型 · 另类数据 · Crypto/链上", en: "Frontier: TSFMs · alt-data · crypto/on-chain" },
     summary: { zh: "Chronos/TimesFM金融评测的谨慎结论；另类数据；CCXT/资金费率/链上。", en: "Cautious Chronos/TimesFM finance results; alt-data; CCXT/funding/on-chain." },
-    hours: 11,
+    hours: 14,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h paper/docs + 4h design exercises + 1h structure/PIT lab + 1h base-rate foil — HEAVY",
+    hourBasis: "5h papers + 5h design + 2h funding/liquidation foils + 2h structure/PIT — HEAVY",
     prereqs: ["modern-ml-pipelines", "data-cleaning", "execution-slippage"],
     goals: [
       { zh: "概括TSFM日频超额收益谨慎结论。", en: "Summarize cautious TSFM daily excess-return findings." },
@@ -1309,7 +1310,7 @@ const phase_P8_lessons: Lesson[] = [
     methodTags: {
       classic: [],
       niche: ["@sera00111 Crypto toolchain", "Funding/on-chain pipeline examples as structure refs"],
-      frontier: ["Chronos/TimesFM finance evals e.g. arXiv:2511.18578", "Trading Strategy GMX CCXT adapters 2025", "OpenBB-style alt/market data aggregation"],
+      frontier: ["Chronos/TimesFM finance evals e.g. arXiv:2511.18578", "Trading Strategy GMX CCXT adapters 2025", "OpenBB-style alt/market data aggregation", "Perp funding fundamentals arXiv:2212.06888", "Liquidation subcritical arXiv:2608.03616"],
     },
     tasks: [
       { id: "ex1", text: { zh: "读TSFM金融评测摘要列5条不可直接实盘理由。", en: "Read TSFM-finance eval; list 5 no-naive-live reasons." } },

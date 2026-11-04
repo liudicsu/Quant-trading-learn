@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **18 学时**：概念 5h + 含 CPCV 玩具的多实验 10h + 写作 3h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **21 学时**：概念 5h + 含 CPCV 玩具的多实验 10h + 写作 3h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -285,6 +285,30 @@ ASSERTS_OK
 
 **声明：** 本站演示是**教学素描**，不是生产级 AFML `CombinatorialPurgedKFold`。`ml-leakage-control` 在多折 purged 评分时会复用这一组合思想。
 
+## 一键切换的决策时点泄漏（TEMP_CENTER / EXEC_OPEN）
+
+即便训练/测试按时间切开，回测仍可能错。[When Alpha Disappears](https://arxiv.org/abs/2605.23959)（Zhang 等）做 **one-switch** 基准：固定面板、滚动切分、模型族、持有期、组合规则与成本约定，只改 **一条** 协议规则，再量 **Leakage Gain** = 指标(泄漏) − 指标(CLEAN)。
+
+**直觉：** 「样本外」只说明*日历*更晚，并不保证决策时刻的*信息集*合法。
+
+两个开关在其表中占主导：
+
+| 开关 | 破坏了什么 | 干净做法 |
+|------|------------|----------|
+| **TEMP_CENTER** | 中心化滚动特征用到 \(t\) 附近的未来观测 | 只用向后滚动 |
+| **EXEC_OPEN** | 信号用到当日开盘后的 H/L/C/V，却假设当日**开盘**成交 | 收盘 \(t\) 决策；开盘 \(t+1\) 建仓 |
+
+实验玩具（诊断性虚高，**不是**可部署 alpha）：
+
+```text
+CLEAN SR@toy≈-0.741
+TEMP_CENTER SR≈6.265  LeakageGain_SR≈+7.006
+EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556
+```
+
+大额正 Leakage Gain 说明**协议**让未来更好看见——不是模型突然变天才。论文亦显示 NORM_GLOBAL / STRUCT_GRAPH / EXEC_CLOSE 多数情形偏弱。`ml-leakage-control` 有短复用提示。
+
+
 ## 常见错误 / 陷阱
 
 1. 把同日成交标成「研究」。
@@ -294,6 +318,8 @@ ASSERTS_OK
 5. 未读论文假设就把 PSR/DSR 阈值当实盘规则（IID/平稳遍历、试验独立性）。
 6. 把 CPCV 路径数当成 DSR 的独立试验次数 \(N\)。
 7. 把教学用 CPCV 素描当成生产级 AFML 实现。
+
+8. 日历切分看似干净，但 TEMP_CENTER / EXEC_OPEN 仍在偷看。
 
 ## 练习（与任务清单 1:1）
 
@@ -315,6 +341,9 @@ ASSERTS_OK
 <Quiz id="q6-surv" question="本阶段幸存者偏差指？" options={["用哈希", "只测今天仍在市的名字", "用次日开盘成交", "付佣金"]} answer={1} explanation="交叉链接 data-cleaning。" />
 <Quiz id="q7-cpcv" question="相对单次留出，CPCV 教学上主要多给了什么？" options={["保证超额", "多组测试块上的 OOS 指标分布", "更低费用", "可跳过 purge"]} answer={1} explanation="组合测试块 → 夏普分布；路径不是独立 DSR 试验。" />
 <Quiz id="q8-cpcv2" question="本站 CPCV 演示是？" options={["生产级 AFML CombinatorialPurgedKFold", "AFML 第12章精神的教学素描", "实盘券商 API", "成本替代品"]} answer={1} explanation="实验抬头已声明。" />
+
+<Quiz id="q9-oneswitch" question="TEMP_CENTER 泄漏指？" options={["只用向后窗口", "中心化滚动特征偷看未来观测", "更高佣金", "密封 hold-out"]} answer={1} explanation="中心化统计在 t 用到 t 之后的价格。" />
+<Quiz id="q10-execopen" question="EXEC_OPEN 不合法是因为？" options={["收盘决策后次日开盘成交", "用当日开盘后字段却假设当日开盘成交", "删除成本", "禁止 RankIC"]} answer={1} explanation="执行对齐类金融原生泄漏。" />
 
 ## 完成标准
 

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **20 学时**：AFML 概念 6h + 实验 11h（含分数差分/唯一性/元标注/CPCV 复用）+ 写作 3h — 重课）建立金融 **防泄漏 ML**：波动率缩放标签、带 embargo 的 purged CV，以及正确的 IC 指标。前置：`factor-workflow`、`backtest-traps`。
+本课（约 **21 学时**：AFML 概念 6h + 实验 11h（含分数差分/唯一性/元标注/CPCV 复用）+ 写作 3h — 重课）建立金融 **防泄漏 ML**：波动率缩放标签、带 embargo 的 purged CV，以及正确的 IC 指标。前置：`factor-workflow`、`backtest-traps`。
 
 **课内目标：** 演示 shuffle / 未 purge 泄漏；时间切分与因果特征；用**日度截面 RankIC 均值**评价（非准确率，亦非以混合 Spearman 作主指标）。
 
@@ -199,6 +199,11 @@ disclaimer: synthetic weak panel — learning only
 ## CPCV 复用提示
 
 对许多 purged 折组合打分会得到 OOS 指标的**分布**——与 AFML 第12章 CPCV 精神相同。路径复用测试块，**不是**独立 DSR 试验。数值玩具在 `backtest-traps` / `examples/p2/02_backtest_traps.py`。
+
+## 指针 — 一键切换的决策时点泄漏
+
+即便日历切分做过 purge，仍可能藏 **决策时点** 泄漏。复用 P2 的 [When Alpha Disappears](https://arxiv.org/abs/2605.23959) 对照：**TEMP_CENTER**（中心化滚动）与 **EXEC_OPEN**（用开盘后字段却假设当日开盘成交）可在 walk-forward *看起来干净* 时抬高夏普。数值 Leakage Gain 见 `backtest-traps`。
+
 
 ## 常见错误 / 陷阱
 

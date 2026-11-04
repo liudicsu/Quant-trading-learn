@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **11 学时**：导读 5h + 批判练习 4h + 守则改写 1h + 密封排行榜精读 1h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
+本课（约 **16 学时**：导读 5h + 批判练习 4h + 守则改写 1h + 密封排行榜精读 1h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
 
 **课内目标：** 陈述 RD-Agent(Q) 闭环；解释 AlphaAgent 正则；列出 LLM 挖因子失败模式；设计密封样本外验收。
 
@@ -19,7 +19,7 @@
 
 ## RD-Agent(Q)（已读论文）
 
-[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155)（arXiv 评论写着 NeurIPS 2025——在核验会议录之前只当预印本元数据）是面向因子–模型联合优化的**数据中心多智能体**框架：将流程拆成 **Research**（目标对齐提示、假设→任务）与 **Development**（实现并反馈）。工程主页见 Microsoft [RD-Agent](https://github.com/microsoft/RD-Agent)。自动化**放大**假设数量——因此 purge OOS、成本与 DSR(N) 更重要，而非更次要。
+[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155) 是面向因子–模型联合优化的**数据中心多智能体**框架：将流程拆成 **Research**（目标对齐提示、假设→任务）与 **Development**（实现并反馈）。工程主页见 Microsoft [RD-Agent](https://github.com/microsoft/RD-Agent)。自动化**放大**假设数量——因此 purge OOS、成本与 DSR(N) 更重要，而非更次要。
 
 实验 `examples/p8/01_llm_agents_offline.py` 用公式库 + IS 保留规则（`mean_CS_IC > 0.01`）模拟闭环。该规则会把**噪声**和弱真因子一起留下——正是过拟合故事。
 
@@ -29,7 +29,7 @@
 
 [Quant-Arena](https://arxiv.org/abs/2610.30113)（Qian 等）检验 LLM agent 能否跑完研究闭环且在研究期**之外**仍有效。协议：仅在 2022–2023 研究、候选预算有界；**冻结**一条策略；密封年 **2024 只打开一次**；偷看后再挖无效。实验打印 `agent_kept` 与 `honest_slow` 的密封 OOS IC。
 
-**已核验负面排行榜结论（重读摘要/表2）：** 没有任何模型的*最高总分*密封-2024 配置跑赢全市场等权（毛收益 ARR 约 **17.1%**）。最高分那次（GPT-6 Astra）约 **10.7%** ARR（超额约 **−6.3** 个百分点）。另有 Sol medium 配置 18.4% 跑赢等权——但那**不是**该模型最高总分行。密封 hold-out + 成本常把「AI 量化」演示变成警示。
+**已核验负面排行榜结论（重读摘要/表2）：** 没有任何模型的*最高总分*密封-2024 配置跑赢全市场等权（毛收益 ARR 约 **17.1%**）。最高分那次（GPT-6 Astra）约 **10.7%** ARR（超额约 **−6.3** 个百分点）。另有 Sol medium 配置数字约 18.4%**高于等权、但不是最高总分行；不作优势证据**。密封 hold-out + 成本常把「AI 量化」演示变成警示。
 
 <Callout type="warn" title="拒绝：「AI 对冲基金 / 永远盈利的 LLM」">
 暗示 LLM agent 总盈利的营销话术，过不了该密封、含成本协议。没有「冻结再测密封年」的排行榜不是证据。
@@ -58,6 +58,48 @@
 [Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619)（Lopez-Lira &amp; Tang）：在**截止后**设计下，作者报告 GPT 分数与反应/漂移存在预测性**关联**——这**不是**「拿 ChatGPT 去交易」，且随采用上升该关联会变弱。实验构造离线 `mock_sentiment`（PIT）与 **LEAK** 对照。LEAK IC ≈ +0.67 是警告，不是策略。后续批判把同一问题写严：[Glasserman &amp; Lin（arXiv:2309.17322）](https://arxiv.org/abs/2309.17322)；[Lopez-Lira、Tang &amp; Zhu（arXiv:2504.14765）](https://arxiv.org/abs/2504.14765)（记忆/不可识别）。
 
 ![Agent vs 诚实因子净值](/p8/agent_vs_honest_nav.png)
+
+## 金融 LLM 五宗罪 + 结构有效性清单
+
+[Evaluating LLMs in Finance Requires Explicit Bias Consideration](https://arxiv.org/abs/2602.14233)（Kong 等）点名五种反复出现、制造「看起来有效」幻觉的 **罪**：
+
+1. **前瞻** — 历史 \(t\) 时权重或 RAG 用到未来信息  
+2. **幸存者** — 默默丢掉退市/失败标的  
+3. **叙事** — 流畅故事并无 \(t\) 时可获得证据支撑  
+4. **目标** — 奖励自信填空，而非校准的弃权  
+5. **成本** — 毛收益假设零摩擦、零推理成本  
+
+他们审阅的 164 篇主会论文（2023–2025）中，**没有任何单一偏差被超过约 28% 的论文讨论**（前瞻 ≈26.8%）。部署主张前把下列项当作 **通过/失败门**：
+
+| 门禁 | 失败条件 |
+|------|----------|
+| 时间净化 | 提示 / RAG / 工具用到 \(t\) 之后信息 |
+| 动态股票池 | 股票池只含样本期末幸存者 |
+| 理由稳健 | 解释只是未检验的装饰 |
+| 认知校准 | 强迫猜测；弃权从不计分 |
+| 真实成本与时延 | 主指标是无摩擦毛 PnL |
+
+实验离线打印同一清单。
+
+## 长区间 LLM 择时：偏差缓解评估下的劣势（拆穿 FinMem / FinAgent 营销）
+
+[Can LLM-based Financial Investing Strategies Outperform the Market in Long Run?](https://arxiv.org/abs/2505.07078)（Li、Kim、Cucuringu、Ma；FINSABER）表明：短且挑剔的窗口（常 &lt;1 年、&lt;10 只标的）会**夸大** FinMem / FinAgent 一类 LLM 择时代理。在更宽、更长、偏差缓解的组合评估下，买入持有与简单规则常在风险调整指标上更好；代理可能在牛市过保守、熊市过激进。
+
+实验选择性窗口对照：
+
+```text
+selective_best_~6m_SR≈4.079  full_sample_SR≈0.191  buy_hold_SR≈-0.027
+delta_selective_minus_full≈+3.889
+```
+
+<Callout type="warn" title="拒绝：FinMem / FinAgent 式小窗口营销">
+在少数大市值赢家上漂亮的 3–6 个月回测 **不是** 长期证据。要求 FINSABER 式广度、含退市池与风险调整指标。
+</Callout>
+
+## OpenPM — 审计协议精神（仅点名用法，不当 PnL）
+
+[OpenPM](https://arxiv.org/abs/2608.09988) 是面向 LLM 组合代理的 **可审计点时**评估框架：可用性门控、污染证书、成本敏感曲线、确定性约束批评器。**教协议，不教收益表**——缺泄漏/成本/约束审计的收益只是上界，不是已验证 alpha。
+
 
 ## Python 实验
 
@@ -112,11 +154,15 @@ weights may remember in-cutoff paths; sealed-year / post-cutoff only; FinCAD rec
 <Quiz id="p8llm-q9" question="参数前瞻指？" options={["仅 CSV 时区 bug", "模型权重可能记住截止前结果", "截止前回测总安全", "FinCAD 必做作业"]} answer={1} explanation="先教问题；FinCAD 仅点名；用密封/截止后。" />
 <Quiz id="p8llm-q6" question="RD-Agent(Q) 阶段包括？" options={["仅实盘路由", "Research 假设再 Development 实现并反馈", "删除 purge 窗", "跳过伦理"]} answer={1} explanation="Research ↔ Development 联合优化闭环。" />
 
+<Quiz id="p8llm-q10" question="下列哪项不是 Kong 等五宗罪？" options={["前瞻", "幸存者", "GPU 品牌偏差", "成本偏差"]} answer={2} explanation="五宗罪：前瞻、幸存者、叙事、目标、成本。" />
+<Quiz id="p8llm-q11" question="FINSABER 对 FinMem/FinAgent 式评估的主要警示？" options={["需要更多 GPU", "短且挑剔的窗口会相对更长、偏差缓解测试夸大技能", "禁止买入持有", "证明代理永远盈利"]} answer={1} explanation="arXiv:2505.07078。" />
+<Quiz id="p8llm-q12" question="OpenPM 应如何使用？" options={["保证 alpha 配方", "当作审计协议（PIT、污染、成本、约束）——不当 PnL 主张", "Deep RL 训练器", "资金费率套利机器人"]} answer={1} explanation="arXiv:2608.09988 精神。" />
+
 ## 完成标准
 
 前沿风险清单 + 更新研究守则（密封 OOS、显式 N、不依赖已撤回 PDF）。
 
-**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent)；[arXiv:2605.24564](https://arxiv.org/abs/2605.24564) 参数前瞻/FinCAD（问题+仅点名配方）；[arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha（**仅点名**）；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**由 Lang Cao 撤回**；含管理员许可评论）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena（~10.7% vs ~17.1%）；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619)；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322)；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765)；niche：@_zheergen。
+**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)（*arXiv 评论写着 NeurIPS 2025——核验会议录前只当预印本脚注*）；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent)；[arXiv:2605.24564](https://arxiv.org/abs/2605.24564) 参数前瞻/FinCAD（问题+仅点名配方）；[arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha（**仅点名**）；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**由 Lang Cao 撤回**；含管理员许可评论）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena（~10.7% vs ~17.1%）；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619)；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322)；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765)；[arXiv:2602.14233](https://arxiv.org/abs/2602.14233) 五宗罪；[arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER；[arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM； niche：@_zheergen。
 
 <Summary>
 **要点**：agent 放大试错 → 更严 DSR/密封 OOS；mock ≠ API；撤回论文只做脚注不做流水线。  

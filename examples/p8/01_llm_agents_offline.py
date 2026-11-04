@@ -318,4 +318,57 @@ print("- LLM factors homogenize without originality/complexity/hypothesis constr
 print("- Parametric look-ahead: weights can memorize in-cutoff outcomes (FinCAD PROBLEM; sealed-year only).")
 print("- Marketing: 'AI hedge fund / always-profitable LLM' claims fail Quant-Arena-style sealed tests.")
 print("\nwrote", PUBLIC / "rdagent_proposals.png", PUBLIC / "agent_vs_honest_nav.png")
+
+
+print("\n=== five LLM-finance sins + structural validity (arXiv:2602.14233) ===")
+sins = [
+    ("look_ahead", "future info in weights/RAG at historical t"),
+    ("survivorship", "delisted/failed names silently dropped"),
+    ("narrative", "fluent story not supported by evidence at t"),
+    ("objective", "confident completion rewarded over calibrated abstention"),
+    ("cost", "gross metrics with zero friction / zero inference cost"),
+]
+for i, (name, note) in enumerate(sins, 1):
+    print(f"  sin#{i} {name}: {note}")
+checklist = [
+    ("temporal_sanitation", "FAIL if any prompt/RAG/tool uses post-t info"),
+    ("dynamic_universe", "FAIL if universe is end-of-sample survivors only"),
+    ("rationale_robustness", "FAIL if explanations are untested decoration"),
+    ("epistemic_calibration", "FAIL if forced guess with no abstention scored"),
+    ("realistic_costs_latency", "FAIL if primary metric is frictionless gross"),
+]
+print("structural_validity checklist (pass/fail before deployment claim):")
+for name, note in checklist:
+    print(f"  [GATE] {name}: {note}")
+print("paper: among 164 conf papers, no single bias discussed in >28%; look-ahead ~26.8%")
+
+print("\n=== long-horizon LLM timing under bias-mitigated eval (arXiv:2505.07078 FINSABER) ===")
+print("cite: Li/Kim/Cucuringu/Ma — FinMem/FinAgent-style short selective windows overstate skill")
+print("toy foil: selective 6m window SR inflated vs 20y-like pooled mean under same rule")
+rng_f = np.random.default_rng(7)
+# Simulate 20y daily excess ~ N(0, 1%) with mild serial noise; "LLM" = random long/flat with 52% win on winners only in a lucky window
+T = 252 * 20
+r = rng_f.normal(0.0002, 0.012, T)  # mild positive drift market
+# selective window: pick best contiguous 126-day SR for a noisy signal
+sig = np.sign(rng_f.normal(size=T) + 0.05 * np.sign(r))
+pnl = sig * r
+# rolling 126d SR
+win = 126
+roll_sr = []
+for i in range(0, T - win, 21):
+    x = pnl[i : i + win]
+    roll_sr.append(x.mean() / (x.std() + 1e-12) * np.sqrt(252))
+best = max(roll_sr)
+full = pnl.mean() / (pnl.std() + 1e-12) * np.sqrt(252)
+bh = r.mean() / (r.std() + 1e-12) * np.sqrt(252)
+print(f"selective_best_~6m_SR≈{best:.3f}  full_sample_SR≈{full:.3f}  buy_hold_SR≈{bh:.3f}")
+print(f"delta_selective_minus_full≈{best - full:+.3f}  <-- short windows + symbol pick inflate")
+print("DEBUNK: FinMem/FinAgent-style marketing on <1y / <10 names is not long-run evidence.")
+print("paper composite setups: B&H often beats FinMem/FinAgent on risk-adjusted metrics.")
+
+print("\n=== OpenPM protocol spirit (arXiv:2608.09988) — audit, not PnL ===")
+print("OpenPM: availability-gated PIT eval + contamination certificate + cost curve + mandate critic")
+print("teach: returns without leakage/cost/mandate audits are upper bounds — not validated alpha")
+print("NAME use: adopt audit artifacts; do not ship OpenPM PnL as a strategy claim")
+
 print("DONE lab 01")

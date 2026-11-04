@@ -75,4 +75,20 @@ Paper negative result spirit: positive IC can still yield negative net Sharpe un
 - Nautilus: identical strategy code ≠ identical fills (latency/partial/recon still differ).
 
 wrote /workspace/Quant-trading-learn/public/p8/tsfm_vs_baselines.png /workspace/Quant-trading-learn/public/p8/funding_regime.png
+
+=== perpetual funding mechanism + funding arb NOT risk-free (arXiv:2212.06888) ===
+cite: He/Manela/Ross/von Wachter — Fundamentals of Perpetual Futures
+theory: funding ≈ clamp(interest - premium) keeps F near S; arb is RANDOM-MATURITY, not riskless
+toy: premium=20.0bps  funding_8h≈20.0bps on $100,000
+  if long spot / short perp: receive ~$200.00 per 8h while gap stays
+  if gap widens +60bps before unwind: interim MTM≈$-600.00 (margin risk)
+WARN: DO NOT treat advertised funding-arb Sharpes as risk-free alpha — margin, gap risk, fees, exchange solvency.
+paper spirit: deviations can be large; strategy Sharpe high in sample still needs costs/liquidations.
+
+=== liquidation cascades: subcritical engine (arXiv:2608.03616) ===
+cite: Garcia Seuma — branching ratio λ measured in-flight on Hyperliquid Oct 2025 cascade
+paper: λ̂≈0.1–0.2 (subcritical); reject critical EWS / 'crash multiplier→1' marketing
+toy Galton–Watson: λ=0.15  initial_forced=$100M  amplified_total≈$117.6M (not runaway)
+if λ→1 amplification diverges; measured cascades stayed <<1 — severity = shock × path × liquidity withdrawal
+DEBUNK: critical early-warning crash marketing — Part I found no event-invariant CSD; engine stayed subcritical.
 DONE lab 02

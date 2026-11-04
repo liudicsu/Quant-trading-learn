@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **17 学时**：概念 5h + 实验 9h（含 HRP）+ 写作 3h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **20 学时**：概念 5h + 实验 9h（含 HRP）+ 写作 3h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -103,6 +103,20 @@ mean_shrinkage_intensity=0.036
 
 ![HRP vs ERC](/p6/hrp_vs_erc.png)
 
+## 无交易区 / 成本进入交叉验证
+
+有比例成本时，最优再平衡通常**不是**「永远回到目标」。[Brandt、Santa-Clara & Valkanov（RFS 2009）](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695) 给出实用 **无交易**边界（目标权重周围的超球面）：持仓在内部则**不动**；在外部则朝边界交易——不必一次打到目标。连续时间经典：Magill–Constantinides / Davis–Norman 式无交易区。
+
+实验玩具：
+
+```text
+rmse(hold,target)=0.0294  k=0.0500  inside_no_trade=True
+turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
+```
+
+**桥接 Detzel（JF 2023）：** 成本会改变因子/模型谁胜出——因此无交易半径/换手惩罚应在验证**内部**选择（cost-in-CV），而不是偷看 OOS 后再定。
+
+
 ## 常见错误 / 陷阱
 
 1. 在噪声估计优势上使用满 Kelly。
@@ -132,6 +146,8 @@ mean_shrinkage_intensity=0.036
 <Quiz id="p6prs-q6" question="波动目标必须使用？" options={["当日实现 σ", "滞后波动，使权重在下一根 K 线生效", "仅用未来期权 IV", "全样本 σ"]} answer={1} explanation="无前瞻：用过去估 σ̂，下一根再交易。" />
 <Quiz id="p6prs-q7" question="HRP 独特的数值动作是？" options={["总是反演 Σ", "在层级上配置且不反演 Σ", "只用满 Kelly", "丢掉债券"]} answer={1} explanation="López de Prado 2016 JPM / AFML 第16章。" />
 <Quiz id="p6prs-q8" question="玩具面板上 HRP 股票簇权重相对逆波动？" options={["大得多", "被压缩（≈0.42 vs ≈0.53），因相关名字同枝", "永远恰为 1/N", "未定义"]} answer={1} explanation="层级相对按票数思维削减股票块。" />
+
+<Quiz id="p6prs-q-nt" question="无交易区意味着？" options={["每天都再平衡到目标", "足够接近目标则不交易；越界则朝边界交易", "禁止一切成本", "最大化换手"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 精神。" />
 
 ## 完成标准
 

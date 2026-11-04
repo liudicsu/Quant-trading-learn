@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **11 学时**：论文/文档 5h + 设计练习 4h + 结构/PIT 实验 1h + 基率 foil 1h）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
+本课（约 **14 学时**：论文/文档 5h + 设计练习 4h + 结构/PIT 实验 1h + 基率 foil 1h）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
 
 **课内目标：** 概括 TSFM 日频超额收益的谨慎结论；报告相对 always-up 的**超额方向准确率**；设计另类数据 / Crypto PIT 检查；说明 CEX CCXT 与链上适配差异及额外风险。
 
@@ -63,6 +63,31 @@ TSFM、资金费率账本、GMX 风格 OI 均为离线 mock。无交易所密钥
 - **[@sera00111 工具笔记](https://x.com/sera00111/status/2108332340753969191)**（P2 已核验）：分钟/小时研究可从 [Binance Vision](https://data.binance.vision/) + CCXT 类免费入口起步；**先定策略再选粒度**。
 
 ![资金费率制度切换](/p8/funding_regime.png)
+
+## 永续资金费率机制 — 资金费率套利不是无风险
+
+[Fundamentals of Perpetual Futures](https://arxiv.org/abs/2212.06888)（He、Manela、Ross、von Wachter）在交易所 **funding**（clamp）机制下推导永续无套利价格/边界。多头周期性按期现价差相关费率付给空头（或相反），使 \(F\) 贴近 \(S\)。
+
+**关键教学点：** 所谓「资金费率套利」是 **随机到期** 套利，不是经典无风险套利——价差不必在固定日收敛，中途盯市可打到保证金，费用与交易所偿付能力都重要。
+
+实验玩具：
+
+```text
+premium=20.0bps  funding_8h≈20.0bps on $100,000
+  receive ~$200.00 per 8h while gap stays
+  if gap widens +60bps before unwind: interim MTM≈$-600.00
+```
+
+<Callout type="warn" title="不要把广告里的资金费率套利夏普当 alpha">
+论文策略在样本内扣除成本后仍可能打出高夏普；那 **不是** 无风险优势。本课只讲理论+警告——不提供广告夏普配方表。
+</Callout>
+
+## 清算 cascade：亚临界引擎（拒绝临界 EWS 营销）
+
+[Measuring the engine of a liquidation cascade](https://arxiv.org/abs/2608.03616)（Garcia Seuma）在 Hyperliquid 2025-10 cascade 上**飞行中**测量分支比 \(\lambda\)：\(\hat\lambda pprox 0.1\)–\(0.2\)（**亚临界**）。严重程度更像 冲击 × 路径地图 × 流动性抽离——不是乘数冲向 1。
+
+实验 Galton–Watson 对照：\(\lambda=0.15\)，强制卖出 $100M → 放大约 $117.6M（并非失控）。**拒绝**需要 \(\lambda	o 1\) 的「临界预警→崩盘」营销。
+
 
 ## NautilusTrader：回测与实盘代码同构
 

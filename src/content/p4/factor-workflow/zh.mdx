@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **15 学时**：概念 5h + 实验 7h + 写作 2h + 拥挤→LLM 桥 1h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
+本课（约 **18 学时**：概念 5h + 实验 7h + 写作 2h + 拥挤→LLM 桥 1h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
 
 **课内目标：** 实现 Spearman IC；构建分层多空；对照真/假因子。
 
@@ -72,6 +72,21 @@ Alphalens 风格五分位；多 Q5 / 空 Q1；共享成本。强：毛夏普 ≈
 | \|t\|>3 | ≈0.0%（0/200） | ≈**0.27%**（≈**0.54**/200） |
 
 观测到的约 4.5–6% \|t\|>2 **与纯噪声一致**。因此 HLZ 把门槛抬向 **t>3**：业界已把 t≈2 的预算花光。
+
+## 含成本的因子排序（Detzel–Novy-Marx–Velikov）
+
+[Model Comparison with Transaction Costs](https://doi.org/10.1111/jofi.13225)（Detzel、Novy-Marx & Velikov，《Journal of Finance》2023）表明：**忽略交易成本会让检验偏向高换手因子/模型**。毛夏普冠军在计入成本后可能翻盘。
+
+实验玩具（无前瞻；同一滞后信息、不同换手）：
+
+```text
+slow_factor  turnover≈0.506  gross_SR≈-0.119  net_SR@10bps≈-1.929
+fast_factor  turnover≈3.197  gross_SR≈0.363  net_SR@10bps≈-11.368
+ranking_by_gross_picks=fast  ranking_by_net_picks=slow
+```
+
+**要教：** 不计成本的毛收益排序偏向高换手信号；净收益排序可能反转。论文：计入成本后，FF5（尤其现金盈利变体）在其设定下优于高成本 q / 六因子一类比较。
+
 
 ## 拥挤与衰减
 
@@ -202,11 +217,13 @@ disclaimer: strong panel MU is inflated for teaching; weak panel is the realisti
 <Quiz id="q5-overlap" question="重叠的多日 IC 窗口主要会？" options={["大幅上偏平均 IC", "抬高 IC 自相关并影响 ICIR 标准误；用非重叠或 Newey–West 修复", "消灭换手", "替代中性化"]} answer={1} explanation="平均 IC 受影响较小；推断需非重叠或 NW。" />
 <Quiz id="q6-zoo" question="观测到约 4.5–6% 随机因子 |t|>2 意味着？" options={["alpha 真实", "与约 4.55% 的 N(0,1) 原假设一致——不是发现", "t>2 胜过 HLZ", "成本为零"]} answer={1} explanation="匹配纯噪声比例；HLZ 把门槛推向 t>3。" />
 
+<Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov（JF 2023）主要警示？" options={["总选最高换手", "忽略成本会让模型/因子比较偏向高成本因子", "成本从不改变排序", "只与加密有关"]} answer={1} explanation="DOI 10.1111/jofi.13225。" />
+
 ## 完成标准
 
 IC + 分层多空 + 空因子动物园报告，含强/弱表、滞后市值中性化与前瞻说明。
 
-**来源：** Fama–MacBeth 1973；Fama–French 1993/2015；Harvey–Liu–Zhu 2016；Alphalens；Qlib；AFML Factor Mirage；@alin_alphapilot；quant-wiki 对照。
+**来源：** Fama–MacBeth 1973；Fama–French 1993/2015；Harvey–Liu–Zhu 2016；Alphalens；Qlib；AFML Factor Mirage；@alin_alphapilot；quant-wiki 对照。 Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225)；
 
 <Summary>
 **要点**：构建 → IC/衰减 → 强 vs 弱 → 分层+成本 → FM → t>3 动物园。  

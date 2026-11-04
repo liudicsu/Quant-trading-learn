@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**20 hours**: 6h AFML concepts + 11h labs (fracdiff / uniqueness / meta / CPCV note) + 3h write-up — HEAVY) builds **anti-leakage ML** for finance: vol-scaled labels, purged CV with embargo, and the right IC metric. Prereqs: `factor-workflow`, `backtest-traps`.
+This lesson (~**21 hours**: 6h AFML concepts + 11h labs (fracdiff / uniqueness / meta / CPCV note) + 3h write-up — HEAVY) builds **anti-leakage ML** for finance: vol-scaled labels, purged CV with embargo, and the right IC metric. Prereqs: `factor-workflow`, `backtest-traps`.
 
 **Goals:** demo shuffle / unpurged leakage; time-split with causal features; score with **mean daily cross-sectional RankIC** (not accuracy, not pooled Spearman as primary).
 
@@ -199,6 +199,11 @@ On this weak panel, a stricter meta filter can **raise IC a little** while **hur
 ## CPCV reuse note
 
 Scoring many purged fold combinations yields a **distribution** of OOS metrics — the same spirit as AFML ch.12 CPCV. Paths reuse test blocks and are **not** independent DSR trials. The numeric toy (15 combo SRs, single hold-out contrast) lives in `backtest-traps` / `examples/p2/02_backtest_traps.py`.
+
+## Pointer — one-switch decision-time leakage
+
+Even a purged calendar split can hide **decision-time** leaks. Reuse the P2 foil from [When Alpha Disappears](https://arxiv.org/abs/2605.23959): **TEMP_CENTER** (centered rolling) and **EXEC_OPEN** (same-day open fill with post-open bar fields) can inflate Sharpe while the walk-forward *looks* clean. Details and numeric Leakage Gains live in `backtest-traps`.
+
 
 ## Common mistakes / pitfalls
 

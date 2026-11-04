@@ -39,5 +39,8 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
 [OK] sec_cftc_2025_09_02: SEC-CFTC Joint Staff Statement (Project Crypto / Crypto Sprint)
     https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225
     verified: Staff statement 2025-09-02 (not Commission rule); view that law does not prohibit registered exchanges facilitating certain spot crypto products; explicitly non-binding.
+[OK] hkex_nb_program_trading_2026: Northbound Program Trading Reporting (Stock Connect)
+    https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en
+    verified: Mainland NB Program Trading Reporting Requirements effective 2026-01-12; ECP submissions from 2026-01-12; existing investors transition to 2026-04-10; thresholds include automation / fast order rate / many stocks+turnover / customized software (SSE/SZSE separate).
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=13 all_fetch_OK=True
+n_sources=14 all_fetch_OK=True

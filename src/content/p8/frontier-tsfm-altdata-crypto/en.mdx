@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**11 hours**: 5h papers/docs + 4h design exercises + 1h structure/PIT lab + 1h base-rate foil) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
+This lesson (~**14 hours**: 5h papers/docs + 4h design exercises + 1h structure/PIT lab + 1h base-rate foil) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
 
 **Goals:** summarize cautious TSFM daily excess-return findings; report **excess directional accuracy** over always-up; design alt-data / crypto PIT checks; explain CEX CCXT vs on-chain adapter risks.
 
@@ -63,6 +63,31 @@ Treat sentiment, filings, web scrapes like any other feature: **as-of timestamps
 - **[@sera00111 tooling note](https://x.com/sera00111/status/2108332340753969191)** (P2-verified): minute/hour research can start from [Binance Vision](https://data.binance.vision/) + CCXT-style free entry; choose grain **after** you know the strategy.
 
 ![Funding regime foil](/p8/funding_regime.png)
+
+## Perpetual funding mechanism — funding arb is NOT risk-free
+
+[Fundamentals of Perpetual Futures](https://arxiv.org/abs/2212.06888) (He, Manela, Ross, von Wachter) derives no-arbitrage prices / bounds for perpetuals with the exchange **funding** (clamp) mechanism. Longs periodically pay shorts a rate tied to the futures–spot gap (or vice versa) so \(F\) stays near \(S\).
+
+**Critical teaching point:** so-called “funding-rate arbitrage” is **random-maturity**, not classical riskless arb — the gap need not converge on a fixed date, interim mark-to-market can hit margin, and fees/solvency matter.
+
+Lab toy:
+
+```text
+premium=20.0bps  funding_8h≈20.0bps on $100,000
+  receive ~$200.00 per 8h while gap stays
+  if gap widens +60bps before unwind: interim MTM≈$-600.00
+```
+
+<Callout type="warn" title="Do NOT ship advertised funding-arb Sharpes as alpha">
+Paper strategies can print high sample Sharpes after costs; that is **not** a risk-free edge. Theory + warning only in this course — no recipe tables of advertised Sharpes.
+</Callout>
+
+## Liquidation cascades: subcritical engine (reject critical EWS marketing)
+
+[Measuring the engine of a liquidation cascade](https://arxiv.org/abs/2608.03616) (Garcia Seuma) measures the branching ratio \(\lambda\) **in flight** on Hyperliquid’s October 2025 cascade: \(\hat\lambda pprox 0.1\)–\(0.2\) (**subcritical**). Severity looks like shock × map-in-path × liquidity withdrawal — not a multiplier racing to 1.
+
+Lab Galton–Watson foil: \(\lambda=0.15\), $100M forced → ≈$117.6M amplified (not runaway). **Reject** “critical early-warning → crash” marketing that needs \(\lambda	o 1\).
+
 
 ## NautilusTrader: identical backtest &amp; live code
 

@@ -251,3 +251,7 @@ oof_ridge.to_frame("pred").to_pickle(out / "oof_ridge.pkl")
 oof_gbm.to_frame("pred").to_pickle(out / "oof_gbm.pkl")
 print("saved artifacts for lab 02")
 print("disclaimer: synthetic weak panel — learning only")
+
+print("\n=== pointer: one-switch decision-time leakage (see backtest-traps; arXiv:2605.23959) ===")
+print("TEMP_CENTER / EXEC_OPEN can inflate SR even when the calendar split looks clean — reuse the P2 foil.")
+

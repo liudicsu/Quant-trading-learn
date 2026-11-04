@@ -55,3 +55,11 @@ ERC equity_cluster_sum 0.5000
 teach: inv-vol ignores correlation clusters; ERC equalizes risk contributions; HRP allocates across a hierarchy so a large correlated cluster does not dominate like 1/N-by-ticker
 chart /workspace/Quant-trading-learn/public/p6/hrp_dendrogram.png
 chart /workspace/Quant-trading-learn/public/p6/hrp_vs_erc.png
+
+=== no-trade region / cost-in-CV spirit (Brandt–Santa-Clara–Valkanov RFS 2009 + Detzel bridge) ===
+cite: Brandt/Santa-Clara/Valkanov RFS 2009 parametric portfolio policies — hypersphere no-trade boundary
+cite bridge: Detzel–Novy-Marx–Velikov JF 2023 — costs change which models/factors win
+rmse(hold,target)=0.0294  k=0.0500  inside_no_trade=True
+turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
+teach: near the target, first-order costs beat second-order utility gains — stay put.
+cost-in-CV spirit: choose k / turnover penalty INSIDE validation, not after peeking at OOS.

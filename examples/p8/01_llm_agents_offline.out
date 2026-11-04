@@ -88,4 +88,31 @@ Out of scope here: Deep RL / FinRL-as-alpha / HFT recipes / options MM.
 - Marketing: 'AI hedge fund / always-profitable LLM' claims fail Quant-Arena-style sealed tests.
 
 wrote /workspace/Quant-trading-learn/public/p8/rdagent_proposals.png /workspace/Quant-trading-learn/public/p8/agent_vs_honest_nav.png
+
+=== five LLM-finance sins + structural validity (arXiv:2602.14233) ===
+  sin#1 look_ahead: future info in weights/RAG at historical t
+  sin#2 survivorship: delisted/failed names silently dropped
+  sin#3 narrative: fluent story not supported by evidence at t
+  sin#4 objective: confident completion rewarded over calibrated abstention
+  sin#5 cost: gross metrics with zero friction / zero inference cost
+structural_validity checklist (pass/fail before deployment claim):
+  [GATE] temporal_sanitation: FAIL if any prompt/RAG/tool uses post-t info
+  [GATE] dynamic_universe: FAIL if universe is end-of-sample survivors only
+  [GATE] rationale_robustness: FAIL if explanations are untested decoration
+  [GATE] epistemic_calibration: FAIL if forced guess with no abstention scored
+  [GATE] realistic_costs_latency: FAIL if primary metric is frictionless gross
+paper: among 164 conf papers, no single bias discussed in >28%; look-ahead ~26.8%
+
+=== long-horizon LLM timing under bias-mitigated eval (arXiv:2505.07078 FINSABER) ===
+cite: Li/Kim/Cucuringu/Ma — FinMem/FinAgent-style short selective windows overstate skill
+toy foil: selective 6m window SR inflated vs 20y-like pooled mean under same rule
+selective_best_~6m_SR≈4.079  full_sample_SR≈0.191  buy_hold_SR≈-0.027
+delta_selective_minus_full≈+3.889  <-- short windows + symbol pick inflate
+DEBUNK: FinMem/FinAgent-style marketing on <1y / <10 names is not long-run evidence.
+paper composite setups: B&H often beats FinMem/FinAgent on risk-adjusted metrics.
+
+=== OpenPM protocol spirit (arXiv:2608.09988) — audit, not PnL ===
+OpenPM: availability-gated PIT eval + contamination certificate + cost curve + mandate critic
+teach: returns without leakage/cost/mandate audits are upper bounds — not validated alpha
+NAME use: adopt audit artifacts; do not ship OpenPM PnL as a strategy claim
 DONE lab 01

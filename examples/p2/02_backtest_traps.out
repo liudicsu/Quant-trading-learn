@@ -108,4 +108,13 @@ contrast: single hold-out gives ONE OOS SR=-1.3379; CPCV-style combos give a DIS
 teach: combinatorial test blocks reuse information across paths — paths are NOT independent trials; use the SR distribution to stress-test stability, not to mint N free trials for DSR.
 saved_plot public/p2/cpcv_sr_dist.png
 reuse_note: ml-leakage-control reuses this combinatorial idea when scoring many purged folds
+
+=== one-switch decision-time leakage (arXiv:2605.23959 When Alpha Disappears) ===
+cite: Zhang et al. arXiv:2605.23959 — TEMP_CENTER and EXEC_OPEN dominate Leakage Gain
+CLEAN SR@toy≈-0.741
+TEMP_CENTER SR≈6.265  LeakageGain_SR≈+7.006  (centered rolling uses future)
+EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556  (close info + same-day open fill)
+teach: chronological train/test split alone is NOT enough — decision-time semantics matter.
+paper: TEMP_CENTER & EXEC_OPEN dominate; NORM_GLOBAL / STRUCT_GRAPH / EXEC_CLOSE often weak.
+diagnostic only — large LG is protocol inflation under infeasible rules, not deployable alpha.
 ASSERTS_OK

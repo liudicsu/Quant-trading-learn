@@ -304,3 +304,56 @@ fig.tight_layout(); fig.savefig(PUBLIC / "quantile_bars.png", dpi=120); plt.clos
 print("quantile_ann_means", {f"Q{k}": round(v, 4) for k, v in qret.items()})
 print("chart", PUBLIC / "quantile_bars.png")
 print("disclaimer: strong panel MU is inflated for teaching; weak panel is the realistic foil — learning only")
+
+
+
+print("\n=== cost-aware factor / AP-model comparison foil (Detzel–Novy-Marx–Velikov JF 2023) ===")
+print("cite: DOI 10.1111/jofi.13225 — ignoring costs biases tests toward high-turnover factors/models")
+rng_d = np.random.default_rng(11)
+n_d, m_d = 600, 120
+# Plant a moderate CS alpha that BOTH factors can see, but fast factor churns more
+a = rng_d.normal(0, 1.0, size=(n_d, m_d))
+noise = rng_d.normal(0, 0.015, size=(n_d, m_d))
+rets_d = 0.0012 * a + noise
+fwd = pd.DataFrame(rets_d).shift(-1)
+# Slow factor: lagged sticky score (low turnover)
+slow = pd.DataFrame(a).shift(1).rolling(40, min_periods=20).mean().rank(axis=1, pct=True)
+# Fast factor: re-ranks every day using a noisier short window of the SAME lagged info (no look-ahead)
+# Higher gross capture of short-lived noise + true alpha, but huge turnover
+fast = (pd.DataFrame(a).shift(1) + 0.8 * pd.DataFrame(noise).shift(1)).rank(axis=1, pct=True)
+
+def ls_pnl(factor, fwd, cost_bps=10.0):
+    pnl, turns, prev = [], [], None
+    for t_i in range(len(factor) - 1):
+        row = factor.iloc[t_i]
+        if row.notna().sum() < 30:
+            continue
+        q_hi, q_lo = row.quantile(0.8), row.quantile(0.2)
+        long = row >= q_hi
+        short = row <= q_lo
+        w = long.astype(float) / max(long.sum(), 1) - short.astype(float) / max(short.sum(), 1)
+        r = float((w * fwd.iloc[t_i]).sum())
+        turn = float(np.abs(w).sum()) if prev is None else float(np.abs(w - prev).sum())
+        prev = w
+        pnl.append(r - turn * (cost_bps / 1e4))
+        turns.append(turn)
+    s = pd.Series(pnl)
+    sr = float(s.mean() / s.std(ddof=1) * np.sqrt(252)) if len(s) > 20 and s.std(ddof=1) > 0 else float("nan")
+    # also gross SR
+    return sr, float(np.mean(turns))
+
+def ls_gross(factor, fwd):
+    return ls_pnl(factor, fwd, cost_bps=0.0)
+
+sr_s_g, turn_s = ls_gross(slow, fwd)
+sr_s_n, _ = ls_pnl(slow, fwd, cost_bps=10.0)
+sr_f_g, turn_f = ls_gross(fast, fwd)
+sr_f_n, _ = ls_pnl(fast, fwd, cost_bps=10.0)
+print(f"slow_factor  turnover≈{turn_s:.3f}  gross_SR≈{sr_s_g:.3f}  net_SR@10bps≈{sr_s_n:.3f}")
+print(f"fast_factor  turnover≈{turn_f:.3f}  gross_SR≈{sr_f_g:.3f}  net_SR@10bps≈{sr_f_n:.3f}")
+winner_gross = "fast" if sr_f_g > sr_s_g else "slow"
+winner_net = "fast" if sr_f_n > sr_s_n else "slow"
+print(f"ranking_by_gross_picks={winner_gross}  ranking_by_net_picks={winner_net}")
+print("teach: cost-blind gross rankings bias toward high-turnover factors; net-of-cost rankings can reverse — Detzel spirit.")
+print("paper: after costs, FF5 (esp. cash-profitability variants) beat high-cost q/six-factor style comparisons.")
+

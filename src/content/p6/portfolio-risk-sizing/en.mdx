@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**17 hours**: 5h concepts + 9h labs (incl. HRP) + 3h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+This lesson (~**20 hours**: 5h concepts + 9h labs (incl. HRP) + 3h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
 
 **Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
 
@@ -103,6 +103,20 @@ HRP trims the large correlated equity block relative to ticker-count / inv-vol t
 
 ![HRP vs ERC](/p6/hrp_vs_erc.png)
 
+## No-trade region / cost-in-CV spirit
+
+With proportional costs, optimal rebalancing is usually **not** “always return to target.” [Brandt, Santa-Clara & Valkanov (RFS 2009)](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695) implement a practical **no-trade** boundary (hypersphere around target weights): if holdings are inside, **do nothing**; if outside, trade toward the boundary — not necessarily all the way to target. Classic continuous-time roots: Magill–Constantinides / Davis–Norman style no-trade regions.
+
+Lab toy:
+
+```text
+rmse(hold,target)=0.0294  k=0.0500  inside_no_trade=True
+turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
+```
+
+**Bridge to Detzel (JF 2023):** costs change which factors/models win — so choose the no-trade radius / turnover penalty **inside** validation (cost-in-CV), not after peeking at OOS.
+
+
 ## Common mistakes / pitfalls
 
 1. Full Kelly on a noisy estimated edge.
@@ -132,6 +146,8 @@ HRP trims the large correlated equity block relative to ticker-count / inv-vol t
 <Quiz id="p6prs-q6" question="Vol targeting must use?" options={["Same-bar realised σ", "Lagged volatility so weights enter the next bar", "Future option IV only", "Full-sample σ"]} answer={1} explanation="No look-ahead: σ̂ from the past, trade next bar." />
 <Quiz id="p6prs-q7" question="HRP’s distinctive numerical move is?" options={["Always invert Σ", "Allocate on a hierarchy without inverting Σ", "Use only full Kelly", "Drop bonds"]} answer={1} explanation="López de Prado 2016 JPM / AFML ch.16." />
 <Quiz id="p6prs-q8" question="On the toy panel HRP equity-cluster weight vs inv-vol is?" options={["Much larger", "Trimmed (≈0.42 vs ≈0.53) because correlated names share a branch", "Exactly 1/N always", "Undefined"]} answer={1} explanation="Hierarchy cuts the equity block relative to ticker-count thinking." />
+
+<Quiz id="p6prs-q-nt" question="A no-trade region means?" options={["Always rebalance to target daily", "Do not trade when close enough to target; trade toward the boundary if outside", "Ban all costs", "Maximize turnover"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 spirit." />
 
 ## Done when
 

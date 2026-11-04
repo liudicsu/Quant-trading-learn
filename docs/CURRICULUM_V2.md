@@ -85,7 +85,7 @@
 | P5 | AFML CV/labeling；ML4T；Qlib Quick Start | Canvas m10；@quantscience_；ML4T 帖 | Qlib 深度模型可选对照 |
 | P6 | QuantStart VaR/Kelly/execution；NYU TCA；UChicago FINM | Canvas m11–m12；@sera00111 | — |
 | P7 | JoinQuant 模拟；QuantStart paper-before-live | Canvas m13–m14；Qbot/Atlas | — |
-| P8 | — | XQuant / Crypto 工具链等非主流 | RD-Agent(Q)；Chain-of-Alpha；Quant-Arena；TSFM 评测；GMX CCXT |
+| P8 | — | XQuant / Crypto 工具链等非主流 | RD-Agent(Q)；Chain-of-Alpha；Quant-Arena；TSFM 评测；GMX CCXT; perp funding arXiv:2212.06888; liquidation subcritical arXiv:2608.03616 |
 | P9 | Canvas 结业量规；聚宽综合 | 开源策略库仅灵感 | 可选前沿负结果附录 |
 
 ## 4. 非主流 / 前沿条目清单 → 归属课
@@ -360,7 +360,7 @@
   - walk-forward目的
 - **Completion criteria:**
   - 陷阱报告含对照与OOS。
-- **Method tags:** classic: Canvas m5; JoinQuant审讯室; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | classic+: Bailey-LdP 2012 PSR / 2014 DSR; AFML ch.7/14 | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out
+- **Method tags:** classic: Canvas m5; JoinQuant审讯室; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | classic+: Bailey-LdP 2012 PSR / 2014 DSR; AFML ch.7/14 | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out; When Alpha Disappears arXiv:2605.23959 one-switch
 
 #### `costs-in-backtest` — 成本写入回测 / Costs in the backtest
 - **Hours:** 6h · **Difficulty:** 3/5 · **Basis:** 2h concepts + 3.5h coding + 0.5h quiz
@@ -758,7 +758,7 @@
   - 密封hold-out是什么
 - **Completion criteria:**
   - 前沿风险清单+更新研究守则。
-- **Method tags:** niche: XQuant Spec+AI run-first as motivation only (@_zheergen) | frontier: microsoft/RD-Agent + R&D-Agent(Q) NeurIPS 2025 / arXiv:2505.15155; Chain-of-Alpha arXiv:2508.06312; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113; Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765
+- **Method tags:** niche: XQuant Spec+AI run-first as motivation only (@_zheergen) | frontier: microsoft/RD-Agent + R&D-Agent(Q) arXiv:2505.15155 (NeurIPS 2025 only as arXiv comment — verify proceedings); Chain-of-Alpha arXiv:2508.06312; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113; Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765; Five sins arXiv:2602.14233; FINSABER arXiv:2505.07078; OpenPM arXiv:2608.09988
 
 #### `frontier-tsfm-altdata-crypto` — 前沿：时序基础模型 · 另类数据 · Crypto/链上 / Frontier: TSFMs · alt-data · crypto/on-chain
 - **Hours:** 8h · **Difficulty:** 4/5 · **Basis:** 4h paper/docs + 3h design exercises + 1h optional pull

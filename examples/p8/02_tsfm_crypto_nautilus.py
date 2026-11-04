@@ -322,4 +322,32 @@ print("- Funding regime shifts: carry sign flips; constant-rate ann. is a foil."
 print("- On-chain/GMX: MEV, oracle, liquidity, bridge risks beyond CEX CCXT.")
 print("- Nautilus: identical strategy code ≠ identical fills (latency/partial/recon still differ).")
 print("\nwrote", PUBLIC / "tsfm_vs_baselines.png", PUBLIC / "funding_regime.png")
+
+
+print("\n=== perpetual funding mechanism + funding arb NOT risk-free (arXiv:2212.06888) ===")
+print("cite: He/Manela/Ross/von Wachter — Fundamentals of Perpetual Futures")
+print("theory: funding ≈ clamp(interest - premium) keeps F near S; arb is RANDOM-MATURITY, not riskless")
+# Toy: futures-spot premium and funding accrual; convergence trade can lose if gap widens before unwind
+premium = 0.002  # F 20bps above S
+funding_8h = premium  # simplified: funding ~ premium index
+notional = 100_000.0
+print(f"toy: premium={premium*1e4:.1f}bps  funding_8h≈{funding_8h*1e4:.1f}bps on ${notional:,.0f}")
+print(f"  if long spot / short perp: receive ~${notional*funding_8h:.2f} per 8h while gap stays")
+# Mark-to-market shock: gap widens to 80bps before closing → interim loss on basis
+gap_widen = 0.006
+interim_mtm = -notional * gap_widen
+print(f"  if gap widens +{gap_widen*1e4:.0f}bps before unwind: interim MTM≈${interim_mtm:.2f} (margin risk)")
+print("WARN: DO NOT treat advertised funding-arb Sharpes as risk-free alpha — margin, gap risk, fees, exchange solvency.")
+print("paper spirit: deviations can be large; strategy Sharpe high in sample still needs costs/liquidations.")
+
+print("\n=== liquidation cascades: subcritical engine (arXiv:2608.03616) ===")
+print("cite: Garcia Seuma — branching ratio λ measured in-flight on Hyperliquid Oct 2025 cascade")
+print("paper: λ̂≈0.1–0.2 (subcritical); reject critical EWS / 'crash multiplier→1' marketing")
+lam = 0.15
+shock = 100.0  # $M forced
+ampl = shock / (1 - lam)
+print(f"toy Galton–Watson: λ={lam:.2f}  initial_forced=${shock:.0f}M  amplified_total≈${ampl:.1f}M (not runaway)")
+print(f"if λ→1 amplification diverges; measured cascades stayed <<1 — severity = shock × path × liquidity withdrawal")
+print("DEBUNK: critical early-warning crash marketing — Part I found no event-invariant CSD; engine stayed subcritical.")
+
 print("DONE lab 02")

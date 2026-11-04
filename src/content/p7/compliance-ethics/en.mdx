@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**6 hours**: 3h reading + 2h writing + 1h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
+This lesson (~**8 hours**: 3h reading + 2h writing + 1h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
 
 **Goals:** write a risk-preference page; log failures honestly; refuse “guaranteed Sharpe” pitches.
 
@@ -27,6 +27,12 @@ Nothing here is legal, compliance, or investment advice. Thresholds and effectiv
 
 - **Source (fetched OK):** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 中国证监会公告〔2025〕12号；also announced on [csrc.gov.cn](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml) (2025-06-13).
 - **Verified:** published **2025-06-13**; **effective 2025-10-09**. Futures programmatic trading = computer-generated/routed orders on futures exchanges. **Report-before-trade:** customer reports to futures company → FC verifies → exchange confirms → then trade. HFT features are qualitative in the CSRC text; **futures exchanges set numeric HFT standards**, may apply differentiated fees / cancel charges / limits. Host-colocation and seat fairness rules; abnormal cancel/replace monitoring. Pre-effective participants get **6 months** to meet Arts. 7–12 reporting. Complements securities 〔2024〕8 — do not conflate the two markets.
+
+### Northbound Stock Connect — program-trading reporting (eff. 2026-01-12)
+
+- **Hub (fetched OK):** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
+- **Verified:** Mainland exchanges’ NB Program Trading Reporting Requirements **effective 2026-01-12**; CCEPs/TTEPs submit via HKEX ECP from that date; existing investors had a transition window through **2026-04-10**. SSE/SZSE thresholds (computed separately) include high automation of order elements, fast order rate, many stocks + high turnover, or customized software — **TWAP/VWAP-only simple splitting is generally not the trigger**. Primary texts live on SSE/SZSE; HKEX page is the English hub. Complements onshore securities 〔2024〕8 / futures 〔2025〕12 — Stock Connect northbound has its **own** reporting channel.
+
 
 ## United States — market access, shorts, margin, algo supervision
 
@@ -79,7 +85,7 @@ Nothing here is legal, compliance, or investment advice. Thresholds and effectiv
 ### Real run output
 
 ```
-n_sources=13 all_fetch_OK=True
+n_sources=14 all_fetch_OK=True
 (checked Asia/Shanghai 2026-11-04)
 ```
 
@@ -110,6 +116,8 @@ n_sources=13 all_fetch_OK=True
 <Quiz id="p7ce-q6" question="PBoC 2021 notice (fetched) states virtual currency related businesses are?" options={["Encouraged fintech", "Characterised as illegal financial activities and prohibited", "Mandatory for banks", "Unregulated"]} answer={1} explanation="银发〔2021〕237号 high-level status." />
 <Quiz id="p7ce-q7" question="CSRC futures programmatic rules 〔2025〕12 (fetched) take effect on?" options={["2024-10-08", "2025-10-09", "2026-06-04", "Never"]} answer={1} explanation="Announcement 〔2025〕12号: effective 2025-10-09; report-before-trade on futures." />
 <Quiz id="p7ce-q8" question="FINRA Notice 26-11 mainly?" options={["Restores PDT $25k", "Publishes IMD/IML interpretations for the new intraday margin standards (eff. 2026-06-04)", "Abolishes margin", "Only crypto"]} answer={1} explanation="26-11 implements 26-10 via Rule 4210 IMD/IML interpretations." />
+
+<Quiz id="p7ce-q9" question="Northbound Stock Connect program-trading reporting (verified) takes effect on?" options={["2024-10-08", "2025-10-09", "2026-01-12", "Never"]} answer={2} explanation="HKEX hub: NB requirements effective 2026-01-12." />
 
 ## Done when
 

@@ -69,3 +69,6 @@ chart /workspace/Quant-trading-learn/public/p5/side_by_side_ic.png
 chart /workspace/Quant-trading-learn/public/p5/leak_vs_clean_ic.png
 saved artifacts for lab 02
 disclaimer: synthetic weak panel — learning only
+
+=== pointer: one-switch decision-time leakage (see backtest-traps; arXiv:2605.23959) ===
+TEMP_CENTER / EXEC_OPEN can inflate SR even when the calendar split looks clean — reuse the P2 foil.
