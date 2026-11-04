@@ -45,5 +45,11 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
 [OK] sec_withdraw_pda_2025_06: Withdrawal of Proposed Regulatory Actions (incl. PDA conflicts S7-12-23)
     https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions
     verified: Published 2025-06-17; formally withdraws several 2022–2023 proposals including Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers (File No. S7-12-23; 88 FR 53960). Withdrawal ≠ absence of remaining duties under Advisers Act / Reg BI / firm policies. Not legal advice.
+[OK] sec_fy2026_exam_priorities: SEC Division of Examinations FY2026 Priorities — Emerging Financial Technology / AI
+    https://www.sec.gov/about/reports-publications/2026-examination-priorities
+    verified: Published/updated 2025-11-17. Emerging FinTech focus: automated investment tools, AI, trading algorithms/platforms, alt-data. Exams check fair/accurate AI representations; ops vs disclosures; algo advice vs investor profiles; policies to supervise AI in fraud/AML/trading/back-office. Complements PDA-conflicts proposal withdrawal (S7-12-23) — withdrawal ≠ no remaining duties. Not legal advice; date-stamp official pages.
+[OK] finra_2026_genai_agents: FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents (NEW FOR 2026)
+    https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai
+    verified: GenAI section NEW FOR 2026. Rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging Agents: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails. Awareness only — not legal advice.
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=15 all_fetch_OK=True
+n_sources=17 all_fetch_OK=True

@@ -51,3 +51,7 @@ benchmarks (volume-weighted): arrival/Perold=103.84 bps | interval_VWAP=100.03 b
 note: on nearly equal slice sizes, unweighted mean arrival_slip=103.84 bps ≈ volume-weighted Perold=103.84; they diverge only when slice sizes differ — always prefer volume-weighted (=IS)
 interval_VWAP(planned weights)=99.9615 close=99.9142 participation_max=0.10
 disclaimer: toy paths — learning only, not a broker TCA
+
+=== Pointer — alpha decay + costs → no-trade (arXiv:2502.04284) ===
+host detail in portfolio-risk-sizing: widen no-trade band with costs; 不交易也是决策
+here: TCA / Almgren paths still assume you decided TO trade — size the band first

@@ -99,4 +99,28 @@ moral hazard grows with participation; 'zero-loss' socialization is impossible a
 Hyperliquid Oct-10-2025 case study: ~$2.1B liquidations / ~12 minutes; production overshoot vs needed ~$45–52M PNL$ (paper estimates)
 NOT a trade recipe; NO optimized ADL alpha; compare production vs transparent benchmark allocations only as risk literacy
 SaR name-drop (arXiv:2603.09164): forward-looking order-book Slippage-at-Risk — theory+warn; not a listed-alpha engine
+
+=== EWS heterogeneity across cascades (arXiv:2607.27070) ===
+cite: Garcia Seuma — early-warning signals are EVENT-HETEROGENEOUS across 7 crypto-perp cascades
+next to liquidation subcritical arXiv:2608.03616 — reject critical EWS as tradeable alarm
+lag1_AR_pos_sig_fraction (paper-style; 39 configs/variable):
+  May22: price=0.67  open_interest=0.38
+  Nov22: price=0.67  open_interest=0.54
+  Aug24: price=0.72  open_interest=0.08
+  Dec24: price=0.79  open_interest=0.26
+  Feb25: price=0.03  open_interest=0.10
+  Apr25: price=0.85  open_interest=0.21
+  Oct25: price=0.10  open_interest=0.59
+pattern: price carries CSD in 5/7; silent in Feb25+Oct25 sudden-news (tariff) shocks
+Oct-2025 in-sample 'criticality in leverage' INVERTS OOS (Aug-2024) — outlier, not the rule
+variance rising is NON-SPECIFIC (almost every variable/event) — unreliable alarm
+sole population regularity: taker-flow variance COMPRESSION (placebo-tested) — NOT a per-event tradeable EWS
+REJECT: critical early-warning crash marketing / single-event CSD claims as trade signals
+
+=== Funding path-dependent literacy (arXiv:2506.08573) — theory ONLY ===
+cite: Kim & Park — designing funding rates; path-dependent (e.g. 8h average) ≈ practical spot funding
+literacy: issuers choose Φ so perpetual stays near target; path-average is implementable approx
+toy: spot_funding_proxy≈-2.04bps  path_8h_avg≈1.65bps  |diff|≈3.70bps
+WARN: literacy only — DO NOT ship funding-design / path-funding as an arb recipe or advertised Sharpe
+ties to 2212.06888: funding arb is NOT risk-free (margin, gap, fees, solvency)
 DONE lab 02

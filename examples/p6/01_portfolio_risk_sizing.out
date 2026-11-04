@@ -63,3 +63,17 @@ rmse(hold,target)=0.0294  k=0.0500  inside_no_trade=True
 turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
 teach: near the target, first-order costs beat second-order utility gains — stay put.
 cost-in-CV spirit: choose k / turnover penalty INSIDE validation, not after peeking at OOS.
+
+=== Alpha decay + costs → no-trade band (arXiv:2502.04284 Ma & Smith) ===
+cite: multi-period optimal trading with alpha decay + transaction costs; deepens Brandt no-trade spirit
+optional foil: arXiv:2411.07949 (prior two-parameter note) — NAME-ONLY
+punchline: 不交易也是决策 — widen the no-trade band as costs rise / as lag α decays
+signal model: Y_t = 0.8*X_t + 0.4*X_(t-1) + eps  (lag still informative)
+  cost c=0.10: naive_half_band≈0.125  cost_aware_half_band≈0.138  (wider → trade less)
+  cost c=0.50: naive_half_band≈0.625  cost_aware_half_band≈0.688  (wider → trade less)
+  cost c=1.00: naive_half_band≈1.250  cost_aware_half_band≈1.375  (wider → trade less)
+  sim switches @c=0.10 half≈0.125: 241 / 500 steps
+  sim switches @c=1.00 half≈1.375: 41 / 500 steps
+teach: when lag α is weak (rho1≪rho0), multi-period correction is small; when lag persists, aim ahead
+bridge: choose band width INSIDE validation (cost-in-CV) — not after peeking at OOS
+pointer: execution-slippage lesson — TCA / participation caps sit next to this no-trade logic

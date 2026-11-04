@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**26 hours**: 5h concepts + 12h multi-labs incl. CPCV + one-switch + PBO/CSCV evaporation + 4h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**28 hours**: 5h concepts + 14h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
 **Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
@@ -334,6 +334,25 @@ CSCV_sketch S=4 combos=6 strategies=5 PBO_hat≈0.67  (teaching sketch)
 
 For every LLM / agent trading paper you read, mark **Y** (yes), **P** (partial), or **NR** (not reported) on: **PiT labels**, **split dates**, **fill timing**, **costs/turnover**, **universe**, **artifacts** ([arXiv:2606.08285](https://arxiv.org/abs/2606.08285)). Capstone uses the same checklist. Missing rows → do not treat headline Sharpe as evidence.
 
+
+## Admission gates / injected-truth — precision ≠ higher returns
+
+**Intuition:** Automated research inserts **admission gates** (must-pass criteria) before adopting a strategy. [Zheng (arXiv:2610.07701)](https://arxiv.org/abs/2610.07701) tests gates with an **injected-truth** protocol plus a **random-admission control** at the same adoption rate — only then can you tell “informative” from “merely stricter.”
+
+**Boundary (paper):** Gates beat random-admission for weak train **t ≲ 2.5**, at the cost of adoption ~**1–7%**. For strong signals (t ≳ 2.5) they are mostly **overhead** (lower adoption, little FDR gain). **门槛 ≠ 提高收益** — a precision device, not a return engine.
+
+**Necessary condition:** Evaluate criteria on **excess** returns (information ratio), not absolute. Under absolute returns the market component inflates volatility and can **silently reject even a true t=4** (paper Table 7: DSR reject rate = 1.00 at every strength before the excess correction).
+
+**Lab / paper numbers:**
+
+```
+compression_foil: absolute_SR≈1.594  excess_IR≈5.276  ratio≈3.31×
+Table 7 (absolute, pre-correction) t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
+after excess @ t=4: hit≈98.3% FDR≈0
+```
+
+**MinervaScore NAME-ONLY:** [arXiv:2608.23808](https://arxiv.org/abs/2608.23808) — auditable validation layer; authors’ own sealed forward null (Spearman ρ≈0.013) — **NOT Seal-as-alpha**. Pointer also in `factor-workflow`.
+
 ## Common mistakes / pitfalls
 
 1. Same-bar fills labeled “research.”
@@ -347,6 +366,8 @@ For every LLM / agent trading paper you read, mark **Y** (yes), **P** (partial),
 9. Treating DSR/PBO as proof the information set is clean (oracle foil).
 10. Shipping CSCV teaching sketches as production AFML/Bailey code.
 11. Forgetting to log every agent-scored candidate when applying DSR(N).
+12. Running admission gates on absolute returns (silent reject of true signals).
+13. Treating gates / Minerva Seal as proof of higher expected returns.
 
 ## Practice (1:1 with the checklist)
 
@@ -373,13 +394,15 @@ For every LLM / agent trading paper you read, mark **Y** (yes), **P** (partial),
 <Quiz id="q9-oneswitch" question="TEMP_CENTER leakage means?" options={["Using only trailing windows", "Centered rolling features that peek at future observations", "Paying higher fees", "Sealed hold-out"]} answer={1} explanation="Centered stats at t use post-t prints." />
 <Quiz id="q-pbo-dsr" question="A planted look-ahead oracle with huge Sharpe typically?" options={["Is caught by DSR alone", "Can survive DSR/PBO while the info set is contaminated", "Has PBO=0 always", "Needs no PIT audit"]} answer={1} explanation="Gençay E1 / lab oracle: deflation ≠ leakage guardrail." />
 <Quiz id="q-pbo-cscv" question="Bailey CSCV/PBO mainly estimates?" options={["Broker fees", "Chance the IS winner underperforms the OOS median", "Always-up accuracy", "Funding rates"]} answer={1} explanation="PBO via combinatorially symmetric CV." />
+<Quiz id="q-admit-bound" question="Admission gates (injected-truth) help most when?" options={["Train t≫3 always", "Weak train t≲2.5 vs random-admission; adoption often ~1–7%", "They raise expected returns", "Absolute SR is enough"]} answer={1} explanation="Precision device; beyond ~2.5 mostly overhead — arXiv:2610.07701." />
+<Quiz id="q-admit-excess" question="Why must gate criteria use excess returns?" options={["Fees only", "Absolute criteria can silently reject even true t=4 when market vol dominates", "DSR forbids excess", "PIT unused"]} answer={1} explanation="Paper Table 7 / lab compression foil absolute_SR≈1.594 vs excess_IR≈5.276." />
 <Quiz id="q10-execopen" question="EXEC_OPEN is illegal because?" options={["It uses next-open fills after close decisions", "It pairs same-day post-open bar fields with a same-day open fill", "It deletes costs", "It bans RankIC"]} answer={1} explanation="Finance-native execution-alignment leak." />
 
 ## Done when
 
 - Walk-forward summary + PSR/DSR vs N + false-hit context + quizzes
 
-**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734).
+**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); admission gates [arXiv:2610.07701](https://arxiv.org/abs/2610.07701); MinervaScore NAME-ONLY [arXiv:2608.23808](https://arxiv.org/abs/2608.23808).
 
 <Summary>
 **Takeaways**: walk-forward tables, trial counts, PSR/DSR vs N, null false-hit math, survivorship/snooping recap.  

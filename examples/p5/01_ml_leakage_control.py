@@ -255,3 +255,10 @@ print("disclaimer: synthetic weak panel — learning only")
 print("\n=== pointer: one-switch decision-time leakage (see backtest-traps; arXiv:2605.23959) ===")
 print("TEMP_CENTER / EXEC_OPEN can inflate SR even when the calendar split looks clean — reuse the P2 foil.")
 
+# ---------- Pointers: KTD-Fin mask + Profit Mirage Part I–II (enrich4) ----------
+print("\n=== Pointers — KTD-Fin mask + Profit Mirage Part I–II ===")
+print("KTD-Fin arXiv:2605.28359: bright→blinded ticker/date mask; attacker probe; Barra selection α")
+print("  teach: headline PnL ≠ stock-selection skill; host detail in frontier-llm-agents")
+print("Profit Mirage arXiv:2510.07920 Part I–II ONLY: post-cutoff decay + FinLake-Bench memorization")
+print("  HARD REJECT FactFin / Part III–IV SR tables as alpha — diagnosis yes, campaign Sharpes no")
+

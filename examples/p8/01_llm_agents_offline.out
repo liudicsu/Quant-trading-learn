@@ -146,4 +146,38 @@ capstone_recoverability_Y_P_NR:
   artifacts (code/prompts/model versions): P
 teach: a Y means reconstructable from public evidence — not that the assumption is realistic or profitable
 research_log_row: date | paper | PiT | splits | fill | costs | universe | artifacts | next_action
+
+=== KTD-Fin bright→blinded + Barra selection α (arXiv:2605.28359) ===
+cite: Zhu et al. — Knowing-To-Doing Fin; data-side mask + Barra attribution
+protocol: 赚钱≠选股能力 — headline returns ≈ common + style; selection α near 0 / often negative
+NO leaderboard Sharpes / total-return ranks as skill proof
+agent_A Port≈-13.73%  Common≈-8.09% Style≈-3.62% Selα≈-2.02%
+agent_B Port≈-13.99%  Common≈-8.09% Style≈-3.62% Selα≈-2.29%
+paper spirit (Table 5): only ~1/10 agents near-zero/+ selection α; most negative under blinded
+mask toy: BRIGHT ticker visible → brand narrative; BLINDED alias → factor ranks / cash if no signal
+  BRIGHT rationale: SH600519 defensive blue-chip — increase (ticker prior, not OHLCV)
+  BLINDED rationale: asset_0006: 20d +2.1%, vol 0.02 — rank only (no brand)
+attacker-probe spirit: joint ticker+date recovery ≤~1.5% under blinded — mask closes memory channel
+REJECT: KTD total-return leaderboard as transferable stock-selection skill
+
+=== Agentic Trading survey audit fields (Xia et al. arXiv:2605.19337) ===
+cite: bridge Yao&Zheng recoverability arXiv:2606.08285 — architecture > fill/costs/universe/artifacts
+empirical subset n=80 closed-loop systems; protocol coverage (paper Table 4 pooled):
+audit_checklist (report Y/P/NR — NOT an agent cookbook; NOT Deep RL build guide):
+  time_split: 50/80 ≈ 62.5% reported in survey ledger
+  transaction_costs: 47/80 ≈ 58.8% reported in survey ledger
+  universe_survivorship: 48/80 ≈ 60.0% reported in survey ledger
+  execution_semantics: 47/80 ≈ 58.8% reported in survey ledger
+  R3_reproducibility: RARE — most systems R0/R1; treat missing as NR/Unknown
+teach: checklist for reading papers; do not copy architectures as trading recipes
+REJECT: Xia survey as product alpha or Deep RL / FinRL-as-alpha build guide
+
+=== Profit Mirage leakage diagnosis Part I–II ONLY (arXiv:2510.07920) ===
+cite: Li/Zeng/Xing/Xu — post-cutoff decay + FinLake-Bench memorization probes
+HARD REJECT: FactFin / Part III–IV SR tables as curriculum edge or deployable alpha
+toy_pre_cutoff_SR≈2.080  post_cutoff_SR≈0.346  decay_rate≈83.4%
+paper spirit: published agents drop ~50–70% SR once past knowledge cutoff (Fig.1)
+FinLake-Bench spirit: price/event/trend QA accuracy often ≫ chance (~85%+) — memorization, not forecasting
+counterfactual PC often stays high (~0.69–0.82) after input perturbation — recite, don't adapt
+REJECT BOX: FactFin 1.4× Sharpe / Part III–IV campaign tables — out of curriculum scope as alpha
 DONE lab 01

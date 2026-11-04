@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**20 hours**: 5h concepts + 11h labs (incl. HRP + no-trade) + 4h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+This lesson (~**22 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
 
 **Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
 
@@ -117,7 +117,26 @@ turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
 **Bridge to Detzel (JF 2023):** costs change which factors/models win — so choose the no-trade radius / turnover penalty **inside** validation (cost-in-CV), not after peeking at OOS.
 
 
+
+## Alpha decay + costs → no-trade band
+
+**Intuition:** When predictive signal **decays** and trading is costly, the optimum is often **not** to chase every tick of alpha. [Ma & Smith (arXiv:2502.04284)](https://arxiv.org/abs/2502.04284) study multi-period optimal trading with **alpha decay + transaction costs** — deepening the Brandt–Santa-Clara–Valkanov **no-trade** spirit: **不交易也是决策** (not trading is also a decision).
+
+Optional NAME-ONLY foil: [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) (prior two-parameter note).
+
+**Toy (lab):** signal `Y_t = 0.8*X_t + 0.4*X_(t-1) + eps`; widen the half-band as cost rises:
+
+```
+c=0.10: naive_half≈0.125  cost_aware_half≈0.138  switches 241/500
+c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches 41/500
+```
+
+Choose band width **inside** validation (cost-in-CV) — not after peeking at OOS. Thin pointer in `execution-slippage` (TCA / participation caps sit next to this logic).
+
 ## Common mistakes / pitfalls
+
+- Ignoring alpha decay and always full-rebalancing to target under costs.
+- Setting the no-trade band after peeking at OOS (must be cost-in-CV).
 
 1. Full Kelly on a noisy estimated edge.
 2. Using same-bar vol for today’s weight (look-ahead).
@@ -147,13 +166,14 @@ turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
 <Quiz id="p6prs-q7" question="HRP’s distinctive numerical move is?" options={["Always invert Σ", "Allocate on a hierarchy without inverting Σ", "Use only full Kelly", "Drop bonds"]} answer={1} explanation="López de Prado 2016 JPM / AFML ch.16." />
 <Quiz id="p6prs-q8" question="On the toy panel HRP equity-cluster weight vs inv-vol is?" options={["Much larger", "Trimmed (≈0.42 vs ≈0.53) because correlated names share a branch", "Exactly 1/N always", "Undefined"]} answer={1} explanation="Hierarchy cuts the equity block relative to ticker-count thinking." />
 
+<Quiz id="p6prs-q-decay" question="As trading costs rise with decaying alpha, the cost-aware no-trade band should?" options={["Always shrink to zero", "Widen — trade less; 不交易也是决策", "Ignore lag terms", "Maximize switches"]} answer={1} explanation="arXiv:2502.04284 / lab: c↑ → half-band↑ → switches↓." />
 <Quiz id="p6prs-q-nt" question="A no-trade region means?" options={["Always rebalance to target daily", "Do not trade when close enough to target; trade toward the boundary if outside", "Ban all costs", "Maximize turnover"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 spirit." />
 
 ## Done when
 
 Sizing comparison table (Kelly / vol-target / RP / MV–LW–1/N) plus a risk-preference page stating why you cap below full Kelly.
 
-**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11.
+**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11; [arXiv:2502.04284](https://arxiv.org/abs/2502.04284) Ma & Smith alpha decay + costs; [Brandt–Santa-Clara–Valkanov RFS 2009](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695); optional [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) NAME-ONLY.
 
 <Summary>
 **Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; HRP allocates on a tree without inverting Σ; MV needs shrinkage and an honest 1/N foil.  

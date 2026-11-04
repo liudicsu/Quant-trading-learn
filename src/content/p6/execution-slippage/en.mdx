@@ -72,6 +72,11 @@ benchmarks: arrival/Perold=103.84 | planned_interval_VWAP=100.03 | close=95.35
 market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 ```
 
+
+## Pointer — alpha decay + costs → no-trade
+
+Host detail in `portfolio-risk-sizing`: [arXiv:2502.04284](https://arxiv.org/abs/2502.04284). TCA / participation caps sit next to the same logic — widen the band as costs rise; **不交易也是决策**. Not a broker TCA product.
+
 ## Common mistakes / pitfalls
 
 1. Backtesting fills at mid with zero schedule / impact.
@@ -101,7 +106,7 @@ market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 
 Execution assumptions (schedule, participation caps, AC λ or heuristic, IS benchmark) live in the shared main config — same model research and paper trading use.
 
-**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche).
+**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche); no-trade pointer [arXiv:2502.04284](https://arxiv.org/abs/2502.04284).
 
 <Summary>
 **Takeaways**: schedule consciously; AC gives a cost–risk frontier; measure IS vs arrival; limits are not free.  

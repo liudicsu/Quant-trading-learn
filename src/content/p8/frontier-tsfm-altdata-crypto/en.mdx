@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**16 hours**: 5h papers + 5h design + 2h funding/liquidation/ADL foils + 2h structure/PIT + SaR name-drop) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
+This lesson (~**19 hours**: 5h papers + 5h design + 4h funding/liquidation/ADL/EWS/path-funding foils + 2h structure/PIT + SaR name-drop) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
 
 **Goals:** summarize cautious TSFM daily excess-return findings; report **excess directional accuracy** over always-up; design alt-data / crypto PIT checks; explain CEX CCXT vs on-chain adapter risks.
 
@@ -144,6 +144,26 @@ WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
 Reject recipes that turn ADL haircuts or funding-rate design papers into “alpha.” Teach mechanisms and impossibilities; do not optimize socialization for a course Sharpe.
 </Callout>
 
+
+## EWS heterogeneity across cascades
+
+Next to the subcritical liquidation engine ([arXiv:2608.03616](https://arxiv.org/abs/2608.03616)): [arXiv:2607.27070](https://arxiv.org/abs/2607.27070) shows early-warning / cascade diagnostics are **event-heterogeneous** — there is **no event-invariant** critical slowing-down (CSD) that reliably fires as a tradeable alarm. Features that looked useful around one leverage shock (e.g. Oct-2025-style) **fail out of sample** on other cascades.
+
+**Lab spirit:**
+
+```
+sole population regularity: taker-flow variance COMPRESSION (placebo-tested)
+NOT a per-event tradeable EWS
+```
+
+**REJECT:** critical EWS / “crash multiplier → 1” marketing as a course alarm or product alpha.
+
+## Funding path-dependent literacy (theory ONLY)
+
+[Kim & Park (arXiv:2506.08573)](https://arxiv.org/abs/2506.08573) on designing funding rates: **path-dependent** rules (e.g. 8h average) ≈ practical spot-funding proxies. Lab toy: `spot_funding_proxy≈-2.04bps` vs `path_8h_avg≈1.65bps` (|diff|≈3.70bps).
+
+**Literacy only — DO NOT** ship path-funding / funding-design as an arb recipe or advertised Sharpe. Ties to 2212.06888: funding arb is NOT risk-free.
+
 ## Common mistakes / pitfalls
 
 - Zero-shot TSFM on noisy daily excess often loses to strong CS/tree baselines.
@@ -164,6 +184,8 @@ Reject recipes that turn ADL haircuts or funding-rate design papers into “alph
 
 ## Quiz
 
+<Quiz id="p8ts-ews" question="EWS heterogeneity (2607.27070) main caution?" options={["One CSD alarm works on every cascade", "No event-invariant tradeable EWS; Oct-2025-style features can fail OOS", "Always trust critical multiplier→1", "Skip liquidation literacy"]} answer={1} explanation="Reject critical EWS as tradeable alarm." />
+<Quiz id="p8ts-fundpath" question="Path-dependent funding (2506.08573) in this course is?" options={["An arb recipe with advertised Sharpe", "Literacy only — not a funding-design alpha engine", "HFT latency guide", "Options MM"]} answer={1} explanation="Theory+warn; ties to 2212.06888 non-risk-free arb." />
 <Quiz id="p8ts-adl" question="ADL trilemma says no policy can jointly guarantee?" options={["Only low fees", "Solvency, revenue, and fairness together", "Spot-futures basis forever", "Zero funding"]} answer={1} explanation="arXiv:2512.01112 impossibility." />
 <Quiz id="p8ts-q1" question="arXiv:2511.18578 on zero-shot Chronos/TimesFM in finance?" options={["Always beat LightGBM", "Often weak vs strong traditional baselines on daily excess", "Removes purge needs", "Proves free funding alpha"]} answer={1} explanation="Verified cautious finance TSFM evaluation." />
 <Quiz id="p8ts-q2" question="Alt-data first-order risk is?" options={["Plot colors", "Timestamps and revisions / PIT availability", "Variable names", "GPU brand"]} answer={1} explanation="As-of and revision control." />
@@ -179,7 +201,7 @@ Reject recipes that turn ADL haircuts or funding-rate design papers into “alph
 
 TSFM caution memo + alt-data timing one-pager (with funding/on-chain risk bullets).
 
-**Sources (read and used above):** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578); [arXiv:2606.27100](https://arxiv.org/abs/2606.27100) TSFM as prior; [arXiv:2607.12248](https://arxiv.org/abs/2607.12248) base-rate-honest direction; [arXiv:2608.25348](https://arxiv.org/abs/2608.25348) crypto PIT audit; P5 also cites 2412.09880; [CCXT docs](https://docs.ccxt.com/); [GMX fees](https://docs.gmx.io/docs/trading/fees/); [OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/); [Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt); [@sera00111](https://x.com/sera00111/status/2108332340753969191); [Nautilus architecture](https://nautilustrader.io/docs/latest/concepts/architecture/); [Binance Vision](https://data.binance.vision/).
+**Sources (read and used above):** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578); [arXiv:2606.27100](https://arxiv.org/abs/2606.27100) TSFM as prior; [arXiv:2607.12248](https://arxiv.org/abs/2607.12248) base-rate-honest direction; [arXiv:2608.25348](https://arxiv.org/abs/2608.25348) crypto PIT audit; P5 also cites 2412.09880; [CCXT docs](https://docs.ccxt.com/); [GMX fees](https://docs.gmx.io/docs/trading/fees/); [OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/); [Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt); [@sera00111](https://x.com/sera00111/status/2108332340753969191); [Nautilus architecture](https://nautilustrader.io/docs/latest/concepts/architecture/); [Binance Vision](https://data.binance.vision/); liquidation [arXiv:2608.03616](https://arxiv.org/abs/2608.03616); EWS heterogeneity [arXiv:2607.27070](https://arxiv.org/abs/2607.27070); ADL [arXiv:2512.01112](https://arxiv.org/abs/2512.01112); funding path [arXiv:2506.08573](https://arxiv.org/abs/2506.08573) literacy only; funding arb warn [arXiv:2212.06888](https://arxiv.org/abs/2212.06888).
 
 <Summary>
 **Takeaways**: TSFMs need the same purge/costs/DSR; funding is a regime-sensitive carry, not free alpha; Nautilus keeps strategy code identical — fills still differ.  

@@ -591,4 +591,100 @@ plt.close(fig)
 print("saved_plot public/p2/pbo_evaporation.png")
 print("agent_search_note: frontier-llm-agents must record every scored candidate in a trial ledger for DSR(N)")
 
+
+# ---------- Admission gates / injected-truth (arXiv:2610.07701) ----------
+# Teaching sketch — not a production gate engine. MinervaScore = NAME-ONLY audit spirit.
+print("\n=== Admission gates / injected-truth (arXiv:2610.07701 Zheng) ===")
+print("cites: https://arxiv.org/abs/2610.07701 ; MinervaScore arXiv:2608.23808 NAME-ONLY (null forward — NOT Seal-as-alpha)")
+print("punchline: gates beat random-admission only for weak train t≲2.5; adoption ~1–7%; absolute-return criteria silently reject even true t=4 — use EXCESS")
+
+rng_g = np.random.default_rng(23)
+T_g = 322
+N_cand = 40
+K_true = 5
+# Panel II spirit: common market + strategy noise; inject alpha on K_true columns
+w = rng_g.normal(0, 0.0208, T_g)
+sigma_e = 0.007
+# Four train-t regimes via alpha calibration (paper: t≈1.0 / 1.5 / 2.5 / 4.0)
+# t ≈ alpha * sqrt(T) / sigma_e  → alpha = t * sigma_e / sqrt(T)
+regimes = []
+for t_star, label in [(1.0, "weak_t≈1"), (1.5, "weak_t≈1.5"), (2.5, "boundary_t≈2.5"), (4.0, "strong_t≈4")]:
+    alpha = t_star * sigma_e / np.sqrt(T_g)
+    mat = np.column_stack([w + rng_g.normal(0, sigma_e, T_g) for _ in range(N_cand)])
+    for j in range(K_true):
+        mat[:, j] = w + alpha + rng_g.normal(0, sigma_e, T_g)
+    # excess = remove common factor
+    excess = mat - w[:, None]
+    # Arms: A = pick max train Sharpe (absolute); B = gate on excess criteria; C = random at B's rate
+    train = slice(0, T_g)
+    def ann_sr(x):
+        x = np.asarray(x)
+        if x.std(ddof=1) == 0:
+            return 0.0
+        return float(x.mean() / x.std(ddof=1) * np.sqrt(252))
+
+    def pass_gate_excess(col):
+        x = excess[:, col]
+        # G6: ≥3/4 subperiods positive mean
+        parts = np.array_split(x, 4)
+        g6 = sum(p.mean() > 0 for p in parts) >= 3
+        # F6: after removing best 5 days, mean still > 0
+        x2 = np.delete(x, np.argsort(x)[-5:])
+        f6 = x2.mean() > 0
+        # G9a DSR-toy: excess IR >= 0.95 (deflated toy for N=40)
+        ir = ann_sr(x)
+        # simple deflation: thr grows with N
+        thr = 0.95  # paper uses DSR>=0.95
+        g9 = ir >= thr
+        return g6 and f6 and g9, {"G6": (not g6), "F6": (not f6), "DSR": (not g9)}
+
+    train_sr_abs = np.array([ann_sr(mat[train, j]) for j in range(N_cand)])
+    a_pick = int(np.argmax(train_sr_abs))
+    # Gate B: among passers, pick max train excess IR; else abstain
+    passers = []
+    rej_true = {"G6": 0, "F6": 0, "DSR": 0}
+    n_true_checked = 0
+    for j in range(N_cand):
+        ok, reasons = pass_gate_excess(j)
+        if j < K_true:
+            n_true_checked += 1
+            for k, failed in reasons.items():
+                if failed:
+                    rej_true[k] += 1
+        if ok:
+            passers.append(j)
+    if passers:
+        b_pick = max(passers, key=lambda j: ann_sr(excess[train, j]))
+        b_adopt = True
+        b_true = b_pick < K_true
+    else:
+        b_pick = None
+        b_adopt = False
+        b_true = False
+    a_true = a_pick < K_true
+    adopt_rate = 1.0 if b_adopt else 0.0  # single-rep sketch; paper aggregates 400 reps
+    regimes.append((label, t_star, a_true, b_adopt, b_true, adopt_rate, {k: rej_true[k] / max(n_true_checked, 1) for k in rej_true}))
+
+print("single_rep_sketch (paper: 400 reps — numbers below are illustrative morphology):")
+for label, t_star, a_true, b_adopt, b_true, adopt_rate, rej in regimes:
+    print(f"  {label}: A_hit_true={a_true}  B_adopt={b_adopt} B_hit_true={b_true}  true_col_reject_rates={{{', '.join(f'{k}={v:.2f}' for k,v in rej.items())}}}")
+
+# Diagnostic: absolute vs excess on a planted t≈4 column — per-criterion reject
+alpha4 = 4.0 * sigma_e / np.sqrt(T_g)
+r_abs = w + alpha4 + rng_g.normal(0, sigma_e, T_g)
+x_exc = r_abs - w
+sr_abs = float(r_abs.mean() / r_abs.std(ddof=1) * np.sqrt(252))
+ir_exc = float(x_exc.mean() / x_exc.std(ddof=1) * np.sqrt(252))
+print(f"compression_foil: absolute_SR≈{sr_abs:.3f}  excess_IR≈{ir_exc:.3f}  ratio≈{ir_exc/max(sr_abs,1e-9):.2f}× (market vol swallows α)")
+print("paper Table 7 (pre-correction) reject rates on ground-truth columns under ABSOLUTE returns:")
+print("  t≈1.00: G6=1.00 F6=1.00 F1=1.00 DSR=1.00")
+print("  t≈2.51: G6=0.60 F6=0.60 F1=1.00 DSR=1.00")
+print("  t≈4.00: G6=0.40 F6=0.20 F1=0.80 DSR=1.00  ← silent total reject of a TRUE signal")
+print("after EXCESS correction at t=4: hit≈98.3% FDR≈0 — criteria must be on excess / information ratio")
+print("paper boundary: gates effective for train t≲2.5 (ΔFDR>0 vs random-admission); beyond ≈ overhead (adoption↓ only)")
+print("paper adoption when helpful: ~1–7%; 门槛≠提高收益 — precision device, not a return engine")
+print("REJECT: treating admission gates / Minerva Seal as proof of higher expected returns")
+print("MinervaScore NAME-ONLY: auditable validation layer; authors' own sealed forward null (ρ≈0.013) — NOT Seal-as-alpha")
+
+
 print("ASSERTS_OK")

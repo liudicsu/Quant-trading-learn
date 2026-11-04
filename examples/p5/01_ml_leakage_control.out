@@ -72,3 +72,9 @@ disclaimer: synthetic weak panel — learning only
 
 === pointer: one-switch decision-time leakage (see backtest-traps; arXiv:2605.23959) ===
 TEMP_CENTER / EXEC_OPEN can inflate SR even when the calendar split looks clean — reuse the P2 foil.
+
+=== Pointers — KTD-Fin mask + Profit Mirage Part I–II ===
+KTD-Fin arXiv:2605.28359: bright→blinded ticker/date mask; attacker probe; Barra selection α
+  teach: headline PnL ≠ stock-selection skill; host detail in frontier-llm-agents
+Profit Mirage arXiv:2510.07920 Part I–II ONLY: post-cutoff decay + FinLake-Bench memorization
+  HARD REJECT FactFin / Part III–IV SR tables as alpha — diagnosis yes, campaign Sharpes no

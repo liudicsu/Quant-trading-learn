@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **20 学时**：概念 5h + 含 Detzel 成本与 w34898 局部 FDR 的实验 9h + 写作 3h + 拥挤→LLM 桥 1h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
+本课（约 **22 学时**：概念 5h + 含 Detzel 成本、w34898 局部 FDR、HXZ 箔与准入指针的实验 10h + 写作 3h + 拥挤→LLM 桥 1h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
 
 **课内目标：** 实现 Spearman IC；构建分层多空；对照真/假因子。
 
@@ -210,7 +210,24 @@ planted_t=4.2: two-sided_p≈0.0000  localFDR_sketch≈0.003
 
 统计过关后仍要用成本衡量经济显著性（Detzel 桥）。
 
+
+## 准入门槛指针 + Hou–Xue–Zhang 复制失败率
+
+**指针：** **准入门槛 / 注入真值**的主机细节在 `backtest-traps`（[arXiv:2610.07701](https://arxiv.org/abs/2610.07701)）。对因子研究的要点：门槛相对随机准入主要在弱训练 **t ≲ 2.5** 有用；采纳常仅约 1–7%；准则永远用**超额**，勿用绝对。**门槛 ≠ 提高收益。**
+
+**Hou–Xue–Zhang（2020 RFS）复制箔** — 紧挨 HLZ + Harvey–Sancetta–Zhao：[Replicating Anomalies](https://doi.org/10.1093/rfs/hhy131) 显示在统一复制协议下，多数已发表异象**失败**。
+
+```
+论文：452 个异象中 65% 未过 |t|≥1.96（NYSE 断点 + 市值加权）；82% 未过多重检验 |t|≥2.78
+实验混合箔：fail_|t|<1.96≈87%  fail_|t|<2.78≈97%（数量级示意）
+```
+
+即便「复制成功」的经济幅度也常远小于原文。把失败率当作**先验**——新因子仍需 HLZ/HSZ 门槛 **与** Detzel 成本，而不是博客 t 统计量。
+
 ## 常见错误 / 陷阱
+
+- 把 HXZ 失败率当成可跳过 HLZ/HSZ + Detzel 的许可证——它是先验，不是通行证。
+- 对因子面板使用绝对收益准入门槛。
 
 1. 不做中性化就把行业暴露叫作 alpha。
 2. 把夸大的强面板当成实盘 RankIC 基准。
@@ -238,13 +255,15 @@ planted_t=4.2: two-sided_p≈0.0000  localFDR_sketch≈0.003
 
 <Quiz id="p4fw-hsz" question="Harvey–Sancetta–Zhao（NBER w34898）下界 t 阈值？" options={["t≥1", "t≥2 总够", "相关/选择调整后至少 t≥3.0", "只要 R²"]} answer={2} explanation="NBER w34898：阈值至少 3.0。" />
 <Quiz id="p4fw-lfdr" question="局部 FDR 回答 p 值答不了的哪一句？" options={["仅 P(data|null) 式尾概率", "近似 P(null|实现的统计量)", "券商费率", "永远上涨准确率"]} answer={1} explanation="p 值 ≠ P(null|data)。" />
+<Quiz id="p4fw-hxz" question="Hou–Xue–Zhang（2020 RFS）主要箔是？" options={["多数异象容易复制", "大量已发表异象在统一复制下失败（约65%/82%门槛）", "t>2 总够", "成本从不重要"]} answer={1} explanation="DOI 10.1093/rfs/hhy131 — 失败率先验，紧挨 HLZ/HSZ。" />
+<Quiz id="p4fw-admit" question="因子采纳的准入门槛主要？" options={["保证更高收益", "弱 t≲2.5 相对随机准入有用；永远用超额；不是收益引擎", "取代 HLZ", "禁止市值加权"]} answer={1} explanation="主机细节在 backtest-traps；门槛≠提高收益。" />
 <Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov（JF 2023）主要警示？" options={["总选最高换手", "忽略成本会让模型/因子比较偏向高成本因子", "成本从不改变排序", "只与加密有关"]} answer={1} explanation="DOI 10.1111/jofi.13225。" />
 
 ## 完成标准
 
 IC + 分层多空 + 空因子动物园报告，含强/弱表、滞后市值中性化与前瞻说明。
 
-**来源：** Fama–MacBeth 1973；Fama–French 1993/2015；Harvey–Liu–Zhu 2016；Alphalens；Qlib；AFML Factor Mirage；@alin_alphapilot；quant-wiki 对照。 Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225)； Harvey–Sancetta–Zhao NBER [w34898](https://www.nber.org/papers/w34898)（t≥3 + 局部 FDR）。
+**来源：** Fama–MacBeth 1973；Fama–French 1993/2015；Harvey–Liu–Zhu 2016；Alphalens；Qlib；AFML Factor Mirage；@alin_alphapilot；quant-wiki 对照。 Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225)； Harvey–Sancetta–Zhao NBER [w34898](https://www.nber.org/papers/w34898)；Hou–Xue–Zhang 2020 RFS [DOI 10.1093/rfs/hhy131](https://doi.org/10.1093/rfs/hhy131)；准入门槛指针 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)（t≥3 + 局部 FDR）。
 
 <Summary>
 **要点**：构建 → IC/衰减 → 强 vs 弱 → 分层+成本 → FM → t>3 动物园。  

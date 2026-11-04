@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **20 学时**：概念 5h + 实验 11h（含 HRP + 无交易区）+ 写作 4h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **22 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -117,7 +117,26 @@ turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
 **桥接 Detzel（JF 2023）：** 成本会改变因子/模型谁胜出——因此无交易半径/换手惩罚应在验证**内部**选择（cost-in-CV），而不是偷看 OOS 后再定。
 
 
+
+## Alpha 衰减 + 成本 → 无交易带宽
+
+**直觉：** 当预测信号会**衰减**且交易有成本时，最优常常**不是**追逐每一跳 alpha。[Ma & Smith（arXiv:2502.04284）](https://arxiv.org/abs/2502.04284) 研究带 **alpha 衰减 + 交易成本**的多期最优交易——加深 Brandt–Santa-Clara–Valkanov **无交易**精神：**不交易也是决策**。
+
+可选仅点名箔：[arXiv:2411.07949](https://arxiv.org/abs/2411.07949)（先前双参数笔记）。
+
+**实验玩具：** 信号 `Y_t = 0.8*X_t + 0.4*X_(t-1) + eps`；成本上升则半带宽变宽：
+
+```
+c=0.10: naive_half≈0.125  cost_aware_half≈0.138  switches 241/500
+c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches 41/500
+```
+
+带宽须在验证**内部**选定（cost-in-CV）——不可偷看 OOS。`execution-slippage` 有薄指针（TCA / 参与率上限与此相邻）。
+
 ## 常见错误 / 陷阱
+
+- 忽略 alpha 衰减，有成本仍天天满仓再平衡到目标。
+- 偷看 OOS 后再定无交易带宽（必须 cost-in-CV）。
 
 1. 在噪声估计优势上使用满 Kelly。
 2. 用当日波动算当日权重（前瞻）。
@@ -147,6 +166,7 @@ turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
 <Quiz id="p6prs-q7" question="HRP 独特的数值动作是？" options={["总是反演 Σ", "在层级上配置且不反演 Σ", "只用满 Kelly", "丢掉债券"]} answer={1} explanation="López de Prado 2016 JPM / AFML 第16章。" />
 <Quiz id="p6prs-q8" question="玩具面板上 HRP 股票簇权重相对逆波动？" options={["大得多", "被压缩（≈0.42 vs ≈0.53），因相关名字同枝", "永远恰为 1/N", "未定义"]} answer={1} explanation="层级相对按票数思维削减股票块。" />
 
+<Quiz id="p6prs-q-decay" question="alpha 衰减且成本上升时，成本感知无交易半带宽应？" options={["永远缩到 0", "变宽——少交易；不交易也是决策", "忽略滞后项", "最大化切换次数"]} answer={1} explanation="arXiv:2502.04284 / 实验：c↑ → 半带宽↑ → 切换↓。" />
 <Quiz id="p6prs-q-nt" question="无交易区意味着？" options={["每天都再平衡到目标", "足够接近目标则不交易；越界则朝边界交易", "禁止一切成本", "最大化换手"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 精神。" />
 
 ## 完成标准

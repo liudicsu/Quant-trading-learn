@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**21 hours**: 6h AFML concepts + 12h labs (fracdiff/uniqueness/meta/CPCV + one-switch pointer) + 3h write-up — HEAVY) builds **anti-leakage ML** for finance: vol-scaled labels, purged CV with embargo, and the right IC metric. Prereqs: `factor-workflow`, `backtest-traps`.
+This lesson (~**21 hours**: 6h AFML concepts + 12h labs (fracdiff/uniqueness/meta/CPCV + one-switch + KTD/Mirage pointers) + 3h write-up — HEAVY) builds **anti-leakage ML** for finance: vol-scaled labels, purged CV with embargo, and the right IC metric. Prereqs: `factor-workflow`, `backtest-traps`.
 
 **Goals:** demo shuffle / unpurged leakage; time-split with causal features; score with **mean daily cross-sectional RankIC** (not accuracy, not pooled Spearman as primary).
 
@@ -213,6 +213,14 @@ Even a purged calendar split can hide **decision-time** leaks. Reuse the P2 foil
 - **AQuA structural sealed sandbox:** [arXiv:2608.12841](https://arxiv.org/abs/2608.12841) freezes splits / features / labels / evaluator. **Protocol only.** Reject pasting Part II IC / Sharpe (+2.50 etc.) as course alpha — use the REJECT box in **frontier-llm-agents**.
 - Keep one-switch **TEMP_CENTER / EXEC_OPEN** decision-time leakage (arXiv:2605.23959) next to purge/embargo habits.
 
+
+## Pointers — KTD-Fin mask + Profit Mirage Part I–II
+
+Host detail in `frontier-llm-agents`:
+
+- **[KTD-Fin](https://arxiv.org/abs/2605.28359):** bright→blinded ticker/date mask + attacker probe; Barra selection α — **赚钱 ≠ 选股能力**. Do not treat total-return boards as skill.
+- **[Profit Mirage](https://arxiv.org/abs/2510.07920) Part I–II ONLY:** post-cutoff decay + FinLake-Bench memorization spirit. **HARD REJECT** FactFin / Part III–IV Sharpe tables as course alpha.
+
 ## Common mistakes / pitfalls
 
 1. Fixed % barriers that encode volatility, not information.
@@ -242,6 +250,8 @@ Even a purged calendar split can hide **decision-time** leaks. Reuse the P2 foil
 <Quiz id="q4-cases" question="Unpurged IC above purged IC mainly illustrates?" options={["Free alpha", "Case (a): pipeline illusion from leakage", "Case (c) only", "Oracle bound"]} answer={1} explanation="Leak protocols inflate IC without honest OOS design." />
 <Quiz id="q5-pooled" question="Pooled Spearman is demoted because it?" options={["Is faster", "Mixes time-series and cross-sectional variation", "Needs GPU", "Replaces DSR"]} answer={1} explanation="It confounds TS persistence with CS ranking." />
 <Quiz id="q6-overfit" question="Train CS IC ~0.34 with OOS ~0.02 means?" options={["Deploy", "In-sample fit ≠ OOS edge; log trials", "Skip purge", "Fixed 2% is fine"]} answer={1} explanation="Overfit trap with noise features." />
+<Quiz id="p5ml-ktd" question="KTD-Fin pointer in this lesson mainly warns?" options={["Total return boards prove selection skill", "Mask + Barra: headline ≠ selection α; host in frontier-llm-agents", "Skip purge", "FactFin SR homework"]} answer={1} explanation="赚钱≠选股能力." />
+<Quiz id="p5ml-mirage" question="Profit Mirage Part I–II here is?" options={["FactFin Sharpe recipe", "Leakage/decay diagnosis only — REJECT Part III–IV SR as alpha", "HFT guide", "Always-profit LLM"]} answer={1} explanation="Diagnosis yes; campaign Sharpes no." />
 <Quiz id="q7-frac" question="Integer d=1 vs fracdiff d≈0.4 in the toy mainly shows?" options={["Fees fall", "Both can be stationary but fracdiff keeps more autocorr/memory", "Purge is optional", "Meta labels invent side"]} answer={1} explanation="AFML ch.5 stationarity–memory trade-off." />
 <Quiz id="q8-uniq" question="Average uniqueness down-weights labels that?" options={["Have high dollar volume only", "Overlap many concurrent events", "Fail ADF", "Use LightGBM"]} answer={1} explanation="AFML ch.4 concurrent labels." />
 <Quiz id="q9-meta" question="Meta-labeling’s job is to?" options={["Replace the primary side with a new direction", "Filter when to trade/skip a primary side", "Remove purge", "Maximize accuracy alone"]} answer={1} explanation="AFML ch.3 — trade vs skip." />
@@ -250,7 +260,7 @@ Even a purged calendar split can hide **decision-time** leaks. Reuse the P2 foil
 
 Anti-leak notebook with vol-scaled TB, side-by-side table, and the three-case narrative.
 
-**Sources:** [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); [arXiv:2608.12841](https://arxiv.org/abs/2608.12841); AFML ch.3 (meta-labeling), ch.4 (uniqueness / sequential bootstrap), ch.5 (fracdiff), ch.7 (purged CV), ch.12 (CPCV spirit); P4 weak panel; Canvas m10.
+**Sources:** [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); [arXiv:2608.12841](https://arxiv.org/abs/2608.12841); KTD pointer [arXiv:2605.28359](https://arxiv.org/abs/2605.28359); Mirage Part I–II [arXiv:2510.07920](https://arxiv.org/abs/2510.07920); AFML ch.3 (meta-labeling), ch.4 (uniqueness / sequential bootstrap), ch.5 (fracdiff), ch.7 (purged CV), ch.12 (CPCV spirit); P4 weak panel; Canvas m10.
 
 <Summary>
 **Takeaways**: vol-scaled labels → daily CS IC → purge recovers weak signal → don’t confuse leak / recover / cost-wipe.  

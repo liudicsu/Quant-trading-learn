@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **9 学时**：阅读 4h（含北向程序化 + SEC PDA 撤回知晓）+ 写作 3h + 测验 1h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
+本课（约 **10 学时**：阅读 5h（含北向程序化 + SEC PDA 撤回 + FY2026 检查 / FINRA GenAI 知晓）+ 写作 3h + 测验 1h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
 
 **课内目标：** 写风险偏好一页；诚实记录失败；拆穿「保证夏普」话术。
 
@@ -97,7 +97,20 @@ n_sources=15 all_fetch_OK=True
 
 **谨慎教学：撤回 ≠ 不再有义务。** 《顾问法》信义义务、Reg BI、公司政策等仍在。若日后再管相关主题，会重新提案。**非法律意见。**
 
+
+## SEC FY2026 检查重点 + FINRA 2026 GenAI / Agents — 知晓即可
+
+补充 PDA 利益冲突提案**撤回**（S7-12-23）：**撤回 ≠ 无剩余义务。**
+
+- **[SEC 考试司 FY2026 优先事项](https://www.sec.gov/about/reports-publications/2026-examination-priorities)**（页面约 2025-11-17；另有 [PDF](https://www.sec.gov/files/2026-exam-priorities.pdf)）：新兴金融科技焦点——自动化投资工具、AI、交易算法/平台、另类数据。检查可能关注 AI 表述是否公允准确；运营与披露是否一致；算法建议与投资者画像；欺诈/AML/交易/中后台中监督 AI 的政策。
+- **[FINRA 2026 年度监管报告 — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)**（**2026 新增**）：规则（含 FINRA Rule 3110 监督）保持技术中立。新兴智能体主题：自主性、范围/权限、可审计性、数据敏感度、领域知识、奖励错位，以及 GenAI 偏见/幻觉/隐私。可考虑人在回路、访问/数据监控、动作日志、护栏。
+
+**仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=17`。
+
 ## 常见错误 / 陷阱
+
+- 假定 PDA 撤回消灭了全部 AI/建议义务（FY2026 仍列 Emerging FinTech）。
+- 把 FINRA GenAI 主题当成交易执照或产品 alpha。
 
 1. 用自媒体阈值代替交易所/证监会文本。
 2. 把工作人员声明当成委员会终局规则。
@@ -120,6 +133,8 @@ n_sources=15 all_fetch_OK=True
 <Quiz id="p7ce-q2" question="沪深高频认定（已抓取 2025 细则）包括？" options={["任意两笔成交", "每秒≥300 笔或全日≥20000 笔申报撤单峰值", "仅零股", "Kelly f*>0.5"]} answer={1} explanation="上交所答问与深交所第33条。" />
 <Quiz id="p7ce-q3" question="SEA Rule 15c3-5 主要要求？" options={["免费裸接入", "市场接入的事前风控与年度 CEO 证明", "保证成交", "加密质押"]} answer={1} explanation="Market Access Rule。" />
 <Quiz id="p7ce-q4" question="Reg SHO Rule 201 大致在何时触发？" options={["波动 1%", "相对前收跌 10%（上市市场）", "周跌 50%", "任意上涨"]} answer={1} explanation="10% 熔断。" />
+<Quiz id="p7ce-fy2026" question="SEC FY2026 检查重点中新兴金融科技主要关注？" options={["全面禁止 AI", "自动化工具/AI/算法/另类数据——表述、运营vs披露、监督", "仅加密场所", "恢复 PDA 原案"]} answer={1} explanation="知晓即可；撤回 S7-12-23 ≠ 无剩余义务。" />
+<Quiz id="p7ce-genai" question="FINRA 2026 GenAI/Agents 章节主要是？" options={["新的交易 alpha 执照", "技术中立的监督主题（自主性、可审计、护栏）— 2026 新增", "废除 Rule 3110", "仅限 HFT"]} answer={1} explanation="仅知晓 — 非法律意见。" />
 <Quiz id="p7ce-pda" question="SEC 2025-06 撤回 S7-12-23 意味着？" options={["所有 AI 合规义务消失", "该 PDA 利益冲突提案不会按原案定稿；其他义务仍在", "Reg BI 废除", "只剩加密规则"]} answer={1} explanation="撤回 ≠ 无剩余义务；非法律意见。" />
 <Quiz id="p7ce-q5" question="FINRA Notice 26-10（已抓取）的含义？" options={["新设 PDT $25k", "以内日保证金标准取代原 PDT 次数/$25k 制度（2026-06-04 生效）", "废除保证金", "仅适用于加密"]} answer={1} explanation="Notice 26-10 取代日内交易保证金旧制。" />
 <Quiz id="p7ce-q6" question="央行 2021 通知（已抓取）对虚拟货币相关业务的定性？" options={["鼓励金融科技", "属非法金融活动并禁止", "银行强制开展", "完全不管"]} answer={1} explanation="银发〔2021〕237号高层次状态。" />
@@ -132,7 +147,7 @@ n_sources=15 all_fetch_OK=True
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。Canvas m14；AFML 科学伦理。
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；Canvas m14；AFML 科学伦理。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明。  

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **21 学时**：AFML 概念 6h + 实验 12h（含分数差分/唯一性/元标注/CPCV 复用 + one-switch 指针）+ 写作 3h — 重课）建立金融 **防泄漏 ML**：波动率缩放标签、带 embargo 的 purged CV，以及正确的 IC 指标。前置：`factor-workflow`、`backtest-traps`。
+本课（约 **21 学时**：AFML 概念 6h + 实验 12h（含分数差分/唯一性/元标注/CPCV 复用 + one-switch + KTD/Mirage 指针）+ 写作 3h — 重课）建立金融 **防泄漏 ML**：波动率缩放标签、带 embargo 的 purged CV，以及正确的 IC 指标。前置：`factor-workflow`、`backtest-traps`。
 
 **课内目标：** 演示 shuffle / 未 purge 泄漏；时间切分与因果特征；用**日度截面 RankIC 均值**评价（非准确率，亦非以混合 Spearman 作主指标）。
 
@@ -210,8 +210,16 @@ disclaimer: synthetic weak panel — learning only
 ## 桥接：PBO / DSR≠泄漏 与 AQuA 密封沙箱
 
 - **PBO / CSCV / 蒸发曲线：** 主课在 **回测陷阱**（[arXiv:2608.27734](https://arxiv.org/abs/2608.27734) + Bailey PBO）。记住：Deflated Sharpe 好看也可能伴随**污染信息集**（植入未来收益神谕）。CSCV 草图是教学玩具——不是生产级 CombinatorialPurgedKFold。
-- **AQuA 结构密封沙箱：** [arXiv:2608.12841](https://arxiv.org/abs/2608.12841) 冻结划分 / 特征 / 标签 / 评估器。**只学协议。** 拒绝把 Part II IC / Sharpe（如 +2.50）当课程 alpha——见 **frontier-llm-agents** 的 REJECT 框。
+- **AQuA 结构密封沙箱：** [arXiv:2608.12841](https://arxiv.org/abs/2608.12841)；KTD 指针 [arXiv:2605.28359](https://arxiv.org/abs/2605.28359)；Mirage 仅 Part I–II [arXiv:2510.07920](https://arxiv.org/abs/2510.07920) 冻结划分 / 特征 / 标签 / 评估器。**只学协议。** 拒绝把 Part II IC / Sharpe（如 +2.50）当课程 alpha——见 **frontier-llm-agents** 的 REJECT 框。
 - 决策时泄漏开关 **TEMP_CENTER / EXEC_OPEN**（arXiv:2605.23959）继续与 purge/禁运习惯并列。
+
+
+## 指针 — KTD-Fin 掩码 + Profit Mirage 仅 Part I–II
+
+主机细节在 `frontier-llm-agents`：
+
+- **[KTD-Fin](https://arxiv.org/abs/2605.28359)：** 明标→盲标代码/日期掩码 + 攻击者探针；Barra 选股 α — **赚钱 ≠ 选股能力**。勿把总收益榜当技能。
+- **[Profit Mirage](https://arxiv.org/abs/2510.07920) 仅 Part I–II：** 截断后衰减 + FinLake-Bench 记忆精神。**硬拒绝** FactFin / Part III–IV 夏普表作课程 alpha。
 
 ## 常见错误 / 陷阱
 
@@ -242,6 +250,8 @@ disclaimer: synthetic weak panel — learning only
 <Quiz id="q4-cases" question="未 purge IC 高于 purged IC 主要说明？" options={["免费 alpha", "情形 (a)：泄漏造成的管线幻觉", "只是情形 (c)", "oracle 上界"]} answer={1} explanation="泄漏协议抬高 IC，并无诚实 OOS 设计。" />
 <Quiz id="q5-pooled" question="混合 Spearman 被降级是因为？" options={["更快", "混淆时序与截面变异", "需要 GPU", "替代 DSR"]} answer={1} explanation="把序列持续性与截面排序搅在一起。" />
 <Quiz id="q6-overfit" question="训练截面 IC~0.34 而 OOS~0.02 说明？" options={["上线", "样本内拟合≠OOS 优势；记录试验", "跳过 purge", "固定 2% 没问题"]} answer={1} explanation="噪声特征下的过拟合陷阱。" />
+<Quiz id="p5ml-ktd" question="本课 KTD-Fin 指针主要警示？" options={["总收益榜=选股技能", "掩码+Barra：标题收益≠选股α；主机在 frontier-llm-agents", "可跳过 purge", "FactFin 夏普作业"]} answer={1} explanation="赚钱≠选股能力。" />
+<Quiz id="p5ml-mirage" question="Profit Mirage Part I–II 在此是？" options={["FactFin 夏普配方", "仅泄漏/衰减诊断——拒绝 Part III–IV SR 作 alpha", "HFT 指南", "永赚 LLM"]} answer={1} explanation="只诊断，不贴宣传夏普。" />
 <Quiz id="q7-frac" question="玩具里整数 d=1 与分数差分 d≈0.4 主要说明？" options={["费用下降", "两者都可平稳但分数差分保留更多自相关/记忆", "可跳过 purge", "元标签发明方向"]} answer={1} explanation="AFML 第5章平稳–记忆权衡。" />
 <Quiz id="q8-uniq" question="平均唯一性会下调哪些标签的权重？" options={["仅高成交额", "与许多并发事件重叠者", "ADF 失败", "使用 LightGBM"]} answer={1} explanation="AFML 第4章并发标签。" />
 <Quiz id="q9-meta" question="元标签的任务是？" options={["用新方向替换主方向", "过滤何时交易/跳过主方向", "去掉 purge", "只最大化准确率"]} answer={1} explanation="AFML 第3章 — 做与不做。" />

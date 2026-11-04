@@ -328,3 +328,38 @@ print(f"turnover_if_full_rebalance={turn_full:.4f}  turnover_with_no_trade_polic
 print("teach: near the target, first-order costs beat second-order utility gains — stay put.")
 print("cost-in-CV spirit: choose k / turnover penalty INSIDE validation, not after peeking at OOS.")
 
+
+# ---------- Alpha decay + costs → no-trade band (arXiv:2502.04284) ----------
+print("\n=== Alpha decay + costs → no-trade band (arXiv:2502.04284 Ma & Smith) ===")
+print("cite: multi-period optimal trading with alpha decay + transaction costs; deepens Brandt no-trade spirit")
+print("optional foil: arXiv:2411.07949 (prior two-parameter note) — NAME-ONLY")
+print("punchline: 不交易也是决策 — widen the no-trade band as costs rise / as lag α decays")
+rho0, rho1 = 0.80, 0.40  # current vs lagged signal weight
+print(f"signal model: Y_t = {rho0}*X_t + {rho1}*X_(t-1) + eps  (lag still informative)")
+for c in (0.10, 0.50, 1.00):
+    # Naive myopic half-width ~ c/(2*rho1) when switching long/short
+    half_naive = c / (2 * rho1)
+    # First-order optimal band slightly wider when future impact of today's switch is valued
+    # Teaching: use +10% widening vs naive as stand-in for ∂G/∂c correction (not closed form)
+    half_opt = half_naive * 1.10
+    print(f"  cost c={c:.2f}: naive_half_band≈{half_naive:.3f}  cost_aware_half_band≈{half_opt:.3f}  (wider → trade less)")
+# Tiny simulation: count switches under narrow vs wide band
+rng_n = np.random.default_rng(8)
+x0 = rng_n.normal(size=500)
+x1 = rng_n.normal(size=500)
+score = rho0 * x0 + rho1 * x1
+def switches(half):
+    q = 1
+    n_sw = 0
+    for s in score:
+        if q == 1 and s < -half:
+            q = -1; n_sw += 1
+        elif q == -1 and s > half:
+            q = 1; n_sw += 1
+    return n_sw
+for c, half in [(0.10, 0.10/(2*rho1)), (1.00, 1.00/(2*rho1)*1.10)]:
+    print(f"  sim switches @c={c:.2f} half≈{half:.3f}: {switches(half)} / 500 steps")
+print("teach: when lag α is weak (rho1≪rho0), multi-period correction is small; when lag persists, aim ahead")
+print("bridge: choose band width INSIDE validation (cost-in-CV) — not after peeking at OOS")
+print("pointer: execution-slippage lesson — TCA / participation caps sit next to this no-trade logic")
+

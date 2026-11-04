@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**23 hours**: 5h reading + 9h critical exercises (five sins/FINSABER/OpenPM/CLQT/AQuA/recoverability) + 2h rules + 3h sealed leaderboard + 4h process diagnosis) treats **LLM / multi-agent quant R&D** as a *frontier* under the same anti-leakage and multiple-testing discipline as P4–P5 — never as a shortcut. Prereqs: `factor-workflow`, `ml-leakage-control`, `modern-ml-pipelines`, `compliance-ethics`.
+This lesson (~**29 hours**: 5h reading + 12h critical exercises (KTD/Xia/Mirage/five sins/FINSABER/OpenPM/CLQT/AQuA/recoverability) + 2h rules + 3h sealed leaderboard + 7h process diagnosis) treats **LLM / multi-agent quant R&D** as a *frontier* under the same anti-leakage and multiple-testing discipline as P4–P5 — never as a shortcut. Prereqs: `factor-workflow`, `ml-leakage-control`, `modern-ml-pipelines`, `compliance-ethics`.
 
 **Goals:** state the RD-Agent(Q) loop; explain AlphaAgent regularizers; list LLM factor-mining failure modes; design a sealed-OOS acceptance bar.
 
@@ -182,6 +182,51 @@ Add one research-log row in `backtest-traps` whenever you read an LLM trading pa
 
 When an agent proposes and scores many candidates, **N for DSR is the ledger length**, not “the one we kept.” Record every evaluated plan; Gençay (arXiv:2608.27734) evaporation curves show the deflation threshold chasing the best IS Sharpe. Pre-registered single hypotheses face almost no deflation; brute search pays for every trial.
 
+
+## KTD-Fin — bright→blinded masking + Barra selection α
+
+**Intuition:** End-to-end LLM trading backtests often (1) leak pretraining memory via real tickers/dates and (2) treat **headline portfolio return** as stock-selection skill. [KTD-Fin](https://arxiv.org/abs/2605.28359) (Zhu et al.) answers both inside the protocol: a four-level **data-side mask** (bright → stock-blind → date-blind → **blinded**) anonymizes identifiers consistently across prompts *and* tool returns, with an independent attacker probe (joint ticker+date recovery ≤~1.5%). A **Barra-style** daily attribution then splits realized return into **Common + Style + Selection α**.
+
+**Protocol punchline:** **赚钱 ≠ 选股能力.** Under blinded × open-research on CSI300 (2024–2026 window), agents’ cumulative returns are largely **common + style**; selection α is near zero or **negative** for most models (paper Table 5: only ~1/10 near-zero/+ α). Masking also changes rationales — brand narratives under bright become factor ranks under blinded.
+
+**Numeric foil (lab):**
+
+```
+agent_A Port≈-13.73%  Common≈-8.09% Style≈-3.62% Selα≈-2.02%
+agent_B Port≈-13.99%  Common≈-8.09% Style≈-3.62% Selα≈-2.29%
+BRIGHT: "SH600519 defensive blue-chip"  vs  BLINDED: "asset_0006: 20d +2.1%, vol…"
+```
+
+**REJECT:** KTD **total-return leaderboards** as proof of transferable stock-selection skill. Pointer also in `ml-leakage-control`.
+
+## Agentic Trading survey — audit fields (not a cookbook)
+
+[Xia et al.](https://arxiv.org/abs/2605.19337) survey agentic trading with an Architecture–Capability–Adaptation lens and, crucially, **empirical protocol coverage** on n=80 closed-loop systems (bridge: Yao & Zheng [recoverability](https://arxiv.org/abs/2606.08285)).
+
+**Checklist only** (report Y / P / NR — **not** an agent cookbook; **not** a Deep RL build guide):
+
+| Field | Survey coverage (pooled) |
+|------|--------------------------:|
+| Time-consistent split | 50/80 ≈ 62.5% |
+| Transaction costs | 47/80 ≈ 58.8% |
+| Universe / survivorship | 48/80 ≈ 60.0% |
+| Execution semantics | 47/80 ≈ 58.8% |
+| R3 reproducibility | rare (most R0/R1) |
+
+**REJECT:** treating Xia as a product-alpha architecture recipe or FinRL-as-alpha guide.
+
+## Profit Mirage — leakage diagnosis (Part I–II ONLY)
+
+[Profit Mirage](https://arxiv.org/abs/2510.07920) (Li et al.) documents a **profit mirage**: dazzling pre-cutoff agent returns **evaporate** past the LLM knowledge window. Part I–II teach **diagnosis**: post-cutoff decay; counterfactual prediction-consistency often stays high (~0.69–0.82); **FinLake-Bench** memorization probes (price/event/trend QA often ≫ chance, ~85%+).
+
+**Lab toy:**
+
+```
+toy_pre_cutoff_SR≈2.080  post_cutoff_SR≈0.346  decay_rate≈83.4%
+```
+
+**HARD REJECT BOX:** **FactFin** and Part III–IV **Sharpe / 1.4×** campaign tables are **out of curriculum as alpha**. Use the paper for leakage literacy only — never paste FactFin SR as edge.
+
 ## Common mistakes / pitfalls
 
 - **Training cutoff / memorization:** pre-cutoff headlines are not forecasts; LEAK foils look amazing (see Glasserman &amp; Lin 2309.17322; Lopez-Lira/Tang/Zhu 2504.14765).
@@ -190,6 +235,8 @@ When an agent proposes and scores many candidates, **N for DSR is the ledger len
 - **Trial inflation:** agent rounds need explicit **N** in DSR; paper tables ≠ your sealed OOS.
 - **IS keep rules** overfit; sealed years must stay sealed.
 - **Withdrawn papers:** Chain-of-Alpha — use live banner + admin comment; drop unstable claims.
+- **KTD total-return boards:** Common+style ≠ selection α (2605.28359).
+- **FactFin / Mirage Part III–IV SR:** diagnosis only — never course alpha.
 - **Scope reject:** Deep RL / FinRL-as-alpha, HFT latency, options MM — out of this curriculum.
 - Niche motivation only: XQuant Spec+AI run-first (@_zheergen) — still needs the same traps.
 
@@ -217,13 +264,16 @@ When an agent proposes and scores many candidates, **N for DSR is the ledger len
 
 <Quiz id="p8llm-q10" question="Which is NOT one of Kong et al. five LLM-finance sins?" options={["Look-ahead", "Survivorship", "GPU brand bias", "Cost bias"]} answer={2} explanation="Five sins: look-ahead, survivorship, narrative, objective, cost." />
 <Quiz id="p8llm-q11" question="FINSABER’s main caution on FinMem/FinAgent-style evals?" options={["They need more GPUs", "Short selective windows overstate skill vs longer bias-mitigated tests", "They ban Buy-and-Hold", "They prove always-profitable agents"]} answer={1} explanation="arXiv:2505.07078 — breadth and horizon matter." />
+<Quiz id="p8llm-ktd" question="KTD-Fin’s Barra lesson is mainly?" options={["Total return = skill", "Headline returns ≈ common+style; selection α often ≈0/negative", "Masks are optional decoration", "Always trade bright tickers"]} answer={1} explanation="赚钱≠选股能力 — arXiv:2605.28359." />
+<Quiz id="p8llm-xia" question="Xia et al. survey numbers are for?" options={["A trading cookbook", "Audit/protocol coverage on closed-loop papers (checklist)", "Guaranteed R3 repos", "Deep RL homework"]} answer={1} explanation="Architecture coverage ≠ alpha recipe." />
+<Quiz id="p8llm-mirage" question="Profit Mirage Part I–II should be used as?" options={["FactFin Sharpe homework", "Leakage/decay diagnosis; REJECT FactFin SR tables as course alpha", "Proof LLMs always profit post-cutoff", "HFT latency guide"]} answer={1} explanation="Diagnosis yes; Part III–IV / FactFin campaign Sharpes no." />
 <Quiz id="p8llm-q12" question="OpenPM should be used as?" options={["A guaranteed alpha recipe", "An audit protocol (PIT, contamination, costs, mandates) — not a PnL claim", "A Deep RL trainer", "A funding-arb bot"]} answer={1} explanation="arXiv:2608.09988 spirit." />
 
 ## Done when
 
 Frontier risk list + updated research rules (sealed OOS, explicit N, no withdrawn-PDF dependence).
 
-**Sources (read and used above):** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q) *(arXiv comment lists NeurIPS 2025 — verify proceedings before treating as conference-of-record)*; [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent); [arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent); [arXiv:2605.24564](https://arxiv.org/abs/2605.24564) parametric look-ahead / FinCAD (problem + NAME-ONLY recipe); [arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha (**NAME-ONLY**); [arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha (**withdrawn by Lang Cao**; admin license-removal comment); [arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS; [arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena (~10.7% vs ~17.1%); [arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023; [arXiv:2309.17322](https://arxiv.org/abs/2309.17322) Glasserman &amp; Lin; [arXiv:2504.14765](https://arxiv.org/abs/2504.14765) Lopez-Lira/Tang/Zhu; [arXiv:2602.14233](https://arxiv.org/abs/2602.14233) five sins; [arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER; [arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM;  [arXiv:2606.29771](https://arxiv.org/abs/2606.29771) CLQT; [arXiv:2608.12841](https://arxiv.org/abs/2608.12841) AQuA (protocol only); [arXiv:2606.08285](https://arxiv.org/abs/2606.08285) recoverability; [arXiv:2608.27734](https://arxiv.org/abs/2608.27734) Gençay; niche: @_zheergen Spec+AI motivation only.
+**Sources (read and used above):** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q) *(arXiv comment lists NeurIPS 2025 — verify proceedings before treating as conference-of-record)*; [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent); [arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent); [arXiv:2605.24564](https://arxiv.org/abs/2605.24564) parametric look-ahead / FinCAD (problem + NAME-ONLY recipe); [arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha (**NAME-ONLY**); [arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha (**withdrawn by Lang Cao**; admin license-removal comment); [arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS; [arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena (~10.7% vs ~17.1%); [arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023; [arXiv:2309.17322](https://arxiv.org/abs/2309.17322) Glasserman &amp; Lin; [arXiv:2504.14765](https://arxiv.org/abs/2504.14765) Lopez-Lira/Tang/Zhu; [arXiv:2602.14233](https://arxiv.org/abs/2602.14233) five sins; [arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER; [arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM;  [arXiv:2606.29771](https://arxiv.org/abs/2606.29771) CLQT; [arXiv:2608.12841](https://arxiv.org/abs/2608.12841) AQuA (protocol only); [arXiv:2606.08285](https://arxiv.org/abs/2606.08285) recoverability; [arXiv:2608.27734](https://arxiv.org/abs/2608.27734) Gençay; [arXiv:2605.28359](https://arxiv.org/abs/2605.28359) KTD-Fin; [arXiv:2605.19337](https://arxiv.org/abs/2605.19337) Xia survey (audit only); [arXiv:2510.07920](https://arxiv.org/abs/2510.07920) Profit Mirage **Part I–II ONLY**; niche: @_zheergen Spec+AI motivation only.
 
 <Summary>
 **Takeaways**: agents multiply trials → stricter DSR/sealed OOS; mocks ≠ APIs; withdrawn papers get a footnote not a pipeline.  

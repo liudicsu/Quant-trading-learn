@@ -360,4 +360,37 @@ print("Hyperliquid Oct-10-2025 case study: ~$2.1B liquidations / ~12 minutes; pr
 print("NOT a trade recipe; NO optimized ADL alpha; compare production vs transparent benchmark allocations only as risk literacy")
 print("SaR name-drop (arXiv:2603.09164): forward-looking order-book Slippage-at-Risk — theory+warn; not a listed-alpha engine")
 
+
+# ---------- EWS heterogeneity (arXiv:2607.27070) next to 2608.03616 ----------
+print("\n=== EWS heterogeneity across cascades (arXiv:2607.27070) ===")
+print("cite: Garcia Seuma — early-warning signals are EVENT-HETEROGENEOUS across 7 crypto-perp cascades")
+print("next to liquidation subcritical arXiv:2608.03616 — reject critical EWS as tradeable alarm")
+# Toy robustness fractions (paper Table 3 spirit — teaching numbers, not a live detector)
+events = ["May22", "Nov22", "Aug24", "Dec24", "Feb25", "Apr25", "Oct25"]
+# price lag-1 AR positive-sig fraction /39 configs (paper): .67 .67 .72 .79 .03 .85 .10
+price_ar = [0.67, 0.67, 0.72, 0.79, 0.03, 0.85, 0.10]
+oi_ar = [0.38, 0.54, 0.08, 0.26, 0.10, 0.21, 0.59]
+print("lag1_AR_pos_sig_fraction (paper-style; 39 configs/variable):")
+for e, p_ar, o_ar in zip(events, price_ar, oi_ar):
+    print(f"  {e}: price={p_ar:.2f}  open_interest={o_ar:.2f}")
+print("pattern: price carries CSD in 5/7; silent in Feb25+Oct25 sudden-news (tariff) shocks")
+print("Oct-2025 in-sample 'criticality in leverage' INVERTS OOS (Aug-2024) — outlier, not the rule")
+print("variance rising is NON-SPECIFIC (almost every variable/event) — unreliable alarm")
+print("sole population regularity: taker-flow variance COMPRESSION (placebo-tested) — NOT a per-event tradeable EWS")
+print("REJECT: critical early-warning crash marketing / single-event CSD claims as trade signals")
+
+# ---------- Funding path-dependent literacy (arXiv:2506.08573) ----------
+print("\n=== Funding path-dependent literacy (arXiv:2506.08573) — theory ONLY ===")
+print("cite: Kim & Park — designing funding rates; path-dependent (e.g. 8h average) ≈ practical spot funding")
+print("literacy: issuers choose Φ so perpetual stays near target; path-average is implementable approx")
+# Toy: spot premium vs 8h trailing mean funding proxy
+rng_f = np.random.default_rng(3)
+prem = rng_f.normal(0.0002, 0.0008, 24)  # 24× hourly-ish samples in an 8h window story
+spot_F = prem[-1]
+path_F = prem.mean()
+print(f"toy: spot_funding_proxy≈{spot_F*1e4:.2f}bps  path_8h_avg≈{path_F*1e4:.2f}bps  |diff|≈{abs(spot_F-path_F)*1e4:.2f}bps")
+print("WARN: literacy only — DO NOT ship funding-design / path-funding as an arb recipe or advertised Sharpe")
+print("ties to 2212.06888: funding arb is NOT risk-free (margin, gap, fees, solvency)")
+
+
 print("DONE lab 02")

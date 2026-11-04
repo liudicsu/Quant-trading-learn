@@ -156,3 +156,10 @@ print(f"note: on nearly equal slice sizes, unweighted mean arrival_slip={uw:.2f}
 print(f"interval_VWAP(planned weights)={interval_vwap:.4f} close={close_px:.4f} participation_max={(trades/X0).max():.2f}")
 report.to_csv(DATA / "tca_report.csv", index=False)
 print("disclaimer: toy paths — learning only, not a broker TCA")
+
+
+# ---------- Thin pointer: alpha-decay no-trade (arXiv:2502.04284) ----------
+print("\n=== Pointer — alpha decay + costs → no-trade (arXiv:2502.04284) ===")
+print("host detail in portfolio-risk-sizing: widen no-trade band with costs; 不交易也是决策")
+print("here: TCA / Almgren paths still assume you decided TO trade — size the band first")
+

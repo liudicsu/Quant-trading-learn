@@ -6,7 +6,8 @@ arXiv:2304.07619; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113;
 AlphaAgent arXiv:2502.16789; FinCAD/parametric look-ahead arXiv:2605.24564;
 CogAlpha arXiv:2511.18850 (NAME-ONLY);
 CLQT arXiv:2606.29771; AQuA arXiv:2608.12841; exec-assumptions arXiv:2606.08285;
-leakage-safe search-aware arXiv:2608.27734.
+leakage-safe search-aware arXiv:2608.27734;
+KTD-Fin arXiv:2605.28359; Xia survey arXiv:2605.19337; Profit Mirage arXiv:2510.07920 Part I-II ONLY.
 Learning only — not investment advice.
 """
 from __future__ import annotations
@@ -413,5 +414,78 @@ for name, code in rows:
     print(f"  {name}: {code}")
 print("teach: a Y means reconstructable from public evidence — not that the assumption is realistic or profitable")
 print("research_log_row: date | paper | PiT | splits | fill | costs | universe | artifacts | next_action")
+
+
+# ---------- KTD-Fin: bright→blinded + Barra selection α (arXiv:2605.28359) ----------
+print("\n=== KTD-Fin bright→blinded + Barra selection α (arXiv:2605.28359) ===")
+print("cite: Zhu et al. — Knowing-To-Doing Fin; data-side mask + Barra attribution")
+print("protocol: 赚钱≠选股能力 — headline returns ≈ common + style; selection α near 0 / often negative")
+print("NO leaderboard Sharpes / total-return ranks as skill proof")
+
+rng_k = np.random.default_rng(5)
+# Toy panel: 8 names × 60 days; common + style + residual
+n_names, n_days = 8, 60
+common = rng_k.normal(0.0008, 0.01, n_days)
+style = rng_k.normal(0.0003, 0.006, n_days)
+resid = rng_k.normal(0, 0.008, (n_names, n_days))
+# Two "agents": A loads on common+style (no selection skill); B has mild negative selection
+w_A = np.full(n_names, 1 / n_names)
+w_B = np.array([0.25, 0.25, 0.1, 0.1, 0.1, 0.1, 0.05, 0.05])  # concentrates on worse residuals
+# Plant negative mean residual on B's heavy names
+resid[:2] -= 0.0015
+r_i = common[None, :] + style[None, :] + resid
+port_A = w_A @ r_i
+port_B = w_B @ r_i
+# Attribution: Common + Style + Selα
+sel_A = float((w_A @ resid).sum())
+sel_B = float((w_B @ resid).sum())
+com_A = float(common.sum()); sty_A = float(style.sum())
+com_B, sty_B = com_A, sty_A
+print(f"agent_A Port≈{(com_A+sty_A+sel_A)*100:.2f}%  Common≈{com_A*100:.2f}% Style≈{sty_A*100:.2f}% Selα≈{sel_A*100:.2f}%")
+print(f"agent_B Port≈{(com_B+sty_B+sel_B)*100:.2f}%  Common≈{com_B*100:.2f}% Style≈{sty_B*100:.2f}% Selα≈{sel_B*100:.2f}%")
+print("paper spirit (Table 5): only ~1/10 agents near-zero/+ selection α; most negative under blinded")
+print("mask toy: BRIGHT ticker visible → brand narrative; BLINDED alias → factor ranks / cash if no signal")
+bright_reason = "SH600519 defensive blue-chip — increase (ticker prior, not OHLCV)"
+blind_reason = "asset_0006: 20d +2.1%, vol 0.02 — rank only (no brand)"
+print(f"  BRIGHT rationale: {bright_reason}")
+print(f"  BLINDED rationale: {blind_reason}")
+print("attacker-probe spirit: joint ticker+date recovery ≤~1.5% under blinded — mask closes memory channel")
+print("REJECT: KTD total-return leaderboard as transferable stock-selection skill")
+
+# ---------- Agentic Trading survey Xia et al. (arXiv:2605.19337) ----------
+print("\n=== Agentic Trading survey audit fields (Xia et al. arXiv:2605.19337) ===")
+print("cite: bridge Yao&Zheng recoverability arXiv:2606.08285 — architecture > fill/costs/universe/artifacts")
+print("empirical subset n=80 closed-loop systems; protocol coverage (paper Table 4 pooled):")
+fields = [
+    ("time_split", 50, 80, 0.625),
+    ("transaction_costs", 47, 80, 0.588),
+    ("universe_survivorship", 48, 80, 0.600),
+    ("execution_semantics", 47, 80, 0.588),
+]
+print("audit_checklist (report Y/P/NR — NOT an agent cookbook; NOT Deep RL build guide):")
+for name, num, den, pct in fields:
+    print(f"  {name}: {num}/{den} ≈ {pct:.1%} reported in survey ledger")
+print("  R3_reproducibility: RARE — most systems R0/R1; treat missing as NR/Unknown")
+print("teach: checklist for reading papers; do not copy architectures as trading recipes")
+print("REJECT: Xia survey as product alpha or Deep RL / FinRL-as-alpha build guide")
+
+# ---------- Profit Mirage Part I–II ONLY (arXiv:2510.07920) ----------
+print("\n=== Profit Mirage leakage diagnosis Part I–II ONLY (arXiv:2510.07920) ===")
+print("cite: Li/Zeng/Xing/Xu — post-cutoff decay + FinLake-Bench memorization probes")
+print("HARD REJECT: FactFin / Part III–IV SR tables as curriculum edge or deployable alpha")
+# Toy: pre-cutoff vs post-cutoff SR collapse
+rng_m = np.random.default_rng(9)
+pre = rng_m.normal(0.0012, 0.01, 126)   # inflated "memorized" window
+post = rng_m.normal(0.0001, 0.012, 126)  # post-cutoff generalization
+def sr(x):
+    return float(x.mean() / (x.std(ddof=1) + 1e-12) * np.sqrt(252))
+sr_pre, sr_post = sr(pre), sr(post)
+decay = (sr_pre - sr_post) / max(abs(sr_pre), 1e-9)
+print(f"toy_pre_cutoff_SR≈{sr_pre:.3f}  post_cutoff_SR≈{sr_post:.3f}  decay_rate≈{decay*100:.1f}%")
+print("paper spirit: published agents drop ~50–70% SR once past knowledge cutoff (Fig.1)")
+print("FinLake-Bench spirit: price/event/trend QA accuracy often ≫ chance (~85%+) — memorization, not forecasting")
+print("counterfactual PC often stays high (~0.69–0.82) after input perturbation — recite, don't adapt")
+print("REJECT BOX: FactFin 1.4× Sharpe / Part III–IV campaign tables — out of curriculum scope as alpha")
+
 
 print("DONE lab 01")

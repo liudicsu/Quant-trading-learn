@@ -68,10 +68,10 @@
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 39h | ~5.0 周 | ~2.5 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 304 学时（跳过 P0 为 284）。** 6h/周 ≈ 47.8 周；12h/周 ≈ 23.9 周。
-**跳过 P0 后：精确 284 学时。** 6h/周 ≈ 44.5 周；12h/周 ≈ 22.3 周。
+**全量（含 P0）：精确 320 学时（跳过 P0 为 300）。** 6h/周 ≈ 53.3 周；12h/周 ≈ 26.7 周。
+**跳过 P0 后：精确 300 学时。** 6h/周 ≈ 50.0 周；12h/周 ≈ 25.0 周。
 
-精确合计：**304h 全量 / 284h 跳过 P0**。对外可表述为约 **290–320h 全量 / 270–300h 跳过基础**（含个人复盘缓冲）。
+精确合计：**320h 全量 / 300h 跳过 P0**。对外可表述为约 **300–340h 全量 / 280–320h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -874,3 +874,14 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - ADL trilemma + SaR name-drop → `frontier-tsfm-altdata-crypto`.
 - SEC FR 2025-11110 S7-12-23 withdrawal → `compliance-ethics` (awareness; withdrawn ≠ no duties).
 - Hours: **304 full / 284 skip-P0**.
+
+
+## Enrich4 (Phase B) mapping notes
+
+- KTD-Fin (2605.28359) + Xia survey (2605.19337) + Profit Mirage Part I–II (2510.07920) → `frontier-llm-agents` (+ pointers in `ml-leakage-control`).
+- Admission gates / injected-truth (2610.07701) → `backtest-traps` + pointer `factor-workflow`; MinervaScore 2608.23808 NAME-ONLY.
+- EWS heterogeneity (2607.27070) + funding path-dependent literacy (2506.08573) → `frontier-tsfm-altdata-crypto`.
+- Alpha decay + costs → no-trade (2502.04284) → `portfolio-risk-sizing` + thin `execution-slippage` pointer.
+- SEC FY2026 Exam Priorities + FINRA 2026 GenAI/Agents → `compliance-ethics`.
+- Hou–Xue–Zhang 2020 RFS (hhy131) → `factor-workflow` next to HLZ/HSZ.
+- Hours: **320 full / 300 skip-P0** (~+16h from enrich3 tip).

@@ -72,6 +72,11 @@ benchmarks: arrival/Perold=103.84 | planned_interval_VWAP=100.03 | close=95.35
 market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 ```
 
+
+## 指针 — alpha 衰减 + 成本 → 无交易
+
+主机细节在 `portfolio-risk-sizing`：[arXiv:2502.04284](https://arxiv.org/abs/2502.04284)。TCA / 参与率上限与同一逻辑相邻——成本上升则加宽带宽；**不交易也是决策**。不是券商 TCA 产品。
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。

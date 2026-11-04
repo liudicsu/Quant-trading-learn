@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**20 hours**: 5h concepts + 9h labs incl. Detzel costs + w34898 localFDR + 3h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
+This lesson (~**22 hours**: 5h concepts + 10h labs incl. Detzel costs + w34898 localFDR + HXZ foil + admission pointer + 3h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
 
 **Goals:** implement Spearman IC; build quantile long–short; contrast true vs null factors.
 
@@ -214,7 +214,25 @@ chart /workspace/Quant-trading-learn/public/p4/quantile_bars.png
 disclaimer: strong panel MU is inflated for teaching; weak panel is the realistic foil — learning only
 ```
 
+
+## Admission gates pointer + Hou–Xue–Zhang replication failure rates
+
+**Pointer:** Host detail for **admission gates / injected-truth** lives in `backtest-traps` ([arXiv:2610.07701](https://arxiv.org/abs/2610.07701)). Takeaway for factor research: gates beat random-admission mainly for weak train **t ≲ 2.5**; adoption often ~1–7%; always score on **excess**, not absolute. **门槛 ≠ 提高收益.**
+
+**Hou–Xue–Zhang (2020 RFS) replication foil** — next to HLZ + Harvey–Sancetta–Zhao: [Replicating Anomalies](https://doi.org/10.1093/rfs/hhy131) shows most published anomalies **fail** under a common replication protocol.
+
+```
+paper: 65% of 452 anomalies fail |t|≥1.96 (NYSE breakpoints + value-weight)
+       82% fail multiple-testing |t|≥2.78
+lab toy mixture: fail_|t|<1.96≈87%  fail_|t|<2.78≈97%  (order-of-magnitude foil)
+```
+
+Even “successful” replications are often economically smaller than the original reports. Treat the failure rate as a **prior** — new factors still need HLZ/HSZ hurdles **and** Detzel costs, not a blog t-stat.
+
 ## Common mistakes / pitfalls
+
+- Treating HXZ failure rates as a license to skip HLZ/HSZ + Detzel — they are a prior, not a free pass.
+- Using absolute-return admission gates on factor panels.
 
 1. Skipping neutralization then calling industry exposure "alpha."
 2. Treating the inflated strong panel as a live RankIC benchmark.
@@ -242,13 +260,15 @@ disclaimer: strong panel MU is inflated for teaching; weak panel is the realisti
 
 <Quiz id="p4fw-hsz" question="Harvey–Sancetta–Zhao (NBER w34898) lower-bound t cutoff?" options={["t≥1", "t≥2 always enough", "At least t≥3.0 after dependence/selection adjustments", "Only R²"]} answer={2} explanation="NBER w34898: threshold at least 3.0." />
 <Quiz id="p4fw-lfdr" question="Local FDR answers which question a p-value does not?" options={["P(data|null) style tail prob only", "Approx. P(null|realized statistic)", "Broker fee schedule", "Always-up accuracy"]} answer={1} explanation="p-value ≠ P(null|data); local FDR targets the latter." />
+<Quiz id="p4fw-hxz" question="Hou–Xue–Zhang (2020 RFS) main foil?" options={["Most anomalies replicate easily", "Large share of published anomalies fail under common replication (~65% / ~82% hurdles)", "t>2 always enough", "Costs never matter"]} answer={1} explanation="DOI 10.1093/rfs/hhy131 — failure-rate prior next to HLZ/HSZ." />
+<Quiz id="p4fw-admit" question="Admission gates for factor adoption mainly?" options={["Guarantee higher returns", "Help weak t≲2.5 vs random-admission; always use excess; not a return engine", "Replace HLZ", "Ban value-weight"]} answer={1} explanation="Host detail in backtest-traps; 门槛≠提高收益." />
 <Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov (JF 2023) main caution?" options={["Always prefer highest turnover", "Ignoring costs biases model/factor comparisons toward high-cost factors", "Costs never change rankings", "Only crypto matters"]} answer={1} explanation="DOI 10.1111/jofi.13225." />
 
 ## Done when
 
 IC + quantile L/S + null-factor zoo report, with strong/weak table, lagged-mcap neutralization, and look-ahead notes.
 
-**Sources:** Fama–MacBeth 1973 JPE 81; Fama–French 1993 JFE 33; Fama–French 2015 JFE 116; Harvey–Liu–Zhu 2016 RFS 29(1); Alphalens Reloaded docs; Qlib DataHandlerLP/Alpha158; AFML Factor Mirage; @alin_alphapilot IC-first; quant-wiki foil Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225); Harvey–Sancetta–Zhao NBER [w34898](https://www.nber.org/papers/w34898) (t≥3 + local FDR).
+**Sources:** Fama–MacBeth 1973 JPE 81; Fama–French 1993 JFE 33; Fama–French 2015 JFE 116; Harvey–Liu–Zhu 2016 RFS 29(1); Alphalens Reloaded docs; Qlib DataHandlerLP/Alpha158; AFML Factor Mirage; @alin_alphapilot IC-first; quant-wiki foil Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225); Harvey–Sancetta–Zhao NBER [w34898](https://www.nber.org/papers/w34898) (t≥3 + local FDR); Hou–Xue–Zhang 2020 RFS [DOI 10.1093/rfs/hhy131](https://doi.org/10.1093/rfs/hhy131); admission gates pointer [arXiv:2610.07701](https://arxiv.org/abs/2610.07701).
 
 <Summary>
 **Takeaways**: construct → IC/decay → strong vs weak → quantiles+costs → FM → t>3 zoo.  

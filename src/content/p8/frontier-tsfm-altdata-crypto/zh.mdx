@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **16 学时**：论文/文档 5h + 设计练习 5h + 资金费率/清算/ADL 对照 2h + 结构/PIT 2h + SaR 点名）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
+本课（约 **19 学时**：论文/文档 5h + 设计练习 5h + 资金费率/清算/ADL/EWS/路径资金费对照 4h + 结构/PIT 2h + SaR 点名）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
 
 **课内目标：** 概括 TSFM 日频超额收益的谨慎结论；报告相对 always-up 的**超额方向准确率**；设计另类数据 / Crypto PIT 检查；说明 CEX CCXT 与链上适配差异及额外风险。
 
@@ -142,7 +142,30 @@ WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
 拒绝把 ADL 削发或资金费设计论文变成「策略夏普」。教机制与不可能，不为课程夏普优化社会化。
 </Callout>
 
+
+## 跨 cascade 的 EWS 异质性
+
+紧挨亚临界清算引擎（[arXiv:2608.03616](https://arxiv.org/abs/2608.03616)）：[arXiv:2607.27070](https://arxiv.org/abs/2607.27070) 表明预警 / cascade 诊断是**事件异质**的——**不存在**作为可交易警报可靠触发的事件不变临界慢化（CSD）。在一次杠杆冲击（如 Oct-2025 风格）上看似有用的特征，在其他 cascade 上**样本外失败**。
+
+**实验精神：**
+
+```
+sole population regularity: taker-flow variance COMPRESSION (placebo-tested)
+NOT a per-event tradeable EWS
+```
+
+**拒绝：** 把临界 EWS /「崩溃乘数 → 1」营销当课程警报或产品 alpha。
+
+## 路径依赖资金费素养（仅理论）
+
+[Kim & Park（arXiv:2506.08573）](https://arxiv.org/abs/2506.08573) 讨论资金费设计：**路径依赖**规则（如 8h 均值）≈ 实用现货资金费代理。实验玩具：`spot_funding_proxy≈-2.04bps` vs `path_8h_avg≈1.65bps`（|diff|≈3.70bps）。
+
+**仅素养 — 禁止**把路径资金费 / 资金费设计当成套利配方或宣传夏普。桥接 2212.06888：资金费套利**不是**无风险。
+
 ## 常见错误 / 陷阱
+
+- 把临界 EWS / 崩溃乘数营销当成可交易警报。
+- 把路径依赖资金费设计当成宣传套利 alpha。
 
 - 日频噪声上零样本 TSFM 常输给强截面/树基准。
 - Mock ≠ 已发布 Chronos/TimesFM 权重。
@@ -162,6 +185,8 @@ WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
 
 ## 测验
 
+<Quiz id="p8ts-ews" question="EWS 异质性（2607.27070）主要警示？" options={["一个 CSD 警报适用所有 cascade", "无可交易的事件不变 EWS；Oct-2025 风格特征可样本外失败", "总相信临界乘数→1", "跳过清算素养"]} answer={1} explanation="拒绝临界 EWS 当可交易警报。" />
+<Quiz id="p8ts-fundpath" question="路径依赖资金费（2506.08573）在本课是？" options={["带宣传夏普的套利配方", "仅素养——不是资金费设计 alpha 引擎", "HFT 时延指南", "期权做市"]} answer={1} explanation="理论+警示；桥接 2212.06888。" />
 <Quiz id="p8ts-adl" question="ADL 三难指无法同时保证？" options={["仅低费率", "偿付、收入与公平三者一起", "基差永远为零", "零资金费"]} answer={1} explanation="arXiv:2512.01112。" />
 <Quiz id="p8ts-q1" question="arXiv:2511.18578 对零样本 Chronos/TimesFM？" options={["总是胜过 LightGBM", "在日频超额上常弱于强传统基准", "取消 purge", "证明免费资金费率 alpha"]} answer={1} explanation="已核验的谨慎金融 TSFM 评价。" />
 <Quiz id="p8ts-q2" question="另类数据第一风险是？" options={["配色", "时间戳与修订 / PIT 可得性", "变量名", "GPU 品牌"]} answer={1} explanation="as-of 与修订控制。" />

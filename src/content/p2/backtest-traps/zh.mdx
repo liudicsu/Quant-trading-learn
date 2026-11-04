@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **26 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV·蒸发曲线 的多实验 12h + 写作 4h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **28 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 14h + 写作 4h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -334,6 +334,25 @@ CSCV_sketch S=4 combos=6 strategies=5 PBO_hat≈0.67  （教学草图）
 
 读每篇 LLM / agent 交易论文时，对 **PiT 标签**、**划分日期**、**成交时点**、**成本/换手**、**股票池**、**工件** 标 **Y**（有）/ **P**（部分）/ **NR**（未报）（[arXiv:2606.08285](https://arxiv.org/abs/2606.08285)）。结业项目用同一清单。缺行 → 不把标题夏普当证据。
 
+
+## 准入门槛 / 注入真值 — 精度 ≠ 提高收益
+
+**直觉：** 自动化研究常用**准入门槛**（必须通过的准则）才采纳策略。[Zheng（arXiv:2610.07701）](https://arxiv.org/abs/2610.07701) 用**注入真值**协议，并配**相同采纳率的随机准入对照**——这样才能区分「有信息」与「只是更严」。
+
+**边界（论文）：** 门槛相对随机准入，主要在弱训练 **t ≲ 2.5** 时有用，采纳率常仅 ~**1–7%**。强信号（t ≳ 2.5）多为**开销**（采纳↓、FDR 增益小）。**门槛 ≠ 提高收益**——精度装置，不是收益引擎。
+
+**必要条件：** 准则须用**超额**收益（信息比率），勿用绝对收益。绝对收益下市场波动会吞掉 α，甚至**静默拒绝真 t=4**（论文表 7：修正前 DSR 拒绝率在各强度可为 1.00）。
+
+**实验 / 论文数字：**
+
+```
+compression_foil: absolute_SR≈1.594  excess_IR≈5.276  ratio≈3.31×
+Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
+超额修正后 @ t=4: hit≈98.3% FDR≈0
+```
+
+**MinervaScore 仅点名：** [arXiv:2608.23808](https://arxiv.org/abs/2608.23808) — 可审计验证层；作者自报密封前向 Spearman ρ≈0.013 — **不是 Seal-as-alpha**。`factor-workflow` 亦有指针。
+
 ## 常见错误 / 陷阱
 
 1. 把同日成交标成「研究」。
@@ -371,13 +390,15 @@ CSCV_sketch S=4 combos=6 strategies=5 PBO_hat≈0.67  （教学草图）
 <Quiz id="q9-oneswitch" question="TEMP_CENTER 泄漏指？" options={["只用向后窗口", "中心化滚动特征偷看未来观测", "更高佣金", "密封 hold-out"]} answer={1} explanation="中心化统计在 t 用到 t 之后的价格。" />
 <Quiz id="q-pbo-dsr" question="植入前瞻预言机且 Sharpe 极大时通常？" options={["单靠 DSR 就能抓住", "信息集被污染时仍可能在 DSR/PBO 下存活", "PBO 恒为 0", "无需 PIT 审计"]} answer={1} explanation="Gençay E1 / 实验预言机：通缩 ≠ 泄漏护栏。" />
 <Quiz id="q-pbo-cscv" question="Bailey CSCV/PBO 主要估计？" options={["券商费率", "样本内冠军样本外低于中位数的概率", "永远上涨准确率", "资金费率"]} answer={1} explanation="组合对称交叉验证估计 PBO。" />
+<Quiz id="q-admit-bound" question="注入真值准入门槛何时最有用？" options={["训练 t≫3 总有用", "弱训练 t≲2.5 相对随机准入；采纳常仅约1–7%", "门槛会提高期望收益", "绝对夏普足够"]} answer={1} explanation="精度装置；t≳2.5 多为开销 — arXiv:2610.07701。" />
+<Quiz id="q-admit-excess" question="为何门槛准则必须用超额收益？" options={["只为手续费", "绝对准则可在市场波动主导时静默拒绝真 t=4", "DSR 禁止超额", "不用 PIT"]} answer={1} explanation="论文表7 / 实验 compression foil。" />
 <Quiz id="q10-execopen" question="EXEC_OPEN 不合法是因为？" options={["收盘决策后次日开盘成交", "用当日开盘后字段却假设当日开盘成交", "删除成本", "禁止 RankIC"]} answer={1} explanation="执行对齐类金融原生泄漏。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。
+**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

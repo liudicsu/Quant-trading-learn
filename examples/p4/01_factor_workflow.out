@@ -84,3 +84,12 @@ local FDR: probability null is true GIVEN the realized test statistic — a p-va
   planted_t=4.2: two-sided_p≈0.0000  localFDR_sketch≈0.003
 quiz_foil: p-value ≠ P(null|data); local FDR targets the latter
 costs still matter for economic significance after statistical hurdles (Detzel bridge)
+
+=== Admission gates pointer (arXiv:2610.07701) + Hou–Xue–Zhang 2020 RFS ===
+gates host: backtest-traps — injected-truth; helpful only for weak train t≲2.5; use EXCESS not absolute
+cite HXZ: https://doi.org/10.1093/rfs/hhy131 — Replicating Anomalies (RFS 2020)
+foil next to HLZ + Harvey–Sancetta–Zhao: most published anomalies FAIL under common replication
+  65% of 452 anomalies fail |t|≥1.96 (NYSE breakpoints + value-weight); 82% fail multiple-testing |t|≥2.78
+  even 'successful' replications often much smaller economically than original reports
+toy_mixture fail_|t|<1.96≈87%  fail_|t|<2.78≈97%  (order-of-magnitude foil; paper=65%/82%)
+teach: replication failure rate is a prior — new factors need HLZ/HSZ hurdles + Detzel costs, not a blog t-stat

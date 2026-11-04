@@ -386,3 +386,20 @@ print("quiz_foil: p-value ≠ P(null|data); local FDR targets the latter")
 print("costs still matter for economic significance after statistical hurdles (Detzel bridge)")
 
 
+# ---------- Admission gates pointer + Hou–Xue–Zhang replicating anomalies ----------
+print("\n=== Admission gates pointer (arXiv:2610.07701) + Hou–Xue–Zhang 2020 RFS ===")
+print("gates host: backtest-traps — injected-truth; helpful only for weak train t≲2.5; use EXCESS not absolute")
+print("cite HXZ: https://doi.org/10.1093/rfs/hhy131 — Replicating Anomalies (RFS 2020)")
+print("foil next to HLZ + Harvey–Sancetta–Zhao: most published anomalies FAIL under common replication")
+print("  65% of 452 anomalies fail |t|≥1.96 (NYSE breakpoints + value-weight); 82% fail multiple-testing |t|≥2.78")
+print("  even 'successful' replications often much smaller economically than original reports")
+# Toy: 452 null-ish t-stats; fraction clearing 1.96 vs 2.78
+rng_h = np.random.default_rng(15)
+# Mixture: 70% null N(0,1), 30% weak N(1.5,1) — illustrative failure morphology
+n = 452
+z = np.where(rng_h.random(n) < 0.70, rng_h.normal(0, 1, n), rng_h.normal(1.5, 1, n))
+fail_196 = float(np.mean(np.abs(z) < 1.96))
+fail_278 = float(np.mean(np.abs(z) < 2.78))
+print(f"toy_mixture fail_|t|<1.96≈{fail_196*100:.0f}%  fail_|t|<2.78≈{fail_278*100:.0f}%  (order-of-magnitude foil; paper=65%/82%)")
+print("teach: replication failure rate is a prior — new factors need HLZ/HSZ hurdles + Detzel costs, not a blog t-stat")
+

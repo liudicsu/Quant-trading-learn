@@ -135,4 +135,23 @@ CSCV_sketch S=4 combos=6 strategies=5 PBO_hat≈0.667
 disclaimer: teaching sketch — NOT production CombinatorialPurgedKFold / Bailey production CSCV
 saved_plot public/p2/pbo_evaporation.png
 agent_search_note: frontier-llm-agents must record every scored candidate in a trial ledger for DSR(N)
+
+=== Admission gates / injected-truth (arXiv:2610.07701 Zheng) ===
+cites: https://arxiv.org/abs/2610.07701 ; MinervaScore arXiv:2608.23808 NAME-ONLY (null forward — NOT Seal-as-alpha)
+punchline: gates beat random-admission only for weak train t≲2.5; adoption ~1–7%; absolute-return criteria silently reject even true t=4 — use EXCESS
+single_rep_sketch (paper: 400 reps — numbers below are illustrative morphology):
+  weak_t≈1: A_hit_true=True  B_adopt=True B_hit_true=True  true_col_reject_rates={G6=0.20, F6=0.20, DSR=0.40}
+  weak_t≈1.5: A_hit_true=False  B_adopt=True B_hit_true=False  true_col_reject_rates={G6=0.20, F6=0.00, DSR=0.40}
+  boundary_t≈2.5: A_hit_true=True  B_adopt=True B_hit_true=True  true_col_reject_rates={G6=0.20, F6=0.20, DSR=0.40}
+  strong_t≈4: A_hit_true=True  B_adopt=True B_hit_true=True  true_col_reject_rates={G6=0.00, F6=0.00, DSR=0.00}
+compression_foil: absolute_SR≈1.594  excess_IR≈5.276  ratio≈3.31× (market vol swallows α)
+paper Table 7 (pre-correction) reject rates on ground-truth columns under ABSOLUTE returns:
+  t≈1.00: G6=1.00 F6=1.00 F1=1.00 DSR=1.00
+  t≈2.51: G6=0.60 F6=0.60 F1=1.00 DSR=1.00
+  t≈4.00: G6=0.40 F6=0.20 F1=0.80 DSR=1.00  ← silent total reject of a TRUE signal
+after EXCESS correction at t=4: hit≈98.3% FDR≈0 — criteria must be on excess / information ratio
+paper boundary: gates effective for train t≲2.5 (ΔFDR>0 vs random-admission); beyond ≈ overhead (adoption↓ only)
+paper adoption when helpful: ~1–7%; 门槛≠提高收益 — precision device, not a return engine
+REJECT: treating admission gates / Minerva Seal as proof of higher expected returns
+MinervaScore NAME-ONLY: auditable validation layer; authors' own sealed forward null (ρ≈0.013) — NOT Seal-as-alpha
 ASSERTS_OK

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **23 学时**：导读 5h + 批判练习 9h（五宗罪/FINSABER/OpenPM/CLQT/AQuA/可恢复性）+ 守则改写 2h + 密封排行榜 3h + 流程诊断 4h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
+本课（约 **29 学时**：导读 5h + 批判练习 12h（KTD/Xia/Mirage/五宗罪/FINSABER/OpenPM/CLQT/AQuA/可恢复性）+ 守则改写 2h + 密封排行榜 3h + 流程诊断 7h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
 
 **课内目标：** 陈述 RD-Agent(Q) 闭环；解释 AlphaAgent 正则；列出 LLM 挖因子失败模式；设计密封样本外验收。
 
@@ -173,6 +173,51 @@ Part II 数字是**其沙箱下的论文结果**——**不是**课程优势、�
 
 智能体提出并评分许多候选时，**DSR 的 N 是账本长度**，不是「留下的那一个」。记每一条被评估的计划；Gençay（arXiv:2608.27734）蒸发曲线显示通缩阈值追赶最佳 IS 夏普。
 
+
+## KTD-Fin — 明标→盲标掩码 + Barra 选股 α
+
+**直觉：** 端到端 LLM 交易回测常有两类失败：(1) 真实代码/日期泄漏预训练记忆；(2) 把**组合总收益**当成选股能力。[KTD-Fin](https://arxiv.org/abs/2605.28359) 在协议内同时处理：四级**数据侧掩码**（bright → stock-blind → date-blind → **blinded**）在提示与工具返回中一致匿名化，并用独立攻击者探针认证（联合代码+日期恢复 ≤~1.5%）；再用 **Barra 风格**截面归因把收益拆成 **共同 + 风格 + 选股 α**。
+
+**协议要点：赚钱 ≠ 选股能力。** blinded × open-research 下，标题收益大多来自共同与风格暴露，选股 α 接近 0 或为负（论文表 5：约仅 1/10 接近非负）。掩码也会改变说理：明标下的品牌叙事 → 盲标下的因子排序。
+
+**实验箔：**
+
+```
+agent_A Port≈-13.73%  Common≈-8.09% Style≈-3.62% Selα≈-2.02%
+agent_B Port≈-13.99%  Common≈-8.09% Style≈-3.62% Selα≈-2.29%
+BRIGHT: "SH600519 防御性蓝筹"  vs  BLINDED: "asset_0006: 20d +2.1%, vol…"
+```
+
+**拒绝：** 把 KTD **总收益排行榜**当作可迁移选股技能证据。`ml-leakage-control` 有指针。
+
+## Agentic Trading 综述 — 审计字段（不是菜谱）
+
+[Xia 等](https://arxiv.org/abs/2605.19337) 用 Architecture–Capability–Adaptation 梳理智能体交易，并给出 n=80 闭环系统的**协议字段覆盖率**（桥接 Yao & Zheng [可恢复性](https://arxiv.org/abs/2606.08285)）。
+
+**只作检查清单**（填 Y/P/NR — **不是**智能体菜谱，**不是** Deep RL 搭建指南）：
+
+| 字段 | 综述覆盖（合并） |
+|------|------------------:|
+| 时间切分 | 50/80 ≈ 62.5% |
+| 交易成本 | 47/80 ≈ 58.8% |
+| 宇宙/幸存者 | 48/80 ≈ 60.0% |
+| 成交语义 | 47/80 ≈ 58.8% |
+| R3 可复现 | 少见（多为 R0/R1） |
+
+**拒绝：** 把 Xia 当成产品 alpha 架构菜谱或 FinRL-as-alpha 指南。
+
+## Profit Mirage — 泄漏诊断（仅 Part I–II）
+
+[Profit Mirage](https://arxiv.org/abs/2510.07920) 记录**利润蜃景**：截断前炫目收益在知识截止后蒸发。Part I–II 教**诊断**：截断后衰减；反事实预测一致性常仍高（~0.69–0.82）；**FinLake-Bench** 记忆探针（价格/事件/趋势问答常远高于随机，~85%+）。
+
+**实验玩具：**
+
+```
+toy_pre_cutoff_SR≈2.080  post_cutoff_SR≈0.346  decay_rate≈83.4%
+```
+
+**硬拒绝框：FactFin** 与 Part III–IV 的 **Sharpe / 1.4×** 宣传表**不得作为课程 alpha**。只借诊断，不贴排行榜。
+
 ## 常见错误 / 陷阱
 
 - **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会好看得吓人（Glasserman &amp; Lin；Lopez-Lira/Tang/Zhu）。
@@ -181,6 +226,8 @@ Part II 数字是**其沙箱下的论文结果**——**不是**课程优势、�
 - **试错膨胀：** DSR 须显式 **N**；论文表 ≠ 密封 OOS。
 - **IS 保留规则**过拟合；密封年必须保持密封。
 - **已撤回论文：** Chain-of-Alpha — 用现场横幅+管理员评论；不写进流水线。
+- **KTD 总收益榜：** 共同+风格 ≠ 选股 α。
+- **FactFin / Mirage Part III–IV SR：** 只诊断，不作课程 alpha。
 - **范围拒绝：** Deep RL / FinRL-as-alpha、HFT 时延、期权做市 — 本课大纲外。
 - Niche 仅动机：XQuant Spec+AI（@_zheergen）。
 
@@ -208,13 +255,16 @@ Part II 数字是**其沙箱下的论文结果**——**不是**课程优势、�
 
 <Quiz id="p8llm-q10" question="下列哪项不是 Kong 等五宗罪？" options={["前瞻", "幸存者", "GPU 品牌偏差", "成本偏差"]} answer={2} explanation="五宗罪：前瞻、幸存者、叙事、目标、成本。" />
 <Quiz id="p8llm-q11" question="FINSABER 对 FinMem/FinAgent 式评估的主要警示？" options={["需要更多 GPU", "短且挑剔的窗口会相对更长、偏差缓解测试夸大技能", "禁止买入持有", "证明代理永远盈利"]} answer={1} explanation="arXiv:2505.07078。" />
+<Quiz id="p8llm-ktd" question="KTD-Fin 的 Barra 要点是？" options={["总收益=技能", "标题收益≈共同+风格；选股α常≈0/负", "掩码可有可无", "应总做明标交易"]} answer={1} explanation="赚钱≠选股能力 — arXiv:2605.28359。" />
+<Quiz id="p8llm-xia" question="Xia 综述数字主要用于？" options={["交易菜谱", "闭环论文的审计/协议覆盖（清单）", "保证 R3 仓库", "Deep RL 作业"]} answer={1} explanation="覆盖率≠alpha 菜谱。" />
+<Quiz id="p8llm-mirage" question="Profit Mirage Part I–II 应如何用？" options={["FactFin Sharpe 作业", "泄漏/衰减诊断；拒绝 FactFin SR 表作课程 alpha", "证明 LLM 截止后必赚", "HFT 延迟指南"]} answer={1} explanation="只借诊断；Part III–IV / FactFin 宣传 Sharpe 不进课。" />
 <Quiz id="p8llm-q12" question="OpenPM 应如何使用？" options={["保证 alpha 配方", "当作审计协议（PIT、污染、成本、约束）——不当 PnL 主张", "Deep RL 训练器", "资金费率套利机器人"]} answer={1} explanation="arXiv:2608.09988 精神。" />
 
 ## 完成标准
 
 前沿风险清单 + 更新研究守则（密封 OOS、显式 N、不依赖已撤回 PDF）。
 
-**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)（*arXiv 评论写着 NeurIPS 2025——核验会议录前只当预印本脚注*）；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent)；[arXiv:2605.24564](https://arxiv.org/abs/2605.24564) 参数前瞻/FinCAD（问题+仅点名配方）；[arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha（**仅点名**）；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**由 Lang Cao 撤回**；含管理员许可评论）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena（~10.7% vs ~17.1%）；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619)；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322)；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765)；[arXiv:2602.14233](https://arxiv.org/abs/2602.14233) 五宗罪；[arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER；[arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM；  [arXiv:2606.29771](https://arxiv.org/abs/2606.29771) CLQT；[arXiv:2608.12841](https://arxiv.org/abs/2608.12841) AQuA（仅协议）；[arXiv:2606.08285](https://arxiv.org/abs/2606.08285) 可恢复性；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734) Gençay； niche：@_zheergen。
+**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)（*arXiv 评论写着 NeurIPS 2025——核验会议录前只当预印本脚注*）；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent)；[arXiv:2605.24564](https://arxiv.org/abs/2605.24564) 参数前瞻/FinCAD（问题+仅点名配方）；[arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha（**仅点名**）；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**由 Lang Cao 撤回**；含管理员许可评论）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena（~10.7% vs ~17.1%）；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619)；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322)；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765)；[arXiv:2602.14233](https://arxiv.org/abs/2602.14233) 五宗罪；[arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER；[arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM；  [arXiv:2606.29771](https://arxiv.org/abs/2606.29771) CLQT；[arXiv:2608.12841](https://arxiv.org/abs/2608.12841) AQuA（仅协议）；[arXiv:2606.08285](https://arxiv.org/abs/2606.08285) 可恢复性；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734) Gençay；[arXiv:2605.28359](https://arxiv.org/abs/2605.28359) KTD-Fin；[arXiv:2605.19337](https://arxiv.org/abs/2605.19337) Xia 综述（仅审计）；[arXiv:2510.07920](https://arxiv.org/abs/2510.07920) Profit Mirage **仅 Part I–II**； niche：@_zheergen。
 
 <Summary>
 **要点**：agent 放大试错 → 更严 DSR/密封 OOS；mock ≠ API；撤回论文只做脚注不做流水线。  

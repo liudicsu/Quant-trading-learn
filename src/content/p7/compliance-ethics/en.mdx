@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**9 hours**: 4h reading incl. Northbound + SEC PDA withdrawal awareness + 3h writing + 1h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
+This lesson (~**10 hours**: 5h reading incl. Northbound + SEC PDA withdrawal + FY2026 Exam / FINRA GenAI awareness + 3h writing + 1h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
 
 **Goals:** write a risk-preference page; log failures honestly; refuse “guaranteed Sharpe” pitches.
 
@@ -97,7 +97,20 @@ n_sources=15 all_fetch_OK=True
 (checked Asia/Shanghai 2026-11-04)
 ```
 
+
+## SEC FY2026 Exam Priorities + FINRA 2026 GenAI / Agents — awareness
+
+Complements the PDA-conflicts proposal **withdrawal** (S7-12-23): **withdrawal ≠ no remaining duties.**
+
+- **[SEC Division of Examinations FY2026 Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities)** (page stamped ~2025-11-17; also [PDF](https://www.sec.gov/files/2026-exam-priorities.pdf)): Emerging Financial Technology focus — automated investment tools, AI, trading algorithms/platforms, alt-data. Exams may check fair/accurate AI representations; ops vs disclosures; algo advice vs investor profiles; policies supervising AI in fraud/AML/trading/back-office.
+- **[FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)** (**NEW FOR 2026**): rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging agent themes: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails.
+
+**Awareness only — not legal advice.** Date-stamp official pages when you cite them. Lab row count: `n_sources=17` in `examples/p7/02_compliance_sources.py`.
+
 ## Common mistakes / pitfalls
+
+- Assuming PDA withdrawal erased all AI/advice duties (FY2026 exams still list Emerging FinTech).
+- Treating FINRA GenAI themes as a trading license or product alpha.
 
 1. Quoting blog thresholds instead of exchange/CSRC text.
 2. Treating staff statements as final Commission rules.
@@ -120,6 +133,8 @@ n_sources=15 all_fetch_OK=True
 <Quiz id="p7ce-q2" question="SSE/SZSE HFT recognition (fetched 2025 rules) includes?" options={["Any two trades", "≥300 msgs/sec or ≥20,000/day peak cancels+orders", "Only odd lots", "Kelly f*>0.5"]} answer={1} explanation="SSE Q&A and SZSE Art.33." />
 <Quiz id="p7ce-q3" question="SEA Rule 15c3-5 mainly requires?" options={["Free sponsored access", "Pre-trade risk controls and annual CEO cert for market access", "Guaranteed fills", "Crypto staking"]} answer={1} explanation="Market Access Rule controls." />
 <Quiz id="p7ce-q4" question="Reg SHO Rule 201 triggers after roughly?" options={["1% move", "10% decline from prior close (listing market)", "50% weekly", "Any uptick"]} answer={1} explanation="10% circuit breaker." />
+<Quiz id="p7ce-fy2026" question="SEC FY2026 Exam Priorities Emerging FinTech mainly flags?" options={["All AI banned", "Automated tools / AI / algos / alt-data — exam focus on representations, ops vs disclosures, supervision", "Only crypto venues", "PDA proposal restored"]} answer={1} explanation="Awareness; withdrawal of S7-12-23 ≠ no remaining duties." />
+<Quiz id="p7ce-genai" question="FINRA 2026 GenAI/Agents section is mainly?" options={["A new trading alpha license", "Technology-neutral supervision themes (autonomy, auditability, guardrails) — NEW FOR 2026", "Abolishes Rule 3110", "Only for HFT"]} answer={1} explanation="Awareness only — not legal advice." />
 <Quiz id="p7ce-pda" question="SEC 2025-06 FR withdrawal of S7-12-23 means?" options={["All AI compliance duties vanished", "That PDA conflicts proposal will not be finalized as proposed; other duties remain", "Reg BI repealed", "Only crypto rules apply"]} answer={1} explanation="Withdrawal ≠ absence of remaining duties; not legal advice." />
 <Quiz id="p7ce-q5" question="As of FINRA Notice 26-10 (fetched)?" options={["PDT $25k is newly created", "Intraday margin standards replace the old PDT day-trade count /$25k regime (eff. 2026-06-04)", "Margin rules abolished", "Only applies to crypto"]} answer={1} explanation="Notice 26-10 replaces day-trading margin requirements." />
 <Quiz id="p7ce-q6" question="PBoC 2021 notice (fetched) states virtual currency related businesses are?" options={["Encouraged fintech", "Characterised as illegal financial activities and prohibited", "Mandatory for banks", "Unregulated"]} answer={1} explanation="银发〔2021〕237号 high-level status." />
@@ -132,7 +147,7 @@ n_sources=15 all_fetch_OK=True
 
 Ethics checklist checked; official-source table filled with URLs and **2026-11-04** check date; risk-preference page written.
 
-**Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK this session). Canvas m14; AFML scientific ethics.
+**Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK; n_sources=17). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); FR PDA withdrawal. Canvas m14; AFML scientific ethics.
 
 <Summary>
 **Takeaways**: cite official text + date; CN securities 〔2024〕8 + futures 〔2025〕12 report-before-trade & exchange HFT standards; US 15c3-5 / Reg SHO / 4210-IML via 26-10+26-11 / 15-09; crypto via PBoC 2021 + non-binding SEC/CFTC staff note.  
