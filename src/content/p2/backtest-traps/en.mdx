@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**21 hours**: 5h concepts + 12h multi-labs incl. CPCV + one-switch leakage + 4h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**26 hours**: 5h concepts + 12h multi-labs incl. CPCV + one-switch + PBO/CSCV evaporation + 4h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
 **Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
@@ -309,6 +309,31 @@ EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556
 Large positive Leakage Gain means the **protocol** made the future easier to see — not that the model suddenly became a genius. Paper also finds NORM_GLOBAL / STRUCT_GRAPH / EXEC_CLOSE often weak. Short reuse note lives in `ml-leakage-control`.
 
 
+
+
+## PBO / CSCV + evaporation curve — DSR ≠ leakage
+
+**Intuition:** Deflated Sharpe and PBO ask: *among many honest backtests, how often is the in-sample winner a fluke?* They do **not** ask: *was the information set contaminated?* [What survives honest evaluation?](https://arxiv.org/abs/2608.27734) (Gençay) makes both corrections **structural**: a registry that cannot express look-ahead, plus a **complete trial ledger** that indexes DSR/PBO to the agent’s own search. Classic PBO/CSCV: [Bailey et al. PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf).
+
+**Toy (lab):** six synthetic strategies on a 3-year random walk — honest MA windows, a noise arm, and a planted **future-return oracle** (`pnl = |r_{t+1}|`).
+
+```text
+oracle_LEAK design_SR≈20.7  held_SR≈19.1  — survives selection deflation by construction
+best_honest ma_20 design_SR≈1.05 held_SR≈1.12
+evaporation: as k grows, deflation threshold rises (k=5 thr≈0.70) while best IS SR plateaus ≈1.05
+CSCV_sketch S=4 combos=6 strategies=5 PBO_hat≈0.67  (teaching sketch)
+```
+
+![Evaporation curve sketch](/p2/pbo_evaporation.png)
+
+**Punchline:** Gençay’s E1 planted oracle still posts DSR≈1 at Sharpe ~35 — **DSR corrects selection among honest backtests; leakage needs a structural guardrail.** Tiny CSCV here is **not** production `CombinatorialPurgedKFold`. Agent-search ledger note continues in `frontier-llm-agents`.
+
+
+
+### Research-log row: execution-assumption recoverability (Y / P / NR)
+
+For every LLM / agent trading paper you read, mark **Y** (yes), **P** (partial), or **NR** (not reported) on: **PiT labels**, **split dates**, **fill timing**, **costs/turnover**, **universe**, **artifacts** ([arXiv:2606.08285](https://arxiv.org/abs/2606.08285)). Capstone uses the same checklist. Missing rows → do not treat headline Sharpe as evidence.
+
 ## Common mistakes / pitfalls
 
 1. Same-bar fills labeled “research.”
@@ -319,6 +344,9 @@ Large positive Leakage Gain means the **protocol** made the future easier to see
 6. Counting CPCV paths as independent DSR trials \(N\).
 7. Treating the teaching CPCV sketch as production AFML code.
 8. Trusting a chronological split while TEMP_CENTER / EXEC_OPEN still peek.
+9. Treating DSR/PBO as proof the information set is clean (oracle foil).
+10. Shipping CSCV teaching sketches as production AFML/Bailey code.
+11. Forgetting to log every agent-scored candidate when applying DSR(N).
 
 ## Practice (1:1 with the checklist)
 
@@ -329,6 +357,7 @@ Large positive Leakage Gain means the **protocol** made the future easier to see
 5. **ex5** — Survivorship/snooping recap + link to data-cleaning; **done when** both appear with the cross-link.
 6. **ex6** — (Optional) purged/embargo note; **done when** purge/embargo counts print.
 7. **ex7** — CPCV toy: print \(C(6,2)\), path count, combo SR mean/std vs single hold-out; **done when** numbers match and `cpcv_sr_dist.png` exists.
+8. **ex8** — PBO/oracle: print oracle vs honest SRs, evaporation rows, CSCV PBO_hat, save `pbo_evaporation.png`; **done when** .out matches and disclaimer says teaching sketch.
 
 ## Quiz
 
@@ -342,13 +371,15 @@ Large positive Leakage Gain means the **protocol** made the future easier to see
 <Quiz id="q8-cpcv2" question="This site’s CPCV demo is?" options={["Production AFML CombinatorialPurgedKFold", "A teaching sketch of AFML ch.12 spirit", "A live broker API", "A substitute for costs"]} answer={1} explanation="Stated in the lab header." />
 
 <Quiz id="q9-oneswitch" question="TEMP_CENTER leakage means?" options={["Using only trailing windows", "Centered rolling features that peek at future observations", "Paying higher fees", "Sealed hold-out"]} answer={1} explanation="Centered stats at t use post-t prints." />
+<Quiz id="q-pbo-dsr" question="A planted look-ahead oracle with huge Sharpe typically?" options={["Is caught by DSR alone", "Can survive DSR/PBO while the info set is contaminated", "Has PBO=0 always", "Needs no PIT audit"]} answer={1} explanation="Gençay E1 / lab oracle: deflation ≠ leakage guardrail." />
+<Quiz id="q-pbo-cscv" question="Bailey CSCV/PBO mainly estimates?" options={["Broker fees", "Chance the IS winner underperforms the OOS median", "Always-up accuracy", "Funding rates"]} answer={1} explanation="PBO via combinatorially symmetric CV." />
 <Quiz id="q10-execopen" question="EXEC_OPEN is illegal because?" options={["It uses next-open fills after close decisions", "It pairs same-day post-open bar fields with a same-day open fill", "It deletes costs", "It bans RankIC"]} answer={1} explanation="Finance-native execution-alignment leak." />
 
 ## Done when
 
 - Walk-forward summary + PSR/DSR vs N + false-hit context + quizzes
 
-**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN).
+**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734).
 
 <Summary>
 **Takeaways**: walk-forward tables, trial counts, PSR/DSR vs N, null false-hit math, survivorship/snooping recap.  

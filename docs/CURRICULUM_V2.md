@@ -31,14 +31,14 @@
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
 | `data-cleaning` | P2 | 13 | 3 | 否 | eval-lab |
-| `backtest-traps` | P2 | 18 | 4 | 否 | data-cleaning, stats-probability-basics |
+| `backtest-traps` | P2 | 26 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 6 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
 | `mean-reversion` | P3 | 7 | 3 | 否 | momentum-trend |
 | `pairs-stat-arb` | P3 | 10 | 3 | 否 | mean-reversion |
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
-| `factor-workflow` | P4 | 15 | 4 | 否 | strategy-compare-lab, backtest-traps |
+| `factor-workflow` | P4 | 20 | 4 | 否 | strategy-compare-lab, backtest-traps |
 | `factor-portfolio-lab` | P4 | 7 | 4 | 否 | factor-workflow |
 | `ml-leakage-control` | P5 | 20 | 5 | 否 | factor-workflow, backtest-traps |
 | `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
@@ -46,9 +46,9 @@
 | `execution-slippage` | P6 | 7 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
 | `risk-systems-lab` | P6 | 5 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
 | `paper-trading-infra` | P7 | 11 | 3 | 否 | risk-systems-lab |
-| `compliance-ethics` | P7 | 6 | 2 | 否 | paper-trading-infra |
-| `frontier-llm-agents` | P8 | 11 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
-| `frontier-tsfm-altdata-crypto` | P8 | 11 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
+| `compliance-ethics` | P7 | 9 | 2 | 否 | paper-trading-infra |
+| `frontier-llm-agents` | P8 | 23 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
+| `frontier-tsfm-altdata-crypto` | P8 | 16 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
 | `capstone` | P9 | 24 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
 
 **程序员建议：** 对 P0 三课做测验；通过则跳过，把时间补给 P2/P4/P5/P6 的重课。
@@ -59,19 +59,19 @@
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
 | P1 | 市场语言与度量 / Market language & measurement | 4 | 27h | ~4.5 周 | ~2.3 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 48h | ~8.0 周 | ~4.0 周 | Research infrastructure / scientific method for backtests |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 53h | ~8.0 周 | ~4.0 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 30h | ~5.0 周 | ~2.5 周 | Classic alpha templates before factors/ML |
-| P4 | 因子研究 / Factor research | 2 | 25h | ~4.2 周 | ~2.1 周 | Cross-sectional research methods |
+| P4 | 因子研究 / Factor research | 2 | 27h | ~4.2 周 | ~2.1 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
 | P6 | 风险、仓位与执行 / Risk, sizing & execution | 3 | 32h | ~5.3 周 | ~2.7 周 | Portfolio construction / execution / controls |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 19h | ~3.2 周 | ~1.6 周 | Operationalization and professional norms |
-| P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 30h | ~5.0 周 | ~2.5 周 | Post-prerequisite frontier / niche methods |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 20h | ~3.2 周 | ~1.6 周 | Operationalization and professional norms |
+| P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 39h | ~5.0 周 | ~2.5 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 287 学时（跳过 P0 为 267）。** 6h/周 ≈ 47.8 周；12h/周 ≈ 23.9 周。
-**跳过 P0 后：精确 267 学时。** 6h/周 ≈ 44.5 周；12h/周 ≈ 22.3 周。
+**全量（含 P0）：精确 304 学时（跳过 P0 为 284）。** 6h/周 ≈ 47.8 周；12h/周 ≈ 23.9 周。
+**跳过 P0 后：精确 284 学时。** 6h/周 ≈ 44.5 周；12h/周 ≈ 22.3 周。
 
-精确合计：**287h 全量 / 267h 跳过 P0**。对外可表述为约 **270–300h 全量 / 250–280h 跳过基础**（含个人复盘缓冲）。
+精确合计：**304h 全量 / 284h 跳过 P0**。对外可表述为约 **290–320h 全量 / 270–300h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -864,3 +864,13 @@ Inventory items woven into existing lessons (zh+en, offline toys):
 7. **HRP** → `portfolio-risk-sizing`; López de Prado 2016 JPM 42(4) + AFML ch.16.
 
 Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase B next (2a1a28d) → **287h full / 267h skip P0**.
+
+
+## Enrich3 (Phase B) mapping notes
+
+- PBO/CSCV + evaporation + DSR≠leakage → `backtest-traps` (+ pointers `ml-leakage-control`, `frontier-llm-agents`); teaching CSCV sketch ≠ production CombinatorialPurgedKFold.
+- CLQT / AQuA protocol-only / Yao&Zheng recoverability → `frontier-llm-agents` (+ AQuA/PBO bridges in `ml-leakage-control`; recoverability row in `backtest-traps` research log).
+- Harvey–Sancetta–Zhao NBER w34898 → `factor-workflow` next to HLZ + Detzel.
+- ADL trilemma + SaR name-drop → `frontier-tsfm-altdata-crypto`.
+- SEC FR 2025-11110 S7-12-23 withdrawal → `compliance-ethics` (awareness; withdrawn ≠ no duties).
+- Hours: **304 full / 284 skip-P0**.

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14 hours**: 5h papers + 5h design + 2h funding/liquidation foils + 2h structure/PIT) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
+This lesson (~**16 hours**: 5h papers + 5h design + 2h funding/liquidation/ADL foils + 2h structure/PIT + SaR name-drop) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
 
 **Goals:** summarize cautious TSFM daily excess-return findings; report **excess directional accuracy** over always-up; design alt-data / crypto PIT checks; explain CEX CCXT vs on-chain adapter risks.
 
@@ -130,6 +130,20 @@ WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
   [OK] OI_publication_unverified → disable OI as alpha input
 ```
 
+
+
+## Perp ADL trilemma — solvency / revenue / fairness
+
+[Autodeleveraging: Impossibilities and Optimization](https://arxiv.org/abs/2512.01112) (Chitra) is the first formal model of **ADL** — last-resort loss socialization when liquidations cannot keep a perp venue solvent. **Impossibility:** no policy jointly satisfies exchange **solvency**, **revenue**, and **fairness** to traders; moral hazard grows with participation.
+
+**Hyperliquid 2025-10-10 case study (literacy only):** ~$2.1B liquidations in ~12 minutes; paper estimates production overshoot vs needed ≈ **$45–52M** in PNL dollars. Compare production queues to transparent benchmark allocations as **risk literacy** — **not** a trade recipe, **not** optimized ADL alpha.
+
+**NICE name-drop:** [Slippage-at-Risk (SaR)](https://arxiv.org/abs/2603.09164) — forward-looking order-book liquidation slippage risk; theory+warn only (connects to insurance-fund / cascade literacy; not a listed alpha engine).
+
+<Callout type="warn" title="No optimized ADL / funding-design alpha">
+Reject recipes that turn ADL haircuts or funding-rate design papers into “alpha.” Teach mechanisms and impossibilities; do not optimize socialization for a course Sharpe.
+</Callout>
+
 ## Common mistakes / pitfalls
 
 - Zero-shot TSFM on noisy daily excess often loses to strong CS/tree baselines.
@@ -150,6 +164,7 @@ WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
 
 ## Quiz
 
+<Quiz id="p8ts-adl" question="ADL trilemma says no policy can jointly guarantee?" options={["Only low fees", "Solvency, revenue, and fairness together", "Spot-futures basis forever", "Zero funding"]} answer={1} explanation="arXiv:2512.01112 impossibility." />
 <Quiz id="p8ts-q1" question="arXiv:2511.18578 on zero-shot Chronos/TimesFM in finance?" options={["Always beat LightGBM", "Often weak vs strong traditional baselines on daily excess", "Removes purge needs", "Proves free funding alpha"]} answer={1} explanation="Verified cautious finance TSFM evaluation." />
 <Quiz id="p8ts-q2" question="Alt-data first-order risk is?" options={["Plot colors", "Timestamps and revisions / PIT availability", "Variable names", "GPU brand"]} answer={1} explanation="As-of and revision control." />
 <Quiz id="p8ts-q3" question="Positive CEX funding usually means?" options={["Shorts pay longs always", "Longs pay shorts (premium)", "Fees are zero", "Oracles halt"]} answer={1} explanation="Classic perpetual premium funding." />

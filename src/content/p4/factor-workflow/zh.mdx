@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **18 学时**：概念 5h + 含 Detzel 成本对照的实验 9h + 写作 3h + 拥挤→LLM 桥 1h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
+本课（约 **20 学时**：概念 5h + 含 Detzel 成本与 w34898 局部 FDR 的实验 9h + 写作 3h + 拥挤→LLM 桥 1h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
 
 **课内目标：** 实现 Spearman IC；构建分层多空；对照真/假因子。
 
@@ -191,6 +191,25 @@ chart /workspace/Quant-trading-learn/public/p4/quantile_bars.png
 disclaimer: strong panel MU is inflated for teaching; weak panel is the realistic foil — learning only
 ```
 
+
+
+## Harvey–Sancetta–Zhao（NBER w34898，2026）：t≥3 与局部 FDR
+
+紧挨 HLZ（2016）与 Detzel 成本：[What Threshold Should be Applied to Tests of Factor Models?](https://www.nber.org/papers/w34898) 强调要处理检验相关、原假设形态与选择偏差，并给出下界：t 统计量阈值**至少 3.0**。优先用 **NBER 链接**。
+
+并提倡**局部错误发现率（local FDR）**：在给定实现的检验统计量下原假设为真的概率。经典 **p 值 ≠** P(null | data)。
+
+实验草图：
+
+```text
+noise_t≈1.2: two-sided_p≈0.2301  localFDR_sketch≈0.957
+borderline_t≈2.0: two-sided_p≈0.0455  localFDR_sketch≈0.668
+HLZ_bar_t≈3.0: two-sided_p≈0.0027  localFDR_sketch≈0.091
+planted_t=4.2: two-sided_p≈0.0000  localFDR_sketch≈0.003
+```
+
+统计过关后仍要用成本衡量经济显著性（Detzel 桥）。
+
 ## 常见错误 / 陷阱
 
 1. 不做中性化就把行业暴露叫作 alpha。
@@ -217,6 +236,8 @@ disclaimer: strong panel MU is inflated for teaching; weak panel is the realisti
 <Quiz id="q5-overlap" question="重叠的多日 IC 窗口主要会？" options={["大幅上偏平均 IC", "抬高 IC 自相关并影响 ICIR 标准误；用非重叠或 Newey–West 修复", "消灭换手", "替代中性化"]} answer={1} explanation="平均 IC 受影响较小；推断需非重叠或 NW。" />
 <Quiz id="q6-zoo" question="观测到约 4.5–6% 随机因子 |t|>2 意味着？" options={["alpha 真实", "与约 4.55% 的 N(0,1) 原假设一致——不是发现", "t>2 胜过 HLZ", "成本为零"]} answer={1} explanation="匹配纯噪声比例；HLZ 把门槛推向 t>3。" />
 
+<Quiz id="p4fw-hsz" question="Harvey–Sancetta–Zhao（NBER w34898）下界 t 阈值？" options={["t≥1", "t≥2 总够", "相关/选择调整后至少 t≥3.0", "只要 R²"]} answer={2} explanation="NBER w34898：阈值至少 3.0。" />
+<Quiz id="p4fw-lfdr" question="局部 FDR 回答 p 值答不了的哪一句？" options={["仅 P(data|null) 式尾概率", "近似 P(null|实现的统计量)", "券商费率", "永远上涨准确率"]} answer={1} explanation="p 值 ≠ P(null|data)。" />
 <Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov（JF 2023）主要警示？" options={["总选最高换手", "忽略成本会让模型/因子比较偏向高成本因子", "成本从不改变排序", "只与加密有关"]} answer={1} explanation="DOI 10.1111/jofi.13225。" />
 
 ## 完成标准

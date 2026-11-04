@@ -117,4 +117,22 @@ EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556  (close info + same-day open f
 teach: chronological train/test split alone is NOT enough — decision-time semantics matter.
 paper: TEMP_CENTER & EXEC_OPEN dominate; NORM_GLOBAL / STRUCT_GRAPH / EXEC_CLOSE often weak.
 diagnostic only — large LG is protocol inflation under infeasible rules, not deployable alpha.
+
+=== PBO/CSCV teaching sketch + evaporation (Bailey et al. + arXiv:2608.27734) ===
+cites: Bailey PBO https://davidhbailey.com/dhbpapers/backtest-prob.pdf ; Gençay arXiv:2608.27734
+punchline: DSR corrects selection among HONEST backtests — it does NOT catch a contaminated info set
+design_window_SR: {'ma_10': 0.846, 'ma_20': 1.053, 'ma_40': 0.495, 'rev_5': 0.057, 'noise': -0.399, 'oracle_LEAK': 20.693}
+held_window_SR: {'ma_10': 0.91, 'ma_20': 1.122, 'ma_40': 0.604, 'rev_5': -1.543, 'noise': 0.86, 'oracle_LEAK': 19.097}
+best_honest_by_design=ma_20 design_SR=1.053 held_SR=1.122
+evap k=1: best_IS_SR=0.846 deflation_threshold≈0.000
+evap k=2: best_IS_SR=1.053 deflation_threshold≈0.076
+evap k=3: best_IS_SR=1.053 deflation_threshold≈0.241
+evap k=4: best_IS_SR=1.053 deflation_threshold≈0.459
+evap k=5: best_IS_SR=1.053 deflation_threshold≈0.703
+oracle_LEAK design_SR=20.693 held_SR=19.097 — survives selection deflation by construction
+teach: structural leakage guardrails complementary to DSR/PBO — Gençay E1 planted oracle Sharpe~35 still DSR≈1
+CSCV_sketch S=4 combos=6 strategies=5 PBO_hat≈0.667
+disclaimer: teaching sketch — NOT production CombinatorialPurgedKFold / Bailey production CSCV
+saved_plot public/p2/pbo_evaporation.png
+agent_search_note: frontier-llm-agents must record every scored candidate in a trial ledger for DSR(N)
 ASSERTS_OK

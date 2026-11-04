@@ -458,4 +458,137 @@ print("teach: chronological train/test split alone is NOT enough — decision-ti
 print("paper: TEMP_CENTER & EXEC_OPEN dominate; NORM_GLOBAL / STRUCT_GRAPH / EXEC_CLOSE often weak.")
 print("diagnostic only — large LG is protocol inflation under infeasible rules, not deployable alpha.")
 
+
+
+# ---------- PBO / CSCV + evaporation + DSR≠leakage (Bailey PBO + arXiv:2608.27734) ----------
+# Teaching sketch ONLY — not production CombinatorialPurgedKFold / production CSCV.
+print("\n=== PBO/CSCV teaching sketch + evaporation (Bailey et al. + arXiv:2608.27734) ===")
+print("cites: Bailey PBO https://davidhbailey.com/dhbpapers/backtest-prob.pdf ; Gençay arXiv:2608.27734")
+print("punchline: DSR corrects selection among HONEST backtests — it does NOT catch a contaminated info set")
+
+rng_pbo = np.random.default_rng(7)
+n_pbo = 252 * 3
+eps = rng_pbo.normal(0, 0.01, n_pbo)
+px_pbo = 100 * np.exp(np.cumsum(eps))
+r_pbo = pd.Series(px_pbo).pct_change().fillna(0.0)
+
+# Honest MA: sign of trailing 20d mean return, enter next bar
+ma = r_pbo.rolling(20).mean()
+pos_ma = np.sign(ma).shift(1)
+pnl_ma = (pos_ma * r_pbo).fillna(0.0)
+
+# Planted future-return oracle (LEAK): at t we illegally observe r_{t+1} and earn it
+# → pnl = |r_{t+1}| (perfect sign foresight). Gençay E1 spirit: contamination ≠ selection.
+future = r_pbo.shift(-1)
+pnl_oracle = (np.sign(future) * future).fillna(0.0)  # == abs(future)
+
+# Small synthetic strategy bank (N=6): honest variants + noise + oracle
+strats = {}
+for w in (10, 20, 40):
+    m = r_pbo.rolling(w).mean()
+    strats[f"ma_{w}"] = (np.sign(m).shift(1) * r_pbo).fillna(0.0)
+strats["rev_5"] = (-np.sign(r_pbo.rolling(5).mean()).shift(1) * r_pbo).fillna(0.0)
+strats["noise"] = pd.Series(rng_pbo.normal(0, 0.01, n_pbo))
+strats["oracle_LEAK"] = pnl_oracle
+
+mat = pd.DataFrame(strats)
+
+
+def sr_ann_series(x: pd.Series) -> float:
+    x = x.dropna()
+    if len(x) < 20 or x.std(ddof=1) == 0:
+        return float("nan")
+    return float(x.mean() / x.std(ddof=1) * np.sqrt(252))
+
+
+# Design-window SRs (first 2/3) — selection happens here
+cut_p = int(n_pbo * 2 / 3)
+design = mat.iloc[:cut_p]
+held = mat.iloc[cut_p:]
+design_sr = {c: sr_ann_series(design[c]) for c in mat.columns}
+held_sr = {c: sr_ann_series(held[c]) for c in mat.columns}
+print("design_window_SR:", {k: round(v, 3) for k, v in design_sr.items()})
+print("held_window_SR:", {k: round(v, 3) for k, v in held_sr.items()})
+
+# DSR vs N using honest-only ledger first, then show oracle separately
+honest_cols = [c for c in mat.columns if c != "oracle_LEAK"]
+honest_srs = np.array([design_sr[c] for c in honest_cols], dtype=float)
+# Select best honest by design SR
+best_h = max(honest_cols, key=lambda c: design_sr[c])
+print(f"best_honest_by_design={best_h} design_SR={design_sr[best_h]:.3f} held_SR={held_sr[best_h]:.3f}")
+
+# Evaporation curve: for k=1..N take best-of-first-k (evaluation order) vs rising E[max SR] threshold
+order = list(honest_cols)  # fixed search order
+mu0, sig0 = 0.0, 1.0  # null SR units for threshold sketch (ann. scale toy)
+evap_best, evap_thr = [], []
+for k in range(1, len(order) + 1):
+    first_k = order[:k]
+    best_sr = max(design_sr[c] for c in first_k)
+    # Bailey-style expected-max threshold grows with Φ^{-1}(1-1/N)
+    # Use annualized SR scale loosely: thr ≈ σ * ((1-γ)Φ^{-1}(1-1/N)+γ Φ^{-1}(1-1/(N e)))
+    from math import e as _e
+    if k == 1:
+        thr = 0.0  # N=1 → almost no deflation (pre-registered)
+    else:
+        z1 = norm.ppf(1 - 1 / k)
+        z2 = norm.ppf(1 - 1 / (k * _e))
+        srs_k = np.array([design_sr[c] for c in first_k], dtype=float)
+        V = float(np.var(srs_k, ddof=1))
+        thr = float(np.sqrt(max(V, 1e-6)) * ((1 - EMC) * z1 + EMC * z2))
+    evap_best.append(best_sr)
+    evap_thr.append(thr)
+    print(f"evap k={k}: best_IS_SR={best_sr:.3f} deflation_threshold≈{thr:.3f}")
+
+# Oracle: extreme design+held SR; DSR on honest ledger can still look high if we illegally include it
+ora_d, ora_h = design_sr["oracle_LEAK"], held_sr["oracle_LEAK"]
+print(f"oracle_LEAK design_SR={ora_d:.3f} held_SR={ora_h:.3f} — survives selection deflation by construction")
+print("teach: structural leakage guardrails complementary to DSR/PBO — Gençay E1 planted oracle Sharpe~35 still DSR≈1")
+
+# Tiny CSCV sketch on 6 strategies × S=4 blocks (C(4,2)=6 combos) — NOT production
+S_blk = 4
+blocks = np.array_split(np.arange(cut_p), S_blk)
+# Candidate matrix: design-window returns of each strategy
+cand = design[honest_cols]
+from itertools import combinations as _comb
+
+logits = []
+n_star_below = 0
+n_comb_cscv = 0
+for is_ids in _comb(range(S_blk), S_blk // 2):
+    oos_ids = [i for i in range(S_blk) if i not in is_ids]
+    is_idx = np.concatenate([blocks[i] for i in is_ids])
+    oos_idx = np.concatenate([blocks[i] for i in oos_ids])
+    is_sr = {c: sr_ann_series(cand.iloc[is_idx][c]) for c in honest_cols}
+    oos_sr = {c: sr_ann_series(cand.iloc[oos_idx][c]) for c in honest_cols}
+    n_star = max(honest_cols, key=lambda c: is_sr[c])
+    # relative rank of IS winner among OOS (1=worst .. N=best) using rank of OOS SR
+    oos_vals = sorted(oos_sr.values())
+    # rank of winner's OOS among N (higher better)
+    ranks = pd.Series(oos_sr).rank(method="average")
+    rel = float(ranks[n_star] / (len(honest_cols) + 1))
+    # PBO event: IS winner underperforms median OOS (rel rank < 0.5)
+    if rel < 0.5:
+        n_star_below += 1
+    n_comb_cscv += 1
+    logits.append(rel)
+
+pbo_hat = n_star_below / max(n_comb_cscv, 1)
+print(f"CSCV_sketch S={S_blk} combos={n_comb_cscv} strategies={len(honest_cols)} PBO_hat≈{pbo_hat:.3f}")
+print("disclaimer: teaching sketch — NOT production CombinatorialPurgedKFold / Bailey production CSCV")
+
+fig, ax = plt.subplots(figsize=(7.5, 4))
+ks = np.arange(1, len(evap_best) + 1)
+ax.plot(ks, evap_best, "o-", color="#1f4e79", label="best IS SR (running max)")
+ax.plot(ks, evap_thr, "s--", color="#c45911", label="deflation threshold (toy)")
+ax.set_xlabel("trial count k in search ledger")
+ax.set_ylabel("Sharpe (ann., toy)")
+ax.set_title("Evaporation curve sketch: search intensity vs best IS SR")
+ax.legend()
+ax.grid(True, alpha=0.3)
+fig.tight_layout()
+fig.savefig(OUT_DIR / "pbo_evaporation.png", dpi=120)
+plt.close(fig)
+print("saved_plot public/p2/pbo_evaporation.png")
+print("agent_search_note: frontier-llm-agents must record every scored candidate in a trial ledger for DSR(N)")
+
 print("ASSERTS_OK")

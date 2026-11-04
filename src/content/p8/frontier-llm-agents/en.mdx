@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**16 hours**: 5h reading + 6h critical exercises (five sins/FINSABER/OpenPM) + 2h rules + 3h sealed leaderboard) treats **LLM / multi-agent quant R&D** as a *frontier* under the same anti-leakage and multiple-testing discipline as P4–P5 — never as a shortcut. Prereqs: `factor-workflow`, `ml-leakage-control`, `modern-ml-pipelines`, `compliance-ethics`.
+This lesson (~**23 hours**: 5h reading + 9h critical exercises (five sins/FINSABER/OpenPM/CLQT/AQuA/recoverability) + 2h rules + 3h sealed leaderboard + 4h process diagnosis) treats **LLM / multi-agent quant R&D** as a *frontier* under the same anti-leakage and multiple-testing discipline as P4–P5 — never as a shortcut. Prereqs: `factor-workflow`, `ml-leakage-control`, `modern-ml-pipelines`, `compliance-ethics`.
 
 **Goals:** state the RD-Agent(Q) loop; explain AlphaAgent regularizers; list LLM factor-mining failure modes; design a sealed-OOS acceptance bar.
 
@@ -133,6 +133,55 @@ admin license-removal comment present on abs page
 ```
 *(Full stdout in `examples/p8/01_llm_agents_offline.out` after rerun.)*
 
+
+
+## CLQT — diagnose the process; don’t rank a period’s Sharpe
+
+[CLQT](https://arxiv.org/abs/2606.29771) (Qu & Chen) reframes LLM portfolio-agent evaluation as **diagnosis**, not a returns leaderboard. A single window’s Sharpe is dominated by the realized path; apparent alpha can vanish once look-ahead and realistic costs are controlled.
+
+**Stating-versus-doing:** agents’ allocations systematically fail to follow their own stated analysis (paper: gap ≈ +0.30 backtest / +0.23 live under their judges). **Capability leader ≠ Sharpe leader.**
+
+Lab checklist (offline):
+
+```text
+[Y] PiT TimeGate — hard gate: no future timestamps in tools/memory
+[Y] multi-component costs — commission+spread+impact+financing modeled
+[P] strategy consistency score — stated thesis vs executed weights audited
+[P] sealed audit hash chain — recompute-verifiable DecisionRound
+[Y] capability axes vs Sharpe board — diagnose; do not crown period Sharpe
+```
+
+<Callout type="warn" title="REJECT: CLQT campaign Sharpes as course edge">
+Do **not** paste CLQT table Sharpes (including extreme self-selected windows) into this curriculum as deployable alpha. Use the **process checklist** only.
+</Callout>
+
+## AQuA — structural sealed sandbox (PROTOCOL ONLY)
+
+[AQuA](https://arxiv.org/abs/2608.12841) (Guo et al.) runs recursive research loops inside a **fixed sandbox**: data splits, feature/label definitions, and the evaluator are human-sealed; the agent may only emit constrained factor DSL expressions or model **config diffs**. Bridge to `ml-leakage-control`: freeze the scorer before you search.
+
+<Callout type="warn" title="REJECT: AQuA Part II IC / Sharpe +2.50 as curriculum alpha">
+Part II reports (e.g. per-stock IC ≈ +0.0843, threshold L/S Sharpe up to +2.50 at 2 bp two-leg cost) are **paper results under their sandbox** — **not** a course edge, **not** a homework target, **not** deployment evidence. Teach the **protocol**, ban the **scoreboard**.
+</Callout>
+
+## Execution-assumption recoverability checklist
+
+[Yao & Zheng (arXiv:2606.08285)](https://arxiv.org/abs/2606.08285) audit whether LLM trading papers make **execution assumptions recoverable**: PiT controls, split dates, fill timing, costs/turnover, universe construction, artifacts. Capstone habit — mark each field **Y / P / NR**:
+
+```text
+PiT / availability times: Y
+split dates train/val/test: Y
+fill timing (next-open vs same-close): P
+costs + turnover: P
+universe construction: NR
+artifacts (code/prompts/model versions): P
+```
+
+Add one research-log row in `backtest-traps` whenever you read an LLM trading paper. **Y means reconstructable — not “realistic” or “profitable.”**
+
+## Agent-search trial ledger (pointer from PBO lesson)
+
+When an agent proposes and scores many candidates, **N for DSR is the ledger length**, not “the one we kept.” Record every evaluated plan; Gençay (arXiv:2608.27734) evaporation curves show the deflation threshold chasing the best IS Sharpe. Pre-registered single hypotheses face almost no deflation; brute search pays for every trial.
+
 ## Common mistakes / pitfalls
 
 - **Training cutoff / memorization:** pre-cutoff headlines are not forecasts; LEAK foils look amazing (see Glasserman &amp; Lin 2309.17322; Lopez-Lira/Tang/Zhu 2504.14765).
@@ -159,7 +208,10 @@ admin license-removal comment present on abs page
 <Quiz id="p8llm-q4" question="Lopez-Lira & Tang emphasize scoring?" options={["Only pre-cutoff headlines", "Post-knowledge-cutoff headlines", "Random tickers without news", "Intraday L2 only"]} answer={1} explanation="Post-cutoff design is central to their forecast claim." />
 <Quiz id="p8llm-q5" question="Lab LEAK sentiment foil teaches?" options={["Always trade GPT scores", "Cutoff/memorization can fake huge IC", "Costs are optional", "DSR needs N=1 always"]} answer={1} explanation="Honest PIT path vs look-ahead analogue." />
 <Quiz id="p8llm-q6" question="RD-Agent(Q) stages include?" options={["Only live broker routing", "Research hypotheses then Development implementation with feedback", "Deleting purge windows", "Skipping ethics"]} answer={1} explanation="Research ↔ Development co-optimization loop." />
-<Quiz id="p8llm-q7" question="Quant-Arena top-scored sealed-2024 ARR vs equal-weight (verified)?" options={["≈10.7% beat 17.1%", "≈10.7% trailed ≈17.1%", "Both zero", "Equal by construction"]} answer={1} explanation="Astra ~10.7% vs EW ~17.1%; no best-scored run beat EW." />
+<Quiz id="p8llm-clqt" question="CLQT’s main evaluation stance?" options={["Rank models by one-window Sharpe", "Diagnose process axes; capability leader need not be Sharpe leader", "Ignore costs", "Skip PiT"]} answer={1} explanation="arXiv:2606.29771 diagnosis-before-ranking." />
+<Quiz id="p8llm-aqua" question="AQuA’s sealed sandbox means?" options={["Agent rewrites the evaluator", "Splits/features/labels/evaluator frozen; agent emits constrained specs only", "Live broker required", "Sharpe +2.50 is homework"]} answer={1} explanation="Protocol only — reject Part II scoreboard as course alpha." />
+<Quiz id="p8llm-recover" question="In Yao&Zheng recoverability coding, NR means?" options={["Proven profitable", "No recoverable public evidence for that field", "Next-open fills", "Sealed OOS"]} answer={1} explanation="Recoverability ≠ quality or edge." />
+<Quiz id="p8llm-q7" question="Quant-Arena top-scored sealed-2024 ARR vs equal-weight (verified)?" options={["≈10.7% above 17.1%", "≈10.7% trailed ≈17.1%", "Both zero", "Equal by construction"]} answer={1} explanation="Astra ~10.7% vs EW ~17.1%; no best-scored run beat EW." />
 <Quiz id="p8llm-q8" question="AlphaAgent’s three regularizers target?" options={["Latency only", "Originality, hypothesis alignment, complexity", "Broker fees only", "Options Greeks"]} answer={1} explanation="AST originality + alignment + complexity to fight homogenization/decay." />
 <Quiz id="p8llm-q9" question="Parametric look-ahead means?" options={["CSV timezone bug only", "Model weights may memorize in-cutoff outcomes", "Always safe pre-cutoff backtests", "FinCAD is required homework"]} answer={1} explanation="Teach the PROBLEM; FinCAD recipe is NAME-ONLY; use sealed/post-cutoff." />
 
@@ -171,7 +223,7 @@ admin license-removal comment present on abs page
 
 Frontier risk list + updated research rules (sealed OOS, explicit N, no withdrawn-PDF dependence).
 
-**Sources (read and used above):** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q) *(arXiv comment lists NeurIPS 2025 — verify proceedings before treating as conference-of-record)*; [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent); [arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent); [arXiv:2605.24564](https://arxiv.org/abs/2605.24564) parametric look-ahead / FinCAD (problem + NAME-ONLY recipe); [arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha (**NAME-ONLY**); [arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha (**withdrawn by Lang Cao**; admin license-removal comment); [arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS; [arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena (~10.7% vs ~17.1%); [arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023; [arXiv:2309.17322](https://arxiv.org/abs/2309.17322) Glasserman &amp; Lin; [arXiv:2504.14765](https://arxiv.org/abs/2504.14765) Lopez-Lira/Tang/Zhu; [arXiv:2602.14233](https://arxiv.org/abs/2602.14233) five sins; [arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER; [arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM; niche: @_zheergen Spec+AI motivation only.
+**Sources (read and used above):** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q) *(arXiv comment lists NeurIPS 2025 — verify proceedings before treating as conference-of-record)*; [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent); [arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent); [arXiv:2605.24564](https://arxiv.org/abs/2605.24564) parametric look-ahead / FinCAD (problem + NAME-ONLY recipe); [arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha (**NAME-ONLY**); [arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha (**withdrawn by Lang Cao**; admin license-removal comment); [arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS; [arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena (~10.7% vs ~17.1%); [arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023; [arXiv:2309.17322](https://arxiv.org/abs/2309.17322) Glasserman &amp; Lin; [arXiv:2504.14765](https://arxiv.org/abs/2504.14765) Lopez-Lira/Tang/Zhu; [arXiv:2602.14233](https://arxiv.org/abs/2602.14233) five sins; [arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER; [arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM;  [arXiv:2606.29771](https://arxiv.org/abs/2606.29771) CLQT; [arXiv:2608.12841](https://arxiv.org/abs/2608.12841) AQuA (protocol only); [arXiv:2606.08285](https://arxiv.org/abs/2606.08285) recoverability; [arXiv:2608.27734](https://arxiv.org/abs/2608.27734) Gençay; niche: @_zheergen Spec+AI motivation only.
 
 <Summary>
 **Takeaways**: agents multiply trials → stricter DSR/sealed OOS; mocks ≠ APIs; withdrawn papers get a footnote not a pipeline.  

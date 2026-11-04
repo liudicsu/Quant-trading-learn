@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **21 学时**：概念 5h + 含 CPCV / one-switch 的多实验 12h + 写作 4h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **26 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV·蒸发曲线 的多实验 12h + 写作 4h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -309,6 +309,31 @@ EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556
 大额正 Leakage Gain 说明**协议**让未来更好看见——不是模型突然变天才。论文亦显示 NORM_GLOBAL / STRUCT_GRAPH / EXEC_CLOSE 多数情形偏弱。`ml-leakage-control` 有短复用提示。
 
 
+
+
+## PBO / CSCV + 蒸发曲线 — DSR ≠ 泄漏
+
+**直觉：** Deflated Sharpe 与 PBO 问的是：*在许多诚实回测里，样本内冠军有多大概率是运气？* 它们**不**问：*信息集是否被污染？* [What survives honest evaluation?](https://arxiv.org/abs/2608.27734)（Gençay）把两道修正做成**结构**：无法表达前瞻的工具注册表 + 用智能体自身搜索索引 DSR/PBO 的**完整试错账本**。经典 PBO/CSCV：[Bailey 等 PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)。
+
+**数值玩具（实验）：** 三年随机游走上的六个合成策略——诚实均线窗、噪声臂、以及植入的**未来收益预言机**（`pnl = |r_{t+1}|`）。
+
+```text
+oracle_LEAK design_SR≈20.7  held_SR≈19.1  — 按构造可在选择校正下存活
+best_honest ma_20 design_SR≈1.05 held_SR≈1.12
+蒸发：k 增大时阈值阈值上升（k=5 thr≈0.70），而最佳 IS SR 停在 ≈1.05
+CSCV_sketch S=4 combos=6 strategies=5 PBO_hat≈0.67  （教学草图）
+```
+
+![蒸发曲线草图](/p2/pbo_evaporation.png)
+
+**要点：** Gençay E1 植入预言机在 Sharpe~35 时仍可 DSR≈1 — **DSR 校正诚实回测之间的选择；泄漏需要结构护栏。** 此处微型 CSCV **不是**生产级 `CombinatorialPurgedKFold`。智能体搜索账本说明延续到 `frontier-llm-agents`。
+
+
+
+### 研究日志行：执行假设可恢复性（Y / P / NR）
+
+读每篇 LLM / agent 交易论文时，对 **PiT 标签**、**划分日期**、**成交时点**、**成本/换手**、**股票池**、**工件** 标 **Y**（有）/ **P**（部分）/ **NR**（未报）（[arXiv:2606.08285](https://arxiv.org/abs/2606.08285)）。结业项目用同一清单。缺行 → 不把标题夏普当证据。
+
 ## 常见错误 / 陷阱
 
 1. 把同日成交标成「研究」。
@@ -330,6 +355,7 @@ EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556
 5. **ex5**：幸存者/数据挖掘回顾并链到 data-cleaning；**完成标准**：两点 + 交叉链接。
 6. **ex6**：（可选）purge/embargo 说明；**完成标准**：打印 purge/embargo 计数。
 7. **ex7**：CPCV 玩具——打印 \(C(6,2)\)、路径数、组合 SR 均值/标准差并对比单次留出；**完成标准**：数字与课内一致且存在 `cpcv_sr_dist.png`。
+8. **ex8**：PBO/预言机——打印 oracle vs 诚实 SR、蒸发曲线行、CSCV PBO_hat，保存 `pbo_evaporation.png`；**完成标准**：.out 一致且注明教学草图。
 
 ## 测验
 
@@ -343,13 +369,15 @@ EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556
 <Quiz id="q8-cpcv2" question="本站 CPCV 演示是？" options={["生产级 AFML CombinatorialPurgedKFold", "AFML 第12章精神的教学素描", "实盘券商 API", "成本替代品"]} answer={1} explanation="实验抬头已声明。" />
 
 <Quiz id="q9-oneswitch" question="TEMP_CENTER 泄漏指？" options={["只用向后窗口", "中心化滚动特征偷看未来观测", "更高佣金", "密封 hold-out"]} answer={1} explanation="中心化统计在 t 用到 t 之后的价格。" />
+<Quiz id="q-pbo-dsr" question="植入前瞻预言机且 Sharpe 极大时通常？" options={["单靠 DSR 就能抓住", "信息集被污染时仍可能在 DSR/PBO 下存活", "PBO 恒为 0", "无需 PIT 审计"]} answer={1} explanation="Gençay E1 / 实验预言机：通缩 ≠ 泄漏护栏。" />
+<Quiz id="q-pbo-cscv" question="Bailey CSCV/PBO 主要估计？" options={["券商费率", "样本内冠军样本外低于中位数的概率", "永远上涨准确率", "资金费率"]} answer={1} explanation="组合对称交叉验证估计 PBO。" />
 <Quiz id="q10-execopen" question="EXEC_OPEN 不合法是因为？" options={["收盘决策后次日开盘成交", "用当日开盘后字段却假设当日开盘成交", "删除成本", "禁止 RankIC"]} answer={1} explanation="执行对齐类金融原生泄漏。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。
+**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

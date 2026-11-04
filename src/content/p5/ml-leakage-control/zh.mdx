@@ -205,6 +205,14 @@ disclaimer: synthetic weak panel — learning only
 即便日历切分做过 purge，仍可能藏 **决策时点** 泄漏。复用 P2 的 [When Alpha Disappears](https://arxiv.org/abs/2605.23959) 对照：**TEMP_CENTER**（中心化滚动）与 **EXEC_OPEN**（用开盘后字段却假设当日开盘成交）可在 walk-forward *看起来干净* 时抬高夏普。数值 Leakage Gain 见 `backtest-traps`。
 
 
+
+
+## 桥接：PBO / DSR≠泄漏 与 AQuA 密封沙箱
+
+- **PBO / CSCV / 蒸发曲线：** 主课在 **回测陷阱**（[arXiv:2608.27734](https://arxiv.org/abs/2608.27734) + Bailey PBO）。记住：Deflated Sharpe 好看也可能伴随**污染信息集**（植入未来收益神谕）。CSCV 草图是教学玩具——不是生产级 CombinatorialPurgedKFold。
+- **AQuA 结构密封沙箱：** [arXiv:2608.12841](https://arxiv.org/abs/2608.12841) 冻结划分 / 特征 / 标签 / 评估器。**只学协议。** 拒绝把 Part II IC / Sharpe（如 +2.50）当课程 alpha——见 **frontier-llm-agents** 的 REJECT 框。
+- 决策时泄漏开关 **TEMP_CENTER / EXEC_OPEN**（arXiv:2605.23959）继续与 purge/禁运习惯并列。
+
 ## 常见错误 / 陷阱
 
 1. 固定百分比势垒，把波动写成标签。
@@ -242,7 +250,7 @@ disclaimer: synthetic weak panel — learning only
 
 防泄漏 notebook：波动缩放 TB、并排表、三种情形叙述。
 
-**来源：** AFML 第3章（元标签）、第4章（唯一性/序贯自助）、第5章（分数差分）、第7章（purged CV）、第12章（CPCV 精神）；P4 弱面板；Canvas m10。
+**来源：[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；[arXiv:2608.12841](https://arxiv.org/abs/2608.12841)；：** AFML 第3章（元标签）、第4章（唯一性/序贯自助）、第5章（分数差分）、第7章（purged CV）、第12章（CPCV 精神）；P4 弱面板；Canvas m10。
 
 <Summary>
 **要点**：波动缩放标签 → 日度截面 IC → purge 回收弱信号 → 分清泄漏/回收/成本抹平。  

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14 学时**：论文/文档 5h + 设计练习 5h + 资金费率/清算对照 2h + 结构/PIT 2h）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
+本课（约 **16 学时**：论文/文档 5h + 设计练习 5h + 资金费率/清算/ADL 对照 2h + 结构/PIT 2h + SaR 点名）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
 
 **课内目标：** 概括 TSFM 日频超额收益的谨慎结论；报告相对 always-up 的**超额方向准确率**；设计另类数据 / Crypto PIT 检查；说明 CEX CCXT 与链上适配差异及额外风险。
 
@@ -128,6 +128,20 @@ WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
   [OK] OI_publication_unverified → disable OI as alpha input
 ```
 
+
+
+## 永续 ADL 三难 — 偿付 / 收入 / 公平
+
+[Autodeleveraging: Impossibilities and Optimization](https://arxiv.org/abs/2512.01112)（Chitra）给出 ADL（自动减仓）的正式模型：清算无法维持偿付时的最后手段损失社会化。**不可能定理：** 没有政策能同时满足交易所**偿付**、**收入**与对交易者的**公平**；参与规模上升时道德风险上升。
+
+**Hyperliquid 2025-10-10 案例（仅素养）：** 约 12 分钟内约 **$21 亿**清算；文中估计相对所需的生产端超调约 **$4500–5200 万** PNL 美元。用透明基准对照生产队列作**风险素养**——**不是**交易配方，**不是**可优化的 ADL alpha。
+
+**NICE 点名：** [Slippage-at-Risk (SaR)](https://arxiv.org/abs/2603.09164) — 面向订单簿的前瞻清算滑点风险；仅理论+警示。
+
+<Callout type="warn" title="禁止优化 ADL / 资金费设计当 alpha">
+拒绝把 ADL 削发或资金费设计论文变成「策略夏普」。教机制与不可能，不为课程夏普优化社会化。
+</Callout>
+
 ## 常见错误 / 陷阱
 
 - 日频噪声上零样本 TSFM 常输给强截面/树基准。
@@ -148,6 +162,7 @@ WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
 
 ## 测验
 
+<Quiz id="p8ts-adl" question="ADL 三难指无法同时保证？" options={["仅低费率", "偿付、收入与公平三者一起", "基差永远为零", "零资金费"]} answer={1} explanation="arXiv:2512.01112。" />
 <Quiz id="p8ts-q1" question="arXiv:2511.18578 对零样本 Chronos/TimesFM？" options={["总是胜过 LightGBM", "在日频超额上常弱于强传统基准", "取消 purge", "证明免费资金费率 alpha"]} answer={1} explanation="已核验的谨慎金融 TSFM 评价。" />
 <Quiz id="p8ts-q2" question="另类数据第一风险是？" options={["配色", "时间戳与修订 / PIT 可得性", "变量名", "GPU 品牌"]} answer={1} explanation="as-of 与修订控制。" />
 <Quiz id="p8ts-q3" question="CEX 正资金费率通常意味着？" options={["空头总付给多头", "多头付给空头（溢价）", "费率为零", "预言机停机"]} answer={1} explanation="经典永续溢价资金费率。" />

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **16 学时**：导读 5h + 批判练习 6h（五宗罪/FINSABER/OpenPM）+ 守则改写 2h + 密封排行榜 3h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
+本课（约 **23 学时**：导读 5h + 批判练习 9h（五宗罪/FINSABER/OpenPM/CLQT/AQuA/可恢复性）+ 守则改写 2h + 密封排行榜 3h + 流程诊断 4h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
 
 **课内目标：** 陈述 RD-Agent(Q) 闭环；解释 AlphaAgent 正则；列出 LLM 挖因子失败模式；设计密封样本外验收。
 
@@ -124,6 +124,55 @@ weights may remember in-cutoff paths; sealed-year / post-cutoff only; FinCAD rec
 ```
 *（完整 stdout 见 rerun 后的 `examples/p8/01_llm_agents_offline.out`。）*
 
+
+
+## CLQT — 诊断流程，不要按单期夏普排行
+
+[CLQT](https://arxiv.org/abs/2606.29771)（Qu & Chen）把 LLM 组合智能体评估改成**诊断**而非收益排行榜。单窗夏普被实现路径支配；控制前瞻与真实成本后表观 alpha 常消失。
+
+**说 vs 做：** 配置系统性地跟不上自己陈述的分析（文中约 +0.30 回测 / +0.23 实盘）。**能力领袖 ≠ 夏普领袖。**
+
+实验清单（离线）：
+
+```text
+[Y] PiT TimeGate
+[Y] 多成分成本
+[P] 策略一致性分数
+[P] 可重算审计哈希链
+[Y] 能力轴 vs 夏普榜 — 诊断；不为单期夏普加冕
+```
+
+<Callout type="warn" title="拒绝：把 CLQT 战役夏普当课程优势">
+不要把 CLQT 表中夏普（含极端自选窗）贴进本课当作可部署 alpha。只用**流程清单**。
+</Callout>
+
+## AQuA — 结构化密封沙箱（仅协议）
+
+[AQuA](https://arxiv.org/abs/2608.12841) 在**固定沙箱**中做递归研究：切分、特征/标签与评估器由人密封；智能体只能输出受限因子 DSL 或模型配置 diff。桥接 `ml-leakage-control`：搜索前先冻结评分器。
+
+<Callout type="warn" title="拒绝：AQuA Part II IC / Sharpe +2.50 当课程 alpha">
+Part II 数字是**其沙箱下的论文结果**——**不是**课程优势、作业目标或部署证据。教**协议**，禁**计分板**。
+</Callout>
+
+## 执行假设可恢复性清单
+
+[Yao & Zheng（arXiv:2606.08285）](https://arxiv.org/abs/2606.08285) 审查 LLM 交易论文的**执行假设是否可恢复**：PiT 控制、划分日期、成交时点、成本/换手、股票池、工件。结业习惯——每项标 **Y / P / NR**：
+
+| 字段 | 含义 |
+|------|------|
+| PiT | 点时间标签/特征无前瞻 |
+| 划分日期 | 训练/验证/密封 OOS 边界公开 |
+| 成交时点 | 信号→下单→成交假设可复现 |
+| 成本/换手 | 费率与换手进入评估 |
+| 股票池 | 进出规则可审计 |
+| 工件 | 代码/配置/日志可取回 |
+
+缺行 → 不把标题夏普当证据。`backtest-traps` 研究日志同一行。
+
+## 智能体搜索试错账本（PBO 课指针）
+
+智能体提出并评分许多候选时，**DSR 的 N 是账本长度**，不是「留下的那一个」。记每一条被评估的计划；Gençay（arXiv:2608.27734）蒸发曲线显示通缩阈值追赶最佳 IS 夏普。
+
 ## 常见错误 / 陷阱
 
 - **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会好看得吓人（Glasserman &amp; Lin；Lopez-Lira/Tang/Zhu）。
@@ -149,7 +198,10 @@ weights may remember in-cutoff paths; sealed-year / post-cutoff only; FinCAD rec
 <Quiz id="p8llm-q3" question="本课对 Chain-of-Alpha arXiv:2508.06312？" options={["必须实现的主论文", "存在但已撤回——放弃细节主张", "证明双链总有效", "取代 RD-Agent"]} answer={1} explanation="现场横幅：withdrawn by Lang Cao；abs 页另有管理员许可移除评论。" />
 <Quiz id="p8llm-q4" question="Lopez-Lira & Tang 强调打分对象是？" options={["仅截止前标题", "知识截止日期之后的标题", "无新闻的随机代码", "仅 L2"]} answer={1} explanation="截止后设计是其预测主张的核心。" />
 <Quiz id="p8llm-q5" question="实验 LEAK 情绪对照教会？" options={["总是交易 GPT 分数", "截止/记忆可伪造巨大 IC", "成本可省略", "DSR 永远 N=1"]} answer={1} explanation="诚实 PIT 路径 vs 前瞻类比。" />
-<Quiz id="p8llm-q7" question="Quant-Arena 最高分密封-2024 ARR 相对等权（已核验）？" options={["约10.7%跑赢17.1%", "约10.7%落后约17.1%", "两者皆零", "构造上相等"]} answer={1} explanation="Astra ~10.7% vs EW ~17.1%；最高分行未跑赢等权。" />
+<Quiz id="p8llm-clqt" question="CLQT 的主要评估立场？" options={["按单窗夏普给模型排名", "诊断流程轴；能力领袖不必是夏普领袖", "忽略成本", "跳过 PIT"]} answer={1} explanation="arXiv:2606.29771 先诊断再排名。" />
+<Quiz id="p8llm-aqua" question="AQuA 密封沙箱指？" options={["智能体重写评估器", "切分/特征/标签/评估器冻结；智能体只发受限规格", "必须实盘", "Sharpe +2.50 是作业"]} answer={1} explanation="仅协议——拒绝 Part II 计分板当课程 alpha。" />
+<Quiz id="p8llm-recover" question="Yao&Zheng 可还原编码中 NR 表示？" options={["已证明盈利", "公开材料无法还原该字段", "次日开盘成交", "密封 OOS"]} answer={1} explanation="可还原 ≠ 质量或优势。" />
+<Quiz id="p8llm-q7" question="Quant-Arena 最高分密封-2024 ARR 相对等权（已核验）？" options={["约10.7%高于17.1%", "约10.7%落后约17.1%", "两者皆零", "构造上相等"]} answer={1} explanation="Astra ~10.7% vs EW ~17.1%；最高分行未跑赢等权。" />
 <Quiz id="p8llm-q8" question="AlphaAgent 三正则针对？" options={["仅时延", "原创性、假设对齐、复杂度", "仅佣金", "期权希腊值"]} answer={1} explanation="对抗同质化/衰减。" />
 <Quiz id="p8llm-q9" question="参数前瞻指？" options={["仅 CSV 时区 bug", "模型权重可能记住截止前结果", "截止前回测总安全", "FinCAD 必做作业"]} answer={1} explanation="先教问题；FinCAD 仅点名；用密封/截止后。" />
 <Quiz id="p8llm-q6" question="RD-Agent(Q) 阶段包括？" options={["仅实盘路由", "Research 假设再 Development 实现并反馈", "删除 purge 窗", "跳过伦理"]} answer={1} explanation="Research ↔ Development 联合优化闭环。" />
@@ -162,7 +214,7 @@ weights may remember in-cutoff paths; sealed-year / post-cutoff only; FinCAD rec
 
 前沿风险清单 + 更新研究守则（密封 OOS、显式 N、不依赖已撤回 PDF）。
 
-**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)（*arXiv 评论写着 NeurIPS 2025——核验会议录前只当预印本脚注*）；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent)；[arXiv:2605.24564](https://arxiv.org/abs/2605.24564) 参数前瞻/FinCAD（问题+仅点名配方）；[arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha（**仅点名**）；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**由 Lang Cao 撤回**；含管理员许可评论）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena（~10.7% vs ~17.1%）；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619)；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322)；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765)；[arXiv:2602.14233](https://arxiv.org/abs/2602.14233) 五宗罪；[arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER；[arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM； niche：@_zheergen。
+**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)（*arXiv 评论写着 NeurIPS 2025——核验会议录前只当预印本脚注*）；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent)；[arXiv:2605.24564](https://arxiv.org/abs/2605.24564) 参数前瞻/FinCAD（问题+仅点名配方）；[arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha（**仅点名**）；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**由 Lang Cao 撤回**；含管理员许可评论）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena（~10.7% vs ~17.1%）；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619)；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322)；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765)；[arXiv:2602.14233](https://arxiv.org/abs/2602.14233) 五宗罪；[arXiv:2505.07078](https://arxiv.org/abs/2505.07078) FINSABER；[arXiv:2608.09988](https://arxiv.org/abs/2608.09988) OpenPM；  [arXiv:2606.29771](https://arxiv.org/abs/2606.29771) CLQT；[arXiv:2608.12841](https://arxiv.org/abs/2608.12841) AQuA（仅协议）；[arXiv:2606.08285](https://arxiv.org/abs/2606.08285) 可恢复性；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734) Gençay； niche：@_zheergen。
 
 <Summary>
 **要点**：agent 放大试错 → 更严 DSR/密封 OOS；mock ≠ API；撤回论文只做脚注不做流水线。  

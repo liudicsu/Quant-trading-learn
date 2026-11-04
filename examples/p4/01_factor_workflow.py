@@ -357,3 +357,32 @@ print(f"ranking_by_gross_picks={winner_gross}  ranking_by_net_picks={winner_net}
 print("teach: cost-blind gross rankings bias toward high-turnover factors; net-of-cost rankings can reverse — Detzel spirit.")
 print("paper: after costs, FF5 (esp. cash-profitability variants) beat high-cost q/six-factor style comparisons.")
 
+print("\n=== Harvey–Sancetta–Zhao NBER w34898 (2026): t≥3 + local FDR ===")
+print("cite: https://www.nber.org/papers/w34898 — What Threshold Should be Applied to Tests of Factor Models?")
+print("next to HLZ 2016 + Detzel costs: valid thresholds need dependence, null shape, selection bias")
+print("lower bound: researchers should employ a t-statistic cutoff of at least 3.0")
+print("local FDR: probability null is true GIVEN the realized test statistic — a p-value cannot supply that")
+# toy: 200 simulated factor t-stats under null N(0,1); show p-value vs local-FDR spirit
+rng_h = np.random.default_rng(11)
+ts = rng_h.normal(0, 1.0, 200)
+# plant one strong true t≈4.2
+ts[0] = 4.2
+from scipy.stats import norm as _norm
+pvals = 2 * (1 - _norm.cdf(np.abs(ts)))
+# crude local-FDR sketch: compare density at |t| vs null; teaching only
+# For |t|~4.2, empirical null density tiny → lfdr low; for |t|~1.2 lfdr high
+def lfdr_sketch(t):
+    # mixture: 90% null N(0,1) + 10% N(3,1); Bayes posterior null | |T|=t
+    # f0 = phi(t); f = 0.9*phi(t)+0.1*phi(t-3) [one-sided sketch on signed]
+    f0 = float(_norm.pdf(t))
+    f = 0.9 * f0 + 0.1 * float(_norm.pdf(t - 3.0))
+    return float(0.9 * f0 / max(f, 1e-12))
+
+for label, t0 in [("noise_t≈1.2", 1.2), ("borderline_t≈2.0", 2.0), ("HLZ_bar_t≈3.0", 3.0), ("planted_t=4.2", 4.2)]:
+    pv = 2 * (1 - _norm.cdf(abs(t0)))
+    lf = lfdr_sketch(t0)
+    print(f"  {label}: two-sided_p≈{pv:.4f}  localFDR_sketch≈{lf:.3f}")
+print("quiz_foil: p-value ≠ P(null|data); local FDR targets the latter")
+print("costs still matter for economic significance after statistical hurdles (Detzel bridge)")
+
+

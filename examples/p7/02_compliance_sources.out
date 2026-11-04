@@ -42,5 +42,8 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
 [OK] hkex_nb_program_trading_2026: Northbound Program Trading Reporting (Stock Connect)
     https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en
     verified: Mainland NB Program Trading Reporting Requirements effective 2026-01-12; ECP submissions from 2026-01-12; existing investors transition to 2026-04-10; thresholds include automation / fast order rate / many stocks+turnover / customized software (SSE/SZSE separate).
+[OK] sec_withdraw_pda_2025_06: Withdrawal of Proposed Regulatory Actions (incl. PDA conflicts S7-12-23)
+    https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions
+    verified: Published 2025-06-17; formally withdraws several 2022–2023 proposals including Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers (File No. S7-12-23; 88 FR 53960). Withdrawal ≠ absence of remaining duties under Advisers Act / Reg BI / firm policies. Not legal advice.
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=14 all_fetch_OK=True
+n_sources=15 all_fetch_OK=True

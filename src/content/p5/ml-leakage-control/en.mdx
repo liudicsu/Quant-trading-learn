@@ -205,6 +205,14 @@ Scoring many purged fold combinations yields a **distribution** of OOS metrics �
 Even a purged calendar split can hide **decision-time** leaks. Reuse the P2 foil from [When Alpha Disappears](https://arxiv.org/abs/2605.23959): **TEMP_CENTER** (centered rolling) and **EXEC_OPEN** (same-day open fill with post-open bar fields) can inflate Sharpe while the walk-forward *looks* clean. Details and numeric Leakage Gains live in `backtest-traps`.
 
 
+
+
+## Bridge: PBO / DSR≠leakage and AQuA sealed sandboxes
+
+- **PBO / CSCV / evaporation:** primary teaching lives in **backtest-traps** ([arXiv:2608.27734](https://arxiv.org/abs/2608.27734) + Bailey PBO). Remember: a clean Deflated Sharpe can coexist with a **contaminated information set** (planted future oracle). CSCV sketches here are teaching toys — not production CombinatorialPurgedKFold.
+- **AQuA structural sealed sandbox:** [arXiv:2608.12841](https://arxiv.org/abs/2608.12841) freezes splits / features / labels / evaluator. **Protocol only.** Reject pasting Part II IC / Sharpe (+2.50 etc.) as course alpha — use the REJECT box in **frontier-llm-agents**.
+- Keep one-switch **TEMP_CENTER / EXEC_OPEN** decision-time leakage (arXiv:2605.23959) next to purge/embargo habits.
+
 ## Common mistakes / pitfalls
 
 1. Fixed % barriers that encode volatility, not information.
@@ -242,7 +250,7 @@ Even a purged calendar split can hide **decision-time** leaks. Reuse the P2 foil
 
 Anti-leak notebook with vol-scaled TB, side-by-side table, and the three-case narrative.
 
-**Sources:** AFML ch.3 (meta-labeling), ch.4 (uniqueness / sequential bootstrap), ch.5 (fracdiff), ch.7 (purged CV), ch.12 (CPCV spirit); P4 weak panel; Canvas m10.
+**Sources: [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); [arXiv:2608.12841](https://arxiv.org/abs/2608.12841); ** AFML ch.3 (meta-labeling), ch.4 (uniqueness / sequential bootstrap), ch.5 (fracdiff), ch.7 (purged CV), ch.12 (CPCV spirit); P4 weak panel; Canvas m10.
 
 <Summary>
 **Takeaways**: vol-scaled labels → daily CS IC → purge recovers weak signal → don’t confuse leak / recover / cost-wipe.  

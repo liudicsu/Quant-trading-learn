@@ -115,4 +115,35 @@ paper composite setups: B&H often beats FinMem/FinAgent on risk-adjusted metrics
 OpenPM: availability-gated PIT eval + contamination certificate + cost curve + mandate critic
 teach: returns without leakage/cost/mandate audits are upper bounds — not validated alpha
 NAME use: adopt audit artifacts; do not ship OpenPM PnL as a strategy claim
+
+=== CLQT: diagnose process, don't rank period Sharpe (arXiv:2606.29771) ===
+cite: Qu & Chen — CLQT closed-loop cost-aware strategy-consistent benchmark
+stating-vs-doing gap: agents' allocations fail to follow their own stated analysis
+capability leader ≠ Sharpe leader; campaign Sharpes are NOT curriculum edge
+CLQT_checklist:
+  [Y] PiT TimeGate — hard gate: no future timestamps in tools/memory
+  [Y] multi-component costs — commission+spread+impact+financing modeled
+  [P] strategy consistency score — stated thesis vs executed weights audited
+  [P] sealed audit hash chain — recompute-verifiable DecisionRound
+  [Y] capability axes vs Sharpe board — diagnose Coherence/Acuity/...; do not crown period Sharpe
+REJECT: pasting CLQT campaign Sharpes (e.g. 2.99 / 9.82 artifacts) as course alpha
+
+=== AQuA sealed sandbox PROTOCOL ONLY (arXiv:2608.12841) ===
+cite: Guo et al. — recursive self-improving quant research agents
+structural idea: freeze splits/features/labels/evaluator; agent may only emit constrained DSL / config diffs
+bridge: same spirit as ml-leakage-control sealed hold-out + fixed evaluator
+REJECT BOX: do NOT teach Part II IC/+0.0843 or Sharpe +2.50 as curriculum edge / deployable alpha
+AQuA_protocol_gates: splits_frozen=Y features_frozen=Y labels_frozen=Y evaluator_frozen=Y
+
+=== Execution-assumption recoverability (arXiv:2606.08285 Yao&Zheng) ===
+cite: PRISMA-ScR audit — architecture reported more than fill timing/costs/universe/artifacts
+capstone_recoverability_Y_P_NR:
+  PiT / availability times: Y
+  split dates train/val/test: Y
+  fill timing (next-open vs same-close): P
+  costs + turnover: P
+  universe construction: NR
+  artifacts (code/prompts/model versions): P
+teach: a Y means reconstructable from public evidence — not that the assumption is realistic or profitable
+research_log_row: date | paper | PiT | splits | fill | costs | universe | artifacts | next_action
 DONE lab 01

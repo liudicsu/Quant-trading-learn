@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**18 hours**: 5h concepts + 9h labs incl. Detzel costs + 3h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
+This lesson (~**20 hours**: 5h concepts + 9h labs incl. Detzel costs + w34898 localFDR + 3h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
 
 **Goals:** implement Spearman IC; build quantile long–short; contrast true vs null factors.
 
@@ -76,6 +76,25 @@ Lab: **200** random CS factors on the strong panel.
 | \|t\|>3 | ≈0.0% (0 of 200) | ≈**0.27%** (≈**0.54** of 200) |
 
 The observed ~4.5–6% rate at \|t\|>2 is **right in line with pure noise**. That is why HLZ raise the bar toward **t>3**: the industry already spent the t≈2 budget.
+
+
+
+## Harvey–Sancetta–Zhao (NBER w34898, 2026): t ≥ 3 and local FDR
+
+Next to HLZ (2016) and Detzel costs: [What Threshold Should be Applied to Tests of Factor Models?](https://www.nber.org/papers/w34898) (Harvey, Sancetta & Zhao) argue proper inference needs dependence across tests, a correct null, and selection-bias mitigation. Their framework yields a **lower bound**: use a **t-statistic cutoff of at least 3.0**. Prefer the **NBER URL** (DOI pages may 500).
+
+They also advocate the **local False Discovery Rate** — roughly the probability the null is true **given** the realized test statistic. A classical **p-value is not** P(null | data).
+
+Lab sketch:
+
+```text
+noise_t≈1.2: two-sided_p≈0.2301  localFDR_sketch≈0.957
+borderline_t≈2.0: two-sided_p≈0.0455  localFDR_sketch≈0.668
+HLZ_bar_t≈3.0: two-sided_p≈0.0027  localFDR_sketch≈0.091
+planted_t=4.2: two-sided_p≈0.0000  localFDR_sketch≈0.003
+```
+
+Statistical clearance still needs **economic** significance after costs (Detzel bridge).
 
 ## Cost-aware factor ranking (Detzel–Novy-Marx–Velikov)
 
@@ -221,6 +240,8 @@ disclaimer: strong panel MU is inflated for teaching; weak panel is the realisti
 <Quiz id="q5-overlap" question="Overlapping multi-day IC windows mainly?" options={["Bias mean IC upward a lot", "Inflate IC autocorrelation and ICIR SE issues; fix with non-overlap or Newey–West", "Remove turnover", "Replace neutralization"]} answer={1} explanation="Mean IC less affected; inference needs non-overlap or NW." />
 <Quiz id="q6-zoo" question="Observed ~4.5–6% of random factors with |t|>2 means?" options={["Alpha is real", "Right in line with the ~4.55% N(0,1) null — not a discovery", "t>2 beats HLZ", "Costs are zero"]} answer={1} explanation="Matches pure-noise rate; HLZ push toward t>3." />
 
+<Quiz id="p4fw-hsz" question="Harvey–Sancetta–Zhao (NBER w34898) lower-bound t cutoff?" options={["t≥1", "t≥2 always enough", "At least t≥3.0 after dependence/selection adjustments", "Only R²"]} answer={2} explanation="NBER w34898: threshold at least 3.0." />
+<Quiz id="p4fw-lfdr" question="Local FDR answers which question a p-value does not?" options={["P(data|null) style tail prob only", "Approx. P(null|realized statistic)", "Broker fee schedule", "Always-up accuracy"]} answer={1} explanation="p-value ≠ P(null|data); local FDR targets the latter." />
 <Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov (JF 2023) main caution?" options={["Always prefer highest turnover", "Ignoring costs biases model/factor comparisons toward high-cost factors", "Costs never change rankings", "Only crypto matters"]} answer={1} explanation="DOI 10.1111/jofi.13225." />
 
 ## Done when

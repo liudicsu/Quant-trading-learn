@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **8 学时**：阅读 4h（含北向程序化）+ 写作 3h + 测验 1h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
+本课（约 **9 学时**：阅读 4h（含北向程序化 + SEC PDA 撤回知晓）+ 写作 3h + 测验 1h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
 
 **课内目标：** 写风险偏好一页；诚实记录失败；拆穿「保证夏普」话术。
 
@@ -89,6 +89,14 @@ n_sources=14 all_fetch_OK=True
 (checked Asia/Shanghai 2026-11-04)
 ```
 
+
+
+## SEC 撤回 PDA 利益冲突提案（S7-12-23）— 知晓即可
+
+**2025-06-17** SEC 在联邦公报发布[撤回若干 2022–2023 提案](https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions)的通知，其中包括券商/投资顾问使用**预测性数据分析**相关利益冲突提案（File No. **S7-12-23**；原 88 FR 53960）。
+
+**谨慎教学：撤回 ≠ 不再有义务。** 《顾问法》信义义务、Reg BI、公司政策等仍在。若日后再管相关主题，会重新提案。**非法律意见。**
+
 ## 常见错误 / 陷阱
 
 1. 用自媒体阈值代替交易所/证监会文本。
@@ -112,6 +120,7 @@ n_sources=14 all_fetch_OK=True
 <Quiz id="p7ce-q2" question="沪深高频认定（已抓取 2025 细则）包括？" options={["任意两笔成交", "每秒≥300 笔或全日≥20000 笔申报撤单峰值", "仅零股", "Kelly f*>0.5"]} answer={1} explanation="上交所答问与深交所第33条。" />
 <Quiz id="p7ce-q3" question="SEA Rule 15c3-5 主要要求？" options={["免费裸接入", "市场接入的事前风控与年度 CEO 证明", "保证成交", "加密质押"]} answer={1} explanation="Market Access Rule。" />
 <Quiz id="p7ce-q4" question="Reg SHO Rule 201 大致在何时触发？" options={["波动 1%", "相对前收跌 10%（上市市场）", "周跌 50%", "任意上涨"]} answer={1} explanation="10% 熔断。" />
+<Quiz id="p7ce-pda" question="SEC 2025-06 撤回 S7-12-23 意味着？" options={["所有 AI 合规义务消失", "该 PDA 利益冲突提案不会按原案定稿；其他义务仍在", "Reg BI 废除", "只剩加密规则"]} answer={1} explanation="撤回 ≠ 无剩余义务；非法律意见。" />
 <Quiz id="p7ce-q5" question="FINRA Notice 26-10（已抓取）的含义？" options={["新设 PDT $25k", "以内日保证金标准取代原 PDT 次数/$25k 制度（2026-06-04 生效）", "废除保证金", "仅适用于加密"]} answer={1} explanation="Notice 26-10 取代日内交易保证金旧制。" />
 <Quiz id="p7ce-q6" question="央行 2021 通知（已抓取）对虚拟货币相关业务的定性？" options={["鼓励金融科技", "属非法金融活动并禁止", "银行强制开展", "完全不管"]} answer={1} explanation="银发〔2021〕237号高层次状态。" />
 <Quiz id="p7ce-q7" question="证监会期货程序化规定〔2025〕12（已抓取）生效日？" options={["2024-10-08", "2025-10-09", "2026-06-04", "永不"]} answer={1} explanation="公告〔2025〕12号：2025-10-09 起施行；期货先报告后交易。" />

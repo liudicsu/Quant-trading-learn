@@ -120,6 +120,14 @@ SOURCES = [
     "fetch": "OK",
     "verified": "Mainland NB Program Trading Reporting Requirements effective 2026-01-12; ECP submissions from 2026-01-12; existing investors transition to 2026-04-10; thresholds include automation / fast order rate / many stocks+turnover / customized software (SSE/SZSE separate).",
   },
+{
+    "id": "sec_withdraw_pda_2025_06",
+    "title": "Withdrawal of Proposed Regulatory Actions (incl. PDA conflicts S7-12-23)",
+    "issuer": "SEC / Federal Register",
+    "url": "https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions",
+    "fetch": "OK",
+    "verified": "Published 2025-06-17; formally withdraws several 2022–2023 proposals including Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers (File No. S7-12-23; 88 FR 53960). Withdrawal ≠ absence of remaining duties under Advisers Act / Reg BI / firm policies. Not legal advice.",
+  },
 ]
 
 print("=== official sources checklist (checked Asia/Shanghai 2026-11-04) ===")

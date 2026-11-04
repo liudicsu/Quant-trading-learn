@@ -350,4 +350,14 @@ print(f"toy Galton–Watson: λ={lam:.2f}  initial_forced=${shock:.0f}M  amplifi
 print(f"if λ→1 amplification diverges; measured cascades stayed <<1 — severity = shock × path × liquidity withdrawal")
 print("DEBUNK: critical early-warning crash marketing — Part I found no event-invariant CSD; engine stayed subcritical.")
 
+
+
+print("\n=== Perp ADL trilemma (arXiv:2512.01112) — theory+warn ONLY ===")
+print("cite: Chitra — Autodeleveraging: Impossibilities and Optimization")
+print("trilemma: no ADL policy simultaneously satisfies exchange solvency + revenue + fairness to traders")
+print("moral hazard grows with participation; 'zero-loss' socialization is impossible at scale")
+print("Hyperliquid Oct-10-2025 case study: ~$2.1B liquidations / ~12 minutes; production overshoot vs needed ~$45–52M PNL$ (paper estimates)")
+print("NOT a trade recipe; NO optimized ADL alpha; compare production vs transparent benchmark allocations only as risk literacy")
+print("SaR name-drop (arXiv:2603.09164): forward-looking order-book Slippage-at-Risk — theory+warn; not a listed-alpha engine")
+
 print("DONE lab 02")

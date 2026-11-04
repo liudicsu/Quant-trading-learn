@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**8 hours**: 4h reading incl. Northbound + 3h writing + 1h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
+This lesson (~**9 hours**: 4h reading incl. Northbound + SEC PDA withdrawal awareness + 3h writing + 1h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
 
 **Goals:** write a risk-preference page; log failures honestly; refuse “guaranteed Sharpe” pitches.
 
@@ -55,6 +55,14 @@ Nothing here is legal, compliance, or investment advice. Thresholds and effectiv
 
 - **Source (fetched OK):** https://www.finra.org/rules-guidance/notices/26-11 — published **2026-05-19**; **effective 2026-06-04** (same day as 26-10 go-live).
 - **Verified:** publishes / updates Rule 4210 interpretations for the new intraday margin standards — including how to compute **IMD** (intraday margin deficit) and **IML** (intraday margin level), deposits, market moves, and liquidation examples — and **deletes** obsolete PDT day-trading interpretations. Short update next to 26-10: 26-10 = rule change; 26-11 = how members implement IMD/IML in practice + investor education links.
+
+
+
+## SEC withdrawal of PDA conflicts proposal (S7-12-23) — awareness
+
+On **2025-06-17** the SEC published a Federal Register notice [withdrawing several 2022–2023 proposed rulemakings](https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions), including **Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers** (File No. **S7-12-23**; originally 88 FR 53960).
+
+**Teach carefully:** **withdrawn ≠ no remaining duties.** Advisers Act fiduciary duties, Reg BI, firm policies, and other existing rules still apply. If the Commission pursues related topics later, it would repropose. **Not legal advice.**
 
 ### FINRA Regulatory Notice 15-09
 
@@ -112,6 +120,7 @@ n_sources=14 all_fetch_OK=True
 <Quiz id="p7ce-q2" question="SSE/SZSE HFT recognition (fetched 2025 rules) includes?" options={["Any two trades", "≥300 msgs/sec or ≥20,000/day peak cancels+orders", "Only odd lots", "Kelly f*>0.5"]} answer={1} explanation="SSE Q&A and SZSE Art.33." />
 <Quiz id="p7ce-q3" question="SEA Rule 15c3-5 mainly requires?" options={["Free sponsored access", "Pre-trade risk controls and annual CEO cert for market access", "Guaranteed fills", "Crypto staking"]} answer={1} explanation="Market Access Rule controls." />
 <Quiz id="p7ce-q4" question="Reg SHO Rule 201 triggers after roughly?" options={["1% move", "10% decline from prior close (listing market)", "50% weekly", "Any uptick"]} answer={1} explanation="10% circuit breaker." />
+<Quiz id="p7ce-pda" question="SEC 2025-06 FR withdrawal of S7-12-23 means?" options={["All AI compliance duties vanished", "That PDA conflicts proposal will not be finalized as proposed; other duties remain", "Reg BI repealed", "Only crypto rules apply"]} answer={1} explanation="Withdrawal ≠ absence of remaining duties; not legal advice." />
 <Quiz id="p7ce-q5" question="As of FINRA Notice 26-10 (fetched)?" options={["PDT $25k is newly created", "Intraday margin standards replace the old PDT day-trade count /$25k regime (eff. 2026-06-04)", "Margin rules abolished", "Only applies to crypto"]} answer={1} explanation="Notice 26-10 replaces day-trading margin requirements." />
 <Quiz id="p7ce-q6" question="PBoC 2021 notice (fetched) states virtual currency related businesses are?" options={["Encouraged fintech", "Characterised as illegal financial activities and prohibited", "Mandatory for banks", "Unregulated"]} answer={1} explanation="银发〔2021〕237号 high-level status." />
 <Quiz id="p7ce-q7" question="CSRC futures programmatic rules 〔2025〕12 (fetched) take effect on?" options={["2024-10-08", "2025-10-09", "2026-06-04", "Never"]} answer={1} explanation="Announcement 〔2025〕12号: effective 2025-10-09; report-before-trade on futures." />

@@ -4,7 +4,9 @@ Sources (read offline for the lesson text): RD-Agent(Q) arXiv:2505.15155;
 Chain-of-Alpha arXiv:2508.06312 (WITHDRAWN — caution only); Lopez-Lira & Tang
 arXiv:2304.07619; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113;
 AlphaAgent arXiv:2502.16789; FinCAD/parametric look-ahead arXiv:2605.24564;
-CogAlpha arXiv:2511.18850 (NAME-ONLY).
+CogAlpha arXiv:2511.18850 (NAME-ONLY);
+CLQT arXiv:2606.29771; AQuA arXiv:2608.12841; exec-assumptions arXiv:2606.08285;
+leakage-safe search-aware arXiv:2608.27734.
 Learning only — not investment advice.
 """
 from __future__ import annotations
@@ -370,5 +372,46 @@ print("\n=== OpenPM protocol spirit (arXiv:2608.09988) — audit, not PnL ===")
 print("OpenPM: availability-gated PIT eval + contamination certificate + cost curve + mandate critic")
 print("teach: returns without leakage/cost/mandate audits are upper bounds — not validated alpha")
 print("NAME use: adopt audit artifacts; do not ship OpenPM PnL as a strategy claim")
+
+
+
+print("\n=== CLQT: diagnose process, don't rank period Sharpe (arXiv:2606.29771) ===")
+print("cite: Qu & Chen — CLQT closed-loop cost-aware strategy-consistent benchmark")
+print("stating-vs-doing gap: agents' allocations fail to follow their own stated analysis")
+print("capability leader ≠ Sharpe leader; campaign Sharpes are NOT curriculum edge")
+checklist = [
+    ("PiT TimeGate", "Y", "hard gate: no future timestamps in tools/memory"),
+    ("multi-component costs", "Y", "commission+spread+impact+financing modeled"),
+    ("strategy consistency score", "P", "stated thesis vs executed weights audited"),
+    ("sealed audit hash chain", "P", "recompute-verifiable DecisionRound"),
+    ("capability axes vs Sharpe board", "Y", "diagnose Coherence/Acuity/...; do not crown period Sharpe"),
+]
+print("CLQT_checklist:")
+for name, code, note in checklist:
+    print(f"  [{code}] {name} — {note}")
+print("REJECT: pasting CLQT campaign Sharpes (e.g. 2.99 / 9.82 artifacts) as course alpha")
+
+print("\n=== AQuA sealed sandbox PROTOCOL ONLY (arXiv:2608.12841) ===")
+print("cite: Guo et al. — recursive self-improving quant research agents")
+print("structural idea: freeze splits/features/labels/evaluator; agent may only emit constrained DSL / config diffs")
+print("bridge: same spirit as ml-leakage-control sealed hold-out + fixed evaluator")
+print("REJECT BOX: do NOT teach Part II IC/+0.0843 or Sharpe +2.50 as curriculum edge / deployable alpha")
+print("AQuA_protocol_gates: splits_frozen=Y features_frozen=Y labels_frozen=Y evaluator_frozen=Y")
+
+print("\n=== Execution-assumption recoverability (arXiv:2606.08285 Yao&Zheng) ===")
+print("cite: PRISMA-ScR audit — architecture reported more than fill timing/costs/universe/artifacts")
+rows = [
+    ("PiT / availability times", "Y"),
+    ("split dates train/val/test", "Y"),
+    ("fill timing (next-open vs same-close)", "P"),
+    ("costs + turnover", "P"),
+    ("universe construction", "NR"),
+    ("artifacts (code/prompts/model versions)", "P"),
+]
+print("capstone_recoverability_Y_P_NR:")
+for name, code in rows:
+    print(f"  {name}: {code}")
+print("teach: a Y means reconstructable from public evidence — not that the assumption is realistic or profitable")
+print("research_log_row: date | paper | PiT | splits | fill | costs | universe | artifacts | next_action")
 
 print("DONE lab 01")

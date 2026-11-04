@@ -91,4 +91,12 @@ paper: λ̂≈0.1–0.2 (subcritical); reject critical EWS / 'crash multiplier�
 toy Galton–Watson: λ=0.15  initial_forced=$100M  amplified_total≈$117.6M (not runaway)
 if λ→1 amplification diverges; measured cascades stayed <<1 — severity = shock × path × liquidity withdrawal
 DEBUNK: critical early-warning crash marketing — Part I found no event-invariant CSD; engine stayed subcritical.
+
+=== Perp ADL trilemma (arXiv:2512.01112) — theory+warn ONLY ===
+cite: Chitra — Autodeleveraging: Impossibilities and Optimization
+trilemma: no ADL policy simultaneously satisfies exchange solvency + revenue + fairness to traders
+moral hazard grows with participation; 'zero-loss' socialization is impossible at scale
+Hyperliquid Oct-10-2025 case study: ~$2.1B liquidations / ~12 minutes; production overshoot vs needed ~$45–52M PNL$ (paper estimates)
+NOT a trade recipe; NO optimized ADL alpha; compare production vs transparent benchmark allocations only as risk literacy
+SaR name-drop (arXiv:2603.09164): forward-looking order-book Slippage-at-Risk — theory+warn; not a listed-alpha engine
 DONE lab 02
