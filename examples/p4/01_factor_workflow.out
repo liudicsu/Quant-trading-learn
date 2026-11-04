@@ -73,6 +73,18 @@ ranking_by_gross_picks=fast  ranking_by_net_picks=slow
 teach: cost-blind gross rankings bias toward high-turnover factors; net-of-cost rankings can reverse — Detzel spirit.
 paper: after costs, FF5 (esp. cash-profitability variants) beat high-cost q/six-factor style comparisons.
 
+=== Novy-Marx & Velikov RFS 2016 costs×turnover taxonomy (next to Detzel) ===
+cite: NBER w20721 https://www.nber.org/papers/w20721 — A Taxonomy of Anomalies and Their Trading Costs
+cite: RFS 2016 29(1) 104–147 DOI 10.1093/rfs/hhv063
+spirit: gross zoo ≠ net zoo; low-turnover anomalies mostly survive net; high-turnover mostly die
+NOT a homework alpha list — taxonomy of *costs×turnover*, not a shopping list
+bucket | turnover | gross_SR | net_SR@10bps | net_survives?
+low_turnover(<50%/mo spirit): turn≈0.506 gross_SR≈-0.119 net_SR≈-1.929 survives=False
+high_turnover(>50%/mo spirit): turn≈3.197 gross_SR≈0.363 net_SR≈-11.368 survives=False
+teach: most low-turnover strategies keep significant net spreads when cost-mitigated; few high-turnover do
+name-drop FIM capacity: Frazzini–Israel–Moskowitz Trading Costs (SSRN 3229719) — capacity↔turnover spirit; NO capacity-as-alpha table here
+REJECT: Procedia / FactFin Sharpe recipes; treating taxonomy rows as homework alphas
+
 === Harvey–Sancetta–Zhao NBER w34898 (2026): t≥3 + local FDR ===
 cite: https://www.nber.org/papers/w34898 — What Threshold Should be Applied to Tests of Factor Models?
 next to HLZ 2016 + Detzel costs: valid thresholds need dependence, null shape, selection bias

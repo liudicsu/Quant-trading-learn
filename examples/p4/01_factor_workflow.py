@@ -357,6 +357,24 @@ print(f"ranking_by_gross_picks={winner_gross}  ranking_by_net_picks={winner_net}
 print("teach: cost-blind gross rankings bias toward high-turnover factors; net-of-cost rankings can reverse — Detzel spirit.")
 print("paper: after costs, FF5 (esp. cash-profitability variants) beat high-cost q/six-factor style comparisons.")
 
+print("\n=== Novy-Marx & Velikov RFS 2016 costs×turnover taxonomy (next to Detzel) ===")
+print("cite: NBER w20721 https://www.nber.org/papers/w20721 — A Taxonomy of Anomalies and Their Trading Costs")
+print("cite: RFS 2016 29(1) 104–147 DOI 10.1093/rfs/hhv063")
+print("spirit: gross zoo ≠ net zoo; low-turnover anomalies mostly survive net; high-turnover mostly die")
+print("NOT a homework alpha list — taxonomy of *costs×turnover*, not a shopping list")
+# Toy buckets from the Detzel foil above: classify by one-sided monthly turnover spirit
+buckets = [
+    ("low_turnover(<50%/mo spirit)", turn_s, sr_s_g, sr_s_n),
+    ("high_turnover(>50%/mo spirit)", turn_f, sr_f_g, sr_f_n),
+]
+print("bucket | turnover | gross_SR | net_SR@10bps | net_survives?")
+for name, turn, g, n in buckets:
+    survives = n > 0  # toy: positive net SR = "survives" spirit
+    print(f"{name}: turn≈{turn:.3f} gross_SR≈{g:.3f} net_SR≈{n:.3f} survives={survives}")
+print("teach: most low-turnover strategies keep significant net spreads when cost-mitigated; few high-turnover do")
+print("name-drop FIM capacity: Frazzini–Israel–Moskowitz Trading Costs (SSRN 3229719) — capacity↔turnover spirit; NO capacity-as-alpha table here")
+print("REJECT: Procedia / FactFin Sharpe recipes; treating taxonomy rows as homework alphas")
+
 print("\n=== Harvey–Sancetta–Zhao NBER w34898 (2026): t≥3 + local FDR ===")
 print("cite: https://www.nber.org/papers/w34898 — What Threshold Should be Applied to Tests of Factor Models?")
 print("next to HLZ 2016 + Detzel costs: valid thresholds need dependence, null shape, selection bias")

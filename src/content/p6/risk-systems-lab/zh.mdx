@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **5 学时**：概念 1.5h + 实验 3h + 测验 0.5h）工程化**硬风险约束**：VaR/CVaR（历史、参数、MC）、Kupiec 违约回测、压力情景、滞后回撤熔断、集中度与杠杆上限，以及缺口/密钥清单。前置：`portfolio-risk-sizing`、`execution-slippage`。
+本课（约 **8 学时**：概念 2.5h（Kupiec+Christoffersen+巴塞尔）+ 实验 4.5h + 测验 1h）工程化**硬风险约束**：VaR/CVaR（历史、参数、MC）、Kupiec 违约回测、压力情景、滞后回撤熔断、集中度与杠杆上限，以及缺口/密钥清单。前置：`portfolio-risk-sizing`、`execution-slippage`。
 
 **课内目标：** 数据陈旧/缺口时拒单或降仓；演示回撤熔断/降仓；自查密钥不进 git。
 
@@ -75,6 +75,7 @@ mean_hist_VaR=0.0270 mean_CVaR=0.0337 CVaR>=VaR check=1.00 (finite days)
 MC_t5 VaR=0.0298 CVaR=0.0423
 uncontrolled maxDD≈-0.750 controlled maxDD≈-0.200
 book0: max_w≤0.30 gross≤1.5 after projection
+Christoffersen 250d: x=21 LR_uc=5.097 LR_ind=0.463 LR_cc=5.560 (χ²(2) p=0.062)
 ```
 
 ## 常见错误 / 陷阱
@@ -102,11 +103,14 @@ book0: max_w≤0.30 gross≤1.5 after projection
 <Quiz id="p6rs-q5" question="本课压力测试？" options={["取代 Kupiec", "对账本施加叙事冲击并读 PnL", "为 Kelly 估计 μ", "打乱面板"]} answer={1} explanation="董事会级情景 PnL，不是概率模型。" />
 <Quiz id="p6rs-q6" question="密钥卫生要求？" options={["为可复现提交 API key", "密钥不进 git；轮换；最小权限；纸面/实盘分离", "在 MDX 硬编码密码", "把密钥邮件发给全班"]} answer={1} explanation="操作安全清单。" />
 
+<Quiz id="p6rs-q7" question="Christoffersen 的 LR_cc 等于？" options={["只有 LR_uc", "LR_uc + LR_ind（约 χ²(2)）", "只有 LR_ind", "最大回撤"]} answer={1} explanation="条件覆盖 = 频率 + 独立性。" />
+<Quiz id="p6rs-q8" question="本课巴塞尔交通灯绿/黄/红是？" options={["alpha 择时信号", "违约次数审计带宽（经典 99% VaR）— 不是交易", "VWAP 日程", "Kelly f*"]} answer={1} explanation="仅计数识字。" />
+
 ## 完成标准
 
 三道硬约束演示（缺口暂停、回撤降仓、集中度/杠杆）通过，附 Kupiec 表与密钥自查记录。
 
-**来源（已阅读并写入正文）：** Kupiec 1995 *Journal of Derivatives* 3(2)；Artzner 等 1999 *Mathematical Finance*（相干风险）；业界 VaR/ES 实践；Canvas m13 bits；ML4T ops 笔记；Cookbook/Qbot 配置思路（niche）。
+**来源（已阅读并写入正文）：** Kupiec 1995；Christoffersen 1998 *IER* 39(4)；巴塞尔 VaR 交通灯计数；Artzner 等 1999 *Mathematical Finance*（相干风险）；业界 VaR/ES 实践；Canvas m13 bits；ML4T ops 笔记；Cookbook/Qbot 配置思路（niche）。
 
 <Summary>
 **要点**：风险估计一律滞后；回测违约（Kupiec）；压力 + 回撤 + 限额是工程；密钥远离仓库。  

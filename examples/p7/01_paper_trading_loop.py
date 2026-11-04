@@ -289,4 +289,62 @@ for c in cases:
         action, tgt = "gross_clip", float(np.sign(tgt) * MAX_GROSS)
     print(f"input dd={c['dd']:+.2f} gap={c['gap']} target={c['target']} → action={action} sized={tgt:.3f} (expect {c['expect']})")
 
+
+# ---------- Backtest↔live parity: six defects + 10-point checklist (arXiv:2610.21846) ----------
+print("\n=== backtest↔live parity — six defects + checklist (PROTOCOL ONLY) ===")
+print("cite: arXiv:2610.21846 — Where Backtests and Live Trading Part Ways: Six Defects from One Intraday System")
+print("NO PnL claim; NO broker API; NO advertised Sharpe — protocol / asserts only")
+
+# Synthetic "two paths that should agree" foils — each assert catches a class of drift
+def parity_cases():
+    cases = []
+    # 1) feed ≠ SIP / opening volume: backtest assumes full open volume; live feed thin
+    bt_open_vol, live_open_vol = 1_000_000.0, 80_000.0  # live sees ~8% of open volume
+    cases.append(("feed_ne_SIP_open_vol", abs(live_open_vol / bt_open_vol - 1) > 0.5, f"live/bt open-vol ratio={live_open_vol/bt_open_vol:.3f}"))
+    # 2) div-adjusted vs unadjusted: research series adjusted; live orders see raw
+    adj_ret, raw_ret = 0.012, 0.002  # ex-div day foil
+    cases.append(("div_adjusted_vs_unadjusted", abs(adj_ret - raw_ret) > 0.005, f"adj-raw={adj_ret-raw_ret:.4f}"))
+    # 3) sizing past live limit
+    target_w, live_max_gross = 2.2, 1.5
+    cases.append(("sizing_past_live_limit", abs(target_w) > live_max_gross, f"target={target_w} > live_max={live_max_gross}"))
+    # 4) UTC ≠ NY session clock
+    ts_utc_hour, assumed_ny_hour = 14, 14  # bug: read UTC 14:00 as NY 14:00 (actually 10:00 ET)
+    # true NY hour would be 10; defect = treating UTC label as NY
+    cases.append(("UTC_ne_NY", ts_utc_hour == assumed_ny_hour, "UTC-14 labeled as NY-14 (true NY≈10) — clock defect"))
+    # 5) live downloads missing in replay
+    live_extra_files, replay_files = {"corp_actions.csv", "halts.csv", "bars.csv"}, {"bars.csv"}
+    missing = live_extra_files - replay_files
+    cases.append(("live_downloads_missing_in_replay", len(missing) > 0, f"missing_in_replay={sorted(missing)}"))
+    # 6) config on ≠ wired to order path
+    config_kill_enabled, wired_to_submit = True, False
+    cases.append(("config_on_ne_wired", config_kill_enabled and (not wired_to_submit), "kill flag True but submit path never reads it"))
+    return cases
+
+results = parity_cases()
+n_caught = 0
+for name, caught, detail in results:
+    status = "CAUGHT" if caught else "MISS"
+    if caught:
+        n_caught += 1
+    print(f"  defect[{status}] {name}: {detail}")
+assert n_caught == 6, f"expected 6 synthetic defects caught, got {n_caught}"
+print(f"synthetic_parity_asserts: caught={n_caught}/6 OK")
+
+checklist = [
+    "1. Same raw feed class in BT and live (SIP vs thin/default) — compare open volume share",
+    "2. Same price adjustment policy (div-adjusted research ≠ unadjusted live tickets)",
+    "3. Sizing clipped to live account / broker limits before submit",
+    "4. Explicit timezone: store UTC, convert to session TZ once; never relabel",
+    "5. Replay includes every live download artifact (halts, corp actions, calendars)",
+    "6. Config flags that gate risk must be wired into the submit path (integration test)",
+    "7. Fill model documented: next-open / mid / touch — frozen for the paper window",
+    "8. Cost model shared object between research and paper (no silent upgrade)",
+    "9. VERSION string frozen; config hash logged each session",
+    "10. Daily recon: strategy ledger vs independent fill replay; break → pause",
+]
+print("10-point parity checklist:")
+for line in checklist:
+    print(" ", line)
+print("REJECT: using this paper as a profitability claim; QuantAgent/HFT latency recipes; broker order routers")
+
 print("disclaimer: synthetic paper loop — learning only; no broker connectivity")

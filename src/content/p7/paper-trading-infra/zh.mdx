@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **11 学时**：设计 3h + 运行/日志 6h + 模板 1h + 基建名录 1h）在**合成数据**上建立纸面闭环：信号→目标→模拟成交→日志→对账→漂移指标，以及熔断与实盘−回测缺口的数值分解。前置：`risk-systems-lab`。
+本课（约 **14 学时**：设计 3h + 运行/日志 6h + 一致性清单/断言 3h + 模板 1h + 基建名录 1h）在**合成数据**上建立纸面闭环：信号→目标→模拟成交→日志→对账→漂移指标，以及熔断与实盘−回测缺口的数值分解。前置：`risk-systems-lab`。
 
 **课内目标：** CSV/模拟撮合；产出日报日志；说明纸面验证的是流程而非 alpha。
 
@@ -74,7 +74,31 @@
 sessions=360 version=mom20_vt_v1.0.0 final_equity≈0.93
 kill 含 dd_derisk；单元演示触发 dd_kill / data_gap / gross_clip
 cum_return research_bt≈-0.030 +latency≈+0.015 +slip≈-0.008 +partial≈-0.016
+synthetic_parity_asserts: caught=6/6 OK
 ```
+
+
+## 回测 ↔ 实盘一致性 — 六缺陷 + 10 点清单
+
+[arXiv:2610.21846](https://arxiv.org/abs/2610.21846)（《回测与实盘分道扬镳之处》）记录**同一**日内系统把实盘日与回放对比时发现的六类缺陷——**汇总统计看不到**的漂移。**只讲协议：** 无盈亏主张、无券商 API、无广告夏普。
+
+**六类缺陷（实验合成断言 — 6/6 全捕获）：**
+
+1. **行情 ≠ SIP / 开盘量偏瘦** — 默认源只带真实开盘量的一小部分。
+2. **除权价 vs 未除权** — 研究用复权价，实盘票据从未见过。
+3. **仓位超过实盘限额** — 研究仓位大于账户硬约束。
+4. **UTC ≠ 纽约时区** — 把 UTC 时间戳当成纽约时段。
+5. **实盘下载未进回放** — 实盘路径拉取的文件从未进入回测。
+6. **配置开启 ≠ 接到下单** — 开关打开，但从未接到下单代码。
+
+**10 点清单**（工程，不是 alpha）：同一行情等级；同一复权政策；实盘仓位上限；显式时区；回放含全部实盘产物；风控开关接到 submit；冻结成交模型；共享成本对象；冻结 VERSION + 配置哈希；每日对账、有断点则暂停。
+
+优先用这篇协议文，而不是实盘资金加密 AI 回测营销（例如拒绝在此搬运 2609.34510 类主张）。
+
+<Callout type="warn" title="排伪">
+一致性清单不证明 edge。抓住时钟 bug 是过程质量 — 不是夏普。
+</Callout>
+
 
 ## 常见错误 / 陷阱
 
@@ -100,6 +124,9 @@ cum_return research_bt≈-0.030 +latency≈+0.015 +slip≈-0.008 +partial≈-0.0
 <Quiz id="p7pt-q4" question="data_gap 熔断应？" options={["加杠杆", "空仓/暂停", "忽略陈旧数据", "重拟合模型"]} answer={1} explanation="坏数据上的工程刹车。" />
 <Quiz id="p7pt-q5" question="对账检查的是？" options={["Twitter 情绪", "账本权益 vs 由成交/日志回放", "仅训练损失", "VWAP 图"]} answer={1} explanation="在声称结果前抓住记账 bug。" />
 <Quiz id="p7pt-q6" question="实验中的漂移指标使用？" options={["仅准确率", "前/后期 Spearman(mom, fwd_ret)", "Kelly f*", "VaR α"]} answer={1} explanation="信号上的简单分布漂移示意。" />
+
+<Quiz id="p7pt-q7" question="arXiv:2610.21846 六缺陷主要教？" options={["保证实盘夏普", "回测与实盘路径漂移处 — 协议/清单，不是盈亏", "HFT 延迟食谱", "期权做市"]} answer={1} explanation="只讲协议；原文不作盈亏主张。" />
+<Quiz id="p7pt-q8" question="下列哪项属于六类缺陷？" options={["把 UTC 时间戳当成纽约时间", "永赚 LLM", "FactFin 夏普表", "Deep RL alpha"]} answer={0} explanation="时区/时钟漂移是已记录缺陷。" />
 
 ## 完成标准
 

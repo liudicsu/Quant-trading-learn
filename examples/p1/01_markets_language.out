@@ -35,5 +35,5 @@ lookahead_flag: none — OLS uses contemporaneous aligned returns only; do not s
 === three-sentence research goal (template filled) ===
 GOAL: On synthetic daily equity-like closes (n=252), test whether a pre-registered rule improves constrained risk-adjusted performance vs a buy-and-hold benchmark after costs.
 CONSTRAINTS: Max 100% gross exposure; declare Rf=0 and √252 annualization; no look-ahead fills.
-SUCCESS: Net Sharpe and max drawdown beat the benchmark on a frozen hold-out block — reproducible from seed+CSV.
+SUCCESS: Net Sharpe and max drawdown above the benchmark on a frozen hold-out block — reproducible from seed+CSV.
 ASSERTS_OK

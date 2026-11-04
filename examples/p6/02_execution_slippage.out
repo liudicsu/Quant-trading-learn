@@ -55,3 +55,29 @@ disclaimer: toy paths — learning only, not a broker TCA
 === Pointer — alpha decay + costs → no-trade (arXiv:2502.04284) ===
 host detail in portfolio-risk-sizing: widen no-trade band with costs; 不交易也是决策
 here: TCA / Almgren paths still assume you decided TO trade — size the band first
+
+=== square-root / double-√ impact literacy (NOT edge) ===
+cite: arXiv:2502.16246 — double square-root: child √q + time decay → metaorder √Q; scramble → mechanical
+cite: arXiv:2411.13965 — TSE complete survey: δ≈1/2 universal within errors
+cite: Gatheral 2010 Quant. Finance 10(7) DOI 10.1080/14697680903373692 — no-dynamic-arbitrage: exp decay ↔ only linear impact
+formula: I ≈ Y · σ · √(Q/V)  — cost RULER, not alpha; reject optimize-Y→alpha
+tension: Almgren–Chriss linear temporary η vs empirical √; AC remains a desk utility frontier
+Q/V | I_sqrt(bps) | I_lin(bps) | sqrt/lin
+0.0010 |     6.32 |     0.20 | 31.623
+0.0100 |    20.00 |     2.00 | 10.000
+0.0500 |    44.72 |    10.00 |  4.472
+0.1000 |    63.25 |    20.00 |  3.162
+0.2000 |    89.44 |    40.00 |  2.236
+double-√ child cumulative (q=1e4, i0=4):
+  i= 1 J_bps=4.72
+  i= 4 J_bps=16.57
+  i= 9 J_bps=32.11
+  i=16 J_bps=49.44
+  i=25 J_bps=67.70
+metaorder √Q at Q=q*25 → I_bps=100.00; child-cumul J(i=25)_bps=67.70
+schedule caveat: empirics often find I(Q) ≈ independent of T for moderate participation — not a free speed dial
+scramble literacy: synthetic metaorders (ID reshuffle) follow the same √Q law → mechanical origin foil
+REJECT: fitting Y on the evaluation path as 'alpha'; Obizhaeva–Wang N-trader games; RL execution papers
+equal-programme foil Q/V=0.10: √-ruler=63.25bps vs linear=20.00bps
+bridge from costs-in-backtest: same √(Q/ADV) capacity ruler — deepen mechanics here, not a second alpha
+disclaimer: TSE ID-resolved empirics cited for literacy; toy Y=1 — learning only, not a broker impact model

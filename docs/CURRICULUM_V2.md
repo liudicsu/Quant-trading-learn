@@ -38,15 +38,15 @@
 | `mean-reversion` | P3 | 7 | 3 | 否 | momentum-trend |
 | `pairs-stat-arb` | P3 | 10 | 3 | 否 | mean-reversion |
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
-| `factor-workflow` | P4 | 20 | 4 | 否 | strategy-compare-lab, backtest-traps |
+| `factor-workflow` | P4 | 24 | 4 | 否 | strategy-compare-lab, backtest-traps |
 | `factor-portfolio-lab` | P4 | 7 | 4 | 否 | factor-workflow |
 | `ml-leakage-control` | P5 | 20 | 5 | 否 | factor-workflow, backtest-traps |
 | `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
 | `portfolio-risk-sizing` | P6 | 17 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
-| `execution-slippage` | P6 | 7 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
-| `risk-systems-lab` | P6 | 5 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
-| `paper-trading-infra` | P7 | 11 | 3 | 否 | risk-systems-lab |
-| `compliance-ethics` | P7 | 9 | 2 | 否 | paper-trading-infra |
+| `execution-slippage` | P6 | 10 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
+| `risk-systems-lab` | P6 | 8 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
+| `paper-trading-infra` | P7 | 14 | 3 | 否 | risk-systems-lab |
+| `compliance-ethics` | P7 | 12 | 2 | 否 | paper-trading-infra |
 | `frontier-llm-agents` | P8 | 23 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
 | `frontier-tsfm-altdata-crypto` | P8 | 16 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
 | `capstone` | P9 | 24 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
@@ -61,17 +61,17 @@
 | P1 | 市场语言与度量 / Market language & measurement | 4 | 27h | ~4.5 周 | ~2.3 周 | Market concepts + evaluation language |
 | P2 | 数据与诚实回测 / Data & honest backtests | 4 | 53h | ~8.0 周 | ~4.0 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 30h | ~5.0 周 | ~2.5 周 | Classic alpha templates before factors/ML |
-| P4 | 因子研究 / Factor research | 2 | 27h | ~4.2 周 | ~2.1 周 | Cross-sectional research methods |
+| P4 | 因子研究 / Factor research | 2 | 31h | ~4.2 周 | ~2.1 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
-| P6 | 风险、仓位与执行 / Risk, sizing & execution | 3 | 32h | ~5.3 周 | ~2.7 周 | Portfolio construction / execution / controls |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 20h | ~3.2 周 | ~1.6 周 | Operationalization and professional norms |
+| P6 | 风险、仓位与执行 / Risk, sizing & execution | 3 | 40h | ~5.3 周 | ~2.7 周 | Portfolio construction / execution / controls |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 26h | ~3.2 周 | ~1.6 周 | Operationalization and professional norms |
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 39h | ~5.0 周 | ~2.5 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 320 学时（跳过 P0 为 300）。** 6h/周 ≈ 53.3 周；12h/周 ≈ 26.7 周。
-**跳过 P0 后：精确 300 学时。** 6h/周 ≈ 50.0 周；12h/周 ≈ 25.0 周。
+**全量（含 P0）：精确 333 学时（跳过 P0 为 313）。** 6h/周 ≈ 55.5 周；12h/周 ≈ 27.8 周。
+**跳过 P0 后：精确 313 学时。** 6h/周 ≈ 52.2 周；12h/周 ≈ 26.1 周。
 
-精确合计：**320h 全量 / 300h 跳过 P0**。对外可表述为约 **300–340h 全量 / 280–320h 跳过基础**（含个人复盘缓冲）。
+精确合计：**333h 全量 / 313h 跳过 P0**。对外可表述为约 **310–350h 全量 / 290–330h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -885,3 +885,14 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - SEC FY2026 Exam Priorities + FINRA 2026 GenAI/Agents → `compliance-ethics`.
 - Hou–Xue–Zhang 2020 RFS (hhy131) → `factor-workflow` next to HLZ/HSZ.
 - Hours: **320 full / 300 skip-P0** (~+16h from enrich3 tip).
+
+
+## Enrich5 (Phase B) mapping notes
+
+- Square-root / double-√ impact literacy (arXiv:2502.16246 + 2411.13965) + Gatheral 2010 no-dynamic-arbitrage para → `execution-slippage` (+ one-line bridge `costs-in-backtest`).
+- Christoffersen 1998 IND + CC + Basel traffic-light counting → `risk-systems-lab` (extends Kupiec).
+- Backtest↔live parity six defects + 10-point checklist (arXiv:2610.21846) → `paper-trading-infra` (protocol only).
+- Novy-Marx & Velikov RFS 2016 costs×turnover taxonomy (NBER w20721 / DOI 10.1093/rfs/hhv063) + FIM capacity name-drop → `factor-workflow` next to Detzel.
+- SFC Circular 24EC55 (2024-11-12) GenAI LM → `compliance-ethics` (Asia peer to FINRA GenAI).
+- Rewrite-harder: `markets-language` SUCCESS “beat the benchmark” → “above the benchmark” / 高于 (zh+en lab+MDX).
+- Hours: **333 full / 313 skip-P0** (~+13h from enrich4 tip 882995b).

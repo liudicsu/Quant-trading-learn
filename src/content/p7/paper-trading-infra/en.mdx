@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**11 hours**: 3h design + 6h running/logging + 1h template + 1h infra name-map) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
+This lesson (~**14 hours**: 3h design + 6h running/logging + 3h parity checklist/asserts + 1h template + 1h infra name-map) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
 
 **Goals:** CSV/sim paper matching; emit daily logs; explain what paper validates (process, not alpha).
 
@@ -75,7 +75,31 @@ sessions=360 version=mom20_vt_v1.0.0 final_equity≈0.93
 BREAK DETECTED … INJECTED_PARTIAL_MISS; assert detected=True
 kill unit demo: dd_derisk / dd_kill / data_gap / gross_clip
 cum_return research_bt≈-0.030 +latency≈+0.015 +slip≈-0.008 +partial≈-0.016
+synthetic_parity_asserts: caught=6/6 OK
 ```
+
+
+## Backtest ↔ live parity — six defects + 10-point checklist
+
+[arXiv:2610.21846](https://arxiv.org/abs/2610.21846) (*Where Backtests and Live Trading Part Ways*) documents six defects found when **one** intraday system’s live days were compared to their backtest replay — drift that **summary statistics never showed**. **Protocol only:** no PnL claim, no broker API, no advertised Sharpe.
+
+**Six defect classes (lab synthetic asserts — all 6/6 caught):**
+
+1. **Feed ≠ SIP / thin open volume** — default feed carried a small fraction of real opening volume.
+2. **Div-adjusted vs unadjusted** — research prices adjusted for dividends that live tickets never see.
+3. **Sizing past live limit** — research size exceeded the live account constraint.
+4. **UTC ≠ NY** — UTC timestamps read as New York session time.
+5. **Live downloads missing in replay** — files the live path fetched never entered the backtest.
+6. **Config on ≠ wired** — settings switched on but never reached the order-submit code.
+
+**10-point checklist** (engineering, not alpha): same feed class; same adjustment policy; live size caps; explicit timezone; replay includes every live artifact; risk flags wired into submit; frozen fill model; shared cost object; frozen VERSION + config hash; daily recon with pause-on-break.
+
+Prefer this paper over live-money crypto AI backtest marketing (e.g. reject shipping 2609.34510-style claims here).
+
+<Callout type="warn" title="Debunk">
+Parity checklists do not prove edge. Catching a clock bug is process quality — not a Sharpe.
+</Callout>
+
 
 ## Common mistakes / pitfalls
 
@@ -102,11 +126,14 @@ cum_return research_bt≈-0.030 +latency≈+0.015 +slip≈-0.008 +partial≈-0.0
 <Quiz id="p7pt-q5" question="Reconciliation checks?" options={["Twitter sentiment", "Ledger equity vs replay from fills/logs", "Only train loss", "VWAP charts"]} answer={1} explanation="Catch booking bugs before claiming results." />
 <Quiz id="p7pt-q6" question="Drift metrics in the lab use?" options={["Accuracy only", "Early vs late Spearman(mom, fwd_ret)", "Kelly f*", "VaR α"]} answer={1} explanation="Simple distribution-shift foil on the signal." />
 
+<Quiz id="p7pt-q7" question="arXiv:2610.21846 six defects mainly teach?" options={["A guaranteed live Sharpe", "Where BT and live paths drift — protocol/checklist, not PnL", "HFT latency recipes", "Options MM"]} answer={1} explanation="Protocol only; paper makes no profitability claim." />
+<Quiz id="p7pt-q8" question="Which is one of the six defect classes?" options={["UTC timestamps read as NY time", "Always-profitable LLM", "FactFin Sharpe table", "Deep RL alpha"]} answer={0} explanation="Clock / timezone drift was a documented defect." />
+
 ## Done when
 
 ≥5-day (lab: 360) log pack, friction gap table, kill-switch demo, frozen version string in every row.
 
-**Sources:** Canvas m13; JoinQuant W08 paper-before-live ethos; QuantStart paper notes; P6 risk kill patterns; Qbot + Atlas GitHub (infra name-drops only).
+**Sources:** Canvas m13; JoinQuant W08 paper-before-live ethos; QuantStart paper notes; P6 risk kill patterns; Qbot + Atlas GitHub (infra name-drops only); parity [arXiv:2610.21846](https://arxiv.org/abs/2610.21846).
 
 <Summary>
 **Takeaways**: freeze version → log everything → reconcile → decompose gaps → kill on gap/DD/gross.  

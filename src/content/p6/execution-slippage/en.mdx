@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**7 hours**: 2.5h concepts + 4h experiments + 0.5h quiz) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
+This lesson (~**10 hours**: 3.5h concepts (incl √/Gatheral) + 5.5h experiments + 1h quiz) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
 
 **Goals:** add participation / schedule discipline; write a one-page execution sheet tied to the shared cost model.
 
@@ -77,6 +77,39 @@ market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 
 Host detail in `portfolio-risk-sizing`: [arXiv:2502.04284](https://arxiv.org/abs/2502.04284). TCA / participation caps sit next to the same logic — widen the band as costs rise; **不交易也是决策**. Not a broker TCA product.
 
+
+## Square-root / double-√ impact literacy
+
+[arXiv:2502.16246](https://arxiv.org/abs/2502.16246) (*The “double” square-root law*, TSE ID-resolved data) and companion [arXiv:2411.13965](https://arxiv.org/abs/2411.13965) (strict √ universality on TSE) teach **mechanical** impact literacy:
+
+- Child orders already obey √ in volume *after digestion*; mesoscopic metaorder √ emerges from a **double** square-root: √ volume × inverse-√ time decay.
+- **Scramble foil:** reshuffling trader IDs yields synthetic metaorders with the **same** √Q law → impact looks mechanical, not “informed metaorder detection.”
+- Schedule caveat: average impact is often roughly **independent of total time T** at moderate participation — not a free speed dial.
+- Tension with **Almgren–Chriss linear η**: AC remains a desk **cost–risk utility** frontier; empirics favour concave √. Keep both: AC for trajectories, √ as the **capacity cost ruler**.
+
+**Formula (cost ruler, not edge):** `I ≈ Y·σ·√(Q/V)`. **Reject** optimising Y on the evaluation path as “alpha.”
+
+Lab toy (`Y=1`, `σ=0.02`, `V=1e6`):
+
+| Q/V | √ impact (bps) | linear foil (bps) | √ / lin |
+|-----|----------------|-------------------|---------|
+| 0.001 | 6.32 | 0.20 | 31.6 |
+| 0.01 | 20.00 | 2.00 | 10.0 |
+| 0.05 | 44.72 | 10.00 | 4.47 |
+| 0.10 | 63.25 | 20.00 | 3.16 |
+| 0.20 | 89.44 | 40.00 | 2.24 |
+
+Double-√ child cumulative (`q=1e4`, `i0=4`): i=1 → 4.72 bps … i=25 → 67.70 bps; plain metaorder √ at `Q=q·25` → 100 bps (N-dependent factor in the double-√ recovery — teaching sketch, not production calibration).
+
+### Gatheral no-dynamic-arbitrage (one paragraph)
+
+[Gatheral (2010), *Quantitative Finance* 10(7)](https://doi.org/10.1080/14697680903373692) (RePEc/DOI verified): no-dynamic-arbitrage links the **shape** of impact to its **decay**. In particular, **exponential decay is compatible only with linear impact** — another reason the AC linear-η + fast decay combo is a modelling tension next to empirical √. Literacy only — not an arb recipe.
+
+<Callout type="warn" title="Debunk">
+√ impact is a **cost ruler**. Do not ship “optimize Y → alpha,” Obizhaeva–Wang N-trader games, or RL execution papers as course edge.
+</Callout>
+
+
 ## Common mistakes / pitfalls
 
 1. Backtesting fills at mid with zero schedule / impact.
@@ -101,6 +134,9 @@ Host detail in `portfolio-risk-sizing`: [arXiv:2502.04284](https://arxiv.org/abs
 <Quiz id="p6ex-q4" question="TWAP differs from VWAP because TWAP?" options={["Matches volume profile", "Ignores volume and splits evenly in time", "Always minimises IS", "Uses only limit orders"]} answer={1} explanation="TWAP is time-uniform; VWAP follows expected volume." />
 <Quiz id="p6ex-q5" question="Limit orders vs market in the toy mainly add?" options={["Guaranteed better PnL", "Non-fill risk and adverse-selection risk", "Zero slippage", "Higher κ"]} answer={1} explanation="Fills are probabilistic and biased when the mid moves against you." />
 <Quiz id="p6ex-q6" question="Volume-weighted arrival slippage vs Perold IS?" options={["Independent second metric ≈116 bps", "Mathematically identical (same dollars / notional)", "Always equal to close slippage", "Ignores share sizes"]} answer={1} explanation="VW arrival slip ≡ IS_bps; use VWAP/close as truly different benchmarks." />
+
+<Quiz id="p6ex-q7" question="I≈Yσ√(Q/V) in this lesson is primarily?" options={["An alpha signal to maximise Y", "A cost / capacity ruler — not edge", "A proof that linear AC is false always", "A broker API"]} answer={1} explanation="Teach impact as cost literacy; reject optimize-Y→alpha." />
+<Quiz id="p6ex-q8" question="Double-√ literacy (2502.16246) says metaorder √ mainly comes from?" options={["Only Kyle λ", "Child √ volume + inverse-√ time decay (mechanical foil)", "Guaranteed informed flow", "RL execution"]} answer={1} explanation="Child √ + decay → metaorder √; scramble foil." />
 
 ## Done when
 

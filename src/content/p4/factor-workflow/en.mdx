@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**22 hours**: 5h concepts + 10h labs incl. Detzel costs + w34898 localFDR + HXZ foil + admission pointer + 3h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
+This lesson (~**24 hours**: 5h concepts + 12h labs incl. Detzel costs + NMV 2016 taxonomy + w34898 localFDR + HXZ foil + admission pointer + 3h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
 
 **Goals:** implement Spearman IC; build quantile long–short; contrast true vs null factors.
 
@@ -109,6 +109,27 @@ ranking_by_gross_picks=fast  ranking_by_net_picks=slow
 ```
 
 **Teach:** cost-blind gross rankings bias toward high-turnover signals; net-of-cost rankings can reverse. Paper: after costs, FF5 (especially cash-profitability variants) beats high-cost q / six-factor style comparisons on their design.
+
+
+
+## Costs × turnover taxonomy (Novy-Marx & Velikov RFS 2016)
+
+Next to Detzel’s *model comparison with costs*: [A Taxonomy of Anomalies and Their Trading Costs](https://www.nber.org/papers/w20721) (NBER w20721; published *RFS* 2016 29(1) 104–147, [DOI 10.1093/rfs/hhv063](https://doi.org/10.1093/rfs/hhv063)).
+
+**Spirit (not a homework alpha list):**
+
+- **Gross zoo ≠ net zoo** — transaction costs shrink profitability and significance; data-snooping concerns rise.
+- Anomalies with **one-sided monthly turnover ≲ 50%** mostly keep statistically significant *net* spreads when designed with cost mitigation (e.g. buy/hold spreads).
+- **Few** high-turnover strategies survive net.
+- Capacity of new capital to erode profits is **inversely** related to turnover (size/value/profitability-style books tend to have more capacity) — literacy only.
+
+Lab buckets reuse the Detzel foil (slow vs fast turnover → net survival flips).
+
+**Name-drop — FIM capacity:** Frazzini–Israel–Moskowitz *Trading Costs* (SSRN 3229719) is often cited beside this taxonomy for **capacity ↔ turnover** spirit. **No capacity-as-alpha table** in this course.
+
+<Callout type="warn" title="Debunk">
+Do not treat taxonomy rows as a shopping list of alphas. Costs kill many gross “winners.”
+</Callout>
 
 
 ## Crowding and decay
@@ -264,11 +285,13 @@ Even “successful” replications are often economically smaller than the origi
 <Quiz id="p4fw-admit" question="Admission gates for factor adoption mainly?" options={["Guarantee higher returns", "Help weak t≲2.5 vs random-admission; always use excess; not a return engine", "Replace HLZ", "Ban value-weight"]} answer={1} explanation="Host detail in backtest-traps; 门槛≠提高收益." />
 <Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov (JF 2023) main caution?" options={["Always prefer highest turnover", "Ignoring costs biases model/factor comparisons toward high-cost factors", "Costs never change rankings", "Only crypto matters"]} answer={1} explanation="DOI 10.1111/jofi.13225." />
 
+<Quiz id="p4fw-nmv2016" question="Novy-Marx & Velikov RFS 2016 taxonomy main spirit?" options={["All high-turnover anomalies survive net", "Gross zoo ≠ net zoo; low-turnover mostly survive / high-turnover mostly die", "Costs never matter", "Use taxonomy as alpha shopping list"]} answer={1} explanation="NBER w20721 / DOI 10.1093/rfs/hhv063." />
+
 ## Done when
 
 IC + quantile L/S + null-factor zoo report, with strong/weak table, lagged-mcap neutralization, and look-ahead notes.
 
-**Sources:** Fama–MacBeth 1973 JPE 81; Fama–French 1993 JFE 33; Fama–French 2015 JFE 116; Harvey–Liu–Zhu 2016 RFS 29(1); Alphalens Reloaded docs; Qlib DataHandlerLP/Alpha158; AFML Factor Mirage; @alin_alphapilot IC-first; quant-wiki foil Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225); Harvey–Sancetta–Zhao NBER [w34898](https://www.nber.org/papers/w34898) (t≥3 + local FDR); Hou–Xue–Zhang 2020 RFS [DOI 10.1093/rfs/hhy131](https://doi.org/10.1093/rfs/hhy131); admission gates pointer [arXiv:2610.07701](https://arxiv.org/abs/2610.07701).
+**Sources:** Fama–MacBeth 1973 JPE 81; Fama–French 1993 JFE 33; Fama–French 2015 JFE 116; Harvey–Liu–Zhu 2016 RFS 29(1); Alphalens Reloaded docs; Qlib DataHandlerLP/Alpha158; AFML Factor Mirage; @alin_alphapilot IC-first; quant-wiki foil Detzel–Novy-Marx–Velikov JF 2023 DOI [10.1111/jofi.13225](https://doi.org/10.1111/jofi.13225); Novy-Marx & Velikov RFS 2016 [NBER w20721](https://www.nber.org/papers/w20721) / [DOI 10.1093/rfs/hhv063](https://doi.org/10.1093/rfs/hhv063); FIM Trading Costs SSRN 3229719 name-drop; Harvey–Sancetta–Zhao NBER [w34898](https://www.nber.org/papers/w34898) (t≥3 + local FDR); Hou–Xue–Zhang 2020 RFS [DOI 10.1093/rfs/hhy131](https://doi.org/10.1093/rfs/hhy131); admission gates pointer [arXiv:2610.07701](https://arxiv.org/abs/2610.07701).
 
 <Summary>
 **Takeaways**: construct → IC/decay → strong vs weak → quantiles+costs → FM → t>3 zoo.  

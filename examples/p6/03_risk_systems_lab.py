@@ -153,3 +153,91 @@ print("\n=== lab checklist: gap analysis & secrets hygiene (teach) ===")
 print("gap: map each risk limit to an owner, metric, breach action, and lagged data source")
 print("secrets: no API keys in notebooks; rotate; least privilege; separate paper vs live credentials")
 print("disclaimer: educational simulations — not a production risk system or trading advice")
+
+
+# ---------- Christoffersen 1998 IND + CC + Basel traffic-light ----------
+print("\n=== Christoffersen 1998 IND + CC (+ Basel traffic-light counting) ===")
+print("cite: Christoffersen 1998 Int. Econ. Rev. 39(4) — Evaluating Interval Forecasts")
+print("cite: Basel traffic-light zones for VaR exceptions (counting bands — NOT a trading signal)")
+print("identity: LR_cc = LR_uc + LR_ind  ~  χ²(2) under correct conditional coverage")
+
+# Use hist-VaR exception series on the finite window; also a fixed 250-day Basel window at the end
+exc_series = exc_h & np.isfinite(hvar)
+idx_f = np.where(np.isfinite(hvar))[0]
+# Basel-style 250-day window (last 250 finite days)
+win = idx_f[-250:]
+exc250 = exc_series[win]
+n_b = len(exc250)
+x_b = int(exc250.sum())
+p0 = alpha
+ph_b = x_b / n_b if n_b else float("nan")
+
+def kupiec_lr_local(x, n, p=p0):
+    if x <= 0 or x >= n:
+        return float("nan"), float("nan")
+    ph = x / n
+    lr = -2 * (
+        (n - x) * np.log(1 - p) + x * np.log(p)
+        - ((n - x) * np.log(1 - ph) + x * np.log(ph))
+    )
+    return lr, 1 - stats.chi2.cdf(lr, 1)
+
+lr_uc_b, pv_uc_b = kupiec_lr_local(x_b, n_b)
+
+# Transition counts for independence
+n00 = n01 = n10 = n11 = 0
+for t in range(1, n_b):
+    a, b = bool(exc250[t - 1]), bool(exc250[t])
+    if not a and not b:
+        n00 += 1
+    elif not a and b:
+        n01 += 1
+    elif a and not b:
+        n10 += 1
+    else:
+        n11 += 1
+pi01 = n01 / (n00 + n01) if (n00 + n01) else 0.0
+pi11 = n11 / (n10 + n11) if (n10 + n11) else 0.0
+pi2 = (n01 + n11) / (n00 + n01 + n10 + n11) if (n00 + n01 + n10 + n11) else 0.0
+
+def _ll_ind(p01, p11):
+    term = 0.0
+    if n00:
+        term += n00 * np.log(max(1 - p01, 1e-15))
+    if n01:
+        term += n01 * np.log(max(p01, 1e-15))
+    if n10:
+        term += n10 * np.log(max(1 - p11, 1e-15))
+    if n11:
+        term += n11 * np.log(max(p11, 1e-15))
+    return term
+
+L_alt = _ll_ind(pi01, pi11)
+L_null = (n00 + n10) * np.log(max(1 - pi2, 1e-15)) + (n01 + n11) * np.log(max(pi2, 1e-15))
+lr_ind = -2 * (L_null - L_alt)
+pv_ind = 1 - stats.chi2.cdf(lr_ind, 1) if np.isfinite(lr_ind) else float("nan")
+lr_cc = lr_uc_b + lr_ind
+pv_cc = 1 - stats.chi2.cdf(lr_cc, 2) if np.isfinite(lr_cc) else float("nan")
+
+print(f"Basel-window n={n_b} exceptions={x_b} rate={ph_b:.4f} (target {p0})")
+print(f"transitions n00={n00} n01={n01} n10={n10} n11={n11}  pi01={pi01:.3f} pi11={pi11:.3f} pi={pi2:.3f}")
+print(f"LR_uc={lr_uc_b:.3f} p={pv_uc_b:.3f}  LR_ind={lr_ind:.3f} p={pv_ind:.3f}  LR_cc={lr_cc:.3f} p={pv_cc:.3f} (χ²(2))")
+print("check: LR_cc ≈ LR_uc+LR_ind", abs(lr_cc - (lr_uc_b + lr_ind)) < 1e-9)
+
+# Basel Committee traffic-light for *99%* 1-day VaR, 250 days: green 0–4, yellow 5–9, red ≥10
+# Teaching note: our lab is 95% VaR — we still SHOW the classic 99% bands as counting literacy,
+# and separately map our 95% count into an analogous didactic band (expected ≈12.5).
+def basel99_zone(x):
+    if x <= 4:
+        return "green"
+    if x <= 9:
+        return "yellow"
+    return "red"
+
+zone99 = basel99_zone(x_b)
+# Didactic 95% bands (NOT Basel official): green ≤15, yellow 16–20, red ≥21 around E[x]=12.5
+zone95 = "green" if x_b <= 15 else ("yellow" if x_b <= 20 else "red")
+print(f"traffic-light COUNTING: classic Basel99 bands on this count → {zone99} (bands are for 99% VaR — do NOT trade them)")
+print(f"didactic 95%-window map (E≈12.5): x={x_b} → {zone95} — still NOT a trading signal")
+print("teach: UC catches wrong average rate; IND catches clustered exceptions; CC = both; zones are audit counts")
+print("REJECT: treating green/yellow/red as an alpha / timing signal")

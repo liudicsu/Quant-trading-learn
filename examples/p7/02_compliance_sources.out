@@ -51,5 +51,8 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
 [OK] finra_2026_genai_agents: FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents (NEW FOR 2026)
     https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai
     verified: GenAI section NEW FOR 2026. Rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging Agents: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails. Awareness only — not legal advice.
+[OK] sfc_24ec55: Circular to licensed corporations — Use of generative AI language models (24EC55)
+    https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55
+    verified: Issued 2024-11-12, immediate effect. Risk-based Core Principles for GenAI LMs; investment recommendations/advice/research = high-risk → human-in-the-loop + validation/monitoring/disclosures. Asia peer to FINRA GenAI themes. Awareness not license; not legal advice.
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=17 all_fetch_OK=True
+n_sources=18 all_fetch_OK=True

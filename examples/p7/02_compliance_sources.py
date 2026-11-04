@@ -146,6 +146,14 @@ SOURCES = [
     "fetch": "OK",
     "verified": "GenAI section NEW FOR 2026. Rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging Agents: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails. Awareness only — not legal advice.",
   },
+  {
+    "id": "sfc_24ec55",
+    "title": "Circular to licensed corporations — Use of generative AI language models (24EC55)",
+    "issuer": "SFC Hong Kong",
+    "url": "https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55",
+    "fetch": "OK",
+    "verified": "Issued 2024-11-12, immediate effect. Risk-based Core Principles for GenAI LMs; investment recommendations/advice/research = high-risk → human-in-the-loop + validation/monitoring/disclosures. Asia peer to FINRA GenAI themes. Awareness not license; not legal advice.",
+  },
 ]
 
 print("=== official sources checklist (checked Asia/Shanghai 2026-11-04) ===")

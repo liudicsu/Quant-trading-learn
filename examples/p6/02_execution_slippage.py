@@ -163,3 +163,43 @@ print("\n=== Pointer — alpha decay + costs → no-trade (arXiv:2502.04284) ===
 print("host detail in portfolio-risk-sizing: widen no-trade band with costs; 不交易也是决策")
 print("here: TCA / Almgren paths still assume you decided TO trade — size the band first")
 
+
+
+# ---------- Square-root / double-√ impact literacy (arXiv:2502.16246 + 2411.13965) ----------
+print("\n=== square-root / double-√ impact literacy (NOT edge) ===")
+print("cite: arXiv:2502.16246 — double square-root: child √q + time decay → metaorder √Q; scramble → mechanical")
+print("cite: arXiv:2411.13965 — TSE complete survey: δ≈1/2 universal within errors")
+print("cite: Gatheral 2010 Quant. Finance 10(7) DOI 10.1080/14697680903373692 — no-dynamic-arbitrage: exp decay ↔ only linear impact")
+print("formula: I ≈ Y · σ · √(Q/V)  — cost RULER, not alpha; reject optimize-Y→alpha")
+print("tension: Almgren–Chriss linear temporary η vs empirical √; AC remains a desk utility frontier")
+
+Y, sig_d, V_d = 1.0, 0.02, 1_000_000.0
+ladder_rows = []
+print("Q/V | I_sqrt(bps) | I_lin(bps) | sqrt/lin")
+for Q in [1e3, 1e4, 5e4, 1e5, 2e5]:
+    I_sqrt = Y * sig_d * np.sqrt(Q / V_d)
+    I_lin = Y * sig_d * (Q / V_d)  # Kyle-style linear foil, same Yσ scale
+    ladder_rows.append((Q / V_d, 1e4 * I_sqrt, 1e4 * I_lin, I_sqrt / I_lin))
+    print(f"{Q/V_d:.4f} | {1e4*I_sqrt:8.2f} | {1e4*I_lin:8.2f} | {I_sqrt/I_lin:6.3f}")
+
+# Double-√ toy: J(q,i) ∝ σ√(q/V)·(√(i+i0)−√i0); when i=N and Q=qN → ~√Q
+i0, q_child = 4.0, 10_000.0
+print("double-√ child cumulative (q=1e4, i0=4):")
+for i in (1, 4, 9, 16, 25):
+    J = sig_d * np.sqrt(q_child / V_d) * (np.sqrt(i + i0) - np.sqrt(i0))
+    print(f"  i={i:2d} J_bps={1e4*J:.2f}")
+Q_meta = q_child * 25
+I_meta = Y * sig_d * np.sqrt(Q_meta / V_d)
+J25 = sig_d * np.sqrt(q_child / V_d) * (np.sqrt(25 + i0) - np.sqrt(i0))
+print(f"metaorder √Q at Q=q*25 → I_bps={1e4*I_meta:.2f}; child-cumul J(i=25)_bps={1e4*J25:.2f}")
+print("schedule caveat: empirics often find I(Q) ≈ independent of T for moderate participation — not a free speed dial")
+print("scramble literacy: synthetic metaorders (ID reshuffle) follow the same √Q law → mechanical origin foil")
+print("REJECT: fitting Y on the evaluation path as 'alpha'; Obizhaeva–Wang N-trader games; RL execution papers")
+
+# √ vs linear cost on equal slice programme (same Q total)
+Q_tot = 100_000.0
+I_sqrt_tot = Y * sig_d * np.sqrt(Q_tot / V_d)
+I_lin_tot = Y * sig_d * (Q_tot / V_d)
+print(f"equal-programme foil Q/V=0.10: √-ruler={1e4*I_sqrt_tot:.2f}bps vs linear={1e4*I_lin_tot:.2f}bps")
+print("bridge from costs-in-backtest: same √(Q/ADV) capacity ruler — deepen mechanics here, not a second alpha")
+print("disclaimer: TSE ID-resolved empirics cited for literacy; toy Y=1 — learning only, not a broker impact model")

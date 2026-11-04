@@ -56,11 +56,11 @@ export const COURSE_META = {
     zh: "阶段由知识依赖簇导出，不是月历格子",
     en: "Phases come from dependency clusters, not a calendar grid",
   },
-  hoursFull: 320,
-  hoursSkipFoundations: 300,
+  hoursFull: 333,
+  hoursSkipFoundations: 313,
   hoursRangeLabel: {
-    zh: "精确 320h 全量 / 300h 跳过 P0（对外约 300–340h / 280–320h）",
-    en: "Exact 320h full / 300h skip P0 (public range ~300–340h / 280–320h)",
+    zh: "精确 333h 全量 / 313h 跳过 P0（对外约 310–350h / 290–330h）",
+    en: "Exact 333h full / 313h skip P0 (public range ~310–350h / 290–330h)",
   },
   lessonCount: 27,
   phaseCount: 10,
@@ -788,10 +788,10 @@ const phase_P4_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "因子研究工作流", en: "Factor research workflow" },
     summary: { zh: "IC、分层、衰减、中性化直觉；拒绝堆参数。", en: "IC, quantiles, decay, neutralization; reject parameter stacking." },
-    hours: 22,
+    hours: 24,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 10h labs (incl Detzel costs + w34898 localFDR + HXZ foil + admission pointer) + 3h write-up + 1h crowding→LLM bridge — HEAVY",
+    hourBasis: "5h concepts + 12h labs (incl Detzel + NMV 2016 taxonomy + w34898 + HXZ + admission) + 3h write-up + 1h crowding→LLM bridge — HEAVY",
     prereqs: ["strategy-compare-lab", "backtest-traps"],
     goals: [
       { zh: "实现Spearman IC。", en: "Implement Spearman IC." },
@@ -822,7 +822,7 @@ const phase_P4_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m9", "AFML/Factor Mirage", "@alin_alphapilot IC-first", "Qlib Alpha158 ref"],
       niche: ["quant-wiki factor map (@bkdgiffug)"],
-      frontier: ["LLM formulaic alpha mining after this; formalized in P8", "Detzel–Novy-Marx–Velikov JF 2023 DOI 10.1111/jofi.13225"],
+      frontier: ["Novy-Marx & Velikov RFS 2016 NBER w20721 taxonomy", "LLM formulaic alpha mining after this; formalized in P8", "Detzel–Novy-Marx–Velikov JF 2023 DOI 10.1111/jofi.13225"],
     },
     tasks: [
       { id: "ex1", text: { zh: "ic(factor,fwd)。", en: "ic(factor,fwd)." } },
@@ -1030,13 +1030,13 @@ const phase_P6_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "执行与滑点", en: "Execution & slippage" },
     summary: {
-      zh: "TWAP/VWAP、Almgren–Chriss前沿与轨迹、Perold实施缺口、限价vs市价、到达价TCA。",
-      en: "TWAP/VWAP, Almgren–Chriss frontier & trajectory, Perold IS, limit vs market, arrival-price TCA.",
+      zh: "TWAP/VWAP、AC前沿、Perold IS、限价vs市价、到达价TCA、双√冲击识字。",
+      en: "TWAP/VWAP, AC frontier, Perold IS, limit vs market, arrival TCA, double-√ impact literacy.",
     },
-    hours: 7,
+    hours: 10,
     difficulty: 3,
     skippable: false,
-    hourBasis: "2.5h concepts + 4h experiments + 0.5h quiz",
+    hourBasis: "3.5h concepts (incl √/Gatheral) + 5.5h experiments + 1h quiz",
     prereqs: ["costs-in-backtest", "portfolio-risk-sizing"],
     goals: [
       { zh: "加参与率与日程约束。", en: "Add participation and schedule caps." },
@@ -1064,7 +1064,7 @@ const phase_P6_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m12", "NYU impact/TCA", "QuantStart execution", "Almgren-Chriss 2000", "Perold 1988"],
       niche: ["@sera00111 execution/venue notes"],
-      frontier: [],
+      frontier: ["arXiv:2502.16246 double-√ + Gatheral 2010"],
     },
     tasks: [
       { id: "ex1", text: { zh: "TWAP/VWAP+参与率上限。", en: "TWAP/VWAP + participation caps." } },
@@ -1079,13 +1079,13 @@ const phase_P6_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "风险系统小实验", en: "Mini risk-systems lab" },
     summary: {
-      zh: "滞后VaR/CVaR、Kupiec、压力、回撤降仓、集中度/杠杆、缺口与密钥。",
-      en: "Lagged VaR/CVaR, Kupiec, stress, DD de-risk, concentration/leverage, gaps & secrets.",
+      zh: "滞后VaR/CVaR、Kupiec+Christoffersen、巴塞尔交通灯计数、压力、回撤、集中度/杠杆。",
+      en: "Lagged VaR/CVaR, Kupiec+Christoffersen, Basel traffic-light counts, stress, DD, concentration/leverage.",
     },
-    hours: 5,
+    hours: 8,
     difficulty: 3,
     skippable: false,
-    hourBasis: "1.5h concepts + 3h labs + 0.5h quiz",
+    hourBasis: "2.5h concepts (Kupiec+Christoffersen+Basel) + 4.5h labs + 1h quiz",
     prereqs: ["portfolio-risk-sizing", "execution-slippage"],
     goals: [
       { zh: "陈旧/缺口数据拒单。", en: "Refuse orders on stale/gap data." },
@@ -1114,7 +1114,7 @@ const phase_P6_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m13 bits", "ML4T ops", "Kupiec 1995"],
       niche: ["Cookbook/Qbot config ideas"],
-      frontier: [],
+      frontier: ["Christoffersen 1998 IND/CC + Basel traffic-light counting"],
     },
     tasks: [
       { id: "ex1", text: { zh: "缺口→暂停。", en: "Gap→pause." } },
@@ -1132,13 +1132,13 @@ const phase_P7_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "纸面交易与迷你基建", en: "Paper trading & mini infra" },
     summary: {
-      zh: "合成数据纸面闭环：日志/对账/漂移、实盘−回测缺口分解、熔断演示（无券商下单）。",
-      en: "Synthetic paper loop: logs/recon/drift, live−BT gap decomposition, kill demos (no broker orders).",
+      zh: "合成纸面闭环：日志/对账、摩擦阶梯、六缺陷一致性清单（无券商下单）。",
+      en: "Synthetic paper loop: logs/recon, friction ladder, six-defect parity checklist (no broker orders).",
     },
-    hours: 11,
+    hours: 14,
     difficulty: 3,
     skippable: false,
-    hourBasis: "3h design + 6h running/logging + 1h template + 1h infra name-map",
+    hourBasis: "3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map",
     prereqs: ["risk-systems-lab"],
     goals: [
       { zh: "CSV/模拟撮合与冻结版本。", en: "CSV/sim matching with frozen version." },
@@ -1167,7 +1167,7 @@ const phase_P7_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m13", "JoinQuant W08", "QuantStart paper-before-live"],
       niche: ["Qbot/Atlas reference architecture", "Nautilus isomorphic paper/sim concept"],
-      frontier: [],
+      frontier: ["arXiv:2610.21846 BT↔live six defects + checklist"],
     },
     tasks: [
       { id: "ex1", text: { zh: "≥5日纸面日志。", en: "≥5-day paper logs." } },
@@ -1185,10 +1185,10 @@ const phase_P7_lessons: Lesson[] = [
       zh: "中美程序化/接入/卖空/保证金与加密官方状态；非法律意见；研究伦理。",
       en: "CN/US programmatic, access, short sale, margin & crypto official status; not legal advice; research ethics.",
     },
-    hours: 10,
+    hours: 12,
     difficulty: 2,
     skippable: false,
-    hourBasis: "5h reading (incl Northbound + SEC PDA withdrawal + FY2026 Exam / FINRA GenAI) + 3h writing + 1h quiz",
+    hourBasis: "6h reading (incl Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55) + 4h writing + 2h quiz",
     prereqs: ["paper-trading-infra"],
     goals: [
       { zh: "写风险偏好。", en: "Write risk preference." },
@@ -1217,7 +1217,7 @@ const phase_P7_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m14", "AFML scientific ethics", "CSRC/SSE/SZSE", "SEC 15c3-5", "FINRA 15-09/26-10"],
       niche: [],
-      frontier: ["LLM/agent research must obey same ethics/hold-out (link P8)"],
+      frontier: ["SFC Circular 24EC55 GenAI LM", "LLM/agent research must obey same ethics/hold-out (link P8)"],
     },
     tasks: [
       { id: "ex1", text: { zh: "风险一页。", en: "Risk page." } },

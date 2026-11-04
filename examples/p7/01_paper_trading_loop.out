@@ -29,4 +29,27 @@ input dd=-0.05 gap=False target=0.8 → action=dd_derisk sized=0.600 (expect dd_
 input dd=-0.09 gap=False target=0.8 → action=dd_kill sized=0.000 (expect dd_kill)
 input dd=-0.01 gap=True target=0.8 → action=data_gap sized=0.000 (expect data_gap)
 input dd=-0.01 gap=False target=2.5 → action=gross_clip sized=1.500 (expect gross_clip)
+
+=== backtest↔live parity — six defects + checklist (PROTOCOL ONLY) ===
+cite: arXiv:2610.21846 — Where Backtests and Live Trading Part Ways: Six Defects from One Intraday System
+NO PnL claim; NO broker API; NO advertised Sharpe — protocol / asserts only
+  defect[CAUGHT] feed_ne_SIP_open_vol: live/bt open-vol ratio=0.080
+  defect[CAUGHT] div_adjusted_vs_unadjusted: adj-raw=0.0100
+  defect[CAUGHT] sizing_past_live_limit: target=2.2 > live_max=1.5
+  defect[CAUGHT] UTC_ne_NY: UTC-14 labeled as NY-14 (true NY≈10) — clock defect
+  defect[CAUGHT] live_downloads_missing_in_replay: missing_in_replay=['corp_actions.csv', 'halts.csv']
+  defect[CAUGHT] config_on_ne_wired: kill flag True but submit path never reads it
+synthetic_parity_asserts: caught=6/6 OK
+10-point parity checklist:
+  1. Same raw feed class in BT and live (SIP vs thin/default) — compare open volume share
+  2. Same price adjustment policy (div-adjusted research ≠ unadjusted live tickets)
+  3. Sizing clipped to live account / broker limits before submit
+  4. Explicit timezone: store UTC, convert to session TZ once; never relabel
+  5. Replay includes every live download artifact (halts, corp actions, calendars)
+  6. Config flags that gate risk must be wired into the submit path (integration test)
+  7. Fill model documented: next-open / mid / touch — frozen for the paper window
+  8. Cost model shared object between research and paper (no silent upgrade)
+  9. VERSION string frozen; config hash logged each session
+  10. Daily recon: strategy ledger vs independent fill replay; break → pause
+REJECT: using this paper as a profitability claim; QuantAgent/HFT latency recipes; broker order routers
 disclaimer: synthetic paper loop — learning only; no broker connectivity

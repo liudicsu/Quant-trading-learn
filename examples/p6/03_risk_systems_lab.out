@@ -31,3 +31,16 @@ chart /workspace/Quant-trading-learn/public/p6/var_backtest.png
 gap: map each risk limit to an owner, metric, breach action, and lagged data source
 secrets: no API keys in notebooks; rotate; least privilege; separate paper vs live credentials
 disclaimer: educational simulations — not a production risk system or trading advice
+
+=== Christoffersen 1998 IND + CC (+ Basel traffic-light counting) ===
+cite: Christoffersen 1998 Int. Econ. Rev. 39(4) — Evaluating Interval Forecasts
+cite: Basel traffic-light zones for VaR exceptions (counting bands — NOT a trading signal)
+identity: LR_cc = LR_uc + LR_ind  ~  χ²(2) under correct conditional coverage
+Basel-window n=250 exceptions=21 rate=0.0840 (target 0.05)
+transitions n00=208 n01=20 n10=20 n11=1  pi01=0.088 pi11=0.048 pi=0.084
+LR_uc=5.097 p=0.024  LR_ind=0.463 p=0.496  LR_cc=5.560 p=0.062 (χ²(2))
+check: LR_cc ≈ LR_uc+LR_ind True
+traffic-light COUNTING: classic Basel99 bands on this count → red (bands are for 99% VaR — do NOT trade them)
+didactic 95%-window map (E≈12.5): x=21 → red — still NOT a trading signal
+teach: UC catches wrong average rate; IND catches clustered exceptions; CC = both; zones are audit counts
+REJECT: treating green/yellow/red as an alpha / timing signal

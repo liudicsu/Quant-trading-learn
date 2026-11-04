@@ -70,6 +70,6 @@ print(
     "CONSTRAINTS: Max 100% gross exposure; declare Rf=0 and √252 annualization; no look-ahead fills."
 )
 print(
-    "SUCCESS: Net Sharpe and max drawdown beat the benchmark on a frozen hold-out block — reproducible from seed+CSV."
+    "SUCCESS: Net Sharpe and max drawdown above the benchmark on a frozen hold-out block — reproducible from seed+CSV."
 )
 print("ASSERTS_OK")
