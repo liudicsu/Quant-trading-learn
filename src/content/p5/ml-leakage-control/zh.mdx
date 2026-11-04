@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14 学时**：AFML 概念 5h + 实验 7h + 写作 2h — 重课）建立金融 **防泄漏 ML**：波动率缩放标签、带 embargo 的 purged CV，以及正确的 IC 指标。前置：`factor-workflow`、`backtest-traps`。
+本课（约 **20 学时**：AFML 概念 5h + 实验 7h + 写作 2h — 重课）建立金融 **防泄漏 ML**：波动率缩放标签、带 embargo 的 purged CV，以及正确的 IC 指标。前置：`factor-workflow`、`backtest-traps`。
 
 **课内目标：** 演示 shuffle / 未 purge 泄漏；时间切分与因果特征；用**日度截面 RankIC 均值**评价（非准确率，亦非以混合 Spearman 作主指标）。
 
@@ -75,7 +75,7 @@ Purged IC 接近 0 表示“在该协议下无线性可回收信号”——**�
 
 ## Python 实验
 
-`examples/p5/01_ml_leakage_control.py`
+`examples/p5/01_ml_leakage_control.py`（核心泄漏）与 `examples/p5/03_afml_depth.py`（分数差分 / 唯一性 / 元标签 / CPCV 提示）
 
 ### 真实运行输出
 
@@ -153,6 +153,53 @@ saved artifacts for lab 02
 disclaimer: synthetic weak panel — learning only
 ```
 
+
+## 分数差分（AFML 第5章）
+
+**直觉：** 价格通常非平稳。整数差分 \(d=1\)（简单收益）常能通过平稳性检验，但会**抹掉长记忆**——慢信号可能正需要这部分依赖。**分数差分**使用分数权重
+
+
+```text
+\omega_0=1,\quad \omega_k=-\omega_{k-1}\frac{d-k+1}{k}
+```
+
+
+并在 \(|\omega_k|\) 低于阈值时截断（固定窗口）。目标是找到仍近似平稳、却比 \(d=1\) 保留更多序列依赖的最小 \(d\)。
+
+**数值玩具**（`examples/p5/03_afml_depth.py`，合成对数价格）：
+
+- 原始价格 ADF：p≈**0.15**（未能拒绝单位根）
+- 分数差分 \(d=0.4\)：ADF p≈**0.00**；滞后20自相关≈**+0.17**
+- 整数差分 \(d=1\)：ADF p≈**0.00**；滞后20自相关≈**−0.02**
+
+两者都可“平稳”，但分数差分**保留**了整数差分毁掉的记忆。当 \(d\) 为正整数时，超过滞后 \(d\) 的权重恰为 0——记忆被构造性清除。
+
+![Fracdiff weights](/p5/fracdiff_weights.png)
+
+## 样本唯一性与序贯自助法（AFML 第4章）
+
+**直觉：** 三重势垒（及许多远期）标签在时间上**重叠**。把每个重叠事件当 IID 样本会夸大有效样本量。事件的**平均唯一性**是其跨越的各 bar 上 \(1/c_t\) 的均值，其中 \(c_t\) 为时刻 \(t\) 的并发标签数。
+
+**微面板：** 12 个重叠事件，中段并发升至 4。\(y\) 等权均值≈**0.0075**；唯一性加权均值≈**0.0094**——高度并发的冗余标签被降权。
+
+**序贯自助法（一段话）：** 普通 bagging 等概率抽 ID，重叠事件仍常一起出现。序贯自助（AFML 第4章）按**剩余**唯一性比例抽取下一个索引，得到更少冗余的袋子。
+
+## 元标签过滤（AFML 第3章）— 完整小节
+
+**主模型方向**决定多空（此处 `sign(mom_20)`）。**元标签**学习第二个模型，标签是“做还是不做”（是否与势垒结果一致）。它**不**发明新方向，只过滤何时给主方向加仓。过滤后的下注见 `modern-ml-pipelines`（AFML 第10章）。
+
+| 配置 | 日度截面 RankIC 均值 | 换手 | 净 SR | 交易占比 |
+|------|----------------------|------|-------|----------|
+| A 主方向总交易 | ≈+0.032 | ≈0.16 | ≈+0.17 | 1.00 |
+| B 元过滤 p≥0.52 | ≈+0.035 | ≈0.31 | ≈−1.46 | ≈0.36 |
+| C 元过滤 p≥0.48 | ≈+0.030 | ≈0.23 | ≈+0.10 | ≈0.95 |
+
+在本弱面板上，更严的元过滤可能**略抬 IC**，却因换手**伤害净 SR**——再次提醒：过滤 ≠ 成本后免费优势。
+
+## CPCV 复用提示
+
+对许多 purged 折组合打分会得到 OOS 指标的**分布**——与 AFML 第12章 CPCV 精神相同。路径复用测试块，**不是**独立 DSR 试验。数值玩具在 `backtest-traps` / `examples/p2/02_backtest_traps.py`。
+
 ## 常见错误 / 陷阱
 
 1. 固定百分比势垒，把波动写成标签。
@@ -160,6 +207,9 @@ disclaimer: synthetic weak panel — learning only
 3. 宣称“purged IC≈0 永远正确”，却忽略可回收弱信号。
 4. 打乱行 / 未 purge KFold / 全局 scaler。
 5. 为噪声深度树的训练 IC 欢呼。
+6. 做完整数差分就称“特征就绪”却不检查记忆损失。
+7. 把重叠标签当 IID（跳过唯一性权重）。
+8. 把元标签过滤误当成新的方向性 alpha。
 
 ## 练习（1:1）
 
@@ -168,6 +218,8 @@ disclaimer: synthetic weak panel — learning only
 3. **ex3** — 用日度截面 IC 打分（混合作反例）。
 4. **ex4** — 过拟合陷阱训练 vs OOS 日度截面 IC。
 5. **done1** — 防泄漏 notebook + 并排表 + 试验日志。
+6. **ex5** — 运行 `03_afml_depth.py`：报告 ADF p 值、自相关记忆代理、唯一性再加权与元标签 A/B/C 表；**完成标准**：数字与课内一致。
+7. **ex6** — 用三句话把 CPCV 路径与 purged 折评分分布联系起来（不是 DSR 试验次数）。
 
 ## 测验
 
@@ -177,12 +229,15 @@ disclaimer: synthetic weak panel — learning only
 <Quiz id="q4-cases" question="未 purge IC 高于 purged IC 主要说明？" options={["免费 alpha", "情形 (a)：泄漏造成的管线幻觉", "只是情形 (c)", "oracle 上界"]} answer={1} explanation="泄漏协议抬高 IC，并无诚实 OOS 设计。" />
 <Quiz id="q5-pooled" question="混合 Spearman 被降级是因为？" options={["更快", "混淆时序与截面变异", "需要 GPU", "替代 DSR"]} answer={1} explanation="把序列持续性与截面排序搅在一起。" />
 <Quiz id="q6-overfit" question="训练截面 IC~0.34 而 OOS~0.02 说明？" options={["上线", "样本内拟合≠OOS 优势；记录试验", "跳过 purge", "固定 2% 没问题"]} answer={1} explanation="噪声特征下的过拟合陷阱。" />
+<Quiz id="q7-frac" question="玩具里整数 d=1 与分数差分 d≈0.4 主要说明？" options={["费用下降", "两者都可平稳但分数差分保留更多自相关/记忆", "可跳过 purge", "元标签发明方向"]} answer={1} explanation="AFML 第5章平稳–记忆权衡。" />
+<Quiz id="q8-uniq" question="平均唯一性会下调哪些标签的权重？" options={["仅高成交额", "与许多并发事件重叠者", "ADF 失败", "使用 LightGBM"]} answer={1} explanation="AFML 第4章并发标签。" />
+<Quiz id="q9-meta" question="元标签的任务是？" options={["用新方向替换主方向", "过滤何时交易/跳过主方向", "去掉 purge", "只最大化准确率"]} answer={1} explanation="AFML 第3章 — 做与不做。" />
 
 ## 完成标准
 
 防泄漏 notebook：波动缩放 TB、并排表、三种情形叙述。
 
-**来源：** AFML ch.3/7；P4 弱面板；Canvas m10。
+**来源：** AFML 第3章（元标签）、第4章（唯一性/序贯自助）、第5章（分数差分）、第7章（purged CV）、第12章（CPCV 精神）；P4 弱面板；Canvas m10。
 
 <Summary>
 **要点**：波动缩放标签 → 日度截面 IC → purge 回收弱信号 → 分清泄漏/回收/成本抹平。  

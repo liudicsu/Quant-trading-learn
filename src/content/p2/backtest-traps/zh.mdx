@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **16 学时**：概念 5h + 多实验 9h + 写作 2h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **18 学时**：概念 5h + 含 CPCV 玩具的多实验 10h + 写作 3h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -138,6 +138,13 @@ afml_note: this embargo/purge block is a SIMPLIFIED sketch of AFML ch.7, not the
 === failure log template ===
 date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
 2026-11-04 | MA walk-forward | 8 windows × 10 folds | mean_train=0.245 | mean_test=-0.891 | IS≠OOS / DSR falls with N | shrink search / pre-register / sealed hold-out
+
+=== CPCV teaching sketch (AFML ch.12 spirit) ===
+disclaimer: teaching sketch — NOT production AFML Combinatorial Purged Cross-Validation
+params: N_GROUPS=6 N_TEST=2 n_combinations=15 n_backtest_paths=5
+combo_SR_test mean=-0.8222 std=1.4427
+single_holdout OOS_SR=-1.3379 (ONE path)
+saved_plot public/p2/cpcv_sr_dist.png
 ASSERTS_OK
 ```
 
@@ -265,6 +272,19 @@ date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_ac
 ASSERTS_OK
 ```
 
+
+## 组合式 purged CV（CPCV）教学素描
+
+**直觉：** 一次训练/留出只给你**一个**样本外夏普。若该窗口碰巧好坏，你会误爱或误恨规则。组合式 purged 交叉验证（AFML 第 12 章）把时间切成 \(N\) 个连续组，枚举每一种取 \(k\) 组作测试块的组合，对与测试标签重叠的训练样本做 purge，并重建多条回测**路径**，然后看路径指标的**分布**。
+
+**计数：** 组合数 \(C(N,k)\)；路径数 \(\varphi[N,k]=C(N-1,k-1)\)。实验：\(N=6\)，\(k=2\) → \(C(6,2)=15\) 组、\(\varphi=C(5,1)=5\) 条路径。
+
+**数值玩具**（诚实均线盈亏）：组合测试夏普均值约 **−0.82**、标准差约 **1.44**；单一 2/3–1/3 留出只有**一个** OOS SR ≈ **−1.34**。路径会**复用**测试组，因而**不是**互相独立的 DSR 试验。
+
+![CPCV SR distribution](/p2/cpcv_sr_dist.png)
+
+**声明：** 本站演示是**教学素描**，不是生产级 AFML `CombinatorialPurgedKFold`。`ml-leakage-control` 在多折 purged 评分时会复用这一组合思想。
+
 ## 常见错误 / 陷阱
 
 1. 把同日成交标成「研究」。
@@ -272,6 +292,8 @@ ASSERTS_OK
 3. 把两种诚实对齐的相等净值误当成「无前瞻」证明。
 4. 只用今日指数成分「验证」历史。
 5. 未读论文假设就把 PSR/DSR 阈值当实盘规则（IID/平稳遍历、试验独立性）。
+6. 把 CPCV 路径数当成 DSR 的独立试验次数 \(N\)。
+7. 把教学用 CPCV 素描当成生产级 AFML 实现。
 
 ## 练习（与任务清单 1:1）
 
@@ -281,6 +303,7 @@ ASSERTS_OK
 4. **ex4**：假阳性零假设上下文；**完成标准**：SE≈0.918、期望≈3.07 与 mean_false_hits 一并写出。
 5. **ex5**：幸存者/数据挖掘回顾并链到 data-cleaning；**完成标准**：两点 + 交叉链接。
 6. **ex6**：（可选）purge/embargo 说明；**完成标准**：打印 purge/embargo 计数。
+7. **ex7**：CPCV 玩具——打印 \(C(6,2)\)、路径数、组合 SR 均值/标准差并对比单次留出；**完成标准**：数字与课内一致且存在 `cpcv_sr_dist.png`。
 
 ## 测验
 
@@ -290,12 +313,14 @@ ASSERTS_OK
 <Quiz id="q4-dsr" question="独立试验数 N 增大时，固定入选规则的 DSR 通常？" options={["升到 1", "下降，因为 E[max SR] 上升", "与 N 无关", "等于胜率"]} answer={1} explanation="Bailey & López de Prado 2014。" />
 <Quiz id="q5-null" question="n=299、SE≈0.92、P(|SR|>1.5)≈0.10 时，30 次零假设试验期望约？" options={["0 次", "约 3 次", "30 次", "299 次"]} answer={1} explanation="30×0.102≈3.07；实验 MC≈2.78。" />
 <Quiz id="q6-surv" question="本阶段幸存者偏差指？" options={["用哈希", "只测今天仍在市的名字", "用次日开盘成交", "付佣金"]} answer={1} explanation="交叉链接 data-cleaning。" />
+<Quiz id="q7-cpcv" question="相对单次留出，CPCV 教学上主要多给了什么？" options={["保证超额", "多组测试块上的 OOS 指标分布", "更低费用", "可跳过 purge"]} answer={1} explanation="组合测试块 → 夏普分布；路径不是独立 DSR 试验。" />
+<Quiz id="q8-cpcv2" question="本站 CPCV 演示是？" options={["生产级 AFML CombinatorialPurgedKFold", "AFML 第12章精神的教学素描", "实盘券商 API", "成本替代品"]} answer={1} explanation="实验抬头已声明。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** classic — Canvas m5；AFML 第 7/14 章。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。frontier — Quant-Arena arXiv:2610.30113。
+**来源：** 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

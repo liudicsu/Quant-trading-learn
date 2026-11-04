@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**5 hours**: 1.5h concepts + 3h lab + 0.5h quiz) builds a **net-of-cost** metric table: toy MA signal vs buy-and-hold; slippage bumps; why win rate ≠ a good strategy. Prereqs: `returns-vol-corr`, `microstructure-orders`.
+This lesson (~**6 hours**: 1.5h concepts + 3h lab + 0.5h quiz) builds a **net-of-cost** metric table: toy MA signal vs buy-and-hold; slippage bumps; why win rate ≠ a good strategy. Prereqs: `returns-vol-corr`, `microstructure-orders`.
 
 **Goals:** build a net-of-cost table; explain win rate ≠ good strategy.
 
@@ -71,6 +71,23 @@ teach: higher turnover amplifies costs; reporting gross-only is dishonest.
 ASSERTS_OK
 ```
 
+
+## PyFolio tear-sheet meaning (reuse your metrics)
+
+**Intuition:** A [PyFolio](https://github.com/quantopian/pyfolio) / pyfolio-reloaded **returns tear sheet** is a dashboard, not a new edge. `create_returns_tear_sheet(returns, benchmark_rets=...)` plots and tables numbers you already met in `returns-vol-corr` and this lab.
+
+| Tear-sheet label | Lab value (5 bps toy) | How you already compute it |
+|------------------|-----------------------|----------------------------|
+| Annual return | ≈+0.025 | mean(daily)×252 |
+| Annual volatility | ≈0.126 | std(daily)×√252 |
+| Sharpe (Rf=0) | ≈0.195 | (mean−Rf)/std×√252 |
+| Max drawdown | ≈−0.092 | min(nav/peak−1) |
+| Cumulative return | ≈+0.017 | final NAV − 1 |
+| Daily VaR 5% | ≈−0.015 | empirical 5th percentile |
+| Stability (R²) | ≈0.34 | R² of log-NAV vs time |
+
+**Teach:** read full-sample vs OOS carefully; still apply cost honesty; only attach a benchmark when it is investable and time-aligned. Run: `examples/p1/04_eval_lab.py`.
+
 ## Common mistakes / pitfalls
 
 1. Posting gross curves only.
@@ -78,6 +95,8 @@ ASSERTS_OK
 3. Ignoring turnover×cost linkage.
 4. No benchmark comparison.
 5. Evaluating “net of cost” without shifting the signal (still mixed with look-ahead).
+6. Treating a tear sheet as proof of edge instead of a metric dashboard.
+7. Attaching a misaligned or non-investable “benchmark” series.
 
 ## Practice (1:1 with the checklist)
 
@@ -86,6 +105,7 @@ ASSERTS_OK
 3. **ex3** — Three-sentence conclusion (gross vs net, turnover, win-rate trap); **done when** all three appear.
 4. **ex4** — Report annualized turnover; **done when** it matches the lesson’s order of magnitude.
 5. **ex5** — Why benchmarks are required; **done when** ≥2 sentences mention relative evaluation.
+6. **ex6** — Map five PyFolio tear-sheet labels to lab formulas; **done when** the table matches the lesson.
 
 ## Quiz
 
@@ -94,12 +114,13 @@ ASSERTS_OK
 <Quiz id="q3-wr" question="Does a high win rate guarantee a good strategy?" options={["Yes", "No — expectancy and tails can still be poor", "If above 50%", "It equals Sharpe"]} answer={1} explanation="The lesson’s ~91% win rate still had negative mean." />
 <Quiz id="q4-bm" question="Why use a benchmark?" options={["Regulators allow only ETFs", "Relative evaluation — avoid calling Beta Alpha", "Remove all risk", "Raise win rate"]} answer={1} explanation="Benchmarks discipline “excess” claims." />
 <Quiz id="q5-shift" question="position=signal.shift(1) before evaluation mainly?" options={["Speeds rolling", "Reduces same-day close look-ahead", "Raises win rate", "Cancels costs"]} answer={1} explanation="Information-timing alignment." />
+<Quiz id="q6-pf" question="A PyFolio returns tear sheet mainly?" options={["Creates alpha", "Dashboards metrics you already know how to compute", "Removes costs", "Replaces walk-forward"]} answer={1} explanation="Dashboard, not a new edge." />
 
 ## Done when
 
 - Table + three-sentence conclusion + quizzes
 
-**Sources:** classic — JoinQuant strategy evaluation; Canvas eval. niche — the @FG731314 post above (read and linked).
+**Sources:** classic — JoinQuant strategy evaluation; Canvas eval; Quantopian pyfolio / pyfolio-reloaded tear-sheet docs. niche — the @FG731314 post above (read and linked).
 
 <Summary>
 **Takeaways**: net-of-cost tables, turnover, win-rate trap, benchmarks.  

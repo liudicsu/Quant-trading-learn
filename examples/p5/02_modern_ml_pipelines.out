@@ -1,3 +1,4 @@
+Background dataset has 500 samples but max_samples=100. Subsampling to 100 samples for SHAP value computation. To use all samples, set max_samples=500 when initializing the masker.
 === parameters ===
 reuse lab01 frame; PRIMARY metric = mean daily CS RankIC (+ t / ICIR)
 LightGBM=True; SHAP=True
@@ -55,3 +56,26 @@ Qlib: Alpha158 → DatasetH → LGBModel → SignalRecord (official docs)
 pandas: features_long ≈ Alpha158; purged folds ≈ segments; LGBM/Ridge ≈ LGBModel; pred_to_ls_pnl ≈ portfolio
 chart /workspace/Quant-trading-learn/public/p5/ridge_vs_gbm.png
 disclaimer: weak synthetic panel — learning only
+
+=== SFI (Single Feature Importance) vs MDI/MDA/SHAP (AFML ch.8) ===
+cite: López de Prado AFML ch.8 — SFI avoids substitution by scoring one feature at a time
+intuition: MDI/MDA/SHAP on correlated features split credit; SFI asks 'how good alone?'
+SFI mean_daily_CS_RankIC (univariate ridge OOF on fold 2):
+vol_5         0.024283
+mom_20        0.018488
+rank_mom20    0.018488
+vol_20        0.018178
+mom_20_dup    0.014532
+mom_10       -0.014454
+mom_1        -0.017818
+mom_5        -0.022106
+substitution story: MDI split mom_20 vs mom_20_dup; SFI mom_20=+0.0185 mom_20_dup=+0.0145 (near-equal alone → duplicates are substitutes, not two independent alphas)
+chart /workspace/Quant-trading-learn/public/p5/sfi_importance.png
+
+=== Localformer/Transformer foil (same purged protocol; NO 'DL wins' claim) ===
+cite: Yang et al. Qlib arXiv:2009.11189; Vaswani et al. 2017 Attention; Qlib benchmarks list Localformer (Jiang et al.)
+note: we do NOT re-train Qlib Localformer weights — this is a teaching FOIL with a tiny causal attention pooling head
+optional control: Qlib Alpha158 Transformer/Localformer checkpoints under the SAME anti-leakage protocol
+attn_pool_ridge mean_CS_IC=-0.0103 t=-1.94 net_SR=-3.748 turn=1.6008 DSR=0.000
+compare ridge mean_CS_IC=+0.0398 gbm=+0.0336
+teach: under the SAME purged protocol, a tiny attention foil does NOT automatically beat trees/linear — do not claim 'DL wins'. Qlib's published Localformer/Transformer numbers are OPTIONAL CONTROLS, not a license to skip purge/embargo or cost accounting.

@@ -32,3 +32,26 @@ teach: estimation error (Michaud) can make sample-MV lose to 1/N OOS (DeMiguel e
 chart /workspace/Quant-trading-learn/public/p6/kelly_paths.png
 chart /workspace/Quant-trading-learn/public/p6/mv_vs_1n.png
 disclaimer: synthetic panel — learning only, not investment advice
+
+=== Hierarchical Risk Parity (HRP) vs ERC (same panel) ===
+cite: López de Prado 2016 JPM 42(4) — Building Diversified Portfolios that Outperform Out of Sample (HRP)
+cite: AFML ch.16 HRP steps — tree clustering, quasi-diagonalization, recursive bisection
+dendrogram leaf order: ['C0', 'C1', 'B0', 'B1', 'E0', 'E3', 'E1', 'E2']
+ERC RC std=0.000101 (near 0 ⇒ equal risk contributions)
+allocation table:
+       HRP    ERC  inv_vol
+E0  0.1010  0.125   0.1246
+E1  0.1019  0.125   0.1290
+E2  0.1044  0.125   0.1322
+E3  0.1140  0.125   0.1406
+B0  0.1382  0.125   0.1149
+B1  0.1351  0.125   0.1123
+C0  0.1413  0.125   0.1140
+C1  0.1641  0.125   0.1324
+HRP equity_cluster_sum 0.4214
+HRP bond_cluster_sum 0.2733
+HRP commodity_cluster_sum 0.3054
+ERC equity_cluster_sum 0.5000
+teach: inv-vol ignores correlation clusters; ERC equalizes risk contributions; HRP allocates across a hierarchy so a large correlated cluster does not dominate like 1/N-by-ticker
+chart /workspace/Quant-trading-learn/public/p6/hrp_dendrogram.png
+chart /workspace/Quant-trading-learn/public/p6/hrp_vs_erc.png

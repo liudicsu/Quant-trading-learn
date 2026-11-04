@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**10 hours**: 3h design + 6h running/logging + 1h template) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
+This lesson (~**11 hours**: 3h design + 6h running/logging + 1h template) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
 
 **Goals:** CSV/sim paper matching; emit daily logs; explain what paper validates (process, not alpha).
 
@@ -23,7 +23,7 @@ Synthetic bars and simulated fills. Nothing here connects to a live broker.
 
 **What paper validates:** wiring (signal→size→fill→ledger), kill behaviour, logging discipline — **not** that the signal has edge.
 
-For folder/config ideas only (not broker APIs): the **Algo Trading Cookbook** companion repo shows recipe-style paper configs, and **Qbot** is a local all-in-one shell some learners use to keep research and paper logs in one place — freeze your `VERSION` either way.
+For folder/config ideas only (not broker APIs): the **Algo Trading Cookbook** companion repo shows recipe-style paper configs; **[Qbot](https://github.com/UFund-Me/Qbot)** is a local all-in-one shell some learners use to keep research and paper logs in one place; and **[Atlas](https://github.com/Ammaar-Alam/atlas)** is another open research/paper-trading scaffold (paper-by-default, walk-forward helpers). Freeze your `VERSION` whichever shell you copy ideas from — none of these are connected by this course.
 
 ![Paper equity](/p7/paper_equity.png)
 
@@ -106,7 +106,7 @@ cum_return research_bt≈-0.030 +latency≈+0.015 +slip≈-0.008 +partial≈-0.0
 
 ≥5-day (lab: 360) log pack, friction gap table, kill-switch demo, frozen version string in every row.
 
-**Sources:** Canvas m13; JoinQuant W08 paper-before-live ethos; QuantStart paper notes; P6 risk kill patterns.
+**Sources:** Canvas m13; JoinQuant W08 paper-before-live ethos; QuantStart paper notes; P6 risk kill patterns; Qbot + Atlas GitHub (infra name-drops only).
 
 <Summary>
 **Takeaways**: freeze version → log everything → reconcile → decompose gaps → kill on gap/DD/gross.  

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**10 hours**: 4h concepts + 5h pipeline lab + 1h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**12 hours**: 4h concepts + 5h pipeline lab + 1h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -104,8 +104,28 @@ adj_before 92.8473 adj_after 91.3565
 raw_ret_across_split -0.508
 adj_ret_across_split -0.0161
 data_sheet_stub: source=synthetic; seed=17; fields=adj/raw/PIT; timezone=naive dates; universe_rule=see survivorship note
+=== information bars toy (AFML ch.2; teaching only, NO HFT recipe) ===
+toy_counts {'time50': 100, 'vol200': 241, 'dollar': 231}
+time/tick50  n_bars=100 mean_|ret|=0.004509
+volume200    n_bars=241 mean_|ret|=0.002966
+dollar~200p  n_bars=231 mean_|ret|=0.003033
 ASSERTS_OK
 ```
+
+
+## Information bars vs time bars (AFML ch.2)
+
+**Intuition:** A **time bar** samples the wall clock (every minute, every day). Markets do not speak at a constant rate: a quiet hour and a news burst both become “one bar,” so return variance and microstructure noise look uneven. **Tick / volume / dollar bars** sample *activity* instead — emit a bar after \(N\) trades, \(V\) shares, or \(D\) dollars of notional. Busy periods mint more bars; quiet periods fewer. That is a **research sampling** choice for cleaner statistical clocks — **not** an HFT latency or execution recipe.
+
+**Toy comparison** on one synthetic 5,000-tick tape (`examples/p2/01_data_cleaning.py`):
+
+| Clock | n_bars | mean \|ret\| | std(ret) |
+|-------|--------|-------------|----------|
+| time/tick every 50 | 100 | ≈0.0045 | ≈0.0058 |
+| volume 200 shares | 241 | ≈0.0030 | ≈0.0036 |
+| dollar ≈200×mid | 231 | ≈0.0030 | ≈0.0038 |
+
+Activity clocks produce **more** bars with **smaller** per-bar moves on the same tape — the series is closer to an “information clock.”
 
 ## Common mistakes / pitfalls
 
@@ -114,6 +134,8 @@ ASSERTS_OK
 3. UTC vs local off-by-one.  
 4. Mixing raw/adj silently.  
 5. No hash / no version.
+6. Treating info bars as an HFT execution recipe rather than a research sampling clock.
+7. Comparing clocks on different underlying tapes without saying so.
 
 ## Practice (1:1 with the checklist)
 
@@ -122,6 +144,7 @@ ASSERTS_OK
 3. **ex3** — data sheet with four sections; **done when** source/fields/timezone/universe appear.  
 4. **ex4** — survivorship means; **done when** both means match the lesson.  
 5. **ex5** — PIT lag note; **done when** lag=5 and a look-ahead sentence appear.
+6. **ex6** — Info-bar clocks: print time/volume/dollar bar counts on the synthetic tape; **done when** counts match the lesson table.
 
 ## Quiz
 
@@ -130,12 +153,14 @@ ASSERTS_OK
 <Quiz id="q3-tz" question="A one-day session mislabel most resembles?" options={["Lower vol", "Future closes pasted onto earlier rows (look-ahead)", "Higher fees", "Dropping Beta"]} answer={1} explanation="Labels move information earlier." />
 <Quiz id="q4-adj" question="Raw crashes on a split while adj does not — meaning?" options={["Strategy broke", "Unadjusted jump; declare the field", "Must short", "Bad hash"]} answer={1} explanation="Field choice defines returns." />
 <Quiz id="q5-hash" question="Saving sha256 mainly?" options={["Speeds downloads", "Proves byte-level reproducibility", "Raises Sharpe", "Replaces the sheet"]} answer={1} explanation="Version check." />
+<Quiz id="q6-infobar" question="Dollar/volume bars mainly change?" options={["Broker fees", "The sampling clock from wall-time to activity", "Regulatory filings", "Rf"]} answer={1} explanation="AFML ch.2 information-driven bars." />
+<Quiz id="q7-infobar2" question="This lesson’s info-bar demo is?" options={["An HFT latency recipe", "A research sampling comparison on synthetic ticks", "A live order router", "A substitute for PIT"]} answer={1} explanation="Explicitly not an HFT recipe." />
 
 ## Done when
 
 - Rerunnable pipeline + sheet + quizzes  
 
-**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer. niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.
+**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars. niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.
 
 <Summary>
 **Takeaways**: hashes, survivorship, PIT, timezone look-ahead, adj declarations.  

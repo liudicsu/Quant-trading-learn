@@ -49,3 +49,14 @@ raw_ret_across_split -0.508
 adj_ret_across_split -0.0161
 data_sheet_stub: source=synthetic; seed=17; fields=adj/raw/PIT; timezone=naive dates; universe_rule=see survivorship note
 ASSERTS_OK
+
+=== information bars toy (AFML ch.2; teaching only, NO HFT recipe) ===
+cite: López de Prado AFML ch.2 — tick/volume/dollar bars vs time bars
+params: synthetic tick stream seed=0; n_ticks=5000; time_bar=50 ticks wall; tick_bar=50 trades; vol_bar=200 shares; dollar_bar≈200*mid
+clock comparison on SAME synthetic tick tape:
+time/tick50  n_bars= 100 mean_|ret|=0.004509 std_ret=0.005825 max_gap_s=50
+volume200    n_bars= 241 mean_|ret|=0.002966 std_ret=0.003627 max_gap_s=28
+dollar~200p  n_bars= 231 mean_|ret|=0.003033 std_ret=0.003760 max_gap_s=28
+teach: time bars sample the clock; tick/volume/dollar bars sample activity — busy periods mint more bars, quiet periods fewer. This is a sampling choice for research bars, NOT a latency or HFT execution recipe.
+intuition: if news hits and 1000 trades arrive in one minute, time bars still emit one 1-min bar, while tick/volume/dollar bars emit many — returning the series closer to an 'information clock'.
+toy_counts {'time50': 100, 'vol200': 241, 'dollar': 231}

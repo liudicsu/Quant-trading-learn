@@ -84,3 +84,31 @@ print("mean_daily_turnover", round(float(turnover.mean()), 6))
 print("approx_annual_one_way_turns", round(float(turnover.mean() * 252), 2))
 print("teach: higher turnover amplifies costs; reporting gross-only is dishonest.")
 print("ASSERTS_OK")
+
+# --- PyFolio tear-sheet meaning (map to metrics you already compute) ---
+print("\n=== PyFolio tear-sheet meaning (reuse existing metrics) ===")
+print("cite: Quantopian pyfolio / pyfolio-reloaded — create_returns_tear_sheet(returns, benchmark_rets=...)")
+print("params: same toy pnl at 5 bps; Rf=0; ann=√252")
+pnl5 = apply_costs(pos, r, 5.0).dropna()
+nav = (1 + pnl5.fillna(0)).cumprod()
+peak = nav.cummax()
+dd = nav / peak - 1
+m = metrics(pnl5, "signal_5bps")
+# Tear-sheet panel → already-known metric
+mapping = [
+    ("Annual return", m["ann_ret"], "mean(daily)×252"),
+    ("Annual volatility", m["ann_vol"], "std(daily)×√252"),
+    ("Sharpe ratio", m["sharpe_Rf0"], "(mean-Rf)/std×√252"),
+    ("Max drawdown", m["max_dd"], "min(nav/peak-1)"),
+    ("Cumulative return", round(float(nav.iloc[-1] - 1), 4), "final NAV - 1"),
+    ("Daily VaR (5%)", round(float(pnl5.quantile(0.05)), 6), "empirical 5th pct of daily pnl"),
+    ("Stability (R^2)", round(float(np.corrcoef(np.arange(len(nav)), np.log(nav.clip(lower=1e-12)))[0, 1] ** 2), 4), "R² of log-NAV vs time"),
+]
+print("tear_sheet_map (PyFolio-style label → value → how we already compute it)")
+for lab, val, how in mapping:
+    print(f"  {lab:20s} {val:+.6f}  via {how}")
+print(
+    "teach: a returns tear sheet is a dashboard of metrics you already met in returns-vol-corr / this lab — "
+    "it does not create a new edge; read full sample vs OOS carefully and still apply cost honesty."
+)
+print("benchmark note: tear sheets often take benchmark_rets; compare excess return / beta only when the benchmark is investable and aligned.")

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14 hours**: 5h concepts + 7h labs + 2h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+This lesson (~**17 hours**: 5h concepts + 7h labs + 2h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
 
 **Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
 
@@ -82,6 +82,25 @@ OOS_SR mv=-0.215 LedoitWolf=-0.211 1/N=-0.461
 mean_shrinkage_intensity=0.036
 ```
 
+
+## Hierarchical Risk Parity (HRP) vs ERC
+
+**Intuition:** Markowitz-style optimizers invert a covariance matrix and can **concentrate** when assets are highly correlated (“error maximization,” Michaud). **Hierarchical Risk Parity** (López de Prado, *Journal of Portfolio Management* 2016; AFML ch.16) never inverts \(\Sigma\). It (1) turns correlations into distances and builds a dendrogram, (2) quasi-diagonalizes by leaf order, (3) recursively bisects and allocates with inverse-variance cluster variances.
+
+**Same 8-asset toy** (4 equity / 2 bond / 2 commodity factors):
+
+| | Equity cluster sum | Bond | Commodity |
+|--|-------------------|------|-----------|
+| HRP | ≈**0.42** | ≈0.27 | ≈0.31 |
+| ERC (opt.) | ≈**0.50** | ≈0.25 | ≈0.25 |
+| inv-vol | ≈0.53 | ≈0.23 | ≈0.25 |
+
+HRP trims the large correlated equity block relative to ticker-count / inv-vol thinking. ERC equalizes risk contributions (RC std≈0 here); inv-vol ignores correlation clusters.
+
+![HRP dendrogram](/p6/hrp_dendrogram.png)
+
+![HRP vs ERC](/p6/hrp_vs_erc.png)
+
 ## Common mistakes / pitfalls
 
 1. Full Kelly on a noisy estimated edge.
@@ -89,6 +108,8 @@ mean_shrinkage_intensity=0.036
 3. Calling inverse-vol “ERC” when correlations are ignored.
 4. In-sample MV charts as proof of OOS skill.
 5. Treating 1/N as universally optimal rather than a tough benchmark (DeMiguel et al.).
+6. Inverting a singular/ill-conditioned Σ when HRP would have avoided the inverse.
+7. Ignoring dendrogram clusters and treating every ticker as an independent risk bet.
 
 ## Practice (1:1)
 
@@ -97,6 +118,7 @@ mean_shrinkage_intensity=0.036
 3. **ex3** — Inverse-vol vs ERC vs EW; show RC dispersion.
 4. **ex4** — Walk-forward MV vs LedoitWolf vs 1/N; record shrinkage intensity.
 5. **done1** — Sizing comparison table + one-page risk preference (half-Kelly rationale).
+6. **ex5** — HRP dendrogram + allocation table vs ERC/inv-vol on the toy panel; **done when** cluster sums and charts match the lesson.
 
 ## Quiz
 
@@ -106,14 +128,16 @@ mean_shrinkage_intensity=0.036
 <Quiz id="p6prs-q4" question="DeMiguel, Garlappi & Uppal (2009) emphasise that?" options={["Sample MV always wins OOS", "1/N is a hard OOS benchmark for many optimised rules", "Kelly replaces MV", "VaR implies ERC"]} answer={1} explanation="Optimised rules often fail to beat naive 1/N OOS." />
 <Quiz id="p6prs-q5" question="Ledoit & Wolf 2004 JPM “Honey…” proposes?" options={["Discarding covariance", "Shrinkage of the sample covariance toward a structured target", "Only PCA risk models", "Full Kelly sizing"]} answer={1} explanation="Shrink Σ = δF + (1−δ)S with estimated intensity." />
 <Quiz id="p6prs-q6" question="Vol targeting must use?" options={["Same-bar realised σ", "Lagged volatility so weights enter the next bar", "Future option IV only", "Full-sample σ"]} answer={1} explanation="No look-ahead: σ̂ from the past, trade next bar." />
+<Quiz id="p6prs-q7" question="HRP’s distinctive numerical move is?" options={["Always invert Σ", "Allocate on a hierarchy without inverting Σ", "Use only full Kelly", "Drop bonds"]} answer={1} explanation="López de Prado 2016 JPM / AFML ch.16." />
+<Quiz id="p6prs-q8" question="On the toy panel HRP equity-cluster weight vs inv-vol is?" options={["Much larger", "Trimmed (≈0.42 vs ≈0.53) because correlated names share a branch", "Exactly 1/N always", "Undefined"]} answer={1} explanation="Hierarchy cuts the equity block relative to ticker-count thinking." />
 
 ## Done when
 
 Sizing comparison table (Kelly / vol-target / RP / MV–LW–1/N) plus a risk-preference page stating why you cap below full Kelly.
 
-**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11.
+**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP; AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11.
 
 <Summary>
-**Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; MV needs shrinkage and an honest 1/N foil.  
+**Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; HRP allocates on a tree without inverting Σ; MV needs shrinkage and an honest 1/N foil.  
 **Next**: execution-slippage (TWAP/VWAP, Almgren–Chriss, implementation shortfall).
 </Summary>

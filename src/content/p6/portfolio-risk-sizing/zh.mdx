@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14 学时**：概念 5h + 实验 7h + 写作 2h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **17 学时**：概念 5h + 实验 7h + 写作 2h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -82,6 +82,25 @@ OOS_SR mv=-0.215 LedoitWolf=-0.211 1/N=-0.461
 mean_shrinkage_intensity=0.036
 ```
 
+
+## 层级风险平价（HRP）对比 ERC
+
+**直觉：** Markowitz 类优化要反协方差矩阵，资产高度相关时容易**集中**（Michaud 的“误差最大化”）。**层级风险平价**（López de Prado，*Journal of Portfolio Management* 2016；AFML 第16章）**不**反演 \(\Sigma\)：先把相关变成距离并建树，再按叶序准对角化，最后递归二分并用簇内逆方差配置权重。
+
+**同一 8 资产玩具**（4 股票 / 2 债券 / 2 商品因子）：
+
+| | 股票簇权重和 | 债券 | 商品 |
+|--|-------------|------|------|
+| HRP | ≈**0.42** | ≈0.27 | ≈0.31 |
+| ERC（优化） | ≈**0.50** | ≈0.25 | ≈0.25 |
+| 逆波动 | ≈0.53 | ≈0.23 | ≈0.25 |
+
+相对“按票数 / 逆波动”思维，HRP 压缩了大块相关股票敞口。ERC 令风险贡献接近相等（此处 RC std≈0）；逆波动忽略相关簇。
+
+![HRP dendrogram](/p6/hrp_dendrogram.png)
+
+![HRP vs ERC](/p6/hrp_vs_erc.png)
+
 ## 常见错误 / 陷阱
 
 1. 在噪声估计优势上使用满 Kelly。
@@ -89,6 +108,8 @@ mean_shrinkage_intensity=0.036
 3. 忽略相关却把逆波动叫成「ERC」。
 4. 用样本内 MV 曲线证明样本外能力。
 5. 把 1/N 当成万能最优，而非强硬基准（DeMiguel 等）。
+6. 在奇异/病态 Σ 上硬做求逆，而 HRP 本可避开求逆。
+7. 忽略树状簇，把每只票都当成独立风险赌注。
 
 ## 练习（1:1）
 
@@ -97,6 +118,7 @@ mean_shrinkage_intensity=0.036
 3. **ex3** — 逆波动 vs ERC vs 等权；展示 RC 离散度。
 4. **ex4** — 滚动 MV vs LedoitWolf vs 1/N；记录收缩强度。
 5. **done1** — 仓位对照表 + 一页风险偏好（半 Kelly 理由）。
+6. **ex5** — 玩具面板上的 HRP 树状图 + 配置表对照 ERC/逆波动；**完成标准**：簇权重和与图与课内一致。
 
 ## 测验
 
@@ -106,14 +128,16 @@ mean_shrinkage_intensity=0.036
 <Quiz id="p6prs-q4" question="DeMiguel, Garlappi & Uppal（2009）强调？" options={["样本 MV 样本外总赢", "1/N 是许多优化规则的强硬样本外基准", "Kelly 取代 MV", "VaR 蕴含 ERC"]} answer={1} explanation="优化规则经常打不赢朴素 1/N。" />
 <Quiz id="p6prs-q5" question="Ledoit & Wolf 2004 JPM “Honey…” 提出？" options={["丢掉协方差", "把样本协方差向结构化目标收缩", "只用 PCA 风险模型", "满 Kelly 仓位"]} answer={1} explanation="Σ̂ = δF + (1−δ)S，并估计收缩强度。" />
 <Quiz id="p6prs-q6" question="波动目标必须使用？" options={["当日实现 σ", "滞后波动，使权重在下一根 K 线生效", "仅用未来期权 IV", "全样本 σ"]} answer={1} explanation="无前瞻：用过去估 σ̂，下一根再交易。" />
+<Quiz id="p6prs-q7" question="HRP 独特的数值动作是？" options={["总是反演 Σ", "在层级上配置且不反演 Σ", "只用满 Kelly", "丢掉债券"]} answer={1} explanation="López de Prado 2016 JPM / AFML 第16章。" />
+<Quiz id="p6prs-q8" question="玩具面板上 HRP 股票簇权重相对逆波动？" options={["大得多", "被压缩（≈0.42 vs ≈0.53），因相关名字同枝", "永远恰为 1/N", "未定义"]} answer={1} explanation="层级相对按票数思维削减股票块。" />
 
 ## 完成标准
 
 仓位对照表（Kelly / 波动目标 / RP / MV–LW–1/N）+ 一页风险偏好，写明为何把仓位压在满 Kelly 之下。
 
-**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11。
+**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP；AFML 第16章。
 
 <Summary>
-**要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；MV 需要收缩并以 1/N 作诚实对照。  
+**要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；HRP 在树上配置且不反演 Σ；MV 需要收缩并以 1/N 作诚实对照。  
 **下一课**：execution-slippage（TWAP/VWAP、Almgren–Chriss、实施缺口）。
 </Summary>

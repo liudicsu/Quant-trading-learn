@@ -1,8 +1,8 @@
 ## Learning goals
 
-This lesson (~**8 hours**) builds a reproducible ML quant pipeline under the **mean daily CS RankIC** primary metric: ridge vs GBM, importance, calibration/sizing, and a Qlib-style mirror. Prereqs: `ml-leakage-control`, `data-cleaning`.
+This lesson (~**11 hours**) builds a reproducible ML quant pipeline under the **mean daily CS RankIC** primary metric: ridge vs GBM, importance, calibration/sizing, and a Qlib-style mirror. Prereqs: `ml-leakage-control`, `data-cleaning`.
 
-**Must-teach:** versionable pipelines; Qlib Alpha158 + LGBModel pandas equivalent; MDI/MDA/SHAP + substitution; calibration + AFML ch.10 sizing; case **(c)** — recovered IC can still have net SR≤0 after costs; TSFM citations (verified).
+**Must-teach:** versionable pipelines; Qlib Alpha158 + LGBModel pandas equivalent; MDI/MDA/SHAP/SFI + substitution; Localformer/Transformer foil; calibration + AFML ch.10 sizing; case **(c)** — recovered IC can still have net SR≤0 after costs; TSFM citations (verified).
 
 <Callout type="info" title="Learning only — not investment advice">
 Same weak-panel frame and **vol-scaled** triple-barrier labels as lab 01. Positive IC with negative net SR is an honest outcome.
@@ -107,6 +107,27 @@ chart /workspace/Quant-trading-learn/public/p5/ridge_vs_gbm.png
 disclaimer: weak synthetic panel — learning only
 ```
 
+
+## SFI next to MDI / MDA / SHAP (AFML ch.8)
+
+**Substitution story:** correlated features (**mom_20** and **mom_20_dup**) split MDI/MDA/SHAP credit. **Single Feature Importance (SFI)** asks a different question: how good is each feature **alone** under the same purged protocol?
+
+Lab fold-2 univariate ridge SFI (mean daily CS RankIC): `mom_20`≈**+0.0185**, `mom_20_dup`≈**+0.0145** — nearly equal alone, so they are **substitutes**, not two independent alphas. Completing MDI/MDA/SHAP with SFI stops you from double-counting duplicates.
+
+![SFI](/p5/sfi_importance.png)
+
+## Localformer / Transformer foil (same purged protocol)
+
+**Optional control, not a winner’s podium.** Microsoft **Qlib** (Yang et al., arXiv:2009.11189) ships Alpha158 benchmarks that include **Transformer** (Vaswani et al., 2017) and **Localformer** (Qlib’s locality-biased Transformer variant; see Qlib benchmarks / related Jiang et al. work). On this site we do **not** retrain those checkpoints. We run a **tiny causal attention-pooling + ridge foil** under the **same** purged folds, RankIC, costs, and DSR discipline.
+
+| Model | mean daily CS RankIC | note |
+|-------|----------------------|------|
+| purged ridge | ≈**+0.040** | linear baseline |
+| purged GBM | ≈+0.034 | tree baseline |
+| attn-pool ridge foil | ≈**−0.010** | does **not** beat baselines here |
+
+**Teach:** under an honest protocol a “Transformer-flavoured” head does **not** automatically win. Quote Qlib’s published Localformer/Transformer numbers only as **optional controls** — never as license to skip purge, embargo, or costs. **No “DL wins” claim.**
+
 ## Common mistakes / pitfalls
 
 1. Headline pooled Spearman instead of mean daily CS IC.
@@ -114,6 +135,8 @@ disclaimer: weak synthetic panel — learning only
 3. Skipping substitution checks on importance.
 4. Sizing from uncalibrated probabilities.
 5. Mythologizing zero-shot TSFMs.
+6. Reading MDI mass on duplicates as two independent alphas (skip SFI).
+7. Claiming “Localformer/Transformer wins” without the same purged protocol and costs.
 
 ## Practice (1:1)
 
@@ -121,6 +144,8 @@ disclaimer: weak synthetic panel — learning only
 2. **ex2** — Map Qlib Alpha158+LGBModel stages.
 3. **ex3** — Leakage checklist + case (a)/(b)/(c) labels.
 4. **done1** — Mini-pipeline report with cost-wipe discussion.
+5. **ex4** — SFI table for `mom_20` vs `mom_20_dup`; **done when** both univariate ICs print and substitution is stated.
+6. **ex5** — Attention-foil vs ridge/GBM RankIC under purged folds; **done when** you refuse a “DL wins” claim.
 
 ## Quiz
 
@@ -130,12 +155,14 @@ disclaimer: weak synthetic panel — learning only
 <Quiz id="q4-cal" question="Bet sizing should use?" options={["Raw scores only", "Calibrated probabilities", "Only MDI", "Shuffled accuracy"]} answer={1} explanation="AFML ch.10 spirit." />
 <Quiz id="q5-qlib" question="Alpha158 + LGBModel maps to?" options={["Price plots only", "Feature handler + segments + GBM scores", "Unpurged shuffle", "P8 agents"]} answer={1} explanation="Official Qlib workflow mirrored in pandas." />
 <Quiz id="q6-tsfm" question="arXiv:2511.18578 on zero-shot Chronos/TimesFM?" options={["Always beat LightGBM", "Generally underperform tree ensembles on excess returns", "Removes purge", "Proves agents"]} answer={1} explanation="Verified finance TSFM evaluation." />
+<Quiz id="q7-sfi" question="SFI’s role beside MDI/MDA/SHAP is to?" options={["Replace purge", "Score each feature alone and expose substitutes", "Maximize fees", "Skip calibration"]} answer={1} explanation="AFML ch.8 single-feature importance." />
+<Quiz id="q8-tf" question="On this lesson’s purged foil, attn-pool ridge vs ridge/GBM?" options={["Proves DL always wins", "Did not beat the simple baselines — no DL-wins claim", "Removes costs", "Replaces Qlib"]} answer={1} explanation="Same protocol; foil IC negative here." />
 
 ## Done when
 
 Mini-pipeline + checklist stating cases (a)/(b)/(c) with numbers.
 
-**Sources:** Qlib docs; AFML ch.10; Bailey–LdP DSR; arXiv:2511.18578, 2412.09880, 2606.27100.
+**Sources:** Qlib docs + Yang et al. arXiv:2009.11189; Qlib benchmarks (Transformer / Localformer); Vaswani et al. 2017 Attention; AFML ch.8/10; Bailey–LdP DSR; arXiv:2511.18578, 2412.09880, 2606.27100.
 
 <Summary>
 **Takeaways**: daily CS IC primary; purge recovers weak signal; costs can still wipe net SR; Qlib mirror; TSFMs cited.  

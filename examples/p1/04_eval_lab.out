@@ -24,3 +24,17 @@ mean_daily_turnover 0.194444
 approx_annual_one_way_turns 49.0
 teach: higher turnover amplifies costs; reporting gross-only is dishonest.
 ASSERTS_OK
+
+=== PyFolio tear-sheet meaning (reuse existing metrics) ===
+cite: Quantopian pyfolio / pyfolio-reloaded — create_returns_tear_sheet(returns, benchmark_rets=...)
+params: same toy pnl at 5 bps; Rf=0; ann=√252
+tear_sheet_map (PyFolio-style label → value → how we already compute it)
+  Annual return        +0.024600  via mean(daily)×252
+  Annual volatility    +0.126000  via std(daily)×√252
+  Sharpe ratio         +0.194900  via (mean-Rf)/std×√252
+  Max drawdown         -0.091900  via min(nav/peak-1)
+  Cumulative return    +0.016700  via final NAV - 1
+  Daily VaR (5%)       -0.014978  via empirical 5th pct of daily pnl
+  Stability (R^2)      +0.340600  via R² of log-NAV vs time
+teach: a returns tear sheet is a dashboard of metrics you already met in returns-vol-corr / this lab — it does not create a new edge; read full sample vs OOS carefully and still apply cost honesty.
+benchmark note: tear sheets often take benchmark_rets; compare excess return / beta only when the benchmark is investable and aligned.

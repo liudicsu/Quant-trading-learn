@@ -182,3 +182,120 @@ fig.tight_layout(); fig.savefig(PUBLIC / "mv_vs_1n.png", dpi=120); plt.close()
 print("chart", PUBLIC / "kelly_paths.png")
 print("chart", PUBLIC / "mv_vs_1n.png")
 print("disclaimer: synthetic panel — learning only, not investment advice")
+
+# --- Hierarchical Risk Parity (López de Prado 2016 JPM) vs ERC on same tiny panel ---
+print("\n=== Hierarchical Risk Parity (HRP) vs ERC (same panel) ===")
+print("cite: López de Prado 2016 JPM 42(4) — Building Diversified Portfolios that Outperform Out of Sample (HRP)")
+print("cite: AFML ch.16 HRP steps — tree clustering, quasi-diagonalization, recursive bisection")
+from scipy.cluster.hierarchy import linkage, dendrogram, leaves_list
+from scipy.spatial.distance import squareform
+
+# Controlled 8-asset toy with 3 correlation clusters (static teaching panel)
+rng_h = np.random.default_rng(1)
+n_t, names = 400, [f"E{i}" for i in range(4)] + [f"B{i}" for i in range(2)] + [f"C{i}" for i in range(2)]
+f_eq = rng_h.normal(0, 0.01, size=n_t)
+f_bd = rng_h.normal(0, 0.01, size=n_t)
+f_cm = rng_h.normal(0, 0.01, size=n_t)
+cols = {}
+for nm in names:
+    idio = rng_h.normal(0, 0.008, size=n_t)
+    if nm.startswith("E"):
+        cols[nm] = 0.55 * f_eq + idio
+    elif nm.startswith("B"):
+        cols[nm] = 0.55 * f_bd + idio
+    else:
+        cols[nm] = 0.55 * f_cm + idio
+toy = pd.DataFrame(cols)
+cov = toy.cov().values
+corr = toy.corr().values
+dist = np.sqrt(0.5 * (1 - corr))
+np.fill_diagonal(dist, 0.0)
+# Ensure symmetry
+dist = (dist + dist.T) / 2
+link = linkage(squareform(dist, checks=False), method="single")
+order = leaves_list(link)
+ordered_names = [toy.columns[i] for i in order]
+print("dendrogram leaf order:", ordered_names)
+
+
+def hrp_weights(cov, link, labels):
+    """AFML-style recursive bisection on quasi-diagonal leaf order."""
+    order = leaves_list(link)
+    sorted_idx = list(order)
+    w = pd.Series(1.0, index=range(len(labels)))
+    clusters = [sorted_idx]
+    while clusters:
+        cluster = clusters.pop(0)
+        if len(cluster) <= 1:
+            continue
+        mid = len(cluster) // 2
+        left, right = cluster[:mid], cluster[mid:]
+        # cluster variance under inv-var weights
+        def cl_var(ix):
+            c = cov[np.ix_(ix, ix)]
+            iv = 1.0 / np.diag(c)
+            iv = iv / iv.sum()
+            return float(iv @ c @ iv)
+        v_l, v_r = cl_var(left), cl_var(right)
+        alpha = 1.0 - v_l / (v_l + v_r)
+        w[left] *= alpha
+        w[right] *= 1.0 - alpha
+        clusters.append(left)
+        clusters.append(right)
+    w = w / w.sum()
+    out = pd.Series(w.values, index=[labels[i] for i in w.index])
+    # reindex to original names
+    return out.reindex(labels).astype(float)
+
+
+labels = list(toy.columns)
+w_hrp = hrp_weights(cov, link, labels)
+
+def erc_weights_opt(cov):
+    """Long-only ERC by minimizing Σ_i (RC_i - σ_p/n)^2 (teaching)."""
+    from scipy.optimize import minimize
+    n = cov.shape[0]
+    C = cov + 1e-8 * np.eye(n)
+    def obj(w):
+        w = np.maximum(w, 0)
+        w = w / w.sum()
+        sig = float(np.sqrt(w @ C @ w))
+        rc = w * (C @ w) / sig
+        return float(((rc - sig / n) ** 2).sum())
+    w0 = np.ones(n) / n
+    res = minimize(obj, w0, method="SLSQP",
+                   bounds=[(1e-6, 1)] * n,
+                   constraints={"type": "eq", "fun": lambda w: w.sum() - 1})
+    w = np.maximum(res.x, 0); w = w / w.sum()
+    return w
+
+w_erc_t = pd.Series(erc_weights_opt(cov), index=labels)
+rc_check = w_erc_t.values * (cov @ w_erc_t.values) / np.sqrt(w_erc_t.values @ cov @ w_erc_t.values)
+print(f"ERC RC std={rc_check.std():.6f} (near 0 ⇒ equal risk contributions)")
+iv = 1.0 / np.diag(cov)
+w_iv_t = pd.Series(iv / iv.sum(), index=labels)
+alloc = pd.DataFrame({"HRP": w_hrp, "ERC": w_erc_t, "inv_vol": w_iv_t})
+print("allocation table:")
+print(alloc.round(4).to_string())
+# Cluster sums
+print(f"HRP equity_cluster_sum {float(w_hrp[[c for c in labels if c.startswith('E')]].sum()):.4f}")
+print(f"HRP bond_cluster_sum {float(w_hrp[[c for c in labels if c.startswith('B')]].sum()):.4f}")
+print(f"HRP commodity_cluster_sum {float(w_hrp[[c for c in labels if c.startswith('C')]].sum()):.4f}")
+print(f"ERC equity_cluster_sum {float(w_erc_t[[c for c in labels if c.startswith('E')]].sum()):.4f}")
+print(
+    "teach: inv-vol ignores correlation clusters; ERC equalizes risk contributions; "
+    "HRP allocates across a hierarchy so a large correlated cluster does not dominate like 1/N-by-ticker"
+)
+
+fig, ax = plt.subplots(figsize=(8, 4))
+dendrogram(link, labels=labels, ax=ax, leaf_rotation=0)
+ax.set_title("HRP dendrogram (single linkage on corr-distance)")
+fig.tight_layout(); fig.savefig(PUBLIC / "hrp_dendrogram.png", dpi=120); plt.close()
+
+fig, ax = plt.subplots(figsize=(8, 4))
+alloc.plot(kind="bar", ax=ax)
+ax.set_ylabel("weight"); ax.set_title("HRP vs ERC vs inv-vol on same toy panel")
+ax.grid(True, axis="y", alpha=0.3)
+fig.tight_layout(); fig.savefig(PUBLIC / "hrp_vs_erc.png", dpi=120); plt.close()
+print("chart", PUBLIC / "hrp_dendrogram.png")
+print("chart", PUBLIC / "hrp_vs_erc.png")

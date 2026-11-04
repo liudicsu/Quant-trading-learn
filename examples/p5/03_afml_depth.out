@@ -1,0 +1,49 @@
+=== parameters / sources ===
+cite: AFML ch.3 meta-labeling; ch.4 average uniqueness + sequential bootstrap; ch.5 fracdiff
+cite: AFML ch.12 CPCV — reuse note only (full toy lives in P2 backtest-traps)
+disclaimer: teaching sketches on synthetic series — not production AFML code
+
+=== fractional differentiation (AFML ch.5) ===
+intuition: integer d=1 (pct_change) kills memory; fractional d keeps long memory while aiming at stationarity
+d=0.4 weight_cutoff_len=200 first5=[ 1.     -0.4    -0.12   -0.064  -0.0416] last=-0.000162677
+integer note: when d is a positive integer, weights beyond lag d are exactly 0 → memory cancelled
+ADF px level: stat=-2.356 p=0.1545 (usually fail to reject unit root)
+ADF fracdiff d=0.4: stat=-5.283 p=0.0000
+ADF integer diff d=1: stat=-28.370 p=0.0000
+memory_proxy autocorr(lag=20): fracdiff=0.1657 integer_diff=-0.0228
+memory_proxy corr(series, px.shift(20)): fracdiff=-0.0481 integer_diff=-0.0613
+teach: fracdiff aims for the smallest d that passes a stationarity test while preserving more serial dependence than d=1
+chart /workspace/Quant-trading-learn/public/p5/fracdiff_weights.png
+
+=== sample uniqueness / average uniqueness (AFML ch.4) ===
+intuition: overlapping label spans are not independent samples — down-weight concurrent events
+concurrent_count_by_t: [1, 2, 3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 3, 2, 1]
+ t0  t1     y  avg_uniqueness
+  0   3  0.02          0.5208
+  1   4 -0.01          0.3333
+  2   5  0.03          0.2917
+  3   4  0.00          0.2500
+  4   7 -0.02          0.2917
+  5   8  0.01          0.2917
+  6   9  0.04          0.2708
+  7  10 -0.03          0.2500
+  8  11  0.02          0.2500
+  9  12  0.01          0.2708
+ 10  13 -0.01          0.3333
+ 11  14  0.03          0.5208
+equal_weight_mean_y=0.0075 uniqueness_weighted_mean_y=0.0094
+sequential bootstrap (1 paragraph): instead of drawing IDs with equal probability, draw the next bootstrap sample with probability proportional to remaining uniqueness given already drawn overlapping events — AFML ch.4 — so bags are less redundant than IID bagging.
+reweight_effect: uniqueness weights shrink the influence of highly concurrent (redundant) labels
+
+=== meta-labeling full filter (AFML ch.3) ===
+primary side = sign(mom_20); meta learns whether to TRADE or SKIP that side
+link: bet sizing after the meta filter → modern-ml-pipelines (P5-02) / AFML ch.10
+            config  mean_CS_IC  turnover  net_SR  trade_frac
+  A_primary_always      0.0316    0.1636   0.168      1.0000
+B_meta_filter_0.52      0.0354    0.3053  -1.455      0.3573
+C_meta_filter_0.48      0.0301    0.2303   0.098      0.9481
+teach: meta-labeling does not invent the side — it filters when to size the primary bet (→ P5-02 sizing)
+
+=== CPCV reuse note (see P2 backtest-traps for the numeric toy) ===
+When you score many purged fold combinations, you get a DISTRIBUTION of OOS metrics — same spirit as AFML ch.12 CPCV. Paths reuse test blocks and are NOT independent DSR trials. Teaching sketch lives in examples/p2/02_backtest_traps.py (cpcv_sr_dist.png).
+disclaimer: synthetic weak panel — learning only, not investment advice

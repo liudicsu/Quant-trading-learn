@@ -1,8 +1,8 @@
 ## 学习目标
 
-本课（约 **8 学时**）在**日度截面 RankIC 均值**主指标下搭建可复现 ML 量化流水线：ridge vs GBM、重要度、校准/下注、Qlib 风格镜像。前置：`ml-leakage-control`、`data-cleaning`。
+本课（约 **11 学时**）在**日度截面 RankIC 均值**主指标下搭建可复现 ML 量化流水线：ridge vs GBM、重要度、校准/下注、Qlib 风格镜像。前置：`ml-leakage-control`、`data-cleaning`。
 
-**必须教会：** 可版本化流水线；Qlib Alpha158 + LGBModel 的 pandas 等价；MDI/MDA/SHAP 与替代效应；校准 + AFML ch.10 下注；情形 **(c)** — 回收到的 IC 仍可能被成本打成净夏普≤0；已核验 TSFM 引用。
+**必须教会：** 可版本化流水线；Qlib Alpha158 + LGBModel 的 pandas 等价；MDI/MDA/SHAP/SFI 与替代效应；Localformer/Transformer 对照箔；校准 + AFML ch.10 下注；情形 **(c)** — 回收到的 IC 仍可能被成本打成净夏普≤0；已核验 TSFM 引用。
 
 <Callout type="info" title="学习用途 — 非投资建议">
 与实验 01 同一弱面板与**波动率缩放**三重势垒。IC 为正而净夏普为负是诚实结果。
@@ -107,6 +107,27 @@ chart /workspace/Quant-trading-learn/public/p5/ridge_vs_gbm.png
 disclaimer: weak synthetic panel — learning only
 ```
 
+
+## SFI 与 MDI / MDA / SHAP 并列（AFML 第8章）
+
+**替代效应：** 相关特征（**mom_20** 与 **mom_20_dup**）会拆分 MDI/MDA/SHAP 的功劳。**单特征重要性（SFI）**换一个问题：在同一 purged 协议下，每个特征**单独**有多好？
+
+实验折-2 单变量 ridge SFI（日度截面 RankIC）：`mom_20`≈**+0.0185**，`mom_20_dup`≈**+0.0145**——单独几乎相当，因而是**替代品**，不是两个独立 alpha。用 SFI 补全 MDI/MDA/SHAP，避免重复计功。
+
+![SFI](/p5/sfi_importance.png)
+
+## Localformer / Transformer 对照箔（同一 purged 协议）
+
+**可选对照，不是颁奖台。** Microsoft **Qlib**（Yang 等，arXiv:2009.11189）的 Alpha158 基准包含 **Transformer**（Vaswani 等，2017）与 **Localformer**（Qlib 带局部性偏置的 Transformer 变体；见 Qlib benchmarks / 相关 Jiang 等工作）。本站**不**重训这些权重，而是在**同一** purged 折、RankIC、成本与 DSR 纪律下跑一个**小型因果注意力池化 + ridge 对照箔**。
+
+| 模型 | 日度截面 RankIC 均值 | 说明 |
+|------|----------------------|------|
+| purged ridge | ≈**+0.040** | 线性基线 |
+| purged GBM | ≈+0.034 | 树基线 |
+| 注意力池化 ridge 箔 | ≈**−0.010** | 此处**未**击败基线 |
+
+**教学：** 诚实协议下，“Transformer 风味”头**不会**自动获胜。引用 Qlib 公开的 Localformer/Transformer 数字仅作**可选对照**——绝不是跳过 purge、embargo 或成本的许可证。**不宣称“深度学习必胜”。**
+
 ## 常见错误 / 陷阱
 
 1. 头条用混合 Spearman 而非日度截面 IC。
@@ -114,6 +135,8 @@ disclaimer: weak synthetic panel — learning only
 3. 不做替代效应检查。
 4. 用未校准概率下注。
 5. 神话零样本 TSFM。
+6. 把重复特征上的 MDI 质量读成两个独立 alpha（跳过 SFI）。
+7. 未在同一 purged 协议与成本下就宣称 “Localformer/Transformer 获胜”。
 
 ## 练习（1:1）
 
@@ -121,6 +144,8 @@ disclaimer: weak synthetic panel — learning only
 2. **ex2** — 映射 Qlib Alpha158+LGBModel 阶段。
 3. **ex3** — 泄漏清单 + 标注情形 (a)/(b)/(c)。
 4. **done1** — 小流水线报告（含成本抹平讨论）。
+5. **ex4** — `mom_20` vs `mom_20_dup` 的 SFI 表；**完成标准**：打印两者单变量 IC 并陈述替代。
+6. **ex5** — purged 折下注意力箔 vs ridge/GBM RankIC；**完成标准**：拒绝 “DL 必胜” 宣称。
 
 ## 测验
 
@@ -130,12 +155,14 @@ disclaimer: weak synthetic panel — learning only
 <Quiz id="q4-cal" question="下注应使用？" options={["只要原始分数", "校准后的概率", "只要 MDI", "打乱准确率"]} answer={1} explanation="AFML ch.10 精神。" />
 <Quiz id="q5-qlib" question="Alpha158 + LGBModel 对应？" options={["只画价格", "特征 handler + 分段 + GBM 分数", "未 purge shuffle", "P8 智能体"]} answer={1} explanation="官方 Qlib 工作流的 pandas 镜像。" />
 <Quiz id="q6-tsfm" question="arXiv:2511.18578 对零样本 Chronos/TimesFM？" options={["总是胜过 LightGBM", "在超额收益上总体弱于树集成", "取消 purge", "证明智能体"]} answer={1} explanation="已核验的金融 TSFM 评价。" />
+<Quiz id="q7-sfi" question="SFI 相对 MDI/MDA/SHAP 的作用是？" options={["取代 purge", "单独给每个特征打分并暴露替代品", "最大化费用", "跳过校准"]} answer={1} explanation="AFML 第8章单特征重要性。" />
+<Quiz id="q8-tf" question="本课 purged 箔上，注意力池化 ridge 相对 ridge/GBM？" options={["证明 DL 必胜", "未击败简单基线 — 不作 DL 必胜宣称", "取消成本", "取代 Qlib"]} answer={1} explanation="同一协议；此处箔 IC 为负。" />
 
 ## 完成标准
 
 小流水线 + 清单，用数字写明情形 (a)/(b)/(c)。
 
-**来源：** Qlib 文档；AFML ch.10；Bailey–LdP DSR；arXiv:2511.18578、2412.09880、2606.27100。
+**来源：** Qlib 文档 + Yang 等 arXiv:2009.11189；Qlib benchmarks（Transformer / Localformer）；Vaswani 等 2017 Attention；AFML 第8/10章；Bailey–LdP DSR；arXiv:2511.18578、2412.09880、2606.27100。
 
 <Summary>
 **要点**：日度截面 IC 为主；purge 回收弱信号；成本仍可抹净夏普；Qlib 镜像；TSFM 引用。  

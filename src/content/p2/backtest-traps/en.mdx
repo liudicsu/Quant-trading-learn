@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**16 hours**: 5h concepts + 9h multi-labs + 2h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**18 hours**: 5h concepts + 10h multi-labs incl. CPCV toy + 3h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
 **Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
@@ -138,6 +138,13 @@ afml_note: this embargo/purge block is a SIMPLIFIED sketch of AFML ch.7, not the
 === failure log template ===
 date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_action
 2026-11-04 | MA walk-forward | 8 windows × 10 folds | mean_train=0.245 | mean_test=-0.891 | IS≠OOS / DSR falls with N | shrink search / pre-register / sealed hold-out
+
+=== CPCV teaching sketch (AFML ch.12 spirit) ===
+disclaimer: teaching sketch — NOT production AFML Combinatorial Purged Cross-Validation
+params: N_GROUPS=6 N_TEST=2 n_combinations=15 n_backtest_paths=5
+combo_SR_test mean=-0.8222 std=1.4427
+single_holdout OOS_SR=-1.3379 (ONE path)
+saved_plot public/p2/cpcv_sr_dist.png
 ASSERTS_OK
 ```
 
@@ -265,6 +272,19 @@ date | hypothesis | trials | best_is_metric | oos_metric | fail_reason | next_ac
 ASSERTS_OK
 ```
 
+
+## Combinatorial purged CV (CPCV) teaching sketch
+
+**Intuition:** A single train/hold-out split gives you **one** out-of-sample Sharpe. If that window is lucky or unlucky, you may love or hate a rule for the wrong reason. Combinatorial purged cross-validation (AFML ch.12) cuts the timeline into \(N\) contiguous groups, takes every combination of \(k\) groups as the test block, purges train labels that overlap those tests, and rebuilds several backtest **paths**. You then read the **distribution** of path metrics.
+
+**Counts:** combinations \(C(N,k)\); paths \(\varphi[N,k]=C(N-1,k-1)\). Lab: \(N=6\), \(k=2\) → \(C(6,2)=15\) combinations and \(\varphi=C(5,1)=5\) paths.
+
+**Numeric toy** (honest MA pnl): combo test Sharpes mean ≈ **−0.82**, std ≈ **1.44**; a single 2/3–1/3 hold-out yields **one** OOS SR ≈ **−1.34**. The cloud is the point. Paths **reuse** test groups — they are **not** independent DSR trials.
+
+![CPCV SR distribution](/p2/cpcv_sr_dist.png)
+
+**Disclaimer:** this demo is a **teaching sketch**, not production AFML `CombinatorialPurgedKFold`. The same combinatorial spirit reappears when `ml-leakage-control` scores many purged folds.
+
 ## Common mistakes / pitfalls
 
 1. Same-bar fills labeled “research.”
@@ -272,6 +292,8 @@ ASSERTS_OK
 3. Interpreting equal honest NAV tricks as anti-look-ahead proof.
 4. Ignoring survivorship while “fixing” on today’s index members.
 5. Treating PSR/DSR thresholds as live trading rules without reading the papers’ assumptions (IID / stationary ergodic returns, independent trials).
+6. Counting CPCV paths as independent DSR trials \(N\).
+7. Treating the teaching CPCV sketch as production AFML code.
 
 ## Practice (1:1 with the checklist)
 
@@ -281,6 +303,7 @@ ASSERTS_OK
 4. **ex4** — False-hit null context; **done when** SE≈0.918, expected≈3.07, and mean_false_hits are stated together.
 5. **ex5** — Survivorship/snooping recap + link to data-cleaning; **done when** both appear with the cross-link.
 6. **ex6** — (Optional) purged/embargo note; **done when** purge/embargo counts print.
+7. **ex7** — CPCV toy: print \(C(6,2)\), path count, combo SR mean/std vs single hold-out; **done when** numbers match and `cpcv_sr_dist.png` exists.
 
 ## Quiz
 
@@ -290,12 +313,14 @@ ASSERTS_OK
 <Quiz id="q4-dsr" question="As independent trials N grow, DSR of a fixed selected trial usually?" options={["Rises to 1", "Falls because E[max SR] rises", "Ignores N", "Equals win rate"]} answer={1} explanation="Bailey & López de Prado 2014." />
 <Quiz id="q5-null" question="With n=299, SE≈√(252/299)≈0.92, P(|SR|>1.5)≈0.10 means 30 null trials expect about?" options={["0 hits", "~3 hits", "30 hits", "299 hits"]} answer={1} explanation="30×0.102≈3.07; lab MC≈2.78." />
 <Quiz id="q6-surv" question="Survivorship bias in this phase means?" options={["Using hashes", "Testing only names that still exist today", "Using next-open fills", "Paying commission"]} answer={1} explanation="Cross-link data-cleaning." />
+<Quiz id="q7-cpcv" question="CPCV’s main teaching gift versus one hold-out is?" options={["Guaranteed alpha", "A distribution of OOS metrics across combinatorial test blocks", "Lower fees", "Skipping purge"]} answer={1} explanation="Many purged test combinations → SR distribution; paths are not independent DSR trials." />
+<Quiz id="q8-cpcv2" question="This site’s CPCV demo is?" options={["Production AFML CombinatorialPurgedKFold", "A teaching sketch of AFML ch.12 spirit", "A live broker API", "A substitute for costs"]} answer={1} explanation="Stated in the lab header." />
 
 ## Done when
 
 - Walk-forward summary + PSR/DSR vs N + false-hit context + quizzes
 
-**Sources:** classic — Canvas m5; AFML ch.7/14. Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113.
+**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113.
 
 <Summary>
 **Takeaways**: walk-forward tables, trial counts, PSR/DSR vs N, null false-hit math, survivorship/snooping recap.  

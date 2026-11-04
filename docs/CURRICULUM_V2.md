@@ -29,9 +29,9 @@
 | `markets-language` | P1 | 5 | 2 | 否 | basic-finance-markets |
 | `microstructure-orders` | P1 | 7 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
-| `eval-lab` | P1 | 5 | 2 | 否 | returns-vol-corr, microstructure-orders |
-| `data-cleaning` | P2 | 10 | 3 | 否 | eval-lab |
-| `backtest-traps` | P2 | 16 | 4 | 否 | data-cleaning, stats-probability-basics |
+| `eval-lab` | P1 | 6 | 2 | 否 | returns-vol-corr, microstructure-orders |
+| `data-cleaning` | P2 | 12 | 3 | 否 | eval-lab |
+| `backtest-traps` | P2 | 18 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 6 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
@@ -40,12 +40,12 @@
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
 | `factor-workflow` | P4 | 14 | 4 | 否 | strategy-compare-lab, backtest-traps |
 | `factor-portfolio-lab` | P4 | 7 | 4 | 否 | factor-workflow |
-| `ml-leakage-control` | P5 | 14 | 5 | 否 | factor-workflow, backtest-traps |
-| `modern-ml-pipelines` | P5 | 8 | 4 | 否 | ml-leakage-control, data-cleaning |
-| `portfolio-risk-sizing` | P6 | 14 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
+| `ml-leakage-control` | P5 | 20 | 5 | 否 | factor-workflow, backtest-traps |
+| `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
+| `portfolio-risk-sizing` | P6 | 17 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
 | `execution-slippage` | P6 | 7 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
 | `risk-systems-lab` | P6 | 5 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
-| `paper-trading-infra` | P7 | 10 | 3 | 否 | risk-systems-lab |
+| `paper-trading-infra` | P7 | 11 | 3 | 否 | risk-systems-lab |
 | `compliance-ethics` | P7 | 4 | 2 | 否 | paper-trading-infra |
 | `frontier-llm-agents` | P8 | 8 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
 | `frontier-tsfm-altdata-crypto` | P8 | 8 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
@@ -71,7 +71,7 @@
 **全量（含 P0）：约 238 学时。** 6h/周 ≈ 39.7 周；12h/周 ≈ 19.8 周。
 **跳过 P0 后：约 218 学时。** 6h/周 ≈ 36.3 周；12h/周 ≈ 18.2 周。
 
-精确合计：**238h 全量 / 218h 跳过 P0**。对外可表述为约 **220–250h 全量 / 200–230h 跳过基础**（含个人复盘缓冲）。
+精确合计：**256h 全量 / 236h 跳过 P0**。对外可表述为约 **240–270h 全量 / 220–250h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -843,3 +843,18 @@
 | 结业 | P9 |
 | （新）基础 | P0 |
 | （新）前沿 | P8 |
+
+
+### Advanced deepenings (no new phases) — 2026-11-04
+
+Inventory items woven into existing lessons (zh+en, offline toys):
+
+1. **CPCV teaching sketch** → `backtest-traps` (+ reuse note in `ml-leakage-control`); AFML ch.12 spirit, NOT production CombinatorialPurgedKFold.
+2. **Fracdiff / uniqueness / meta-label filter** → `ml-leakage-control` (`examples/p5/03_afml_depth.py`); AFML ch.3–5.
+3. **Info bars** → `data-cleaning`; AFML ch.2; explicitly not an HFT recipe.
+4. **SFI + Localformer/Transformer foil** → `modern-ml-pipelines`; AFML ch.8; Qlib arXiv:2009.11189 + benchmarks; no “DL wins” claim.
+5. **PyFolio tear-sheet map** → `eval-lab`.
+6. **Atlas name-drop** beside Qbot → `paper-trading-infra`.
+7. **HRP** → `portfolio-risk-sizing`; López de Prado 2016 JPM 42(4) + AFML ch.16.
+
+Net hours ≈ +18h (256h full / 236h skip P0).

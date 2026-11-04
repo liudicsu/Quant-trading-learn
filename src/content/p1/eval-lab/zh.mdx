@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **5 学时**：概念 1.5h + 实验 3h + 测验 0.5h）做**成本后**指标对照：玩具 MA 信号 vs 买入持有；滑点升档；解释胜率≠好策略。前置：`returns-vol-corr`、`microstructure-orders`。
+本课（约 **6 学时**：概念 1.5h + 实验 3h + 测验 0.5h）做**成本后**指标对照：玩具 MA 信号 vs 买入持有；滑点升档；解释胜率≠好策略。前置：`returns-vol-corr`、`microstructure-orders`。
 
 **课内目标：** 做成本后对照表；解释胜率≠好策略。
 
@@ -70,6 +70,23 @@ teach: higher turnover amplifies costs; reporting gross-only is dishonest.
 ASSERTS_OK
 ```
 
+
+## PyFolio tear sheet 含义（复用已有指标）
+
+**直觉：** [PyFolio](https://github.com/quantopian/pyfolio) / pyfolio-reloaded 的**收益 tear sheet**是仪表盘，不是新的优势。`create_returns_tear_sheet(returns, benchmark_rets=...)` 画的是你在 `returns-vol-corr` 与本课已经算过的数。
+
+| Tear sheet 标签 | 课内值（5 bps 玩具） | 你已有的算法 |
+|-----------------|---------------------|--------------|
+| 年化收益 | ≈+0.025 | 日均×252 |
+| 年化波动 | ≈0.126 | 日标准差×√252 |
+| 夏普（Rf=0） | ≈0.195 | (均值−Rf)/标准差×√252 |
+| 最大回撤 | ≈−0.092 | min(净值/峰值−1) |
+| 累计收益 | ≈+0.017 | 最终净值 − 1 |
+| 日度 VaR 5% | ≈−0.015 | 经验 5% 分位 |
+| 稳定性（R²） | ≈0.34 | log 净值对时间的 R² |
+
+**教学：** 分清全样本与样本外；仍要诚实扣成本；仅在基准可投资且时间对齐时挂 benchmark。运行：`examples/p1/04_eval_lab.py`。
+
 ## 常见错误 / 陷阱
 
 1. 只贴毛收益曲线。
@@ -77,6 +94,8 @@ ASSERTS_OK
 3. 忽略换手与成本联动。
 4. 无基准对照。
 5. 信号未 shift 就评「成本后」（仍混有前瞻）。
+6. 把 tear sheet 当成优势证明，而不是指标仪表盘。
+7. 挂上未对齐或不可投资的「基准」序列。
 
 ## 练习（与任务清单 1:1）
 
@@ -85,6 +104,7 @@ ASSERTS_OK
 3. **ex3**：写三句结论（毛vs净、换手、胜率陷阱）；**完成标准**：三句都出现。
 4. **ex4**：计算并报告年化换手；**完成标准**：与课内量级一致。
 5. **ex5**：说明为何需要基准；**完成标准**：≥2 句提到相对评价。
+6. **ex6**：把五个 PyFolio tear-sheet 标签映射到课内公式；**完成标准**：与课内表一致。
 
 ## 测验
 
@@ -93,12 +113,13 @@ ASSERTS_OK
 <Quiz id="q3-wr" question="胜率高一定是好策略吗？" options={["是", "否，期望与尾部可能仍很差", "只要大于 50% 即可", "等于夏普"]} answer={1} explanation="课内 91% 胜率均值仍可为负。" />
 <Quiz id="q4-bm" question="为何需要基准？" options={["监管唯一要求用 ETF", "相对评价，避免把 Beta 当 Alpha", "去掉所有风险", "提高胜率"]} answer={1} explanation="基准约束「超额」叙事。" />
 <Quiz id="q5-shift" question="评价前 position=signal.shift(1) 为了？" options={["加快滚动", "降低同日收盘前瞻", "提高胜率", "取消成本"]} answer={1} explanation="信息时点对齐。" />
+<Quiz id="q6-pf" question="PyFolio 收益 tear sheet 主要是？" options={["制造 alpha", "把你已会算的指标做成仪表盘", "取消成本", "取代 walk-forward"]} answer={1} explanation="仪表盘，不是新优势。" />
 
 ## 完成标准
 
 - 对照表 + 三句结论 + 测验
 
-**来源：** classic — JoinQuant 策略评价；Canvas eval。niche — 上文 @FG731314 帖（已阅读并链接）。
+**来源：** classic — JoinQuant 策略评价；Canvas eval；Quantopian pyfolio / pyfolio-reloaded tear-sheet 文档。niche — 上文 @FG731314 帖（已阅读并链接）。
 
 <Summary>
 **要点**：成本后对照、换手、胜率陷阱、基准。  

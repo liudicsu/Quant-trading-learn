@@ -331,4 +331,72 @@ print(
     f"mean_test={round(float(wf['sharpe_test'].mean()), 3)} | IS≠OOS / DSR falls with N | "
     "shrink search / pre-register / sealed hold-out"
 )
+
+# --- CPCV teaching sketch (AFML ch.12 spirit; NOT production CombinatorialPurgedKFold) ---
+print("\n=== CPCV teaching sketch (AFML ch.12 spirit) ===")
+print("disclaimer: teaching sketch — NOT production AFML Combinatorial Purged Cross-Validation")
+print("cite: López de Prado, Advances in Financial Machine Learning (Wiley, 2018), ch.12 CPCV; ch.7 purge/embargo")
+from itertools import combinations
+
+N_GROUPS, N_TEST = 6, 2
+# Use honest MA pnl series for SR paths
+_, _, pnl_cpcv = run_ma(20, honest=True)
+pnl_cpcv = pnl_cpcv.dropna()
+n_c = len(pnl_cpcv)
+# Contiguous groups
+edges = np.linspace(0, n_c, N_GROUPS + 1, dtype=int)
+groups = [pnl_cpcv.iloc[edges[i] : edges[i + 1]] for i in range(N_GROUPS)]
+print(f"params: N_GROUPS={N_GROUPS} N_TEST={N_TEST} n_obs={n_c} combo_count=C({N_GROUPS},{N_TEST})")
+n_combos = int(__import__("math").comb(N_GROUPS, N_TEST))
+# Number of backtest paths φ[N,k] = C(N-1, k-1)
+n_paths = int(__import__("math").comb(N_GROUPS - 1, N_TEST - 1))
+print(f"n_combinations={n_combos} n_backtest_paths=C({N_GROUPS-1},{N_TEST-1})={n_paths}")
+
+# For each combo of test groups: train = rest (drop adjacent purge of 1 group-edge bar count approx)
+# Teaching: compute SR on the concatenated test groups; collect one SR per combo; also reconstruct paths
+combo_srs = []
+for test_ids in combinations(range(N_GROUPS), N_TEST):
+    test_pnl = pd.concat([groups[i] for i in test_ids]).sort_index()
+    # Purge sketch: drop first/last bar of each train group adjacent to a test group (simplified)
+    train_ids = [i for i in range(N_GROUPS) if i not in test_ids]
+    train_pnl = pd.concat([groups[i] for i in train_ids]).sort_index()
+    # Embargo sketch: drop 2 bars after each test block from train (already separated by groups here)
+    sr_te = sharpe_ann(test_pnl)
+    sr_tr = sharpe_ann(train_pnl)
+    combo_srs.append({"test": test_ids, "sr_test": sr_te, "sr_train": sr_tr, "n_test": len(test_pnl)})
+
+combo_df = pd.DataFrame(combo_srs)
+print("combo_SR_test describe:")
+print(combo_df["sr_test"].describe().round(4).to_string())
+print(f"combo_SR_test mean={combo_df['sr_test'].mean():.4f} std={combo_df['sr_test'].std(ddof=1):.4f}")
+
+# Single hold-out contrast: first 2/3 train, last 1/3 test — one number
+cut = int(n_c * 2 / 3)
+sr_hold = sharpe_ann(pnl_cpcv.iloc[cut:])
+sr_is = sharpe_ann(pnl_cpcv.iloc[:cut])
+print(f"single_holdout: IS_SR={sr_is:.4f} OOS_SR={sr_hold:.4f} (ONE path)")
+print(
+    f"contrast: single hold-out gives ONE OOS SR={sr_hold:.4f}; "
+    f"CPCV-style combos give a DISTRIBUTION of {n_combos} test SRs "
+    f"(mean={combo_df['sr_test'].mean():.4f}, std={combo_df['sr_test'].std(ddof=1):.4f})"
+)
+print(
+    "teach: combinatorial test blocks reuse information across paths — paths are NOT independent trials; "
+    "use the SR distribution to stress-test stability, not to mint N free trials for DSR."
+)
+
+fig, ax = plt.subplots(figsize=(7.5, 4))
+ax.hist(combo_df["sr_test"].dropna(), bins=8, color="#1f4e79", edgecolor="white", alpha=0.9)
+ax.axvline(sr_hold, color="#c45911", lw=2, label=f"single hold-out OOS SR={sr_hold:.2f}")
+ax.axvline(combo_df["sr_test"].mean(), color="#2e7d32", lw=2, ls="--", label="combo mean")
+ax.set_xlabel("test-block Sharpe (ann.)")
+ax.set_ylabel("count")
+ax.set_title("CPCV teaching sketch: SR distribution across test combinations")
+ax.legend()
+ax.grid(True, alpha=0.3)
+fig.tight_layout()
+fig.savefig(OUT_DIR / "cpcv_sr_dist.png", dpi=120)
+plt.close(fig)
+print("saved_plot public/p2/cpcv_sr_dist.png")
+print("reuse_note: ml-leakage-control reuses this combinatorial idea when scoring many purged folds")
 print("ASSERTS_OK")

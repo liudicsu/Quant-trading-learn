@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **10 学时**：概念 4h + 管线实验 5h + 文档/测验 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **12 学时**：概念 4h + 管线实验 5h + 文档/测验 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -104,8 +104,28 @@ adj_before 92.8473 adj_after 91.3565
 raw_ret_across_split -0.508
 adj_ret_across_split -0.0161
 data_sheet_stub: source=synthetic; seed=17; fields=adj/raw/PIT; timezone=naive dates; universe_rule=see survivorship note
+=== information bars toy (AFML ch.2; teaching only, NO HFT recipe) ===
+toy_counts {'time50': 100, 'vol200': 241, 'dollar': 231}
+time/tick50  n_bars=100 mean_|ret|=0.004509
+volume200    n_bars=241 mean_|ret|=0.002966
+dollar~200p  n_bars=231 mean_|ret|=0.003033
 ASSERTS_OK
 ```
+
+
+## 信息 bar 对比时间 bar（AFML 第2章）
+
+**直觉：****时间 bar** 按挂钟采样（每分钟、每日）。市场说话的节奏并不均匀：清淡一小时与突发新闻都变成“一根 bar”，收益方差与微观结构噪声显得忽大忽小。**Tick / 成交量 / 美元 bar** 按*活动量*采样——每 \(N\) 笔成交、\(V\) 股或 \(D\) 美元名义成交后再出一根 bar。忙时多出 bar、闲时少出。这是研究用的**采样时钟**选择，**不是**高频延迟或执行配方。
+
+**玩具对照**（同一条 5,000 tick 合成tape，`examples/p2/01_data_cleaning.py`）：
+
+| 时钟 | bar 数 | 均值\|收益\| | 收益标准差 |
+|------|--------|-------------|------------|
+| 每 50 tick 时间/笔数 | 100 | ≈0.0045 | ≈0.0058 |
+| 成交量 200 股 | 241 | ≈0.0030 | ≈0.0036 |
+| 美元 ≈200×中间价 | 231 | ≈0.0030 | ≈0.0038 |
+
+活动时钟在同一 tape 上产生**更多** bar、**更小**的单 bar 波动——序列更接近“信息时钟”。
 
 ## 常见错误 / 陷阱
 
@@ -114,6 +134,8 @@ ASSERTS_OK
 3. UTC/本地日错一天。  
 4. raw/adj 混用却不声明。  
 5. 无哈希/无版本号。
+6. 把信息 bar 当成高频执行配方，而不是研究采样时钟。
+7. 在未声明的不同 tape 上比较时钟。
 
 ## 练习（与任务清单 1:1）
 
@@ -122,6 +144,7 @@ ASSERTS_OK
 3. **ex3**：写数据说明书四节；**完成标准**：来源/字段/时区/宇宙规则。  
 4. **ex4**：复现幸存者均值对比；**完成标准**：两均值与课内一致。  
 5. **ex5**：说明 PIT 滞后；**完成标准**：写出 lag=5 与 lookahead 一句。
+6. **ex6**：信息 bar 时钟——打印合成 tape 上时间/成交量/美元 bar 数量；**完成标准**：与课内表一致。
 
 ## 测验
 
@@ -130,12 +153,14 @@ ASSERTS_OK
 <Quiz id="q3-tz" question="会话标签错一天最像？" options={["降低波动", "把未来收盘价贴到更早的行（前瞻）", "提高佣金", "取消 Beta"]} answer={1} explanation="错标等价于信息时点前移。" />
 <Quiz id="q4-adj" question="拆分日 raw 大跌、adj 不大，说明？" options={["策略失效", "未复权价格跳变，研究需声明字段", "必须做空", "哈希错误"]} answer={1} explanation="字段选择改变收益定义。" />
 <Quiz id="q5-hash" question="保存 sha256 的主要目的？" options={["加快下载", "证明字节级可复现", "提高夏普", "替代说明书"]} answer={1} explanation="版本化校验。" />
+<Quiz id="q6-infobar" question="美元/成交量 bar 主要改变什么？" options={["券商费用", "从挂钟到活动量的采样时钟", "监管披露", "无风险利率"]} answer={1} explanation="AFML 第2章信息驱动 bar。" />
+<Quiz id="q7-infobar2" question="本课信息 bar 演示是？" options={["高频延迟配方", "合成 tick 上的研究采样对照", "实盘路由", "PIT 替代"]} answer={1} explanation="明确声明非 HFT 配方。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖。
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars。
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明。  

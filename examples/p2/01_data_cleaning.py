@@ -92,3 +92,71 @@ print("raw_ret_across_split", round(float(df["AAA_raw"].iloc[i] / df["AAA_raw"].
 print("adj_ret_across_split", round(float(df["AAA_adj"].iloc[i] / df["AAA_adj"].iloc[i - 1] - 1), 4))
 print("data_sheet_stub: source=synthetic; seed=17; fields=adj/raw/PIT; timezone=naive dates; universe_rule=see survivorship note")
 print("ASSERTS_OK")
+
+# --- Information-driven bars toy (AFML ch.2 spirit; NOT an HFT recipe) ---
+print("\n=== information bars toy (AFML ch.2; teaching only, NO HFT recipe) ===")
+print("cite: López de Prado AFML ch.2 — tick/volume/dollar bars vs time bars")
+print("params: synthetic tick stream seed=0; n_ticks=5000; time_bar=50 ticks wall; tick_bar=50 trades; vol_bar=200 shares; dollar_bar≈200*mid")
+import numpy as np
+rng = np.random.default_rng(0)
+n_ticks = 5000
+# Random-walk mid with stochastic size
+mid = 100 * np.exp(np.cumsum(rng.normal(0, 0.0008, size=n_ticks)))
+size = rng.integers(1, 20, size=n_ticks)
+dollar = mid * size
+ts = pd.date_range("2024-01-02 09:30", periods=n_ticks, freq="s")
+ticks = pd.DataFrame({"mid": mid, "size": size, "dollar": dollar}, index=ts)
+
+def make_bars(rule_values, threshold, price):
+    """Accumulate until threshold; emit OHLC on trigger. Teaching sketch."""
+    bars = []
+    acc = 0.0
+    o = h = l = c = None
+    t0 = None
+    for t, v, px in zip(rule_values.index, rule_values.values, price.values):
+        if o is None:
+            o = h = l = c = float(px)
+            t0 = t
+        h = max(h, float(px)); l = min(l, float(px)); c = float(px)
+        acc += float(v)
+        if acc >= threshold:
+            bars.append({"t": t, "open": o, "high": h, "low": l, "close": c, "acc": acc})
+            acc = 0.0
+            o = h = l = c = None
+    return pd.DataFrame(bars).set_index("t") if bars else pd.DataFrame()
+
+# Time bars: every 50 ticks (wall-clock proxy)
+time_idx = np.arange(len(ticks))
+time_bars = make_bars(pd.Series(1, index=ticks.index), 50, ticks["mid"])
+tick_bars = make_bars(pd.Series(1, index=ticks.index), 50, ticks["mid"])  # same threshold unit=trades
+# volume / dollar use different clocks
+vol_bars = make_bars(ticks["size"], 200, ticks["mid"])
+# dollar threshold ≈ 200 * typical mid
+dol_thr = 200 * float(ticks["mid"].iloc[0])
+dol_bars = make_bars(ticks["dollar"], dol_thr, ticks["mid"])
+
+def bar_stats(name, bars):
+    if bars.empty or len(bars) < 3:
+        print(name, "too_few")
+        return
+    ret = bars["close"].pct_change().dropna()
+    print(
+        f"{name:12s} n_bars={len(bars):4d} mean_|ret|={ret.abs().mean():.6f} "
+        f"std_ret={ret.std(ddof=1):.6f} max_gap_s={(bars.index.to_series().diff().dt.total_seconds().max()):.0f}"
+    )
+
+print("clock comparison on SAME synthetic tick tape:")
+bar_stats("time/tick50", time_bars)
+bar_stats("volume200", vol_bars)
+bar_stats("dollar~200p", dol_bars)
+print(
+    "teach: time bars sample the clock; tick/volume/dollar bars sample activity — "
+    "busy periods mint more bars, quiet periods fewer. This is a sampling choice for research bars, "
+    "NOT a latency or HFT execution recipe."
+)
+print(
+    "intuition: if news hits and 1000 trades arrive in one minute, time bars still emit one 1-min bar, "
+    "while tick/volume/dollar bars emit many — returning the series closer to an 'information clock'."
+)
+# Tiny numeric toy for the lesson table
+print("toy_counts", {"time50": len(time_bars), "vol200": len(vol_bars), "dollar": len(dol_bars)})

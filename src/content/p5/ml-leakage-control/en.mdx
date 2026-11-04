@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14 hours**: 5h AFML concepts + 7h labs + 2h write-up — HEAVY) builds **anti-leakage ML** for finance: vol-scaled labels, purged CV with embargo, and the right IC metric. Prereqs: `factor-workflow`, `backtest-traps`.
+This lesson (~**20 hours**: 5h AFML concepts + 7h labs + 2h write-up — HEAVY) builds **anti-leakage ML** for finance: vol-scaled labels, purged CV with embargo, and the right IC metric. Prereqs: `factor-workflow`, `backtest-traps`.
 
 **Goals:** demo shuffle / unpurged leakage; time-split with causal features; score with **mean daily cross-sectional RankIC** (not accuracy, not pooled Spearman as primary).
 
@@ -75,7 +75,7 @@ A purged IC near zero would mean “no recoverable linear signal under this prot
 
 ## Python lab
 
-`examples/p5/01_ml_leakage_control.py`
+`examples/p5/01_ml_leakage_control.py` (core leaks) and `examples/p5/03_afml_depth.py` (fracdiff / uniqueness / meta / CPCV note)
 
 ### Real run output
 
@@ -153,6 +153,53 @@ saved artifacts for lab 02
 disclaimer: synthetic weak panel — learning only
 ```
 
+
+## Fractional differentiation (AFML ch.5)
+
+**Intuition:** Prices are usually non-stationary. Taking an integer difference \(d=1\) (simple returns) often passes a stationarity test **but wipes long memory** — the very dependence a slow signal might need. **Fractional differentiation** applies fractional weights
+
+
+```text
+\omega_0=1,\quad \omega_k=-\omega_{k-1}\frac{d-k+1}{k}
+```
+
+
+and cuts the sum when \(|\omega_k|\) falls under a threshold (fixed-width window). You search for the smallest \(d\) that looks stationary while keeping more serial dependence than \(d=1\).
+
+**Numeric toy** (`examples/p5/03_afml_depth.py`, synthetic log-price):
+
+- ADF on raw price: p≈**0.15** (fail to reject unit root)
+- Fracdiff \(d=0.4\): ADF p≈**0.00**; autocorr(lag=20)≈**+0.17**
+- Integer diff \(d=1\): ADF p≈**0.00**; autocorr(lag=20)≈**−0.02**
+
+So both transforms can be “stationary,” but fracdiff **keeps memory** the integer difference destroys. When \(d\) is a positive integer, weights beyond lag \(d\) are exactly zero — memory cancelled by construction.
+
+![Fracdiff weights](/p5/fracdiff_weights.png)
+
+## Sample uniqueness & sequential bootstrap (AFML ch.4)
+
+**Intuition:** Triple-barrier (and many horizon) labels **overlap in time**. Counting each overlapping event as an IID sample overstates the effective sample size. **Average uniqueness** of an event is the mean of \(1/c_t\) over the bars \(t\) it spans, where \(c_t\) is the number of concurrent labels at \(t\).
+
+**Tiny panel:** 12 overlapping events. Concurrent counts rise to 4 in the middle. Equal-weight mean of \(y\) ≈ **0.0075**; uniqueness-weighted mean ≈ **0.0094** — redundant concurrent labels are down-weighted.
+
+**Sequential bootstrap (one paragraph):** ordinary bagging draws IDs with equal probability, so overlapping events keep co-appearing. Sequential bootstrap (AFML ch.4) draws the next index with probability proportional to **remaining** uniqueness given events already drawn, producing less redundant bags.
+
+## Meta-labeling filter (AFML ch.3) — full subsection
+
+**Primary side** decides direction (here `sign(mom_20)`). **Meta-labeling** learns a second model whose label is “trade or skip” (agree with the barrier outcome). It does **not** invent a new side; it filters when to size the primary bet. Bet sizing after the filter continues in `modern-ml-pipelines` (AFML ch.10).
+
+| Config | mean daily CS RankIC | turnover | net SR | trade_frac |
+|--------|----------------------|----------|--------|------------|
+| A primary always | ≈+0.032 | ≈0.16 | ≈+0.17 | 1.00 |
+| B meta filter p≥0.52 | ≈+0.035 | ≈0.31 | ≈−1.46 | ≈0.36 |
+| C meta filter p≥0.48 | ≈+0.030 | ≈0.23 | ≈+0.10 | ≈0.95 |
+
+On this weak panel, a stricter meta filter can **raise IC a little** while **hurting net SR** via turnover — another (b)/(c) reminder: filtering ≠ free edge after costs.
+
+## CPCV reuse note
+
+Scoring many purged fold combinations yields a **distribution** of OOS metrics — the same spirit as AFML ch.12 CPCV. Paths reuse test blocks and are **not** independent DSR trials. The numeric toy (15 combo SRs, single hold-out contrast) lives in `backtest-traps` / `examples/p2/02_backtest_traps.py`.
+
 ## Common mistakes / pitfalls
 
 1. Fixed % barriers that encode volatility, not information.
@@ -160,6 +207,9 @@ disclaimer: synthetic weak panel — learning only
 3. Declaring “purged IC≈0 is always correct” when a weak signal is recoverable.
 4. Shuffling rows / unpurged KFold / global scalers.
 5. Celebrating train IC from noisy deep trees.
+6. Using integer differencing and calling the series “feature-ready” without checking memory loss.
+7. Treating overlapping labels as IID (skip uniqueness weights).
+8. Confusing meta-label filters with a new directional alpha.
 
 ## Practice (1:1)
 
@@ -168,6 +218,8 @@ disclaimer: synthetic weak panel — learning only
 3. **ex3** — Score with daily CS IC (show pooled as counterexample).
 4. **ex4** — Overfit trap train vs OOS daily CS IC.
 5. **done1** — Anti-leak notebook + side-by-side table + trial log.
+6. **ex5** — Run `03_afml_depth.py`: report ADF p-values, autocorr memory proxy, uniqueness reweight, and the meta A/B/C table; **done when** numbers match the lesson.
+7. **ex6** — Write three sentences linking CPCV paths to purged-fold score distributions (not DSR trial counts).
 
 ## Quiz
 
@@ -177,12 +229,15 @@ disclaimer: synthetic weak panel — learning only
 <Quiz id="q4-cases" question="Unpurged IC above purged IC mainly illustrates?" options={["Free alpha", "Case (a): pipeline illusion from leakage", "Case (c) only", "Oracle bound"]} answer={1} explanation="Leak protocols inflate IC without honest OOS design." />
 <Quiz id="q5-pooled" question="Pooled Spearman is demoted because it?" options={["Is faster", "Mixes time-series and cross-sectional variation", "Needs GPU", "Replaces DSR"]} answer={1} explanation="It confounds TS persistence with CS ranking." />
 <Quiz id="q6-overfit" question="Train CS IC ~0.34 with OOS ~0.02 means?" options={["Deploy", "In-sample fit ≠ OOS edge; log trials", "Skip purge", "Fixed 2% is fine"]} answer={1} explanation="Overfit trap with noise features." />
+<Quiz id="q7-frac" question="Integer d=1 vs fracdiff d≈0.4 in the toy mainly shows?" options={["Fees fall", "Both can be stationary but fracdiff keeps more autocorr/memory", "Purge is optional", "Meta labels invent side"]} answer={1} explanation="AFML ch.5 stationarity–memory trade-off." />
+<Quiz id="q8-uniq" question="Average uniqueness down-weights labels that?" options={["Have high dollar volume only", "Overlap many concurrent events", "Fail ADF", "Use LightGBM"]} answer={1} explanation="AFML ch.4 concurrent labels." />
+<Quiz id="q9-meta" question="Meta-labeling’s job is to?" options={["Replace the primary side with a new direction", "Filter when to trade/skip a primary side", "Remove purge", "Maximize accuracy alone"]} answer={1} explanation="AFML ch.3 — trade vs skip." />
 
 ## Done when
 
 Anti-leak notebook with vol-scaled TB, side-by-side table, and the three-case narrative.
 
-**Sources:** AFML ch.3/7; P4 weak panel; Canvas m10.
+**Sources:** AFML ch.3 (meta-labeling), ch.4 (uniqueness / sequential bootstrap), ch.5 (fracdiff), ch.7 (purged CV), ch.12 (CPCV spirit); P4 weak panel; Canvas m10.
 
 <Summary>
 **Takeaways**: vol-scaled labels → daily CS IC → purge recovers weak signal → don’t confuse leak / recover / cost-wipe.  
