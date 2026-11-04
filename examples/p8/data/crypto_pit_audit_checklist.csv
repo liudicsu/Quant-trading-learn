@@ -1,0 +1,6 @@
+check,ok,note
+no_same_bar_execution,True,decision at t uses only availability_time <= t; no unfinished bar
+funding_lag,True,"realized funding not shifted backward; use event+lag assumption, test sensitivity"
+no_backfill_gap_fill,True,do not interpolate/backward-fill gaps to manufacture continuity
+OI_publication_unverified,True,"if OI pub time unverified, disable as alpha input (paper: OI optional)"
+core_streams_trade_mark_index_funding,True,"admit on availability-masked complete days, not silent repair"

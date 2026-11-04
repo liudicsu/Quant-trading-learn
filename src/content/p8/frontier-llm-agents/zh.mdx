@@ -1,10 +1,10 @@
 ## 学习目标
 
-本课（约 **8 学时**：导读 4h + 批判练习 3h + 守则改写 1h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
+本课（约 **11 学时**：导读 5h + 批判练习 4h + 守则改写 1h + 密封排行榜精读 1h）把 **LLM / 多智能体量化研发**当作 *前沿*：必须服从与 P4–P5 相同的防泄漏与多重检验纪律，绝不是捷径。前置：`factor-workflow`、`ml-leakage-control`、`modern-ml-pipelines`、`compliance-ethics`。
 
-**课内目标：** 陈述 RD-Agent(Q) 闭环；列出 LLM 挖因子失败模式；设计密封样本外验收。
+**课内目标：** 陈述 RD-Agent(Q) 闭环；解释 AlphaAgent 正则；列出 LLM 挖因子失败模式；设计密封样本外验收。
 
-**必须教会：** 自动化放大试错 → 更需多重检验；论文指标 ≠ 你的可复现优势；Agent 输出须进同一陷阱审讯。
+**必须教会：** 自动化放大试错 → 更需多重检验；论文指标 ≠ 你的可复现优势；Agent 输出须进同一陷阱审讯；参数前瞻须用截止后/密封年主张。
 
 <Callout type="info" title="仅供学习 — 非投资建议">
 仅 **离线 mock**。运行时不调用 ChatGPT/Claude/任何付费 API。实验从不实盘下单。
@@ -27,13 +27,31 @@
 
 ## 密封 hold-out（Quant-Arena 精神）
 
-[Quant-Arena](https://arxiv.org/abs/2610.30113) 检验 LLM agent 能否跑完研究闭环且在研究期**之外**仍有效。协议：IS 结束后**冻结**因子列表；密封年**只打开一次**；偷看后再挖无效。实验打印 `agent_kept` 与 `honest_slow` 的密封 OOS IC。
+[Quant-Arena](https://arxiv.org/abs/2610.30113)（Qian 等）检验 LLM agent 能否跑完研究闭环且在研究期**之外**仍有效。协议：仅在 2022–2023 研究、候选预算有界；**冻结**一条策略；密封年 **2024 只打开一次**；偷看后再挖无效。实验打印 `agent_kept` 与 `honest_slow` 的密封 OOS IC。
+
+**已核验负面排行榜结论（重读摘要/表2）：** 没有任何模型的*最高总分*密封-2024 配置跑赢全市场等权（毛收益 ARR 约 **17.1%**）。最高分那次（GPT-6 Astra）约 **10.7%** ARR（超额约 **−6.3** 个百分点）。另有 Sol medium 配置 18.4% 跑赢等权——但那**不是**该模型最高总分行。密封 hold-out + 成本常把「AI 量化」演示变成警示。
+
+<Callout type="warn" title="拒绝：「AI 对冲基金 / 永远盈利的 LLM」">
+暗示 LLM agent 总盈利的营销话术，过不了该密封、含成本协议。没有「冻结再测密封年」的排行榜不是证据。
+</Callout>
 
 稳定对照：[LLM+MCTS 公式化挖掘](https://arxiv.org/abs/2505.11122)——同样要过陷阱审讯。
 
+## AlphaAgent — 原创性、复杂度、假设对齐
+
+[AlphaAgent](https://arxiv.org/abs/2502.16789)（Tang 等，KDD ’25）指出：若不加正则，LLM 挖因子会**同质化**到拥挤经典（RSI/动量/价值/规模）。三机制：(i) 相对 alpha zoo 的 **AST 原创性**；(ii) **假设–因子对齐**（语义一致性）；(iii) **复杂度控制**。代码参考：[RndmVariableQ/AlphaAgent](https://github.com/RndmVariableQ/AlphaAgent)。实验打印玩具 Jaccard：克隆表达式重叠高、结构新颖者更低——**原创 ≠ 优势**。仍须 purge、DSR(N)、密封 OOS。拥挤桥接见 P4 `factor-workflow`。
+
+## 参数前瞻（权重记住未来）
+
+[FinCAD 论文](https://arxiv.org/abs/2605.24564) 命名 **parametric look-ahead**：预训练到年份 *T* 的 LLM，可能在**权重内**编码 *T* 之前的行情——PIT 数据审计看不见。**先教问题：** 与训练窗重叠的 LLM 决策主张，优先只用**截止后/密封年**评估。**FinCAD 配方 = 仅点名脚注**（本课不实现）。
+
+## CogAlpha — 仅点名
+
+[CogAlpha](https://arxiv.org/abs/2511.18850)（代码级进化式 LLM 挖 alpha）与 RD-Agent / AlphaAgent 并列地图。共享陷阱：试错膨胀、同质化、泄漏评估、论文指标 ≠ 密封成本/DSR。**范围外：** Deep RL / FinRL-as-alpha、HFT 时延、期权做市。
+
 ## Chain-of-Alpha — 已核验撤回
 
-[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **在 arXiv 上存在**，但已**撤回**（arXiv 横幅：由 Lang Cao 撤回）。**放弃双链细节主张**；不要依赖不稳定 PDF。优先 RD-Agent(Q)、LLM+MCTS、Quant-Arena。
+[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **在 arXiv 上存在**，但已**撤回**。本会话抓取的 abs 横幅原文：**“This paper has been withdrawn by Lang Cao”**。同页管理员评论：**“This version has been removed by arXiv administrators as the submitter did not have the rights to agree to the license at the time of submission.”** **放弃双链细节主张**；不依赖不稳定 PDF。优先 RD-Agent(Q)、AlphaAgent、LLM+MCTS、Quant-Arena。
 
 ## LLM 情绪（Lopez-Lira &amp; Tang 2023）
 
@@ -49,26 +67,31 @@
 
 ```text
 === parameters ===
-offline mocks only — no LLM API, no network at runtime
 ...
-kept factors after agent loop: ['noise_A', 'slow_lag1']
-explicit trial count N_TRIALS_AGENT=8 (for DSR)
+Chain-of-Alpha — WITHDRAWN by Lang Cao；abs 页含 admin license-removal 评论
+cite: AlphaAgent; FinCAD/parametric LA; CogAlpha NAME-ONLY
 
-agent_kept       purged_OOF_IC=+0.0299 IS_net_SR=-6.646 DSR(N=8)=0.000 | sealed_OOS_IC=+0.0161 OOS_net_SR=-7.707 OOS_DSR=0.000
-honest_slow      purged_OOF_IC=+0.0320 IS_net_SR=-0.991 DSR(N=1)=0.107 | sealed_OOS_IC=+0.0154 OOS_net_SR=-2.171 OOS_DSR=0.067
+=== Quant-Arena punchline ===
+top-scored sealed-2024 ~10.7% ARR vs equal-weight ~17.1%
 
-mock_sentiment_PIT     post_cutoff mean_CS_IC=+0.0011 ...
-mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 ...
-=== Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===
+=== AlphaAgent toy originality ===
+homogen Jaccard 高；novel Jaccard 更低；原创 ≠ 优势
+
+=== Parametric look-ahead PROBLEM (arXiv:2605.24564) ===
+weights may remember in-cutoff paths; sealed-year / post-cutoff only; FinCAD recipe NAME-ONLY
 ```
+*（完整 stdout 见 rerun 后的 `examples/p8/01_llm_agents_offline.out`。）*
 
 ## 常见错误 / 陷阱
 
-- **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会显得很美（见 Glasserman &amp; Lin 2309.17322；Lopez-Lira/Tang/Zhu 2504.14765）。
-- **试错膨胀：** agent 轮次必须在 DSR 中写明 **N**；论文表 ≠ 你的密封 OOS。
+- **训练截止 / 记忆：** 截止前标题不是预测；LEAK 对照会好看得吓人（Glasserman &amp; Lin；Lopez-Lira/Tang/Zhu）。
+- **参数前瞻：** 权重可记住截止前路径（2605.24564）——只用密封年/截止后。
+- **同质化 LLM 因子：** 缺原创/复杂度/假设约束会拥挤衰减（AlphaAgent）。
+- **试错膨胀：** DSR 须显式 **N**；论文表 ≠ 密封 OOS。
 - **IS 保留规则**过拟合；密封年必须保持密封。
-- **已撤回论文：** Chain-of-Alpha — 只记存在+撤回，不写进流水线。
-- Niche 动机仅参考：XQuant Spec+AI（@_zheergen）——仍要同一套陷阱。
+- **已撤回论文：** Chain-of-Alpha — 用现场横幅+管理员评论；不写进流水线。
+- **范围拒绝：** Deep RL / FinRL-as-alpha、HFT 时延、期权做市 — 本课大纲外。
+- Niche 仅动机：XQuant Spec+AI（@_zheergen）。
 
 ## 练习（1:1）
 
@@ -81,16 +104,19 @@ mock_sentiment_LEAK    post_cutoff mean_CS_IC=+0.6740 ...
 
 <Quiz id="p8llm-q1" question="为何 LLM/agent 闭环提高过拟合风险？" options={["不再需要 OOS", "放大试错/假设数但零假设不变", "保证更高夏普", "禁止 DSR"]} answer={1} explanation="自动化放大多重检验问题。" />
 <Quiz id="p8llm-q2" question="密封 hold-out 指？" options={["每周重用 IS", "冻结选择后对留出期只评估一次", "在测试年拟合", "去掉成本"]} answer={1} explanation="Quant-Arena 精神：冻结后只打开一次。" />
-<Quiz id="p8llm-q3" question="本课对 Chain-of-Alpha arXiv:2508.06312？" options={["必须实现的主论文", "存在但已撤回——放弃细节主张", "证明双链总有效", "取代 RD-Agent"]} answer={1} explanation="已核验 arXiv 上已撤回（横幅：由 Lang Cao 撤回）。" />
+<Quiz id="p8llm-q3" question="本课对 Chain-of-Alpha arXiv:2508.06312？" options={["必须实现的主论文", "存在但已撤回——放弃细节主张", "证明双链总有效", "取代 RD-Agent"]} answer={1} explanation="现场横幅：withdrawn by Lang Cao；abs 页另有管理员许可移除评论。" />
 <Quiz id="p8llm-q4" question="Lopez-Lira & Tang 强调打分对象是？" options={["仅截止前标题", "知识截止日期之后的标题", "无新闻的随机代码", "仅 L2"]} answer={1} explanation="截止后设计是其预测主张的核心。" />
 <Quiz id="p8llm-q5" question="实验 LEAK 情绪对照教会？" options={["总是交易 GPT 分数", "截止/记忆可伪造巨大 IC", "成本可省略", "DSR 永远 N=1"]} answer={1} explanation="诚实 PIT 路径 vs 前瞻类比。" />
+<Quiz id="p8llm-q7" question="Quant-Arena 最高分密封-2024 ARR 相对等权（已核验）？" options={["约10.7%跑赢17.1%", "约10.7%落后约17.1%", "两者皆零", "构造上相等"]} answer={1} explanation="Astra ~10.7% vs EW ~17.1%；最高分行未跑赢等权。" />
+<Quiz id="p8llm-q8" question="AlphaAgent 三正则针对？" options={["仅时延", "原创性、假设对齐、复杂度", "仅佣金", "期权希腊值"]} answer={1} explanation="对抗同质化/衰减。" />
+<Quiz id="p8llm-q9" question="参数前瞻指？" options={["仅 CSV 时区 bug", "模型权重可能记住截止前结果", "截止前回测总安全", "FinCAD 必做作业"]} answer={1} explanation="先教问题；FinCAD 仅点名；用密封/截止后。" />
 <Quiz id="p8llm-q6" question="RD-Agent(Q) 阶段包括？" options={["仅实盘路由", "Research 假设再 Development 实现并反馈", "删除 purge 窗", "跳过伦理"]} answer={1} explanation="Research ↔ Development 联合优化闭环。" />
 
 ## 完成标准
 
 前沿风险清单 + 更新研究守则（密封 OOS、显式 N、不依赖已撤回 PDF）。
 
-**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**已撤回** — 仅警示）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619) Lopez-Lira &amp; Tang 2023；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322) Glasserman &amp; Lin 前瞻/分心；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765) Lopez-Lira/Tang/Zhu 记忆不可识别；niche：@_zheergen Spec+AI 仅动机。
+**来源（已阅读并写入正文）：** [arXiv:2505.15155](https://arxiv.org/abs/2505.15155) RD-Agent(Q)；[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)；[arXiv:2502.16789](https://arxiv.org/abs/2502.16789) AlphaAgent + [GitHub](https://github.com/RndmVariableQ/AlphaAgent)；[arXiv:2605.24564](https://arxiv.org/abs/2605.24564) 参数前瞻/FinCAD（问题+仅点名配方）；[arXiv:2511.18850](https://arxiv.org/abs/2511.18850) CogAlpha（**仅点名**）；[arXiv:2508.06312](https://arxiv.org/abs/2508.06312) Chain-of-Alpha（**由 Lang Cao 撤回**；含管理员许可评论）；[arXiv:2505.11122](https://arxiv.org/abs/2505.11122) LLM+MCTS；[arXiv:2610.30113](https://arxiv.org/abs/2610.30113) Quant-Arena（~10.7% vs ~17.1%）；[arXiv:2304.07619](https://arxiv.org/abs/2304.07619)；[arXiv:2309.17322](https://arxiv.org/abs/2309.17322)；[arXiv:2504.14765](https://arxiv.org/abs/2504.14765)；niche：@_zheergen。
 
 <Summary>
 **要点**：agent 放大试错 → 更严 DSR/密封 OOS；mock ≠ API；撤回论文只做脚注不做流水线。  

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **12 学时**：概念 4h + 管线实验 5h + 信息驱动 K 线 2h + 文档/测验 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **13 学时**：概念 4h + 管线实验 5h + 信息驱动 K 线 2h + Crypto-PIT 注 1h + 文档/测验 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -27,6 +27,10 @@
 ## PIT 基本面
 
 `FUND_pit = FUND_true.shift(5)`。若用「当日已可知」的 `FUND_true` 对齐收益，等于偷看尚未发布的数字。
+
+### Crypto PIT 审计注（指针）
+
+挖 Crypto「alpha」之前，先审计**可得性时间**，而不是「文件是否存在」（[arXiv:2608.25348](https://arxiv.org/abs/2608.25348)，Binance BTCUSDT USD-M 永续）。教学清单：**禁止同 bar 成交**；**资金费率滞后**（勿把已实现资金费率前移）；**禁止回填**制造连续性；若 **OI 发布时间未核验**，禁用 OI 作 alpha 输入。完整 foil + 实验见 `frontier-tsfm-altdata-crypto`。
 
 ## 时区 / 会话错标
 
@@ -131,6 +135,7 @@ ASSERTS_OK
 
 1. 用今日成分回测十年。  
 2. 基本面不 PIT。  
+2b. Crypto 档案看似完整却通不过可得性时间审计（同 bar / 资金费率滞后 / 回填 / 未核验 OI）。  
 3. UTC/本地日错一天。  
 4. raw/adj 混用却不声明。  
 5. 无哈希/无版本号。
@@ -155,6 +160,7 @@ ASSERTS_OK
 <Quiz id="q5-hash" question="保存 sha256 的主要目的？" options={["加快下载", "证明字节级可复现", "提高夏普", "替代说明书"]} answer={1} explanation="版本化校验。" />
 <Quiz id="q6-infobar" question="美元/成交量 bar 主要改变什么？" options={["券商费用", "从挂钟到活动量的采样时钟", "监管披露", "无风险利率"]} answer={1} explanation="AFML 第2章信息驱动 bar。" />
 <Quiz id="q7-infobar2" question="本课信息 bar 演示是？" options={["高频延迟配方", "合成 tick 上的研究采样对照", "实盘路由", "PIT 替代"]} answer={1} explanation="明确声明非 HFT 配方。" />
+<Quiz id="q8-cryptopit" question="Crypto PIT 审计先于 alpha（2608.25348 指针）要求？" options={["同 bar 成交 OK", "禁止同 bar；资金费率滞后；禁止回填；OI 谨慎", "忽略可得性时间", "总是使用 OI"]} answer={1} explanation="可得性掩码清单；完整实验见 P8 TSFM/crypto。" />
 
 ## 完成标准
 

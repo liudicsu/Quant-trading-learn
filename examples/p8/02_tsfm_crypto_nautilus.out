@@ -1,7 +1,9 @@
 === parameters ===
 offline only — mock TSFM / mock funding ledger; no CCXT live calls at runtime
 eval: purged OOS mean daily CS RankIC + DSR(N) + shared costs
-cite: arXiv:2511.18578 Re(Visiting) TSFM in Finance — zero-shot often weak vs ensembles
+cite: arXiv:2511.18578 Re(Visiting) TSFM; arXiv:2606.27100 TSFM as prior not alpha engine
+cite: arXiv:2607.12248 base-rate-honest directional accuracy (always-up foil)
+cite: arXiv:2608.25348 crypto PIT audit before alpha (Binance BTCUSDT perp)
 cite: CCXT docs https://docs.ccxt.com/ ; GMX fees https://docs.gmx.io/docs/trading/fees/
 cite: OpenBB Open Data Platform (aggregation); Trading Strategy GMX/CCXT adapters
 cite: @sera00111 Vision+CCXT note (P2-verified); Nautilus architecture docs
@@ -43,9 +45,30 @@ Strategy code should NOT branch on environment for signal logic — adapters dif
   [OK] no peeking future bars in research path — same event handlers
   [OK] recon: live ExecutionEngine vs research fills logged — paper/live gap discipline
 
+=== base-rate-honest directional accuracy (always-up foil; arXiv:2607.12248) ===
+Headline metric: excess_acc = model_accuracy - always_up_accuracy on identical windows.
+bull toy: n_windows=19 always_up_acc=0.684 (~70-80% band in rising markets)
+marketing_mostly_up raw_acc=0.684 vs_coin_flip=+0.184  <-- ads quote raw vs 50%
+marketing_mostly_up excess_acc=+0.000  <-- honest headline; can be <=0 while raw looks high
+persistence_baseline raw_acc=0.526 excess_acc=-0.158
+Paper recreation spirit: always-up base ~0.70; fine-tuned model can fail to beat it (excess negative).
+WARN box: ads saying '80% directional accuracy' without always-up / excess_acc are base-rate theatre.
+WARN box: zero-shot Chronos/TimesFM as free equity alpha — reject; treat TSFM as prior (2606.27100).
+
+=== crypto PIT audit before alpha (arXiv:2608.25348; Binance BTCUSDT perp spirit) ===
+  [OK] no_same_bar_execution: decision at t uses only availability_time <= t; no unfinished bar
+  [OK] funding_lag: realized funding not shifted backward; use event+lag assumption, test sensitivity
+  [OK] no_backfill_gap_fill: do not interpolate/backward-fill gaps to manufacture continuity
+  [OK] OI_publication_unverified: if OI pub time unverified, disable as alpha input (paper: OI optional)
+  [OK] core_streams_trade_mark_index_funding: admit on availability-masked complete days, not silent repair
+Paper negative result spirit: positive IC can still yield negative net Sharpe under costs — audit first.
+
 === limitations / failure modes ===
 - TSFM zero-shot: weak on noisy daily excess; do not skip purge/costs/DSR.
-- Mock ≠ real Chronos/TimesFM weights; protocol transfer only.
+- Mock != real Chronos/TimesFM weights; protocol transfer only.
+- Base-rate trap: raw ~80% direction can be always-up; report excess_acc (2607.12248).
+- TSFM as prior not alpha engine (2606.27100); reject free-equity-alpha marketing.
+- Crypto: PIT audit before alpha (2608.25348) — no same-bar / funding lag / no backfill.
 - Crypto survivorship: delisted perps/coins drop out of free histories.
 - Funding regime shifts: carry sign flips; constant-rate ann. is a foil.
 - On-chain/GMX: MEV, oracle, liquidity, bridge risks beyond CEX CCXT.

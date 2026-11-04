@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**6 hours**: 1.5h concepts + 3h lab + 0.5h PyFolio map + 1h quiz) builds a **net-of-cost** metric table: toy MA signal vs buy-and-hold; slippage bumps; why win rate ≠ a good strategy. Prereqs: `returns-vol-corr`, `microstructure-orders`.
+This lesson (~**7 hours**: 1.5h concepts + 3h lab + 0.5h PyFolio map + 0.5h base-rate pointer + 1.5h quiz) builds a **net-of-cost** metric table: toy MA signal vs buy-and-hold; slippage bumps; why win rate ≠ a good strategy; why raw directional accuracy can be a base-rate trap. Prereqs: `returns-vol-corr`, `microstructure-orders`.
 
 **Goals:** build a net-of-cost table; explain win rate ≠ good strategy.
 
@@ -24,6 +24,10 @@ Buy-and-hold gross Sharpe≈0.66; toy MA net Sharpe≈0.39 at 0 bps, ≈0.19 at 
 ## Win-rate trap
 
 **Win-rate definition (this lesson):** `win_rate_all_days` = share of **all** days with `pnl>0` (flat/zero days count as non-wins). Not “days-in-position only.”
+
+### Pointer — base-rate-honest directional accuracy
+
+Raw “80% directional accuracy” ads can be a **bull-market base rate**: an **always-up** rule scores high with zero skill. Headline excess accuracy = model accuracy − always-up accuracy on the **same** windows ([arXiv:2607.12248](https://arxiv.org/abs/2607.12248)). Full foil + lab live in `frontier-tsfm-altdata-crypto`; here just remember: win rate and raw direction both need an honest baseline.
 
 Seed=3 toy path: win rate≈**0.91** but **negative** mean return. High win rate can hide rare large losses.
 
@@ -115,12 +119,13 @@ ASSERTS_OK
 <Quiz id="q4-bm" question="Why use a benchmark?" options={["Regulators allow only ETFs", "Relative evaluation — avoid calling Beta Alpha", "Remove all risk", "Raise win rate"]} answer={1} explanation="Benchmarks discipline “excess” claims." />
 <Quiz id="q5-shift" question="position=signal.shift(1) before evaluation mainly?" options={["Speeds rolling", "Reduces same-day close look-ahead", "Raises win rate", "Cancels costs"]} answer={1} explanation="Information-timing alignment." />
 <Quiz id="q6-pf" question="A PyFolio returns tear sheet mainly?" options={["Creates alpha", "Dashboards metrics you already know how to compute", "Removes costs", "Replaces walk-forward"]} answer={1} explanation="Dashboard, not a new edge." />
+<Quiz id="q7-base" question="Always-up / excess_acc (pointer to 2607.12248) warns that?" options={["80% direction always means skill", "Raw directional accuracy can equal a bull base rate with zero skill", "Costs never matter", "Benchmarks are illegal"]} answer={1} explanation="Headline = excess over always-up on identical windows." />
 
 ## Done when
 
 - Table + three-sentence conclusion + quizzes
 
-**Sources:** classic — JoinQuant strategy evaluation; Canvas eval; Quantopian pyfolio / pyfolio-reloaded tear-sheet docs. niche — the @FG731314 post above (read and linked).
+**Sources:** classic — JoinQuant strategy evaluation; Canvas eval; Quantopian pyfolio / pyfolio-reloaded tear-sheet docs. niche — the @FG731314 post above (read and linked). Pointer: [arXiv:2607.12248](https://arxiv.org/abs/2607.12248) base-rate-honest directional accuracy (full treatment in P8 TSFM lesson).
 
 <Summary>
 **Takeaways**: net-of-cost tables, turnover, win-rate trap, benchmarks.  

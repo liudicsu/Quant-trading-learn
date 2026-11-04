@@ -2,7 +2,9 @@
 NO paid API, NO network at runtime — mocks only.
 Sources (read offline for the lesson text): RD-Agent(Q) arXiv:2505.15155;
 Chain-of-Alpha arXiv:2508.06312 (WITHDRAWN — caution only); Lopez-Lira & Tang
-arXiv:2304.07619; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113.
+arXiv:2304.07619; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113;
+AlphaAgent arXiv:2502.16789; FinCAD/parametric look-ahead arXiv:2605.24564;
+CogAlpha arXiv:2511.18850 (NAME-ONLY).
 Learning only — not investment advice.
 """
 from __future__ import annotations
@@ -38,7 +40,8 @@ print("eval: purged OOS mean daily CS RankIC + DSR(N) + shared 10bps+impact cost
 print("cite: RD-Agent(Q) arXiv:2505.15155; Lopez-Lira&Tang arXiv:2304.07619")
 print("cite: LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113")
 print("cite look-ahead/memorization critiques: Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765")
-print("Chain-of-Alpha arXiv:2508.06312 — EXISTS but WITHDRAWN (arXiv: withdrawn by Lang Cao); drop detailed claims")
+print("Chain-of-Alpha arXiv:2508.06312 — WITHDRAWN by Lang Cao; admin license-removal comment on abs page; drop detailed claims")
+print("cite: AlphaAgent arXiv:2502.16789; FinCAD/parametric LA arXiv:2605.24564; CogAlpha arXiv:2511.18850 NAME-ONLY")
 
 rets, slow, meta = make_panel()
 y1 = forward_label_wide(rets, h=1)
@@ -186,6 +189,7 @@ print("\n=== Quant-Arena spirit (arXiv:2610.30113) ===")
 print("freeze factor list AFTER IS loop; evaluate sealed hold-out ONCE; no peeking / re-mining.")
 print(f"frozen_kept={kept_names}")
 print(f"sealed_OOS_IC agent={res_agent['sealed_OOS_mean_CS_IC']:+.4f} vs honest={res_honest['sealed_OOS_mean_CS_IC']:+.4f}")
+print("paper punchline (verified): top-scored sealed-2024 run ~10.7% ARR vs ~17.1% equal-weight — see later section.")
 
 # ---------- Mock Lopez-Lira & Tang sentiment ----------
 print("\n=== mock Lopez-Lira & Tang (2023) headline sentiment (offline) ===")
@@ -221,10 +225,47 @@ for tag, S in [("mock_sentiment_PIT", sent), ("mock_sentiment_LEAK", sent_leak)]
 print("teach: LEAK foil inflates IC (cutoff/memorization analogue); PIT mock is the honest path.")
 
 # ---------- Chain-of-Alpha note ----------
-print("\n=== Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN ===")
-print("Verified on arXiv: entry exists but is withdrawn (banner: withdrawn by Lang Cao).")
+print("\n=== Chain-of-Alpha (arXiv:2508.06312) — WITHDRAWN (live banner wording) ===")
+print('arXiv banner: "This paper has been withdrawn by Lang Cao"')
+print('arXiv admin comment: "This version has been removed by arXiv administrators as the submitter did not have the rights to agree to the license at the time of submission"')
 print("DROP detailed dual-chain claims; do not depend on an unstable PDF.")
-print("Prefer stable cites: RD-Agent(Q), LLM+MCTS (2505.11122), Quant-Arena (2610.30113).")
+print("Prefer stable cites: RD-Agent(Q), AlphaAgent, LLM+MCTS, Quant-Arena.")
+
+print("\n=== Quant-Arena negative leaderboard punchline (arXiv:2610.30113, verified) ===")
+print("Protocol: research on 2022–2023 with <=5 candidates; freeze ONE strategy; sealed year 2024 once.")
+print("Verified punchline: no model's *best-scoring* sealed-2024 run beat equal-weight.")
+print("Best top-scored run: GPT-6 Astra ARR ~ 10.7% vs gross equal-weight market ARR ~ 17.1% (excess ~ -6.3 pp).")
+print("Note: 1/38 configs (Sol medium) ARR 18.4% beat EW — but that is NOT the model's best total-score row.")
+print("Teach: sealed hold-out + costs can turn a leaderboard into a caution, not a green light.")
+
+print("\n=== AlphaAgent originality / complexity / hypothesis alignment (arXiv:2502.16789) ===")
+print("cite: https://github.com/RndmVariableQ/AlphaAgent")
+print("Without originality/complexity/hypothesis-alignment regularizers, LLM factors homogenize -> crowded -> decay.")
+_zoo = {
+    "Alpha101_like": set("Rank(close-open)/Std(volume,20)".replace(" ", "")),
+    "mom_classic": set("Mean(close/Ref(close,20)-1,5)".replace(" ", "")),
+}
+_cand_h = set("Rank(close-open)/Std(volume,20)".replace(" ", ""))
+_cand_n = set("TsCorr(log(volume),Abs(high-low),10)/Rank(vwap)".replace(" ", ""))
+
+def _jaccard(a, b):
+    return len(a & b) / max(1, len(a | b))
+
+_s_h = max(_jaccard(_cand_h, z) for z in _zoo.values())
+_s_n = max(_jaccard(_cand_n, z) for z in _zoo.values())
+print(f"  homogen_candidate max Jaccard vs zoo = {_s_h:.3f} (high -> crowded / low originality)")
+print(f"  novel_candidate    max Jaccard vs zoo = {_s_n:.3f} (lower -> more original structurally)")
+print("Still required after any agent mine: purge / DSR(N) / sealed OOS — originality != edge.")
+
+print("\n=== Parametric look-ahead (weights remember the future) — PROBLEM (arXiv:2605.24564) ===")
+print("If an LLM was pretrained through year T, a backtest on years < T can use memorized outcomes")
+print("inside the *weights* — invisible to PIT data audits. Teach: post-cutoff / sealed-year only for claims.")
+print("FinCAD decoding mitigation = NAME-ONLY footnote (recipe out of scope for this course).")
+
+print("\n=== CogAlpha (arXiv:2511.18850) — NAME-ONLY map ===")
+print("Code-based evolutionary LLM alpha mining next to RD-Agent / AlphaAgent.")
+print("Shared traps: trial inflation, homogenization, leaky eval, paper metrics != sealed costs/DSR.")
+print("Out of scope here: Deep RL / FinRL-as-alpha / HFT recipes / options MM.")
 
 # ---------- Plots + exports ----------
 fig, ax = plt.subplots(figsize=(8, 4))
@@ -272,6 +313,9 @@ print("- LLM training cutoff / memorization: scores on pre-cutoff headlines are 
 print("- Agent loops multiply trials → DSR needs explicit N; paper metrics ≠ your OOS edge.")
 print("- IS keep rules (IC>threshold) overfit; sealed hold-out must stay sealed.")
 print("- Formula banks / CoT traces can look interpretable while mining noise.")
-print("- Chain-of-Alpha withdrawn: do not rely on unstable PDFs.")
+print("- Chain-of-Alpha withdrawn (Lang Cao + admin license comment): do not rely on unstable PDFs.")
+print("- LLM factors homogenize without originality/complexity/hypothesis constraints (AlphaAgent).")
+print("- Parametric look-ahead: weights can memorize in-cutoff outcomes (FinCAD PROBLEM; sealed-year only).")
+print("- Marketing: 'AI hedge fund / always-profitable LLM' claims fail Quant-Arena-style sealed tests.")
 print("\nwrote", PUBLIC / "rdagent_proposals.png", PUBLIC / "agent_vs_honest_nav.png")
 print("DONE lab 01")

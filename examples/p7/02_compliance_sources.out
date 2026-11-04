@@ -3,6 +3,9 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
 [OK] csrc_2024_8: 证券市场程序化交易管理规定（试行）
     https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html
     verified: Effective 2024-10-08; programmatic trading = computer-generated/routed orders; report-before-trade; exchange sets abnormal thresholds; HFT features delegated to exchanges.
+[OK] csrc_2025_12_futures: 期货市场程序化交易管理规定（试行）
+    https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html
+    verified: Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c101954/c7564346/content.shtml
 [OK] sse_faq_2025_04_03: 上交所就正式发布程序化交易管理实施细则答记者问
     https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml
     verified: 细则自2025-07-07施行; 高频认定: 单账户每秒申报撤单合计最高≥300笔, 或全日≥20000笔; 四类异常行为构成要件说明.
@@ -24,6 +27,9 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
 [OK] finra_26_10: Regulatory Notice 26-10 (intraday margin replaces PDT)
     https://www.finra.org/rules-guidance/notices/26-10
     verified: Published 2026-04-20; effective 2026-06-04; phase-in to 2027-10-20; replaces pattern day trader count + $25,000 minimum equity with intraday margin standards.
+[OK] finra_26_11: Regulatory Notice 26-11 (IMD/IML interpretations for intraday margin)
+    https://www.finra.org/rules-guidance/notices/26-11
+    verified: Published 2026-05-19; effective 2026-06-04. Publishes Rule 4210 interpretations for new intraday margin: IML (intraday margin level) and IMD (intraday margin deficit = abs of largest negative IML). Deletes obsolete PDT day-trading interpretations. PDF: https://www.finra.org/sites/default/files/2026-05/Regulatory-Notice-26-11.pdf
 [OK] finra_15_09: Regulatory Notice 15-09 Algorithmic trading supervision
     https://www.finra.org/rules-guidance/notices/15-09
     verified: Published 2015-03-26; five practice areas; references SEA 15c3-5 and Reg SHO.
@@ -34,4 +40,4 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
     https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225
     verified: Staff statement 2025-09-02 (not Commission rule); view that law does not prohibit registered exchanges facilitating certain spot crypto products; explicitly non-binding.
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=11 all_fetch_OK=True
+n_sources=13 all_fetch_OK=True

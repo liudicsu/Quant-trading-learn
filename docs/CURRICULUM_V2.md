@@ -29,8 +29,8 @@
 | `markets-language` | P1 | 5 | 2 | 否 | basic-finance-markets |
 | `microstructure-orders` | P1 | 7 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
-| `eval-lab` | P1 | 6 | 2 | 否 | returns-vol-corr, microstructure-orders |
-| `data-cleaning` | P2 | 12 | 3 | 否 | eval-lab |
+| `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
+| `data-cleaning` | P2 | 13 | 3 | 否 | eval-lab |
 | `backtest-traps` | P2 | 18 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 6 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
@@ -38,7 +38,7 @@
 | `mean-reversion` | P3 | 7 | 3 | 否 | momentum-trend |
 | `pairs-stat-arb` | P3 | 10 | 3 | 否 | mean-reversion |
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
-| `factor-workflow` | P4 | 14 | 4 | 否 | strategy-compare-lab, backtest-traps |
+| `factor-workflow` | P4 | 15 | 4 | 否 | strategy-compare-lab, backtest-traps |
 | `factor-portfolio-lab` | P4 | 7 | 4 | 否 | factor-workflow |
 | `ml-leakage-control` | P5 | 20 | 5 | 否 | factor-workflow, backtest-traps |
 | `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
@@ -46,9 +46,9 @@
 | `execution-slippage` | P6 | 7 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
 | `risk-systems-lab` | P6 | 5 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
 | `paper-trading-infra` | P7 | 11 | 3 | 否 | risk-systems-lab |
-| `compliance-ethics` | P7 | 4 | 2 | 否 | paper-trading-infra |
-| `frontier-llm-agents` | P8 | 8 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
-| `frontier-tsfm-altdata-crypto` | P8 | 8 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
+| `compliance-ethics` | P7 | 6 | 2 | 否 | paper-trading-infra |
+| `frontier-llm-agents` | P8 | 11 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
+| `frontier-tsfm-altdata-crypto` | P8 | 11 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
 | `capstone` | P9 | 24 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
 
 **程序员建议：** 对 P0 三课做测验；通过则跳过，把时间补给 P2/P4/P5/P6 的重课。
@@ -68,10 +68,10 @@
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 16h | ~2.7 周 | ~1.3 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 256 学时（跳过 P0 为 236）。** 6h/周 ≈ 42.7 周；12h/周 ≈ 21.3 周。
+**全量（含 P0）：精确 267 学时（跳过 P0 为 247）。** 6h/周 ≈ 44.5 周；12h/周 ≈ 22.3 周。
 **跳过 P0 后：约 218 学时。** 6h/周 ≈ 36.3 周；12h/周 ≈ 18.2 周。
 
-精确合计：**256h 全量 / 236h 跳过 P0**。对外可表述为约 **240–270h 全量 / 220–250h 跳过基础**（含个人复盘缓冲）。
+精确合计：**267h 全量 / 247h 跳过 P0**。对外可表述为约 **250–280h 全量 / 230–260h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -118,10 +118,16 @@
 | 金融 API 清单 | @pyquantnews | niche | `data-cleaning` |
 | NautilusTrader research-to-live | nautilustrader.io 2026；GitHub | frontier | `engines-vectorized-event + paper-trading-infra` |
 | R&D-Agent(Q) | microsoft/RD-Agent；arXiv:2505.15155；MSR | frontier | `frontier-llm-agents` |
-| Chain-of-Alpha | arXiv:2508.06312 | frontier | `frontier-llm-agents` |
+| AlphaAgent originality/complexity/alignment | arXiv:2502.16789；GitHub RndmVariableQ/AlphaAgent | frontier | `frontier-llm-agents` |
+| Parametric look-ahead / FinCAD (problem; recipe NAME-ONLY) | arXiv:2605.24564 | frontier | `frontier-llm-agents` |
+| CogAlpha (NAME-ONLY) | arXiv:2511.18850 | frontier | `frontier-llm-agents` |
+| Chain-of-Alpha (**withdrawn by Lang Cao**; admin license comment) | arXiv:2508.06312 | frontier | `frontier-llm-agents` |
 | LLM+MCTS 公式因子 | arXiv:2505.11122 | frontier | `frontier-llm-agents` |
 | Quant-Arena 密封年基准 | arXiv:2610.30113 | frontier | `frontier-llm-agents / backtest-traps` |
 | Chronos/TimesFM 金融评测 | arXiv:2511.18578 等 | frontier | `frontier-tsfm-altdata-crypto` |
+| Base-rate-honest directional accuracy | arXiv:2607.12248 | frontier | `frontier-tsfm-altdata-crypto` + `eval-lab` |
+| TSFM as prior not alpha engine | arXiv:2606.27100 | frontier | `frontier-tsfm-altdata-crypto` |
+| Crypto PIT audit before alpha | arXiv:2608.25348 | frontier | `frontier-tsfm-altdata-crypto` + `data-cleaning` |
 | Qlib Transformer/Localformer | Qlib release notes | frontier | `modern-ml-pipelines（可选对照）` |
 | CCXT 兼容 GMX/链上适配 | Trading Strategy / Arbitrum 2025 | frontier | `frontier-tsfm-altdata-crypto` |
 | 资金费率/链上指标流水线结构 | 社区开源示例（结构参考） | niche | `frontier-tsfm-altdata-crypto` |
@@ -857,4 +863,4 @@ Inventory items woven into existing lessons (zh+en, offline toys):
 6. **Atlas name-drop** beside Qbot → `paper-trading-infra`.
 7. **HRP** → `portfolio-risk-sizing`; López de Prado 2016 JPM 42(4) + AFML ch.16.
 
-Net hours ≈ +18h (256h full / 236h skip P0).
+Net hours ≈ +18h deepen (b07393d) then +11h Phase B verified enrichments (267h full / 247h skip P0).

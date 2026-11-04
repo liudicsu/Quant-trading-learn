@@ -1,10 +1,10 @@
 ## Learning goals
 
-This lesson (~**8 hours**: 4h papers/docs + 3h design exercises + 1h optional structure lab) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
+This lesson (~**11 hours**: 5h papers/docs + 4h design exercises + 1h structure/PIT lab + 1h base-rate foil) covers **time-series foundation models**, **alt-data timing**, and **crypto/on-chain** tooling — critically, under the same purged IC / DSR / cost framework. Prereqs: `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`.
 
-**Goals:** summarize cautious TSFM daily excess-return findings; design alt-data PIT/lag checks; explain CEX CCXT vs on-chain adapter risks.
+**Goals:** summarize cautious TSFM daily excess-return findings; report **excess directional accuracy** over always-up; design alt-data / crypto PIT checks; explain CEX CCXT vs on-chain adapter risks.
 
-**Must-teach:** zero-shot TSFMs often lag strong traditional baselines; domain pretrain still needs anti-lookahead; alt-data timestamps/revisions are first-order; funding/on-chain ≠ free alpha.
+**Must-teach:** zero-shot TSFMs often lag strong traditional baselines; TSFMs are useful **priors**, not free alpha engines; ~80% direction can be a bull-market base rate; alt-data/crypto timestamps are first-order; funding/on-chain ≠ free alpha.
 
 <Callout type="info" title="Learning only — not investment advice">
 Offline mocks for TSFM, funding ledgers, and GMX-style OI. No exchange keys, no live CCXT calls at runtime.
@@ -25,9 +25,33 @@ Offline mocks for TSFM, funding ledgers, and GMX-style OI. No exchange keys, no 
 
 Lab sealed-OOS mean CS IC (illustrative): `strong_CS ≈ +0.015` &gt; `naive_RW ≈ +0.008` &gt; `AR1 ≈ −0.002` &gt; `mock_TSFM ≈ −0.009`. Net SR after shared costs stays negative — honest case (c) again.
 
+## Base-rate-honest directional accuracy (always-up foil)
+
+[When Directional Accuracy Lies](https://arxiv.org/abs/2607.12248) (Cheung) shows raw ~**80%** directional accuracy on equities can be a **bull-market base rate**: an **always-up** rule scores high with **zero skill**. Headline metric:
+
+`excess_acc` = model accuracy − `always_up` accuracy
+
+on **identical** windows. The paper recreates a legacy high-accuracy condition as a ~**0.70** always-up base the fine-tuned model **fails to beat** (excess negative). Lab bull toy prints always-up in the ~70–80% band and a “marketing mostly-up” model with raw accuracy that can look impressive while **excess ≤ 0**. Short pointer also in `eval-lab`.
+
+<Callout type="warn" title="Reject: “80% accuracy” marketing">
+Ads that quote raw directional accuracy without an always-up / excess_acc baseline are base-rate theatre — not forecasting skill.
+</Callout>
+
+## TSFM as prior, not alpha engine
+
+[Pretrained TSFMs for Financial Return Forecasting](https://arxiv.org/abs/2606.27100) (Noguer i Alonso &amp; Franklin) frames pretraining as an **inductive prior** that can help in low-data per-asset settings, while gains over a random-walk benchmark stay **small and sparse** — not a universal alpha engine. Tie to the base-rate lesson: ranking wins ≠ tradeable edge; reject zero-shot Chronos/TimesFM as “free equity alpha.”
+
+<Callout type="warn" title="Reject: zero-shot Chronos/TimesFM as free equity alpha">
+Treat TSFMs as optional priors under purge / costs / DSR — never as a plug-and-play money machine.
+</Callout>
+
 ## Alt-data PIT / lag
 
 Treat sentiment, filings, web scrapes like any other feature: **as-of timestamps**, revision histories, and embargoes. Reuse the Lopez-Lira post-cutoff idea from the sibling lesson; never join a “final” restated field as if it were available on day 0.
+
+## Crypto PIT audit before alpha
+
+[Point-in-Time Audit Before Alpha](https://arxiv.org/abs/2608.25348) audits public **Binance BTCUSDT USD-M perpetual** archives with event / publication / availability times. Teaching checklist (lab prints OK rows): **no same-bar execution**; **funding lag** (do not shift realized funding backward); **no backfill** to manufacture continuity; if **OI publication time is unverified**, disable OI as an alpha input. Positive holdout IC still coexisted with **uniformly negative** net Sharpe under their cost grid — audit first, alpha second. Short note also in `data-cleaning`.
 
 ## Crypto / on-chain: CCXT, funding, GMX, @sera00111
 
@@ -66,17 +90,31 @@ regime-shift foil ... cum_funding_pnl_long=$450.00
 
 === NautilusTrader: keep backtest and live code identical ===
   [OK] signal/on_bar logic identical in backtest & live
-  [OK] order intents via submit_order API only
   ...
+
+=== base-rate-honest directional accuracy (always-up foil; arXiv:2607.12248) ===
+bull toy: n_windows=19 always_up_acc=0.684 (~70-80% band in rising markets)
+marketing_mostly_up raw_acc=0.684 vs_coin_flip=+0.184
+marketing_mostly_up excess_acc=+0.000  <-- honest headline; can be <=0 while raw looks high
+WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
+
+=== crypto PIT audit before alpha (arXiv:2608.25348) ===
+  [OK] no_same_bar_execution
+  [OK] funding_lag
+  [OK] no_backfill_gap_fill
+  [OK] OI_publication_unverified → disable OI as alpha input
 ```
 
 ## Common mistakes / pitfalls
 
 - Zero-shot TSFM on noisy daily excess often loses to strong CS/tree baselines.
 - Mock ≠ published Chronos/TimesFM checkpoints.
-- **Crypto survivorship:** delisted perps/coins vanish from free histories.
+- Raw ~80% direction without always-up / excess_acc is a base-rate trap (2607.12248).
+- Treating TSFM as an alpha engine instead of a prior (2606.27100).
+- **Crypto survivorship** and missing PIT audits (2608.25348): same-bar, funding lag, backfill.
 - **Funding regime shifts** flip carry; bridges/MEV/oracle/liquidity risks sit outside CEX CCXT.
 - Nautilus identical kernel ≠ identical latency, partial fills, or recon outcomes.
+- **Scope reject:** Deep RL trading / HFT latency / options MM — out of this curriculum.
 
 ## Practice (1:1)
 
@@ -93,12 +131,15 @@ regime-shift foil ... cum_funding_pnl_long=$450.00
 <Quiz id="p8ts-q4" question="NautilusTrader Backtest vs Live share?" options={["Nothing", "NautilusKernel (engines/cache/bus/trader)", "Only CSV loaders", "Only cloud GPUs"]} answer={1} explanation="Official architecture: common kernel." />
 <Quiz id="p8ts-q5" question="Lab funding 1095 bps/year assumes?" options={["Rate never changes", "Perfect foresight of regimes", "Zero notional", "No 8h prints"]} answer={0} explanation="Constant-rate foil; regime shift changes PnL sign." />
 <Quiz id="p8ts-q6" question="@sera00111 crypto toolchain note suggests?" options={["Always buy tick L3 first", "Start from Vision/CCXT-scale data; pick grain after the strategy", "Skip costs", "Ignore survivorship"]} answer={1} explanation="P2-verified niche tooling advice." />
+<Quiz id="p8ts-q7" question="excess_acc (arXiv:2607.12248) equals?" options={["Raw accuracy alone", "Model accuracy minus always-up accuracy on the same windows", "Sharpe minus 1", "Funding APR"]} answer={1} explanation="Headline skill over the bull base rate." />
+<Quiz id="p8ts-q8" question="TSFM-as-prior paper (2606.27100) supports?" options={["Universal free equity alpha", "Useful inductive priors; small sparse gains vs RW — not a universal alpha engine", "Skip costs forever", "Ban tree baselines"]} answer={1} explanation="Priors help; they do not mint alpha by themselves." />
+<Quiz id="p8ts-q9" question="Crypto PIT audit before alpha (2608.25348) requires?" options={["Same-bar fills OK", "No same-bar; funding lag; no backfill; careful OI", "Delete all funding", "Ignore availability time"]} answer={1} explanation="Availability-masked checklist before claiming alpha." />
 
 ## Done when
 
 TSFM caution memo + alt-data timing one-pager (with funding/on-chain risk bullets).
 
-**Sources (read and used above):** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578); P5 also cites 2412.09880, 2606.27100; [CCXT docs](https://docs.ccxt.com/); [GMX fees](https://docs.gmx.io/docs/trading/fees/); [OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/); [Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt); [@sera00111](https://x.com/sera00111/status/2108332340753969191); [Nautilus architecture](https://nautilustrader.io/docs/latest/concepts/architecture/); [Binance Vision](https://data.binance.vision/).
+**Sources (read and used above):** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578); [arXiv:2606.27100](https://arxiv.org/abs/2606.27100) TSFM as prior; [arXiv:2607.12248](https://arxiv.org/abs/2607.12248) base-rate-honest direction; [arXiv:2608.25348](https://arxiv.org/abs/2608.25348) crypto PIT audit; P5 also cites 2412.09880; [CCXT docs](https://docs.ccxt.com/); [GMX fees](https://docs.gmx.io/docs/trading/fees/); [OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/); [Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt); [@sera00111](https://x.com/sera00111/status/2108332340753969191); [Nautilus architecture](https://nautilustrader.io/docs/latest/concepts/architecture/); [Binance Vision](https://data.binance.vision/).
 
 <Summary>
 **Takeaways**: TSFMs need the same purge/costs/DSR; funding is a regime-sensitive carry, not free alpha; Nautilus keeps strategy code identical — fills still differ.  

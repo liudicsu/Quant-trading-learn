@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14 学时**：概念 5h + 实验 7h + 写作 2h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
+本课（约 **15 学时**：概念 5h + 实验 7h + 写作 2h + 拥挤→LLM 桥 1h — 重课）搭建可重复的**截面因子研究**工作流：构建、IC/RankIC/ICIR/衰减、分层多空含成本、Fama–MacBeth，以及 Harvey–Liu–Zhu 多重检验对照。前置：`strategy-compare-lab`、`backtest-traps`。
 
 **课内目标：** 实现 Spearman IC；构建分层多空；对照真/假因子。
 
@@ -77,6 +77,10 @@ Alphalens 风格五分位；多 Q5 / 空 Q1；共享成本。强：毛夏普 ≈
 
 因子秩一阶自相关 ≈ **0.88**：秩粘性降低理论换手，但组合收敛时抬升拥挤。
 
+### 桥接 — 拥挤 → LLM 同质化
+
+当许多账户追逐同一价值/动量/市值表达式时，即便样本内 IC 好看，容量与衰减也会恶化。LLM 挖因子只是换了外壳面临**同一**风险：缺少原创性 / 复杂度 / 假设对齐约束时，会**同质化**到拥挤经典因子（[AlphaAgent](https://arxiv.org/abs/2502.16789)；实验 foil 见 `frontier-llm-agents`）。教学：报告试错次数 N，优先密封 OOS + 成本/DSR，并把「又一个 RSI 克隆」当成拥挤——无论公式是人写还是 agent 写。
+
 ## Alphalens / Qlib 风格流程（pandas）
 
 官方文档：`get_clean_factor_and_forward_returns` → tear sheet。本课纯 pandas；可选映射 `alphalens-reloaded`。Qlib `CSZScoreNorm` 等 ≈ 去极值 + z + 中性化（`log_mcap.shift(1)`）。
@@ -84,7 +88,7 @@ Alphalens 风格五分位；多 Q5 / 空 Q1；共享成本。强：毛夏普 ≈
 ## 小众 / 前沿
 
 - **小众（对照）：** quant-wiki 因子图谱 — 当地图，不当已验证 alpha。
-- **前沿延后到 P8：** LLM/智能体挖因子。正文不收录无法核验的主张。
+- **前沿延后到 P8：** LLM/智能体挖因子（RD-Agent / AlphaAgent / Quant-Arena）——仍须 purge/DSR/密封 OOS；见上文拥挤桥接。
 
 ## 期望值框架
 

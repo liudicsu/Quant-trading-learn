@@ -1,7 +1,8 @@
 """P8 lab 02: TSFM follow-up (offline mock), crypto funding/on-chain structure,
 NautilusTrader identical backtest/live architecture checklist.
 NO network at runtime. Learning only — not investment advice.
-Cites: arXiv:2511.18578 (Chronos/TimesFM finance); CCXT docs; GMX docs;
+Cites: arXiv:2511.18578 (Chronos/TimesFM finance); arXiv:2607.12248 (base-rate-honest dir. acc.);
+arXiv:2606.27100 (TSFM as prior); arXiv:2608.25348 (crypto PIT audit); CCXT docs; GMX docs;
 @sera00111 https://x.com/sera00111/status/2108332340753969191;
 NautilusTrader architecture https://nautilustrader.io/docs/latest/concepts/architecture/
 """
@@ -35,7 +36,9 @@ from _common import (
 print("=== parameters ===")
 print("offline only — mock TSFM / mock funding ledger; no CCXT live calls at runtime")
 print("eval: purged OOS mean daily CS RankIC + DSR(N) + shared costs")
-print("cite: arXiv:2511.18578 Re(Visiting) TSFM in Finance — zero-shot often weak vs ensembles")
+print("cite: arXiv:2511.18578 Re(Visiting) TSFM; arXiv:2606.27100 TSFM as prior not alpha engine")
+print("cite: arXiv:2607.12248 base-rate-honest directional accuracy (always-up foil)")
+print("cite: arXiv:2608.25348 crypto PIT audit before alpha (Binance BTCUSDT perp)")
 print("cite: CCXT docs https://docs.ccxt.com/ ; GMX fees https://docs.gmx.io/docs/trading/fees/")
 print("cite: OpenBB Open Data Platform (aggregation); Trading Strategy GMX/CCXT adapters")
 print("cite: @sera00111 Vision+CCXT note (P2-verified); Nautilus architecture docs")
@@ -254,9 +257,66 @@ report = {
 }
 (DATA / "lab02_report.json").write_text(json.dumps(report, indent=2))
 
+
+# ---------- Base-rate-honest directional accuracy (arXiv:2607.12248) ----------
+print("\n=== base-rate-honest directional accuracy (always-up foil; arXiv:2607.12248) ===")
+print("Headline metric: excess_acc = model_accuracy - always_up_accuracy on identical windows.")
+# Strong bull path (teaching foil): high always-up base rate like the paper's ~0.70 recreation
+rng_br = np.random.default_rng(42)
+T_br = 1280  # enough non-overlapping h=64 windows
+drift = 0.00105  # bull daily drift vs 1% vol → long-horizon mostly up (~70-80% band)
+noise = rng_br.normal(0, 0.01, size=T_br)
+r_br = drift + noise
+h = 64  # paper-style multi-month horizon where base rate inflates
+starts = list(range(0, T_br - h, h))
+fwd = np.array([r_br[s : s + h].sum() for s in starts])
+y_up = fwd > 0
+always_up_acc = float(y_up.mean())
+# "Fine-tuned" marketing model: mostly-up but slightly worse than always-up (paper spirit)
+model_pred_up = np.ones_like(y_up, dtype=bool)
+flip = rng_br.choice(len(y_up), size=max(1, len(y_up) // 8), replace=False)
+model_pred_up[flip] = False
+model_acc = float((model_pred_up == y_up).mean())
+excess = model_acc - always_up_acc
+# Naive coin-flip reference marketers wrongly use
+coin_ref = 0.50
+vs_coin = model_acc - coin_ref
+# Persistence baseline (sign of prior window)
+persist = np.array([
+    (r_br[s - h : s].sum() > 0) if s >= h else True for s in starts
+])
+persist_acc = float((persist == y_up).mean())
+persist_excess = persist_acc - always_up_acc
+print(f"bull toy: n_windows={len(fwd)} always_up_acc={always_up_acc:.3f} (~70-80% band in rising markets)")
+print(f"marketing_mostly_up raw_acc={model_acc:.3f} vs_coin_flip={vs_coin:+.3f}  <-- ads quote raw vs 50%")
+print(f"marketing_mostly_up excess_acc={excess:+.3f}  <-- honest headline; can be <=0 while raw looks high")
+print(f"persistence_baseline raw_acc={persist_acc:.3f} excess_acc={persist_excess:+.3f}")
+print("Paper recreation spirit: always-up base ~0.70; fine-tuned model can fail to beat it (excess negative).")
+print("WARN box: ads saying '80% directional accuracy' without always-up / excess_acc are base-rate theatre.")
+print("WARN box: zero-shot Chronos/TimesFM as free equity alpha — reject; treat TSFM as prior (2606.27100).")
+
+# ---------- Crypto PIT audit checklist (arXiv:2608.25348) ----------
+print("\n=== crypto PIT audit before alpha (arXiv:2608.25348; Binance BTCUSDT perp spirit) ===")
+pit_checks = [
+    ("no_same_bar_execution", True, "decision at t uses only availability_time <= t; no unfinished bar"),
+    ("funding_lag", True, "realized funding not shifted backward; use event+lag assumption, test sensitivity"),
+    ("no_backfill_gap_fill", True, "do not interpolate/backward-fill gaps to manufacture continuity"),
+    ("OI_publication_unverified", True, "if OI pub time unverified, disable as alpha input (paper: OI optional)"),
+    ("core_streams_trade_mark_index_funding", True, "admit on availability-masked complete days, not silent repair"),
+]
+for name, ok, note in pit_checks:
+    print(f"  [{'OK' if ok else 'FAIL'}] {name}: {note}")
+print("Paper negative result spirit: positive IC can still yield negative net Sharpe under costs — audit first.")
+pd.DataFrame([{"check": a, "ok": b, "note": c} for a, b, c in pit_checks]).to_csv(
+    DATA / "crypto_pit_audit_checklist.csv", index=False
+)
+
 print("\n=== limitations / failure modes ===")
 print("- TSFM zero-shot: weak on noisy daily excess; do not skip purge/costs/DSR.")
-print("- Mock ≠ real Chronos/TimesFM weights; protocol transfer only.")
+print("- Mock != real Chronos/TimesFM weights; protocol transfer only.")
+print("- Base-rate trap: raw ~80% direction can be always-up; report excess_acc (2607.12248).")
+print("- TSFM as prior not alpha engine (2606.27100); reject free-equity-alpha marketing.")
+print("- Crypto: PIT audit before alpha (2608.25348) — no same-bar / funding lag / no backfill.")
 print("- Crypto survivorship: delisted perps/coins drop out of free histories.")
 print("- Funding regime shifts: carry sign flips; constant-rate ann. is a foil.")
 print("- On-chain/GMX: MEV, oracle, liquidity, bridge risks beyond CEX CCXT.")

@@ -17,6 +17,14 @@ SOURCES = [
     "verified": "Effective 2024-10-08; programmatic trading = computer-generated/routed orders; report-before-trade; exchange sets abnormal thresholds; HFT features delegated to exchanges.",
   },
   {
+    "id": "csrc_2025_12_futures",
+    "title": "期货市场程序化交易管理规定（试行）",
+    "issuer": "CSRC / 中国证监会公告〔2025〕12号",
+    "url": "https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html",
+    "fetch": "OK",
+    "verified": "Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c101954/c7564346/content.shtml",
+  },
+  {
     "id": "sse_faq_2025_04_03",
     "title": "上交所就正式发布程序化交易管理实施细则答记者问",
     "issuer": "SSE",
@@ -71,6 +79,14 @@ SOURCES = [
     "url": "https://www.finra.org/rules-guidance/notices/26-10",
     "fetch": "OK",
     "verified": "Published 2026-04-20; effective 2026-06-04; phase-in to 2027-10-20; replaces pattern day trader count + $25,000 minimum equity with intraday margin standards.",
+  },
+  {
+    "id": "finra_26_11",
+    "title": "Regulatory Notice 26-11 (IMD/IML interpretations for intraday margin)",
+    "issuer": "FINRA",
+    "url": "https://www.finra.org/rules-guidance/notices/26-11",
+    "fetch": "OK",
+    "verified": "Published 2026-05-19; effective 2026-06-04. Publishes Rule 4210 interpretations for new intraday margin: IML (intraday margin level) and IMD (intraday margin deficit = abs of largest negative IML). Deletes obsolete PDT day-trading interpretations. PDF: https://www.finra.org/sites/default/files/2026-05/Regulatory-Notice-26-11.pdf",
   },
   {
     "id": "finra_15_09",

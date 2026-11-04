@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**12 hours**: 4h concepts + 5h pipeline lab + 2h info-bars + 1h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**13 hours**: 4h concepts + 5h pipeline lab + 2h info-bars + 1h crypto-PIT note + 1h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -27,6 +27,10 @@ Today's universe keeps AAA/BBB while the panel still has CCC. Survivor-only equa
 ## PIT fundamentals
 
 `FUND_pit = FUND_true.shift(5)`. Aligning on `FUND_true` as if it were knowable that day leaks unpublished prints.
+
+### Crypto PIT audit note (pointer)
+
+Before mining crypto “alpha,” audit **availability time**, not just file existence ([arXiv:2608.25348](https://arxiv.org/abs/2608.25348) on Binance BTCUSDT USD-M perps). Teaching checklist: **no same-bar execution**; **funding lag** (do not shift realized funding backward); **no backfill** to manufacture continuity; if **OI publication time is unverified**, disable OI as an alpha input. Full foil + lab in `frontier-tsfm-altdata-crypto`.
 
 ## Timezone / session mislabel
 
@@ -131,6 +135,7 @@ Activity clocks produce **more** bars with **smaller** per-bar moves on the same
 
 1. Backtesting a decade with today’s members only.  
 2. Fundamentals without PIT.  
+2b. Crypto archives that look complete but fail availability-time audits (same-bar / funding lag / backfill / unverified OI).  
 3. UTC vs local off-by-one.  
 4. Mixing raw/adj silently.  
 5. No hash / no version.
@@ -155,6 +160,7 @@ Activity clocks produce **more** bars with **smaller** per-bar moves on the same
 <Quiz id="q5-hash" question="Saving sha256 mainly?" options={["Speeds downloads", "Proves byte-level reproducibility", "Raises Sharpe", "Replaces the sheet"]} answer={1} explanation="Version check." />
 <Quiz id="q6-infobar" question="Dollar/volume bars mainly change?" options={["Broker fees", "The sampling clock from wall-time to activity", "Regulatory filings", "Rf"]} answer={1} explanation="AFML ch.2 information-driven bars." />
 <Quiz id="q7-infobar2" question="This lesson’s info-bar demo is?" options={["An HFT latency recipe", "A research sampling comparison on synthetic ticks", "A live order router", "A substitute for PIT"]} answer={1} explanation="Explicitly not an HFT recipe." />
+<Quiz id="q8-cryptopit" question="Crypto PIT audit before alpha (2608.25348 pointer) requires?" options={["Same-bar fills OK", "No same-bar; funding lag; no backfill; careful OI", "Ignore availability time", "Always use OI"]} answer={1} explanation="Availability-masked checklist; full lab in P8 TSFM/crypto." />
 
 ## Done when
 

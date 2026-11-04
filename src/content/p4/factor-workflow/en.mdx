@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14 hours**: 5h concepts + 7h labs + 2h write-up — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
+This lesson (~**15 hours**: 5h concepts + 7h labs + 2h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
 
 **Goals:** implement Spearman IC; build quantile long–short; contrast true vs null factors.
 
@@ -81,6 +81,10 @@ The observed ~4.5–6% rate at \|t\|>2 is **right in line with pure noise**. Tha
 
 Factor rank autocorr lag-1 ≈ **0.88**: sticky ranks lower theoretical turnover but raise crowding if books converge.
 
+### Bridge — crowding → LLM homogenization
+
+When many desks chase the same value/momentum/size expressions, capacity and decay worsen even if in-sample IC looked fine. LLM factor miners face the **same** risk in a new wrapper: without originality / complexity / hypothesis-alignment constraints they **homogenize** toward crowded classics ([AlphaAgent](https://arxiv.org/abs/2502.16789); lab foil in `frontier-llm-agents`). Teach: report trial count N, prefer sealed OOS + costs/DSR, and treat “another RSI clone” as crowding — whether a human or an agent wrote the formula.
+
 ## Alphalens / Qlib-style workflow (pandas)
 
 Official Alphalens Reloaded docs: `get_clean_factor_and_forward_returns` → tear sheets. Plain-pandas mirror here; optional `alphalens-reloaded` map. Qlib `CSZScoreNorm` / `CSZFillna` / Alpha158 ≈ winsorize + z + neutralize(`log_mcap.shift(1)`).
@@ -88,7 +92,7 @@ Official Alphalens Reloaded docs: `get_clean_factor_and_forward_returns` → tea
 ## Niche / frontier
 
 - **Niche (foil):** quant-wiki factor taxonomy — map only, not validated alphas.
-- **Frontier deferred to P8:** LLM / agent formulaic mining. Dropped unverifiable agent-based mining from the main text.
+- **Frontier deferred to P8:** LLM / agent formulaic mining (RD-Agent / AlphaAgent / Quant-Arena) — still needs purge/DSR/sealed OOS; see crowding bridge above.
 
 ## Expected-value framing
 

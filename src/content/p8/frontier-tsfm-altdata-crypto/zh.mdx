@@ -1,10 +1,10 @@
 ## 学习目标
 
-本课（约 **8 学时**：论文/文档 4h + 设计练习 3h + 可选结构实验 1h）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
+本课（约 **11 学时**：论文/文档 5h + 设计练习 4h + 结构/PIT 实验 1h + 基率 foil 1h）覆盖**时序基础模型**、**另类数据时点**与 **Crypto/链上**工具链——批判性阅读，并沿用 purge IC / DSR / 成本框架。前置：`modern-ml-pipelines`、`data-cleaning`、`execution-slippage`。
 
-**课内目标：** 概括 TSFM 日频超额收益的谨慎结论；设计另类数据 PIT/滞后检查；说明 CEX CCXT 与链上适配差异及额外风险。
+**课内目标：** 概括 TSFM 日频超额收益的谨慎结论；报告相对 always-up 的**超额方向准确率**；设计另类数据 / Crypto PIT 检查；说明 CEX CCXT 与链上适配差异及额外风险。
 
-**必须教会：** 零样本 TSFM 常弱于强传统基准；领域预训练仍须防前瞻；另类数据时间戳与修订是第一风险；资金费率/链上 ≠ 免费 alpha。
+**必须教会：** 零样本 TSFM 常弱于强传统基准；TSFM 是有用的**先验**而非免费 alpha 引擎；~80% 方向准确率可能只是牛市基率；另类数据/Crypto 时间戳是第一风险；资金费率/链上 ≠ 免费 alpha。
 
 <Callout type="info" title="仅供学习 — 非投资建议">
 TSFM、资金费率账本、GMX 风格 OI 均为离线 mock。无交易所密钥，运行时不发起真实 CCXT 请求。
@@ -25,9 +25,33 @@ TSFM、资金费率账本、GMX 风格 OI 均为离线 mock。无交易所密钥
 
 密封 OOS 日均 CS IC（示意）：`strong_CS ≈ +0.015` &gt; `naive_RW ≈ +0.008` &gt; `AR1 ≈ −0.002` &gt; `mock_TSFM ≈ −0.009`。共享成本后净 SR 仍为负——再次诚实的情形 (c)。
 
+## 基率诚实的方向准确率（always-up foil）
+
+[When Directional Accuracy Lies](https://arxiv.org/abs/2607.12248)（Cheung）指出：股票上原始约 **80%** 方向准确率可以只是**牛市基率**——**always-up** 规则在零技能下也能打出高分。标题指标：
+
+`excess_acc` = 模型准确率 − `always_up` 准确率
+
+必须在**同一窗口**上计算。论文复现「历史高准确率」条件时，always-up 基率约 **0.70**，微调模型**未能超过**（超额为负）。实验牛市玩具会打印 ~70–80% 带的 always-up，以及 raw 准确率看起来很高但 **excess ≤ 0** 的「营销多头」模型。`eval-lab` 亦有短指针。
+
+<Callout type="warn" title="拒绝：「80% 准确率」营销">
+只报原始方向准确率、不报 always-up / excess_acc 的广告是基率表演——不是预测技能。
+</Callout>
+
+## TSFM 作为先验，而非 alpha 引擎
+
+[Pretrained TSFMs for Financial Return Forecasting](https://arxiv.org/abs/2606.27100)（Noguer i Alonso &amp; Franklin）把预训练框定为**归纳先验**：在单资产低数据场景下可降低建模成本，但对随机游走基准的增益**小且稀疏**——不是通用 alpha 引擎。与基率课衔接：排名靠前 ≠ 可交易优势；拒绝把零样本 Chronos/TimesFM 当作「免费股票 alpha」。
+
+<Callout type="warn" title="拒绝：零样本 Chronos/TimesFM 当作免费股票 alpha">
+把 TSFM 当作 purge / 成本 / DSR 下的可选先验——绝不是即插即用印钞机。
+</Callout>
+
 ## 另类数据 PIT / 滞后
 
 情绪、公告、爬虫字段与任何特征一样：需要 **as-of 时间戳**、修订历史与禁运。复用姊妹课 Lopez-Lira 的截止后思想；切勿把「最终重述」字段当成 day-0 可用。
+
+## Crypto PIT 审计先于 alpha
+
+[Point-in-Time Audit Before Alpha](https://arxiv.org/abs/2608.25348) 用事件/发布/可得性时间审计公开 **Binance BTCUSDT USD-M 永续**档案。教学清单（实验打印 OK 行）：**禁止同 bar 成交**；**资金费率滞后**（勿把已实现资金费率前移）；**禁止回填**制造连续性；若 **OI 发布时间未核验**，禁用 OI 作 alpha 输入。他们的持有期 IC 仍可为正，但成本网格下净夏普**一律为负**——先审计，再谈 alpha。`data-cleaning` 亦有短注。
 
 ## Crypto / 链上：CCXT、资金费率、GMX、@sera00111
 
@@ -65,15 +89,30 @@ ann_carry_cost_long≈1095.0 bps/year if rate stays constant
 === NautilusTrader: keep backtest and live code identical ===
   [OK] signal/on_bar logic identical in backtest & live
   ...
+
+=== base-rate-honest directional accuracy (always-up foil; arXiv:2607.12248) ===
+bull toy: n_windows=19 always_up_acc=0.684 (~70-80% band in rising markets)
+marketing_mostly_up raw_acc=0.684 vs_coin_flip=+0.184
+marketing_mostly_up excess_acc=+0.000  <-- honest headline; can be <=0 while raw looks high
+WARN: '80% accuracy' ads without always-up / excess_acc are base-rate theatre
+
+=== crypto PIT audit before alpha (arXiv:2608.25348) ===
+  [OK] no_same_bar_execution
+  [OK] funding_lag
+  [OK] no_backfill_gap_fill
+  [OK] OI_publication_unverified → disable OI as alpha input
 ```
 
 ## 常见错误 / 陷阱
 
 - 日频噪声上零样本 TSFM 常输给强截面/树基准。
 - Mock ≠ 已发布 Chronos/TimesFM 权重。
-- **Crypto 幸存者偏差：** 退市永续/币种从免费历史中消失。
+- 不报 always-up / excess_acc 的 ~80% 方向准确率是基率陷阱（2607.12248）。
+- 把 TSFM 当 alpha 引擎而非先验（2606.27100）。
+- **Crypto 幸存者偏差**与缺失 PIT 审计（2608.25348）：同 bar、资金费率滞后、回填。
 - **资金费率制度切换**翻转套利方向；桥/MEV/预言机/流动性风险超出 CEX CCXT。
 - Nautilus 同构内核 ≠ 相同延迟、部分成交或对账结果。
+- **范围拒绝：** Deep RL 交易 / HFT 时延 / 期权做市 — 本课程范围外。
 
 ## 练习（1:1）
 
@@ -90,12 +129,15 @@ ann_carry_cost_long≈1095.0 bps/year if rate stays constant
 <Quiz id="p8ts-q4" question="NautilusTrader Backtest 与 Live 共享？" options={["什么都不共享", "NautilusKernel（引擎/cache/bus/trader）", "仅 CSV 加载器", "仅云 GPU"]} answer={1} explanation="官方架构：公共内核。" />
 <Quiz id="p8ts-q5" question="实验 1095 bps/年假设？" options={["费率不变", "完美预知制度", "名义为零", "没有 8h 结算"]} answer={0} explanation="常值费率 foil；制度切换会改 PnL 符号。" />
 <Quiz id="p8ts-q6" question="@sera00111 Crypto 工具笔记建议？" options={["先买 L3 tick", "可从 Vision/CCXT 量级起步；先定策略再选粒度", "忽略成本", "忽略幸存者"]} answer={1} explanation="P2 已核验的 niche 工具建议。" />
+<Quiz id="p8ts-q7" question="excess_acc（arXiv:2607.12248）等于？" options={["仅原始准确率", "模型准确率减去同一窗口 always-up 准确率", "夏普减 1", "资金费率年化"]} answer={1} explanation="相对牛市基率的标题技能指标。" />
+<Quiz id="p8ts-q8" question="TSFM-as-prior 论文（2606.27100）支持？" options={["通用免费股票 alpha", "有用的归纳先验；相对 RW 增益小且稀疏——不是通用 alpha 引擎", "永远忽略成本", "禁止树基准"]} answer={1} explanation="先验有帮助；自身不会铸造 alpha。" />
+<Quiz id="p8ts-q9" question="Crypto PIT 审计先于 alpha（2608.25348）要求？" options={["同 bar 成交 OK", "禁止同 bar；资金费率滞后；禁止回填；OI 谨慎", "删除全部资金费率", "忽略可得性时间"]} answer={1} explanation="可得性掩码清单先于声称 alpha。" />
 
 ## 完成标准
 
 TSFM 谨慎备忘 + 另类数据时点一页纸（含资金费率/链上风险条目）。
 
-**来源（已阅读并写入正文）：** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578)；P5 亦引 2412.09880、2606.27100；[CCXT 文档](https://docs.ccxt.com/)；[GMX 费用](https://docs.gmx.io/docs/trading/fees/)；[OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/)；[Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt)；[@sera00111](https://x.com/sera00111/status/2108332340753969191)；[Nautilus 架构](https://nautilustrader.io/docs/latest/concepts/architecture/)；[Binance Vision](https://data.binance.vision/)。
+**来源（已阅读并写入正文）：** [arXiv:2511.18578](https://arxiv.org/abs/2511.18578)；[arXiv:2606.27100](https://arxiv.org/abs/2606.27100) TSFM 作为先验；[arXiv:2607.12248](https://arxiv.org/abs/2607.12248) 基率诚实方向；[arXiv:2608.25348](https://arxiv.org/abs/2608.25348) Crypto PIT 审计；P5 亦引 2412.09880；[CCXT 文档](https://docs.ccxt.com/)；[GMX 费用](https://docs.gmx.io/docs/trading/fees/)；[OpenBB ODP](https://openbb.co/blog/openbb-releases-open-data-platform/)；[Trading Strategy GMX/CCXT](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt)；[@sera00111](https://x.com/sera00111/status/2108332340753969191)；[Nautilus 架构](https://nautilustrader.io/docs/latest/concepts/architecture/)；[Binance Vision](https://data.binance.vision/)。
 
 <Summary>
 **要点**：TSFM 仍要 purge/成本/DSR；资金费率是制度敏感套利而非免费 alpha；Nautilus 保持策略代码同构——成交仍会不同。  

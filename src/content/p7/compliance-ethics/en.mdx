@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**4 hours**: 2h reading + 1.5h writing + 0.5h quiz) covers **compliance basics** for retail/programmatic trading in China, the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
+This lesson (~**6 hours**: 3h reading + 2h writing + 1h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
 
 **Goals:** write a risk-preference page; log failures honestly; refuse “guaranteed Sharpe” pitches.
 
@@ -23,6 +23,11 @@ Nothing here is legal, compliance, or investment advice. Thresholds and effectiv
 - **SZSE PDF (fetched OK):** https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf — Article 33 matches the **300 / 20,000** HFT thresholds; Article 18 lists the four abnormal types; **effective 2025-07-07**.
 - **SZSE release notice (fetched OK):** https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html — 深证上〔2025〕292号, issued 2025-04-03, effective 2025-07-07.
 
+### CSRC 《期货市场程序化交易管理规定（试行）》〔2025〕12号
+
+- **Source (fetched OK):** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 中国证监会公告〔2025〕12号；also announced on [csrc.gov.cn](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml) (2025-06-13).
+- **Verified:** published **2025-06-13**; **effective 2025-10-09**. Futures programmatic trading = computer-generated/routed orders on futures exchanges. **Report-before-trade:** customer reports to futures company → FC verifies → exchange confirms → then trade. HFT features are qualitative in the CSRC text; **futures exchanges set numeric HFT standards**, may apply differentiated fees / cancel charges / limits. Host-colocation and seat fairness rules; abnormal cancel/replace monitoring. Pre-effective participants get **6 months** to meet Arts. 7–12 reporting. Complements securities 〔2024〕8 — do not conflate the two markets.
+
 ## United States — market access, shorts, margin, algo supervision
 
 ### SEC Rule 15c3-5 (Market Access Rule)
@@ -39,6 +44,11 @@ Nothing here is legal, compliance, or investment advice. Thresholds and effectiv
 
 - **Rule 4210 (fetched OK):** https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210 — current text includes **intraday margin level (IML)** definitions and deficit/satisfaction rules in (d)(2).
 - **Regulatory Notice 26-10 (fetched OK):** https://www.finra.org/rules-guidance/notices/26-10 — published **2026-04-20**; amendments **effective 2026-06-04** with member phase-in through **2027-10-20**. Explicitly **replaces** the prior day-trading margin regime, including the **pattern day trader** designation counts and the **$25,000** PDT minimum equity, with intraday margin standards. Teach the **historical PDT idea** as legacy context, and the **current IML framework** as the live Rule 4210 approach as of the check date.
+
+### FINRA Regulatory Notice 26-11 (IMD / IML interpretations)
+
+- **Source (fetched OK):** https://www.finra.org/rules-guidance/notices/26-11 — published **2026-05-19**; **effective 2026-06-04** (same day as 26-10 go-live).
+- **Verified:** publishes / updates Rule 4210 interpretations for the new intraday margin standards — including how to compute **IMD** (intraday margin deficit) and **IML** (intraday margin level), deposits, market moves, and liquidation examples — and **deletes** obsolete PDT day-trading interpretations. Short update next to 26-10: 26-10 = rule change; 26-11 = how members implement IMD/IML in practice + investor education links.
 
 ### FINRA Regulatory Notice 15-09
 
@@ -69,7 +79,7 @@ Nothing here is legal, compliance, or investment advice. Thresholds and effectiv
 ### Real run output
 
 ```
-n_sources=11 all_fetch_OK=True
+n_sources=13 all_fetch_OK=True
 (checked Asia/Shanghai 2026-11-04)
 ```
 
@@ -77,9 +87,10 @@ n_sources=11 all_fetch_OK=True
 
 1. Quoting blog thresholds instead of exchange/CSRC text.
 2. Treating staff statements as final Commission rules.
-3. Ignoring that PDT/$25k was replaced (Notice 26-10) if teaching US retail margin in 2026+.
-4. Offering personalised trading advice from this course.
-5. Skipping the “date checked” stamp.
+3. Ignoring that PDT/$25k was replaced (Notice 26-10 / 26-11 IMD/IML) if teaching US retail margin in 2026+.
+4. Conflating securities 〔2024〕8 with futures 〔2025〕12 — markets and exchanges differ.
+5. Offering personalised trading advice from this course.
+6. Skipping the “date checked” stamp.
 
 ## Practice (1:1)
 
@@ -97,6 +108,8 @@ n_sources=11 all_fetch_OK=True
 <Quiz id="p7ce-q4" question="Reg SHO Rule 201 triggers after roughly?" options={["1% move", "10% decline from prior close (listing market)", "50% weekly", "Any uptick"]} answer={1} explanation="10% circuit breaker." />
 <Quiz id="p7ce-q5" question="As of FINRA Notice 26-10 (fetched)?" options={["PDT $25k is newly created", "Intraday margin standards replace the old PDT day-trade count /$25k regime (eff. 2026-06-04)", "Margin rules abolished", "Only applies to crypto"]} answer={1} explanation="Notice 26-10 replaces day-trading margin requirements." />
 <Quiz id="p7ce-q6" question="PBoC 2021 notice (fetched) states virtual currency related businesses are?" options={["Encouraged fintech", "Characterised as illegal financial activities and prohibited", "Mandatory for banks", "Unregulated"]} answer={1} explanation="银发〔2021〕237号 high-level status." />
+<Quiz id="p7ce-q7" question="CSRC futures programmatic rules 〔2025〕12 (fetched) take effect on?" options={["2024-10-08", "2025-10-09", "2026-06-04", "Never"]} answer={1} explanation="Announcement 〔2025〕12号: effective 2025-10-09; report-before-trade on futures." />
+<Quiz id="p7ce-q8" question="FINRA Notice 26-11 mainly?" options={["Restores PDT $25k", "Publishes IMD/IML interpretations for the new intraday margin standards (eff. 2026-06-04)", "Abolishes margin", "Only crypto"]} answer={1} explanation="26-11 implements 26-10 via Rule 4210 IMD/IML interpretations." />
 
 ## Done when
 
@@ -105,6 +118,6 @@ Ethics checklist checked; official-source table filled with URLs and **2026-11-0
 **Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK this session). Canvas m14; AFML scientific ethics.
 
 <Summary>
-**Takeaways**: cite official text + date; CN report-before-trade & exchange HFT thresholds; US 15c3-5 / Reg SHO / 4210-IML / 15-09; crypto via PBoC 2021 + non-binding SEC/CFTC staff note.  
+**Takeaways**: cite official text + date; CN securities 〔2024〕8 + futures 〔2025〕12 report-before-trade & exchange HFT standards; US 15c3-5 / Reg SHO / 4210-IML via 26-10+26-11 / 15-09; crypto via PBoC 2021 + non-binding SEC/CFTC staff note.  
 **Next:** P8 frontier (optional) or capstone — still learning-only.
 </Summary>
