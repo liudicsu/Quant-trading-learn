@@ -32,7 +32,7 @@
     "how3Title": "Honest research",
     "how3": "Focus on traps, costs, and out-of-sample thinking before clever strategies.",
     "progressLocal": "Progress is stored only in this browser (localStorage) and is never uploaded.",
-    "placeholderNote": "Curriculum V2: phases from knowledge dependencies. P0–P2 are fully written; later lessons are stubs."
+    "placeholderNote": "Curriculum V2: phases from knowledge dependencies. All 27 lessons in P0–P9 are fully written (zh + en)."
   },
   "lesson": {
     "lesson": "Lesson {n}",
@@ -86,7 +86,7 @@
     "title": "About",
     "lead": "A self-contained quant trading research learning site: concepts, formulas, runnable labs, quizzes, and local progress.",
     "sourceTitle": "Content & version",
-    "source": "The outline is Curriculum V2 (phases from knowledge dependencies; see docs/CURRICULUM_V2.md). Lessons are bilingual. P0 is fully written; later phases fill in by batch. Published lessons do not require outside sites.",
+    "source": "The outline is Curriculum V2 (phases from knowledge dependencies; see docs/CURRICULUM_V2.md). Lessons are bilingual. P0–P9 bodies are fully written. Published lessons do not require outside sites.",
     "copyrightTitle": "Disclaimer",
     "copyright": "Learning only — not investment advice. No security tips, broker signup, or live-order tutorials. Labs mostly use synthetic/teaching data.",
     "privacyTitle": "Privacy",

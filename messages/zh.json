@@ -32,7 +32,7 @@
     "how3Title": "诚实研究",
     "how3": "强调回测陷阱、成本与样本外——先学流程，再谈策略。",
     "progressLocal": "进度仅保存在本浏览器（localStorage），不会上传。",
-    "placeholderNote": "大纲 V2：按知识依赖分阶段。P0–P2 已写满；其余课为占位正文。"
+    "placeholderNote": "大纲 V2：按知识依赖分阶段。P0–P9 共 27 课正文均已写满（中英双语）。"
   },
   "lesson": {
     "lesson": "第 {n} 课",
@@ -86,7 +86,7 @@
     "title": "关于",
     "lead": "自包含的量化交易研究学习站：概念、公式、可运行示例、测验与本地进度。",
     "sourceTitle": "内容与版本",
-    "source": "大纲为 Curriculum V2（阶段由知识依赖导出，见 docs/CURRICULUM_V2.md）。站点实现中英双语课稿；P0 已写满，后续阶段按批次补正文。不依赖外站也能学完已发布课。",
+    "source": "大纲为 Curriculum V2（阶段由知识依赖导出，见 docs/CURRICULUM_V2.md）。站点实现中英双语课稿；P0–P9 正文均已写满。不依赖外站也能学完。",
     "copyrightTitle": "免责声明",
     "copyright": "学习用途，非投资建议。不推荐具体证券，不提供券商开户或实盘下单教程。示例多为合成/教学数据。",
     "privacyTitle": "隐私",
