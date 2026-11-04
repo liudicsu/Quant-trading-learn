@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **12 学时**：阅读 6h（含北向程序化 + SEC PDA 撤回 + FY2026 检查 / FINRA GenAI + 香港证监会 SFC 24EC55）+ 写作 4h + 测验 2h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
+本课（约 **15 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
 
 **课内目标：** 写风险偏好一页；诚实记录失败；拆穿「保证夏普」话术。
 
@@ -105,7 +105,7 @@ n_sources=15 all_fetch_OK=True
 - **[SEC 考试司 FY2026 优先事项](https://www.sec.gov/about/reports-publications/2026-examination-priorities)**（页面约 2025-11-17；另有 [PDF](https://www.sec.gov/files/2026-exam-priorities.pdf)）：新兴金融科技焦点——自动化投资工具、AI、交易算法/平台、另类数据。检查可能关注 AI 表述是否公允准确；运营与披露是否一致；算法建议与投资者画像；欺诈/AML/交易/中后台中监督 AI 的政策。
 - **[FINRA 2026 年度监管报告 — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)**（**2026 新增**）：规则（含 FINRA Rule 3110 监督）保持技术中立。新兴智能体主题：自主性、范围/权限、可审计性、数据敏感度、领域知识、奖励错位，以及 GenAI 偏见/幻觉/隐私。可考虑人在回路、访问/数据监控、动作日志、护栏。
 
-**仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=18`。
+**仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=19`。
 
 
 ## 香港证监会通函 24EC55 — GenAI 语言模型（知晓即可）
@@ -119,13 +119,35 @@ n_sources=15 all_fetch_OK=True
 - **高风险用途** — 提供投资建议、意见或研究报告 — 需要额外缓释：客户可见输出前的**人在回路**审阅、验证/持续监控、提示鲁棒性测试，以及正在与 AI 互动的持续披露。
 - 与 FINRA 2026 GenAI/Agents、SEC FY2026 Emerging FinTech 并列阅读：**美国某提案撤回 ≠ 其他司法辖区没有义务**。
 
-实验行：`examples/p7/02_compliance_sources.py` 中 `sfc_24ec55`（`n_sources=18`）。
+实验行：`examples/p7/02_compliance_sources.py` 中 `sfc_24ec55`（`n_sources=19`）。
+
+
+
+## ESMA 算法交易监管简报（2026-02-26）— 识字即可
+
+欧盟对照（与 FINRA GenAI / 香港证监会 24EC55 并列）：[ESMA74-1505669079-10311《欧盟算法交易监管简报》](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)（[文档页](https://www.esma.europa.eu/document/supervisory-briefing-algorithmic-trading-eu)），**2026-02-26** 发布。依据 ESMA 条例 Art.29(2) 的**非约束性**趋同工具——**不适用 comply-or-explain**。
+
+**仅识字（不是执照清单，不是 HFT 教程，非法律意见）：**
+
+| 主题 | 简报精神（已抓取 PDF） |
+|------|------------------------|
+| 算法定义 | 计算机算法决定订单任一参数（价/量/时点/是否发起等）即属算法交易；**人类点击授权 ≠ 自动排除**（若参数已由算法决定） |
+| 重大变更复测 | 逻辑/范围/风控/外部依赖变更后复测；**含 ML 重训 / 自适应能力**（一系列小重标定也可累积成重大变更） |
+| 压力测试 | 系统应能承受约 **2×** 过去 **6 个月**峰值报文/成交量（RTS 6 Art.10 精神） |
+| PTC | **硬阻断**满足强制要求；**软阻断**强烈建议；母/子单累计校验 |
+| 外包 | 使用第三方算法/软件时，**投资公司仍负全责**；合同不能转移监管责任 |
+| AI Act + 自评 | 与 AI Act 交互需纳入治理；RTS 6 **Art.9** 年度自评/验证精神——把 AI 用法写进自评 |
+
+与亚洲同侪（SFC 24EC55、FINRA GenAI）一起读：**某司法辖区撤回某提案 ≠ 其他辖区无义务。**
+
+实验行：`examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026`（`n_sources=19`）。
 
 ## 常见错误 / 陷阱
 
 - 假定 PDA 撤回消灭了全部 AI/建议义务（FY2026 仍列 Emerging FinTech）。
 - 把 FINRA GenAI 主题当成交易执照或产品 alpha。
 - 把香港证监会（SFC）通函 24EC55 当成交易执照，而非持牌法团期望。
+- 把 ESMA 简报当成可勾选的执照清单或 HFT 操作手册。
 
 1. 用自媒体阈值代替交易所/证监会文本。
 2. 把工作人员声明当成委员会终局规则。
@@ -158,15 +180,17 @@ n_sources=15 all_fetch_OK=True
 
 <Quiz id="p7ce-q9" question="港股通北向程序化交易报告（已核验）生效日？" options={["2024-10-08", "2025-10-09", "2026-01-12", "永不"]} answer={2} explanation="HKEX 汇总页：2026-01-12 生效。" />
 
+<Quiz id="p7ce-esma" question="ESMA74-1505669079-10311（2026-02-26）主要是？" options={["HFT 配方执照", "非约束性算法交易监管简报：定义/重大变更复测/2×压力/PTC/外包责任/AI Act+RTS6 Art.9 — 仅识字", "废除 MiFID II", "仅限香港"]} answer={1} explanation="已抓取官方 PDF；非法律意见；非执照清单。" />
+<Quiz id="p7ce-esma2" question="ESMA 简报下，人类点击授权是否自动使交易非算法？" options={["是，一律排除", "否 — 若算法已决定订单参数，仍可属算法交易", "仅加密适用", "只看佣金"]} answer={1} explanation="人机协同不否定算法已决定参数。" />
 <Quiz id="p7ce-sfc" question="香港证监会（SFC）通函 24EC55（已抓取）主要是？" options={["GenAI 交易 alpha 执照", "香港对 GenAI 语言模型的期望；高风险建议/研究 → 人在回路 — 仅知晓", "废除 FINRA 3110", "仅限 HFT"]} answer={1} explanation="2024-11-12 发出；非法律意见。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；Canvas m14；AFML 科学伦理。
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。
 
 <Summary>
-**要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明。  
+**要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  
 **其后：** P8 前沿（可选）或毕业项目 — 仍仅供学习。
 </Summary>

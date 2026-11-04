@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**10 hours**: 3.5h concepts (incl √/Gatheral) + 5.5h experiments + 1h quiz) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
+This lesson (~**13 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
 
 **Goals:** add participation / schedule discipline; write a one-page execution sheet tied to the shared cost model.
 
@@ -110,13 +110,43 @@ Double-√ child cumulative (`q=1e4`, `i0=4`): i=1 → 4.72 bps … i=25 → 67.
 </Callout>
 
 
+
+
+## Why public-data metaorder impact is hard (arXiv:2501.17096)
+
+[arXiv:2501.17096](https://arxiv.org/abs/2501.17096) (Naviglio et al.): when you build metaorder generalized IRFs from **public** price–trade models (TIM / Hasbrouck VAR / CNN–LSTM), the paths often disagree with **real metaorder** stylized facts.
+
+| | Real metaorders (literature) | Public-data IRFs (paper's linear/nonlinear fits) |
+|--|------------------------------|--------------------------------------------------|
+| During execution | **Concave** growth (often near √t) | Near-**linear** (sometimes post-end inertia) |
+| After the end | **Convex** partial reversion | **Weak** reversion / price may keep drifting |
+
+**LMF literacy:** long memory in order flow ≈ many overlapping metaorders; your new child order does **not** trigger the same same-sign volume the unconditional VAR implies.
+
+**Modified TIM α literacy:** α∈[0,1] = share of child volume that enters the **market volume** equation; α→1 near criticality → linear/inertia; smaller α closer to concave+revert. Lab toy (subcritical):
+
+```
+alpha | peak | end | revert_frac | below_chord_during
+0.00 | 27.259 | 33.085 | -0.214 | +2.173
+0.35 | 48.979 | 89.257 | -0.822 | +8.687
+1.00 | 89.315 | 193.578 | -1.167 | +20.785
+```
+
+Higher α → weaker post-end reversion / more inertia risk (negative revert). **Protocol/warn: public tape often mis-estimates large metaorder impact.**
+
+<Callout type="warn" title="Debunk">
+Do **not** calibrate α on the evaluation path as alpha; no LOB HFT / Hawkes / GAN / MPC execution recipes. This paper is **protocol + warning**, not impact alpha.
+</Callout>
+
 ## Common mistakes / pitfalls
 
 1. Backtesting fills at mid with zero schedule / impact.
 2. Fitting η, γ on the evaluation path (look-ahead calibration).
-3. Treating VWAP beat as alpha rather than schedule benchmark noise.
+3. Treating **above VWAP** as alpha rather than schedule benchmark noise.
 4. Ignoring adverse selection when quoting limits.
 5. Mixing arrival-price IS with close-to-close PnL without stating the benchmark.
+6. Using public-tape IRFs as real metaorder costs without noting missing concavity/reversion.
+7. Calibrating α / impact kernels as course edge.
 
 ## Practice (1:1)
 
@@ -136,13 +166,14 @@ Double-√ child cumulative (`q=1e4`, `i0=4`): i=1 → 4.72 bps … i=25 → 67.
 <Quiz id="p6ex-q6" question="Volume-weighted arrival slippage vs Perold IS?" options={["Independent second metric ≈116 bps", "Mathematically identical (same dollars / notional)", "Always equal to close slippage", "Ignores share sizes"]} answer={1} explanation="VW arrival slip ≡ IS_bps; use VWAP/close as truly different benchmarks." />
 
 <Quiz id="p6ex-q7" question="I≈Yσ√(Q/V) in this lesson is primarily?" options={["An alpha signal to maximise Y", "A cost / capacity ruler — not edge", "A proof that linear AC is false always", "A broker API"]} answer={1} explanation="Teach impact as cost literacy; reject optimize-Y→alpha." />
+<Quiz id="p6ex-q9" question="2501.17096 main warning on public-data metaorder IRFs?" options={["Public TIM always yields perfect concave paths", "Often near-linear paths + weak reversion — unlike real metaorder stylized facts; large-impact estimates go wrong", "Proves α=1 is alpha", "Replaces Perold IS"]} answer={1} explanation="Protocol/warn; LMF + modified TIM α are literacy only." />
 <Quiz id="p6ex-q8" question="Double-√ literacy (2502.16246) says metaorder √ mainly comes from?" options={["Only Kyle λ", "Child √ volume + inverse-√ time decay (mechanical foil)", "Guaranteed informed flow", "RL execution"]} answer={1} explanation="Child √ + decay → metaorder √; scramble foil." />
 
 ## Done when
 
 Execution assumptions (schedule, participation caps, AC λ or heuristic, IS benchmark) live in the shared main config — same model research and paper trading use.
 
-**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche); no-trade pointer [arXiv:2502.04284](https://arxiv.org/abs/2502.04284); double-√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965); Gatheral 2010 DOI [10.1080/14697680903373692](https://doi.org/10.1080/14697680903373692).
+**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche); no-trade pointer [arXiv:2502.04284](https://arxiv.org/abs/2502.04284); double-√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965); Gatheral 2010 DOI [10.1080/14697680903373692](https://doi.org/10.1080/14697680903373692); public-data metaorder impact challenge [arXiv:2501.17096](https://arxiv.org/abs/2501.17096).
 
 <Summary>
 **Takeaways**: schedule consciously; AC gives a cost–risk frontier; measure IS vs arrival; limits are not free.  

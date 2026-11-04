@@ -60,3 +60,27 @@ dollar~200p  n_bars= 231 mean_|ret|=0.003033 std_ret=0.003760 max_gap_s=28
 teach: time bars sample the clock; tick/volume/dollar bars sample activity — busy periods mint more bars, quiet periods fewer. This is a sampling choice for research bars, NOT a latency or HFT execution recipe.
 intuition: if news hits and 1000 trades arrive in one minute, time bars still emit one 1-min bar, while tick/volume/dollar bars emit many — returning the series closer to an 'information clock'.
 toy_counts {'time50': 100, 'vol200': 241, 'dollar': 231}
+
+=== mask-first / upstream contamination (arXiv:2507.07107; Boolean mask contract) ===
+cite: https://arxiv.org/abs/2507.07107 — upstream contamination: limit closes enter rolling ops BEFORE row filter
+paper_ablation_cite: no-mask apparent IC +18% while realised Sharpe −0.44 vs full mask (author ablation)
+REJECT_as_course_alpha: Sharpe 2.05 synthetic / 1.63 real; 213-factor GPU engine; AdjMSE γ system
+params: toy seed=11; T=750; N=120; limit_up_p≈0.04; mom_window=10; fantasy vs realisable fill
+toy_IC_apparent_contam 0.0264
+toy_IC_realisable_contam 0.0053
+toy_IC_mask_first 0.0017
+toy_IC_inflate_apparent_vs_realisable_pct 394.0
+toy_SR_fantasy_contam 3.007
+toy_SR_realisable_contam 0.914
+toy_SR_mask_first 0.814
+toy_SR_gap_fantasy_minus_realisable 2.093
+teach: contaminated rolling features make limit-chasing look predictive (high apparent IC / fantasy SR); realisable fill on the same features collapses — mask-first Boolean contract refuses non-executable closes in the window.
+boolean_mask_contract: M[t,i]=tradable; every rolling op must ignore cells with M=0; post-hoc row drop CANNOT un-poison aggregates already computed.
+
+=== rolling MA contamination sketch (5 closes) ===
+closes [10.0, 10.1, 10.2, 11.2, 10.3]
+tradable_mask [1, 1, 1, 0, 1]
+MA3_naive [None, None, 10.1, 10.5, 10.5667]
+MA3_mask_first [None, None, 10.1, 10.15, 10.25]
+teach: day-index-3 limit print 11.2 enters naive MA for indices 3–4; mask-first never reads it.
+ASSERT_mask_first_demo_ok

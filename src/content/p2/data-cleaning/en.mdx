@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**13 hours**: 4h concepts + 5h pipeline lab + 2h info-bars + 1h crypto-PIT note + 1h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**17 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -131,6 +131,48 @@ ASSERTS_OK
 
 Activity clocks produce **more** bars with **smaller** per-bar moves on the same tape — the series is closer to an “information clock.”
 
+
+
+## Mask-first / upstream contamination (limit closes in rolling windows)
+
+[arXiv:2507.07107](https://arxiv.org/abs/2507.07107) documents a costly A-share pipeline failure: **limit-up/down closes are non-executable**, yet they enter rolling means / correlations / ranks **before** any row filter — **upstream contamination**.
+
+**Paper ablation (warning numbers only — not course alpha):** removing the mask **inflates apparent IC by ~+18%** while **cutting realised Sharpe by ~0.44** — the model learns returns it cannot trade.
+
+**Boolean mask-first contract (what this lesson keeps):**
+
+1. Build `M[t,i]` at load time (tradable: not halted ∧ not at limit ∧ past seasoning).
+2. Every rolling operator reads **only** cells with `M=1`; any `M=0` in the window → mark output unreliable (conservative).
+3. **Post-hoc row drops cannot un-poison** aggregates already computed.
+
+### Five-close sketch (lab printout)
+
+| day | close | tradable? | naive MA3 | mask-first MA3 |
+|-----|-------|-----------|-----------|----------------|
+| 0 | 10.0 | 1 | — | — |
+| 1 | 10.1 | 1 | — | — |
+| 2 | 10.2 | 1 | 10.10 | 10.10 |
+| 3 | **11.2** (limit print) | **0** | **10.50** | **10.15** |
+| 4 | 10.3 | 1 | **10.57** | **10.25** |
+
+The limit print contaminates the naive MA until it rolls off; mask-first **never reads it**.
+
+### Toy panel numbers (`examples/p2/01_data_cleaning.py`)
+
+Synthetic T=750×N=120; 10-day momentum. **Toy ≠ paper tables:**
+
+| Metric | Contam. apparent | Contam. realisable | Mask-first |
+|--------|------------------|--------------------|------------|
+| RankIC | ≈0.026 | ≈0.005 | ≈0.002 |
+| L/S Sharpe | fantasy ≈3.01 | realisable ≈0.91 | ≈0.81 |
+
+Apparent vs realisable IC inflate ≈ **+394%** (toy); fantasy−realisable Sharpe gap ≈ **2.09**. Keep the mechanism: **dirty windows make limit-chasing look predictable; the same signal collapses under fillability.**
+
+<Callout type="warn" title="Debunk / REJECT">
+Do **not** ship the paper's Sharpe **2.05** (synthetic) / **1.63** (real), **213-factor** engine, or **AdjMSE** system as course edge. Keep only the **Boolean mask-first contract** + contamination diagnosis.
+</Callout>
+
+
 ## Common mistakes / pitfalls
 
 1. Backtesting a decade with today’s members only.  
@@ -150,6 +192,7 @@ Activity clocks produce **more** bars with **smaller** per-bar moves on the same
 4. **ex4** — survivorship means; **done when** both means match the lesson.  
 5. **ex5** — PIT lag note; **done when** lag=5 and a look-ahead sentence appear.
 6. **ex6** — Info-bar clocks: print time/volume/dollar bar counts on the synthetic tape; **done when** counts match the lesson table.
+7. **ex7**: Run the mask-first toy; **done when** apparent vs realisable IC, MA sketch, and ASSERT_mask_first_demo_ok print.
 
 ## Quiz
 
@@ -160,15 +203,17 @@ Activity clocks produce **more** bars with **smaller** per-bar moves on the same
 <Quiz id="q5-hash" question="Saving sha256 mainly?" options={["Speeds downloads", "Proves byte-level reproducibility", "Raises Sharpe", "Replaces the sheet"]} answer={1} explanation="Version check." />
 <Quiz id="q6-infobar" question="Dollar/volume bars mainly change?" options={["Broker fees", "The sampling clock from wall-time to activity", "Regulatory filings", "Rf"]} answer={1} explanation="AFML ch.2 information-driven bars." />
 <Quiz id="q7-infobar2" question="This lesson’s info-bar demo is?" options={["An HFT latency recipe", "A research sampling comparison on synthetic ticks", "A live order router", "A substitute for PIT"]} answer={1} explanation="Explicitly not an HFT recipe." />
+<Quiz id="q9-mask" question="Upstream contamination (2507.07107) fails because?" options={["Commissions wrong", "Non-executable limit closes enter rolling ops before row filters", "Adj only", "Must use dollar bars"]} answer={1} explanation="Post-hoc drops cannot un-poison aggregates; use Boolean mask-first." />
+<Quiz id="q10-mask2" question="Course stance on 2507.07107 Sharpe 2.05/1.63?" options={["Required alpha target", "REJECT — teach mask contract + diagnosis only", "Replaces PIT", "Proves 213 factors"]} answer={1} explanation="Debunk: headline Sharpe / factor engine are not course edge." />
 <Quiz id="q8-cryptopit" question="Crypto PIT audit before alpha (2608.25348 pointer) requires?" options={["Same-bar fills OK", "No same-bar; funding lag; no backfill; careful OI", "Ignore availability time", "Always use OI"]} answer={1} explanation="Availability-masked checklist; full lab in P8 TSFM/crypto." />
 
 ## Done when
 
 - Rerunnable pipeline + sheet + quizzes  
 
-**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars. niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.
+**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (contract+diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.
 
 <Summary>
-**Takeaways**: hashes, survivorship, PIT, timezone look-ahead, adj declarations.  
+**Takeaways** (incl. mask-first): hashes, survivorship, PIT, timezone look-ahead, adj declarations.  
 **Next**: backtest traps and overfitting interrogation.
 </Summary>

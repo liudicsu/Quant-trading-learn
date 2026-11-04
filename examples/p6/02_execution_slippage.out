@@ -81,3 +81,17 @@ REJECT: fitting Y on the evaluation path as 'alpha'; Obizhaeva–Wang N-trader g
 equal-programme foil Q/V=0.10: √-ruler=63.25bps vs linear=20.00bps
 bridge from costs-in-backtest: same √(Q/ADV) capacity ruler — deepen mechanics here, not a second alpha
 disclaimer: TSE ID-resolved empirics cited for literacy; toy Y=1 — learning only, not a broker impact model
+
+=== public-data metaorder impact challenge (arXiv:2501.17096) ===
+cite: https://arxiv.org/abs/2501.17096 — Why is estimation of metaorder impact with public market data so challenging?
+stylized_facts_real_metaorders: concave path DURING execution; convex PARTIAL reversion AFTER end
+public TIM/VAR/NN IRFs (calibrated on public tape): often ~LINEAR path + WEAK reversion (sometimes post-end inertia)
+LMF literacy (Lillo–Mike–Farmer): long memory of order flow ≈ many overlapping metaorders — YOUR new child order does NOT trigger the same volume AR the unconditional fit implies
+modified TIM α literacy: α∈[0,1] = share of child volume that enters the market volume equation; α→1 near criticality → linear/inertia; smaller α restores concave+revert
+protocol_warn: 公开盘口估大单冲击常估歪; NO calibrate-α-for-alpha; no LOB HFT
+alpha | peak | end | revert_frac | below_chord_during
+0.00 | 27.259 | 33.085 | -0.214 | +2.173
+0.35 | 48.979 | 89.257 | -0.822 | +8.687
+1.00 | 89.315 | 193.578 | -1.167 | +20.785
+teach: as α rises, post-end reversion weakens (can flip to inertia if near-critical in richer calibrations); below-chord during execution is the concave stylized-fact foil — public-data α≈1 IRFs often miss it
+REJECT: calibrate α for course alpha; LOB GAN / Hawkes / MPC / HFT recipes; paper is protocol/warn only

@@ -154,6 +154,15 @@ SOURCES = [
     "fetch": "OK",
     "verified": "Issued 2024-11-12, immediate effect. Risk-based Core Principles for GenAI LMs; investment recommendations/advice/research = high-risk → human-in-the-loop + validation/monitoring/disclosures. Asia peer to FINRA GenAI themes. Awareness not license; not legal advice.",
   },
+  {
+    "id": "esma74_algo_briefing_2026",
+    "title": "ESMA Supervisory Briefing on Algorithmic Trading in the EU (ESMA74-1505669079-10311)",
+    "issuer": "ESMA",
+    "url": "https://www.esma.europa.eu/document/supervisory-briefing-algorithmic-trading-eu",
+    "pdf": "https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf",
+    "fetch": "OK",
+    "verified": "Published 2026-02-26. Non-binding supervisory briefing (Art.29(2) ESMA Reg; not comply-or-explain). Algo definition: human click/authorisation ≠ out-of-scope if algorithm determined parameters. Material change retest incl. ML retrain/adaptive capabilities. Stress: 2× prior-6m peak messages/trades. PTC hard blocks mandatory / soft recommended. Outsourcing: firm remains liable. AI Act interaction + RTS 6 Art.9 annual self-assessment spirit. Literacy + Asia peers (SFC 24EC55 / FINRA GenAI); NOT a license checklist; not HFT how-to; not legal advice.",
+  },
 ]
 
 print("=== official sources checklist (checked Asia/Shanghai 2026-11-04) ===")

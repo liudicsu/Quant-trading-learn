@@ -200,6 +200,12 @@ disclaimer: synthetic weak panel — learning only
 
 对许多 purged 折组合打分会得到 OOS 指标的**分布**——与 AFML 第12章 CPCV 精神相同。路径复用测试块，**不是**独立 DSR 试验。数值玩具在 `backtest-traps` / `examples/p2/02_backtest_traps.py`。
 
+
+
+## 指针 — Mask-first 上游污染
+
+与决策时泄漏开关相邻：涨跌停不可成交收盘价若在行过滤前进入滚动特征，会抬高表观 IC、压低可实现夏普。详见 `data-cleaning` [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)。**REJECT** 该文 Sharpe 2.05/1.63 作课程 edge。
+
 ## 指针 — 一键切换的决策时点泄漏
 
 即便日历切分做过 purge，仍可能藏 **决策时点** 泄漏。复用 P2 的 [When Alpha Disappears](https://arxiv.org/abs/2605.23959) 对照：**TEMP_CENTER**（中心化滚动）与 **EXEC_OPEN**（用开盘后字段却假设当日开盘成交）可在 walk-forward *看起来干净* 时抬高夏普。数值 Leakage Gain 见 `backtest-traps`。
@@ -255,6 +261,8 @@ disclaimer: synthetic weak panel — learning only
 <Quiz id="q7-frac" question="玩具里整数 d=1 与分数差分 d≈0.4 主要说明？" options={["费用下降", "两者都可平稳但分数差分保留更多自相关/记忆", "可跳过 purge", "元标签发明方向"]} answer={1} explanation="AFML 第5章平稳–记忆权衡。" />
 <Quiz id="q8-uniq" question="平均唯一性会下调哪些标签的权重？" options={["仅高成交额", "与许多并发事件重叠者", "ADF 失败", "使用 LightGBM"]} answer={1} explanation="AFML 第4章并发标签。" />
 <Quiz id="q9-meta" question="元标签的任务是？" options={["用新方向替换主方向", "过滤何时交易/跳过主方向", "去掉 purge", "只最大化准确率"]} answer={1} explanation="AFML 第3章 — 做与不做。" />
+<Quiz id="q-mask-upstream" question="涨跌停收盘价先滚均值再删行（2507.07107）最像哪类失败？" options={["纯佣金误差", "上游污染 / 决策时特征泄漏近亲 — 表观 IC↑、可实现夏普↓", "只要波动缩放", "CPCV 替代"]} answer={1} explanation="主机在 data-cleaning；mask-first 契约。REJECT 该文 headline Sharpe。" />
+
 
 ## 完成标准
 

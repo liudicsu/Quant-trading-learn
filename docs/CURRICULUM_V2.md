@@ -68,10 +68,10 @@
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 39h | ~5.0 周 | ~2.5 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 333 学时（跳过 P0 为 313）。** 6h/周 ≈ 55.5 周；12h/周 ≈ 27.8 周。
-**跳过 P0 后：精确 313 学时。** 6h/周 ≈ 52.2 周；12h/周 ≈ 26.1 周。
+**全量（含 P0）：精确 344 学时（跳过 P0 为 324）。** 6h/周 ≈ 57.3 周；12h/周 ≈ 28.7 周。
+**跳过 P0 后：精确 324 学时。** 6h/周 ≈ 54.0 周；12h/周 ≈ 27.0 周。
 
-精确合计：**333h 全量 / 313h 跳过 P0**。对外可表述为约 **310–350h 全量 / 290–330h 跳过基础**（含个人复盘缓冲）。
+精确合计：**344h 全量 / 324h 跳过 P0**。对外可表述为约 **320–360h 全量 / 300–340h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -895,4 +895,13 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - Novy-Marx & Velikov RFS 2016 costs×turnover taxonomy (NBER w20721 / DOI 10.1093/rfs/hhv063) + FIM capacity name-drop → `factor-workflow` next to Detzel.
 - SFC Circular 24EC55 (2024-11-12) GenAI LM → `compliance-ethics` (Asia peer to FINRA GenAI).
 - Rewrite-harder: `markets-language` SUCCESS “beat the benchmark” → “above the benchmark” / 高于 (zh+en lab+MDX).
-- Hours: **333 full / 313 skip-P0** (~+13h from enrich4 tip 882995b).
+- Hours: **344 full / 324 skip-P0** (~+13h from enrich4 tip 882995b).
+
+
+## Enrich6 (Phase B LIGHT) mapping notes
+
+- Mask-first / upstream contamination (arXiv:2507.07107) → `data-cleaning` (+ pointer `costs-in-backtest`; quiz bridge `ml-leakage-control`). Boolean mask contract only; REJECT paper Sharpe 2.05/1.63 / 213-factor / AdjMSE as course alpha.
+- ESMA Supervisory Briefing on Algorithmic Trading ESMA74-1505669079-10311 (2026-02-26 PDF) → `compliance-ethics` (non-binding literacy; Asia peers; not HFT how-to).
+- Public-data metaorder impact challenge (arXiv:2501.17096) → `execution-slippage` (+ one-line `microstructure-orders`). Protocol/warn; NO calibrate-α-for-alpha; no LOB HFT.
+- Rewrite-harder: execution-slippage 「跑赢 VWAP」→「高于 VWAP」 / beat→above; factor-portfolio-lab toy net_SR≈3.67/4.36 hardened as synthetic MU not live edge.
+- Hours: **344 full / 324 skip-P0** (~+11h from enrich5 tip ebd4b35). Quality pause after this pack — no enrich7 unless new brief.

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **10 学时**：概念 3.5h（含 √/Gatheral）+ 实验 5.5h + 测验 1h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **13 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -110,13 +110,43 @@ market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 </Callout>
 
 
+
+
+## 公开盘口元订单冲击为何难估（arXiv:2501.17096）
+
+[arXiv:2501.17096](https://arxiv.org/abs/2501.17096)（Naviglio 等）：用**公开**价量模型（TIM / Hasbrouck VAR / CNN–LSTM）做元订单广义脉冲响应时，轨迹常与**真实元订单** stylized facts 不符。
+
+| | 真实元订单（文献） | 公开数据 IRF（文中线性/非线性标定） |
+|--|-------------------|-------------------------------------|
+| 执行中 | **凹**增长（常近 √t） | 近**线性**（有时还带结束后惯性） |
+| 结束后 | **凸**的部分回撤 | **回撤很弱** / 有时价格继续走 |
+
+**LMF 识字：** 订单流长记忆 ≈ 许多重叠元订单的叠加；你新加的子单**不会**像无条件 VAR 暗示的那样同等触发同向成交。
+
+**修正 TIM 的 α 识字：** α∈[0,1] = 子单进入**市场成交量方程**的份额；α→1 且接近临界 → 线性/惯性；更小 α 更接近凹+回撤。实验玩具（次临界）：
+
+```
+alpha | peak | end | revert_frac | below_chord_during
+0.00 | 27.259 | 33.085 | -0.214 | +2.173
+0.35 | 48.979 | 89.257 | -0.822 | +8.687
+1.00 | 89.315 | 193.578 | -1.167 | +20.785
+```
+
+α 升高 → 结束后回撤更弱、更易惯性（负 revert）。**协议/警告：公开盘口估大单冲击常估歪。**
+
+<Callout type="warn" title="排伪">
+**禁止**在评估路径上标定 α 当 alpha；不做 LOB HFT / Hawkes / GAN / MPC 执行食谱。本文是**协议与警告**，不是冲击 alpha。
+</Callout>
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
 2. 在评估路径上拟合 η、γ（前瞻标定）。
-3. 把跑赢 VWAP 当成 alpha 而非日程基准噪声。
+3. 把**高于 VWAP**当成 alpha 而非日程基准噪声。
 4. 挂限价时忽略逆向选择。
 5. 未声明基准就把到达价 IS 与收盘对收盘 PnL 混用。
+6. 用公开盘口 IRF 直接当真实元订单成本，却不提凹/回撤缺失。
+7. 标定 α / 冲击核当成课程 edge。
 
 ## 练习（1:1）
 
@@ -136,13 +166,14 @@ market mean_cost=0.0200 limit mean_pnl≈-0.0278 fill_rate≈0.56
 <Quiz id="p6ex-q6" question="成交量加权到达价滑点与 Perold IS？" options={["另一个独立的约 116 bps 指标", "数学上相同（同一美元/名义本金）", "总是等于收盘滑点", "忽略股数"]} answer={1} explanation="成交量加权到达价滑点 ≡ IS_bps；VWAP/收盘才是不同基准。" />
 
 <Quiz id="p6ex-q7" question="本课 I≈Yσ√(Q/V) 主要是？" options={["把 Y 做大的 alpha 信号", "成本/容量尺 — 不是 edge", "永远证伪线性 AC", "券商 API"]} answer={1} explanation="冲击作成本识字；拒绝优化 Y→alpha。" />
+<Quiz id="p6ex-q9" question="2501.17096 对公开数据元订单 IRF 的主要警告？" options={["公开 TIM 总给出完美凹路径", "常呈近线性路径+弱回撤，与真实元订单 stylized facts 不符 — 估大单冲击易估歪", "证明 α=1 是 alpha", "替代 Perold IS"]} answer={1} explanation="协议/警告；LMF + 修正 TIM α 仅识字。" />
 <Quiz id="p6ex-q8" question="双 √ 识字（2502.16246）说元订单 √ 主要来自？" options={["只有 Kyle λ", "子单成交量 √ + 时间逆 √ 衰减（机械箔）", "保证知情流", "RL 执行"]} answer={1} explanation="子单 √ + 衰减 → 元订单 √；打乱箔。" />
 
 ## 完成标准
 
 执行假设（日程、参与率上限、AC λ 或启发式、IS 基准）写入共用主配置——研究与纸面交易使用同一模型。
 
-**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010 DOI [10.1080/14697680903373692](https://doi.org/10.1080/14697680903373692)。
+**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010 DOI [10.1080/14697680903373692](https://doi.org/10.1080/14697680903373692)；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

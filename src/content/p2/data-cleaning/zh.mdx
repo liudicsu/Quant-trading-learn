@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **13 学时**：概念 4h + 管线实验 5h + 信息驱动 K 线 2h + Crypto-PIT 注 1h + 文档/测验 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **17 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -131,6 +131,48 @@ ASSERTS_OK
 
 活动时钟在同一 tape 上产生**更多** bar、**更小**的单 bar 波动——序列更接近“信息时钟”。
 
+
+
+## Mask-first / 上游污染（涨跌停进滚动窗）
+
+[arXiv:2507.07107](https://arxiv.org/abs/2507.07107) 指出 A 股流水线里一个昂贵但隐蔽的失败模式：**涨跌停收盘价不可成交**，却在行过滤之前就进入滚动均值 / 相关 / 秩。作者称之为**上游污染（upstream contamination）**。
+
+**论文消融（只作警示数字，不是课程 alpha）：** 去掉 mask 后，**表观 IC 约 +18%**，但**可实现夏普约 −0.44**——模型在学“买不到的收益”。
+
+**布尔 mask-first 契约（本课只教这个）：**
+
+1. 数据加载时构造 `M[t,i]`（可交易：非停牌 ∧ 非涨跌停 ∧ 过观察期）。
+2. 每个滚动算子**只读** `M=1` 的格子；窗内出现 `M=0` → 输出一并标记不可靠（保守）。
+3. **事后删行修不了**已经写进均值的脏收盘价。
+
+### 五步收盘价草图（实验打印）
+
+| 日 | close | 可交易? | 朴素 MA3 | mask-first MA3 |
+|----|-------|---------|----------|----------------|
+| 0 | 10.0 | 1 | — | — |
+| 1 | 10.1 | 1 | — | — |
+| 2 | 10.2 | 1 | 10.10 | 10.10 |
+| 3 | **11.2**（涨停印） | **0** | **10.50** | **10.15** |
+| 4 | 10.3 | 1 | **10.57** | **10.25** |
+
+涨停印 11.2 会污染朴素 MA 直到滚出窗口；mask-first **从不读它**。
+
+### 玩具面板数字（`examples/p2/01_data_cleaning.py`）
+
+合成 T=750×N=120；10 日动量。**玩具 ≠ 论文表：**
+
+| 指标 | 污染表观 | 污染可实现 | mask-first |
+|------|----------|------------|------------|
+| RankIC | ≈0.026 | ≈0.005 | ≈0.002 |
+| 多空夏普 | 幻想 ≈3.01 | 可实现 ≈0.91 | ≈0.81 |
+
+表观相对可实现 IC 膨胀约 **+394%**（玩具）；幻想夏普 − 可实现 ≈ **2.09**。课内要记住的机制：**脏窗口让涨停追逐看起来可预测；同一信号在可成交约束下塌掉。**
+
+<Callout type="warn" title="排伪 / REJECT">
+**不要**把该文 Sharpe **2.05**（合成）/ **1.63**（真实）、**213 因子**引擎、**AdjMSE** 系统写成课程 edge 或作业目标。本课只收：**Boolean mask-first 契约** + 上游污染诊断。
+</Callout>
+
+
 ## 常见错误 / 陷阱
 
 1. 用今日成分回测十年。  
@@ -141,6 +183,8 @@ ASSERTS_OK
 5. 无哈希/无版本号。
 6. 把信息 bar 当成高频执行配方，而不是研究采样时钟。
 7. 在未声明的不同 tape 上比较时钟。
+8. 涨跌停 / 停牌收盘价先滚均值再删行（上游污染）。
+9. 把 2507.07107 的 headline Sharpe / 213 因子当成课程 alpha。
 
 ## 练习（与任务清单 1:1）
 
@@ -150,6 +194,7 @@ ASSERTS_OK
 4. **ex4**：复现幸存者均值对比；**完成标准**：两均值与课内一致。  
 5. **ex5**：说明 PIT 滞后；**完成标准**：写出 lag=5 与 lookahead 一句。
 6. **ex6**：信息 bar 时钟——打印合成 tape 上时间/成交量/美元 bar 数量；**完成标准**：与课内表一致。
+7. **ex7**：跑 mask-first 玩具；**完成标准**：打印表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。
 
 ## 测验
 
@@ -160,15 +205,17 @@ ASSERTS_OK
 <Quiz id="q5-hash" question="保存 sha256 的主要目的？" options={["加快下载", "证明字节级可复现", "提高夏普", "替代说明书"]} answer={1} explanation="版本化校验。" />
 <Quiz id="q6-infobar" question="美元/成交量 bar 主要改变什么？" options={["券商费用", "从挂钟到活动量的采样时钟", "监管披露", "无风险利率"]} answer={1} explanation="AFML 第2章信息驱动 bar。" />
 <Quiz id="q7-infobar2" question="本课信息 bar 演示是？" options={["高频延迟配方", "合成 tick 上的研究采样对照", "实盘路由", "PIT 替代"]} answer={1} explanation="明确声明非 HFT 配方。" />
+<Quiz id="q9-mask" question="上游污染（2507.07107）的核心失败是？" options={["佣金算错", "不可成交的涨跌停收盘价在行过滤前进入滚动算子", "只要复权", "必须用美元 bar"]} answer={1} explanation="事后删行修不了已污染的均值/相关/秩；要用 Boolean mask-first。" />
+<Quiz id="q10-mask2" question="本课对 2507.07107 的 Sharpe 2.05/1.63 立场？" options={["课程必达 alpha", "REJECT — 只教 mask 契约与污染诊断", "替代 PIT", "证明 213 因子"]} answer={1} explanation="排伪：headline Sharpe / 因子引擎不作课程 edge。" />
 <Quiz id="q8-cryptopit" question="Crypto PIT 审计先于 alpha（2608.25348 指针）要求？" options={["同 bar 成交 OK", "禁止同 bar；资金费率滞后；禁止回填；OI 谨慎", "忽略可得性时间", "总是使用 OI"]} answer={1} explanation="可得性掩码清单；完整实验见 P8 TSFM/crypto。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars。
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅契约+诊断；REJECT headline Sharpe）。
 
 <Summary>
-**要点**：哈希、幸存者、PIT、时区前瞻、复权声明。  
+**要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  
 **下一课**：回测陷阱与过拟合审讯。
 </Summary>

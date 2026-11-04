@@ -1,13 +1,13 @@
 ## Learning goals
 
-This lesson (~**7 hours**: 2h concepts + 4.5h lab + 0.5h quiz) turns a cleaned factor into a **portfolio experiment**: neutralization before/after, single vs EW multi-factor honesty, turnover–cost schedules, crowding, and **strong vs weak** panels. Prereq: `factor-workflow`.
+This lesson (~**8 hours**: 2.5h concepts + 4.5h lab + 1h quiz) turns a cleaned factor into a **portfolio experiment**: neutralization before/after, single vs EW multi-factor honesty, turnover–cost schedules, crowding, and **strong vs weak** panels. Prereq: `factor-workflow`.
 
 **Goals:** estimate factor-portfolio turnover; sketch size/industry neutralization impact; compare single vs EW multi-factor.
 
 **Must-teach:** combining factors does not auto-raise tradeability; turnover and the shared cost model decide net returns; before/after neutralization; crowding and decay; weak signals need cost control and honest combination.
 
 <Callout type="info" title="Learning only — not investment advice">
-Same planted covariates. **`MU_STRONG=0.0025` is inflated teaching**; **`MU_WEAK=0.0010`** is the realistic RankIC foil. The nuisance `raw_factor2` has **no** premium.
+Same planted covariates. **`MU_STRONG=0.0025` is inflated teaching**; **`MU_WEAK=0.0010`** is the realistic RankIC foil. The nuisance `raw_factor2` has **no** premium. In-lesson net SR ≈3.67 / ≈4.36 are **synthetic-MU toy numbers** — **not** live-reproducible Sharpes and not product targets.
 </Callout>
 
 ## Parameters
@@ -142,7 +142,8 @@ disclaimer: strong MU inflated for teaching; weak panel is the realistic foil �
 <Quiz id="q2-combo" question="Equal-weighting a true factor with a null nuisance factor typically?" options={["Always raises net SR", "Dilutes IC/net SR and can raise turnover — worse when the factor is already weak", "Deletes look-ahead", "Removes the need for costs"]} answer={1} explanation="Weak panel: net SR 0.79 → 0.23 when blending null." />
 <Quiz id="q3-turn" question="On a weak planted signal, lengthening the hold window mainly?" options={["Raises mean turnover", "Cuts turnover and cost drag so net SR can survive", "Forces t<2", "Removes neutralization"]} answer={1} explanation="Weak hold 1→10d: net SR 0.79→1.50 in the lab." />
 <Quiz id="q4-crowd" question="High factor rank autocorr warns that?" options={["Costs are zero", "Books may stay concentrated and crowd if many funds agree", "ICIR is infinite", "FM is invalid"]} answer={1} explanation="Sticky ranks ↔ overlapping holdings risk." />
-<Quiz id="q5-strong" question="The strong MU panel is best read as?" options={["A live Sharpe target", "An inflated teaching setting; judge realism on the weak panel", "Proof costs never matter", "A reason to skip HLZ"]} answer={1} explanation="Lessons state strong is inflated; weak is the foil." />
+<Quiz id="q5-strong" question="The strong MU panel is best read as?" options={["A live-reproducible Sharpe target", "An inflated teaching setting; judge realism on the weak panel", "Proof costs never matter", "A reason to skip HLZ"]} answer={1} explanation="Strong is inflated; ≈3.67/≈4.36 are synthetic-MU toys." />
+<Quiz id="q6-toysr" question="In-lesson net SR ≈3.67 (1d) / ≈4.36 (10d) should be read as?" options={["Live-reproducible Sharpes", "Teaching numbers on a synthetic-MU path — not live edge", "An HLZ threshold", "Proof costs are optional"]} answer={1} explanation="Wrong options must not claim live-reproducible Sharpe." />
 
 ## Done when
 

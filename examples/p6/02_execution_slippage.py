@@ -203,3 +203,56 @@ I_lin_tot = Y * sig_d * (Q_tot / V_d)
 print(f"equal-programme foil Q/V=0.10: √-ruler={1e4*I_sqrt_tot:.2f}bps vs linear={1e4*I_lin_tot:.2f}bps")
 print("bridge from costs-in-backtest: same √(Q/ADV) capacity ruler — deepen mechanics here, not a second alpha")
 print("disclaimer: TSE ID-resolved empirics cited for literacy; toy Y=1 — learning only, not a broker impact model")
+
+
+# ---------- Public-data metaorder impact challenge (arXiv:2501.17096) ----------
+print("\n=== public-data metaorder impact challenge (arXiv:2501.17096) ===")
+print("cite: https://arxiv.org/abs/2501.17096 — Why is estimation of metaorder impact with public market data so challenging?")
+print("stylized_facts_real_metaorders: concave path DURING execution; convex PARTIAL reversion AFTER end")
+print("public TIM/VAR/NN IRFs (calibrated on public tape): often ~LINEAR path + WEAK reversion (sometimes post-end inertia)")
+print("LMF literacy (Lillo–Mike–Farmer): long memory of order flow ≈ many overlapping metaorders — YOUR new child order does NOT trigger the same volume AR the unconditional fit implies")
+print("modified TIM α literacy: α∈[0,1] = share of child volume that enters the market volume equation; α→1 near criticality → linear/inertia; smaller α restores concave+revert")
+print("protocol_warn: 公开盘口估大单冲击常估歪; NO calibrate-α-for-alpha; no LOB HFT")
+
+# Minimal discrete sketch: price propagator G + volume AR with α split (subcritical; teaching only)
+T_mo, after_n = 40, 25
+g = 0.10 * (0.88 ** np.arange(0, 80))
+d = 0.20 * (0.85 ** np.arange(1, 80))
+lam = 0.85
+
+
+def simulate(alpha: float):
+    v = np.zeros(T_mo + after_n)
+    p = np.zeros(T_mo + after_n)
+    flows = []
+    for t in range(T_mo + after_n):
+        meta = 1.0 if t < T_mo else 0.0
+        ar = sum(d[i] * v[t - 1 - i] for i in range(min(len(d), t)))
+        v[t] = alpha * meta + lam * ar
+        flow = v[t] + (1.0 - alpha) * meta
+        flows.append(flow)
+        dp = sum(g[i] * flows[t - i] for i in range(min(len(g), t + 1)))
+        p[t] = (0.0 if t == 0 else p[t - 1]) + dp
+    return p
+
+
+def stats(alpha: float):
+    p = simulate(alpha)
+    peak = float(p[T_mo - 1])
+    end = float(p[-1])
+    revert = (peak - end) / peak if peak else float("nan")
+    # mid vs chord during execution
+    mid_t = T_mo // 2
+    chord = peak * mid_t / (T_mo - 1)
+    below_chord = chord - float(p[mid_t])  # >0 ≈ concave
+    return peak, end, revert, below_chord
+
+print("alpha | peak | end | revert_frac | below_chord_during")
+for a in (0.0, 0.35, 1.0):
+    peak, end, rev, below = stats(a)
+    print(f"{a:.2f} | {peak:.3f} | {end:.3f} | {rev:+.3f} | {below:+.3f}")
+print(
+    "teach: as α rises, post-end reversion weakens (can flip to inertia if near-critical in richer calibrations); "
+    "below-chord during execution is the concave stylized-fact foil — public-data α≈1 IRFs often miss it"
+)
+print("REJECT: calibrate α for course alpha; LOB GAN / Hawkes / MPC / HFT recipes; paper is protocol/warn only")

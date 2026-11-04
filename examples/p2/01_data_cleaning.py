@@ -160,3 +160,116 @@ print(
 )
 # Tiny numeric toy for the lesson table
 print("toy_counts", {"time50": len(time_bars), "vol200": len(vol_bars), "dollar": len(dol_bars)})
+
+# --- Mask-first / upstream contamination toy (arXiv:2507.07107 spirit) ---
+# Learning only. HARD REJECT paper Sharpe 2.05/1.63, 213-factor engine, AdjMSE as course alpha.
+print("\n=== mask-first / upstream contamination (arXiv:2507.07107; Boolean mask contract) ===")
+print("cite: https://arxiv.org/abs/2507.07107 — upstream contamination: limit closes enter rolling ops BEFORE row filter")
+print("paper_ablation_cite: no-mask apparent IC +18% while realised Sharpe −0.44 vs full mask (author ablation)")
+print("REJECT_as_course_alpha: Sharpe 2.05 synthetic / 1.63 real; 213-factor GPU engine; AdjMSE γ system")
+print("params: toy seed=11; T=750; N=120; limit_up_p≈0.04; mom_window=10; fantasy vs realisable fill")
+
+rng_m = np.random.default_rng(11)
+T_m, N_m = 750, 120
+rets_m = rng_m.normal(0.00015, 0.016, size=(T_m, N_m))
+lu = rng_m.random((T_m, N_m)) < 0.04
+rets_m = np.where(lu, 0.098, rets_m)
+ld = (~lu) & (rng_m.random((T_m, N_m)) < 0.02)
+rets_m = np.where(ld, -0.098, rets_m)
+for t in range(T_m - 1):
+    rets_m[t + 1] = np.where(lu[t], rets_m[t + 1] + 0.012, rets_m[t + 1])
+prices_m = 100 * np.cumprod(1 + rets_m, axis=0)
+M_m = ~(lu | ld)
+fwd_m = np.full((T_m, N_m), np.nan)
+fwd_m[:-1] = rets_m[1:]
+M_next = np.vstack([M_m[1:], np.zeros((1, N_m), dtype=bool)])
+
+px_df = pd.DataFrame(prices_m)
+feat_c = (px_df / px_df.shift(10) - 1).to_numpy()
+px_masked = prices_m.astype(float).copy()
+px_masked[~M_m] = np.nan
+px_ff = pd.DataFrame(px_masked).ffill()
+feat_m = (px_ff / px_ff.shift(10) - 1).to_numpy()
+n_bad = np.zeros((T_m, N_m))
+for k in range(10):
+    pad = np.zeros((k, N_m))
+    n_bad += np.vstack([pad, (~M_m)[: T_m - k].astype(float)])
+feat_m = feat_m.copy()
+feat_m[n_bad >= 1] = np.nan
+feat_m[~M_m] = np.nan
+
+def _rank_ic(sig, realisable: bool) -> float:
+    ics = []
+    for t in range(10, T_m - 1):
+        s, y = sig[t], fwd_m[t]
+        m = np.isfinite(s) & np.isfinite(y)
+        if realisable:
+            m &= M_m[t] & M_next[t]
+        if m.sum() < 30:
+            continue
+        ics.append(float(pd.Series(s[m]).rank().corr(pd.Series(y[m]).rank())))
+    return float(np.mean(ics)) if ics else float("nan")
+
+def _ls_sr(sig, fantasy: bool) -> float:
+    pnls = []
+    for t in range(10, T_m - 1):
+        s = sig[t].copy()
+        if not fantasy:
+            s[~M_m[t]] = np.nan
+        m = np.isfinite(s)
+        if m.sum() < 50:
+            continue
+        r = pd.Series(s).rank(pct=True)
+        w = np.zeros(N_m)
+        top = (r >= 0.8).to_numpy() & m
+        bot = (r <= 0.2).to_numpy() & m
+        if top.sum() < 5 or bot.sum() < 5:
+            continue
+        w[top] = 1.0 / top.sum()
+        w[bot] = -1.0 / bot.sum()
+        y = fwd_m[t].copy()
+        if not fantasy:
+            y[~(M_m[t] & M_next[t])] = 0.0
+        pnls.append(float(w @ y))
+    p = np.asarray(pnls, dtype=float)
+    return float(p.mean() / p.std(ddof=1) * np.sqrt(252))
+
+ic_app = _rank_ic(feat_c, False)
+ic_real_c = _rank_ic(feat_c, True)
+ic_mask = _rank_ic(feat_m, True)
+sr_fant = _ls_sr(feat_c, True)
+sr_real_c = _ls_sr(feat_c, False)
+sr_mask = _ls_sr(feat_m, False)
+print("toy_IC_apparent_contam", round(ic_app, 4))
+print("toy_IC_realisable_contam", round(ic_real_c, 4))
+print("toy_IC_mask_first", round(ic_mask, 4))
+print(
+    "toy_IC_inflate_apparent_vs_realisable_pct",
+    round((ic_app / ic_real_c - 1) * 100, 1) if ic_real_c else None,
+)
+print("toy_SR_fantasy_contam", round(sr_fant, 3))
+print("toy_SR_realisable_contam", round(sr_real_c, 3))
+print("toy_SR_mask_first", round(sr_mask, 3))
+print("toy_SR_gap_fantasy_minus_realisable", round(sr_fant - sr_real_c, 3))
+print(
+    "teach: contaminated rolling features make limit-chasing look predictive (high apparent IC / fantasy SR); "
+    "realisable fill on the same features collapses — mask-first Boolean contract refuses non-executable closes in the window."
+)
+print(
+    "boolean_mask_contract: M[t,i]=tradable; every rolling op must ignore cells with M=0; "
+    "post-hoc row drop CANNOT un-poison aggregates already computed."
+)
+
+print("\n=== rolling MA contamination sketch (5 closes) ===")
+closes = np.array([10.0, 10.1, 10.2, 11.2, 10.3])
+mask5 = np.array([True, True, True, False, True])
+ma_naive = pd.Series(closes).rolling(3).mean()
+closes_m5 = closes.astype(float).copy()
+closes_m5[~mask5] = np.nan
+ma_mask = [float("nan")] * 2 + [float(np.nanmean(closes_m5[i - 2 : i + 1])) for i in range(2, 5)]
+print("closes", closes.tolist())
+print("tradable_mask", mask5.astype(int).tolist())
+print("MA3_naive", [None if pd.isna(x) else round(float(x), 4) for x in ma_naive])
+print("MA3_mask_first", [None if (isinstance(x, float) and np.isnan(x)) else round(x, 4) for x in ma_mask])
+print("teach: day-index-3 limit print 11.2 enters naive MA for indices 3–4; mask-first never reads it.")
+print("ASSERT_mask_first_demo_ok")

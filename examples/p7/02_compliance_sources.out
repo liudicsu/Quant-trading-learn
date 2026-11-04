@@ -54,5 +54,8 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
 [OK] sfc_24ec55: Circular to licensed corporations — Use of generative AI language models (24EC55)
     https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55
     verified: Issued 2024-11-12, immediate effect. Risk-based Core Principles for GenAI LMs; investment recommendations/advice/research = high-risk → human-in-the-loop + validation/monitoring/disclosures. Asia peer to FINRA GenAI themes. Awareness not license; not legal advice.
+[OK] esma74_algo_briefing_2026: ESMA Supervisory Briefing on Algorithmic Trading in the EU (ESMA74-1505669079-10311)
+    https://www.esma.europa.eu/document/supervisory-briefing-algorithmic-trading-eu
+    verified: Published 2026-02-26. Non-binding supervisory briefing (Art.29(2) ESMA Reg; not comply-or-explain). Algo definition: human click/authorisation ≠ out-of-scope if algorithm determined parameters. Material change retest incl. ML retrain/adaptive capabilities. Stress: 2× prior-6m peak messages/trades. PTC hard blocks mandatory / soft recommended. Outsourcing: firm remains liable. AI Act interaction + RTS 6 Art.9 annual self-assessment spirit. Literacy + Asia peers (SFC 24EC55 / FINRA GenAI); NOT a license checklist; not HFT how-to; not legal advice.
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=18 all_fetch_OK=True
+n_sources=19 all_fetch_OK=True

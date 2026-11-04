@@ -1,13 +1,13 @@
 ## 学习目标
 
-本课（约 **7 学时**：概念 2h + 实验 4.5h + 测验 0.5h）把清洗后的因子做成**组合实验**：中性化前后、单因子 vs 等权多因子诚实性、换手–成本表、拥挤，以及**强 vs 弱**面板。前置：`factor-workflow`。
+本课（约 **8 学时**：概念 2.5h + 实验 4.5h + 测验 1h）把清洗后的因子做成**组合实验**：中性化前后、单因子 vs 等权多因子诚实性、换手–成本表、拥挤，以及**强 vs 弱**面板。前置：`factor-workflow`。
 
 **课内目标：** 估计因子组合换手；示意市值/行业中性化；对照单因子与等权多因子。
 
 **必须教会：** 合成不会自动提高可交易性；换手与共享成本决定净收益；中性化前后对照；拥挤与衰减；弱信号更需要控成本与诚实合成。
 
 <Callout type="info" title="学习用途 — 非投资建议">
-同一植入协变量。**`MU_STRONG=0.0025` 为夸大教学**；**`MU_WEAK=0.0010`** 为现实 RankIC 对照。滋扰 `raw_factor2`**没有**溢价。
+同一植入协变量。**`MU_STRONG=0.0025` 为夸大教学**；**`MU_WEAK=0.0010`** 为现实 RankIC 对照。滋扰 `raw_factor2`**没有**溢价。课内净夏普 ≈3.67 / ≈4.36 **只是合成 MU 玩具**——**不是**实盘可复现夏普，也不是产品目标。
 </Callout>
 
 ## 参数
@@ -127,6 +127,7 @@ disclaimer: strong MU inflated for teaching; weak panel is the realistic foil �
 2. RankIC 仅几个百分点时仍忽略换手。
 3. 用当日市值中性化。
 4. 把强面板当成实盘基准。
+4b. 把玩具净夏普 ≈3.67/≈4.36 说成“实盘可复现夏普”。
 5. 只报毛净值。
 
 ## 练习（1:1）
@@ -142,7 +143,8 @@ disclaimer: strong MU inflated for teaching; weak panel is the realistic foil �
 <Quiz id="q2-combo" question="把真因子与空滋扰等权合成通常会？" options={["总是抬升净夏普", "稀释 IC/净夏普并可能抬升换手——因子本就弱时更糟", "消除前瞻", "不再需要成本"]} answer={1} explanation="弱面板：净夏普 0.79→0.23。" />
 <Quiz id="q3-turn" question="在弱植入信号上拉长持有窗主要会？" options={["抬升平均换手", "降低换手与成本拖累，使净夏普更易存活", "迫使 t<2", "取消中性化"]} answer={1} explanation="弱持有 1→10 日：净夏普 0.79→1.50。" />
 <Quiz id="q4-crowd" question="因子秩自相关很高时警示？" options={["成本为零", "若许多基金看法一致，持仓可能持续集中并拥挤", "ICIR 无穷", "FM 无效"]} answer={1} explanation="粘性秩 ↔ 重叠持仓风险。" />
-<Quiz id="q5-strong" question="强 MU 面板最好理解成？" options={["实盘夏普目标", "夸大的教学设定；现实判断看弱面板", "证明成本从不重要", "可以跳过 HLZ 的理由"]} answer={1} explanation="课文标明强为夸大；弱为对照。" />
+<Quiz id="q5-strong" question="强 MU 面板最好理解成？" options={["实盘可复现夏普目标", "夸大的教学设定；现实判断看弱面板", "证明成本从不重要", "可以跳过 HLZ 的理由"]} answer={1} explanation="课文标明强为夸大；弱为对照；≈3.67/≈4.36 是合成 MU 玩具。" />
+<Quiz id="q6-toysr" question="课内净夏普 ≈3.67（1日）/≈4.36（10日）应读作？" options={["实盘可复现夏普", "合成 MU 玩具路径上的教学数字 — 非 live edge", "HLZ 阈值", "免成本证明"]} answer={1} explanation="强面板夸大；错误选项不得主张实盘可复现夏普。" />
 
 ## 完成标准
 

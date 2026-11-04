@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**12 hours**: 6h reading incl. Northbound + SEC PDA withdrawal + FY2026 Exam / FINRA GenAI + SFC 24EC55 + 4h writing + 2h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
+This lesson (~**15 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
 
 **Goals:** write a risk-preference page; log failures honestly; refuse “guaranteed Sharpe” pitches.
 
@@ -105,7 +105,7 @@ Complements the PDA-conflicts proposal **withdrawal** (S7-12-23): **withdrawal �
 - **[SEC Division of Examinations FY2026 Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities)** (page stamped ~2025-11-17; also [PDF](https://www.sec.gov/files/2026-exam-priorities.pdf)): Emerging Financial Technology focus — automated investment tools, AI, trading algorithms/platforms, alt-data. Exams may check fair/accurate AI representations; ops vs disclosures; algo advice vs investor profiles; policies supervising AI in fraud/AML/trading/back-office.
 - **[FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)** (**NEW FOR 2026**): rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging agent themes: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails.
 
-**Awareness only — not legal advice.** Date-stamp official pages when you cite them. Lab row count: `n_sources=18` in `examples/p7/02_compliance_sources.py`.
+**Awareness only — not legal advice.** Date-stamp official pages when you cite them. Lab row count: `n_sources=19` in `examples/p7/02_compliance_sources.py`.
 
 
 ## SFC Circular 24EC55 — GenAI language models (HK)
@@ -119,10 +119,33 @@ Asia peer to FINRA GenAI themes: [SFC Circular 24EC55](https://apps.sfc.hk/edist
 - **High-risk use cases** — providing investment recommendations, advice, or research — need extra mitigations including **human-in-the-loop** review before client-facing output, validation / ongoing monitoring, prompt-robustness testing, and ongoing disclosures that the user is interacting with AI.
 - Complements FINRA 2026 GenAI/Agents supervision themes and SEC FY2026 Emerging FinTech exam focus: **withdrawal of a US proposal ≠ absence of duties elsewhere**.
 
-Lab row: `sfc_24ec55` in `examples/p7/02_compliance_sources.py` (`n_sources=18`).
+Lab row: `sfc_24ec55` in `examples/p7/02_compliance_sources.py` (`n_sources=19`).
 
+
+
+
+## ESMA Supervisory Briefing on Algorithmic Trading (2026-02-26) — literacy only
+
+EU peer (alongside FINRA GenAI / HK SFC 24EC55): [ESMA74-1505669079-10311 Supervisory Briefing on Algorithmic Trading in the EU](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf) ([document page](https://www.esma.europa.eu/document/supervisory-briefing-algorithmic-trading-eu)), published **2026-02-26**. Non-binding convergence tool under ESMA Regulation Art.29(2) — **not** a comply-or-explain instrument.
+
+**Literacy only (not a license checklist, not an HFT how-to, not legal advice):**
+
+| Theme | Briefing spirit (fetched PDF) |
+|-------|-------------------------------|
+| Algo definition | A computer algorithm determining any order parameter counts; **human click/authorisation ≠ automatic out-of-scope** if the algorithm already set parameters |
+| Material-change retest | Retest after logic/scope/controls/dependency changes; **includes ML retrain / adaptive capabilities** (small recalibrations can accumulate) |
+| Stress | Systems should withstand about **2×** the prior **6-month** peak message/trade volume (RTS 6 Art.10 spirit) |
+| PTC | **Hard blocks** meet mandatory requirements; **soft blocks** strongly recommended; parent/child cumulative checks |
+| Outsourcing | Firm remains **fully liable** when using third-party algorithms/software; contracts cannot transfer regulatory responsibility |
+| AI Act + self-assessment | Integrate AI Act interaction into governance; RTS 6 **Art.9** annual self-assessment/validation should cover AI use |
+
+Read with Asia peers (SFC 24EC55, FINRA GenAI): **a withdrawal elsewhere ≠ no duties here.**
+
+Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` (`n_sources=19`).
 
 ## Common mistakes / pitfalls
+
+- Treating the ESMA briefing as a tick-box license checklist or HFT playbook.
 
 - Assuming PDA withdrawal erased all AI/advice duties (FY2026 exams still list Emerging FinTech).
 - Treating FINRA GenAI themes as a trading license or product alpha.
@@ -159,13 +182,15 @@ Lab row: `sfc_24ec55` in `examples/p7/02_compliance_sources.py` (`n_sources=18`)
 
 <Quiz id="p7ce-q9" question="Northbound Stock Connect program-trading reporting (verified) takes effect on?" options={["2024-10-08", "2025-10-09", "2026-01-12", "Never"]} answer={2} explanation="HKEX hub: NB requirements effective 2026-01-12." />
 
+<Quiz id="p7ce-esma" question="ESMA74-1505669079-10311 (2026-02-26) is mainly?" options={["An HFT recipe license", "A non-binding algo-trading supervisory briefing: definition / material-change retest / 2× stress / PTC / outsourcing liability / AI Act+RTS6 Art.9 — literacy only", "Repeal of MiFID II", "HK-only"]} answer={1} explanation="Fetched official PDF; not legal advice; not a license checklist." />
+<Quiz id="p7ce-esma2" question="Under the ESMA briefing, does a human click automatically make trading non-algo?" options={["Yes, always excluded", "No — if an algorithm already determined order parameters, it can still be algo trading", "Crypto only", "Only commissions matter"]} answer={1} explanation="Human authorisation does not negate algorithm-determined parameters." />
 <Quiz id="p7ce-sfc" question="SFC Circular 24EC55 (fetched) mainly?" options={["A trading alpha license for GenAI", "HK expectations for GenAI LMs; high-risk advice/research → human-in-the-loop — awareness only", "Abolishes FINRA 3110", "Only for HFT"]} answer={1} explanation="Issued 2024-11-12; not legal advice." />
 
 ## Done when
 
 Ethics checklist checked; official-source table filled with URLs and **2026-11-04** check date; risk-preference page written.
 
-**Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK; n_sources=18). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); FR PDA withdrawal. Canvas m14; AFML scientific ethics.
+**Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK; n_sources=19). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); FR PDA withdrawal. Canvas m14; AFML scientific ethics.
 
 <Summary>
 **Takeaways**: cite official text + date; CN securities 〔2024〕8 + futures 〔2025〕12 report-before-trade & exchange HFT standards; US 15c3-5 / Reg SHO / 4210-IML via 26-10+26-11 / 15-09; crypto via PBoC 2021 + non-binding SEC/CFTC staff note.  
