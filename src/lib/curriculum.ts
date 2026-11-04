@@ -59,8 +59,8 @@ export const COURSE_META = {
   hoursFull: 304,
   hoursSkipFoundations: 284,
   hoursRangeLabel: {
-    zh: "精确 287h 全量 / 267h 跳过 P0（对外约 270–300h / 250–280h）",
-    en: "Exact 287h full / 267h skip P0 (public range ~270–300h / 250–280h)",
+    zh: "精确 304h 全量 / 284h 跳过 P0（对外约 290–320h / 270–300h）",
+    en: "Exact 304h full / 284h skip P0 (public range ~290–320h / 270–300h)",
   },
   lessonCount: 27,
   phaseCount: 10,

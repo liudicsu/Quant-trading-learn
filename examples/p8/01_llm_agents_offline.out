@@ -9,7 +9,7 @@ cite: AlphaAgent arXiv:2502.16789; FinCAD/parametric LA arXiv:2605.24564; CogAlp
 
 === mock RD-Agent(Q) loop (Research → Development → Co-STEER-style keep/reject) ===
 real paper: Research sets goal-aligned prompts/hypotheses; Development implements;
-factor–model co-optimization with iterative feedback (NeurIPS 2025 / arXiv:2505.15155).
+factor–model co-optimization with iterative feedback (arXiv:2505.15155; NeurIPS 2025 only as arXiv comment — verify proceedings).
 here: a formula bank stands in for LLM proposals; bandit keeps top by IS IC (danger!).
 IS days=400 sealed_OOS days=120 (freeze then open once)
 
@@ -57,7 +57,7 @@ Prefer stable cites: RD-Agent(Q), AlphaAgent, LLM+MCTS, Quant-Arena.
 Protocol: research on 2022–2023 with <=5 candidates; freeze ONE strategy; sealed year 2024 once.
 Verified punchline: no model's *best-scoring* sealed-2024 run beat equal-weight.
 Best top-scored run: GPT-6 Astra ARR ~ 10.7% vs gross equal-weight market ARR ~ 17.1% (excess ~ -6.3 pp).
-Note: 1/38 configs (Sol medium) ARR 18.4% beat EW — but that is NOT the model's best total-score row.
+Note: 1/38 configs (Sol medium) ARR 18.4% above EW — but that is NOT the model's best total-score row; not advantage evidence.
 Teach: sealed hold-out + costs can turn a leaderboard into a caution, not a green light.
 
 === AlphaAgent originality / complexity / hypothesis alignment (arXiv:2502.16789) ===

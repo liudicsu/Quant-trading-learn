@@ -66,7 +66,7 @@ feat_bank = {
 # ---------- Mock RD-Agent(Q): Research → Development → evaluate loop ----------
 print("\n=== mock RD-Agent(Q) loop (Research → Development → Co-STEER-style keep/reject) ===")
 print("real paper: Research sets goal-aligned prompts/hypotheses; Development implements;")
-print("factor–model co-optimization with iterative feedback (NeurIPS 2025 / arXiv:2505.15155).")
+print("factor–model co-optimization with iterative feedback (arXiv:2505.15155; NeurIPS 2025 only as arXiv comment — verify proceedings).")
 print("here: a formula bank stands in for LLM proposals; bandit keeps top by IS IC (danger!).")
 
 rng = np.random.default_rng(SEED)
@@ -237,7 +237,7 @@ print("\n=== Quant-Arena negative leaderboard punchline (arXiv:2610.30113, verif
 print("Protocol: research on 2022–2023 with <=5 candidates; freeze ONE strategy; sealed year 2024 once.")
 print("Verified punchline: no model's *best-scoring* sealed-2024 run beat equal-weight.")
 print("Best top-scored run: GPT-6 Astra ARR ~ 10.7% vs gross equal-weight market ARR ~ 17.1% (excess ~ -6.3 pp).")
-print("Note: 1/38 configs (Sol medium) ARR 18.4% beat EW — but that is NOT the model's best total-score row.")
+print("Note: 1/38 configs (Sol medium) ARR 18.4% above EW — but that is NOT the model's best total-score row; not advantage evidence.")
 print("Teach: sealed hold-out + costs can turn a leaderboard into a caution, not a green light.")
 
 print("\n=== AlphaAgent originality / complexity / hypothesis alignment (arXiv:2502.16789) ===")
