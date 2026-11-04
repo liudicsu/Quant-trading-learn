@@ -85,6 +85,8 @@ mean_shrinkage_intensity=0.036
 
 ## Hierarchical Risk Parity (HRP) vs ERC
 
+The 2016 paper title contains “Outperform Out of Sample” — that is a **historical paper title**, not a promised OOS Sharpe upgrade for your book. HRP is a **hierarchy allocation method that avoids inverting Σ**.
+
 **Intuition:** Markowitz-style optimizers invert a covariance matrix and can **concentrate** when assets are highly correlated (“error maximization,” Michaud). **Hierarchical Risk Parity** (López de Prado, *Journal of Portfolio Management* 2016; AFML ch.16) never inverts \(\Sigma\). It (1) turns correlations into distances and builds a dendrogram, (2) quasi-diagonalizes by leaf order, (3) recursively bisects and allocates with inverse-variance cluster variances.
 
 **Same 8-asset toy** (4 equity / 2 bond / 2 commodity factors):
@@ -135,7 +137,7 @@ HRP trims the large correlated equity block relative to ticker-count / inv-vol t
 
 Sizing comparison table (Kelly / vol-target / RP / MV–LW–1/N) plus a risk-preference page stating why you cap below full Kelly.
 
-**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP; AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11.
+**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11.
 
 <Summary>
 **Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; HRP allocates on a tree without inverting Σ; MV needs shrinkage and an honest 1/N foil.  

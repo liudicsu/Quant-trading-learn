@@ -185,7 +185,7 @@ print("disclaimer: synthetic panel — learning only, not investment advice")
 
 # --- Hierarchical Risk Parity (López de Prado 2016 JPM) vs ERC on same tiny panel ---
 print("\n=== Hierarchical Risk Parity (HRP) vs ERC (same panel) ===")
-print("cite: López de Prado 2016 JPM 42(4) — Building Diversified Portfolios that Outperform Out of Sample (HRP)")
+print("cite: López de Prado 2016 JPM 42(4) HRP (title says Outperform OOS — historical title, not a guaranteed Sharpe upgrade)")
 print("cite: AFML ch.16 HRP steps — tree clustering, quasi-diagonalization, recursive bisection")
 from scipy.cluster.hierarchy import linkage, dendrogram, leaves_list
 from scipy.spatial.distance import squareform

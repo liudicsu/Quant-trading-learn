@@ -19,7 +19,7 @@ Offline **mocks** only. No ChatGPT/Claude/API calls at runtime. Labs never place
 
 ## RD-Agent(Q) (read the paper)
 
-[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155) (NeurIPS 2025) is a **data-centric multi-agent** framework for factor–model co-optimization. It splits work into a **Research** stage (goal-aligned prompts, hypotheses → tasks) and a **Development** stage that implements and feeds results back. Microsoft’s [RD-Agent](https://github.com/microsoft/RD-Agent) repo is the engineering home. Automation **multiplies** hypotheses — so purged OOS, costs, and DSR(N) get *more* important, not less.
+[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155) (arXiv comment lists **NeurIPS 2025** — treat as preprint metadata until you verify the proceedings entry) is a **data-centric multi-agent** framework for factor–model co-optimization. It splits work into a **Research** stage (goal-aligned prompts, hypotheses → tasks) and a **Development** stage that implements and feeds results back. Microsoft’s [RD-Agent](https://github.com/microsoft/RD-Agent) repo is the engineering home. Automation **multiplies** hypotheses — so purged OOS, costs, and DSR(N) get *more* important, not less.
 
 Lab `examples/p8/01_llm_agents_offline.py` mocks the loop with a formula bank + IS keep rule (`mean_CS_IC > 0.01`). That rule **keeps noise** alongside the weak true factor — exactly the overfitting story.
 
@@ -51,11 +51,11 @@ Stable companion: [LLM+MCTS formulaic mining](https://arxiv.org/abs/2505.11122) 
 
 ## Chain-of-Alpha — verified withdrawn
 
-[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **exists on arXiv** but is **withdrawn**. Live abs banner wording (fetched this session): **“This paper has been withdrawn by Lang Cao”**. Admin comment on the same page: **“This version has been removed by arXiv administrators as the submitter did not have the rights to agree to the license at the time of submission.”** **Drop detailed dual-chain claims**; do not depend on an unstable PDF. Prefer RD-Agent(Q), AlphaAgent, LLM+MCTS, Quant-Arena.
+[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **exists on arXiv** but is **withdrawn**. Live abs banner wording (fetched this session): **“This paper has been withdrawn by Lang Cao”**. Admin comment on the same page: **“This version has been removed by arXiv administrators as the submitter did not have the rights to agree to the license at the time of submission.”** **Drop detailed dual-chain claims**; do not depend on an unstable PDF. **Ignore any HTML/PDF mirror tables that still claim outperformance** — the abs page is withdrawn. Prefer RD-Agent(Q), AlphaAgent, LLM+MCTS, Quant-Arena.
 
 ## LLM sentiment (Lopez-Lira &amp; Tang 2023)
 
-[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619) (Lopez-Lira &amp; Tang) shows GPT scores on **post-knowledge-cutoff** headlines can predict reactions/drift — and that edge shrinks as adoption rises. Lab builds an offline `mock_sentiment` (PIT) vs a **LEAK** foil that peeks at next returns (cutoff/memorization analogue). LEAK IC ≈ +0.67 is a warning, not a strategy. Later critiques make the same point rigorous: [Glasserman &amp; Lin (arXiv:2309.17322)](https://arxiv.org/abs/2309.17322) measure look-ahead vs distraction via headline anonymization; [Lopez-Lira, Tang &amp; Zhu (arXiv:2504.14765)](https://arxiv.org/abs/2504.14765) prove pre-cutoff “forecasts” are non-identified under memorization.
+[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619) (Lopez-Lira &amp; Tang): under a **post-cutoff** design the authors report a predictive **association** with reactions/drift — that is **not** “use ChatGPT to trade,” and the reported edge shrinks as adoption rises. Lab builds offline `mock_sentiment` (PIT) vs a **LEAK** foil (cutoff/memorization analogue). LEAK IC ≈ +0.67 is a warning, not a strategy. Later critiques tighten the same point: [Glasserman &amp; Lin (arXiv:2309.17322)](https://arxiv.org/abs/2309.17322); [Lopez-Lira, Tang &amp; Zhu (arXiv:2504.14765)](https://arxiv.org/abs/2504.14765) on memorization / non-identification.
 
 ![Agent vs honest NAV](/p8/agent_vs_honest_nav.png)
 

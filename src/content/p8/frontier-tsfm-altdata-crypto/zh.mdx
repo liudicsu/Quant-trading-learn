@@ -58,7 +58,7 @@ TSFM、资金费率账本、GMX 风格 OI 均为离线 mock。无交易所密钥
 - **[CCXT](https://docs.ccxt.com/)** — 统一 CEX API（ticker、OHLCV、funding）。实验离线写出 **CCXT 形状**的资金费率 CSV（`symbol`、`fundingRate`、`markPrice`…）——仅结构参考。
 - **资金费率套利（数值）：** 多头永续 $10 万、每 8h +1 bp → 约 **−$30/日**、约 **$900/30 日**、若费率不变约 **1095 bps/年**。制度切换对照会改符号——常值年化只是教学 foil。
 - **[GMX 费用文档](https://docs.gmx.io/docs/trading/fees/)** — 优势方付给少数方；费率与 OI 失衡相关；**资金费率按秒连续累积**。修改/平仓时的结算主要是**借币费 / 开平仓仓位费**机制（累积资金费率也会在那时入账——不要把「平仓才结算」说成资金费率的全部故事）。实验用 OI 失衡打印玩具 `savedFundingFactorPerSecond`。
-- **[OpenBB Open Data Platform](https://openbb.co/blog/openbb-releases-open-data-platform/)** — 开源**数据聚合**（一次接入、多端消费：Python / REST / MCP）。作为 PIT 友好聚合模式点名；本课仍只用离线 mock。同一 niche 栈旁还有 **PyFolio**（组合 tear sheet）与 Alphalens（因子 tear sheet）。
+- **[OpenBB Open Data Platform](https://openbb.co/blog/openbb-releases-open-data-platform/)** — 开源**数据聚合**（一次接入、多端消费：Python / REST / MCP）。它是**数据聚合工具箱**；**PIT/as-of 时点纪律仍要你自己做**——库不会自动让历史变诚实。本课仍只用离线 mock。同一 niche 栈旁还有 **PyFolio**（组合 tear sheet）与 Alphalens（因子 tear sheet）。
 - **[Trading Strategy GMX/CCXT 适配器](https://tradingstrategy.ai/blog/gmx-adapter-for-ccxt)** — CCXT 兼容 GMX 接口（`eth_defi.gmx.ccxt`）及 FreqTrade 中间件。链上适配结构参考；此处无实盘密钥。
 - **[@sera00111 工具笔记](https://x.com/sera00111/status/2108332340753969191)**（P2 已核验）：分钟/小时研究可从 [Binance Vision](https://data.binance.vision/) + CCXT 类免费入口起步；**先定策略再选粒度**。
 

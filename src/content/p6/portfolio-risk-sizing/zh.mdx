@@ -85,6 +85,8 @@ mean_shrinkage_intensity=0.036
 
 ## 层级风险平价（HRP）对比 ERC
 
+2016 年论文标题里有 “Outperform Out of Sample”——那是**历史论文标题**，不是保证你样本外夏普一定更高。HRP 是**在层级上配置、且避开对 Σ 求逆**的方法。
+
 **直觉：** Markowitz 类优化要反协方差矩阵，资产高度相关时容易**集中**（Michaud 的“误差最大化”）。**层级风险平价**（López de Prado，*Journal of Portfolio Management* 2016；AFML 第16章）**不**反演 \(\Sigma\)：先把相关变成距离并建树，再按叶序准对角化，最后递归二分并用簇内逆方差配置权重。
 
 **同一 8 资产玩具**（4 股票 / 2 债券 / 2 商品因子）：
@@ -135,7 +137,7 @@ mean_shrinkage_intensity=0.036
 
 仓位对照表（Kelly / 波动目标 / RP / MV–LW–1/N）+ 一页风险偏好，写明为何把仓位压在满 Kelly 之下。
 
-**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP；AFML 第16章。
+**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。
 
 <Summary>
 **要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；HRP 在树上配置且不反演 Σ；MV 需要收缩并以 1/N 作诚实对照。  

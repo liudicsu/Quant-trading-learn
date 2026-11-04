@@ -19,7 +19,7 @@
 
 ## RD-Agent(Q)（已读论文）
 
-[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155)（NeurIPS 2025）是面向因子–模型联合优化的**数据中心多智能体**框架：将流程拆成 **Research**（目标对齐提示、假设→任务）与 **Development**（实现并反馈）。工程主页见 Microsoft [RD-Agent](https://github.com/microsoft/RD-Agent)。自动化**放大**假设数量——因此 purge OOS、成本与 DSR(N) 更重要，而非更次要。
+[R&amp;D-Agent-Quant / RD-Agent(Q)](https://arxiv.org/abs/2505.15155)（arXiv 评论写着 NeurIPS 2025——在核验会议录之前只当预印本元数据）是面向因子–模型联合优化的**数据中心多智能体**框架：将流程拆成 **Research**（目标对齐提示、假设→任务）与 **Development**（实现并反馈）。工程主页见 Microsoft [RD-Agent](https://github.com/microsoft/RD-Agent)。自动化**放大**假设数量——因此 purge OOS、成本与 DSR(N) 更重要，而非更次要。
 
 实验 `examples/p8/01_llm_agents_offline.py` 用公式库 + IS 保留规则（`mean_CS_IC > 0.01`）模拟闭环。该规则会把**噪声**和弱真因子一起留下——正是过拟合故事。
 
@@ -51,11 +51,11 @@
 
 ## Chain-of-Alpha — 已核验撤回
 
-[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **在 arXiv 上存在**，但已**撤回**。本会话抓取的 abs 横幅原文：**“This paper has been withdrawn by Lang Cao”**。同页管理员评论：**“This version has been removed by arXiv administrators as the submitter did not have the rights to agree to the license at the time of submission.”** **放弃双链细节主张**；不依赖不稳定 PDF。优先 RD-Agent(Q)、AlphaAgent、LLM+MCTS、Quant-Arena。
+[Chain-of-Alpha](https://arxiv.org/abs/2508.06312) **在 arXiv 上存在**，但已**撤回**。本会话抓取的 abs 横幅原文：**“This paper has been withdrawn by Lang Cao”**。同页管理员评论：**“This version has been removed by arXiv administrators as the submitter did not have the rights to agree to the license at the time of submission.”** **放弃双链细节主张**；不依赖不稳定 PDF。**忽略仍在展示「跑赢」表格的 HTML/PDF 镜像**——以 abs 撤回横幅为准。优先 RD-Agent(Q)、AlphaAgent、LLM+MCTS、Quant-Arena。
 
 ## LLM 情绪（Lopez-Lira &amp; Tang 2023）
 
-[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619)（Lopez-Lira &amp; Tang）表明：在**知识截止日期之后**的标题上，GPT 分数可预测反应/漂移——且随采用上升收益下降。实验构造离线 `mock_sentiment`（PIT）与窥视下一收益的 **LEAK** 对照（截止日期/记忆类比）。LEAK IC ≈ +0.67 是警告，不是策略。后续批判把同一问题写严：[Glasserman &amp; Lin（arXiv:2309.17322）](https://arxiv.org/abs/2309.17322) 用标题匿名化度量前瞻 vs 分心；[Lopez-Lira、Tang &amp; Zhu（arXiv:2504.14765）](https://arxiv.org/abs/2504.14765) 证明截止前「预测」在记忆下不可识别。
+[Can ChatGPT Forecast Stock Price Movements?](https://arxiv.org/abs/2304.07619)（Lopez-Lira &amp; Tang）：在**截止后**设计下，作者报告 GPT 分数与反应/漂移存在预测性**关联**——这**不是**「拿 ChatGPT 去交易」，且随采用上升该关联会变弱。实验构造离线 `mock_sentiment`（PIT）与 **LEAK** 对照。LEAK IC ≈ +0.67 是警告，不是策略。后续批判把同一问题写严：[Glasserman &amp; Lin（arXiv:2309.17322）](https://arxiv.org/abs/2309.17322)；[Lopez-Lira、Tang &amp; Zhu（arXiv:2504.14765）](https://arxiv.org/abs/2504.14765)（记忆/不可识别）。
 
 ![Agent vs 诚实因子净值](/p8/agent_vs_honest_nav.png)
 

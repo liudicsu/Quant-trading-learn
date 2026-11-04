@@ -22,7 +22,7 @@ SOURCES = [
     "issuer": "CSRC / 中国证监会公告〔2025〕12号",
     "url": "https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html",
     "fetch": "OK",
-    "verified": "Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c101954/c7564353/content.shtml",
+    "verified": "Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml",
   },
   {
     "id": "sse_faq_2025_04_03",
