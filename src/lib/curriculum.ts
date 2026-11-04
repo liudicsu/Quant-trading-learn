@@ -56,11 +56,11 @@ export const COURSE_META = {
     zh: "阶段由知识依赖簇导出，不是月历格子",
     en: "Phases come from dependency clusters, not a calendar grid",
   },
-  hoursFull: 256,
-  hoursSkipFoundations: 236,
+  hoursFull: 267,
+  hoursSkipFoundations: 247,
   hoursRangeLabel: {
-    zh: "精确 256h 全量 / 236h 跳过 P0（对外约 240–270h / 220–250h）",
-    en: "Exact 256h full / 236h skip P0 (public range ~240–270h / 220–250h)",
+    zh: "精确 267h 全量 / 247h 跳过 P0（对外约 250–280h / 230–260h）",
+    en: "Exact 267h full / 247h skip P0 (public range ~250–280h / 230–260h)",
   },
   lessonCount: 27,
   phaseCount: 10,
@@ -367,7 +367,7 @@ const phase_P1_lessons: Lesson[] = [
     hours: 7,
     difficulty: 2,
     skippable: false,
-    hourBasis: "1.5h concepts + 3h lab + 0.5h PyFolio map + 1h quiz",
+    hourBasis: "1.5h concepts + 3h lab + 0.5h PyFolio map + 0.5h base-rate pointer + 1.5h quiz",
     prereqs: ["returns-vol-corr", "microstructure-orders"],
     goals: [
       { zh: "做成本后对照表。", en: "Build net-of-cost table." },
@@ -415,7 +415,7 @@ const phase_P2_lessons: Lesson[] = [
     hours: 13,
     difficulty: 3,
     skippable: false,
-    hourBasis: "4h concepts + 5h pipeline lab + 2h info-bars + 1h docs/quiz",
+    hourBasis: "4h concepts + 5h pipeline lab + 2h info-bars + 1h crypto-PIT note + 1h docs/quiz",
     prereqs: ["eval-lab"],
     goals: [
       { zh: "版本化下载与哈希。", en: "Version downloads and hashes." },
@@ -790,7 +790,7 @@ const phase_P4_lessons: Lesson[] = [
     hours: 15,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 7h labs + 2h write-up — HEAVY",
+    hourBasis: "5h concepts + 7h labs + 2h write-up + 1h crowding→LLM bridge — HEAVY",
     prereqs: ["strategy-compare-lab", "backtest-traps"],
     goals: [
       { zh: "实现Spearman IC。", en: "Implement Spearman IC." },
@@ -1187,7 +1187,7 @@ const phase_P7_lessons: Lesson[] = [
     hours: 6,
     difficulty: 2,
     skippable: false,
-    hourBasis: "2h reading + 1.5h writing + 0.5h quiz",
+    hourBasis: "3h reading + 2h writing + 1h quiz",
     prereqs: ["paper-trading-infra"],
     goals: [
       { zh: "写风险偏好。", en: "Write risk preference." },
@@ -1237,7 +1237,7 @@ const phase_P8_lessons: Lesson[] = [
     hours: 11,
     difficulty: 5,
     skippable: false,
-    hourBasis: "4h guided reading + 3h critical exercises + 1h rules rewrite",
+    hourBasis: "5h guided reading + 4h critical exercises + 1h rules rewrite + 1h sealed leaderboard — HEAVY",
     prereqs: ["factor-workflow", "ml-leakage-control", "modern-ml-pipelines", "compliance-ethics"],
     goals: [
       { zh: "陈述RD-Agent(Q)闭环。", en: "State RD-Agent(Q) loop." },
@@ -1281,7 +1281,7 @@ const phase_P8_lessons: Lesson[] = [
     hours: 11,
     difficulty: 4,
     skippable: false,
-    hourBasis: "4h paper/docs + 3h design exercises + 1h optional pull",
+    hourBasis: "5h paper/docs + 4h design exercises + 1h structure/PIT lab + 1h base-rate foil — HEAVY",
     prereqs: ["modern-ml-pipelines", "data-cleaning", "execution-slippage"],
     goals: [
       { zh: "概括TSFM日频超额收益谨慎结论。", en: "Summarize cautious TSFM daily excess-return findings." },

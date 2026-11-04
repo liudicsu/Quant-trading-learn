@@ -5,7 +5,7 @@ NOT LEGAL ADVICE — rules change; re-read the current official text before acti
     verified: Effective 2024-10-08; programmatic trading = computer-generated/routed orders; report-before-trade; exchange sets abnormal thresholds; HFT features delegated to exchanges.
 [OK] csrc_2025_12_futures: 期货市场程序化交易管理规定（试行）
     https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html
-    verified: Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c101954/c7564346/content.shtml
+    verified: Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c101954/c7564353/content.shtml
 [OK] sse_faq_2025_04_03: 上交所就正式发布程序化交易管理实施细则答记者问
     https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml
     verified: 细则自2025-07-07施行; 高频认定: 单账户每秒申报撤单合计最高≥300笔, 或全日≥20000笔; 四类异常行为构成要件说明.
