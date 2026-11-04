@@ -434,10 +434,13 @@ const phase_P2_lessons: Lesson[] = [
       { zh: "数据说明书四节；完成标准：来源/字段/时区/宇宙。", en: "Data sheet four sections; done when source/fields/timezone/universe appear." },
       { zh: "幸存者均值对比；完成标准：两均值与课内一致。", en: "Survivorship means; done when both means match the lesson." },
       { zh: "说明 PIT 滞后；完成标准：lag=5 + lookahead 一句。", en: "PIT lag note; done when lag=5 and a look-ahead sentence appear." },
+      { zh: "信息 bar 时钟；完成标准：与课内表一致。", en: "Info-bar clocks; done when counts match the lesson table." },
+      { zh: "跑 mask-first 玩具；完成标准：表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。", en: "Run mask-first toy; done when apparent vs realisable IC, MA sketch, ASSERT_mask_first_demo_ok print." },
     ],
     quizTopics: [
       { zh: "幸存者偏差", en: "Survivorship" },
       { zh: "PIT含义", en: "PIT meaning" },
+      { zh: "上游污染 / mask-first", en: "Upstream contamination / mask-first" },
     ],
     doneWhen: [
       { zh: "管线可复跑+说明书。", en: "Rerunnable pipeline + sheet." },
@@ -445,7 +448,7 @@ const phase_P2_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m4", "QuantStart securities master", "Qlib data layer", "JoinQuant data"],
       niche: ["@pyquantnews 45 APIs (status/2116517809920327801 → public-apis finance)", "OpenBB quantitative docs", "Binance Vision + @sera00111 crypto data notes"],
-      frontier: ["Alt-data awareness; deeper in P8"],
+      frontier: ["Mask-first / upstream contamination arXiv:2507.07107 (contract+diagnosis only; REJECT headline Sharpes)", "Alt-data awareness; deeper in P8"],
     },
     tasks: [
       { id: "ex1", text: { zh: "reindex+缺失断言；完成标准：missing=0 且 ASSERT。", en: "reindex+missingness assert; done when missing=0 and ASSERT." } },
@@ -453,6 +456,8 @@ const phase_P2_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "数据说明书四节；完成标准：来源/字段/时区/宇宙。", en: "Data sheet four sections; done when source/fields/timezone/universe appear." } },
       { id: "ex4", text: { zh: "幸存者均值对比；完成标准：两均值与课内一致。", en: "Survivorship means; done when both means match the lesson." } },
       { id: "ex5", text: { zh: "说明 PIT 滞后；完成标准：lag=5 + lookahead 一句。", en: "PIT lag note; done when lag=5 and a look-ahead sentence appear." } },
+      { id: "ex6", text: { zh: "信息 bar 时钟；完成标准：与课内表一致。", en: "Info-bar clocks; done when counts match the lesson table." } },
+      { id: "ex7", text: { zh: "跑 mask-first 玩具；完成标准：表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。", en: "Run mask-first toy; done when apparent vs realisable IC, MA sketch, ASSERT_mask_first_demo_ok print." } },
     ],
   },
   {
@@ -1221,7 +1226,7 @@ const phase_P7_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m14", "AFML scientific ethics", "CSRC/SSE/SZSE", "SEC 15c3-5", "FINRA 15-09/26-10"],
       niche: [],
-      frontier: ["SFC Circular 24EC55 GenAI LM", "LLM/agent research must obey same ethics/hold-out (link P8)"],
+      frontier: ["SFC Circular 24EC55 GenAI LM", "ESMA74-1505669079-10311 algo-trading supervisory briefing (2026-02-26; non-binding literacy)", "LLM/agent research must obey same ethics/hold-out (link P8)"],
     },
     tasks: [
       { id: "ex1", text: { zh: "风险一页。", en: "Risk page." } },
