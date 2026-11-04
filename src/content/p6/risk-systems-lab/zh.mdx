@@ -40,6 +40,29 @@ Kupiec（1995，*Journal of Derivatives* 3(2)）给出违约率是否等于名�
 
 ![VaR 回测](/p6/var_backtest.png)
 
+
+## Christoffersen 条件覆盖 + 巴塞尔交通灯（计数，不是交易）
+
+Kupiec 只问「违约次数对不对」。[Christoffersen（1998），*International Economic Review* 39(4)](https://www.jstor.org/stable/2527392) 再问：**违约会不会扎堆**。
+
+- **LR_uc**：无条件覆盖（与 Kupiec 同精神）— 平均违约率是否 ≈ α。
+- **LR_ind**：独立性 — 今天违约是否会抬高明天违约的概率（聚类）。
+- **恒等式：** `LR_cc = LR_uc + LR_ind`，在正确条件覆盖下约服从 **χ²(2)**。
+
+实验巴塞尔窗 `n=250`、违约 `x=21`（目标 α=0.05）：
+
+| 统计量 | 数值 | 说明 |
+|--------|------|------|
+| LR_uc | **5.097**（p≈0.024） | 平均频率偏高 |
+| LR_ind | **0.463**（p≈0.496） | 本路径上未见强聚类 |
+| LR_cc | **5.560**（χ²(2) p≈**0.062**） | UC+IND；检查 `LR_cc ≈ LR_uc+LR_ind` |
+
+**巴塞尔交通灯**把（经典 **99%** VaR 的）违约次数划进绿/黄/红**计数带宽**——给监管/审计看例外有多密，**不是**择时或 alpha 信号。本玩具窗是 95% 教学映射：`x=21` 会落在「红」一侧，仍**禁止**据此下单。
+
+<Callout type="warn" title="排伪">
+绿/黄/红 = 审计计数。不要把交通灯当成买卖信号。
+</Callout>
+
 ## 压力测试
 
 等权玩具账本情景 PnL：股票 −10% → −5.25%；利率 +100bp 代理 → −3.25%；波动冲击且相关→1 → −8.0%。压力**不是**概率——是董事会级叙事检查。
@@ -113,6 +136,6 @@ Christoffersen 250d: x=21 LR_uc=5.097 LR_ind=0.463 LR_cc=5.560 (χ²(2) p=0.062)
 **来源（已阅读并写入正文）：** Kupiec 1995；Christoffersen 1998 *IER* 39(4)；巴塞尔 VaR 交通灯计数；Artzner 等 1999 *Mathematical Finance*（相干风险）；业界 VaR/ES 实践；Canvas m13 bits；ML4T ops 笔记；Cookbook/Qbot 配置思路（niche）。
 
 <Summary>
-**要点**：风险估计一律滞后；回测违约（Kupiec）；压力 + 回撤 + 限额是工程；密钥远离仓库。  
+**要点**：风险估计一律滞后；回测违约（Kupiec + Christoffersen）；交通灯只计数；压力 + 回撤 + 限额是工程；密钥远离仓库。  
 **下一阶段**：P7 paper-trading-infra（信号 → 目标 → 日志）。
 </Summary>

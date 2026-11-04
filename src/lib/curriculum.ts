@@ -1094,7 +1094,7 @@ const phase_P6_lessons: Lesson[] = [
     ],
     mustTeach: [
       { zh: "熔断是工程不是预测；风险估计一律滞后。", en: "Kill switches are engineering, not forecasts; lag all risk estimates." },
-      { zh: "历史/参数/MC VaR与CVaR；Kupiec 1995违约回测。", en: "Hist/param/MC VaR and CVaR; Kupiec 1995 exception backtest." },
+      { zh: "历史/参数/MC VaR与CVaR；Kupiec 1995 + Christoffersen 1998 IND/CC；巴塞尔交通灯只计数。", en: "Hist/param/MC VaR and CVaR; Kupiec 1995 + Christoffersen 1998 IND/CC; Basel traffic-light counting only." },
       { zh: "压力测试；集中度与杠杆上限；密钥卫生。", en: "Stress tests; concentration and leverage limits; secrets hygiene." },
     ],
     exercises: [
@@ -1182,8 +1182,8 @@ const phase_P7_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "合规、风险心态与研究伦理", en: "Compliance, risk mindset & research ethics" },
     summary: {
-      zh: "中美程序化/接入/卖空/保证金与加密官方状态；非法律意见；研究伦理。",
-      en: "CN/US programmatic, access, short sale, margin & crypto official status; not legal advice; research ethics.",
+      zh: "中美程序化/接入/卖空/保证金与加密官方状态；香港证监会 GenAI 通函知晓；非法律意见；研究伦理。",
+      en: "CN/US programmatic, access, short sale, margin & crypto official status; HK SFC GenAI circular awareness; not legal advice; research ethics.",
     },
     hours: 12,
     difficulty: 2,

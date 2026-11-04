@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **12 学时**：阅读 6h（含北向程序化 + SEC PDA 撤回 + FY2026 检查 / FINRA GenAI + 证监会 24EC55）+ 写作 4h + 测验 2h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
+本课（约 **12 学时**：阅读 6h（含北向程序化 + SEC PDA 撤回 + FY2026 检查 / FINRA GenAI + 香港证监会 SFC 24EC55）+ 写作 4h + 测验 2h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
 
 **课内目标：** 写风险偏好一页；诚实记录失败；拆穿「保证夏普」话术。
 
@@ -107,11 +107,25 @@ n_sources=15 all_fetch_OK=True
 
 **仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=18`。
 
+
+## 香港证监会通函 24EC55 — GenAI 语言模型（知晓即可）
+
+与 FINRA GenAI 主题相邻的亚洲对照：[香港证监会（SFC）通函 24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)（《致持牌法团通函 — 生成式人工智能语言模型的使用》），**2024-11-12** 发出、即时生效（官方页已抓取）。
+
+**仅知晓（不是执照，非法律意见）：**
+
+- 适用于在受规管活动中使用 GenAI 语言模型的持牌法团（自研、集团、第三方或开源）。
+- 风险为本的核心原则：高层管理；AI 模型风险管理；网络安全与数据；第三方供应商风险。
+- **高风险用途** — 提供投资建议、意见或研究报告 — 需要额外缓释：客户可见输出前的**人在回路**审阅、验证/持续监控、提示鲁棒性测试，以及正在与 AI 互动的持续披露。
+- 与 FINRA 2026 GenAI/Agents、SEC FY2026 Emerging FinTech 并列阅读：**美国某提案撤回 ≠ 其他司法辖区没有义务**。
+
+实验行：`examples/p7/02_compliance_sources.py` 中 `sfc_24ec55`（`n_sources=18`）。
+
 ## 常见错误 / 陷阱
 
 - 假定 PDA 撤回消灭了全部 AI/建议义务（FY2026 仍列 Emerging FinTech）。
 - 把 FINRA GenAI 主题当成交易执照或产品 alpha。
-- 把证监会 24EC55 当成交易执照，而非持牌法团期望。
+- 把香港证监会（SFC）通函 24EC55 当成交易执照，而非持牌法团期望。
 
 1. 用自媒体阈值代替交易所/证监会文本。
 2. 把工作人员声明当成委员会终局规则。
@@ -144,13 +158,13 @@ n_sources=15 all_fetch_OK=True
 
 <Quiz id="p7ce-q9" question="港股通北向程序化交易报告（已核验）生效日？" options={["2024-10-08", "2025-10-09", "2026-01-12", "永不"]} answer={2} explanation="HKEX 汇总页：2026-01-12 生效。" />
 
-<Quiz id="p7ce-sfc" question="证监会通函 24EC55（已抓取）主要是？" options={["GenAI 交易 alpha 执照", "香港对 GenAI 语言模型的期望；高风险建议/研究 → 人在回路 — 仅知晓", "废除 FINRA 3110", "仅限 HFT"]} answer={1} explanation="2024-11-12 发出；非法律意见。" />
+<Quiz id="p7ce-sfc" question="香港证监会（SFC）通函 24EC55（已抓取）主要是？" options={["GenAI 交易 alpha 执照", "香港对 GenAI 语言模型的期望；高风险建议/研究 → 人在回路 — 仅知晓", "废除 FINRA 3110", "仅限 HFT"]} answer={1} explanation="2024-11-12 发出；非法律意见。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；证监会 [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；Canvas m14；AFML 科学伦理。
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；Canvas m14；AFML 科学伦理。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明。  
