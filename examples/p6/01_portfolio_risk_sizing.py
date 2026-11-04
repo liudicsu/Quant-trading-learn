@@ -357,8 +357,9 @@ def switches(half):
         elif q == -1 and s > half:
             q = 1; n_sw += 1
     return n_sw
-for c, half in [(0.10, 0.10/(2*rho1)), (1.00, 1.00/(2*rho1)*1.10)]:
-    print(f"  sim switches @c={c:.2f} half≈{half:.3f}: {switches(half)} / 500 steps")
+for c in (0.10, 1.00):
+    half = (c / (2 * rho1)) * 1.10  # cost-aware band used for switch count
+    print(f"  sim switches @c={c:.2f} cost_aware_half≈{half:.3f}: {switches(half)} / 500 steps")
 print("teach: when lag α is weak (rho1≪rho0), multi-period correction is small; when lag persists, aim ahead")
 print("bridge: choose band width INSIDE validation (cost-in-CV) — not after peeking at OOS")
 print("pointer: execution-slippage lesson — TCA / participation caps sit next to this no-trade logic")

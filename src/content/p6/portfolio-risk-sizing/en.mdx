@@ -127,8 +127,8 @@ Optional NAME-ONLY foil: [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) (p
 **Toy (lab):** signal `Y_t = 0.8*X_t + 0.4*X_(t-1) + eps`; widen the half-band as cost rises:
 
 ```
-c=0.10: naive_half≈0.125  cost_aware_half≈0.138  switches 241/500
-c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches 41/500
+c=0.10: naive_half≈0.125  cost_aware_half≈0.138  switches@cost_aware 241/500
+c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches@cost_aware 41/500
 ```
 
 Choose band width **inside** validation (cost-in-CV) — not after peeking at OOS. Thin pointer in `execution-slippage` (TCA / participation caps sit next to this logic).

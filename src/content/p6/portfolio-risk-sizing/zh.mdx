@@ -127,8 +127,8 @@ turnover_if_full_rebalance=0.0800  turnover_with_no_trade_policy=0.0000
 **实验玩具：** 信号 `Y_t = 0.8*X_t + 0.4*X_(t-1) + eps`；成本上升则半带宽变宽：
 
 ```
-c=0.10: naive_half≈0.125  cost_aware_half≈0.138  switches 241/500
-c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches 41/500
+c=0.10: naive_half≈0.125  cost_aware_half≈0.138  switches@cost_aware 241/500
+c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches@cost_aware 41/500
 ```
 
 带宽须在验证**内部**选定（cost-in-CV）——不可偷看 OOS。`execution-slippage` 有薄指针（TCA / 参与率上限与此相邻）。

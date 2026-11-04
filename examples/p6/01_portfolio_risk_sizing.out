@@ -72,8 +72,8 @@ signal model: Y_t = 0.8*X_t + 0.4*X_(t-1) + eps  (lag still informative)
   cost c=0.10: naive_half_band≈0.125  cost_aware_half_band≈0.138  (wider → trade less)
   cost c=0.50: naive_half_band≈0.625  cost_aware_half_band≈0.688  (wider → trade less)
   cost c=1.00: naive_half_band≈1.250  cost_aware_half_band≈1.375  (wider → trade less)
-  sim switches @c=0.10 half≈0.125: 241 / 500 steps
-  sim switches @c=1.00 half≈1.375: 41 / 500 steps
+  sim switches @c=0.10 cost_aware_half≈0.138: 241 / 500 steps
+  sim switches @c=1.00 cost_aware_half≈1.375: 41 / 500 steps
 teach: when lag α is weak (rho1≪rho0), multi-period correction is small; when lag persists, aim ahead
 bridge: choose band width INSIDE validation (cost-in-CV) — not after peeking at OOS
 pointer: execution-slippage lesson — TCA / participation caps sit next to this no-trade logic
