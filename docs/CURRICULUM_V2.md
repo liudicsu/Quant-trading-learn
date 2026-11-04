@@ -58,20 +58,20 @@
 | 阶段 | 名称 | 课数 | 总课时 | 6h/周 | 12h/周 | 依赖簇 |
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
-| P1 | 市场语言与度量 / Market language & measurement | 4 | 25h | ~4.2 周 | ~2.1 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 40h | ~6.7 周 | ~3.3 周 | Research infrastructure / scientific method for backtests |
+| P1 | 市场语言与度量 / Market language & measurement | 4 | 27h | ~4.5 周 | ~2.3 周 | Market concepts + evaluation language |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 48h | ~8.0 周 | ~4.0 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 30h | ~5.0 周 | ~2.5 周 | Classic alpha templates before factors/ML |
-| P4 | 因子研究 / Factor research | 2 | 21h | ~3.5 周 | ~1.8 周 | Cross-sectional research methods |
-| P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 22h | ~3.7 周 | ~1.8 周 | Supervised ML methodology for finance |
-| P6 | 风险、仓位与执行 / Risk, sizing & execution | 3 | 26h | ~4.3 周 | ~2.2 周 | Portfolio construction / execution / controls |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 14h | ~2.3 周 | ~1.2 周 | Operationalization and professional norms |
-| P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 16h | ~2.7 周 | ~1.3 周 | Post-prerequisite frontier / niche methods |
+| P4 | 因子研究 / Factor research | 2 | 25h | ~4.2 周 | ~2.1 周 | Cross-sectional research methods |
+| P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
+| P6 | 风险、仓位与执行 / Risk, sizing & execution | 3 | 32h | ~5.3 周 | ~2.7 周 | Portfolio construction / execution / controls |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 19h | ~3.2 周 | ~1.6 周 | Operationalization and professional norms |
+| P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 30h | ~5.0 周 | ~2.5 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 267 学时（跳过 P0 为 247）。** 6h/周 ≈ 44.5 周；12h/周 ≈ 22.3 周。
-**跳过 P0 后：约 218 学时。** 6h/周 ≈ 36.3 周；12h/周 ≈ 18.2 周。
+**全量（含 P0）：精确 287 学时（跳过 P0 为 267）。** 6h/周 ≈ 47.8 周；12h/周 ≈ 23.9 周。
+**跳过 P0 后：精确 267 学时。** 6h/周 ≈ 44.5 周；12h/周 ≈ 22.3 周。
 
-精确合计：**267h 全量 / 247h 跳过 P0**。对外可表述为约 **250–280h 全量 / 230–260h 跳过基础**（含个人复盘缓冲）。
+精确合计：**287h 全量 / 267h 跳过 P0**。对外可表述为约 **270–300h 全量 / 250–280h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -863,4 +863,4 @@ Inventory items woven into existing lessons (zh+en, offline toys):
 6. **Atlas name-drop** beside Qbot → `paper-trading-infra`.
 7. **HRP** → `portfolio-risk-sizing`; López de Prado 2016 JPM 42(4) + AFML ch.16.
 
-Net hours ≈ +18h deepen (b07393d) then +11h Phase B verified enrichments (267h full / 247h skip P0).
+Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase B next (2a1a28d) → **287h full / 267h skip P0**.

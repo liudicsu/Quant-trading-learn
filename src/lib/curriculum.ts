@@ -56,11 +56,11 @@ export const COURSE_META = {
     zh: "阶段由知识依赖簇导出，不是月历格子",
     en: "Phases come from dependency clusters, not a calendar grid",
   },
-  hoursFull: 267,
-  hoursSkipFoundations: 247,
+  hoursFull: 287,
+  hoursSkipFoundations: 267,
   hoursRangeLabel: {
-    zh: "精确 267h 全量 / 247h 跳过 P0（对外约 250–280h / 230–260h）",
-    en: "Exact 267h full / 247h skip P0 (public range ~250–280h / 230–260h)",
+    zh: "精确 287h 全量 / 267h 跳过 P0（对外约 270–300h / 250–280h）",
+    en: "Exact 287h full / 267h skip P0 (public range ~270–300h / 250–280h)",
   },
   lessonCount: 27,
   phaseCount: 10,
@@ -791,7 +791,7 @@ const phase_P4_lessons: Lesson[] = [
     hours: 18,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 7h labs + 2h write-up + 1h crowding→LLM bridge — HEAVY",
+    hourBasis: "5h concepts + 9h labs (incl Detzel costs) + 3h write-up + 1h crowding→LLM bridge — HEAVY",
     prereqs: ["strategy-compare-lab", "backtest-traps"],
     goals: [
       { zh: "实现Spearman IC。", en: "Implement Spearman IC." },
@@ -887,7 +887,7 @@ const phase_P5_lessons: Lesson[] = [
     hours: 21,
     difficulty: 5,
     skippable: false,
-    hourBasis: "6h AFML concepts + 11h labs (fracdiff/uniqueness/meta/CPCV note) + 3h write-up — HEAVY",
+    hourBasis: "6h AFML concepts + 12h labs (fracdiff/uniqueness/meta/CPCV + one-switch pointer) + 3h write-up — HEAVY",
     prereqs: ["factor-workflow", "backtest-traps"],
     goals: [
       { zh: "演示shuffle泄漏。", en: "Demo shuffle leakage." },
@@ -986,7 +986,7 @@ const phase_P6_lessons: Lesson[] = [
     hours: 20,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 9h labs (incl HRP) + 3h writing — HEAVY",
+    hourBasis: "5h concepts + 11h labs (incl HRP + no-trade) + 4h writing — HEAVY",
     prereqs: ["returns-vol-corr", "strategy-compare-lab"],
     goals: [
       { zh: "三种仓位层对照。", en: "Compare three sizing layers." },
@@ -1188,7 +1188,7 @@ const phase_P7_lessons: Lesson[] = [
     hours: 8,
     difficulty: 2,
     skippable: false,
-    hourBasis: "3h reading + 2h writing + 1h quiz",
+    hourBasis: "4h reading (incl Northbound) + 3h writing + 1h quiz",
     prereqs: ["paper-trading-infra"],
     goals: [
       { zh: "写风险偏好。", en: "Write risk preference." },
