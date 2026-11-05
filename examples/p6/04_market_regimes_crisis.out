@@ -1,0 +1,40 @@
+=== parameters ===
+seed=11; path: rally→range→crash→recovery; all detectors use shift(1) / data through t-1
+cite: Hamilton 1989 Econometrica 57(2) — filtered vs smoothed regime probs
+cite: Moreira & Muir 2017 JF; Cederburg et al. 2020 JFE — vol-managed foil literacy
+cite: NYSE Rule 7.12 MWCB 7/13/20%; CSRC 2016-01 circuit-breaker suspension literacy
+learning only — not investment advice; stress toys are not forecasts
+
+=== Lab A: causal regime labels (shift(1) stack) ===
+n_days=500 segments=rally180/range120/crash40/recovery160
+label_stress_like=197
+label_rally_like=179
+label_range_like=115
+label_recovery_like=9
+stress_hit_rate_in_planted_crash=0.900
+mean_vol20_rally=0.0065 mean_vol20_crash=0.0327
+min_dd_lag=-0.4098
+wrote /workspace/Quant-trading-learn/public/p6/regime_path.png
+
+=== Lab B: fixed vs vol-target vs DD brake (vol & maxDD only) ===
+fixed: ann_vol=0.2195 maxDD=-0.4098 end_nav=0.9717
+vol_target: ann_vol=0.1706 maxDD=-0.2093 end_nav=1.2680
+dd_brake: ann_vol=0.1286 maxDD=-0.1996 end_nav=1.0786
+NOTE: compare ann_vol & maxDD only — end_nav is diagnostic, NOT an edge claim
+wrote /workspace/Quant-trading-learn/public/p6/regime_overlays.png
+
+=== Lab C: multi-asset corr→1 stress PnL ===
+equal_w book; mean_daily_pnl_calm=-0.00062
+one_day_common_shock_pnl=-0.0776 (≈-0.08)
+mean_offdiag_corr_calm=0.069 mean_offdiag_corr_stress=0.990
+teaching: diversification shrinks when corr→1 — stress PnL ≈ single-name crash
+
+=== Lab D: HMM filtered vs smoothed (Hamilton filter spirit) ===
+first_stress_onset_t=80
+t=79 (day before onset): filt_P(stress)=0.022 smooth_P(stress)=0.176
+t=80 (onset):           filt_P(stress)=0.092 smooth_P(stress)=0.439
+calm_days_before_onset=80 smoother_leads_filter_by_>0.15_on=1 days
+HARD RULE: decision systems may use FILTERED probs only; SMOOTHED = research look-ahead
+wrote /workspace/Quant-trading-learn/public/p6/regime_hmm_filter_vs_smooth.png
+
+=== done ===

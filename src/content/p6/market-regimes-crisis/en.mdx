@@ -1,0 +1,223 @@
+## Learning goals
+
+This lesson (~**11 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
+
+**Goals:** write an engineering definition of regime; build a `shift(1)` detector stack; draft identification / engineering response / failure modes for four playbooks; spot look-ahead in smoothed HMM probabilities; separate news-day volatility from a defined regime.
+
+**Must-teach:** operational regime definition; causal detectors (dual MA, price vs N-day high, lagged realised vol, peak-DD buckets, rolling correlation spike); breadth & VIX term structure as literacy only; Hamilton (1989) filter vs smoother; playbooks A–D; cross-scenario hard rules; debunks (timing, whipsaw, Moreira–Muir vs Cederburg, CPPI, stress≠forecast, circuit breaker≠signal); news-box literacy.
+
+<Callout type="info" title="Learning only — not investment advice">
+Teaching simulations and historical mechanism literacy — not trade advice, not buy-the-dip / short talk-tracks, not a forecast for any index.
+</Callout>
+
+## 1. Learning boundary
+
+| In scope | Out of scope |
+|----------|--------------|
+| Reproducible state labels from past info | Proclaiming “this is a bull/bear” as a forecast |
+| Stress tables & brakes as **engineering** foils | Treating stress tests as probability forecasts |
+| Circuit breakers / price limits as **market mechanisms** | Trading the halt itself as a signal |
+| Showing that smoothed HMM probs peek ahead | Building HMM alpha |
+
+**One line:** this is **risk literacy and engineering playbooks**, not a timing-product manual.
+
+## 2. Operational definition of a regime
+
+Casual “bull / bear / chop” labels slide — three people can disagree on the same day. Engineering needs:
+
+1. **Observable inputs:** only data available **before** decision time `t` (`shift(1)` / windows ending at `t−1`).
+2. **Explicit rules:** e.g. “20-day MA above 60-day MA **and** lagged 20-day vol ≤ 1.5× lagged 60-day vol”.
+3. **Label use:** drive **exposure caps, rebalance cadence, stress switches** — not a bullish/bearish slogan.
+
+**Vol-bucket intuition:**
+
+<Formula label="Lagged vol and spike flag">
+{`σ̂_{t−1}^{(L)} = Std(r_{t−L}, …, r_{t−1});   spike_t = 1[ σ̂_{t−1}^{(20)} > 1.5 · σ̂_{t−1}^{(60)} ]`}
+</Formula>
+
+Weights / brakes at `t` may depend on lagged flags like `spike_t` only.
+
+## 3. Detection toolbox (all causal)
+
+Lab A runs the same stack on a synthetic path (`examples/p6/04_market_regimes_crisis.py`):
+
+| Tool | Causal form | Role here |
+|------|-------------|-----------|
+| Dual MA | `MA20.shift(1)` vs `MA60.shift(1)` | Coarse trend / non-trend |
+| vs N-day high | `px.shift(1) / rolling_max(60).shift(1)` | Near-high flag |
+| Lagged realised vol | `rolling_std(20/60).shift(1)` | Vol-spike bucket |
+| Peak-DD buckets | equity through `t−1` vs lagged peak: −5%/−10%/−20% | Soft/hard brake input |
+| Rolling corr spike | multi-asset window ending `t−1` | Diversification failure |
+
+**Literacy-only (not in auto labels):** market breadth, VIX term structure — recognise them when reading research; labs here do not depend on a live options chain.
+
+### HMM: Hamilton filter vs smoother (look-ahead warning)
+
+[Hamilton (1989), *Econometrica* 57(2)](https://www.jstor.org/stable/1912559) models unobserved states as a Markov switch and uses a **nonlinear filter** to infer “which state we may be in” from the observed series.
+
+- **Filtered** `P(S_t | y_1,…,y_t)`: uses today and the past — **decision-eligible** (still a model, not truth).
+- **Smoothed** `P(S_t | y_1,…,y_T)`: uses the **whole sample’s future** — fine for retrospective research; **live decisions = look-ahead leakage**.
+
+Lab D (toy two-state Gaussian with known params; first stress planted at `t=80`):
+
+| Time | Filtered P(stress) | Smoothed P(stress) |
+|------|-------------------:|-------------------:|
+| `t=79` (day before onset) | **0.022** | **0.176** |
+| `t=80` (onset day) | 0.092 | 0.439 |
+
+The smoother rises **before** the crash is fully in the filter’s information set — that is the shape of leakage.
+
+![HMM filter vs smoother](/p6/regime_hmm_filter_vs_smooth.png)
+
+<Callout type="warn" title="Debunk: smoothed probabilities">
+Pretty “perfect turning points” on research charts often come from smoothing. Production labels / sizing rules use filtered probs (or simpler `shift(1)` rules) only.
+</Callout>
+
+## 4. Four scenario playbooks
+
+Each playbook has three columns: **identification (causal) → engineering response → failure modes**. Responses are a risk menu, not a “guaranteed profit” list.
+
+### A. One-way rally / fear of a pullback
+
+- **ID:** lagged dual-MA uptrend; shallow DD bucket; no vol spike.
+- **Engineering:** scheduled rebalance; vol-target scales exposure with `σ̂_{t−1}`; optional trend overlay; widen a **no-trade band** when costs are high (see `portfolio-risk-sizing`).
+- **Failure:** end-of-trend whipsaw; “fear of pullback” → chronic de-risking → costs dominate; treating a news day as a regime switch.
+
+### B. Ordinary pullback vs crisis
+
+- **Pullback ID:** price off highs by a few percent, but lagged correlations calm, vol moderate, liquidity narrative normal.
+- **Crisis ID:** deep DD bucket + vol spike + **corr→1** + liquidity worsening (spreads/impact).
+- **Engineering:** pullback — keep existing brakes/rebalance discipline; crisis — up-weight stress scenarios, tighten leverage/concentration, hard DD kill (`risk-systems-lab`).
+- **Failure:** promoting every −3% day to “crisis playbook” → permanently low risk; or denying crisis features → diversification illusion.
+
+### C. Crash crisis
+
+**Teaching stress table (order-of-magnitude literacy — not a forecast, not your backtest alpha):**
+
+| Teaching tag | Common classroom narrative | Engineering association |
+|--------------|----------------------------|-------------------------|
+| 1987-10 | Extreme single-day drop | Gap risk; continuous-trading assumptions break |
+| 2000–02 | Long post-bubble bear | Crowded valuation + slow bleed |
+| 2008 | Credit/liquidity spiral | Corr→1, funding stress |
+| 2020-03 | Fast crash then policy response | Instant liquidity vacuum |
+| 2022 | Rate-shock repricing | Equity–bond joint drawdowns |
+
+**Mechanism literacy (not signals):**
+
+- **US market-wide circuit breakers (MWCB):** NYSE Rule 7.12 et al. trigger off S&P 500 decline vs prior close — **7% / 13% / 20%** (Levels 1/2/3); Levels 1/2 before 15:25 typically halt ~15 minutes; Level 3 halts for the rest of the day (confirm live exchange rules; learning use).
+- **A-share price limits:** limit-up/down change path shape; backtests that ignore limits overstate fillable size.
+- **2016 China index circuit-breaker trial:** after rapid controversy that halts accelerated selling, the CSRC suspended the mechanism effective 2016-01-08 (SSE English notice / CSRC statements) — **suspension itself teaches: mechanisms change behaviour; they are not alpha switches**.
+
+**CPPI literacy:** cushion-based dynamic exposure; classic failures are **gap risk** (jump through the floor) and **cash-lock** after a floor hit (miss the rebound) — **not a holy grail**.
+
+**Corr→1:** Lab C equal four-asset toy: calm mean off-diagonal corr ≈ **0.069**; stress window ≈ **0.990**; common −8% shock day book PnL ≈ **−0.0776** (≈ single-name crash). Diversification shrinks in crises.
+
+### D. Range-bound (chop)
+
+- **ID:** dual MAs tangled; price oscillates in a band; vol moderate.
+- **Engineering:** down-weight trend overlays; tighten no-trade bands; book turnover costs honestly.
+- **Failure:** trend rules **whipsaw** — signals “work,” net NAV grinds down after costs.
+
+![Synthetic path](/p6/regime_path.png)
+
+Lab A (seed=11, 500 days: rally 180 / range 120 / crash 40 / recovery 160): causal `stress_like` hit-rate inside the **planted crash window** ≈ **0.900**; mean lagged 20-day vol: rally ≈ **0.0065**, crash ≈ **0.0327**; min lagged DD ≈ **−0.4098**. Labels are teaching rulers, not live signals.
+
+## 5. Cross-scenario hard rules
+
+1. **Every state input is lagged** (`shift(1)` / window ends at `t−1`).
+2. **Brakes and limits before opinions** — opinions can be wrong; hard constraints must still execute (ties to `risk-systems-lab`).
+3. **Stress tests are board-level narrative checks, not probability forecasts.**
+4. **Circuit breakers / price limits / suspensions = microstructure, ≠ trade signals.**
+5. **Filtered OK; smoothed banned for decisions.**
+6. **When the brief is risk metrics only, do not smuggle end-NAV as “the strategy won.”**
+
+## 6. Debunk callouts
+
+<Callout type="warn" title="Timing often fails">
+Operational labels ≠ profitable timing. Many “regime-switch” strategies look great in-sample and break on costs and delay out-of-sample.
+</Callout>
+
+<Callout type="warn" title="Trend gets whipsawed">
+Trend rules in playbook D suffer repeated false breaks; cost-blind “win rate” lies.
+</Callout>
+
+<Callout type="warn" title="Vol management: Moreira–Muir vs Cederburg">
+[Moreira & Muir (2017), *Journal of Finance*](https://doi.org/10.1111/jofi.12513) document attractive in-sample behaviour of volatility-managed portfolios; [Cederburg, O’Doherty, Wang & Yan (2020), *Journal of Financial Economics* 138(1)](https://doi.org/10.1016/j.jfineco.2020.04.015) stress that for **real-time investors**, reasonable out-of-sample versions often are **not systematically better**. This course treats vol targeting as **risk-scaling engineering**, not paper alphas as curriculum edge.
+</Callout>
+
+<Callout type="warn" title="HMM smoothing / CPPI / stress / circuit breakers">
+Smoothed probs peek ahead; CPPI has gap risk and cash-lock; stress is not a forecast; circuit breakers are not signals.
+</Callout>
+
+## 7. News box: a single volatile day ≠ a defined regime (2026-11-05)
+
+**Verified sources (learning cites — not trade advice):**
+
+- [CNBC live updates (page dated 2026-11-05)](https://www.cnbc.com/2026/11/04/stock-market-today-live-updates.html): reported the Nasdaq Composite down about **3.3%** on the day and wrote that the index **dipped into correction territory** (described as ~10% below a record close set the prior month).
+- [Associated Press same-day piece](https://apnews.com/article/stocks-markets-ai-midterm-oil-trump-7ee9c212805aa5e70cf34d25aab7a36e): reported AI/chip-led pressure with the Nasdaq down about **3%**, S&P lower, and the prior day’s rebound eroding.
+
+**How to read it in-course:**
+
+1. Media “correction” is a **narrative tag** (often ~−10% from a high) — **not** the same as a regime defined by this lesson’s `shift(1)` rules.
+2. A **single ~−3% day** can sit inside playbook B (ordinary risk day) — layer lagged vol, DD bucket, and whether correlations spiked before talking about playbook C **engineering** triggers.
+3. **Do not** rewrite this box as “buy the dip” or “short it” — literacy and process only.
+
+## Labs (offline synthetic)
+
+Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
+
+### Lab B: fixed vs vol-target vs DD brake (vol & maxDD only)
+
+| Rule | Ann. vol | Max DD | End NAV (diagnostic only) |
+|------|----------:|--------:|--------------------------:|
+| fixed | **0.2195** | **−0.4098** | 0.9717 |
+| vol_target | **0.1706** | **−0.2093** | 1.2680 |
+| dd_brake | **0.1286** | **−0.1996** | 1.0786 |
+
+**Done when:** you can explain how vol_target / dd_brake compress vol and DD; you **must not** claim end-NAV as reproducible live edge.
+
+![Risk overlays](/p6/regime_overlays.png)
+
+### Labs C / D numbers (match text above)
+
+- Corr: calm **0.069** → stress **0.990**; common-shock book PnL ≈ **−0.0776**
+- HMM: `t=79` filtered **0.022** vs smoothed **0.176** (leakage shape)
+
+## Common mistakes / traps
+
+1. Computing today’s state from today’s close, then trading the same bar (look-ahead).
+2. Putting smoothed HMM probs on a “live” dashboard.
+3. Trading the circuit-breaker print.
+4. Promoting every ordinary pullback to the crisis playbook.
+5. Treating stress-table years as strategy return promises.
+6. Running trend rules in chop without costs.
+7. Mapping a news “correction” straight onto the course regime enum.
+
+## Practice (1:1)
+
+1. **ex1** — Reproduce Lab A: emit causal labels; report `stress_like` hit-rate in the planted crash window (lesson ≈ 0.900).
+2. **ex2** — Reproduce Lab B: submit the three-row ann_vol & maxDD table; one sentence on why Sharpe is not the conclusion.
+3. **ex3** — Reproduce Lab C: print calm/stress mean off-diagonal corr and common-shock PnL.
+4. **ex4** — Reproduce Lab D: compare filtered vs smoothed the day before first stress; one sentence on leakage.
+5. **ex5** — Write three-column cards for playbooks A–D (ID / response / failure) with **no** trade-recommendation sentences.
+6. **done1** — One-page hard-rules + debunk checklist; attach CNBC/AP links and a “news ≠ regime” paragraph.
+
+## Quiz
+
+<Quiz id="p6mrc-q1" question="Regime inputs at decision time t must?" options={["Include the same-bar close before trading", "Use only data through t−1 (shift(1))", "Use full-sample smoothed probabilities", "Read future VIX"]} answer={1} explanation="Causal: windows end at t−1." />
+<Quiz id="p6mrc-q2" question="Relative to the filter, HMM smoothed probabilities?" options={["Are better for live orders", "Condition on future data — look-ahead if used for decisions", "Always equal the filter", "Are given by circuit-breaker rules"]} answer={1} explanation="Smoothing conditions on the whole sample." />
+<Quiz id="p6mrc-q3" question="Lab B should mainly compare?" options={["Whoever ends with the highest NAV has alpha", "Annualised vol and max DD (risk scaling)", "Count of news corrections", "Broker rebate rates"]} answer={1} explanation="Lesson brief: vol and maxDD only." />
+<Quiz id="p6mrc-q4" question="Teaching point of corr→1?" options={["Diversification always strengthens", "Assets fall together in crises; book loss ≈ single-name crash", "Equals a price limit", "Proves CPPI is risk-free"]} answer={1} explanation="Lab C: stress corr≈0.99, common shock≈−8%." />
+<Quiz id="p6mrc-q5" question="US MWCB 7/13/20% levels are, in this course?" options={["A buy signal", "A sell signal", "Mechanism literacy — not a trade signal", "Kelly formula inputs"]} answer={1} explanation="Halts pause trading to cool the tape; they do not issue alpha instructions." />
+<Quiz id="p6mrc-q6" question="After reading Moreira–Muir (2017) with Cederburg et al. (2020), vol targeting should be treated as?" options={["Guaranteed Sharpe uplift / course alpha", "Risk-scaling engineering; OOS value is cautious — no return promise", "A substitute for the compliance lesson", "A synonym for HMM smoothing"]} answer={1} explanation="One paper shows appeal; the other stresses real-time/OOS versions are not systematically better." />
+
+## Done when
+
+Four playbook cards + Labs A–D numbers matching the lesson + a short “news ≠ regime” note (with verified links) + hard-rules checklist. Smoothed probabilities must not appear in the “live-usable” column.
+
+**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.
+
+<Summary>
+**Takeaways**: regimes must be operational and causal; smoothed HMM leaks; write failure modes for every playbook; circuit breakers and news “corrections” are not course trade signals; vol management is risk engineering, not a return promise.  
+**Next**: paper-trading-infra (paper loop and parity).
+</Summary>

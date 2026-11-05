@@ -30,8 +30,8 @@
 | `microstructure-orders` | P1 | 7 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
-| `data-cleaning` | P2 | 13 | 3 | 否 | eval-lab |
-| `backtest-traps` | P2 | 26 | 4 | 否 | data-cleaning, stats-probability-basics |
+| `data-cleaning` | P2 | 17 | 3 | 否 | eval-lab |
+| `backtest-traps` | P2 | 28 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 6 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
@@ -39,16 +39,17 @@
 | `pairs-stat-arb` | P3 | 10 | 3 | 否 | mean-reversion |
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
 | `factor-workflow` | P4 | 24 | 4 | 否 | strategy-compare-lab, backtest-traps |
-| `factor-portfolio-lab` | P4 | 7 | 4 | 否 | factor-workflow |
-| `ml-leakage-control` | P5 | 20 | 5 | 否 | factor-workflow, backtest-traps |
+| `factor-portfolio-lab` | P4 | 8 | 4 | 否 | factor-workflow |
+| `ml-leakage-control` | P5 | 21 | 5 | 否 | factor-workflow, backtest-traps |
 | `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
-| `portfolio-risk-sizing` | P6 | 17 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
-| `execution-slippage` | P6 | 10 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
+| `portfolio-risk-sizing` | P6 | 22 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
+| `execution-slippage` | P6 | 13 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
 | `risk-systems-lab` | P6 | 8 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
-| `paper-trading-infra` | P7 | 14 | 3 | 否 | risk-systems-lab |
-| `compliance-ethics` | P7 | 12 | 2 | 否 | paper-trading-infra |
-| `frontier-llm-agents` | P8 | 23 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
-| `frontier-tsfm-altdata-crypto` | P8 | 16 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
+| `market-regimes-crisis` | P6 | 11 | 4 | 否 | risk-systems-lab |
+| `paper-trading-infra` | P7 | 14 | 3 | 否 | market-regimes-crisis |
+| `compliance-ethics` | P7 | 15 | 2 | 否 | paper-trading-infra |
+| `frontier-llm-agents` | P8 | 29 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
+| `frontier-tsfm-altdata-crypto` | P8 | 19 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
 | `capstone` | P9 | 24 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
 
 **程序员建议：** 对 P0 三课做测验；通过则跳过，把时间补给 P2/P4/P5/P6 的重课。
@@ -59,19 +60,19 @@
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
 | P1 | 市场语言与度量 / Market language & measurement | 4 | 27h | ~4.5 周 | ~2.3 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 53h | ~8.0 周 | ~4.0 周 | Research infrastructure / scientific method for backtests |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 59h | ~9.8 周 | ~4.9 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 30h | ~5.0 周 | ~2.5 周 | Classic alpha templates before factors/ML |
-| P4 | 因子研究 / Factor research | 2 | 31h | ~4.2 周 | ~2.1 周 | Cross-sectional research methods |
+| P4 | 因子研究 / Factor research | 2 | 32h | ~5.3 周 | ~2.7 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
-| P6 | 风险、仓位与执行 / Risk, sizing & execution | 3 | 40h | ~5.3 周 | ~2.7 周 | Portfolio construction / execution / controls |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 26h | ~3.2 周 | ~1.6 周 | Operationalization and professional norms |
-| P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 39h | ~5.0 周 | ~2.5 周 | Post-prerequisite frontier / niche methods |
+| P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 54h | ~9.0 周 | ~4.5 周 | Portfolio construction / execution / controls / regimes |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 29h | ~4.8 周 | ~2.4 周 | Operationalization and professional norms |
+| P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 344 学时（跳过 P0 为 324）。** 6h/周 ≈ 57.3 周；12h/周 ≈ 28.7 周。
-**跳过 P0 后：精确 324 学时。** 6h/周 ≈ 54.0 周；12h/周 ≈ 27.0 周。
+**全量（含 P0）：精确 355 学时（跳过 P0 为 335）。** 6h/周 ≈ 59.2 周；12h/周 ≈ 29.6 周。
+**跳过 P0 后：精确 335 学时。** 6h/周 ≈ 55.8 周；12h/周 ≈ 27.9 周。
 
-精确合计：**344h 全量 / 324h 跳过 P0**。对外可表述为约 **320–360h 全量 / 300–340h 跳过基础**（含个人复盘缓冲）。
+精确合计：**355h 全量 / 335h 跳过 P0**。对外可表述为约 **330–370h 全量 / 310–350h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -610,14 +611,14 @@
   - 可复现小流水线+检查清单。
 - **Method tags:** classic: Qlib Quick Start; ML4T end-to-end; Canvas m10 | niche: @quantscience_ stack; ML4T high-engagement X posts | frontier: Qlib Transformer/Localformer as optional controls under same anti-leakage protocol; RD-Agent automation deferred to P8
 
-### P6 · 风险、仓位与执行（Risk, sizing & execution）— 26h / 3 课
+### P6 · 风险、仓位与执行（Risk, sizing & execution）— 54h / 4 课
 
 **阶段目标：** 仓位层、执行成本与硬约束工程化。
 
 **6h/周 ≈ 4.3 周；12h/周 ≈ 2.2 周。**
 
 #### `portfolio-risk-sizing` — 组合、风险与仓位 / Portfolio, risk & position sizing
-- **Hours:** 14h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 7h labs + 2h writing — HEAVY
+- **Hours:** 22h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 13h labs (incl HRP + Brandt no-trade + alpha-decay band) + 4h writing — HEAVY
 - **Prereqs:** `returns-vol-corr`, `strategy-compare-lab`
 - **Summary:** 波动目标、回撤熔断、Kelly上界直觉、历史VaR。
 - **Goals:**
@@ -641,7 +642,7 @@
 - **Method tags:** classic: Canvas m11; QuantStart VaR/Kelly; UChicago FINM risk
 
 #### `execution-slippage` — 执行与滑点 / Execution & slippage
-- **Hours:** 7h · **Difficulty:** 3/5 · **Basis:** 2.5h concepts + 4h experiments + 0.5h quiz
+- **Hours:** 13h · **Difficulty:** 3/5 · **Basis:** 5h concepts (√/Gatheral + public metaorder IRF) + 6.5h experiments + 1.5h quiz
 - **Prereqs:** `costs-in-backtest`, `portfolio-risk-sizing`
 - **Summary:** 参与率、冲击示意、TWAP/VWAP直觉。
 - **Goals:**
@@ -662,7 +663,7 @@
 - **Method tags:** classic: Canvas m12; NYU impact/TCA; QuantStart execution | niche: @sera00111 execution/venue notes
 
 #### `risk-systems-lab` — 风险系统小实验 / Mini risk-systems lab
-- **Hours:** 5h · **Difficulty:** 3/5 · **Basis:** 1.5h concepts + 3h labs + 0.5h quiz
+- **Hours:** 8h · **Difficulty:** 3/5 · **Basis:** 2.5h concepts (Kupiec+Christoffersen+Basel) + 4.5h labs + 1h quiz
 - **Prereqs:** `portfolio-risk-sizing`, `execution-slippage`
 - **Summary:** 数据缺口暂停、回撤降仓、密钥不进git。
 - **Goals:**
@@ -681,6 +682,31 @@
   - 三道硬约束演示通过。
 - **Method tags:** classic: Canvas m13 bits; ML4T ops | niche: Cookbook/Qbot config ideas
 
+
+#### `market-regimes-crisis` — 市场状态与危机剧本 / Market regimes & crisis playbooks
+- **Hours:** 11h · **Difficulty:** 4/5 · **Basis:** 4.5h concepts + 5h labs + 1.5h quiz/review
+- **Prereqs:** `risk-systems-lab`
+- **Summary:** 可操作 regime、因果检测栈、四场景剧本、HMM 过滤 vs 平滑泄漏、熔断识字、新闻≠regime。
+- **Goals:**
+  - 写出可操作、可因果的 regime 定义。
+  - 用 shift(1) 检测栈标出教学路径。
+  - 区分过滤与平滑 HMM；新闻日 ≠ 已定义 regime。
+- **Must-teach:**
+  - 状态输入一律滞后；平滑概率禁止用于决策。
+  - 四剧本各含失败模式；Moreira–Muir vs Cederburg 波动管理识字。
+  - 美股熔断 7/13/20% 与 2016 A 股熔断暂停 = 机制 ≠ 信号。
+- **Exercises:**
+  - 因果标签路径 + 急跌窗命中率。
+  - 固定 / 波动目标 / DD 刹车：只比 vol 与 maxDD。
+  - 相关→1 压力 PnL；HMM 过滤 vs 平滑。
+- **Quiz topics:**
+  - 因果滞后与平滑泄漏
+  - 危机 vs 普通回调
+  - 熔断 / 新闻 ≠ 交易信号
+- **Completion criteria:**
+  - 四场景卡片 + 实验数字一致 + 新闻≠regime 短文。
+- **Method tags:** classic: Hamilton 1989; NYSE Rule 7.12; CPPI literacy | niche: CSRC/SSE 2016 suspension | frontier: Moreira–Muir 2017 JF; Cederburg et al. 2020 JFE
+
 ### P7 · 纸面与伦理（Paper trading & ethics）— 14h / 2 课
 
 **阶段目标：** 纸面闭环与合规/研究伦理。
@@ -688,8 +714,8 @@
 **6h/周 ≈ 2.3 周；12h/周 ≈ 1.2 周。**
 
 #### `paper-trading-infra` — 纸面交易与迷你基建 / Paper trading & mini infra
-- **Hours:** 10h · **Difficulty:** 3/5 · **Basis:** 3h design + 6h running/logging + 1h template
-- **Prereqs:** `risk-systems-lab`
+- **Hours:** 14h · **Difficulty:** 3/5 · **Basis:** 3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map
+- **Prereqs:** `market-regimes-crisis`
 - **Summary:** 信号→目标→日志；≥5日；冻结版本。
 - **Goals:**
   - CSV纸面撮合。
@@ -905,3 +931,8 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - Public-data metaorder impact challenge (arXiv:2501.17096) → `execution-slippage` (+ one-line `microstructure-orders`). Protocol/warn; NO calibrate-α-for-alpha; no LOB HFT.
 - Rewrite-harder: execution-slippage 「跑赢 VWAP」→「高于 VWAP」 / beat→above; factor-portfolio-lab toy net_SR≈3.67/4.36 hardened as synthetic MU not live edge.
 - Hours: **344 full / 324 skip-P0** (~+11h from enrich5 tip ebd4b35). Quality pause after this pack — no enrich7 unless new brief.
+
+### market-regimes-crisis (new lesson)
+- New P6 lesson after `risk-systems-lab` (+11h): operational regimes, causal detectors, four playbooks, Hamilton filter vs smoother leak, MWCB/2016 CN halt literacy, 2026-11-05 news≠regime box (CNBC/AP verified).
+- Fixed `portfolio-risk-sizing` table/opener inconsistency → **22h** (aligned with curriculum.ts).
+- Hours: **355 full / 335 skip-P0**; lessonCount 28.

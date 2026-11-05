@@ -56,13 +56,13 @@ export const COURSE_META = {
     zh: "阶段由知识依赖簇导出，不是月历格子",
     en: "Phases come from dependency clusters, not a calendar grid",
   },
-  hoursFull: 344,
-  hoursSkipFoundations: 324,
+  hoursFull: 355,
+  hoursSkipFoundations: 335,
   hoursRangeLabel: {
-    zh: "精确 344h 全量 / 324h 跳过 P0（对外约 320–360h / 300–340h）",
-    en: "Exact 344h full / 324h skip P0 (public range ~320–360h / 300–340h)",
+    zh: "精确 355h 全量 / 335h 跳过 P0（对外约 330–370h / 310–350h）",
+    en: "Exact 355h full / 335h skip P0 (public range ~330–370h / 310–350h)",
   },
-  lessonCount: 27,
+  lessonCount: 28,
   phaseCount: 10,
 };
 
@@ -1132,6 +1132,58 @@ const phase_P6_lessons: Lesson[] = [
       { id: "done1", text: { zh: "三道硬约束演示通过。", en: "Three hard-constraint demos pass." } },
     ],
   },
+  {
+    slug: "market-regimes-crisis",
+    status: "ready",
+    title: { zh: "市场状态与危机剧本", en: "Market regimes & crisis playbooks" },
+    summary: {
+      zh: "可操作regime、因果检测栈、四场景剧本、HMM过滤vs平滑泄漏、熔断识字、新闻≠regime。",
+      en: "Operational regimes, causal detector stack, four playbooks, HMM filter vs smoother leak, circuit-breaker literacy, news≠regime.",
+    },
+    hours: 11,
+    difficulty: 4,
+    skippable: false,
+    hourBasis: "4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review",
+    prereqs: ["risk-systems-lab"],
+    goals: [
+      { zh: "写出可操作、可因果的regime定义。", en: "Write an operational, causal regime definition." },
+      { zh: "用shift(1)检测栈标出教学路径。", en: "Label a teaching path with a shift(1) detector stack." },
+      { zh: "区分过滤与平滑HMM；新闻日≠已定义regime。", en: "Separate filtered vs smoothed HMM; news day ≠ defined regime." },
+    ],
+    mustTeach: [
+      { zh: "状态输入一律滞后；平滑概率禁止用于决策。", en: "Lag all state inputs; ban smoothed probs for decisions." },
+      { zh: "四剧本：上涨/普通回调vs危机/急跌/震荡，各含失败模式。", en: "Four playbooks: rally / pullback-vs-crisis / crash / range — each with failure modes." },
+      { zh: "Moreira–Muir 2017 vs Cederburg 2020：波动目标是风险工程不是课程alpha。", en: "Moreira–Muir 2017 vs Cederburg 2020: vol targeting is risk engineering, not course alpha." },
+      { zh: "美股熔断7/13/20%与2016 A股熔断暂停=机制识字≠信号。", en: "US MWCB 7/13/20% and 2016 A-share halt suspension = mechanism literacy ≠ signals." },
+    ],
+    exercises: [
+      { zh: "因果标签路径+急跌窗命中率。", en: "Causal label path + crash-window hit-rate." },
+      { zh: "固定/波动目标/DD刹车：只比vol与maxDD。", en: "Fixed/vol-target/DD brake: vol & maxDD only." },
+      { zh: "相关→1压力PnL。", en: "Corr→1 stress PnL." },
+      { zh: "HMM过滤vs平滑泄漏对照。", en: "HMM filter vs smoother leakage foil." },
+    ],
+    quizTopics: [
+      { zh: "因果滞后与平滑泄漏", en: "Causal lag and smoother leakage" },
+      { zh: "危机vs普通回调", en: "Crisis vs ordinary pullback" },
+      { zh: "熔断/新闻≠交易信号", en: "Circuit breaker/news ≠ trade signal" },
+    ],
+    doneWhen: [
+      { zh: "四场景卡片+实验数字一致+新闻≠regime短文。", en: "Four playbook cards + matching lab numbers + news≠regime note." },
+    ],
+    methodTags: {
+      classic: ["Hamilton 1989 Econometrica", "NYSE Rule 7.12 MWCB", "CPPI gap/cash-lock literacy"],
+      niche: ["CSRC/SSE 2016 circuit-breaker suspension"],
+      frontier: ["Moreira-Muir 2017 JF", "Cederburg et al. 2020 JFE"],
+    },
+    tasks: [
+      { id: "ex1", text: { zh: "因果标签路径+急跌窗命中率。", en: "Causal label path + crash-window hit-rate." } },
+      { id: "ex2", text: { zh: "固定/波动目标/DD刹车：只比vol与maxDD。", en: "Fixed/vol-target/DD brake: vol & maxDD only." } },
+      { id: "ex3", text: { zh: "相关→1压力PnL。", en: "Corr→1 stress PnL." } },
+      { id: "ex4", text: { zh: "HMM过滤vs平滑泄漏对照。", en: "HMM filter vs smoother leakage foil." } },
+      { id: "ex5", text: { zh: "四场景三栏卡片（无买卖推荐）。", en: "Four playbook three-column cards (no trade advice)." } },
+      { id: "done1", text: { zh: "硬规则+排伪+新闻≠regime短文。", en: "Hard rules + debunk + news≠regime note." } },
+    ],
+  },
 ];
 
 const phase_P7_lessons: Lesson[] = [
@@ -1147,7 +1199,7 @@ const phase_P7_lessons: Lesson[] = [
     difficulty: 3,
     skippable: false,
     hourBasis: "3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map",
-    prereqs: ["risk-systems-lab"],
+    prereqs: ["market-regimes-crisis"],
     goals: [
       { zh: "CSV/模拟撮合与冻结版本。", en: "CSV/sim matching with frozen version." },
       { zh: "出日报并对账。", en: "Emit daily logs and reconcile." },
