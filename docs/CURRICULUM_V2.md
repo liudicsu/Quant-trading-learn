@@ -926,7 +926,7 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 
 ## Enrich6 (Phase B LIGHT) mapping notes
 
-- Mask-first / upstream contamination (arXiv:2507.07107) → `data-cleaning` (+ pointer `costs-in-backtest`; quiz bridge `ml-leakage-control`). Boolean mask contract only; REJECT paper Sharpe 2.05/1.63 / 213-factor / AdjMSE as course alpha.
+- Mask-first / upstream contamination (arXiv:2507.07107) → `data-cleaning` (+ pointer `costs-in-backtest`; quiz bridge `ml-leakage-control`). mask-first optional conservative protocol only; REJECT paper Sharpe 2.05/1.63 / 213-factor / AdjMSE as course alpha.
 - ESMA Supervisory Briefing on Algorithmic Trading ESMA74-1505669079-10311 (2026-02-26 PDF) → `compliance-ethics` (non-binding literacy; Asia peers; not HFT how-to).
 - Public-data metaorder impact challenge (arXiv:2501.17096) → `execution-slippage` (+ one-line `microstructure-orders`). Protocol/warn; NO calibrate-α-for-alpha; no LOB HFT.
 - Rewrite-harder: execution-slippage 「跑赢 VWAP」→「高于 VWAP」 / beat→above; factor-portfolio-lab toy net_SR≈3.67/4.36 hardened as synthetic MU not live edge.

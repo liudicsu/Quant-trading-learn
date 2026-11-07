@@ -452,7 +452,7 @@ const phase_P2_lessons: Lesson[] = [
     methodTags: {
       classic: ["Canvas m4", "QuantStart securities master", "Qlib data layer", "US source map: SEC EDGAR / ALFRED / Ken French / CRSP docs", "Chinese supplement: JoinQuant data docs"],
       niche: ["@pyquantnews 45 APIs (status/2116517809920327801 → public-apis finance)", "OpenBB quantitative docs", "Binance Vision + @sera00111 crypto data notes"],
-      frontier: ["Mask-first / upstream contamination arXiv:2507.07107 (contract+diagnosis only; REJECT headline Sharpes)", "Alt-data awareness; deeper in P8"],
+      frontier: ["Mask-first / upstream contamination arXiv:2507.07107 (optional conservative protocol + diagnosis only; REJECT headline Sharpes)", "Alt-data awareness; deeper in P8"],
     },
     tasks: [
       { id: "ex1", text: { zh: "reindex+缺失断言；完成标准：missing=0 且 ASSERT。", en: "reindex+missingness assert; done when missing=0 and ASSERT." } },

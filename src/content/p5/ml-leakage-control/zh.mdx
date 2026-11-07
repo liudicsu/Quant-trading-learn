@@ -261,7 +261,7 @@ disclaimer: synthetic weak panel — learning only
 <Quiz id="q7-frac" question="玩具里整数 d=1 与分数差分 d≈0.4 主要说明？" options={["费用下降", "两者都可平稳但分数差分保留更多自相关/记忆", "可跳过 purge", "元标签发明方向"]} answer={1} explanation="AFML 第5章平稳–记忆权衡。" />
 <Quiz id="q8-uniq" question="平均唯一性会下调哪些标签的权重？" options={["仅高成交额", "与许多并发事件重叠者", "ADF 失败", "使用 LightGBM"]} answer={1} explanation="AFML 第4章并发标签。" />
 <Quiz id="q9-meta" question="元标签的任务是？" options={["用新方向替换主方向", "过滤何时交易/跳过主方向", "去掉 purge", "只最大化准确率"]} answer={1} explanation="AFML 第3章 — 做与不做。" />
-<Quiz id="q-mask-upstream" question="把 toy 设定为不可执行的涨跌停收盘价先滚均值再删行（2507.07107）最像哪类失败？" options={["纯佣金误差", "上游污染 / 决策时特征泄漏近亲 — 表观 IC↑、可实现夏普↓", "只要波动缩放", "CPCV 替代"]} answer={1} explanation="主机在 data-cleaning；mask-first 契约。REJECT 该文 headline Sharpe。" />
+<Quiz id="q-mask-upstream" question="把 toy 设定为不可执行的涨跌停收盘价先滚均值再删行（2507.07107）最像哪类失败？" options={["纯佣金误差", "上游污染 / 决策时特征泄漏近亲 — 表观 IC↑、可实现夏普↓", "只要波动缩放", "CPCV 替代"]} answer={1} explanation="主机在 data-cleaning；mask-first 可选保守协议。REJECT 该文 headline Sharpe。" />
 
 
 ## 完成标准

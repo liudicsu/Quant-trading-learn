@@ -147,7 +147,7 @@ ASSERTS_OK
 
 触限、暂停只影响第三件事，而且要看方向和数量；它不自动说明这个价格「不存在」或「不能用作信息」。已公开、质量合格的历史成交价是否进入特征，由研究协议决定，不能仅由「当前不可下单」推出信息不可用。美股对应应指**暂停期间不撮合 / 无可执行报价**等明确状态，而不是抹去暂停前的合法成交价。
 
-**布尔 mask-first 契约（本课 toy 协议）：**
+**布尔 mask-first（本课 toy 的可选保守协议）：**
 
 1. 数据加载时分别构造 `obs[t,i]`（决策时已公开）、`quality[t,i]`（质量合格）与 `trade[t,i,side,size]`（toy 设定：非停牌 ∧ 非触限方向 ∧ 过观察期），toy 里可选地合成为保守 `M[t,i]`（见下方三 mask 实验）。
 2. 每个滚动算子**只读** `M=1` 的格子；窗内出现 `M=0` → 输出一并标记不可靠（保守）。
@@ -169,7 +169,7 @@ ASSERT_E optional toy protocol M = obs & quality & trade[buy,100] drops 1 extra 
 three_mask_summary: feature_cells_used 6 of 8; protocol_M_cells 5 of 8
 ```
 
-要点：d1 AAA 已公开且干净，**仍可作为信息**，只是这个方向/数量的单子成交不了；d2 BBB 公开但是错价，不进特征；d3 AAA 干净但决策时尚未发布，不进特征。把三者合成一个保守 `M` 只是本 toy 的**可选研究协议**，不是通用契约。
+要点：d1 AAA 已公开且干净，**仍可作为信息**，只是这个方向/数量的单子成交不了；d2 BBB 公开但是错价，不进特征；d3 AAA 干净但决策时尚未发布，不进特征。把三者合成一个保守 `M` 只是本 toy 的**可选保守协议**，不是通用规则。
 
 ### 五步收盘价草图（实验打印）
 
@@ -195,7 +195,7 @@ three_mask_summary: feature_cells_used 6 of 8; protocol_M_cells 5 of 8
 表观相对可实现 IC 膨胀约 **+394%**（玩具）；幻想夏普 − 可实现 ≈ **2.09**。课内要记住的机制：**脏窗口让涨停追逐看起来可预测；同一信号在可成交约束下塌掉。**
 
 <Callout type="warn" title="排伪 / REJECT">
-**不要**把该文 Sharpe **2.05**（合成）/ **1.63**（真实）、**213 因子**引擎、**AdjMSE** 系统写成课程 edge 或作业目标。本课只收：**Boolean mask-first 契约** + 上游污染诊断。
+**不要**把该文 Sharpe **2.05**（合成）/ **1.63**（真实）、**213 因子**引擎、**AdjMSE** 系统写成课程 edge 或作业目标。本课只收：**mask-first 可选保守协议** + 上游污染诊断。
 </Callout>
 
 
@@ -313,7 +313,7 @@ SYN_MACRO_2 没有发布时间 → 排除
 <Quiz id="q6-infobar" question="美元/成交量 bar 主要改变什么？" options={["券商费用", "从挂钟到活动量的采样时钟", "监管披露", "无风险利率"]} answer={1} explanation="AFML 第2章信息驱动 bar。" />
 <Quiz id="q7-infobar2" question="本课信息 bar 演示是？" options={["高频延迟配方", "合成 tick 上的研究采样对照", "实盘路由", "PIT 替代"]} answer={1} explanation="明确声明非 HFT 配方。" />
 <Quiz id="q9-mask" question="上游污染（2507.07107）的核心失败是？" options={["佣金算错", "被 toy 设定为不可执行的涨跌停收盘价在行过滤前进入滚动算子", "只要复权", "必须用美元 bar"]} answer={1} explanation="事后删行修不了已污染的均值/相关/秩；要用 Boolean mask-first。" />
-<Quiz id="q10-mask2" question="本课对 2507.07107 的 Sharpe 2.05/1.63 立场？" options={["课程必达 alpha", "REJECT — 只教 mask 契约与污染诊断", "替代 PIT", "证明 213 因子"]} answer={1} explanation="排伪：headline Sharpe / 因子引擎不作课程 edge。" />
+<Quiz id="q10-mask2" question="本课对 2507.07107 的 Sharpe 2.05/1.63 立场？" options={["课程必达 alpha", "REJECT — 只教 mask-first 可选保守协议与污染诊断", "替代 PIT", "证明 213 因子"]} answer={1} explanation="排伪：headline Sharpe / 因子引擎不作课程 edge。" />
 <Quiz id="q8-cryptopit" question="Crypto PIT 审计先于 alpha（2608.25348 指针）要求？" options={["同 bar 成交 OK", "禁止同 bar；资金费率滞后；禁止回填；OI 谨慎", "忽略可得性时间", "总是使用 OI"]} answer={1} explanation="可得性掩码清单；完整实验见 P8 TSFM/crypto。" />
 <Quiz id="q9-ciz" question="Ken French 官网说明，2025 年 1 月起使用的 CRSP CIZ 文件中，月收益如何计算？" options={["逐月持有期收益、分红月末再投资", "日收益复利、分红在除息日再投资", "只算价格变化，不含分红", "与旧版完全相同"]} answer={1} explanation="官网原文：CIZ 月收益是日收益复利，分红在除息日再投资；旧版 FIZ 是月末再投资。所以要记录数据版本。" />
 <Quiz id="dc-fred" question="某 FRED series 标注为公有领域，这意味着？" options={["可以随意缓存并训练模型", "仍须核对 FRED/ALFRED 服务/API 条款；官方条款对缓存、模型训练等列有限制", "必须付费", "数据不准"]} answer={1} explanation="R16：series 权利 ≠ 服务条款。" />
@@ -323,7 +323,7 @@ SYN_MACRO_2 没有发布时间 → 排除
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅契约+诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  

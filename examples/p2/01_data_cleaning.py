@@ -163,7 +163,7 @@ print("toy_counts", {"time50": len(time_bars), "vol200": len(vol_bars), "dollar"
 
 # --- Mask-first / upstream contamination toy (arXiv:2507.07107 spirit) ---
 # Learning only. HARD REJECT paper Sharpe 2.05/1.63, 213-factor engine, AdjMSE as course alpha.
-print("\n=== mask-first / upstream contamination (arXiv:2507.07107; OPTIONAL conservative toy protocol) ===")
+print("\n=== mask-first / upstream contamination (arXiv:2507.07107; optional conservative protocol (toy)) ===")
 print("protocol_label: this toy DELIBERATELY sets limit rows as non-executable and combines obs/quality/trade into one conservative M; not a market law (see three-mask section below)")
 print("cite: https://arxiv.org/abs/2507.07107 — upstream contamination: limit closes enter rolling ops BEFORE row filter")
 print("paper_ablation_cite: no-mask apparent IC +18% while realised Sharpe −0.44 vs full mask (author ablation)")
@@ -257,7 +257,7 @@ print(
     "realisable fill on the same features collapses — under this toy protocol the combined M refuses closes the toy marks non-executable."
 )
 print(
-    "toy_protocol_M: M[t,i] = obs AND quality AND trade (toy-set; conservative research choice, not a general contract); rolling ops here ignore M=0; "
+    "toy_protocol_M: M[t,i] = obs AND quality AND trade (toy-set; conservative research choice, not a general rule); rolling ops here ignore M=0; "
     "post-hoc row drop CANNOT un-poison aggregates already computed."
 )
 

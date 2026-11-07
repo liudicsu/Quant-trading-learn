@@ -169,7 +169,7 @@ ASSERT_E optional toy protocol M = obs & quality & trade[buy,100] drops 1 extra 
 three_mask_summary: feature_cells_used 6 of 8; protocol_M_cells 5 of 8
 ```
 
-Takeaways: d1 AAA is public and clean, so it **still counts as information**, even though an order of that side/size cannot be filled; d2 BBB is public but a bad print, so it stays out of features; d3 AAA is clean but not yet released at decision time, so it stays out. Combining all three into one conservative `M` is only this toy’s **optional research protocol**, not a general contract.
+Takeaways: d1 AAA is public and clean, so it **still counts as information**, even though an order of that side/size cannot be filled; d2 BBB is public but a bad print, so it stays out of features; d3 AAA is clean but not yet released at decision time, so it stays out. Combining all three into one conservative `M` is only this toy’s **optional conservative protocol**, not a general rule.
 
 ### Five-close sketch (lab printout)
 
@@ -195,7 +195,7 @@ Synthetic T=750×N=120; 10-day momentum. **Toy ≠ paper tables:**
 Apparent vs realisable IC inflate ≈ **+394%** (toy); fantasy−realisable Sharpe gap ≈ **2.09**. Keep the mechanism: **dirty windows make limit-chasing look predictable; the same signal collapses under fillability.**
 
 <Callout type="warn" title="Debunk / REJECT">
-Do **not** ship the paper's Sharpe **2.05** (synthetic) / **1.63** (real), **213-factor** engine, or **AdjMSE** system as course edge. Keep only the **Boolean mask-first contract** + contamination diagnosis.
+Do **not** ship the paper's Sharpe **2.05** (synthetic) / **1.63** (real), **213-factor** engine, or **AdjMSE** system as course edge. Keep only the **mask-first optional conservative protocol** + contamination diagnosis.
 </Callout>
 
 
@@ -311,7 +311,7 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 <Quiz id="q6-infobar" question="Dollar/volume bars mainly change?" options={["Broker fees", "The sampling clock from wall-time to activity", "Regulatory filings", "Rf"]} answer={1} explanation="AFML ch.2 information-driven bars." />
 <Quiz id="q7-infobar2" question="This lesson’s info-bar demo is?" options={["An HFT latency recipe", "A research sampling comparison on synthetic ticks", "A live order router", "A substitute for PIT"]} answer={1} explanation="Explicitly not an HFT recipe." />
 <Quiz id="q9-mask" question="Upstream contamination (2507.07107) fails because?" options={["Commissions wrong", "Limit closes the toy marks non-executable enter rolling ops before row filters", "Adj only", "Must use dollar bars"]} answer={1} explanation="Post-hoc drops cannot un-poison aggregates; use Boolean mask-first." />
-<Quiz id="q10-mask2" question="Course stance on 2507.07107 Sharpe 2.05/1.63?" options={["Required alpha target", "REJECT — teach mask contract + diagnosis only", "Replaces PIT", "Proves 213 factors"]} answer={1} explanation="Debunk: headline Sharpe / factor engine are not course edge." />
+<Quiz id="q10-mask2" question="Course stance on 2507.07107 Sharpe 2.05/1.63?" options={["Required alpha target", "REJECT — teach the mask-first optional conservative protocol + diagnosis only", "Replaces PIT", "Proves 213 factors"]} answer={1} explanation="Debunk: headline Sharpe / factor engine are not course edge." />
 <Quiz id="q8-cryptopit" question="Crypto PIT audit before alpha (2608.25348 pointer) requires?" options={["Same-bar fills OK", "No same-bar; funding lag; no backfill; careful OI", "Ignore availability time", "Always use OI"]} answer={1} explanation="Availability-masked checklist; full lab in P8 TSFM/crypto." />
 <Quiz id="q9-ciz" question="Per Ken French’s site, how are monthly returns built in the CRSP CIZ files used from January 2025?" options={["Month-to-month holding period, dividends reinvested at month-end", "Compounded daily returns, dividends reinvested on ex-dates", "Price change only, no dividends", "Identical to the legacy files"]} answer={1} explanation="Site text: CIZ monthly returns are compounded daily returns with dividends reinvested on ex-dates; legacy FIZ reinvested at month-end. So record the data version." />
 <Quiz id="dc-fred" question="A FRED series is marked public domain. This means?" options={["You may freely cache it and train models", "You still must check the FRED/ALFRED service/API terms, which restrict caching, model training and more", "It must be paid for", "The data is wrong"]} answer={1} explanation="R16: series rights ≠ service terms." />
@@ -321,7 +321,7 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 
 - Rerunnable pipeline + sheet + quizzes  
 
-**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (contract+diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.; Ken French Data Library FIZ→CIZ note ([link](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), verified 2026-11-07).; US data sources (checked 2026-11-08): [FRED terms](https://fred.stlouisfed.org/legal/), [FRED key](https://fred.stlouisfed.org/docs/api/api_key.html), [ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html), [EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces), [Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), [CRSP](https://www.crsp.org/research/crsp-us-stock-databases/), [yfinance](https://github.com/ranaroussi/yfinance), [Massive](https://massive.com/stocks), [Alpaca](https://docs.alpaca.markets/docs/about-market-data-api), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).
+**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (optional conservative protocol + diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.; Ken French Data Library FIZ→CIZ note ([link](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), verified 2026-11-07).; US data sources (checked 2026-11-08): [FRED terms](https://fred.stlouisfed.org/legal/), [FRED key](https://fred.stlouisfed.org/docs/api/api_key.html), [ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html), [EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces), [Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), [CRSP](https://www.crsp.org/research/crsp-us-stock-databases/), [yfinance](https://github.com/ranaroussi/yfinance), [Massive](https://massive.com/stocks), [Alpaca](https://docs.alpaca.markets/docs/about-market-data-api), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).
 
 <Summary>
 **Takeaways** (incl. mask-first): hashes, survivorship, PIT, timezone look-ahead, adj declarations.  

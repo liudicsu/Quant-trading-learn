@@ -61,7 +61,7 @@ teach: time bars sample the clock; tick/volume/dollar bars sample activity — b
 intuition: if news hits and 1000 trades arrive in one minute, time bars still emit one 1-min bar, while tick/volume/dollar bars emit many — returning the series closer to an 'information clock'.
 toy_counts {'time50': 100, 'vol200': 241, 'dollar': 231}
 
-=== mask-first / upstream contamination (arXiv:2507.07107; OPTIONAL conservative toy protocol) ===
+=== mask-first / upstream contamination (arXiv:2507.07107; optional conservative protocol (toy)) ===
 protocol_label: this toy DELIBERATELY sets limit rows as non-executable and combines obs/quality/trade into one conservative M; not a market law (see three-mask section below)
 cite: https://arxiv.org/abs/2507.07107 — upstream contamination: limit closes enter rolling ops BEFORE row filter
 paper_ablation_cite: no-mask apparent IC +18% while realised Sharpe −0.44 vs full mask (author ablation)
@@ -76,7 +76,7 @@ toy_SR_realisable_contam 0.914
 toy_SR_mask_first 0.814
 toy_SR_gap_fantasy_minus_realisable 2.093
 teach: contaminated rolling features make limit-chasing look predictive (high apparent IC / fantasy SR); realisable fill on the same features collapses — under this toy protocol the combined M refuses closes the toy marks non-executable.
-toy_protocol_M: M[t,i] = obs AND quality AND trade (toy-set; conservative research choice, not a general contract); rolling ops here ignore M=0; post-hoc row drop CANNOT un-poison aggregates already computed.
+toy_protocol_M: M[t,i] = obs AND quality AND trade (toy-set; conservative research choice, not a general rule); rolling ops here ignore M=0; post-hoc row drop CANNOT un-poison aggregates already computed.
 
 === rolling MA contamination sketch (5 closes) ===
 closes [10.0, 10.1, 10.2, 11.2, 10.3]
