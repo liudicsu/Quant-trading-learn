@@ -1,3 +1,5 @@
+> **Historical V1 document (archived).** Superseded by `docs/CURRICULUM_V2.md`; numbers here are out of date.
+
 # Batch A Report — Quant-trading-learn
 
 **Date:** 2026-11-04 (Asia/Shanghai)  

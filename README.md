@@ -10,7 +10,7 @@ Phases P0–P9 from knowledge dependencies (`src/lib/curriculum.ts`, `docs/CURRI
 
 Routes: `/[locale]/phase/<phaseSlug>/<lessonSlug>`.
 
-**Written so far:** full bodies for **P0–P9** (zh+en), 27 lessons.
+**Written so far:** full bodies for **P0–P9** (zh+en), 28 lessons.
 
 ## Develop
 
