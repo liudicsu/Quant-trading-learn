@@ -1,0 +1,10 @@
+A) required fields: 20 missing: []
+B) fixture sha256 prefix: e7bcfd447dbd matches_contract: True
+C) market: True
+C) currency: True
+C) no_live_download: True
+C) historical_universe: True
+C) paper_ne_live: True
+C) short_mode_declared: True
+D) source_mode = fixture | fallback_reason = offline lab: no network downloads allowed (R16)
+E) contract_ok = True

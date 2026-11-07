@@ -1,6 +1,6 @@
 ## Learning goals
 
-This capstone (~**24 hours**: 6h design/data + 10h backtest/OOS + 4h paper + 4h writing) is an **end-to-end honest small strategy** that stitches every prior phase: hypothesis → PIT data → walk-forward with the **shared cost model** → **DSR counting ALL trials on the same series used for the decision** → risk sizing/limits → execution/TCA estimate → paper plan with **independent-ledger reconciliation** (injected break) and a compliance checklist → a written research-report template, plus a **grading rubric** for *your* pack. Prereqs: `paper-trading-infra`, `compliance-ethics`, `factor-workflow`, `portfolio-risk-sizing`.
+This capstone (~**26 hours**: 6h design/data + 10h backtest/OOS + 4h paper + 4h writing + 2h US research contract) is an **end-to-end honest small strategy** that stitches every prior phase: hypothesis → PIT data → walk-forward with the **shared cost model** → **DSR counting ALL trials on the same series used for the decision** → risk sizing/limits → execution/TCA estimate → paper plan with **independent-ledger reconciliation** (injected break) and a compliance checklist → a written research-report template, plus a **grading rubric** for *your* pack. Prereqs: `paper-trading-infra`, `compliance-ethics`, `factor-workflow`, `portfolio-risk-sizing`.
 
 **Goals:** deliver a reproducible research pack; include cost sensitivity and sealed OOS; attach paper logs and limitations.
 
@@ -131,6 +131,19 @@ DONE capstone lab 01
 7. Treating positive RankIC as proof of edge after costs.
 8. Sizing impact with same-bar realized volatility (look-ahead).
 
+## US research contract (default scope)
+
+The capstone defaults to `market=US-equity`, `currency=USD`. Before coding, write a JSON contract; `examples/p9/02_us_research_contract.py` validates it offline (`examples/p9/us_research_contract.json`). Fields: session scope, source/feed/licence, snapshot hash, adjustment and dividend policy, historical universe (against survivorship), availability-time rule, calendar/rule version (write `needs_broker_verification` when FINRA 26-10 migration is unknown), short-borrow mode, benchmark/risk-free/cost, paper ≠ live, and `source_mode` / `fallback_reason`.
+
+```text
+required fields: 20 missing: []
+fixture sha256 matches_contract: True
+source_mode = fixture | fallback_reason = offline lab: no network downloads allowed (R16)
+contract_ok = True
+```
+
+An A-share or HK project is allowed as a **comparison extension**, with its own contract.
+
 ## Practice (1:1 with checklist)
 
 1. **ex1** — Write a one-page hypothesis (claim, H0, PIT rule, decision rule, disclaimer). **Done when:** JSON/markdown matches the five fields in the lab brief.
@@ -141,6 +154,7 @@ DONE capstone lab 01
 6. **ex6** — ≥5-day (lab: 65-session) paper with independent ledger; prove an injected break is detected. **Done when:** date + abs_diff printed.
 7. **ex7** — Fill the research-report template + self-score the rubric below. **Done when:** every Must row is Pass or an explicit Gap with a fix plan.
 8. **done1** — Capstone pack meets all **Must** rubric rows (honesty/engineering — profits not required).
+9. **ex-us-contract** — change one byte of the fixture and rerun the contract check; **done when**: `matches_contract: False` and `contract_ok = False`, then restore it.
 
 ## Grading rubric (learner’s own capstone)
 
@@ -170,6 +184,7 @@ DONE capstone lab 01
 <Quiz id="p9-q5" question="Capstone grading prioritizes?" options={["Highest SR wins", "Honesty and engineering; profits are not required", "Most LEAK foils", "Shortest report"]} answer={1} explanation="Rubric weight on PIT, DSR(N), recon — not profits." />
 <Quiz id="p9-q6" question="Look-ahead in TCA sizing is?" options={["Using lagged/ex-ante σ", "Using same-bar realized σ to set impact", "Stating participation", "Logging arrival price"]} answer={1} explanation="Impact must use information available before the trade." />
 <Quiz id="p9-q7" question="FINRA Notice 26-10 in this curriculum?" options={["Irrelevant forever", "PDT successor awareness — effective 2026-06-04; know venue rules", "Guarantees retail profits", "Replaces DSR"]} answer={1} explanation="Compliance checklist item — learning awareness, not legal advice." />
+<Quiz id="cap-contract" question="What does source_mode=fixture mean in the contract?" options={["Data downloaded live", "An offline self-made fixture, no real downloads", "Commercially licensed", "Equals live"]} answer={1} explanation="fallback_reason gives the reason (R16)." />
 
 ## Done when
 

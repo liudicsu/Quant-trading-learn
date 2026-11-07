@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**7 hours**: 3h concepts + 3h exercises + 1h quiz) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
+This lesson (~**9 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution)) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
 
 **Goals:** hand-calc mid and market-buy bps; write a fill/cost sheet; compare close vs next-open (and shift) narratives.
 
@@ -88,6 +88,27 @@ ASSERTS_OK
 
 **Bridge (deepened in `execution-slippage`):** public-tape metaorder impact estimates often miss real concave/reversion facts — [arXiv:2501.17096](https://arxiv.org/abs/2501.17096); this lesson stays at spread/fill intuition, no LOB recipe.
 
+## US main line: settlement, accounts, quotes and sessions (checked 2026-11-08)
+
+**Default scope:** US-listed stocks, USD. This is mechanism literacy, not broker rules or investment advice.
+
+- **T+1:** since 2024-05-28 most US securities trades settle **one business day** after the trade date ([SEC](https://www.sec.gov/newsroom/press-releases/2024-62)). It is not “24 hours”, and it does not mean you cannot sell the same day. Weekends and exchange holidays are not business days.
+- **Cash vs margin account:** a cash account buys with settled funds; a margin account borrows from the broker and has maintenance margin. The PDT successor rule and its phase-in are in `compliance-ethics` (not repeated here).
+- **NBBO / SIP / IEX:** the NBBO is the consolidated **best bid + best offer** across exchanges; the SIP is the processor that publishes consolidated data. A single venue (e.g. IEX) can show a wider spread than the NBBO.
+- **Rule 611 (Order Protection Rule) status box:** on 2026-06-11 the SEC issued a **proposal** to rescind Rule 611 (S7-2026-20, Release 34-105655, comments due 2026-08-17); as of 2026-11-08 it is still a proposal and the eCFR still lists §242.611. **Do not write “repealed”** ([SEC](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)).
+- **Sessions:** NYSE core trading is 09:30–16:00 New York time (ET); early close 13:00 on 2026-11-27; closed 2026-07-03 (Independence Day observed) ([NYSE](https://www.nyse.com/markets/hours-calendars)). Pre/post-market hours vary by venue and broker: **do not assume a uniform 04:00 start**, or 24/5.
+- **Best execution:** FINRA 21-23 notes Rule 5310 best execution is **not solely about price** ([FINRA](https://www.finra.org/rules-guidance/notices/21-23)).
+
+**Lab:** `examples/p1/05_us_market_mechanics.py` (local synthetic data only):
+
+```text
+T+1: 2026-07-02 -> 2026-07-06; 2026-11-25 -> 2026-11-27; 2026-11-27 -> 2026-11-30
+Shanghai time: 07-06 21:30→04:00; 12-07 22:30→05:00; 11-27 early close 22:30→11-28 02:00; 07-03 closed
+NBBO 99.99 x100 / 100.02 x100; single-venue spread 0.07 vs NBBO 0.03; 500-share buy averages 100.0320
+```
+
+Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
+
 ## Common mistakes / pitfalls
 
 1. Treating mid as the market-buy fill.
@@ -95,6 +116,7 @@ ASSERTS_OK
 3. Pretending the spread is “not a cost.”
 4. Treating toy bps as a real exchange schedule.
 5. Asking for / designing HFT recipes (out of scope).
+6. Treating T+1 as “24 hours” or settling a Friday trade on Saturday; calling the Rule 611 rescission proposal “repealed”; assuming pre-market always starts at 04:00.
 
 ## Practice (1:1 with the checklist)
 
@@ -103,6 +125,7 @@ ASSERTS_OK
 3. **ex3** — Contrast same-bar vs shift(1)/next-open in prose; **done when** LOOK-AHEAD is named.
 4. **ex4** — Run the script; **done when** optimistic vs honest NAVs match the lesson.
 5. **ex5** — Why impact/latency stay intuitive only; **done when** ≥2 sentences refuse an HFT recipe.
+6. **ex-us1** — run `05_us_market_mechanics.py`, hand-compute settlement for the 2026-11-25 and 2026-11-27 trades and compare; **done when**: both match and you can explain skipping Thanksgiving (2026-11-26).
 
 ## Quiz
 
@@ -111,13 +134,15 @@ ASSERTS_OK
 <Quiz id="q3-spr" question="Half-spread vs mid is?" options={["Income", "A hidden trading cost", "Alpha", "Beta"]} answer={1} explanation="Crossing the spread is a cost." />
 <Quiz id="q4-lh" question="Main problem with same-bar close signal earning close return?" options={["Too slow", "LOOK-AHEAD / over-optimism", "Sharpe formula wrong", "Futures required"]} answer={1} explanation="Information time overlaps the return window." />
 <Quiz id="q5-hft" question="This lesson’s stance on impact/latency?" options={["Ship HFT parameters", "Intuition only — no HFT recipes", "Ignore them", "Same as commissions"]} answer={1} explanation="Course boundary: intuition, not recipes." />
+<Quiz id="mo-t1" question="A US trade on 2026-11-25 (Wed) settles T+1 on?" options={["2026-11-26", "2026-11-27", "2026-11-30", "Same day"]} answer={1} explanation="11-26 is Thanksgiving; the next business day is 11-27." />
+<Quiz id="mo-611" question="As of 2026-11-08, Rule 611 is?" options={["Repealed", "Subject to an SEC rescission proposal, still a proposal", "Never existed", "A-share only"]} answer={1} explanation="S7-2026-20 is a proposal; the eCFR still lists §242.611." />
 
 ## Done when
 
 - Cost one-pager + script + quizzes
 - You can explain mid / market side / same-bar look-ahead
 
-**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer).
+**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer).; US main line (checked 2026-11-08): [SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62), [NYSE hours](https://www.nyse.com/markets/hours-calendars), [SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).
 
 <Summary>
 **Takeaways**: mid, market-buy bps, honest fill timing, cost sheet.  

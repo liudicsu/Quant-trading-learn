@@ -1,0 +1,9 @@
+{"_note": "HAND-MADE fixture shaped like ALFRED observations with realtime_start/realtime_end. Not real FRED/ALFRED data; no API call, no cache.",
+ "series_id": "SYN_MACRO_1",
+ "observations": [
+  {"date": "2026-04-01", "realtime_start": "2026-05-01", "realtime_end": "2026-05-31", "value": 2.0},
+  {"date": "2026-04-01", "realtime_start": "2026-06-01", "realtime_end": "2026-06-30", "value": 2.3},
+  {"date": "2026-04-01", "realtime_start": "2026-07-01", "realtime_end": "9999-12-31", "value": 2.4},
+  {"date": "2026-05-01", "realtime_start": "2026-06-01", "realtime_end": "9999-12-31", "value": 2.1}
+ ],
+ "no_release_time_series": {"series_id": "SYN_MACRO_2", "date": "2026-05-01", "value": 7.0, "realtime_start": null}}

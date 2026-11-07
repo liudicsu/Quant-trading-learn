@@ -1,61 +1,137 @@
-=== official sources checklist (checked Asia/Shanghai 2026-11-04) ===
-NOT LEGAL ADVICE — rules change; re-read the current official text before acting.
-[OK] csrc_2024_8: 证券市场程序化交易管理规定（试行）
-    https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html
-    verified: Effective 2024-10-08; programmatic trading = computer-generated/routed orders; report-before-trade; exchange sets abnormal thresholds; HFT features delegated to exchanges.
-[OK] csrc_2025_12_futures: 期货市场程序化交易管理规定（试行）
-    https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html
-    verified: Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml
-[OK] sse_faq_2025_04_03: 上交所就正式发布程序化交易管理实施细则答记者问
-    https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml
-    verified: 细则自2025-07-07施行; 高频认定: 单账户每秒申报撤单合计最高≥300笔, 或全日≥20000笔; 四类异常行为构成要件说明.
-[OK] szse_细则_pdf: 深圳证券交易所程序化交易管理实施细则
-    https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf
-    verified: 自2025-07-07施行; 第33条高频: 每秒≥300笔或单日≥20000笔; 第18条四类异常监控类型.
-[OK] szse_release_notice: 关于发布《深圳证券交易所程序化交易管理实施细则》的通知
-    https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html
-    verified: 发布日2025-04-03; 施行2025-07-07.
-[OK] sec_15c3_5: 17 CFR 240.15c3-5 Market Access Rule
+=== official sources ledger (US first; comparisons labelled) ===
+NOT LEGAL/TAX ADVICE. This script prints a LOCAL ledger; it does NOT fetch URLs.
+checked_on = date the author read the page; re-check the official text before relying on it.
+[US] sec_15c3_5: 17 CFR 240.15c3-5 Market Access Rule
     https://www.ecfr.gov/current/title-17/chapter-II/part-240/subject-group-ECFRc8401dcba174f73/section-240.15c3-5
-    verified: Pre-trade credit/capital & erroneous-order controls; regulatory controls; exclusive BD control; ≥annual review + CEO cert.
-[OK] reg_sho_201: 17 CFR 242.201 Regulation SHO circuit breaker
+    checked_on=2026-11-04 effective_from=see source status=in force per source text on checked_on
+    summary: Pre-trade credit/capital & erroneous-order controls; regulatory controls; exclusive BD control; ≥annual review + CEO cert.
+[US] reg_sho_201: 17 CFR 242.201 Regulation SHO circuit breaker
     https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201
-    verified: 10% decline from prior-day listing-market close → short sale ≤ NBB restricted for rest of day + next day.
-[OK] finra_4210: FINRA Rule 4210 Margin Requirements
+    checked_on=2026-11-04 effective_from=see source status=in force per source text on checked_on
+    summary: 10% decline from prior-day listing-market close → short sale ≤ NBB restricted for rest of day + next day.
+[US] finra_4210: FINRA Rule 4210 Margin Requirements
     https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210
-    verified: Current rule text includes IML / intraday margin deficit definitions (a)(17)-(19) and (d)(2).
-[OK] finra_26_10: Regulatory Notice 26-10 (intraday margin replaces PDT)
+    checked_on=2026-11-04 effective_from=see source status=in force per source text on checked_on
+    summary: Current rule text includes IML / intraday margin deficit definitions (a)(17)-(19) and (d)(2).
+[US] finra_26_10: Regulatory Notice 26-10 (intraday margin replaces PDT)
     https://www.finra.org/rules-guidance/notices/26-10
-    verified: Published 2026-04-20; effective 2026-06-04; phase-in to 2027-10-20; replaces pattern day trader count + $25,000 minimum equity with intraday margin standards.
-[OK] finra_26_11: Regulatory Notice 26-11 (IMD/IML interpretations for intraday margin)
+    checked_on=2026-11-08 effective_from=2026-06-04 status=adopted; effective; member phase-in to 2027-10-20
+    summary: Published 2026-04-20; effective 2026-06-04; phase-in to 2027-10-20; replaces pattern day trader count + $25,000 minimum equity with intraday margin standards.
+[US] finra_26_11: Regulatory Notice 26-11 (IMD/IML interpretations for intraday margin)
     https://www.finra.org/rules-guidance/notices/26-11
-    verified: Published 2026-05-19; effective 2026-06-04. Publishes Rule 4210 interpretations for new intraday margin: IML (intraday margin level) and IMD (intraday margin deficit = abs of largest negative IML). Deletes obsolete PDT day-trading interpretations. PDF: https://www.finra.org/sites/default/files/2026-05/Regulatory-Notice-26-11.pdf
-[OK] finra_15_09: Regulatory Notice 15-09 Algorithmic trading supervision
+    checked_on=2026-11-04 effective_from=2026-06-04 status=in force per source text on checked_on
+    summary: Published 2026-05-19; effective 2026-06-04. Publishes Rule 4210 interpretations for new intraday margin: IML (intraday margin level) and IMD (intraday margin deficit = abs of largest negative IML). Deletes obsolete PDT day-trading interpretations. PDF: https://www.finra.org/sites/default/files/2026-05/Regulatory-Notice-26-11.pdf
+[US] finra_15_09: Regulatory Notice 15-09 Algorithmic trading supervision
     https://www.finra.org/rules-guidance/notices/15-09
-    verified: Published 2015-03-26; five practice areas; references SEA 15c3-5 and Reg SHO.
-[OK] pbc_2021_237: 关于进一步防范和处置虚拟货币交易炒作风险的通知 银发〔2021〕237号
-    https://www.gov.cn/zhengce/zhengceku/2021-10/08/content_5641404.htm
-    verified: Dated 2021-09-15; virtual currency not legal tender; related businesses illegal financial activities; offshore exchanges serving PRC residents likewise prohibited.
-[OK] sec_cftc_2025_09_02: SEC-CFTC Joint Staff Statement (Project Crypto / Crypto Sprint)
+    checked_on=2026-11-04 effective_from=see source status=in force per source text on checked_on
+    summary: Published 2015-03-26; five practice areas; references SEA 15c3-5 and Reg SHO.
+[US (crypto)] sec_cftc_2025_09_02: SEC-CFTC Joint Staff Statement (Project Crypto / Crypto Sprint)
     https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225
-    verified: Staff statement 2025-09-02 (not Commission rule); view that law does not prohibit registered exchanges facilitating certain spot crypto products; explicitly non-binding.
-[OK] hkex_nb_program_trading_2026: Northbound Program Trading Reporting (Stock Connect)
-    https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en
-    verified: Mainland NB Program Trading Reporting Requirements effective 2026-01-12; ECP submissions from 2026-01-12; existing investors transition to 2026-04-10; thresholds include automation / fast order rate / many stocks+turnover / customized software (SSE/SZSE separate).
-[OK] sec_withdraw_pda_2025_06: Withdrawal of Proposed Regulatory Actions (incl. PDA conflicts S7-12-23)
+    checked_on=2026-11-04 effective_from=see source status=staff statement (non-binding)
+    summary: Staff statement 2025-09-02 (not Commission rule); view that law does not prohibit registered exchanges facilitating certain spot crypto products; explicitly non-binding.
+[US] sec_withdraw_pda_2025_06: Withdrawal of Proposed Regulatory Actions (incl. PDA conflicts S7-12-23)
     https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions
-    verified: Published 2025-06-17; formally withdraws several 2022–2023 proposals including Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers (File No. S7-12-23; 88 FR 53960). Withdrawal ≠ absence of remaining duties under Advisers Act / Reg BI / firm policies. Not legal advice.
-[OK] sec_fy2026_exam_priorities: SEC Division of Examinations FY2026 Priorities — Emerging Financial Technology / AI
+    checked_on=2026-11-04 effective_from=see source status=proposal withdrawn
+    summary: Published 2025-06-17; formally withdraws several 2022–2023 proposals including Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers (File No. S7-12-23; 88 FR 53960). Withdrawal ≠ absence of remaining duties under Advisers Act / Reg BI / firm policies. Not legal advice.
+[US] sec_fy2026_exam_priorities: SEC Division of Examinations FY2026 Priorities — Emerging Financial Technology / AI
     https://www.sec.gov/about/reports-publications/2026-examination-priorities
-    verified: Published/updated 2025-11-17. Emerging FinTech focus: automated investment tools, AI, trading algorithms/platforms, alt-data. Exams check fair/accurate AI representations; ops vs disclosures; algo advice vs investor profiles; policies to supervise AI in fraud/AML/trading/back-office. Complements PDA-conflicts proposal withdrawal (S7-12-23) — withdrawal ≠ no remaining duties. Not legal advice; date-stamp official pages.
-[OK] finra_2026_genai_agents: FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents (NEW FOR 2026)
+    checked_on=2026-11-04 effective_from=see source status=in force per source text on checked_on
+    summary: Published/updated 2025-11-17. Emerging FinTech focus: automated investment tools, AI, trading algorithms/platforms, alt-data. Exams check fair/accurate AI representations; ops vs disclosures; algo advice vs investor profiles; policies to supervise AI in fraud/AML/trading/back-office. Complements PDA-conflicts proposal withdrawal (S7-12-23) — withdrawal ≠ no remaining duties. Not legal advice; date-stamp official pages.
+[US] finra_2026_genai_agents: FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents (NEW FOR 2026)
     https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai
-    verified: GenAI section NEW FOR 2026. Rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging Agents: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails. Awareness only — not legal advice.
-[OK] sfc_24ec55: Circular to licensed corporations — Use of generative AI language models (24EC55)
+    checked_on=2026-11-04 effective_from=see source status=in force per source text on checked_on
+    summary: GenAI section NEW FOR 2026. Rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging Agents: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails. Awareness only — not legal advice.
+[US] sec_t1_bulletin: New “T+1” Settlement Cycle — Investor Bulletin
+    https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/new-t1-settlement-cycle-what-investors-need-know-investor-bulletin
+    checked_on=2026-11-08 effective_from=2024-05-28 (compliance date) status=in force
+    summary: Most applicable securities transactions settle in one business day after trade date (T+1).
+[US] luld_plan: Limit Up-Limit Down Plan (Amendment 20 text; Amendment 18 removed opening doubling)
+    https://www.luldplan.com/
+    checked_on=2026-11-08 effective_from=Amendment 18: 2020-02-24 status=in force
+    summary: Single-stock dynamic bands (5-min reference price), Tier1 5% / Tier2 10% above $3; 15-s limit state -> pause; regular hours only.
+[US] sec_regsho_page: Key Points About Regulation SHO
+    https://www.sec.gov/investor/pubs/regsho.htm
+    checked_on=2026-11-08 effective_from=see source status=educational page; its T+2 passages are outdated (see T+1 bulletin)
+    summary: Rules 200 marking, 201 price test, 203(b) locate, 204 close-out; short seller pays dividends to lender; unlimited-loss risk.
+[US] finra_21_23: Regulatory Notice 21-23 Best Execution / PFOF
+    https://www.finra.org/rules-guidance/notices/21-23
+    checked_on=2026-11-08 effective_from=see source status=guidance
+    summary: Rule 5310 best execution is not concerned solely with price; NBBO is a reference.
+[US] reg_nms_611_proposal: Proposed rescission of Reg NMS Rules 611 and 610(e) (S7-2026-20)
+    https://www.sec.gov/rules-regulations/2026/06/s7-2026-20
+    checked_on=2026-11-08 effective_from=n/a status=Proposed (Release 34-105655); Rule 611 still in eCFR
+    summary: Proposal only; do not write “repealed”.
+[US tax (cross-border)] irs_w8ben: Instructions for Form W-8BEN
+    https://www.irs.gov/instructions/iw8ben
+    checked_on=2026-11-08 effective_from=see source status=current instructions
+    summary: Given to the withholding agent, not the IRS; 30% on certain US-source income unless reduced by treaty.
+[US/CN treaty] us_china_treaty: US–China Income Tax Treaty (Art. 9 dividends)
+    https://www.irs.gov/pub/irs-trty/china.pdf
+    checked_on=2026-11-08 effective_from=see treaty status=in force per IRS page
+    summary: Source-state tax on dividends to a beneficial owner resident in the other state shall not exceed 10% of gross; conditions apply.
+[US tax] irc_1091: 26 U.S.C. §1091 Wash sales
+    https://uscode.house.gov/us/usc/119-124/t26/s1091/
+    checked_on=2026-11-08 effective_from=see statute status=in force
+    summary: 30 days before to 30 days after the sale (61 calendar days incl. sale date); loss deduction limited.
+[US (data licence)] fred_terms: FRED® Services Terms of Use
+    https://fred.stlouisfed.org/legal/
+    checked_on=2026-11-08 effective_from=see source status=current terms
+    summary: API prohibitions include ML/AI development or training (k) and storing/caching/archiving (l); general prohibition (p).
+[CN tax (cross-border)] cn_iit_law: 中华人民共和国个人所得税法
+    https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html
+    checked_on=2026-11-08 effective_from=see law status=in force
+    summary: 183-day resident test; 20% proportional rate for dividends and property transfer; foreign tax credit capped (Art. 7).
+[CN tax (cross-border)] cn_mof_sat_2020_3: 财政部 税务总局公告2020年第3号（境外所得）
+    https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm
+    checked_on=2026-11-08 effective_from=see source status=in force
+    summary: Separate computation; credit within limit; excess carried 5 years; file 1 Mar–30 Jun next year.
+[CN tax (cross-border)] cn_crs: 金融账户涉税信息自动交换（CRS）
+    https://www.chinatax.gov.cn/chinatax/aeoi_index.html
+    checked_on=2026-11-08 effective_from=see source status=framework page
+    summary: Due diligence + annual reporting + exchange between authorities; differs from US FATCA.
+[CN FX (cross-border)] safe_sh_2026: 国家外汇管理局上海市分局 FAQ（2026，5万美元便利化额度）
+    https://www.safe.gov.cn/shanghai/2026/0402/2412.html
+    checked_on=2026-11-08 effective_from=see source status=FAQ
+    summary: Annual facilitation quota USD 50,000 per person for FX purchase/settlement.
+[CN FX (cross-border)] safe_sx_2018: 国家外汇管理局陕西省分局 FAQ（证券投资用途）
+    https://www.safe.gov.cn/shaanxi/2018/1204/249.html
+    checked_on=2026-11-08 effective_from=see source status=FAQ (narrow conclusion only)
+    summary: Quota FX purchase remitted abroad needs a genuine current-account purpose, which does not include overseas securities investment.
+[CN (A-share comparison)] csrc_2024_8: 证券市场程序化交易管理规定（试行）
+    https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html
+    checked_on=2026-11-04 effective_from=2024-10-08 status=in force per source text on checked_on
+    summary: Effective 2024-10-08; programmatic trading = computer-generated/routed orders; report-before-trade; exchange sets abnormal thresholds; HFT features delegated to exchanges.
+[CN (A-share comparison)] csrc_2025_12_futures: 期货市场程序化交易管理规定（试行）
+    https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html
+    checked_on=2026-11-04 effective_from=2025-10-09 status=in force per source text on checked_on
+    summary: Published 2025-06-13; effective 2025-10-09. Futures programmatic trading: report-before-trade (customer→FC→exchange confirm); HFT standards set by futures exchanges; host-colocation/seat rules; abnormal cancel/replace monitoring. Companion official page: https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml
+[CN (A-share comparison)] sse_faq_2025_04_03: 上交所就正式发布程序化交易管理实施细则答记者问
+    https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml
+    checked_on=2026-11-04 effective_from=2025-07-07 status=in force per source text on checked_on
+    summary: 细则自2025-07-07施行; 高频认定: 单账户每秒申报撤单合计最高≥300笔, 或全日≥20000笔; 四类异常行为构成要件说明.
+[CN (A-share comparison)] szse_细则_pdf: 深圳证券交易所程序化交易管理实施细则
+    https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf
+    checked_on=2026-11-04 effective_from=2025-07-07 status=in force per source text on checked_on
+    summary: 自2025-07-07施行; 第33条高频: 每秒≥300笔或单日≥20000笔; 第18条四类异常监控类型.
+[CN (A-share comparison)] szse_release_notice: 关于发布《深圳证券交易所程序化交易管理实施细则》的通知
+    https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html
+    checked_on=2026-11-04 effective_from=2025-07-07 status=in force per source text on checked_on
+    summary: 发布日2025-04-03; 施行2025-07-07.
+[CN (crypto)] pbc_2021_237: 关于进一步防范和处置虚拟货币交易炒作风险的通知 银发〔2021〕237号
+    https://www.gov.cn/zhengce/zhengceku/2021-10/08/content_5641404.htm
+    checked_on=2026-11-04 effective_from=see source status=in force per source text on checked_on
+    summary: Dated 2021-09-15; virtual currency not legal tender; related businesses illegal financial activities; offshore exchanges serving PRC residents likewise prohibited.
+[HK/CN (comparison)] hkex_nb_program_trading_2026: Northbound Program Trading Reporting (Stock Connect)
+    https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en
+    checked_on=2026-11-04 effective_from=2026-01-12 status=in force per source text on checked_on
+    summary: Mainland NB Program Trading Reporting Requirements effective 2026-01-12; ECP submissions from 2026-01-12; existing investors transition to 2026-04-10; thresholds include automation / fast order rate / many stocks+turnover / customized software (SSE/SZSE separate).
+[HK (comparison)] sfc_24ec55: Circular to licensed corporations — Use of generative AI language models (24EC55)
     https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55
-    verified: Issued 2024-11-12, immediate effect. Risk-based Core Principles for GenAI LMs; investment recommendations/advice/research = high-risk → human-in-the-loop + validation/monitoring/disclosures. Asia peer to FINRA GenAI themes. Awareness not license; not legal advice.
-[OK] esma74_algo_briefing_2026: ESMA Supervisory Briefing on Algorithmic Trading in the EU (ESMA74-1505669079-10311)
+    checked_on=2026-11-04 effective_from=2024-11-12 status=in force per source text on checked_on
+    summary: Issued 2024-11-12, immediate effect. Risk-based Core Principles for GenAI LMs; investment recommendations/advice/research = high-risk → human-in-the-loop + validation/monitoring/disclosures. Asia peer to FINRA GenAI themes. Awareness not license; not legal advice.
+[EU (comparison)] esma74_algo_briefing_2026: ESMA Supervisory Briefing on Algorithmic Trading in the EU (ESMA74-1505669079-10311)
     https://www.esma.europa.eu/document/supervisory-briefing-algorithmic-trading-eu
-    verified: Published 2026-02-26. Non-binding supervisory briefing (Art.29(2) ESMA Reg; not comply-or-explain). Algo definition: human click/authorisation ≠ out-of-scope if algorithm determined parameters. Material change retest incl. ML retrain/adaptive capabilities. Stress: 2× prior-6m peak messages/trades. PTC hard blocks mandatory / soft recommended. Outsourcing: firm remains liable. AI Act interaction + RTS 6 Art.9 annual self-assessment spirit. Literacy + Asia peers (SFC 24EC55 / FINRA GenAI); NOT a license checklist; not HFT how-to; not legal advice.
+    checked_on=2026-11-04 effective_from=see source status=non-binding briefing
+    summary: Published 2026-02-26. Non-binding supervisory briefing (Art.29(2) ESMA Reg; not comply-or-explain). Algo definition: human click/authorisation ≠ out-of-scope if algorithm determined parameters. Material change retest incl. ML retrain/adaptive capabilities. Stress: 2× prior-6m peak messages/trades. PTC hard blocks mandatory / soft recommended. Outsourcing: firm remains liable. AI Act interaction + RTS 6 Art.9 annual self-assessment spirit. Literacy + Asia peers (SFC 24EC55 / FINRA GenAI); NOT a license checklist; not HFT how-to; not legal advice.
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=19 all_fetch_OK=True
+n_sources=33 us_first_block=19 fields_complete=True

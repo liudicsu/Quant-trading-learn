@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **12 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **13 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -198,6 +198,28 @@
 - 相关：平静 **0.069** → 压力 **0.990**；共同冲击组合 PnL ≈ **−0.0776**
 - HMM：`t=79` 过滤 **0.022** vs 平滑 **0.176**（泄漏形状）
 
+## 美股三层「刹车」：MWCB / LULD / Reg SHO 201（2026-11-08 核实）
+
+站内已讲 MWCB（全市场熔断），这里只补个股层面的 LULD 与卖空价格测试，并对照。
+
+| 层级 | 触发 | 效果 |
+|------|------|------|
+| MWCB | 全市场指数单日大跌 | 全市场暂停交易 |
+| LULD | 个股价格触及动态价格带，Limit State 15 秒未退出 | 主上市交易所通常宣布 5 分钟暂停（可延长） |
+| Reg SHO 201 | 个股较前一日收盘下跌 ≥10% | 当日剩余时间及次日限制卖空价格（[eCFR](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)） |
+
+**LULD 价格档（按审阅报告 R12）：** LULD 不是相对昨收的固定全天涨跌停。价格带围绕动态参考价；适用百分比档在当日按计划规定以前一交易日主上市市场收盘价等确定：普通非杠杆示例中，价格档大于 3 美元时 Tier1 为 5%、Tier2 为 10%；0.75 至 3 美元（含两端）两者均 20%；低于 0.75 美元时带宽取 0.15 美元与参考价 75% 的较小值。常规收盘前最后 25 分钟，仅所有 Tier1 以及价格档不高于 3 美元的 Tier2 使用双倍参数；提前收盘日对应提前收盘前最后 25 分钟。大于 3 美元的 Tier2 不因收盘统一翻倍。2020-02-24 实施的 Amendment 18 已取消所有股票开盘 09:30–09:45 纽约时段翻倍，不能沿用旧说法。ETF/ETP 分层和杠杆品种须按现行官方名单/计划另核，不由 ticker 名称猜测。
+
+参考价通常是前 5 分钟合资格成交均价；开盘/复牌有专门条款。下面的合成状态机**不是完整规则引擎**。
+
+**实验：** `examples/p6/06_luld_halt_toy.py`：
+
+```text
+Tier1 $50：±5%，收盘窗口 ±10%；Tier2 $50：两窗口均 ±10%；Tier2 $2 收盘窗口 ±40%；Tier1 $0.50：±30%
+t=13 Limit State 持续 20s > 15s → 暂停；t=73 以 37.20 复牌（价格带下沿 38.00）
+38.50 的止损单成交于 37.20（缺口）；下跌 10.5% 触发 SHO 201 价格测试
+```
+
 ## 常见错误 / 陷阱
 
 1. 用当日收盘算当日状态再当日交易（前瞻）。
@@ -208,6 +230,7 @@
 6. 震荡市跑趋势、又不计成本。
 7. 把新闻「correction」直接映射成课程 regime 枚举值。
 8. 把买看跌期权当成「免费保险」，不计权利金；把 VIX 指数的涨跌当成 VIX 期货/期权/相关产品的涨跌。
+9. 把 LULD 当成相对昨收的固定 10% 涨跌停；沿用已取消的开盘 09:30–09:45 翻倍；以为所有 Tier2 收盘都翻倍。
 
 
 ## 练习（1:1）
@@ -219,6 +242,7 @@
 5. **ex5** — 为剧本 A–D 各写三栏卡片（识别 / 应对 / 失败），不得出现买卖推荐句。
 6. **done1** — 一页「硬规则 + 排伪」清单；附 CNBC/AP 链接与「新闻≠regime」段落。
 7. **ex6** — 手算风险框里的看跌期权玩具（到期价 80 与 100 两种情形，含权利金）；**完成标准**：写出 +13 / −2 两个数，并用一句话说明 spot VIX 与 VIX 期货结算值不同。
+8. **ex-luld** — 运行 `06_luld_halt_toy.py`，解释为何 Tier2 $50 在收盘窗口不翻倍而 Tier2 $2 翻倍；**完成标准**：引用 R12 的价格档规则。
 
 
 ## 测验
@@ -230,12 +254,13 @@
 <Quiz id="p6mrc-q5" question="美股市场熔断 7/13/20% 在本课是？" options={["买入信号", "卖出信号", "市场机制识字——不是交易信号", "Kelly 公式参数"]} answer={1} explanation="MWCB 暂停交易以冷静市场，不产生 alpha 指令。" />
 <Quiz id="p6mrc-q6" question="Moreira–Muir（2017）与 Cederburg 等（2020）并读后，波动目标应视为？" options={["保证提高 Sharpe 的课程 alpha", "风险缩放工程；样本外价值需谨慎，不作收益承诺", "替代合规课", "HMM 平滑的同义词"]} answer={1} explanation="一篇展示吸引力，一篇强调实时/OOS 并不系统性更好。" />
 <Quiz id="crisis-put" question="买入的看跌期权到期一文不值，买方损失多少？（按 OIC 说明）" options={["零，期权是保险", "可以是全部已付权利金", "无限", "只损失一半"]} answer={1} explanation="OIC：期权到期无价值时，损失可以是全部权利金；无限风险属于未备兑卖方。" />
+<Quiz id="rc-luld" question="价格 50 美元的 Tier2 股票，在常规收盘前最后 25 分钟的 LULD 百分比是？" options={["5%", "10%", "20%", "无限制"]} answer={1} explanation="大于 3 美元的 Tier2 不因收盘翻倍。" />
 
 ## 完成标准
 
 四场景卡片 + 实验 A–D 数字与课内一致 + 「新闻≠regime」短文（含已核验链接）+ 硬规则清单。平滑概率不得出现在「实盘可用」列。
 
-**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。
+**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

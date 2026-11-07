@@ -1,40 +1,106 @@
 ## Learning goals
 
-This lesson (~**16 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz + 1h SSE trading-rule versions) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
+This lesson (~**19 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE comparison) + 0.5h US four-date table & phase-in status + 2.5h cross-border tax/FX/CRS literacy box) puts **US equities first** for the **compliance basics** of retail/programmatic trading (high level) and research ethics; mainland A-shares (securities and futures), Stock Connect and EU material are **labelled comparison reading**. Prereq: `paper-trading-infra`.
+
+**Default scope:** US-listed stocks / non-leveraged ETFs, in USD. Chinese is the teaching language; it does not make China the default market.
 
 **Goals:** write a risk-preference page; log failures honestly; refuse “guaranteed Sharpe” pitches.
 
 **Must-teach:** this site is learning material, **not** investment advice or a law firm memo; zero size if you do not understand; cite **official** texts only; mark the date checked.
 
 <Callout type="warn" title="Not legal advice — rules change">
-Nothing here is legal, compliance, or investment advice. Thresholds and effective dates below were verified from official pages fetched **2026-11-04 (Asia/Shanghai)**. Re-read the **current** official text before any real-world action. If a page cannot be fetched, we say so instead of guessing.
+Nothing here is legal, compliance, or investment advice. Thresholds and effective dates below were verified from official pages checked **2026-11-04 (Asia/Shanghai)**. Re-read the **current** official text before any real-world action. If a page cannot be fetched, we say so instead of guessing.
 </Callout>
 
-## China — programmatic trading
+## US main line: the PDT successor rule — four dates + phase-in status
+
+**Intuition:** a rule being “effective” does not mean “your broker and your account have already switched.” FINRA gave members a phase-in period, so record **dates** and **member adoption status** as two separate dimensions.
+
+| Item | Date ([FINRA 26-10](https://www.finra.org/rules-guidance/notices/26-10), checked 2026-11-08) |
+|------|------|
+| SEC approval (Release 34-105226) | 2026-04-14 |
+| Notice published | 2026-04-20 |
+| Rule effective | 2026-06-04 |
+| Member phase-in ends | 2027-10-20 |
+
+The new intraday margin standards **replace in their entirety** the old PDT day-trade count and the $25,000 minimum-equity requirement; [26-11](https://www.finra.org/rules-guidance/notices/26-11) (published 2026-05-19, effective 2026-06-04) gives the IML/IMD interpretations. Ordinary maintenance margin has not disappeared.
+
+**Correct version exercise (per review item R04):** the FINRA example records, separately, the SEC approval date, the Notice publication date, the rule effective date and the phase-in end date, and adds `member_adoption_date` / `broker_checked_on` plus the applicable account category. Between 2026-06-04 and 2027-10-20, do not assert from the trade date alone that a member/account has migrated; when migration status is unknown, output `needs_broker_verification`. A local toy must not give any legal-compliance guarantee.
+
+```python
+def pdt_regime(trade_date: str, member_adoption_date: str | None) -> str:
+    if trade_date < "2026-06-04":
+        return "old_pdt"
+    if member_adoption_date is None:
+        return "needs_broker_verification" if trade_date <= "2027-10-20" else "intraday_margin"
+    return "intraday_margin" if trade_date >= member_adoption_date else "old_pdt"
+```
+
+## United States — market access, shorts, margin, algo supervision
+
+### SEC Rule 15c3-5 (Market Access Rule)
+
+- **Source (checked 2026-11-04):** https://www.ecfr.gov/current/title-17/chapter-II/part-240/subject-group-ECFRc8401dcba174f73/section-240.15c3-5
+- **Verified:** broker-dealers with market access must maintain pre-trade **credit/capital** and **erroneous-order** controls; regulatory controls (restricted securities, authorised users, immediate post-trade reports); controls under the BD’s **direct and exclusive** control (limited allocation); **at least annual** review and **CEO certification**.
+
+### Regulation SHO — Rule 201 circuit breaker
+
+- **Source (checked 2026-11-04):** https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201
+- **Verified:** if a covered security falls **10%** or more from the prior day’s listing-market close, trading centers must prevent short sales at or below the NBB for the **remainder of that day and the next** (subject to stated exceptions, including certain “short exempt” marks).
+
+### FINRA Rule 4210 and the former pattern day trader framework
+
+- **Rule 4210 (checked 2026-11-04):** https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210 — current text includes **intraday margin level (IML)** definitions and deficit/satisfaction rules in (d)(2).
+- **Regulatory Notice 26-10 (checked 2026-11-04):** https://www.finra.org/rules-guidance/notices/26-10 — published **2026-04-20**; amendments **effective 2026-06-04** with member phase-in through **2027-10-20**. Explicitly **replaces** the prior day-trading margin regime, including the **pattern day trader** designation counts and the **$25,000** PDT minimum equity, with intraday margin standards. Teach the **historical PDT idea** as legacy context, and the **current IML framework** as the live Rule 4210 approach as of the check date.
+
+### FINRA Regulatory Notice 26-11 (IMD / IML interpretations)
+
+- **Source (checked 2026-11-04):** https://www.finra.org/rules-guidance/notices/26-11 — published **2026-05-19**; **effective 2026-06-04** (same day as 26-10 go-live).
+- **Verified:** publishes / updates Rule 4210 interpretations for the new intraday margin standards — including how to compute **IMD** (intraday margin deficit) and **IML** (intraday margin level), deposits, market moves, and liquidation examples — and **deletes** obsolete PDT day-trading interpretations. Short update next to 26-10: 26-10 = rule change; 26-11 = how members implement IMD/IML in practice + investor education links.
+
+
+
+## Cross-border identity boundaries: tax / FX / CRS literacy box (readers resident in China)
+
+<Callout type="warn" title="Not tax or legal advice">
+Literacy only: status, tax residence and beneficial ownership decide which rules apply. This lesson does not determine your status, compute your tax, or collect any tax ID. Checked 2026-11-08.
+</Callout>
+
+**W-8BEN and dividend withholding:** the [IRS instructions](https://www.irs.gov/instructions/iw8ben): a foreign individual gives Form W-8BEN to the **withholding agent/payer**, not to the IRS; foreign persons are generally subject to US tax at 30% on certain US-source income (including dividends), which a treaty may reduce. The [US–China treaty](https://www.irs.gov/pub/irs-trty/china.pdf) Article 9: when the recipient is a resident of the other state and the beneficial owner, source-state tax on dividends shall not exceed 10% of the gross amount (see also the [IRS treaty page](https://www.irs.gov/individuals/international-taxpayers/claiming-tax-treaty-benefits)). **Chinese nationality ≠ Chinese tax residence ≠ automatic treaty eligibility**; withholding is not the final settlement of all tax.
+
+**Wash sale (per review item R25):** where the relevant US income-tax rules apply, acquiring substantially identical stock or securities by purchase or taxable exchange, or entering into a contract or option to acquire them, within the period from 30 calendar days before to 30 calendar days after the loss sale or disposition (including the sale date, 61 calendar days in total) may trigger the loss-deduction limit in [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/). It is not a trading ban and not a guaranteed tax exemption; the general basis adjustment of the replacement securities etc. follows IRS rules ([Pub. 550](https://www.irs.gov/publications/p550)), and you cannot claim every case is merely a deferral.
+
+**China individual income tax (per review item R28):** a resident individual’s domestic and foreign income is taxed under China’s [Individual Income Tax Law](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html) (an individual with a domicile in China, or without a domicile but residing in China for a cumulative 183 days in a tax year, is a resident individual); cases such as individuals without a domicile are checked under the applicable rules, not judged by nationality alone. Income from property transfer is taxed at a 20% proportional rate, and taxable income is generally transfer proceeds minus the original value of the property and reasonable expenses; interest, dividends and bonuses also carry a 20% statutory proportional rate, with reliefs/treaties and income character checked separately. Income tax actually and lawfully paid abroad can be credited within the prescribed limit, not as an unconditional full credit; the qualifying excess may be carried forward for the next five tax years ([MOF/SAT Announcement 2020 No. 3](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)). A resident individual with foreign income generally files between 1 March and 30 June of the following year. US withholding being complete does not imply no Chinese filing or no additional Chinese tax.
+
+**CRS (per review item R29):** CRS is a framework for due diligence on financial accounts and reporting/exchange of tax information under applicable exchange relationships; it is not a new securities tax and does not mean every country and every account exchanges automatically. Check the applicable rules by the account’s financial institution and your tax residence, and give a truthful tax-residence self-certification; CRS and the US FATCA are different mechanisms ([SAT AEOI page](https://www.chinatax.gov.cn/chinatax/aeoi_index.html), [Q&A](https://www.chinatax.gov.cn/n810341/n810760/c2620533/content.html)). Whether exchange happens does not change the duty to report foreign income lawfully; never promise that a “US brokerage account is invisible / exempt from filing.”
+
+**FX:** the SAFE Shanghai FAQ ([2026](https://www.safe.gov.cn/shanghai/2026/0402/2412.html)): the annual facilitation quota for personal FX settlement and for domestic individuals’ FX purchase is USD 50,000 equivalent per person per year. The SAFE Shaanxi FAQ ([link](https://www.safe.gov.cn/shaanxi/2018/1204/249.html)): FX bought within the quota and remitted abroad needs a genuine, lawful current-account purpose, which **does not include investing in overseas securities**. So the USD 50,000 quota is **not** a licence for overseas securities investment. This lesson provides no remittance routes, splitting, nominee or false-purpose schemes.
+
+## Comparison reading: mainland A-shares / Stock Connect — programmatic trading (extension, not the main line)
 
 ### CSRC 《证券市场程序化交易管理规定（试行）》
 
-- **Source (fetched OK):** https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html — 中国证监会公告〔2024〕8号
+- **Source (checked 2026-11-04):** https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html — 中国证监会公告〔2024〕8号
 - **Verified:** published announcement dated 2024-05-11; **effective 2024-10-08**. Defines programmatic trading as orders automatically generated or routed by computer programs on exchanges. Investors must report account/funds/strategy/software info; **report then trade**. Exchanges monitor abnormal behaviours (rapid cancel/replace, large continuous prints, etc.); **specific numeric thresholds are set by the exchanges**, not listed as fixed numbers in this CSRC text. HFT features are defined qualitatively; exchanges set detailed standards and may apply differentiated fees.
 
 ### SSE / SZSE implementation rules
 
-- **SSE Q&A (fetched OK):** https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml (2025-04-03). States the SSE implementation rules take effect **2025-07-07**. HFT recognition (as stated by SSE): single account peak **≥300** declaration/cancel messages **per second**, or peak **≥20,000** per day. Describes four abnormal-behaviour categories (instant rate, frequent instant cancel, frequent push/depress, short-window large prints); detailed monitor cut-offs are exchange-operated.
-- **SZSE PDF (fetched OK):** https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf — Article 33 matches the **300 / 20,000** HFT thresholds; Article 18 lists the four abnormal types; **effective 2025-07-07**.
-- **SZSE release notice (fetched OK):** https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html — 深证上〔2025〕292号, issued 2025-04-03, effective 2025-07-07.
+- **SSE Q&A (checked 2026-11-04):** https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml (2025-04-03). States the SSE implementation rules take effect **2025-07-07**. HFT recognition (as stated by SSE): single account peak **≥300** declaration/cancel messages **per second**, or peak **≥20,000** per day. Describes four abnormal-behaviour categories (instant rate, frequent instant cancel, frequent push/depress, short-window large prints); detailed monitor cut-offs are exchange-operated.
+- **SZSE PDF (checked 2026-11-04):** https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf — Article 33 matches the **300 / 20,000** HFT thresholds; Article 18 lists the four abnormal types; **effective 2025-07-07**.
+- **SZSE release notice (checked 2026-11-04):** https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html — 深证上〔2025〕292号, issued 2025-04-03, effective 2025-07-07.
 
 ### CSRC 《期货市场程序化交易管理规定（试行）》〔2025〕12号
 
-- **Source (fetched OK):** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 中国证监会公告〔2025〕12号；also announced on [csrc.gov.cn](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml) (2025-06-13).
+- **Source (checked 2026-11-04):** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 中国证监会公告〔2025〕12号；also announced on [csrc.gov.cn](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml) (2025-06-13).
 - **Verified:** published **2025-06-13**; **effective 2025-10-09**. Futures programmatic trading = computer-generated/routed orders on futures exchanges. **Report-before-trade:** customer reports to futures company → FC verifies → exchange confirms → then trade. HFT features are qualitative in the CSRC text; **futures exchanges set numeric HFT standards**, may apply differentiated fees / cancel charges / limits. Host-colocation and seat fairness rules; abnormal cancel/replace monitoring. Pre-effective participants get **6 months** to meet Arts. 7–12 reporting. Complements securities 〔2024〕8 — do not conflate the two markets.
 
 ### Northbound Stock Connect — program-trading reporting (eff. 2026-01-12)
 
-- **Hub (fetched OK):** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
+- **Hub (checked 2026-11-04):** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
 - **Verified:** Mainland exchanges’ NB Program Trading Reporting Requirements **effective 2026-01-12**; CCEPs/TTEPs submit via HKEX ECP from that date; existing investors had a transition window through **2026-04-10**. SSE/SZSE thresholds (computed separately) include high automation of order elements, fast order rate, many stocks + high turnover, or customized software — **TWAP/VWAP-only simple splitting is generally not the trigger**. Primary texts live on SSE/SZSE; HKEX page is the English hub. Complements onshore securities 〔2024〕8 / futures 〔2025〕12 — Stock Connect northbound has its **own** reporting channel.
 
 
-## SSE Trading Rules (2026 revision) — rules have versions too
+## Comparison reading: SSE Trading Rules (2026 revision) — rules have versions too
 
 **Facts (verified on the [SSE official site](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)):** the Shanghai Stock Exchange issued the *Trading Rules of the Shanghai Stock Exchange (2026 Revision)*, document no. **SSE Fa [2026] No. 41 (上证发〔2026〕41号)**, published 2026-04-24, **effective from 2026-07-06**; the *Trading Rules (2023 Revision)* published 2023-02-17 (上证发〔2023〕32号) are **repealed at the same time**. The notice also says that certain provisions not yet implemented **remain deferred** (see Attachment 3, the list of deferred provisions), with implementation dates to be announced separately.
 
@@ -53,30 +119,6 @@ def sse_rule_version(trade_date: str) -> str:
 
 Learning only; the official SSE text governs the details; not legal or investment advice.
 
-## United States — market access, shorts, margin, algo supervision
-
-### SEC Rule 15c3-5 (Market Access Rule)
-
-- **Source (fetched OK):** https://www.ecfr.gov/current/title-17/chapter-II/part-240/subject-group-ECFRc8401dcba174f73/section-240.15c3-5
-- **Verified:** broker-dealers with market access must maintain pre-trade **credit/capital** and **erroneous-order** controls; regulatory controls (restricted securities, authorised users, immediate post-trade reports); controls under the BD’s **direct and exclusive** control (limited allocation); **at least annual** review and **CEO certification**.
-
-### Regulation SHO — Rule 201 circuit breaker
-
-- **Source (fetched OK):** https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201
-- **Verified:** if a covered security falls **10%** or more from the prior day’s listing-market close, trading centers must prevent short sales at or below the NBB for the **remainder of that day and the next** (subject to stated exceptions, including certain “short exempt” marks).
-
-### FINRA Rule 4210 and the former pattern day trader framework
-
-- **Rule 4210 (fetched OK):** https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210 — current text includes **intraday margin level (IML)** definitions and deficit/satisfaction rules in (d)(2).
-- **Regulatory Notice 26-10 (fetched OK):** https://www.finra.org/rules-guidance/notices/26-10 — published **2026-04-20**; amendments **effective 2026-06-04** with member phase-in through **2027-10-20**. Explicitly **replaces** the prior day-trading margin regime, including the **pattern day trader** designation counts and the **$25,000** PDT minimum equity, with intraday margin standards. Teach the **historical PDT idea** as legacy context, and the **current IML framework** as the live Rule 4210 approach as of the check date.
-
-### FINRA Regulatory Notice 26-11 (IMD / IML interpretations)
-
-- **Source (fetched OK):** https://www.finra.org/rules-guidance/notices/26-11 — published **2026-05-19**; **effective 2026-06-04** (same day as 26-10 go-live).
-- **Verified:** publishes / updates Rule 4210 interpretations for the new intraday margin standards — including how to compute **IMD** (intraday margin deficit) and **IML** (intraday margin level), deposits, market moves, and liquidation examples — and **deletes** obsolete PDT day-trading interpretations. Short update next to 26-10: 26-10 = rule change; 26-11 = how members implement IMD/IML in practice + investor education links.
-
-
-
 ## SEC withdrawal of PDA conflicts proposal (S7-12-23) — awareness
 
 On **2025-06-17** the SEC published a Federal Register notice [withdrawing several 2022–2023 proposed rulemakings](https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions), including **Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers** (File No. **S7-12-23**; originally 88 FR 53960).
@@ -85,18 +127,18 @@ On **2025-06-17** the SEC published a Federal Register notice [withdrawing sever
 
 ### FINRA Regulatory Notice 15-09
 
-- **Source (fetched OK):** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**. Guidance on supervising algorithmic strategies: risk assessment, code change control, testing, trading-system monitors, compliance communication; references 15c3-5 and Reg SHO.
+- **Source (checked 2026-11-04):** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**. Guidance on supervising algorithmic strategies: risk assessment, code change control, testing, trading-system monitors, compliance communication; references 15c3-5 and Reg SHO.
 
 ## Crypto — high-level official status only
 
 ### China — PBoC et al. 银发〔2021〕237号
 
-- **Source (fetched OK):** https://www.gov.cn/zhengce/zhengceku/2021-10/08/content_5641404.htm — dated **2021-09-15**.
+- **Source (checked 2026-11-04):** https://www.gov.cn/zhengce/zhengceku/2021-10/08/content_5641404.htm — dated **2021-09-15**.
 - **Verified high-level points:** virtual currencies are **not** legal tender; related businesses (exchange between fiat and virtual currency, crypto-to-crypto, dealing as central counterparty, info intermediary/pricing, token offerings, crypto derivatives, etc.) are characterised as **illegal financial activities** and prohibited; offshore platforms serving PRC residents likewise; civil acts contrary to public order may be void; financial institutions must not provide related services.
 
 ### United States — SEC/CFTC staff statement
 
-- **Source (fetched OK):** https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225 — **2025-09-02** SEC–CFTC **staff** joint statement (Project Crypto / Crypto Sprint).
+- **Source (checked 2026-11-04):** https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225 — **2025-09-02** SEC–CFTC **staff** joint statement (Project Crypto / Crypto Sprint).
 - **Verified:** staff view that current law does **not prohibit** SEC- or CFTC-registered exchanges from facilitating **certain** spot crypto asset products; the statement itself warns it is **not** a Commission rule and creates **no new obligations**. Treat as a directional staff note, not a licence.
 
 ## Research ethics (always)
@@ -107,13 +149,12 @@ On **2025-06-17** the SEC published a Federal Register notice [withdrawing sever
 
 ## Python companion
 
-`examples/p7/02_compliance_sources.py` prints the same checklist with fetch status and writes `examples/p7/data/official_sources.json`.
+`examples/p7/02_compliance_sources.py` prints a LOCAL ledger (US first; fields source_url / checked_on / effective_from / status / jurisdiction) — it does not fetch anything — and writes `examples/p7/data/official_sources.json`.
 
 ### Real run output
 
 ```
-n_sources=19 all_fetch_OK=True
-(checked Asia/Shanghai 2026-11-04)
+n_sources=33 us_first_block=19 fields_complete=True
 ```
 
 
@@ -124,7 +165,7 @@ Complements the PDA-conflicts proposal **withdrawal** (S7-12-23): **withdrawal �
 - **[SEC Division of Examinations FY2026 Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities)** (page stamped ~2025-11-17; also [PDF](https://www.sec.gov/files/2026-exam-priorities.pdf)): Emerging Financial Technology focus — automated investment tools, AI, trading algorithms/platforms, alt-data. Exams may check fair/accurate AI representations; ops vs disclosures; algo advice vs investor profiles; policies supervising AI in fraud/AML/trading/back-office.
 - **[FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)** (**NEW FOR 2026**): rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging agent themes: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails.
 
-**Awareness only — not legal advice.** Date-stamp official pages when you cite them. Lab row count: `n_sources=19` in `examples/p7/02_compliance_sources.py`.
+**Awareness only — not legal advice.** Date-stamp official pages when you cite them. Lab row count: `n_sources=33` in `examples/p7/02_compliance_sources.py`.
 
 
 ## SFC Circular 24EC55 — GenAI language models (HK)
@@ -138,7 +179,7 @@ Asia peer to FINRA GenAI themes: [SFC Circular 24EC55](https://apps.sfc.hk/edist
 - **High-risk use cases** — providing investment recommendations, advice, or research — need extra mitigations including **human-in-the-loop** review before client-facing output, validation / ongoing monitoring, prompt-robustness testing, and ongoing disclosures that the user is interacting with AI.
 - Complements FINRA 2026 GenAI/Agents supervision themes and SEC FY2026 Emerging FinTech exam focus: **withdrawal of a US proposal ≠ absence of duties elsewhere**.
 
-Lab row: `sfc_24ec55` in `examples/p7/02_compliance_sources.py` (`n_sources=19`).
+Lab row: `sfc_24ec55` in `examples/p7/02_compliance_sources.py` (`n_sources=33`).
 
 
 
@@ -149,7 +190,7 @@ EU peer (alongside FINRA GenAI / HK SFC 24EC55): [ESMA74-1505669079-10311 Superv
 
 **Literacy only (not a license checklist, not an HFT how-to, not legal advice):**
 
-| Theme | Briefing spirit (fetched PDF) |
+| Theme | Briefing spirit (official PDF) |
 |-------|-------------------------------|
 | Algo definition | A computer algorithm determining any order parameter counts; **human click/authorisation ≠ automatic out-of-scope** if the algorithm already set parameters |
 | Material-change retest | Retest after logic/scope/controls/dependency changes; **includes ML retrain / adaptive capabilities** (small recalibrations can accumulate) |
@@ -160,7 +201,7 @@ EU peer (alongside FINRA GenAI / HK SFC 24EC55): [ESMA74-1505669079-10311 Superv
 
 Read with Asia peers (SFC 24EC55, FINRA GenAI): **a withdrawal elsewhere ≠ no duties here.**
 
-Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` (`n_sources=19`).
+Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` (`n_sources=33`).
 
 ## Common mistakes / pitfalls
 
@@ -177,6 +218,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 5. Offering personalised trading advice from this course.
 6. Skipping the “date checked” stamp.
 7. Applying today’s trading rules to the whole historical backtest; treating still-deferred provisions as in force.
+8. Asserting from the trade date alone that a broker/account has moved to the new intraday margin (phase-in 2026-06-04 to 2027-10-20); treating the USD 50,000 FX quota as a licence for overseas securities; assuming US withholding means no Chinese filing.
 
 
 ## Practice (1:1)
@@ -186,35 +228,39 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 3. **ex3** — Pitch audit: rewrite a “guaranteed Sharpe” ad into compliant language.
 4. **ex4** — Fill the official-source table with URL + date checked.
 5. **done1** — Ethics checklist complete.
-6. **ex5** — rule-version table: write the 2023/2026 rows for the SSE Trading Rules (document no., published, effective) and a function that switches version by trade date; **done when**: 2026-07-03 returns 2023 and 2026-07-06 returns 2026.
+6. **ex5** — rule-version table (main example FINRA): four rows for SEC approval / Notice published / effective / phase-in end, plus `member_adoption_date`, `broker_checked_on` and account-category fields, and implement `pdt_regime`; **done when**: 2026-05-01→old_pdt and 2026-08-01 with unknown migration→needs_broker_verification. Comparison: the SSE 2023/2026 version rows (2026-07-03→2023, 2026-07-06→2026).
+7. **ex6** — cross-border literacy card: in your own words, who receives W-8BEN, the conditions for the treaty 10%, the 61-calendar-day wash-sale window, China’s 20% with capped credit / filing in Mar–Jun next year, CRS ≠ a new tax, USD 50,000 ≠ securities-investment licence; **done when**: all six points are present with no personal tax calculation and no remittance advice.
 
 
 ## Quiz
 
-<Quiz id="p7ce-q1" question="CSRC 2024 programmatic rules (fetched) take effect on?" options={["2023-01-01", "2024-10-08", "2025-07-07", "Never"]} answer={1} explanation="Announcement 〔2024〕8号: effective 2024-10-08." />
-<Quiz id="p7ce-q2" question="SSE/SZSE HFT recognition (fetched 2025 rules) includes?" options={["Any two trades", "≥300 msgs/sec or ≥20,000/day peak cancels+orders", "Only odd lots", "Kelly f*>0.5"]} answer={1} explanation="SSE Q&A and SZSE Art.33." />
+<Quiz id="p7ce-q1" question="CSRC 2024 programmatic rules (checked) take effect on?" options={["2023-01-01", "2024-10-08", "2025-07-07", "Never"]} answer={1} explanation="Announcement 〔2024〕8号: effective 2024-10-08." />
+<Quiz id="p7ce-q2" question="SSE/SZSE HFT recognition (checked 2025 rules) includes?" options={["Any two trades", "≥300 msgs/sec or ≥20,000/day peak cancels+orders", "Only odd lots", "Kelly f*>0.5"]} answer={1} explanation="SSE Q&A and SZSE Art.33." />
 <Quiz id="p7ce-q3" question="SEA Rule 15c3-5 mainly requires?" options={["Free sponsored access", "Pre-trade risk controls and annual CEO cert for market access", "Guaranteed fills", "Crypto staking"]} answer={1} explanation="Market Access Rule controls." />
 <Quiz id="p7ce-q4" question="Reg SHO Rule 201 triggers after roughly?" options={["1% move", "10% decline from prior close (listing market)", "50% weekly", "Any uptick"]} answer={1} explanation="10% circuit breaker." />
 <Quiz id="p7ce-fy2026" question="SEC FY2026 Exam Priorities Emerging FinTech mainly flags?" options={["All AI banned", "Automated tools / AI / algos / alt-data — exam focus on representations, ops vs disclosures, supervision", "Only crypto venues", "PDA proposal restored"]} answer={1} explanation="Awareness; withdrawal of S7-12-23 ≠ no remaining duties." />
 <Quiz id="p7ce-genai" question="FINRA 2026 GenAI/Agents section is mainly?" options={["A new trading alpha license", "Technology-neutral supervision themes (autonomy, auditability, guardrails) — NEW FOR 2026", "Abolishes Rule 3110", "Only for HFT"]} answer={1} explanation="Awareness only — not legal advice." />
 <Quiz id="p7ce-pda" question="SEC 2025-06 FR withdrawal of S7-12-23 means?" options={["All AI compliance duties vanished", "That PDA conflicts proposal will not be finalized as proposed; other duties remain", "Reg BI repealed", "Only crypto rules apply"]} answer={1} explanation="Withdrawal ≠ absence of remaining duties; not legal advice." />
-<Quiz id="p7ce-q5" question="As of FINRA Notice 26-10 (fetched)?" options={["PDT $25k is newly created", "Intraday margin standards replace the old PDT day-trade count /$25k regime (eff. 2026-06-04)", "Margin rules abolished", "Only applies to crypto"]} answer={1} explanation="Notice 26-10 replaces day-trading margin requirements." />
-<Quiz id="p7ce-q6" question="PBoC 2021 notice (fetched) states virtual currency related businesses are?" options={["Encouraged fintech", "Characterised as illegal financial activities and prohibited", "Mandatory for banks", "Unregulated"]} answer={1} explanation="银发〔2021〕237号 high-level status." />
-<Quiz id="p7ce-q7" question="CSRC futures programmatic rules 〔2025〕12 (fetched) take effect on?" options={["2024-10-08", "2025-10-09", "2026-06-04", "Never"]} answer={1} explanation="Announcement 〔2025〕12号: effective 2025-10-09; report-before-trade on futures." />
+<Quiz id="p7ce-q5" question="As of FINRA Notice 26-10 (checked)?" options={["PDT $25k is newly created", "Intraday margin standards replace the old PDT day-trade count /$25k regime (eff. 2026-06-04)", "Margin rules abolished", "Only applies to crypto"]} answer={1} explanation="Notice 26-10 replaces day-trading margin requirements." />
+<Quiz id="p7ce-q6" question="PBoC 2021 notice (checked) states virtual currency related businesses are?" options={["Encouraged fintech", "Characterised as illegal financial activities and prohibited", "Mandatory for banks", "Unregulated"]} answer={1} explanation="银发〔2021〕237号 high-level status." />
+<Quiz id="p7ce-q7" question="CSRC futures programmatic rules 〔2025〕12 (checked) take effect on?" options={["2024-10-08", "2025-10-09", "2026-06-04", "Never"]} answer={1} explanation="Announcement 〔2025〕12号: effective 2025-10-09; report-before-trade on futures." />
 <Quiz id="p7ce-q8" question="FINRA Notice 26-11 mainly?" options={["Restores PDT $25k", "Publishes IMD/IML interpretations for the new intraday margin standards (eff. 2026-06-04)", "Abolishes margin", "Only crypto"]} answer={1} explanation="26-11 implements 26-10 via Rule 4210 IMD/IML interpretations." />
 
 <Quiz id="p7ce-q9" question="Northbound Stock Connect program-trading reporting (verified) takes effect on?" options={["2024-10-08", "2025-10-09", "2026-01-12", "Never"]} answer={2} explanation="HKEX hub: NB requirements effective 2026-01-12." />
 
 <Quiz id="p7ce-esma" question="ESMA74-1505669079-10311 (2026-02-26) is mainly?" options={["An HFT recipe license", "A non-binding algo-trading supervisory briefing: definition / material-change retest / 2× stress / PTC / outsourcing liability / AI Act+RTS6 Art.9 — literacy only", "Repeal of MiFID II", "HK-only"]} answer={1} explanation="Fetched official PDF; not legal advice; not a license checklist." />
 <Quiz id="p7ce-esma2" question="Under the ESMA briefing, does a human click automatically make trading non-algo?" options={["Yes, always excluded", "No — if an algorithm already determined order parameters, it can still be algo trading", "Crypto only", "Only commissions matter"]} answer={1} explanation="Human authorisation does not negate algorithm-determined parameters." />
-<Quiz id="p7ce-sfc" question="SFC Circular 24EC55 (fetched) mainly?" options={["A trading alpha license for GenAI", "HK expectations for GenAI LMs; high-risk advice/research → human-in-the-loop — awareness only", "Abolishes FINRA 3110", "Only for HFT"]} answer={1} explanation="Issued 2024-11-12; not legal advice." />
+<Quiz id="p7ce-sfc" question="SFC Circular 24EC55 (checked) mainly?" options={["A trading alpha license for GenAI", "HK expectations for GenAI LMs; high-risk advice/research → human-in-the-loop — awareness only", "Abolishes FINRA 3110", "Only for HFT"]} answer={1} explanation="Issued 2024-11-12; not legal advice." />
 <Quiz id="ce-sse2026" question="When do the SSE Trading Rules (2026 revision) take effect, and what about the 2023 version?" options={["From 2026-04-24, 2023 stays in force", "From 2026-07-06, 2023 repealed at the same time", "From 2027-01-01", "Futures only"]} answer={1} explanation="上证发〔2026〕41号: effective 2026-07-06, 2023 version repealed; some provisions still deferred. Backtests switch versions by date." />
+<Quiz id="ce-pdt-phase" question="A trade on 2026-08-01, broker migration status unknown: what does this lesson’s function return?" options={["old_pdt", "intraday_margin", "needs_broker_verification", "illegal"]} answer={2} explanation="Effective 2026-06-04 but phase-in runs to 2027-10-20; unknown status needs broker verification (R04)." />
+<Quiz id="ce-wash61" question="The wash-sale window is?" options={["30 business days after the sale", "30 calendar days before to 30 after, 61 calendar days including the sale date", "Same day only", "The T+1 settlement date"]} answer={1} explanation="IRC §1091: 30 days before through 30 days after; calendar days." />
+<Quiz id="ce-fx50k" question="The USD 50,000 annual FX facilitation quota means?" options={["You may freely buy US stocks", "An annual quota; quota FX remitted abroad needs a genuine current-account purpose, excluding overseas securities", "Automatic tax exemption", "You may buy FX for others"]} answer={1} explanation="SAFE Shanghai/Shaanxi FAQs; no workaround schemes are provided." />
 
 ## Done when
 
 Ethics checklist checked; official-source table filled with URLs and **2026-11-04** check date; risk-preference page written.
 
-**Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK; n_sources=19). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf); FR PDA withdrawal. Canvas m14; AFML scientific ethics.; SSE Trading Rules (2026 Revision) notice page ([link](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml), verified 2026-11-07).
+**Sources:** all rows in `examples/p7/02_compliance_sources.py` (read by the author on each row’s checked_on date; the script itself does not fetch; n_sources=33). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf); FR PDA withdrawal. Canvas m14; AFML scientific ethics.; SSE Trading Rules (2026 Revision) notice page ([link](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml), verified 2026-11-07).; FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11); IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben), [US–China treaty](https://www.irs.gov/pub/irs-trty/china.pdf), [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/), [Pub. 550](https://www.irs.gov/publications/p550); [China IIT Law](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html); [MOF/SAT 2020 No. 3](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm); [CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html); SAFE [Shanghai](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [Shaanxi](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQs (all checked 2026-11-08).
 
 <Summary>
 **Takeaways**: cite official text + date; CN securities 〔2024〕8 + futures 〔2025〕12 report-before-trade & exchange HFT standards; US 15c3-5 / Reg SHO / 4210-IML via 26-10+26-11 / 15-09; crypto via PBoC 2021 + non-binding SEC/CFTC staff note; EU ESMA algo-trading briefing (non-binding).  

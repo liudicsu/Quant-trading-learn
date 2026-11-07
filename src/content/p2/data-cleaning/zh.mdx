@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **19 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -133,7 +133,7 @@ ASSERTS_OK
 
 
 
-## Mask-first / 上游污染（涨跌停进滚动窗）
+## Mask-first / 上游污染（A 股比较案例：涨跌停进滚动窗；美股对应：停牌 / LULD 暂停 / 无报价行）
 
 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) 指出 A 股流水线里一个昂贵但隐蔽的失败模式：**涨跌停收盘价不可成交**，却在行过滤之前就进入滚动均值 / 相关 / 秩。作者称之为**上游污染（upstream contamination）**。
 
@@ -209,6 +209,44 @@ ffill rows where B return is a stale copy: 1
 
 disclaimer: 合成数据；仅供学习。
 
+## 美股数据源：谁提供、能不能用、何时可知（2026-11-08 核实）
+
+| 来源 | 本课只讲到 | 不要写成 |
+|------|------|------|
+| SEC EDGAR（data.sec.gov） | 无需 API key；10 位 CIK；不支持 CORS；每晚批量 ZIP（[SEC](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)） | 固定的 User-Agent 格式或请求频率数字（未核实） |
+| FRED / ALFRED | 需 API key（[key](https://fred.stlouisfed.org/docs/api/api_key.html)）；ALFRED 的 real-time period ≠ observation date，默认是今天已知的值（[realtime](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)） | 「公共领域所以随便用」 |
+| Ken French Data Library | CIZ 版本见 `factor-workflow`；-99.99/-999 缺失标记（[官网](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)） | 免费的 CRSP 个股数据库 |
+| CRSP | 活跃/非活跃证券、PERMNO/PERMCO、退市数据；订阅产品（[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)） | 免费 |
+| yfinance | README：与 Yahoo 无关联、未经 Yahoo 认可或审核；Apache 许可；仅供个人使用（[README](https://github.com/ranaroussi/yfinance)） | 官方数据或可自由再分发 |
+| Massive（原 Polygon.io） | 免费档为日终数据、每分钟 5 次调用；各资产类别分开订阅；专业用途需商业许可（[Massive](https://massive.com/stocks)） | 免费实时或 20 年历史 |
+| Alpaca Basic | 免费；实时仅 IEX；30 个 WebSocket 标的；历史自 2016 年；最近 15 分钟限制（[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)） | 免费实时 SIP |
+
+**FRED/ALFRED 条款（按审阅报告 R16）：** FRED/ALFRED 的 API 访问须同时核对服务/API 条款及各 series 上游权利；公共可读、免费或 series 标注公有领域，不等于服务获取方式与下游开发、模型训练、存储、缓存、归档或再分发当然获许。截至 2026-11-08，官方条款对上述用途列有限制。本课程只分发自造的 FRED/ALFRED 形状 fixture，不提供真实下载、缓存或模型训练默认路径；真实用途在获得适用许可前不执行。（[FRED 法律条款](https://fred.stlouisfed.org/legal/)）
+
+**实验（离线）：** `examples/p2/06_us_data_sources_pit.py` + `data/us_fixtures/*.json`（自造）：
+
+```text
+PIT 值 = 1000（原始申报），朴素「最新值」= 920（修订 1）；2026-04-15 的决策拿到 None（尚未发布）
+ALFRED 当时已知：2.0 / 2.3 / 2.4；最终值 2.4 被回填到过去 → 3 行中 2 行特征不同
+SYN_MACRO_2 没有发布时间 → 排除
+```
+
+## 未复权价、复权价与总收益；退市
+
+**raw 价格（按审阅报告 R21）：** raw（未复权）价格用于历史名义价格尺度与股数/现金账本；某策略能否以某价格和数量成交仍须结合当时会话、报价、交易状态、流动性及订单/成交模型判断，不以 raw OHLC 或最后成交价自动视为可执行。split-adjusted 与总收益序列各自记录调整范围；不得重复计入同一分红，拆股同时调整股数而不凭空创造财富。
+
+注意：Massive 股票页示例把 `adjusted:true` 标为**拆股调整**——不要默认它含分红。
+
+`examples/p2/05_data_versions_calendar.py` 新增 D 节（前面数字不变）：
+
+```text
+账本财富 [6000, 6100, 6080, 6120, 6160]
+拆股调整价格收益 [0.0167, -0.0033, -0.0099, 0.0066]；总收益 [0.0167, -0.0033, 0.0066, 0.0066]
+分红重复计入得 0.0230，正确是 0.0066；退市：缺失收益被标记，不删除也不填 0
+```
+
+**ALFRED 修订 as-of：** 用 `merge_asof` 按**发布时间**（不是观测日期）对齐；没有发布时间的序列不能进入特征。
+
 ## 常见错误 / 陷阱
 
 1. 用今日成分回测十年。  
@@ -222,6 +260,7 @@ disclaimer: 合成数据；仅供学习。
 8. 涨跌停 / 停牌收盘价先滚均值再删行（上游污染）。
 9. 把 2507.07107 的 headline Sharpe / 213 因子当成课程 alpha。
 10. 换了数据版本（如 FIZ→CIZ）却不记录，把口径差当成策略变化；对**收益**做 ffill 跨休市日；用未复权价算拆分日收益。
+11. 把 raw 收盘价当作可成交价；把 FRED series 的公有领域标注当作 FRED 服务/缓存/模型训练许可；把 yfinance 当官方数据。
 
 
 ## 练习（与任务清单 1:1）
@@ -234,6 +273,8 @@ disclaimer: 合成数据；仅供学习。
 6. **ex6**：信息 bar 时钟——打印合成 tape 上时间/成交量/美元 bar 数量；**完成标准**：与课内表一致。
 7. **ex7**：跑 mask-first 玩具；**完成标准**：打印表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。
 8. **ex8**：跑 `05_data_versions_calendar.py`；**完成标准**：打印两种月收益口径差（≈ −18.28 bp）、拆分 raw/adj 收益与日历交集天数，并在数据说明书里补「版本 + 口径 + 日历」三行。
+9. **ex-us-src** — 为三个数据源各写一行 `source / licence / availability_ts / allowed_use_checked_on`；**完成标准**：FRED 行写明需核对服务条款（R16），yfinance 行写明「仅个人使用、非官方」。
+10. **ex-us-ca** — 运行 `05_data_versions_calendar.py` D 节，解释分红重复计入为何得到 0.0230；**完成标准**：指出哪一步加了两次分红。
 
 
 ## 测验
@@ -249,12 +290,14 @@ disclaimer: 合成数据；仅供学习。
 <Quiz id="q10-mask2" question="本课对 2507.07107 的 Sharpe 2.05/1.63 立场？" options={["课程必达 alpha", "REJECT — 只教 mask 契约与污染诊断", "替代 PIT", "证明 213 因子"]} answer={1} explanation="排伪：headline Sharpe / 因子引擎不作课程 edge。" />
 <Quiz id="q8-cryptopit" question="Crypto PIT 审计先于 alpha（2608.25348 指针）要求？" options={["同 bar 成交 OK", "禁止同 bar；资金费率滞后；禁止回填；OI 谨慎", "忽略可得性时间", "总是使用 OI"]} answer={1} explanation="可得性掩码清单；完整实验见 P8 TSFM/crypto。" />
 <Quiz id="q9-ciz" question="Ken French 官网说明，2025 年 1 月起使用的 CRSP CIZ 文件中，月收益如何计算？" options={["逐月持有期收益、分红月末再投资", "日收益复利、分红在除息日再投资", "只算价格变化，不含分红", "与旧版完全相同"]} answer={1} explanation="官网原文：CIZ 月收益是日收益复利，分红在除息日再投资；旧版 FIZ 是月末再投资。所以要记录数据版本。" />
+<Quiz id="dc-fred" question="某 FRED series 标注为公有领域，这意味着？" options={["可以随意缓存并训练模型", "仍须核对 FRED/ALFRED 服务/API 条款；官方条款对缓存、模型训练等列有限制", "必须付费", "数据不准"]} answer={1} explanation="R16：series 权利 ≠ 服务条款。" />
+<Quiz id="dc-raw" question="raw（未复权）收盘价主要用于？" options={["自动视为可成交价格", "历史名义价格尺度与股数/现金账本", "计算总收益时直接使用", "替代 NBBO"]} answer={1} explanation="R21：能否成交还要看报价、状态、流动性与成交模型。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅契约+诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅契约+诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  

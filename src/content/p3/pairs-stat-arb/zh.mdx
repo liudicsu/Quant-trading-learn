@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **12 学时**：概念 4h + 实验 5h + 写作成文 1h + Kalman 动态对冲比选修 2h）实现 **Engle–Granger** 配对，对照静态 vs 滚动对冲，并演示**样本内一次协整 vs 滚动协整**陷阱。前置：`mean-reversion`。
+本课（约 **13 学时**：概念 4h + 实验 5h + 写作成文 1h + Kalman 动态对冲比选修 2h + 美股卖空约束 1h）实现 **Engle–Granger** 配对，对照静态 vs 滚动对冲，并演示**样本内一次协整 vs 滚动协整**陷阱。前置：`mean-reversion`。
 
 **课内目标：** 滚动 beta 价差；讨论腿断裂；EG 两步法 + MacKinnon 说明。
 
@@ -118,6 +118,19 @@ max |smoothed change| for t<=t0: 0.345708
 
 disclaimer: 合成数据；仅供学习，不构成投资建议。
 
+## 美股做空不是「负权重」那么简单（2026-11-08 核实）
+
+Reg SHO 分层（[SEC](https://www.sec.gov/investor/pubs/regsho.htm)）：Rule 200 标记（多/空）；Rule 203(b) 借券定位（locate）；Rule 201 价格测试（单日跌 ≥10% 后当日剩余时间和次日）；Rule 204 交收失败平仓。另外：借券费、可借量、召回/强制平仓风险；做空者要向出借人**支付股息**；理论损失**无上限**。（SEC 页面里 T+2 的段落已过时，现为 T+1。）
+
+**实验：** `examples/p3/06_us_short_constraints.py`（合成数据）：
+
+```text
+累计收益：long_only -0.0338，naive_pair -0.0749，constrained_pair -0.0559
+60 天中 25 天空头腿被拒或持平；借券费 0.00556；应付股息 0.00400
+```
+
+数字只说明约束会改变结果，**不是**策略好坏结论。
+
 ## 常见错误 / 陷阱
 
 1. 只看高相关不做 EG/残差平稳。
@@ -126,6 +139,7 @@ disclaimer: 合成数据；仅供学习，不构成投资建议。
 4. 只计一条腿成本（实验强制 n_legs=2）。
 5. 估 β 时混入测试窗。
 6. 用 Kalman **smoothed** β 生成历史信号（前视泄漏）；或用当期 filtered β 而不滞后一期。
+7. 回测中空头腿永远能借到、零借券费、不付股息。
 
 
 ## 练习（1:1）
@@ -135,6 +149,7 @@ disclaimer: 合成数据；仅供学习，不构成投资建议。
 3. **ex3** — 滚动 p 陷阱段 + 图。
 4. **done1** — 含成本配对 notebook 入库。
 5. **ex4** — （选修）跑 `05_kalman_hedge.py`；**完成标准**：打印 t=149 的 filtered/smoothed β，以及未来扰动测试两行（filtered 变化 = 0，smoothed 变化 > 0），并用一句话解释泄漏。
+6. **ex-us-short** — 把 `06_us_short_constraints.py` 的借券费翻倍；**完成标准**：报告 constrained_pair 的变化并说明方向。
 
 
 ## 测验
@@ -145,12 +160,13 @@ disclaimer: 合成数据；仅供学习，不构成投资建议。
 <Quiz id="q4-corr" question="仅有高收益相关意味着？" options={["保证协整", "不足以构成可交易价差", "零成本", "自动 OOS 优势"]} answer={1} explanation="相关 ≠ 协整。" />
 <Quiz id="q5-legs" question="本课配对成本使用？" options={["n_legs=1", "n_legs=2 且含堆叠+√冲击", "永不计冲击", "只计借券"]} answer={1} explanation="统一成本模型。" />
 <Quiz id="q6-kalman" question="按 statsmodels 文档，smoothed 状态估计在 t 时刻基于什么？" options={["只基于截至 t 的观测", "基于数据集中全部观测（含 t 之后）", "只基于 t 之前一期", "与 filtered 完全相同"]} answer={1} explanation="smoothed 是双侧估计，用到了未来数据，不能当交易信号；信号用滞后的 filtered 值。" />
+<Quiz id="ps-sho" question="Reg SHO Rule 203(b) 要求？" options={["卖空前完成借券定位（locate）", "禁止所有卖空", "T+0 交收", "固定借券费"]} answer={0} explanation="Rule 203(b) 是 locate 要求。" />
 
 ## 完成标准
 
 两对 EG + 滚动 p 演示 + 含成本 notebook + 测验（约 10h 深度）。
 
-**来源：** Engle–Granger / MacKinnon（statsmodels）；Stern 配对；Canvas m8；quants.md W13/W14。；statsmodels 状态空间文档（filtered vs smoothed 定义，[链接](https://www.statsmodels.org/stable/statespace.html)，2026-11-07 核实）。
+**来源：** Engle–Granger / MacKinnon（statsmodels）；Stern 配对；Canvas m8；quants.md W13/W14。；statsmodels 状态空间文档（filtered vs smoothed 定义，[链接](https://www.statsmodels.org/stable/statespace.html)，2026-11-07 核实）。；[SEC Reg SHO](https://www.sec.gov/investor/pubs/regsho.htm)、[Rule 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。
 
 <Summary>
 **要点**：EG+MacKinnon、滚动协整陷阱、滚动对冲、双腿成本。  

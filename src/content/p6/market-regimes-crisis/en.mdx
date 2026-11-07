@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**12 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review + 1h options/VIX risk box) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
+This lesson (~**13 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO comparison) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
 
 **Goals:** write an engineering definition of regime; build a `shift(1)` detector stack; draft identification / engineering response / failure modes for four playbooks; spot look-ahead in smoothed HMM probabilities; separate news-day volatility from a defined regime.
 
@@ -198,6 +198,28 @@ Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
 - Corr: calm **0.069** → stress **0.990**; common-shock book PnL ≈ **−0.0776**
 - HMM: `t=79` filtered **0.022** vs smoothed **0.176** (leakage shape)
 
+## Three US “brakes”: MWCB / LULD / Reg SHO 201 (checked 2026-11-08)
+
+MWCB (market-wide circuit breakers) is already on the site; this adds the single-stock LULD and the short-sale price test, side by side.
+
+| Layer | Trigger | Effect |
+|------|------|------|
+| MWCB | Large one-day drop in the market index | Market-wide trading halt |
+| LULD | A stock hits its dynamic price band and the Limit State is not exited within 15 seconds | The primary listing exchange usually declares a 5-minute pause (can be extended) |
+| Reg SHO 201 | A stock falls ≥10% from the prior day’s close | Short-sale price restriction for the rest of the day and the next day ([eCFR](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)) |
+
+**LULD tiers (per review item R12):** LULD is not a fixed all-day limit relative to the prior close. The bands sit around a dynamic reference price; the applicable percentage tier is set for the day, per the Plan, from the prior trading day’s primary-market closing price and similar: in the ordinary non-leveraged example, for a price tier above $3 Tier 1 is 5% and Tier 2 is 10%; from $0.75 to $3 (inclusive) both are 20%; below $0.75 the band is the lesser of $0.15 or 75% of the reference price. In the last 25 minutes before the regular close, only all Tier 1 stocks and Tier 2 stocks with a price tier not above $3 use doubled parameters; on early-close days it is the last 25 minutes before the early close. Tier 2 stocks above $3 are not uniformly doubled at the close. Amendment 18, implemented 2020-02-24, removed the 09:30–09:45 New York opening doubling for all stocks; do not repeat the old description. ETF/ETP tiering and leveraged products must be checked against the current official list/Plan, not guessed from the ticker name.
+
+The reference price is usually the mean of eligible trades over the prior 5 minutes; opening/reopening have special provisions. The synthetic state machine below is **not a complete rule engine**.
+
+**Lab:** `examples/p6/06_luld_halt_toy.py`:
+
+```text
+Tier1 $50: ±5%, closing window ±10%; Tier2 $50: ±10% in both windows; Tier2 $2 closing window ±40%; Tier1 $0.50: ±30%
+t=13 Limit State lasts 20s > 15s → pause; reopens at t=73 at 37.20 (lower band 38.00)
+A stop at 38.50 fills at 37.20 (gap); the 10.5% drop triggers the SHO 201 price test
+```
+
 ## Common mistakes / traps
 
 1. Computing today’s state from today’s close, then trading the same bar (look-ahead).
@@ -208,6 +230,7 @@ Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
 6. Running trend rules in chop without costs.
 7. Mapping a news “correction” straight onto the course regime enum.
 8. Treating a bought put as “free insurance” and ignoring the premium; treating moves in the VIX Index as moves in VIX futures/options/related products.
+9. Treating LULD as a fixed 10% limit vs the prior close; repeating the removed 09:30–09:45 opening doubling; assuming every Tier 2 doubles at the close.
 
 
 ## Practice (1:1)
@@ -219,6 +242,7 @@ Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
 5. **ex5** — Write three-column cards for playbooks A–D (ID / response / failure) with **no** trade-recommendation sentences.
 6. **done1** — One-page hard-rules + debunk checklist; attach CNBC/AP links and a “news ≠ regime” paragraph.
 7. **ex6** — hand-calc the put toy in the risk box (expiry prices 80 and 100, including premium); **done when**: you write the two numbers +13 / −2 and one sentence on why spot VIX differs from the VIX futures settlement value.
+8. **ex-luld** — run `06_luld_halt_toy.py` and explain why Tier 2 at $50 does not double in the closing window but Tier 2 at $2 does; **done when**: you cite the R12 tier rule.
 
 
 ## Quiz
@@ -230,12 +254,13 @@ Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
 <Quiz id="p6mrc-q5" question="US MWCB 7/13/20% levels are, in this course?" options={["A buy signal", "A sell signal", "Mechanism literacy — not a trade signal", "Kelly formula inputs"]} answer={1} explanation="Halts pause trading to cool the tape; they do not issue alpha instructions." />
 <Quiz id="p6mrc-q6" question="After reading Moreira–Muir (2017) with Cederburg et al. (2020), vol targeting should be treated as?" options={["Guaranteed Sharpe uplift / course alpha", "Risk-scaling engineering; OOS value is cautious — no return promise", "A substitute for the compliance lesson", "A synonym for HMM smoothing"]} answer={1} explanation="One paper shows appeal; the other stresses real-time/OOS versions are not systematically better." />
 <Quiz id="crisis-put" question="A bought put expires worthless. Per OIC, what does the buyer lose?" options={["Nothing, options are insurance", "Up to the entire premium paid", "Unlimited", "Only half"]} answer={1} explanation="OIC: if options expire with no value the loss can be the entire premium; unlimited risk belongs to an uncovered writer." />
+<Quiz id="rc-luld" question="A $50 Tier 2 stock in the last 25 minutes before the regular close has an LULD percentage of?" options={["5%", "10%", "20%", "No limit"]} answer={1} explanation="Tier 2 stocks above $3 are not doubled at the close." />
 
 ## Done when
 
 Four playbook cards + Labs A–D numbers matching the lesson + a short “news ≠ regime” note (with verified links) + hard-rules checklist. Smoothed probabilities must not appear in the “live-usable” column.
 
-**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.; OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) and [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks); Cboe [VIX product page](https://www.cboe.com/tradable_products/vix/) and [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) (all verified 2026-11-07).
+**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.; OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) and [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks); Cboe [VIX product page](https://www.cboe.com/tradable_products/vix/) and [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) (all verified 2026-11-07).; [LULD Plan](https://www.luldplan.com/), [Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf), [Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/), [Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201) (checked 2026-11-08).
 
 <Summary>
 **Takeaways**: regimes must be operational and causal; smoothed HMM leaks; write failure modes for every playbook; circuit breakers and news “corrections” are not course trade signals; vol management is risk engineering, not a return promise.  

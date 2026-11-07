@@ -1,0 +1,25 @@
+{
+  "market": "US-equity",
+  "currency": "USD",
+  "session_scope": "regular 09:30-16:00 ET only",
+  "source": "local synthetic fixture",
+  "feed": "n/a (fixture); if live later record IEX vs SIP",
+  "licence": "self-made fixture; check provider terms before any real data",
+  "snapshot_sha256": "e7bcfd447dbdd33c173bedbad224af0e9bb855b69bd89cb35c1a2eb6b369d94f",
+  "adjustment_policy": "split-adjusted prices + separate dividend ledger",
+  "dividend_policy": "total return from ledger, no double count",
+  "universe": {
+    "survivorship": "historical_membership",
+    "delisting": "flag missing returns"
+  },
+  "availability_ts_rule": "use only values released before decision_ts",
+  "calendar_version": "NYSE 2026 holidays checked 2026-11-08",
+  "rule_version": "FINRA 26-10 phase-in; needs_broker_verification if unknown",
+  "short_borrow_mode": "constrained",
+  "benchmark": "Mkt-RF + RF (Ken French format)",
+  "risk_free": "RF column, decimal",
+  "cost_model": "spread + fees placeholder, sensitivity tested",
+  "paper_is_not_live": true,
+  "source_mode": "fixture",
+  "fallback_reason": "offline lab: no network downloads allowed (R16)"
+}

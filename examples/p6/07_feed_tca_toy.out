@@ -1,0 +1,7 @@
+A) arrival mid SIP=100.020 IEX=100.015
+B) slippage vs SIP=3.00 bps vs IEX=3.50 bps (same fill, different benchmark)
+C) stale NBBO (1 tick old) arrival=100.010 -> slippage 4.00 bps (overstated)
+D) report must record: feed, quote_ts, decision_ts, fill_ts
+E) order    200 shares vs top-of-book 300: OK
+E) order   1000 shares vs top-of-book 300: walks book
+E) order  20000 shares vs top-of-book 300: exceeds 5% ADV

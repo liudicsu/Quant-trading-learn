@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**24 hours**: 5h concepts + 15h labs incl. Detzel costs + NMV 2016 taxonomy + w34898 localFDR + HXZ foil + admission pointer + 3h write-up + 1h crowding→LLM bridge — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
+This lesson (~**25 hours**: 5h concepts + 15h labs incl. Detzel costs + NMV 2016 taxonomy + w34898 localFDR + HXZ foil + admission pointer + 3h write-up + 1h crowding→LLM bridge + 1h US factor benchmark alignment — HEAVY) builds a repeatable **cross-sectional factor research** workflow: construction, IC/RankIC/ICIR/decay, quantile long–short with costs, Fama–MacBeth, and a Harvey–Liu–Zhu multiple-testing foil. Prereqs: `strategy-compare-lab`, `backtest-traps`.
 
 **Goals:** implement Spearman IC; build quantile long–short; contrast true vs null factors.
 
@@ -250,6 +250,18 @@ lab toy mixture: fail_|t|<1.96≈87%  fail_|t|<2.78≈97%  (order-of-magnitude f
 
 Even “successful” replications are often economically smaller than the original reports. Treat the failure rate as a **prior** — new factors still need HLZ/HSZ hurdles **and** Detzel costs, not a blog t-stat.
 
+## US factor benchmarks: units, frequency, missing values and version alignment (checked 2026-11-08)
+
+CIZ is covered above; this only adds format traps ([Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)): files are in **percent**, divide by 100; -99.99/-999 are missing markers (per the specific file’s notes); `Mkt-RF` already has RF subtracted, so do not subtract it again; daily→monthly must compound `prod(1 + r) - 1`, not sum; the library rebuilds history monthly, so record the download version.
+
+`examples/p4/03_us_factor_benchmark.py` (self-made, same shape):
+
+```text
+missing markers -> NaN: 2 cells; day 1 Mkt-RF 0.005, RF 0.0002; total market 0.0052; strategy excess 0.0058
+2026-06: compounded 0.00569 vs simple sum 0.00580; 2026-07: 0.00737 vs 0.00740
+subtracting RF again (wrong) gives 0.0048
+```
+
 ## Common mistakes / pitfalls
 
 - Treating HXZ failure rates as a license to skip HLZ/HSZ + Detzel — they are a prior, not a free pass.
@@ -261,6 +273,7 @@ Even “successful” replications are often economically smaller than the origi
 4. Treating t>2 as a discovery after mining dozens of factors — compare to the ~4.55% null.
 5. Using same-day mcap in neutralization (lookahead).
 6. Reading ICIR from overlapping windows without NW / non-overlap.
+7. Not dividing Ken French percents by 100; subtracting RF from `Mkt-RF` again; treating -99.99 as a real return.
 
 ## Practice (1:1)
 
@@ -269,6 +282,7 @@ Even “successful” replications are often economically smaller than the origi
 3. **ex3** — Scrambled / random-factor control vs null expectation table.
 4. **ex4** — IC vs horizon chart + strong/weak table.
 5. **done1** — Mini-report: recovery + strong/weak + IC + quantiles + null zoo.
+6. **ex-us-ff** — run `03_us_factor_benchmark.py` and state the June 2026 gap between compounding and summing; **done when**: 0.00011.
 
 ## Quiz
 
@@ -286,6 +300,7 @@ Even “successful” replications are often economically smaller than the origi
 <Quiz id="p4fw-detzel" question="Detzel–Novy-Marx–Velikov (JF 2023) main caution?" options={["Always prefer highest turnover", "Ignoring costs biases model/factor comparisons toward high-cost factors", "Costs never change rankings", "Only crypto matters"]} answer={1} explanation="DOI 10.1111/jofi.13225." />
 
 <Quiz id="p4fw-nmv2016" question="Novy-Marx & Velikov RFS 2016 taxonomy main spirit?" options={["All high-turnover anomalies survive net", "Gross zoo ≠ net zoo; low-turnover mostly survive / high-turnover mostly die", "Costs never matter", "Use taxonomy as alpha shopping list"]} answer={1} explanation="NBER w20721 / DOI 10.1093/rfs/hhv063." />
+<Quiz id="fw-mktrf" question="Given the Mkt-RF column, the total market return is?" options={["Mkt-RF − RF", "Mkt-RF + RF", "Mkt-RF × 100", "RF"]} answer={1} explanation="Mkt-RF already has RF subtracted." />
 
 ## Done when
 

@@ -11,4 +11,11 @@ adjusted daily ret: [0.02, 0.0039, 0.0117]
 A days=8 B days=7 inner-join days=7
 ffill rows where B return is a stale copy: 1
 -> forward-filling a RETURN invents a trade on a closed day; use the right calendar
+=== D. raw vs split-adjusted vs total return; share ledger; delisting ===
+shares/cash ledger wealth: [6000.0, 6100.0, 6080.0, 6120.0, 6160.0]
+split-adj price ret: [0.0167, -0.0033, -0.0099, 0.0066]
+total ret (div once): [0.0167, -0.0033, 0.0066, 0.0066]
+double-counted dividend on ex-day: 0.0230 vs correct 0.0066
+split day: ledger wealth 6100.00 -> 6080.00 (shares doubled, no free wealth)
+delisting: final ret known=-0.30; missing ret -> flag 'delist_ret_missing', do NOT drop or set 0
 disclaimer: synthetic; learning only

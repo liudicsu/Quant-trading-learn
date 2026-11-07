@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **7 学时**：概念 3h + 练习 3h + 测验 1h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **9 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -88,6 +88,27 @@ ASSERTS_OK
 
 **桥接（加深在 `execution-slippage`）：** 公开盘口估元订单冲击常与真实凹/回撤不符 — [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)；本课只留价差/成交直觉，不做 LOB 配方。
 
+## 美股主线：交收、账户、报价与交易时段（2026-11-08 核实）
+
+**默认场景：** 美国上市股票、美元。下面是机制识字，不是券商规则或投资建议。
+
+- **T+1：** 自 2024-05-28 起，多数美国证券交易在成交后**下一个营业日**交收（[SEC](https://www.sec.gov/newsroom/press-releases/2024-62)）。不是「24 小时」，也不意味着当天不能卖。周末与交易所假日不算营业日。
+- **现金账户 vs 保证金账户：** 现金账户用已交收资金买入；保证金账户借券商的钱，适用维持保证金。PDT 继任规则及迁移期见 `compliance-ethics`（本课不重复）。
+- **NBBO / SIP / IEX：** NBBO 是各交易所中**最高买价 + 最低卖价**的合并报价；SIP 是发布合并行情的证券信息处理器。只看单一交易所（例如 IEX）看到的价差可能比 NBBO 宽。
+- **Rule 611（订单保护规则）状态框：** SEC 于 2026-06-11 发布撤销 Rule 611 的**提案**（S7-2026-20，Release 34-105655，意见截止 2026-08-17）；截至 2026-11-08，它仍是提案，eCFR 仍列 §242.611。**不要写成「已废除」**（[SEC](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)）。
+- **交易时段：** NYSE 常规交易 09:30–16:00 纽约时间（ET）；2026-11-27 13:00 提前收盘；2026-07-03 休市（独立日补假）（[NYSE](https://www.nyse.com/markets/hours-calendars)）。盘前/盘后时段因交易所和券商而异，**不要假设统一的 04:00 开始**，也不要假设 24/5。
+- **最佳执行：** FINRA 21-23 指出 Rule 5310 的最佳执行**不只看价格**（[FINRA](https://www.finra.org/rules-guidance/notices/21-23)）。
+
+**实验：** `examples/p1/05_us_market_mechanics.py`（纯本地合成数据）：
+
+```text
+T+1: 2026-07-02 -> 2026-07-06; 2026-11-25 -> 2026-11-27; 2026-11-27 -> 2026-11-30
+上海时间：07-06 21:30→04:00；12-07 22:30→05:00；11-27 提前收盘 22:30→11-28 02:00；07-03 休市
+NBBO 99.99 x100 / 100.02 x100；单一交易所价差 0.07 vs NBBO 0.03；买 500 股均价 100.0320
+```
+
+公式用代码写：`spread = ask - bid`，`mid = (bid + ask) / 2`。
+
 ## 常见错误 / 陷阱
 
 1. 用 mid 当市价买成交价。
@@ -95,6 +116,7 @@ ASSERTS_OK
 3. 把价差当成「不是成本」。
 4. 把教学滑点数字当成某交易所真实费率。
 5. 索要/设计 HFT 配方（本课明确不做）。
+6. 把 T+1 当成「24 小时」或把周五成交算成周六交收；把 Rule 611 撤销提案写成「已废除」；假设盘前统一 04:00 开始。
 
 ## 练习（与任务清单 1:1）
 
@@ -103,6 +125,7 @@ ASSERTS_OK
 3. **ex3**：用文字对比同 bar vs shift(1)/次日开盘；**完成标准**：点名 LOOK-AHEAD。
 4. **ex4**：跑脚本核对 optimistic vs honest 净值；**完成标准**：与课内输出一致。
 5. **ex5**：说明冲击/延迟为何只留直觉；**完成标准**：≥2 句且拒绝 HFT 配方。
+6. **ex-us1** — 运行 `05_us_market_mechanics.py`，把 2026-11-25 和 2026-11-27 两笔交易的交收日手算一遍并与输出核对；**完成标准**：两日期一致且能解释为何跳过感恩节（2026-11-26）。
 
 ## 测验
 
@@ -111,13 +134,15 @@ ASSERTS_OK
 <Quiz id="q3-spr" question="半价差相对 mid 是？" options={["收入", "一种隐性交易成本", "Alpha", "Beta"]} answer={1} explanation="穿越价差是成本。" />
 <Quiz id="q4-lh" question="同 bar 用收盘信号吃收盘收益的主要问题？" options={["算得慢", "LOOK-AHEAD / 过乐观", "夏普定义错", "必须用期货"]} answer={1} explanation="信息时点与收益窗口重叠。" />
 <Quiz id="q5-hft" question="本课对冲击/延迟的立场？" options={["给出可上线 HFT 参数", "只建直觉，不做 HFT 配方", "忽略即可", "等于佣金"]} answer={1} explanation="课程边界：直觉而非配方。" />
+<Quiz id="mo-t1" question="2026-11-25（周三）成交的美股，T+1 交收日是？" options={["2026-11-26", "2026-11-27", "2026-11-30", "当天"]} answer={1} explanation="11-26 感恩节休市，下一个营业日是 11-27。" />
+<Quiz id="mo-611" question="截至 2026-11-08，Rule 611 的状态是？" options={["已废除", "SEC 发布了撤销提案，仍是提案", "从未存在", "只适用 A 股"]} answer={1} explanation="S7-2026-20 是提案；eCFR 仍列 §242.611。" />
 
 ## 完成标准
 
 - 成本假设一页 + 跑通脚本 + 测验
 - 能解释 mid/市价侧/同 bar 前瞻
 
-**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。
+**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。；美股主线（2026-11-08 核实）：[SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62)、[NYSE 交易时间](https://www.nyse.com/markets/hours-calendars)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

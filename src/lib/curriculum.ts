@@ -56,11 +56,11 @@ export const COURSE_META = {
     zh: "阶段由知识依赖簇导出，不是月历格子",
     en: "Phases come from dependency clusters, not a calendar grid",
   },
-  hoursFull: 362,
-  hoursSkipFoundations: 342,
+  hoursFull: 382,
+  hoursSkipFoundations: 362,
   hoursRangeLabel: {
-    zh: "精确 362h 全量 / 342h 跳过 P0（对外约 330–370h / 310–350h）",
-    en: "Exact 362h full / 342h skip P0 (public range ~330–370h / 310–350h)",
+    zh: "精确 382h 全量 / 362h 跳过 P0（对外约 350–390h / 330–370h）；默认场景：美国上市股票、美元",
+    en: "Exact 382h full / 362h skip P0 (public range ~350–390h / 330–370h); default scope: US-listed stocks, USD",
   },
   lessonCount: 28,
   phaseCount: 10,
@@ -104,7 +104,7 @@ const phase_P0_lessons: Lesson[] = [
       { zh: "可复现小 notebook+断言。", en: "Reproducible mini-notebook+asserts." },
     ],
     methodTags: {
-      classic: ["JoinQuant W01 pandas", "QuantStart Python stack"],
+      classic: ["Self-contained local pandas labs", "QuantStart Python stack", "Chinese supplement: JoinQuant community tutorials"],
       niche: [],
       frontier: [],
     },
@@ -202,7 +202,7 @@ const phase_P0_lessons: Lesson[] = [
       { zh: "市场/基准一页纸。", en: "Market/benchmark one-pager." },
     ],
     methodTags: {
-      classic: ["QuantStart beginner books", "JoinQuant 初识量化"],
+      classic: ["QuantStart beginner books", "Default: US-listed stocks/ETFs in USD", "Chinese supplement: JoinQuant 初识量化"],
       niche: [],
       frontier: [],
     },
@@ -270,10 +270,10 @@ const phase_P1_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "微观结构与订单", en: "Microstructure & orders" },
     summary: { zh: "价差、mid、市价/限价、滑点；同bar零成本过乐观。", en: "Spread, mid, market/limit, slippage; same-bar zero-cost optimism." },
-    hours: 7,
+    hours: 9,
     difficulty: 2,
     skippable: false,
-    hourBasis: "3h concepts + 3h exercises + 1h quiz",
+    hourBasis: "3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution)",
     prereqs: ["markets-language"],
     goals: [
       { zh: "手算 mid 与市价买 bps。", en: "Hand mid and market-buy bps." },
@@ -291,6 +291,7 @@ const phase_P1_lessons: Lesson[] = [
       { zh: "同 bar vs 诚实时点。", en: "Same-bar vs honest timing." },
       { zh: "跑脚本核净值。", en: "Run script; check NAVs." },
       { zh: "冲击/延迟边界说明。", en: "Impact/latency boundary note." },
+      { zh: "T+1 交收日与上海时间交易时段手算。", en: "Hand-compute T+1 settlement and Shanghai-time sessions." },
     ],
     quizTopics: [
       { zh: "市价单成交侧", en: "Market-buy side" },
@@ -310,6 +311,7 @@ const phase_P1_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "对比同 bar vs shift(1)/次日开盘；完成标准：点名 LOOK-AHEAD。", en: "Contrast same-bar vs shift(1)/next-open; done when LOOK-AHEAD is named." } },
       { id: "ex4", text: { zh: "跑 02 脚本核对乐观 vs 诚实净值；完成标准：与课内输出一致。", en: "Run script 02; done when optimistic vs honest NAVs match the lesson." } },
       { id: "ex5", text: { zh: "说明冲击/延迟只留直觉；完成标准：≥2 句且拒绝 HFT 配方。", en: "Why impact/latency stay intuitive; done when ≥2 sentences refuse an HFT recipe." } },
+      { id: "ex-us1", text: { zh: "运行 05 脚本并手算 2026-11-25/11-27 交收日；完成标准：一致并解释感恩节。", en: "Run script 05 and hand-compute settlement for 2026-11-25/11-27; done when they match and Thanksgiving is explained." } },
     ],
   },
   {
@@ -347,7 +349,7 @@ const phase_P1_lessons: Lesson[] = [
       { zh: "可复用指标函数+测验。", en: "Reusable metrics + quiz." },
     ],
     methodTags: {
-      classic: ["Canvas m3", "JoinQuant W02", "QuantStart performance"],
+      classic: ["Canvas m3", "QuantStart performance", "Chinese supplement: JoinQuant returns/risk tutorial"],
       niche: [],
       frontier: [],
     },
@@ -392,7 +394,7 @@ const phase_P1_lessons: Lesson[] = [
       { zh: "对照表+三句结论。", en: "Table + three-sentence conclusion." },
     ],
     methodTags: {
-      classic: ["JoinQuant 策略评价", "Canvas eval"],
+      classic: ["Canvas eval", "pyfolio tear-sheet docs", "Chinese supplement: JoinQuant 策略评价"],
       niche: ["@FG731314 good-strategy traits (X post 2115609441748001008)"],
       frontier: [],
     },
@@ -412,10 +414,10 @@ const phase_P2_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "数据与清洗", en: "Data & cleaning" },
     summary: { zh: "复权、停牌、缺失、幸存者、PIT；mask-first 反上游污染；数据说明书。", en: "Adjustments,halts,missingness,survivorship,PIT; mask-first vs upstream contamination; data sheet." },
-    hours: 19,
+    hours: 25,
     difficulty: 3,
     skippable: false,
-    hourBasis: "5h concepts + 6h pipeline lab incl mask-first + 2h info-bars + 1h crypto-PIT + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab",
+    hourBasis: "5h concepts + 6h pipeline lab incl mask-first + 2h info-bars + 1h crypto-PIT + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources/licensing/PIT lab (EDGAR/FRED terms R16/Ken French/CRSP/yfinance/Massive/Alpaca) + 2h corporate actions & delisting (R21) + 1h ALFRED revision as-of",
     prereqs: ["eval-lab"],
     goals: [
       { zh: "版本化下载与哈希。", en: "Version downloads and hashes." },
@@ -437,6 +439,7 @@ const phase_P2_lessons: Lesson[] = [
       { zh: "信息 bar 时钟；完成标准：与课内表一致。", en: "Info-bar clocks; done when counts match the lesson table." },
       { zh: "跑 mask-first 玩具；完成标准：表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。", en: "Run mask-first toy; done when apparent vs realisable IC, MA sketch, ASSERT_mask_first_demo_ok print." },
       { zh: "数据版本/公司行为/交易日历实验。", en: "Data versions / corporate actions / calendar lab." },
+      { zh: "三个数据源的许可与可用时间行。", en: "Licence and availability rows for three sources." },
     ],
     quizTopics: [
       { zh: "幸存者偏差", en: "Survivorship" },
@@ -447,7 +450,7 @@ const phase_P2_lessons: Lesson[] = [
       { zh: "管线可复跑+说明书。", en: "Rerunnable pipeline + sheet." },
     ],
     methodTags: {
-      classic: ["Canvas m4", "QuantStart securities master", "Qlib data layer", "JoinQuant data"],
+      classic: ["Canvas m4", "QuantStart securities master", "Qlib data layer", "US source map: SEC EDGAR / ALFRED / Ken French / CRSP docs", "Chinese supplement: JoinQuant data docs"],
       niche: ["@pyquantnews 45 APIs (status/2116517809920327801 → public-apis finance)", "OpenBB quantitative docs", "Binance Vision + @sera00111 crypto data notes"],
       frontier: ["Mask-first / upstream contamination arXiv:2507.07107 (contract+diagnosis only; REJECT headline Sharpes)", "Alt-data awareness; deeper in P8"],
     },
@@ -460,6 +463,8 @@ const phase_P2_lessons: Lesson[] = [
       { id: "ex6", text: { zh: "信息 bar 时钟；完成标准：与课内表一致。", en: "Info-bar clocks; done when counts match the lesson table." } },
       { id: "ex7", text: { zh: "跑 mask-first 玩具；完成标准：表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。", en: "Run mask-first toy; done when apparent vs realisable IC, MA sketch, ASSERT_mask_first_demo_ok print." } },
       { id: "ex8", text: { zh: "跑数据版本/公司行为/日历实验；完成标准：口径差≈−18.28bp、拆分raw/adj、日历交集，并补说明书三行。", en: "Run data-version/corporate-action/calendar lab; done when ≈−18.28bp convention gap, split raw/adj, calendar intersection print and data sheet gains three lines." } },
+      { id: "ex-us-src", text: { zh: "为三个数据源写 source/licence/availability_ts/allowed_use_checked_on；完成标准：FRED 写明服务条款、yfinance 写明仅个人使用。", en: "Write source/licence/availability_ts/allowed_use_checked_on for three sources; done when FRED notes service terms and yfinance notes personal use only." } },
+      { id: "ex-us-ca", text: { zh: "解释 05 脚本 D 节分红重复计入的 0.0230；完成标准：点出重复步骤。", en: "Explain the 0.0230 double-counted dividend in section D of script 05; done when the duplicate step is named." } },
     ],
   },
   {
@@ -502,7 +507,7 @@ const phase_P2_lessons: Lesson[] = [
       { zh: "陷阱报告含 walk-forward、PSR/DSR 与对照。", en: "Trap report with walk-forward, PSR/DSR, and controls." },
     ],
     methodTags: {
-      classic: ["Canvas m5", "JoinQuant审讯室", "AFML ch.7/14", "Bailey-LdP 2012 PSR", "Bailey-LdP 2014 DSR", "@AfuOnTheWay三坑"],
+      classic: ["Canvas m5", "Backtest interrogation discipline", "Chinese supplement: JoinQuant 审讯室 posts", "AFML ch.7/14", "Bailey-LdP 2012 PSR", "Bailey-LdP 2014 DSR", "@AfuOnTheWay三坑"],
       niche: [],
       frontier: ["Quant-Arena sealed hold-out (arXiv:2610.30113)", "When Alpha Disappears one-switch (arXiv:2605.23959)"],
     },
@@ -709,10 +714,10 @@ const phase_P3_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "配对与统计套利入门", en: "Pairs & intro statistical arb" },
     summary: { zh: "价差、滚动对冲比、相关≠可交易。", en: "Spreads, rolling hedge, correlation≠tradeable." },
-    hours: 12,
+    hours: 13,
     difficulty: 3,
     skippable: false,
-    hourBasis: "4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio (filter vs smoother)",
+    hourBasis: "4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio (filter vs smoother) + 1h US short-sale constraints (Reg SHO layers, borrow, dividends)",
     prereqs: ["mean-reversion"],
     goals: [
       { zh: "滚动beta价差。", en: "Rolling-beta spread." },
@@ -728,6 +733,7 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "静态vs滚动。", en: "Static vs rolling." },
       { zh: "冲击/断腿说明。", en: "Shock/broken-leg note." },
       { zh: "（选修）Kalman动态对冲比filter vs smoother。", en: "(Optional) Kalman hedge ratio filter vs smoother." },
+      { zh: "借券费敏感性。", en: "Borrow-fee sensitivity." },
     ],
     quizTopics: [
       { zh: "相关vs协整", en: "Corr vs cointegration" },
@@ -748,6 +754,7 @@ const phase_P3_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "冲击/断腿说明段。", en: "Shock/broken-leg paragraph." } },
       { id: "done1", text: { zh: "含成本配对notebook。", en: "Costed pairs notebook." } },
       { id: "ex4", text: { zh: "（选修）Kalman对冲比；完成标准：t=149 filtered/smoothed β与未来扰动测试两行。", en: "(Optional) Kalman hedge; done when t=149 filtered/smoothed β and the two future-perturbation lines print." } },
+      { id: "ex-us-short", text: { zh: "把 06 脚本借券费翻倍；完成标准：报告 constrained_pair 变化与方向。", en: "Double the borrow fee in script 06; done when the constrained_pair change and direction are reported." } },
     ],
   },
   {
@@ -780,7 +787,7 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "对照报告入库。", en: "Comparison report filed." },
     ],
     methodTags: {
-      classic: ["Canvas comparison spirit", "JoinQuant research rules", "Bailey-LdP DSR via P2", "Further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)"],
+      classic: ["Canvas comparison spirit", "Same-protocol comparison rules", "Bailey-LdP DSR via P2", "Further reading: Ernest P. Chan, Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)"],
       niche: ["Critique quants.md dumps as hypothesis sources only"],
       frontier: [],
     },
@@ -798,10 +805,10 @@ const phase_P4_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "因子研究工作流", en: "Factor research workflow" },
     summary: { zh: "IC、分层、衰减、中性化直觉；拒绝堆参数。", en: "IC, quantiles, decay, neutralization; reject parameter stacking." },
-    hours: 24,
+    hours: 25,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 15h labs (incl Detzel + NMV 2016 taxonomy + w34898 + HXZ + admission) + 3h write-up + 1h crowding→LLM bridge — HEAVY",
+    hourBasis: "5h concepts + 15h labs (incl Detzel + NMV 2016 taxonomy + w34898 + HXZ + admission) + 3h write-up + 1h crowding→LLM bridge — HEAVY + 1h US factor benchmark alignment (percent, missing markers, Mkt-RF+RF, compounding)",
     prereqs: ["strategy-compare-lab", "backtest-traps"],
     goals: [
       { zh: "实现Spearman IC。", en: "Implement Spearman IC." },
@@ -820,6 +827,7 @@ const phase_P4_lessons: Lesson[] = [
       { zh: "分层净值。", en: "Quantile NAVs." },
       { zh: "打乱因子对照。", en: "Scrambled control." },
       { zh: "IC衰减图。", en: "IC decay chart." },
+      { zh: "Ken French 格式对齐。", en: "Ken French format alignment." },
     ],
     quizTopics: [
       { zh: "Spearman IC", en: "Spearman IC" },
@@ -840,6 +848,7 @@ const phase_P4_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "打乱因子对照。", en: "Scrambled control." } },
       { id: "ex4", text: { zh: "IC衰减图。", en: "IC decay chart." } },
       { id: "done1", text: { zh: "IC+分层+空因子报告。", en: "IC+quantile+null report." } },
+      { id: "ex-us-ff", text: { zh: "运行 03 基准脚本并给出 2026-06 复利与相加差；完成标准：0.00011。", en: "Run benchmark script 03 and give the June 2026 compound-vs-sum gap; done when 0.00011." } },
     ],
   },
   {
@@ -1047,10 +1056,10 @@ const phase_P6_lessons: Lesson[] = [
       zh: "TWAP/VWAP、AC前沿、Perold IS、限价vs市价、到达价TCA、双√冲击识字、公开盘口元订单冲击警告。",
       en: "TWAP/VWAP, AC frontier, Perold IS, limit vs market, arrival TCA, double-√ impact literacy, public-data metaorder impact warn.",
     },
-    hours: 13,
+    hours: 14,
     difficulty: 3,
     skippable: false,
-    hourBasis: "5h concepts (√/Gatheral + public metaorder IRF) + 6.5h experiments + 1.5h quiz",
+    hourBasis: "5h concepts (√/Gatheral + public metaorder IRF) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA (IEX vs SIP arrival, stale NBBO, capacity)",
     prereqs: ["costs-in-backtest", "portfolio-risk-sizing"],
     goals: [
       { zh: "加参与率与日程约束。", en: "Add participation and schedule caps." },
@@ -1067,6 +1076,7 @@ const phase_P6_lessons: Lesson[] = [
       { zh: "AC λ扫描与轨迹。", en: "AC λ sweep and trajectories." },
       { zh: "Perold IS分解。", en: "Perold IS decomposition." },
       { zh: "执行一页纸进主配置。", en: "Execution one-pager in main config." },
+      { zh: "feed 感知 TCA。", en: "Feed-aware TCA." },
     ],
     quizTopics: [
       { zh: "隐性成本与IS", en: "Implicit costs and IS" },
@@ -1087,6 +1097,7 @@ const phase_P6_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "Perold IS分解。", en: "Perold IS decomposition." } },
       { id: "ex4", text: { zh: "限价vs市价玩具。", en: "Limit vs market toy." } },
       { id: "done1", text: { zh: "执行假设纳入主配置。", en: "Execution assumptions in main config." } },
+      { id: "ex-us-tca", text: { zh: "把 07 脚本成交价改为 100.03；完成标准：报告两种 feed 的滑点。", en: "Set the fill to 100.03 in script 07; done when slippage under both feeds is reported." } },
     ],
   },
   {
@@ -1147,10 +1158,10 @@ const phase_P6_lessons: Lesson[] = [
       zh: "可操作regime、因果检测栈、四场景剧本、HMM过滤vs平滑泄漏、熔断识字、新闻≠regime。",
       en: "Operational regimes, causal detector stack, four playbooks, HMM filter vs smoother leak, circuit-breaker literacy, news≠regime.",
     },
-    hours: 12,
+    hours: 13,
     difficulty: 4,
     skippable: false,
-    hourBasis: "4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review + 1h options/VIX risk box",
+    hourBasis: "4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO 201 comparison (R12 tiers, Amendment 18)",
     prereqs: ["risk-systems-lab"],
     goals: [
       { zh: "写出可操作、可因果的regime定义。", en: "Write an operational, causal regime definition." },
@@ -1169,6 +1180,7 @@ const phase_P6_lessons: Lesson[] = [
       { zh: "相关→1压力PnL。", en: "Corr→1 stress PnL." },
       { zh: "HMM过滤vs平滑泄漏对照。", en: "HMM filter vs smoother leakage foil." },
       { zh: "期权/VIX风险框手算。", en: "Options/VIX risk-box hand calc." },
+      { zh: "LULD 价格档与收盘翻倍解释。", en: "Explain LULD tiers and closing doubling." },
     ],
     quizTopics: [
       { zh: "因果滞后与平滑泄漏", en: "Causal lag and smoother leakage" },
@@ -1191,6 +1203,7 @@ const phase_P6_lessons: Lesson[] = [
       { id: "ex5", text: { zh: "四场景三栏卡片（无买卖推荐）。", en: "Four playbook three-column cards (no trade advice)." } },
       { id: "done1", text: { zh: "硬规则+排伪+新闻≠regime短文。", en: "Hard rules + debunk + news≠regime note." } },
       { id: "ex6", text: { zh: "看跌期权玩具手算；完成标准：+13/−2 与 spot VIX≠期货结算一句。", en: "Put toy hand calc; done when +13/−2 and one sentence spot VIX ≠ futures settlement." } },
+      { id: "ex-luld", text: { zh: "运行 06 LULD 脚本并解释 Tier2 $50 vs $2；完成标准：引用价格档规则。", en: "Run the 06 LULD script and explain Tier 2 at $50 vs $2; done when the tier rule is cited." } },
     ],
   },
 ];
@@ -1204,10 +1217,10 @@ const phase_P7_lessons: Lesson[] = [
       zh: "合成纸面闭环：日志/对账、摩擦阶梯、六缺陷一致性清单（无券商下单）。",
       en: "Synthetic paper loop: logs/recon, friction ladder, six-defect parity checklist (no broker orders).",
     },
-    hours: 14,
+    hours: 17,
     difficulty: 3,
     skippable: false,
-    hourBasis: "3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map",
+    hourBasis: "3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map + 2h US broker paper differences & adapter fixture + 1h Shanghai-timezone reconciliation",
     prereqs: ["market-regimes-crisis"],
     goals: [
       { zh: "CSV/模拟撮合与冻结版本。", en: "CSV/sim matching with frozen version." },
@@ -1224,6 +1237,7 @@ const phase_P7_lessons: Lesson[] = [
       { zh: "摩擦阶梯表。", en: "Friction ladder table." },
       { zh: "熔断单元演示。", en: "Kill-switch unit demo." },
       { zh: "日报模板。", en: "Daily template." },
+      { zh: "纸面适配器幂等测试。", en: "Paper adapter idempotency test." },
     ],
     quizTopics: [
       { zh: "纸面验证什么", en: "What paper validates" },
@@ -1234,7 +1248,7 @@ const phase_P7_lessons: Lesson[] = [
       { zh: "≥5日日志包+缺口表+熔断演示。", en: "≥5-day log pack + gap table + kill demo." },
     ],
     methodTags: {
-      classic: ["Canvas m13", "JoinQuant W08", "QuantStart paper-before-live"],
+      classic: ["Canvas m13", "QuantStart paper-before-live", "Alpaca / IBKR paper docs (document-level only)", "Chinese supplement: JoinQuant 模拟交易"],
       niche: ["Qbot/Atlas reference architecture", "Nautilus isomorphic paper/sim concept"],
       frontier: ["arXiv:2610.21846 BT↔live six defects + checklist"],
     },
@@ -1244,6 +1258,7 @@ const phase_P7_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "熔断单元演示。", en: "Kill-switch unit demo." } },
       { id: "ex4", text: { zh: "日报模板。", en: "Daily template." } },
       { id: "done1", text: { zh: "≥5日日志包+缺口表+熔断演示。", en: "≥5-day log pack + gap table + kill demo." } },
+      { id: "ex-us-paper", text: { zh: "在 03 适配器 fixture 中加重复 client_order_id；完成标准：unique_orders_sent 不变。", en: "Add a duplicate client_order_id to the 03 adapter fixture; done when unique_orders_sent is unchanged." } },
     ],
   },
   {
@@ -1251,15 +1266,17 @@ const phase_P7_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "合规、风险心态与研究伦理", en: "Compliance, risk mindset & research ethics" },
     summary: {
-      zh: "中美程序化/接入/卖空/保证金与加密官方状态；香港证监会 GenAI；ESMA 算法交易简报识字；非法律意见；研究伦理。",
-      en: "CN/US programmatic, access, short sale, margin & crypto official status; HK SFC GenAI; ESMA algo-trading briefing literacy; not legal advice; research ethics.",
+      zh: "美股主线：接入/卖空/保证金（FINRA 26-10 四日期与迁移状态）与跨境税务/外汇/CRS 识字；A 股/港股/欧盟为比较阅读；加密官方状态；非法律意见；研究伦理。",
+      en: "US main line: access, short sale, margin (FINRA 26-10 four dates & phase-in status) plus cross-border tax/FX/CRS literacy; A-share/HK/EU as comparison reading; crypto official status; not legal advice; research ethics.",
     },
-    hours: 16,
+    hours: 19,
     difficulty: 2,
     skippable: false,
-    hourBasis: "8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h SSE trading-rule versions (2026 rev.)",
+    hourBasis: "8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29)",
     prereqs: ["paper-trading-infra"],
     goals: [
+      { zh: "分开记录 FINRA 规则四个日期与券商迁移状态（未知输出 needs_broker_verification）。", en: "Record FINRA’s four rule dates separately from broker migration status (unknown → needs_broker_verification)." },
+      { zh: "识别 W-8BEN/协定/洗售/中国个税/CRS/外汇额度的边界，不作个人税务判断。", en: "Recognise the boundaries of W-8BEN/treaty/wash sale/China IIT/CRS/FX quota without personal tax judgements." },
       { zh: "写风险偏好。", en: "Write risk preference." },
       { zh: "记录失败。", en: "Log failures." },
       { zh: "拆穿保证夏普话术。", en: "Debunk guaranteed-Sharpe pitches." },
@@ -1276,6 +1293,7 @@ const phase_P7_lessons: Lesson[] = [
       { zh: "话术审计。", en: "Pitch audit." },
       { zh: "官方来源表。", en: "Official-source table." },
       { zh: "上交所交易规则版本表与按日期切换。", en: "SSE trading-rule version table + date switch." },
+      { zh: "跨境税务/外汇/CRS 识字卡。", en: "Cross-border tax/FX/CRS literacy card." },
     ],
     quizTopics: [
       { zh: "选择性汇报危害", en: "Harm of selective reporting" },
@@ -1297,6 +1315,7 @@ const phase_P7_lessons: Lesson[] = [
       { id: "ex4", text: { zh: "官方来源表。", en: "Official-source table." } },
       { id: "done1", text: { zh: "伦理清单勾选完成。", en: "Ethics checklist complete." } },
       { id: "ex5", text: { zh: "上交所规则版本表；完成标准：2026-07-03→2023，2026-07-06→2026。", en: "SSE rule-version table; done when 2026-07-03→2023 and 2026-07-06→2026." } },
+      { id: "ex6", text: { zh: "跨境识字卡六点；完成标准：六点齐全且无个人税额计算或汇路建议。", en: "Six-point cross-border literacy card; done when all six appear with no personal tax calculation or remittance advice." } },
     ],
   },
 ];
@@ -1399,10 +1418,10 @@ const phase_P9_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "结业项目：诚实的小策略", en: "Capstone: an honest small strategy" },
     summary: { zh: "假设→PIT→含成本walk-forward→DSR(N=全部)→仓位→TCA→纸面对账→合规→报告模板与量规。", en: "Hypothesis→PIT→costed walk-forward→DSR(N=all)→sizing→TCA→paper recon→compliance→report template+rubric." },
-    hours: 24,
+    hours: 26,
     difficulty: 5,
     skippable: false,
-    hourBasis: "6h design/data + 10h backtest/OOS + 4h paper + 4h writing — project",
+    hourBasis: "6h design/data + 10h backtest/OOS + 4h paper + 4h writing — project + 2h US research contract (offline JSON checker)",
     prereqs: ["paper-trading-infra", "compliance-ethics", "factor-workflow", "portfolio-risk-sizing"],
     goals: [
       { zh: "交付可复现研究包。", en: "Deliver reproducible research pack." },
@@ -1422,6 +1441,7 @@ const phase_P9_lessons: Lesson[] = [
       { zh: "≥5日纸面+独立账本检出注入差错。", en: "≥5-day paper+independent ledger detects injected break." },
       { zh: "量规自评（Must全过）。", en: "Rubric self-score (all Must pass)." },
       { zh: "（可选）前沿失败对照附录。", en: "(Optional) frontier failure appendix." },
+      { zh: "美股研究合同校验。", en: "US research contract check." },
     ],
     quizTopics: [
       { zh: "DSR的N与决策序列", en: "DSR N and decision series" },
@@ -1432,7 +1452,7 @@ const phase_P9_lessons: Lesson[] = [
       { zh: "结业包通过自评量规全部Must行。", en: "Capstone pack meets all Must rubric rows." },
     ],
     methodTags: {
-      classic: ["Canvas capstone", "JoinQuant综合+模拟", "Bailey–LdP 2014 DSR", "Perold 1988 IS"],
+      classic: ["Canvas capstone", "US research contract (offline)", "Chinese supplement: JoinQuant 综合/模拟", "Bailey–LdP 2014 DSR", "Perold 1988 IS"],
       niche: ["Open strategy libs sparingly as hypothesis inspiration only"],
       frontier: ["Optional negative-result appendix on RD-Agent/TSFM/on-chain signal"],
     },
@@ -1445,6 +1465,7 @@ const phase_P9_lessons: Lesson[] = [
       { id: "ex6", text: { zh: "量规自评（Must全过）；完成标准：每Must行Pass或Gap+修复计划。", en: "Rubric self-score (all Must pass); done when each Must is Pass or Gap+fix." } },
       { id: "ex7", text: { zh: "（可选）前沿失败对照附录；完成标准：不削弱Must行。", en: "(Optional) frontier failure appendix; done when Must rows stay intact." } },
       { id: "done1", text: { zh: "结业包通过自评量规全部Must行。", en: "Capstone pack meets all Must rubric rows." } },
+      { id: "ex-us-contract", text: { zh: "改 fixture 一个字节后重跑合同检查；完成标准：contract_ok=False 后恢复。", en: "Change one fixture byte and rerun the contract check; done when contract_ok=False, then restore." } },
     ],
   },
 ];

@@ -49,7 +49,7 @@ print("universe: AAA single-name; Y_coin/BBB pairs foil; fill=shift(1); Rf=0")
 print("ONE cost model: one_way_bps", ONE_WAY_BPS, "+ √impact×turnover; pairs n_legs=2")
 print("OOS: last 30%; baseline dual_MA", MA_F, MA_S)
 print(f"trial_count N={N_TRIALS} strategies in this lab (explicit — feeds DSR)")
-print("cite: P2 backtest-traps Bailey–LdP DSR; JoinQuant interrogation ethos")
+print("cite: P2 backtest-traps Bailey–LdP DSR; same-protocol backtest interrogation discipline")
 print("cite: quants.md as hypothesis foil only")
 print("further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quotes")
 

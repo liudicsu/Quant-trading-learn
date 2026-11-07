@@ -1,0 +1,17 @@
+=== 1. long-only baseline vs naive pair vs constrained pair ===
+long_only         cum=-0.0338
+naive_pair        cum=-0.0749
+constrained_pair  cum=-0.0559
+days short leg rejected/forced flat: 25/60 (no-borrow 10 + after recall 15)
+borrow fee paid (sum)=0.00556; dividend owed on day 35=0.00400 of NAV
+=== 2. unlimited-loss shape of a short ===
+stock +50%: long loses at most 100% if it goes to 0; short of 1 share @50 loses 25 (no cap)
+stock +100%: long loses at most 100% if it goes to 0; short of 1 share @50 loses 50 (no cap)
+stock +300%: long loses at most 100% if it goes to 0; short of 1 share @50 loses 150 (no cap)
+=== 3. Reg SHO layers (different duties) ===
+Rule 200    : mark order long / short / short exempt
+Rule 203(b) : broker locate before short sale (reasonable grounds to borrow)
+Rule 201    : price test after >=10% one-day drop (rest of day + next day), not a halt
+Rule 204    : clearing participants close out fails to deliver
+-> a local mask is a teaching constraint, NOT legal compliance; a locate is not a guaranteed borrow
+disclaimer: synthetic; learning only

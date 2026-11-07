@@ -1,0 +1,8 @@
+A) missing markers -> NaN: 2 cells
+B) percent -> decimal, first row: {'Mkt-RF': 0.005, 'SMB': -0.001, 'HML': 0.002, 'RF': 0.0002}
+C) total market return = (Mkt-RF) + RF, day 1: 0.0052
+D) strategy excess (R - RF) day 1: 0.0058
+E) 2026-06: compounded=0.00569 simple_sum=0.00580
+E) 2026-07: compounded=0.00737 simple_sum=0.00740
+F) HML month with a NaN day is NOT silently zero-filled; NaN days: 2
+G) double subtraction trap: (Mkt-RF) - RF day 1 = 0.0048 (wrong)

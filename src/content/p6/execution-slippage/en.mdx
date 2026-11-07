@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**13 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
+This lesson (~**14 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
 
 **Goals:** add participation / schedule discipline; write a one-page execution sheet tied to the shared cost model.
 
@@ -138,6 +138,20 @@ Higher α → weaker post-end reversion / more inertia risk (negative revert). *
 Do **not** calibrate α on the evaluation path as alpha; no LOB HFT / Hawkes / GAN / MPC execution recipes. This paper is **protocol + warning**, not impact alpha.
 </Callout>
 
+## Which feed you watch changes your slippage (checked 2026-11-08)
+
+Alpaca Basic real-time is IEX only ([Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)), while the NBBO comes from consolidated data (SIP). For the same fill, using the IEX mid or the SIP mid as the arrival price gives different slippage; a stale quote also distorts it. This is not “routing alpha”, just the wrong benchmark.
+
+`examples/p6/07_feed_tca_toy.py` (synthetic quotes):
+
+```text
+arrival mid SIP=100.020 IEX=100.015 → slippage 3.00 bps vs 3.50 bps
+NBBO stale by 1 tick → 4.00 bps (overstated)
+200 shares OK; 1000 shares walk past top of book (300); 20000 shares exceed 5% ADV
+```
+
+Reports must record: feed, quote_ts, decision_ts, fill_ts.
+
 ## Common mistakes / pitfalls
 
 1. Backtesting fills at mid with zero schedule / impact.
@@ -147,6 +161,7 @@ Do **not** calibrate α on the evaluation path as alpha; no LOB HFT / Hawkes / G
 5. Mixing arrival-price IS with close-to-close PnL without stating the benchmark.
 6. Using public-tape IRFs as real metaorder costs without noting missing concavity/reversion.
 7. Calibrating α / impact kernels as course edge.
+8. Computing slippage against IEX quotes as if they were the NBBO, without stating the feed.
 
 ## Practice (1:1)
 
@@ -155,6 +170,7 @@ Do **not** calibrate α on the evaluation path as alpha; no LOB HFT / Hawkes / G
 3. **ex3** — Compute Perold IS on a sell programme; decompose delay vs trading.
 4. **ex4** — Limit vs market toy; report fill rate and adverse component.
 5. **done1** — Execution one-pager in the main config (schedule, λ, benchmarks, caps).
+6. **ex-us-tca** — change the fill price to 100.03 in `07_feed_tca_toy.py`; **done when**: you report the new slippage under both feeds.
 
 ## Quiz
 
@@ -168,6 +184,7 @@ Do **not** calibrate α on the evaluation path as alpha; no LOB HFT / Hawkes / G
 <Quiz id="p6ex-q7" question="I≈Yσ√(Q/V) in this lesson is primarily?" options={["An alpha signal to maximise Y", "A cost / capacity ruler — not edge", "A proof that linear AC is false always", "A broker API"]} answer={1} explanation="Teach impact as cost literacy; reject optimize-Y→alpha." />
 <Quiz id="p6ex-q9" question="2501.17096 main warning on public-data metaorder IRFs?" options={["Public TIM always yields perfect concave paths", "Often near-linear paths + weak reversion — unlike real metaorder stylized facts; large-impact estimates go wrong", "Proves α=1 is alpha", "Replaces Perold IS"]} answer={1} explanation="Protocol/warn; LMF + modified TIM α are literacy only." />
 <Quiz id="p6ex-q8" question="Double-√ literacy (2502.16246) says metaorder √ mainly comes from?" options={["Only Kyle λ", "Child √ volume + inverse-√ time decay (mechanical foil)", "Guaranteed informed flow", "RL execution"]} answer={1} explanation="Child √ + decay → metaorder √; scramble foil." />
+<Quiz id="es-feed" question="The same fill shows different slippage vs IEX and SIP. This means?" options={["Routing alpha found", "The arrival benchmark depends on the feed, which must be reported", "IEX is wrong", "No timestamps needed"]} answer={1} explanation="A benchmark-choice issue." />
 
 ## Done when
 

@@ -15,3 +15,5 @@ python 05_weight_drift.py            # weight drift & constraint consistency (sy
 
 Each script has a matching `.out` with its expected stdout; capture **stdout only** when refreshing them.
 `04_market_regimes_crisis.py` uses offline synthetic data only (seed=11).
+
+- US-first pack (2026-11-08): `06_luld_halt_toy.py — LULD tiers (R12) + halt toy (not a rule engine); 07_feed_tca_toy.py — IEX vs SIP arrival, stale NBBO, capacity.`

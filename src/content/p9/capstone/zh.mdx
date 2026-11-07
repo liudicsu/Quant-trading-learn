@@ -1,6 +1,6 @@
 ## 学习目标
 
-本结业课（约 **24 学时**：设计/数据 6h + 回测/OOS 10h + 纸面 4h + 写作 4h）是一条**端到端诚实小策略**，串起此前所有阶段：假设 → PIT 数据 → 带**共享成本模型**的 walk-forward → **DSR 计入全部试错且用与决策相同的序列** → 风险仓位/硬限制 → 执行/TCA 估计 → 纸面计划（**独立账本对账** + 注入差错）与合规清单 → 研究报告模板，外加一份给**你自己的结业包**用的**评分量规**。前置：`paper-trading-infra`、`compliance-ethics`、`factor-workflow`、`portfolio-risk-sizing`。
+本结业课（约 **26 学时**：设计/数据 6h + 回测/OOS 10h + 纸面 4h + 写作 4h + 美股研究合同 2h）是一条**端到端诚实小策略**，串起此前所有阶段：假设 → PIT 数据 → 带**共享成本模型**的 walk-forward → **DSR 计入全部试错且用与决策相同的序列** → 风险仓位/硬限制 → 执行/TCA 估计 → 纸面计划（**独立账本对账** + 注入差错）与合规清单 → 研究报告模板，外加一份给**你自己的结业包**用的**评分量规**。前置：`paper-trading-infra`、`compliance-ethics`、`factor-workflow`、`portfolio-risk-sizing`。
 
 **课内目标：** 交付可复现研究包；含成本敏感与密封 OOS；附纸面日志与限制条款。
 
@@ -131,6 +131,19 @@ DONE capstone lab 01
 7. 把成本后的正 RankIC 当成优势证明。
 8. 用同日实现波动率给冲击定标（前瞻）。
 
+## 美股研究合同（默认场景）
+
+结业项目默认：`market=US-equity`、`currency=USD`。动手前先写一份 JSON 合同，`examples/p9/02_us_research_contract.py` 离线校验它（`examples/p9/us_research_contract.json`）。字段包括：交易时段范围、来源/feed/许可、快照哈希、复权与分红政策、历史成分（防幸存者偏差）、可用时间规则、日历/规则版本（FINRA 26-10 迁移未知时写 `needs_broker_verification`）、卖空借券模式、基准/无风险利率/成本、纸面≠实盘，以及 `source_mode` / `fallback_reason`。
+
+```text
+required fields: 20 missing: []
+fixture sha256 matches_contract: True
+source_mode = fixture | fallback_reason = offline lab: no network downloads allowed (R16)
+contract_ok = True
+```
+
+A 股或港股项目可作为**比较扩展**，但须另写合同。
+
 ## 练习（与清单 1:1）
 
 1. **ex1** — 写一页假设（主张、H0、PIT、决策规则、免责）。**完成标准：** 字段与实验简报五要素一致。
@@ -141,6 +154,7 @@ DONE capstone lab 01
 6. **ex6** — ≥5 日（实验：65 会话）纸面 + 独立账本；证明注入差错被检出。**完成标准：** 打印日期 + abs_diff。
 7. **ex7** — 填研究报告模板 + 按下表自评。**完成标准：** 每个 Must 行为 Pass，或写明 Gap 与修复计划。
 8. **done1** — 结业包通过全部 **Must** 量规行（诚实/工程——不要求盈利）。
+9. **ex-us-contract** — 改动 fixture 一个字节后重跑合同检查；**完成标准**：`matches_contract: False` 且 `contract_ok = False`，再恢复。
 
 ## 评分量规（学习者自己的结业包）
 
@@ -170,6 +184,7 @@ DONE capstone lab 01
 <Quiz id="p9-q5" question="结业评分优先？" options={["夏普最高者胜", "诚实与工程；不要求盈利", "LEAK foil 越多越好", "报告越短越好"]} answer={1} explanation="量规权重在 PIT、DSR(N)、对账——不是盈利。" />
 <Quiz id="p9-q6" question="TCA 定标中的前瞻是？" options={["使用滞后/事前 σ", "用同日实现 σ 设定冲击", "写明参与率", "记录到达价"]} answer={1} explanation="冲击只能用交易前已知信息。" />
 <Quiz id="p9-q7" question="本课对 FINRA Notice 26-10？" options={["永远无关", "PDT 继任规则意识——2026-06-04 生效；了解交易场所规则", "保证零售盈利", "取代 DSR"]} answer={1} explanation="合规清单条目——学习意识，非法律意见。" />
+<Quiz id="cap-contract" question="研究合同中 source_mode=fixture 的意义？" options={["数据来自实时下载", "离线自造 fixture，不做真实下载", "已获商业许可", "等于实盘"]} answer={1} explanation="fallback_reason 说明原因（R16）。" />
 
 ## 完成标准
 

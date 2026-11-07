@@ -1,0 +1,7 @@
+{"_note": "HAND-MADE fixture shaped like SEC EDGAR companyfacts/submissions fields. Not real SEC data. CIK is fictional.",
+ "cik": "0000000001", "entity": "SYN_US_01",
+ "facts": [
+  {"tag": "Revenues", "period_end": "2026-03-31", "form": "10-Q", "filed": "2026-05-08", "accepted": "2026-05-07T20:15:00-04:00", "value": 1000, "revision_id": "orig"},
+  {"tag": "Revenues", "period_end": "2026-03-31", "form": "10-Q/A", "filed": "2026-08-20", "accepted": "2026-08-20T09:05:00-04:00", "value": 920, "revision_id": "amend1"},
+  {"tag": "Revenues", "period_end": "2026-06-30", "form": "10-Q", "filed": "2026-08-06", "accepted": "2026-08-06T16:40:00-04:00", "value": 1100, "revision_id": "orig"}
+ ]}

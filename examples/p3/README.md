@@ -16,3 +16,5 @@ python 05_kalman_hedge.py          # optional: Kalman hedge ratio, filter vs smo
 ```
 
 Charts land in `public/p3/`.
+
+- US-first pack (2026-11-08): `06_us_short_constraints.py — Reg SHO layers, locate/borrow fee/dividend owed on a synthetic pair.`

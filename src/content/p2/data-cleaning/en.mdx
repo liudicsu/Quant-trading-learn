@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**19 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**25 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources & licensing/PIT lab + 2h corporate actions & delisting + 1h ALFRED revision as-of) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -133,7 +133,7 @@ Activity clocks produce **more** bars with **smaller** per-bar moves on the same
 
 
 
-## Mask-first / upstream contamination (limit closes in rolling windows)
+## Mask-first / upstream contamination (A-share comparison case: limit closes in rolling windows; US analogue: halted / LULD-paused / no-quote rows)
 
 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) documents a costly A-share pipeline failure: **limit-up/down closes are non-executable**, yet they enter rolling means / correlations / ranks **before** any row filter — **upstream contamination**.
 
@@ -209,6 +209,44 @@ ffill rows where B return is a stale copy: 1
 
 disclaimer: synthetic data; learning only.
 
+## US data sources: who provides it, may you use it, when was it known (checked 2026-11-08)
+
+| Source | What this lesson covers | Do not write |
+|------|------|------|
+| SEC EDGAR (data.sec.gov) | No API key; 10-digit CIK; no CORS; nightly bulk ZIP ([SEC](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)) | A fixed User-Agent format or rate number (not verified) |
+| FRED / ALFRED | API key required ([key](https://fred.stlouisfed.org/docs/api/api_key.html)); ALFRED real-time period ≠ observation date, default is what is known today ([realtime](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)) | “Public domain so anything goes” |
+| Ken French Data Library | CIZ version in `factor-workflow`; -99.99/-999 missing markers ([site](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)) | A free CRSP stock database |
+| CRSP | Active/inactive securities, PERMNO/PERMCO, delisting data; subscription product ([CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)) | Free |
+| yfinance | README: not affiliated, endorsed, or vetted by Yahoo; Apache licence; intended for personal use only ([README](https://github.com/ranaroussi/yfinance)) | Official, or free to redistribute |
+| Massive (formerly Polygon.io) | Free tier is end-of-day data at 5 API calls/min; separate subscriptions per asset class; professional use needs a business licence ([Massive](https://massive.com/stocks)) | Free real-time or 20-year history |
+| Alpaca Basic | Free; real-time is IEX only; 30 WebSocket symbols; history since 2016; latest-15-minutes restriction ([Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)) | Free real-time SIP |
+
+**FRED/ALFRED terms (per review item R16):** API access to FRED/ALFRED must be checked against both the service/API terms and each series’ upstream rights; being publicly readable, free, or a series marked public domain does not mean the way the service is accessed, or downstream development, model training, storing, caching, archiving or redistribution, is automatically permitted. As of 2026-11-08 the official terms list restrictions on those uses. This course distributes only self-made FRED/ALFRED-shaped fixtures and provides no default path for real downloads, caching or model training; real use is not performed until the applicable permission is obtained. ([FRED legal terms](https://fred.stlouisfed.org/legal/))
+
+**Lab (offline):** `examples/p2/06_us_data_sources_pit.py` + `data/us_fixtures/*.json` (self-made):
+
+```text
+PIT value = 1000 (original filing), naive “latest” = 920 (amendment 1); the 2026-04-15 decision gets None (not yet released)
+ALFRED as-known: 2.0 / 2.3 / 2.4; final value 2.4 backfilled into the past → 2 of 3 feature rows differ
+SYN_MACRO_2 has no release time → excluded
+```
+
+## Raw vs adjusted prices and total return; delisting
+
+**Raw prices (per review item R21):** raw (unadjusted) prices are used for the historical nominal price scale and the share/cash ledger; whether a strategy could trade at a given price and size still depends on the session, quotes, trading status, liquidity and the order/fill model at that time — raw OHLC or the last trade price is not automatically executable. Split-adjusted and total-return series each record their adjustment scope; never count the same dividend twice, and a split adjusts the share count too rather than creating wealth out of nothing.
+
+Note: the Massive stocks-page example labels `adjusted:true` as **split-adjusted** — do not assume it includes dividends.
+
+`examples/p2/05_data_versions_calendar.py` new section D (earlier numbers unchanged):
+
+```text
+ledger wealth [6000, 6100, 6080, 6120, 6160]
+split-adjusted price returns [0.0167, -0.0033, -0.0099, 0.0066]; total returns [0.0167, -0.0033, 0.0066, 0.0066]
+double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing return flagged, not dropped or set to 0
+```
+
+**ALFRED revision as-of:** align with `merge_asof` on **release time** (not observation date); a series with no release time cannot enter the features.
+
 ## Common mistakes / pitfalls
 
 1. Backtesting a decade with today’s members only.  
@@ -220,6 +258,7 @@ disclaimer: synthetic data; learning only.
 6. Treating info bars as an HFT execution recipe rather than a research sampling clock.
 7. Comparing clocks on different underlying tapes without saying so.
 8. Switching data versions (e.g. FIZ→CIZ) without recording it, mistaking a convention change for a strategy change; ffilling **returns** across closed days; computing split-day returns on raw prices.
+9. Treating the raw close as an executable price; treating a FRED series’ public-domain label as permission for the FRED service, caching or model training; calling yfinance official data.
 
 
 ## Practice (1:1 with the checklist)
@@ -232,6 +271,8 @@ disclaimer: synthetic data; learning only.
 6. **ex6** — Info-bar clocks: print time/volume/dollar bar counts on the synthetic tape; **done when** counts match the lesson table.
 7. **ex7**: Run the mask-first toy; **done when** apparent vs realisable IC, MA sketch, and ASSERT_mask_first_demo_ok print.
 8. **ex8**: run `05_data_versions_calendar.py`; **done when**: the two monthly-convention difference (≈ −18.28 bp), split raw/adj returns and calendar intersection days print, and the data sheet gains three lines “version + convention + calendar”.
+9. **ex-us-src** — for three sources write `source / licence / availability_ts / allowed_use_checked_on`; **done when**: the FRED row says the service terms must be checked (R16) and the yfinance row says “personal use only, not official”.
+10. **ex-us-ca** — run section D of `05_data_versions_calendar.py` and explain why double-counting gives 0.0230; **done when**: you name the step that adds the dividend twice.
 
 
 ## Quiz
@@ -247,12 +288,14 @@ disclaimer: synthetic data; learning only.
 <Quiz id="q10-mask2" question="Course stance on 2507.07107 Sharpe 2.05/1.63?" options={["Required alpha target", "REJECT — teach mask contract + diagnosis only", "Replaces PIT", "Proves 213 factors"]} answer={1} explanation="Debunk: headline Sharpe / factor engine are not course edge." />
 <Quiz id="q8-cryptopit" question="Crypto PIT audit before alpha (2608.25348 pointer) requires?" options={["Same-bar fills OK", "No same-bar; funding lag; no backfill; careful OI", "Ignore availability time", "Always use OI"]} answer={1} explanation="Availability-masked checklist; full lab in P8 TSFM/crypto." />
 <Quiz id="q9-ciz" question="Per Ken French’s site, how are monthly returns built in the CRSP CIZ files used from January 2025?" options={["Month-to-month holding period, dividends reinvested at month-end", "Compounded daily returns, dividends reinvested on ex-dates", "Price change only, no dividends", "Identical to the legacy files"]} answer={1} explanation="Site text: CIZ monthly returns are compounded daily returns with dividends reinvested on ex-dates; legacy FIZ reinvested at month-end. So record the data version." />
+<Quiz id="dc-fred" question="A FRED series is marked public domain. This means?" options={["You may freely cache it and train models", "You still must check the FRED/ALFRED service/API terms, which restrict caching, model training and more", "It must be paid for", "The data is wrong"]} answer={1} explanation="R16: series rights ≠ service terms." />
+<Quiz id="dc-raw" question="Raw (unadjusted) close prices are mainly for?" options={["Automatically executable prices", "The historical nominal price scale and share/cash ledger", "Direct use as total return", "Replacing the NBBO"]} answer={1} explanation="R21: executability depends on quotes, status, liquidity and the fill model." />
 
 ## Done when
 
 - Rerunnable pipeline + sheet + quizzes  
 
-**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (contract+diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.; Ken French Data Library FIZ→CIZ note ([link](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), verified 2026-11-07).
+**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (contract+diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.; Ken French Data Library FIZ→CIZ note ([link](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), verified 2026-11-07).; US data sources (checked 2026-11-08): [FRED terms](https://fred.stlouisfed.org/legal/), [FRED key](https://fred.stlouisfed.org/docs/api/api_key.html), [ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html), [EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces), [Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), [CRSP](https://www.crsp.org/research/crsp-us-stock-databases/), [yfinance](https://github.com/ranaroussi/yfinance), [Massive](https://massive.com/stocks), [Alpaca](https://docs.alpaca.markets/docs/about-market-data-api), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).
 
 <Summary>
 **Takeaways** (incl. mask-first): hashes, survivorship, PIT, timezone look-ahead, adj declarations.  

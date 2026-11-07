@@ -11,3 +11,5 @@ python 02_compliance_sources.py   # official regulator sources checklist (rules 
 ```
 
 Each script has a matching `.out` with its expected stdout; capture **stdout only** when refreshing them.
+
+- US-first pack (2026-11-08): `03_paper_adapter_fixture.py — idempotent adapter, reconciliation, NY vs Shanghai dates; 02 is now a local US-first source ledger (n_sources=33, no fetching).`

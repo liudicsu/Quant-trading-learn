@@ -52,4 +52,28 @@ inner = pd.concat([a, b], axis=1, join="inner")
 print(f"A days={len(a)} B days={len(b)} inner-join days={len(inner)}")
 print(f"ffill rows where B return is a stale copy: {int((outer_ffill.index == '2025-04-04').sum())}")
 print("-> forward-filling a RETURN invents a trade on a closed day; use the right calendar")
+print("=== D. raw vs split-adjusted vs total return; share ledger; delisting ===")
+# hand-made: 100 shares at 60.00; 2-for-1 split; then 0.50/share cash dividend (post-split); then delisted
+shares, cash = 100, 0.0
+raw = [60.00, 61.00, 30.40, 30.10, 30.30]            # day3 = split day; day4 = ex-dividend
+events = {2: ("split", 2.0), 3: ("div", 0.50)}
+wealth = []
+for i, px in enumerate(raw):
+    ev = events.get(i)
+    if ev and ev[0] == "split":
+        shares = int(shares * ev[1])
+    if ev and ev[0] == "div":
+        cash += shares * ev[1]
+    wealth.append(shares * px + cash)
+print("shares/cash ledger wealth:", [round(w, 2) for w in wealth])
+split_adj = [p / 2.0 if i < 2 else p for i, p in enumerate(raw)]
+pr = [split_adj[i] / split_adj[i - 1] - 1 for i in range(1, len(raw))]
+tr = [(split_adj[i] + (0.50 if i == 3 else 0.0)) / split_adj[i - 1] - 1 for i in range(1, len(raw))]
+print("split-adj price ret:", [round(x, 4) for x in pr])
+print("total ret (div once):", [round(x, 4) for x in tr])
+wrong = (split_adj[3] + 0.50 + 0.50) / split_adj[2] - 1
+print(f"double-counted dividend on ex-day: {wrong:.4f} vs correct {tr[2]:.4f}")
+print(f"split day: ledger wealth {wealth[1]:.2f} -> {wealth[2]:.2f} (shares doubled, no free wealth)")
+delist_ret_known, delist_ret_missing = -0.30, None
+print(f"delisting: final ret known={delist_ret_known:+.2f}; missing ret -> flag 'delist_ret_missing', do NOT drop or set 0")
 print("disclaimer: synthetic; learning only")

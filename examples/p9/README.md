@@ -13,3 +13,5 @@ python 01_capstone_e2e.py | tee 01_capstone_e2e.out
 ```
 
 Charts in `public/p9/`. Artefacts in `examples/p9/data/`.
+
+- US-first pack (2026-11-08): `02_us_research_contract.py + us_research_contract.json — offline research-contract checker (source_mode/fallback_reason).`

@@ -59,35 +59,35 @@
 | 阶段 | 名称 | 课数 | 总课时 | 6h/周 | 12h/周 | 依赖簇 |
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
-| P1 | 市场语言与度量 / Market language & measurement | 4 | 27h | ~4.5 周 | ~2.3 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 61h | ~10.2 周 | ~5.1 周 | Research infrastructure / scientific method for backtests |
-| P3 | 经典策略族 / Classic strategy families | 4 | 32h | ~5.3 周 | ~2.7 周 | Classic alpha templates before factors/ML |
-| P4 | 因子研究 / Factor research | 2 | 32h | ~5.3 周 | ~2.7 周 | Cross-sectional research methods |
+| P1 | 市场语言与度量 / Market language & measurement | 4 | 29h | ~4.8 周 | ~2.4 周 | Market concepts + evaluation language |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 67h | ~11.2 周 | ~5.6 周 | Research infrastructure / scientific method for backtests |
+| P3 | 经典策略族 / Classic strategy families | 4 | 33h | ~5.5 周 | ~2.8 周 | Classic alpha templates before factors/ML |
+| P4 | 因子研究 / Factor research | 2 | 33h | ~5.5 周 | ~2.8 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
-| P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 56h | ~9.3 周 | ~4.7 周 | Portfolio construction / execution / controls / regimes |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 30h | ~5.0 周 | ~2.5 周 | Operationalization and professional norms |
+| P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 58h | ~9.7 周 | ~4.8 周 | Portfolio construction / execution / controls / regimes |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 36h | ~6.0 周 | ~3.0 周 | Operationalization and professional norms |
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
-| P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
+| P9 | 结业项目 / Capstone | 1 | 26h | ~4.3 周 | ~2.2 周 | Synthesis |
 
-**全量（含 P0）：精确 362 学时（跳过 P0 为 342）。** 6h/周 ≈ 60.3 周；12h/周 ≈ 30.2 周。
-**跳过 P0 后：精确 342 学时。** 6h/周 ≈ 57.0 周；12h/周 ≈ 28.5 周。
+**全量（含 P0）：精确 382 学时（跳过 P0 为 362）。** 6h/周 ≈ 63.7 周；12h/周 ≈ 31.8 周。
+**跳过 P0 后：精确 362 学时。** 6h/周 ≈ 60.3 周；12h/周 ≈ 30.2 周。
 
-精确合计：**362h 全量 / 342h 跳过 P0**。对外可表述为约 **330–370h 全量 / 310–350h 跳过基础**（含个人复盘缓冲）。
+精确合计：**382h 全量 / 362h 跳过 P0**。对外可表述为约 **350–390h 全量 / 330–370h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
 | 阶段 | 主要来源（经典/平台） | Canvas / X 策展 | 前沿来源（已核验） |
 |------|----------------------|-----------------|-------------------|
-| P0 | 聚宽零基础 Python；QuantStart Python 清单 | JoinQuant W01 风格 | — |
+| P0 | 本地 Python（自包含）；QuantStart Python 清单；中文补充：聚宽零基础教程 | — | — |
 | P1 | QuantStart；NYU MATH-GA 2708；Stern metrics | Canvas m1–m3；手册教程 | — |
-| P2 | JoinQuant 审讯室；AFML；VectorBT/Zipline；QuantStart | Canvas m4–m5；@AfuOnTheWay；@RoundtableSpace；@pyquantnews | Nautilus 同构；Quant-Arena 密封 hold-out 精神 |
+| P2 | 回测审讯纪律；美国数据源（SEC EDGAR / ALFRED / Ken French / CRSP 文档）；AFML；VectorBT/Zipline；QuantStart；中文补充：聚宽审讯帖 | Canvas m4–m5；@AfuOnTheWay；@RoundtableSpace；@pyquantnews | Nautilus 同构；Quant-Arena 密封 hold-out 精神 |
 | P3 | Stern；Canvas m6–m8；JT；Moskowitz et al. 2012 | quants.md 对照样本；QuantJourney | further reading: Chan Algorithmic Trading (Wiley 2013) |
 | P4 | AFML；Factor Mirage；Qlib Alpha；@alin_alphapilot | Canvas m9；quant-wiki | LLM alpha mining（练习在 P8） |
 | P5 | AFML CV/labeling；ML4T；Qlib Quick Start | Canvas m10；@quantscience_；ML4T 帖 | Qlib 深度模型可选对照 |
 | P6 | QuantStart VaR/Kelly/execution；NYU TCA；UChicago FINM | Canvas m11–m12；@sera00111 | — |
-| P7 | JoinQuant 模拟；QuantStart paper-before-live | Canvas m13–m14；Qbot/Atlas | — |
+| P7 | 本地离线纸面；Alpaca / IBKR paper 文档（仅文档级）；QuantStart paper-before-live；中文补充：聚宽模拟交易 | Canvas m13–m14；Qbot/Atlas | — |
 | P8 | — | XQuant / Crypto 工具链等非主流 | RD-Agent(Q)；Chain-of-Alpha；Quant-Arena；TSFM 评测；GMX CCXT; perp funding arXiv:2212.06888; liquidation subcritical arXiv:2608.03616 |
-| P9 | Canvas 结业量规；聚宽综合 | 开源策略库仅灵感 | 可选前沿负结果附录 |
+| P9 | Canvas 结业量规；美国研究合同（离线）；中文补充：聚宽综合 | 开源策略库仅灵感 | 可选前沿负结果附录 |
 
 ## 4. 非主流 / 前沿条目清单 → 归属课
 
@@ -106,7 +106,7 @@
 | Qlib 人工流水线 | qlib docs；@bkdgiffug | classic | `modern-ml-pipelines` |
 | ML4T 仓库 | stefan-jansen；多条 X 帖 | classic | `ml-leakage-control / modern-ml-pipelines` |
 | 仓位/VaR/Kelly | QuantStart；Canvas m11 | classic | `portfolio-risk-sizing` |
-| 纸面先于实盘 | JoinQuant W08；Canvas m13 | classic | `paper-trading-infra` |
+| 纸面先于实盘 | 本地离线纸面；Canvas m13；中文补充：聚宽模拟交易 | classic | `paper-trading-infra` |
 | XQuant Learning Spec+AI 先跑再补 | @_zheergen/2114885286039789576 | niche | `python-pandas-timeseries + frontier-llm-agents` |
 | Awesome Systematic Trading / 开源合集 | paperswithbacktest/awesome-systematic-trading | niche | `markets-language` |
 | Crypto 工具链 Binance Vision/CCXT/资金费率 | @sera00111 | niche | `data-cleaning + frontier-tsfm-altdata-crypto` |
@@ -165,7 +165,7 @@
   - pct_change 首行 NaN
 - **Completion criteria:**
   - 可复现小 notebook+断言。
-- **Method tags:** classic: JoinQuant W01 pandas; QuantStart Python stack | niche: XQuant Learning: run first then fill gaps (@_zheergen)
+- **Method tags:** classic: Self-contained local pandas labs; QuantStart Python stack; Chinese supplement: JoinQuant community tutorials | niche: XQuant Learning: run first then fill gaps (@_zheergen)
 
 #### `stats-probability-basics` — 统计与概率基础 / Statistics & probability basics
 - **Hours:** 8h · **Difficulty:** 2/5 · **Basis:** 4h concepts + 3h sim lab + 1h quiz
@@ -212,7 +212,7 @@
   - 基准选择
 - **Completion criteria:**
   - 市场/基准一页纸。
-- **Method tags:** classic: QuantStart beginner books; JoinQuant 初识量化
+- **Method tags:** classic: QuantStart beginner books; Default: US-listed stocks/ETFs in USD; Chinese supplement: JoinQuant 初识量化
 
 ### P1 · 市场语言与度量（Market language & measurement）— 25h / 4 课
 
@@ -287,7 +287,7 @@
   - 夏普定义
 - **Completion criteria:**
   - 可复用指标函数+测验。
-- **Method tags:** classic: Canvas m3; JoinQuant W02; QuantStart performance
+- **Method tags:** classic: Canvas m3; QuantStart performance; Chinese supplement: JoinQuant returns/risk tutorial
 
 #### `eval-lab` — 评估实验：基准与诚实指标 / Evaluation lab: benchmarks & honest metrics
 - **Hours:** 5h · **Difficulty:** 2/5 · **Basis:** 1.5h concepts + 3h lab + 0.5h quiz
@@ -307,7 +307,7 @@
   - 换手与成本
 - **Completion criteria:**
   - 对照表+三句结论。
-- **Method tags:** classic: JoinQuant 策略评价; Canvas eval | niche: @FG731314/2115609441748001008 risk-adjusted traits
+- **Method tags:** classic: Canvas eval; pyfolio tear-sheet docs; Chinese supplement: JoinQuant 策略评价 | niche: @FG731314/2115609441748001008 risk-adjusted traits
 
 ### P2 · 数据与诚实回测（Data & honest backtests）— 40h / 4 课
 
@@ -336,7 +336,7 @@
   - PIT含义
 - **Completion criteria:**
   - 管线可复跑+说明书。
-- **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; JoinQuant data | niche: @pyquantnews 45 APIs (2116517809920327801); OpenBB quantitative docs; Binance Vision + @sera00111 crypto data notes | frontier: Alt-data awareness; deeper in P8
+- **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; US source map: SEC EDGAR / ALFRED / Ken French / CRSP docs; Chinese supplement: JoinQuant data docs | niche: @pyquantnews 45 APIs (2116517809920327801); OpenBB quantitative docs; Binance Vision + @sera00111 crypto data notes | frontier: Alt-data awareness; deeper in P8
 
 #### `backtest-traps` — 回测陷阱与过拟合审讯 / Backtest traps & overfitting interrogation
 - **Hours:** 16h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 9h multi-labs + 2h write-up — HEAVY
@@ -361,7 +361,7 @@
   - walk-forward目的
 - **Completion criteria:**
   - 陷阱报告含对照与OOS。
-- **Method tags:** classic: Canvas m5; JoinQuant审讯室; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | classic+: Bailey-LdP 2012 PSR / 2014 DSR; AFML ch.7/14 | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out; When Alpha Disappears arXiv:2605.23959 one-switch
+- **Method tags:** classic: Canvas m5; Backtest interrogation discipline; Chinese supplement: JoinQuant 审讯室 posts; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | classic+: Bailey-LdP 2012 PSR / 2014 DSR; AFML ch.7/14 | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out; When Alpha Disappears arXiv:2605.23959 one-switch
 
 #### `costs-in-backtest` — 成本写入回测 / Costs in the backtest
 - **Hours:** 6h · **Difficulty:** 3/5 · **Basis:** 2h concepts + 3.5h coding + 0.5h quiz
@@ -495,7 +495,7 @@
   - 对照实验要素
 - **Completion criteria:**
   - 对照报告入库。
-- **Method tags:** classic: Canvas comparison spirit; JoinQuant research rules | niche: Critique open strategy dumps (quants.md) as hypothesis sources only | further reading: Chan Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
+- **Method tags:** classic: Canvas comparison spirit; Same-protocol comparison rules | niche: Critique open strategy dumps (quants.md) as hypothesis sources only | further reading: Chan Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
 ### P4 · 因子研究（Factor research）— 21h / 2 课
 
@@ -733,7 +733,7 @@
   - 为何冻结版本
 - **Completion criteria:**
   - ≥5日日志包。
-- **Method tags:** classic: Canvas m13; JoinQuant W08; QuantStart paper-before-live | niche: Qbot/Atlas reference architecture; Nautilus isomorphic paper/sim concept
+- **Method tags:** classic: Canvas m13; QuantStart paper-before-live; Alpaca / IBKR paper docs (document-level only); Chinese supplement: JoinQuant 模拟交易 | niche: Qbot/Atlas reference architecture; Nautilus isomorphic paper/sim concept
 
 #### `compliance-ethics` — 合规、风险心态与研究伦理 / Compliance, risk mindset & research ethics
 - **Hours:** 4h · **Difficulty:** 2/5 · **Basis:** 2h reading + 1.5h writing + 0.5h quiz
@@ -838,7 +838,7 @@
   - （可选）前沿失败对照附录。
 - **Completion criteria:**
   - 结业包通过自评量规全部Must行。
-- **Method tags:** classic: Canvas capstone; JoinQuant综合+模拟; Bailey–LdP 2014 DSR; Perold 1988 IS | niche: Open strategy libs sparingly as hypothesis inspiration only | frontier: Optional negative-result appendix on RD-Agent/TSFM/on-chain signal
+- **Method tags:** classic: Canvas capstone; US research contract (offline); Chinese supplement: JoinQuant 综合/模拟; Bailey–LdP 2014 DSR; Perold 1988 IS | niche: Open strategy libs sparingly as hypothesis inspiration only | frontier: Optional negative-result appendix on RD-Agent/TSFM/on-chain signal
 
 ## 6. 可选工具阅读顺序（OPTIONAL）
 
@@ -948,3 +948,14 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - Q9 Options/VIX risk box (OIC + Cboe) → `market-regimes-crisis` (+1h).
 - Q10 Weight drift & constraint consistency mini-lab → `portfolio-risk-sizing` (+1h, `examples/p6/05`).
 - Hours: **362 full / 342 skip-P0**; lessonCount 28.
+
+## US-first content pack (2026-11-08)
+
+- Default scope: US-listed stocks / non-leveraged ETFs, USD. Chinese is the teaching language, not the default market. A-share / Stock Connect / EU material is labelled comparison reading.
+- Hours: **382 full / 362 skip-P0**; lessonCount 28; P0 stays 20h. MUST +16h, SHOULD +4h:
+  microstructure-orders 7→9 (+2 US mechanics); market-regimes-crisis 12→13 (+1 MWCB/LULD/Reg SHO); data-cleaning 19→25 (+3 sources/licensing/PIT, +2 corporate actions/delisting, +1 ALFRED as-of); paper-trading-infra 14→17 (+2 broker paper/adapter fixture, +1 Shanghai-timezone reconciliation); pairs-stat-arb 12→13 (+1 short constraints); compliance-ethics 16→19 (+0.5 FINRA four dates/phase-in, +2.5 cross-border tax/FX/CRS box); capstone 24→26 (+2 US research contract); factor-workflow 24→25 (+1 benchmark alignment); execution-slippage 13→14 (+1 feed-aware TCA).
+- Phase totals: P0 20, P1 29, P2 67, P3 33, P4 33, P5 32, P6 58, P7 36, P8 48, P9 26.
+- Review items implemented with the review's wording: R04, R12, R16, R21, R25, R28, R29.
+- New offline labs: p1/05, p2/06 (+ data/us_fixtures), p2/05 section D, p3/06, p4/03, p6/06, p6/07, p7/03, p9/02 (+ us_research_contract.json); p7/02 rewritten (n_sources=33, US first). No real FRED / yfinance downloads or caches.
+- Note: the per-lesson detail blocks in section 4 above are historical snapshots; curriculum.ts is the source of truth for per-lesson hours.
+

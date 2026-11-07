@@ -1,6 +1,8 @@
 ## 学习目标
 
-本课（约 **16 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 上交所交易规则版本 1h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
+本课（约 **19 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+
+**默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
 **课内目标：** 写风险偏好一页；诚实记录失败；拆穿「保证夏普」话术。
 
@@ -10,48 +12,29 @@
 以下内容不构成法律、合规或投资建议。文中阈值与生效日期均来自 **2026-11-04（Asia/Shanghai）** 抓取并阅读的官方页面。实盘行动前请重新阅读**现行**官方文本。若官方页无法抓取，我们会如实说明，绝不臆造。
 </Callout>
 
-## 中国 — 程序化交易
+## 美国主线：PDT 继任规则 — 四个日期 + 迁移状态
 
-### 证监会《证券市场程序化交易管理规定（试行）》
+**直觉：** 一条规则「已生效」不等于「你的券商、你的账户已经切换」。FINRA 给了会员迁移期，所以要把**日期**和**会员迁移状态**分成两个维度记录。
 
-- **来源（已抓取）：** https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html — 证监会公告〔2024〕8号
-- **已核验：** 公布落款 2024-05-11；**自 2024-10-08 起施行**。程序化交易=计算机程序自动生成或下达指令在交易所交易。投资者须报告账户/资金/策略/软件等；**先报告、后交易**。交易所对异常交易重点监控；**具体数量阈值由交易所规定**，本规定正文未写死数字。高频交易作定性描述，细则与差异化收费由交易所明确。
+| 事项 | 日期（[FINRA 26-10](https://www.finra.org/rules-guidance/notices/26-10)，2026-11-08 核实） |
+|------|------|
+| SEC 批准（Release 34-105226） | 2026-04-14 |
+| Notice 发布 | 2026-04-20 |
+| 规则生效 | 2026-06-04 |
+| 会员迁移期截止 | 2027-10-20 |
 
-### 上交所 / 深交所实施细则
+新的日内保证金标准**整体取代**旧的 PDT 次数认定与 $25,000 最低权益要求；[26-11](https://www.finra.org/rules-guidance/notices/26-11)（2026-05-19 发布、2026-06-04 生效）给出 IML/IMD 解释。普通维持保证金并未消失。
 
-- **上交所答记者问（已抓取，日期 2025-04-03）：** https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml 。明确细则 **2025-07-07** 起施行。高频认定（上交所表述）：单账户每秒申报、撤单合计最高 **≥300** 笔，或全日最高 **≥20,000** 笔。四类异常行为构成要件有说明；具体监控指标由交易所运行。
-- **深交所细则 PDF（已抓取）：** https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf — 第33条高频阈值同为 **300 / 20,000**；第18条四类异常；**2025-07-07** 起施行。
-- **深交所发布通知（已抓取）：** https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html — 深证上〔2025〕292号，2025-04-03 发布，2025-07-07 施行。
-
-### 证监会《期货市场程序化交易管理规定（试行）》〔2025〕12号
-
-- **来源（已抓取）：** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 证监会公告〔2025〕12号；亦见 [csrc.gov.cn 发布稿](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml)（2025-06-13）。
-- **已核验：** **2025-06-13** 公布；**自 2025-10-09 起施行**。期货程序化交易=计算机程序自动生成或下达指令在期货交易所交易。**先报告、后交易：** 客户向期货公司报告 → 期货公司核查 → 交易所确认 → 方可交易。高频交易在证监会文本中为定性描述；**具体高频标准由期货交易所制定**，可差异化手续费/报撤单收费/限额。主机托管与席位公平；异常报撤重点监控。施行前已开展者，**6 个月内**达到第 7–12 条报告要求。与证券〔2024〕8 号互补——勿混两个市场。
-
-### 港股通北向 — 程序化交易报告（生效 2026-01-12）
-
-- **汇总页（已抓取）：** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
-- **已核验：** 内地交易所北向程序化交易报告要求自 **2026-01-12** 起生效；CCEP/TTEP 自该日起经 HKEX ECP 提交；存量投资者过渡期至 **2026-04-10**。沪/深门槛（分别计算）包括高度自动化下单、瞬时申报速率、多标的高换手、或定制软件等——**仅用非定制简单 TWAP/VWAP 拆单一般不触发**。正文以沪深交易所为准；HKEX 页为英文枢纽。与在岸证券〔2024〕8 / 期货〔2025〕12 互补——北向有**独立**报告通道。
-
-
-## 上交所交易规则（2026 年修订）— 规则也有版本
-
-**事实（已在 [上交所官网](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml) 核实）：** 上交所发布《上海证券交易所交易规则（2026年修订）》，发文文号 **上证发〔2026〕41号**，发布日期 2026-04-24，**自 2026-07-06 起施行**；2023-02-17 发布的《上海证券交易所交易规则（2023年修订）》（上证发〔2023〕32号）**同时废止**。通知还说明：此前暂未实施的部分内容**继续暂缓实施**（见附件 3《暂缓实施条文》），具体实施时间另行通知。
-
-| 版本 | 文号 | 发布日 | 适用区间（本课只写已核实部分） |
-|------|------|------|------|
-| 2023 年修订 | 上证发〔2023〕32号 | 2023-02-17 | 至 2026-07-05（2026-07-06 起废止） |
-| 2026 年修订 | 上证发〔2026〕41号 | 2026-04-24 | 2026-07-06 起施行；部分条文继续暂缓 |
-
-**为什么回测要关心：** 涨跌幅、申报、交易时段等规则决定了「当天能不能成交、以什么价成交」。回测跨越 2026-07-06 时，应**按交易日期选用当时有效的规则版本**，而不是把今天的规则套到全部历史上。暂缓实施的条文在官方公布实施日期前**不应**进入回测。
+**版本练习的正确写法（按审阅报告 R04）：** FINRA 示例分别记录 SEC 批准日、Notice 发布日期、规则生效日、迁移期截止日，并加入 `member_adoption_date` / `broker_checked_on` 与适用账户类别。2026-06-04 至 2027-10-20 期间，不得只凭交易日期断言某会员/账户已迁移；迁移状态未知时输出 `needs_broker_verification`。不得由本地 toy 给出法律合规保证。
 
 ```python
-def sse_rule_version(trade_date: str) -> str:
-    # 只示意版本切换；具体条文以官网原文为准
-    return "2026" if trade_date >= "2026-07-06" else "2023"
+def pdt_regime(trade_date: str, member_adoption_date: str | None) -> str:
+    if trade_date < "2026-06-04":
+        return "old_pdt"
+    if member_adoption_date is None:
+        return "needs_broker_verification" if trade_date <= "2027-10-20" else "intraday_margin"
+    return "intraday_margin" if trade_date >= member_adoption_date else "old_pdt"
 ```
-
-仅供学习；具体条文以上交所官网原文为准，不构成法律或投资建议。
 
 ## 美国 — 市场接入、卖空、保证金、算法督导
 
@@ -79,6 +62,65 @@ def sse_rule_version(trade_date: str) -> str:
 
 - **来源（已抓取）：** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**。算法策略督导有效实践：风险评估、代码变更、测试、交易系统监控、合规沟通；并引用 15c3-5 与 Reg SHO。
 
+## 跨境身份边界：税务 / 外汇 / CRS 识字框（中国居民读者）
+
+<Callout type="warn" title="不是税务或法律意见">
+以下只是识字：身份、税收居民、受益所有人等条件决定适用规则。本课不判断你的身份、不计算你的税额、不收集税号。2026-11-08 核实。
+</Callout>
+
+**W-8BEN 与股息预扣：** [IRS 说明](https://www.irs.gov/instructions/iw8ben)：外国个人把 W-8BEN 交给**扣缴义务人/付款人**，不是交给 IRS；外国人取得的某些美国来源收入（含股息）一般按 30% 征税，协定可降低。[中美税收协定](https://www.irs.gov/pub/irs-trty/china.pdf) 第 9 条：对方居民且为受益所有人时，来源国对股息所征税款不超过毛额的 10%（另见 [IRS 协定说明](https://www.irs.gov/individuals/international-taxpayers/claiming-tax-treaty-benefits)）。**中国国籍 ≠ 中国税收居民 ≠ 自动享受协定**；预扣不是全部税负的最终结算。
+
+**洗售（wash sale，按审阅报告 R25）：** 在适用美国该项所得税规则的情形下，股票/证券亏损出售或处分日前 30 个日历日至后 30 个日历日（含出售日，共 61 个日历日）内，购买/应税交换取得实质相同证券，或订立取得该证券的合同/期权等，可能触发 [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/) 的亏损扣除限制。它不是禁止交易，也不是保证免税；一般替代证券成本基础调整等另按 IRS 规定处理（[Pub. 550](https://www.irs.gov/publications/p550)），不能宣称所有情形都仅递延。
+
+**中国个人所得税（按审阅报告 R28）：** 居民个人的境内外所得依中国[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)规定纳税（在中国境内有住所，或无住所而一个纳税年度内居住累计满 183 天的个人为居民个人）；涉及无住所个人等情形另依适用规定核对，不仅凭国籍判断。财产转让所得适用 20% 比例税率，应纳税所得额一般为转让收入减财产原值及合理费用后的余额；利息、股息、红利所得亦有 20% 法定比例税率，具体减免/协定与所得性质另核。境外已依法实际缴纳的所得税可在规定限额内抵免，非无条件全额抵免；符合规定的超限部分可向后五个纳税年度结转（[公告 2020 年第 3 号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)）。居民个人取得境外所得原则上于次年 3 月 1 日至 6 月 30 日申报。不能由美国预扣完毕推出中国无需申报或无需补税。
+
+**CRS（按审阅报告 R29）：** CRS 是金融账户涉税信息尽职调查与按适用交换关系报送/交换的框架，不是新增证券税种，也不等于所有国家、所有账户自动交换。应按账户所在金融机构及税收居民身份核对适用规则，如实提供税收居民声明；CRS 与美国 FATCA 是不同机制（[税务总局 AEOI 页](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)、[问答](https://www.chinatax.gov.cn/n810341/n810760/c2620533/content.html)）。是否交换不改变依法申报境外所得的义务，不得据此承诺「美股账户隐身/免申报」。
+
+**外汇：** 外汇局上海分局 FAQ（[2026](https://www.safe.gov.cn/shanghai/2026/0402/2412.html)）：个人结汇和境内个人购汇年度便利化额度为每人每年等值 5 万美元。陕西分局 FAQ（[链接](https://www.safe.gov.cn/shaanxi/2018/1204/249.html)）：境内个人额度购汇汇出境外需有真实合法的经常项目用途，**不包括投资境外证券**。所以 5 万美元额度**不是**境外证券投资许可。本课不提供任何汇路、拆分、借名或虚假用途方案。
+
+## 比较阅读：中国 A 股 / 港股通 — 程序化交易（扩展，非主线）
+
+### 证监会《证券市场程序化交易管理规定（试行）》
+
+- **来源（已抓取）：** https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html — 证监会公告〔2024〕8号
+- **已核验：** 公布落款 2024-05-11；**自 2024-10-08 起施行**。程序化交易=计算机程序自动生成或下达指令在交易所交易。投资者须报告账户/资金/策略/软件等；**先报告、后交易**。交易所对异常交易重点监控；**具体数量阈值由交易所规定**，本规定正文未写死数字。高频交易作定性描述，细则与差异化收费由交易所明确。
+
+### 上交所 / 深交所实施细则
+
+- **上交所答记者问（已抓取，日期 2025-04-03）：** https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml 。明确细则 **2025-07-07** 起施行。高频认定（上交所表述）：单账户每秒申报、撤单合计最高 **≥300** 笔，或全日最高 **≥20,000** 笔。四类异常行为构成要件有说明；具体监控指标由交易所运行。
+- **深交所细则 PDF（已抓取）：** https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf — 第33条高频阈值同为 **300 / 20,000**；第18条四类异常；**2025-07-07** 起施行。
+- **深交所发布通知（已抓取）：** https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html — 深证上〔2025〕292号，2025-04-03 发布，2025-07-07 施行。
+
+### 证监会《期货市场程序化交易管理规定（试行）》〔2025〕12号
+
+- **来源（已抓取）：** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 证监会公告〔2025〕12号；亦见 [csrc.gov.cn 发布稿](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml)（2025-06-13）。
+- **已核验：** **2025-06-13** 公布；**自 2025-10-09 起施行**。期货程序化交易=计算机程序自动生成或下达指令在期货交易所交易。**先报告、后交易：** 客户向期货公司报告 → 期货公司核查 → 交易所确认 → 方可交易。高频交易在证监会文本中为定性描述；**具体高频标准由期货交易所制定**，可差异化手续费/报撤单收费/限额。主机托管与席位公平；异常报撤重点监控。施行前已开展者，**6 个月内**达到第 7–12 条报告要求。与证券〔2024〕8 号互补——勿混两个市场。
+
+### 港股通北向 — 程序化交易报告（生效 2026-01-12）
+
+- **汇总页（已抓取）：** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
+- **已核验：** 内地交易所北向程序化交易报告要求自 **2026-01-12** 起生效；CCEP/TTEP 自该日起经 HKEX ECP 提交；存量投资者过渡期至 **2026-04-10**。沪/深门槛（分别计算）包括高度自动化下单、瞬时申报速率、多标的高换手、或定制软件等——**仅用非定制简单 TWAP/VWAP 拆单一般不触发**。正文以沪深交易所为准；HKEX 页为英文枢纽。与在岸证券〔2024〕8 / 期货〔2025〕12 互补——北向有**独立**报告通道。
+
+
+## 比较阅读：上交所交易规则（2026 年修订）— 规则也有版本
+
+**事实（已在 [上交所官网](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml) 核实）：** 上交所发布《上海证券交易所交易规则（2026年修订）》，发文文号 **上证发〔2026〕41号**，发布日期 2026-04-24，**自 2026-07-06 起施行**；2023-02-17 发布的《上海证券交易所交易规则（2023年修订）》（上证发〔2023〕32号）**同时废止**。通知还说明：此前暂未实施的部分内容**继续暂缓实施**（见附件 3《暂缓实施条文》），具体实施时间另行通知。
+
+| 版本 | 文号 | 发布日 | 适用区间（本课只写已核实部分） |
+|------|------|------|------|
+| 2023 年修订 | 上证发〔2023〕32号 | 2023-02-17 | 至 2026-07-05（2026-07-06 起废止） |
+| 2026 年修订 | 上证发〔2026〕41号 | 2026-04-24 | 2026-07-06 起施行；部分条文继续暂缓 |
+
+**为什么回测要关心：** 涨跌幅、申报、交易时段等规则决定了「当天能不能成交、以什么价成交」。回测跨越 2026-07-06 时，应**按交易日期选用当时有效的规则版本**，而不是把今天的规则套到全部历史上。暂缓实施的条文在官方公布实施日期前**不应**进入回测。
+
+```python
+def sse_rule_version(trade_date: str) -> str:
+    # 只示意版本切换；具体条文以官网原文为准
+    return "2026" if trade_date >= "2026-07-06" else "2023"
+```
+
+仅供学习；具体条文以上交所官网原文为准，不构成法律或投资建议。
+
 ## 加密货币 — 仅官方高层次状态
 
 ### 中国 — 人民银行等 银发〔2021〕237号
@@ -99,13 +141,12 @@ def sse_rule_version(trade_date: str) -> str:
 
 ## Python 配套
 
-`examples/p7/02_compliance_sources.py` 打印同一清单与抓取状态，并写入 `official_sources.json`。
+`examples/p7/02_compliance_sources.py` 打印**本地**来源台账（美国在前；字段 source_url / checked_on / effective_from / status / jurisdiction）——它不联网抓取——并写入 `official_sources.json`。
 
 ### 真实运行输出
 
 ```
-n_sources=19 all_fetch_OK=True
-(checked Asia/Shanghai 2026-11-04)
+n_sources=33 us_first_block=19 fields_complete=True
 ```
 
 
@@ -124,7 +165,7 @@ n_sources=19 all_fetch_OK=True
 - **[SEC 考试司 FY2026 优先事项](https://www.sec.gov/about/reports-publications/2026-examination-priorities)**（页面约 2025-11-17；另有 [PDF](https://www.sec.gov/files/2026-exam-priorities.pdf)）：新兴金融科技焦点——自动化投资工具、AI、交易算法/平台、另类数据。检查可能关注 AI 表述是否公允准确；运营与披露是否一致；算法建议与投资者画像；欺诈/AML/交易/中后台中监督 AI 的政策。
 - **[FINRA 2026 年度监管报告 — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)**（**2026 新增**）：规则（含 FINRA Rule 3110 监督）保持技术中立。新兴智能体主题：自主性、范围/权限、可审计性、数据敏感度、领域知识、奖励错位，以及 GenAI 偏见/幻觉/隐私。可考虑人在回路、访问/数据监控、动作日志、护栏。
 
-**仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=19`。
+**仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=33`。
 
 
 ## 香港证监会通函 24EC55 — GenAI 语言模型（知晓即可）
@@ -138,7 +179,7 @@ n_sources=19 all_fetch_OK=True
 - **高风险用途** — 提供投资建议、意见或研究报告 — 需要额外缓释：客户可见输出前的**人在回路**审阅、验证/持续监控、提示鲁棒性测试，以及正在与 AI 互动的持续披露。
 - 与 FINRA 2026 GenAI/Agents、SEC FY2026 Emerging FinTech 并列阅读：**美国某提案撤回 ≠ 其他司法辖区没有义务**。
 
-实验行：`examples/p7/02_compliance_sources.py` 中 `sfc_24ec55`（`n_sources=19`）。
+实验行：`examples/p7/02_compliance_sources.py` 中 `sfc_24ec55`（`n_sources=33`）。
 
 
 
@@ -159,7 +200,7 @@ n_sources=19 all_fetch_OK=True
 
 与亚洲同侪（SFC 24EC55、FINRA GenAI）一起读：**某司法辖区撤回某提案 ≠ 其他辖区无义务。**
 
-实验行：`examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026`（`n_sources=19`）。
+实验行：`examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026`（`n_sources=33`）。
 
 ## 常见错误 / 陷阱
 
@@ -175,6 +216,7 @@ n_sources=19 all_fetch_OK=True
 5. 用本课程给人做个性化投顾。
 6. 不标注「核验日期」。
 7. 把现行交易规则套到全部历史回测上；把仍暂缓实施的条文当作已生效。
+8. 只凭交易日期断言券商/账户已迁移到新日内保证金（2026-06-04 至 2027-10-20 有迁移期）；把 5 万美元购汇额度当成境外证券投资许可；以为美国预扣完毕就不用在中国申报。
 
 
 ## 练习（1:1）
@@ -184,7 +226,8 @@ n_sources=19 all_fetch_OK=True
 3. **ex3** — 话术审计：把「保证夏普」广告改成合规表述。
 4. **ex4** — 官方来源表：URL + 核验日期。
 5. **done1** — 伦理清单勾选完成。
-6. **ex5** — 规则版本表：为上交所交易规则写 2023/2026 两行（文号、发布日、生效日），并写出按交易日期切换版本的函数；**完成标准**：2026-07-03 返回 2023，2026-07-06 返回 2026。
+6. **ex5** — 规则版本表（主例 FINRA）：写出 SEC 批准日/Notice 发布日/生效日/迁移期截止日四行，加 `member_adoption_date`、`broker_checked_on`、账户类别字段，并实现 `pdt_regime`；**完成标准**：2026-05-01→old_pdt，2026-08-01 且迁移未知→needs_broker_verification。对照：上交所 2023/2026 版本行（2026-07-03→2023，2026-07-06→2026）。
+7. **ex6** — 跨境识字卡：用自己的话写出 W-8BEN 交给谁、协定 10% 的条件、洗售 61 个日历日窗口、中国 20% 与限额抵免/次年 3–6 月申报、CRS≠新税种、5 万美元≠证券投资许可；**完成标准**：六点齐全且无任何个人税额计算或汇路建议。
 
 
 ## 测验
@@ -207,12 +250,15 @@ n_sources=19 all_fetch_OK=True
 <Quiz id="p7ce-esma2" question="ESMA 简报下，人类点击授权是否自动使交易非算法？" options={["是，一律排除", "否 — 若算法已决定订单参数，仍可属算法交易", "仅加密适用", "只看佣金"]} answer={1} explanation="人机协同不否定算法已决定参数。" />
 <Quiz id="p7ce-sfc" question="香港证监会（SFC）通函 24EC55（已抓取）主要是？" options={["GenAI 交易 alpha 执照", "香港对 GenAI 语言模型的期望；高风险建议/研究 → 人在回路 — 仅知晓", "废除 FINRA 3110", "仅限 HFT"]} answer={1} explanation="2024-11-12 发出；非法律意见。" />
 <Quiz id="ce-sse2026" question="上交所交易规则（2026年修订）何时起施行？2023 版怎样？" options={["2026-04-24 起施行，2023 版继续有效", "2026-07-06 起施行，2023 版同时废止", "2027-01-01 起施行", "只适用于期货"]} answer={1} explanation="上证发〔2026〕41号：2026-07-06 起施行，2023 版同时废止；部分条文继续暂缓。回测应按日期切换版本。" />
+<Quiz id="ce-pdt-phase" question="2026-08-01 的一笔交易，券商迁移状态未知，按本课规则函数应输出？" options={["old_pdt", "intraday_margin", "needs_broker_verification", "illegal"]} answer={2} explanation="规则 2026-06-04 生效，但迁移期到 2027-10-20；状态未知时必须核实券商（R04）。" />
+<Quiz id="ce-wash61" question="洗售规则的时间窗口是？" options={["卖出后 30 个营业日", "卖出前后各 30 个日历日，含当日共 61 个日历日", "只看同一天", "T+1 交收日"]} answer={1} explanation="IRC §1091：前 30 日至后 30 日；按日历日计算。" />
+<Quiz id="ce-fx50k" question="个人每年等值 5 万美元购汇便利化额度意味着？" options={["可以自由买美股", "是年度便利额度；额度购汇汇出需真实经常项目用途，不包括投资境外证券", "自动免税", "可替别人购汇"]} answer={1} explanation="外汇局上海/陕西分局 FAQ；不提供任何绕道方案。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

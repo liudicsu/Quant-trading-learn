@@ -10,3 +10,5 @@ Offline synthetic examples for Phase P1. Learning only — not investment advice
 | `04_eval_lab.py` | net-of-cost table, win-rate trap → `04_*.out` |
 
 Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
+
+- US-first pack (2026-11-08): `05_us_market_mechanics.py — US T+1, NYSE sessions in Shanghai time, toy NBBO (offline).`

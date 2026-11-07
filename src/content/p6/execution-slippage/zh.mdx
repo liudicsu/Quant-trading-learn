@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **13 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **14 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -138,6 +138,20 @@ alpha | peak | end | revert_frac | below_chord_during
 **禁止**在评估路径上标定 α 当 alpha；不做 LOB HFT / Hawkes / GAN / MPC 执行食谱。本文是**协议与警告**，不是冲击 alpha。
 </Callout>
 
+## 看哪个 feed，滑点就不一样（2026-11-08 核实）
+
+Alpaca Basic 实时只有 IEX（[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)），而 NBBO 来自合并行情（SIP）。同一笔成交，用 IEX 中间价还是 SIP 中间价作到达价，滑点不同；过时的报价也会扭曲结果。这不是「路由 alpha」，只是基准选错。
+
+`examples/p6/07_feed_tca_toy.py`（合成报价）：
+
+```text
+到达中间价 SIP=100.020 IEX=100.015 → 滑点 3.00 bps vs 3.50 bps
+过时 1 tick 的 NBBO → 4.00 bps（高估）
+200 股 OK；1000 股吃穿盘口顶层（300）；20000 股超过 5% ADV
+```
+
+报告必须记录：feed、quote_ts、decision_ts、fill_ts。
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -147,6 +161,7 @@ alpha | peak | end | revert_frac | below_chord_during
 5. 未声明基准就把到达价 IS 与收盘对收盘 PnL 混用。
 6. 用公开盘口 IRF 直接当真实元订单成本，却不提凹/回撤缺失。
 7. 标定 α / 冲击核当成课程 edge。
+8. 用 IEX 报价当 NBBO 计算滑点，却不在报告中写明 feed。
 
 ## 练习（1:1）
 
@@ -155,6 +170,7 @@ alpha | peak | end | revert_frac | below_chord_during
 3. **ex3** — 对卖出程序算 Perold IS；分解延迟 vs 交易。
 4. **ex4** — 限价 vs 市价玩具；报告成交率与逆向分量。
 5. **done1** — 主配置中的执行一页纸（日程、λ、基准、上限）。
+6. **ex-us-tca** — 在 `07_feed_tca_toy.py` 中把成交价改为 100.03；**完成标准**：报告两种 feed 下的新滑点。
 
 ## 测验
 
@@ -168,6 +184,7 @@ alpha | peak | end | revert_frac | below_chord_during
 <Quiz id="p6ex-q7" question="本课 I≈Yσ√(Q/V) 主要是？" options={["把 Y 做大的 alpha 信号", "成本/容量尺 — 不是 edge", "永远证伪线性 AC", "券商 API"]} answer={1} explanation="冲击作成本识字；拒绝优化 Y→alpha。" />
 <Quiz id="p6ex-q9" question="2501.17096 对公开数据元订单 IRF 的主要警告？" options={["公开 TIM 总给出完美凹路径", "常呈近线性路径+弱回撤，与真实元订单 stylized facts 不符 — 估大单冲击易估歪", "证明 α=1 是 alpha", "替代 Perold IS"]} answer={1} explanation="协议/警告；LMF + 修正 TIM α 仅识字。" />
 <Quiz id="p6ex-q8" question="双 √ 识字（2502.16246）说元订单 √ 主要来自？" options={["只有 Kyle λ", "子单成交量 √ + 时间逆 √ 衰减（机械箔）", "保证知情流", "RL 执行"]} answer={1} explanation="子单 √ + 衰减 → 元订单 √；打乱箔。" />
+<Quiz id="es-feed" question="同一成交在 IEX 与 SIP 基准下滑点不同，说明？" options={["发现了路由 alpha", "到达价基准取决于 feed，报告须写明", "IEX 是错的", "无需记录时间戳"]} answer={1} explanation="基准选择问题。" />
 
 ## 完成标准
 

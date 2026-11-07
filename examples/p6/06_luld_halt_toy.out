@@ -1,0 +1,16 @@
+=== 1. band widths (reference price = avg of prior 5 min) ===
+tier1 ref= 50.00 closing_window=False -> band +/-5.00% = [47.5000, 52.5000]
+tier1 ref= 50.00 closing_window=True  -> band +/-10.00% = [45.0000, 55.0000]
+tier2 ref= 50.00 closing_window=False -> band +/-10.00% = [45.0000, 55.0000]
+tier2 ref= 50.00 closing_window=True  -> band +/-10.00% = [45.0000, 55.0000]
+tier2 ref=  2.00 closing_window=True  -> band +/-40.00% = [1.2000, 2.8000]
+tier1 ref=  0.50 closing_window=False -> band +/-30.00% = [0.3500, 0.6500]
+=== 2. toy single-stock path: limit state -> 5-min halt -> reopen gap ===
+t=13: limit state > 15 s (20s) -> trading pause; no new fills while halted
+t=73: reopen at 37.20 (gap from band 38.00)
+stop-sell trigger 38.50 filled at 37.20 -> a stop order does not guarantee its price
+=== 3. three different mechanisms (do not merge them) ===
+MWCB: market-wide, S&P 500 decline vs prior close, Level 1/2/3 = 7%/13%/20%
+LULD: single stock, dynamic band around 5-min reference price, regular hours only
+Reg SHO Rule 201: single stock fell 10.5% >= 10% vs prior close -> short-sale PRICE TEST (not a halt) rest of day + next day
+disclaimer: synthetic; learning only

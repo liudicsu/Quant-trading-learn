@@ -14,3 +14,5 @@ python 02_factor_portfolio_lab.py
 ```
 
 Charts land in `public/p4/`.
+
+- US-first pack (2026-11-08): `03_us_factor_benchmark.py — Ken French-shaped synthetic CSV: percent→decimal, missing markers, Mkt-RF+RF, compounding.`

@@ -3,7 +3,7 @@ universe: AAA single-name; Y_coin/BBB pairs foil; fill=shift(1); Rf=0
 ONE cost model: one_way_bps 10.0 + √impact×turnover; pairs n_legs=2
 OOS: last 30%; baseline dual_MA 10 30
 trial_count N=4 strategies in this lab (explicit — feeds DSR)
-cite: P2 backtest-traps Bailey–LdP DSR; JoinQuant interrogation ethos
+cite: P2 backtest-traps Bailey–LdP DSR; same-protocol backtest interrogation discipline
 cite: quants.md as hypothesis foil only
 further_reading: Ernest P. Chan, Algorithmic Trading..., Wiley 2013 — no quotes
 

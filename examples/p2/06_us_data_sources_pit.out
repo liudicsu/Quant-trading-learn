@@ -1,0 +1,24 @@
+source_mode=synthetic_fixture (no download, no cache)
+=== 1. which source answers which question ===
+- SEC EDGAR (companyfacts/submissions): filings & XBRL facts; NOT price bars
+- FRED / ALFRED: macro series & vintages; NOT tick data; API needs key; service terms restrict
+- Ken French Data Library: research factor returns; NOT raw single-stock prices
+- CRSP (subscription): security-level returns, delistings, PERMNO; not free
+- Alpaca Basic / Massive Basic: vendor feeds with plan limits (IEX real-time / EOD); check entitlement
+- yfinance: unofficial wrapper, not affiliated with Yahoo; no reliability or licence promise
+=== 2. EDGAR-like facts: align by availability, not period end ===
+decision 2026-05-08T09:30:00-04:00: PIT value=1000 (orig, accepted 2026-05-07T20:15:00-04:00)
+naive latest-facts value=920 (amend1, accepted 2026-08-20T09:05:00-04:00) -> look-ahead
+decision 2026-04-15: PIT value=None (period ended 03-31 but nothing filed yet)
+ASSERT available_at <= decision_time: ok
+=== 3. ALFRED-like vintages: observation date != when it was known ===
+value of 2026-04 obs as known on 2026-05-15: 2.0
+value of 2026-04 obs as known on 2026-06-15: 2.3
+value of 2026-04 obs as known on 2026-07-15: 2.4
+'current' (FRED-mode default = today) value backfilled to May decision: 2.4 vs as-known 2.0
+=== 4. S-A: two feature sets differ ===
+as-of feature   : [2.0, 2.3, 2.4]
+final-value feat: [2.4, 2.4, 2.4]
+rows that differ: 2/3
+SYN_MACRO_2: realtime_start=None -> EXCLUDED from signal (cannot guess when it was known)
+disclaimer: hand-made fixtures; learning only

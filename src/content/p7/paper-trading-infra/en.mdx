@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14 hours**: 3h design + 6h running/logging + 3h parity checklist/asserts + 1h template + 1h infra name-map) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
+This lesson (~**17 hours**: 3h design + 6h running/logging + 3h parity checklist/asserts + 1h template + 1h infra name-map + 2h US broker paper differences & adapter fixture + 1h Shanghai-timezone reconciliation) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
 
 **Goals:** CSV/sim paper matching; emit daily logs; explain what paper validates (process, not alpha).
 
@@ -101,6 +101,31 @@ Parity checklists do not prove edge. Catching a clock bug is process quality —
 </Callout>
 
 
+## US broker paper accounts: what they simulate and what they don’t (checked 2026-11-08)
+
+This lesson **connects to no broker API**; it only reads docs and demonstrates with a local fixture.
+
+| | Alpaca paper ([docs](https://docs.alpaca.markets/docs/paper-trading)) | IBKR paper ([glossary](https://www.interactivebrokers.com/campus/glossary-terms/paper-trading-account/)) |
+|------|------|------|
+| Fills | Simulated against the NBBO | Top of book, no deep book |
+| Size | Order quantity **not** checked against NBBO size | — |
+| Dividends | **Not** simulated | — |
+| Order types | — | No VWAP, Auction, RFQ, Pegged-to-Market |
+| Permissions/data | — | Follow the regular account |
+
+Conclusion: **paper ≠ live**. Paper profits do not prove live executability. Account-opening/funding minimums were not verified and are not written here.
+
+**Lab:** `examples/p7/03_paper_adapter_fixture.py` (local fixture: idempotency + reconciliation + timezone):
+
+```text
+intents=6 unique_orders_sent=5 (duplicate retry ignored)
+reconcile gap: o4 expected 40 got 0
+2026-07-06 19:59 UTC fill: New York date 07-06, Shanghai date 07-07 03:59
+2026-11-27 17:59 UTC fill (early-close day) → Shanghai 11-28 01:59
+```
+
+**Shanghai-timezone reconciliation:** file fills by **New York trading date**, not the Shanghai calendar; test DST switches and early-close days separately.
+
 ## Common mistakes / pitfalls
 
 1. Editing signal rules after seeing paper P&amp;L.
@@ -108,6 +133,7 @@ Parity checklists do not prove edge. Catching a clock bug is process quality —
 3. Mixing research fills into the paper ledger.
 4. No recon between fills CSV and equity.
 5. Shipping broker API keys or order routers in the learning repo.
+6. Filing US fills by Shanghai date so one fill “crosses days”; assuming Alpaca paper simulates dividends or checks book size.
 
 ## Practice (1:1)
 
@@ -116,6 +142,7 @@ Parity checklists do not prove edge. Catching a clock bug is process quality —
 3. **ex3** — Reproduce the friction ladder with stated params.
 4. **ex4** — Kill-switch unit cases (gap / DD / gross).
 5. **done1** — ≥5-day log pack + gap table + kill demo.
+6. **ex-us-paper** — add another intent with a duplicate client_order_id in `03_paper_adapter_fixture.py`; **done when**: unique_orders_sent does not change.
 
 ## Quiz
 
@@ -128,12 +155,13 @@ Parity checklists do not prove edge. Catching a clock bug is process quality —
 
 <Quiz id="p7pt-q7" question="arXiv:2610.21846 six defects mainly teach?" options={["A guaranteed live Sharpe", "Where BT and live paths drift — protocol/checklist, not PnL", "HFT latency recipes", "Options MM"]} answer={1} explanation="Protocol only; paper makes no profitability claim." />
 <Quiz id="p7pt-q8" question="Which is one of the six defect classes?" options={["UTC timestamps read as NY time", "Always-profitable LLM", "FactFin Sharpe table", "Deep RL alpha"]} answer={0} explanation="Clock / timezone drift was a documented defect." />
+<Quiz id="pt-alp" question="Alpaca’s paper trading docs say?" options={["Dividends are simulated", "Fills are simulated against the NBBO but quantity is not checked against NBBO size", "It equals live", "It uses the deep book"]} answer={1} explanation="Alpaca paper docs; dividends are not simulated." />
 
 ## Done when
 
 ≥5-day (lab: 360) log pack, friction gap table, kill-switch demo, frozen version string in every row.
 
-**Sources:** Canvas m13; JoinQuant W08 paper-before-live ethos; QuantStart paper notes; P6 risk kill patterns; Qbot + Atlas GitHub (infra name-drops only); parity [arXiv:2610.21846](https://arxiv.org/abs/2610.21846).
+**Sources:** Canvas m13; paper-before-live discipline (Chinese supplement: JoinQuant simulated-trading tutorials); QuantStart paper notes; P6 risk kill patterns; Qbot + Atlas GitHub (infra name-drops only); parity [arXiv:2610.21846](https://arxiv.org/abs/2610.21846).; [Alpaca paper](https://docs.alpaca.markets/docs/paper-trading), [IBKR paper glossary](https://www.interactivebrokers.com/campus/glossary-terms/paper-trading-account/) (checked 2026-11-08).
 
 <Summary>
 **Takeaways**: freeze version → log everything → reconcile → decompose gaps → kill on gap/DD/gross.  
