@@ -14,4 +14,4 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 
 - US-first pack (2026-11-08): `03_paper_adapter_fixture.py — idempotent adapter, reconciliation, NY vs Shanghai dates; 02 is now a local US-first source ledger (n_sources=33, no fetching).`
 
-- R34 (2026-11-08): `04_finra_migration_fixture.py` + `data/finra_26_10_fixture.json` — FINRA 26-10 four dates, member adoption, broker_checked_on, account category; 8 asserted cases (unknown → needs_broker_verification).
+- R34 (2026-11-08): `04_finra_migration_fixture.py` + `fixtures/finra_26_10_fixture.json` — FINRA 26-10 four dates, member adoption, broker_checked_on, account category; 8 asserted cases (unknown → needs_broker_verification).

@@ -27,7 +27,7 @@
 
 **版本练习的正确写法（按审阅报告 R04）：** FINRA 示例分别记录 SEC 批准日、Notice 发布日期、规则生效日、迁移期截止日，并加入 `member_adoption_date` / `broker_checked_on` 与适用账户类别。2026-06-04 至 2027-10-20 期间，不得只凭交易日期断言某会员/账户已迁移；迁移状态未知时输出 `needs_broker_verification`。不得由本地 toy 给出法律合规保证。
 
-实验 `examples/p7/04_finra_migration_fixture.py` 读入手写 fixture `examples/p7/data/finra_26_10_fixture.json`（四个日期 + `member_adoption_date` / `broker_checked_on` / `account_category`），离线跑 8 个案例并断言：
+实验 `examples/p7/04_finra_migration_fixture.py` 读入手写 fixture `examples/p7/fixtures/finra_26_10_fixture.json`（四个日期 + `member_adoption_date` / `broker_checked_on` / `account_category`），离线跑 8 个案例并断言：
 
 ```text
 PASS before_effective           trade=2026-05-01 acct=margin -> old_pdt

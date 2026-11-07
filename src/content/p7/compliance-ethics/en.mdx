@@ -27,7 +27,7 @@ The new intraday margin standards **replace in their entirety** the old PDT day-
 
 **Correct version exercise (per review item R04):** the FINRA example records, separately, the SEC approval date, the Notice publication date, the rule effective date and the phase-in end date, and adds `member_adoption_date` / `broker_checked_on` plus the applicable account category. Between 2026-06-04 and 2027-10-20, do not assert from the trade date alone that a member/account has migrated; when migration status is unknown, output `needs_broker_verification`. A local toy must not give any legal-compliance guarantee.
 
-Lab `examples/p7/04_finra_migration_fixture.py` reads the hand-made fixture `examples/p7/data/finra_26_10_fixture.json` (four dates + `member_adoption_date` / `broker_checked_on` / `account_category`), runs 8 cases offline and asserts them:
+Lab `examples/p7/04_finra_migration_fixture.py` reads the hand-made fixture `examples/p7/fixtures/finra_26_10_fixture.json` (four dates + `member_adoption_date` / `broker_checked_on` / `account_category`), runs 8 cases offline and asserts them:
 
 ```text
 PASS before_effective           trade=2026-05-01 acct=margin -> old_pdt
