@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **11 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **12 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -162,6 +162,21 @@
 2. **单日 −3% 级波动**可以出现在剧本 B（普通风险日）——要叠加滞后波动、回撤档、相关是否飙升，才能谈是否进入剧本 C 的**工程**触发。
 3. **禁止**把该新闻框写成「应该抄底」或「应该做空」——本站只练识字与流程。
 
+## 8. 风险框：期权与 VIX 基础（只讲风险，不讲收益）
+
+<Callout type="warn" title="期权/VIX 不是免费保险">
+**期权权利金（OIC 官方教育页）：** [OIC](https://www.optionseducation.org/optionsoverview/leverage-risk) 说明，期权买方付出的价格叫权利金；期权有杠杆，标的没按预期变动时，杠杆会放大百分比亏损；如果期权到期一文不值，买方的损失可以是**全部权利金**；**未备兑的期权卖方可能面临无限风险**。OIC 也说明，买入看跌期权可以像保险一样防下跌，但代价就是权利金（[来源](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)）。
+
+**含权利金的损益（手算玩具）：** 持有股票 100，买一张行权价 95、权利金 2 的看跌期权（到期时）：
+- 到期价 80：看跌期权价值 15，减去权利金 2 → 期权腿 +13（股票腿 −20，合计 −7，而不是 −20）。
+- 到期价 100：看跌期权价值 0 → 期权腿 −2，**权利金全部损失**。
+保护有成本，而且不发生下跌时这笔成本每次都要付。
+
+**VIX ≠ 可直接买的东西：** [Cboe VIX 页](https://www.cboe.com/tradable_products/vix/) 说明，VIX 指数反映由 SPX 期权价格隐含的预期波动；VIX 期货自 2004 年起在 Cboe 期货交易所（CFE）交易，VIX 期权是另一种合约。[Cboe VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) 专门解释了「即时（spot）VIX 值」与「结算 VIX 值」为何不同。所以：**指数涨了，不代表你持有的期货/期权/相关产品同样涨**。
+
+**本课立场：** 只做风险识字。不给出任何对冲收益承诺，不推荐任何期权或 VIX 产品；本课的实验也不使用期权。
+</Callout>
+
 ## Labs（离线合成）
 
 运行：`examples/p6/04_market_regimes_crisis.py`（图写入 `public/p6/`）。
@@ -192,6 +207,8 @@
 5. 用压力表年份数字当策略收益承诺。
 6. 震荡市跑趋势、又不计成本。
 7. 把新闻「correction」直接映射成课程 regime 枚举值。
+8. 把买看跌期权当成「免费保险」，不计权利金；把 VIX 指数的涨跌当成 VIX 期货/期权/相关产品的涨跌。
+
 
 ## 练习（1:1）
 
@@ -201,6 +218,8 @@
 4. **ex4** — 复现实验 D：对比首压前一日过滤 vs 平滑；用一句话解释泄漏。
 5. **ex5** — 为剧本 A–D 各写三栏卡片（识别 / 应对 / 失败），不得出现买卖推荐句。
 6. **done1** — 一页「硬规则 + 排伪」清单；附 CNBC/AP 链接与「新闻≠regime」段落。
+7. **ex6** — 手算风险框里的看跌期权玩具（到期价 80 与 100 两种情形，含权利金）；**完成标准**：写出 +13 / −2 两个数，并用一句话说明 spot VIX 与 VIX 期货结算值不同。
+
 
 ## 测验
 
@@ -210,12 +229,13 @@
 <Quiz id="p6mrc-q4" question="相关→1 的教学含义？" options={["分散化永远增强", "危机中资产同跌，组合亏损接近单名崩", "等于涨跌停", "证明 CPPI 无风险"]} answer={1} explanation="实验 C：压力相关≈0.99，共同冲击≈−8%。" />
 <Quiz id="p6mrc-q5" question="美股市场熔断 7/13/20% 在本课是？" options={["买入信号", "卖出信号", "市场机制识字——不是交易信号", "Kelly 公式参数"]} answer={1} explanation="MWCB 暂停交易以冷静市场，不产生 alpha 指令。" />
 <Quiz id="p6mrc-q6" question="Moreira–Muir（2017）与 Cederburg 等（2020）并读后，波动目标应视为？" options={["保证提高 Sharpe 的课程 alpha", "风险缩放工程；样本外价值需谨慎，不作收益承诺", "替代合规课", "HMM 平滑的同义词"]} answer={1} explanation="一篇展示吸引力，一篇强调实时/OOS 并不系统性更好。" />
+<Quiz id="crisis-put" question="买入的看跌期权到期一文不值，买方损失多少？（按 OIC 说明）" options={["零，期权是保险", "可以是全部已付权利金", "无限", "只损失一半"]} answer={1} explanation="OIC：期权到期无价值时，损失可以是全部权利金；无限风险属于未备兑卖方。" />
 
 ## 完成标准
 
 四场景卡片 + 实验 A–D 数字与课内一致 + 「新闻≠regime」短文（含已核验链接）+ 硬规则清单。平滑概率不得出现在「实盘可用」列。
 
-**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。
+**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

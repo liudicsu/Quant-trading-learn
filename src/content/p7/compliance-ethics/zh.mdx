@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **15 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
+本课（约 **16 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 上交所交易规则版本 1h）覆盖中国（证券**与**期货）、美国与加密货币场景下零售/程序化交易的**合规基础**（高层次）以及研究伦理。前置：`paper-trading-infra`。
 
 **课内目标：** 写风险偏好一页；诚实记录失败；拆穿「保证夏普」话术。
 
@@ -33,6 +33,25 @@
 - **汇总页（已抓取）：** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
 - **已核验：** 内地交易所北向程序化交易报告要求自 **2026-01-12** 起生效；CCEP/TTEP 自该日起经 HKEX ECP 提交；存量投资者过渡期至 **2026-04-10**。沪/深门槛（分别计算）包括高度自动化下单、瞬时申报速率、多标的高换手、或定制软件等——**仅用非定制简单 TWAP/VWAP 拆单一般不触发**。正文以沪深交易所为准；HKEX 页为英文枢纽。与在岸证券〔2024〕8 / 期货〔2025〕12 互补——北向有**独立**报告通道。
 
+
+## 上交所交易规则（2026 年修订）— 规则也有版本
+
+**事实（已在 [上交所官网](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml) 核实）：** 上交所发布《上海证券交易所交易规则（2026年修订）》，发文文号 **上证发〔2026〕41号**，发布日期 2026-04-24，**自 2026-07-06 起施行**；2023-02-17 发布的《上海证券交易所交易规则（2023年修订）》（上证发〔2023〕32号）**同时废止**。通知还说明：此前暂未实施的部分内容**继续暂缓实施**（见附件 3《暂缓实施条文》），具体实施时间另行通知。
+
+| 版本 | 文号 | 发布日 | 适用区间（本课只写已核实部分） |
+|------|------|------|------|
+| 2023 年修订 | 上证发〔2023〕32号 | 2023-02-17 | 至 2026-07-05（2026-07-06 起废止） |
+| 2026 年修订 | 上证发〔2026〕41号 | 2026-04-24 | 2026-07-06 起施行；部分条文继续暂缓 |
+
+**为什么回测要关心：** 涨跌幅、申报、交易时段等规则决定了「当天能不能成交、以什么价成交」。回测跨越 2026-07-06 时，应**按交易日期选用当时有效的规则版本**，而不是把今天的规则套到全部历史上。暂缓实施的条文在官方公布实施日期前**不应**进入回测。
+
+```python
+def sse_rule_version(trade_date: str) -> str:
+    # 只示意版本切换；具体条文以官网原文为准
+    return "2026" if trade_date >= "2026-07-06" else "2023"
+```
+
+仅供学习；具体条文以上交所官网原文为准，不构成法律或投资建议。
 
 ## 美国 — 市场接入、卖空、保证金、算法督导
 
@@ -155,6 +174,8 @@ n_sources=19 all_fetch_OK=True
 4. 把证券〔2024〕8 与期货〔2025〕12 混为一谈——市场与交易所不同。
 5. 用本课程给人做个性化投顾。
 6. 不标注「核验日期」。
+7. 把现行交易规则套到全部历史回测上；把仍暂缓实施的条文当作已生效。
+
 
 ## 练习（1:1）
 
@@ -163,6 +184,8 @@ n_sources=19 all_fetch_OK=True
 3. **ex3** — 话术审计：把「保证夏普」广告改成合规表述。
 4. **ex4** — 官方来源表：URL + 核验日期。
 5. **done1** — 伦理清单勾选完成。
+6. **ex5** — 规则版本表：为上交所交易规则写 2023/2026 两行（文号、发布日、生效日），并写出按交易日期切换版本的函数；**完成标准**：2026-07-03 返回 2023，2026-07-06 返回 2026。
+
 
 ## 测验
 
@@ -183,12 +206,13 @@ n_sources=19 all_fetch_OK=True
 <Quiz id="p7ce-esma" question="ESMA74-1505669079-10311（2026-02-26）主要是？" options={["HFT 配方执照", "非约束性算法交易监管简报：定义/重大变更复测/2×压力/PTC/外包责任/AI Act+RTS6 Art.9 — 仅识字", "废除 MiFID II", "仅限香港"]} answer={1} explanation="已抓取官方 PDF；非法律意见；非执照清单。" />
 <Quiz id="p7ce-esma2" question="ESMA 简报下，人类点击授权是否自动使交易非算法？" options={["是，一律排除", "否 — 若算法已决定订单参数，仍可属算法交易", "仅加密适用", "只看佣金"]} answer={1} explanation="人机协同不否定算法已决定参数。" />
 <Quiz id="p7ce-sfc" question="香港证监会（SFC）通函 24EC55（已抓取）主要是？" options={["GenAI 交易 alpha 执照", "香港对 GenAI 语言模型的期望；高风险建议/研究 → 人在回路 — 仅知晓", "废除 FINRA 3110", "仅限 HFT"]} answer={1} explanation="2024-11-12 发出；非法律意见。" />
+<Quiz id="ce-sse2026" question="上交所交易规则（2026年修订）何时起施行？2023 版怎样？" options={["2026-04-24 起施行，2023 版继续有效", "2026-07-06 起施行，2023 版同时废止", "2027-01-01 起施行", "只适用于期货"]} answer={1} explanation="上证发〔2026〕41号：2026-07-06 起施行，2023 版同时废止；部分条文继续暂缓。回测应按日期切换版本。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（本会话均 fetch OK）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

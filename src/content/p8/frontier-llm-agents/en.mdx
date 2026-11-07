@@ -167,16 +167,16 @@ Part II reports (e.g. per-stock IC ≈ +0.0843, threshold L/S Sharpe up to +2.50
 
 [Yao & Zheng (arXiv:2606.08285)](https://arxiv.org/abs/2606.08285) audit whether LLM trading papers make **execution assumptions recoverable**: PiT controls, split dates, fill timing, costs/turnover, universe construction, artifacts. Capstone habit — mark each field **Y / P / NR**:
 
-```text
-PiT / availability times: Y
-split dates train/val/test: Y
-fill timing (next-open vs same-close): P
-costs + turnover: P
-universe construction: NR
-artifacts (code/prompts/model versions): P
-```
+| Field | Meaning | Example mark |
+|------|------|------|
+| PiT / availability times | Point-in-time labels/features, no look-ahead | Y |
+| Split dates train/val/test | Train/val/sealed-OOS boundaries are public | Y |
+| Fill timing (next-open vs same-close) | Signal→order→fill assumption is reproducible | P |
+| Costs + turnover | Fees and turnover enter the evaluation | P |
+| Universe construction | Entry/exit rules are auditable | NR |
+| Artifacts (code/prompts/model versions) | Code/config/logs are retrievable | P |
 
-Add one research-log row in `backtest-traps` whenever you read an LLM trading paper. **Y means reconstructable — not “realistic” or “profitable.”**
+Add one research-log row in `backtest-traps` whenever you read an LLM trading paper. Missing rows → do not treat a headline Sharpe as evidence. **Y means reconstructable — not “realistic” or “profitable.”**
 
 ## Agent-search trial ledger (pointer from PBO lesson)
 

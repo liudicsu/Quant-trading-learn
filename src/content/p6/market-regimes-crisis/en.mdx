@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**11 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
+This lesson (~**12 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review + 1h options/VIX risk box) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
 
 **Goals:** write an engineering definition of regime; build a `shift(1)` detector stack; draft identification / engineering response / failure modes for four playbooks; spot look-ahead in smoothed HMM probabilities; separate news-day volatility from a defined regime.
 
@@ -162,6 +162,21 @@ Smoothed probs peek ahead; CPPI has gap risk and cash-lock; stress is not a fore
 2. A **single ~−3% day** can sit inside playbook B (ordinary risk day) — layer lagged vol, DD bucket, and whether correlations spiked before talking about playbook C **engineering** triggers.
 3. **Do not** rewrite this box as “buy the dip” or “short it” — literacy and process only.
 
+## 8. Risk box: options & VIX basics (risks only, no returns)
+
+<Callout type="warn" title="Options/VIX are not free insurance">
+**Option premium (OIC official education pages):** [OIC](https://www.optionseducation.org/optionsoverview/leverage-risk) explains that the price an option buyer pays is the premium; options provide leverage, and if the underlying does not move as anticipated, leverage can magnify the percentage loss; if the options expire with no value, the buyer’s loss can be **the entire premium paid**; **an uncovered option writer may face unlimited risk**. OIC also explains that buying puts can act like insurance against a price drop, at the cost of the premium ([source](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)).
+
+**P&L including premium (hand-calc toy):** hold a stock at 100 and buy one put with strike 95 and premium 2 (at expiry):
+- Expiry price 80: put worth 15, minus premium 2 → option leg +13 (stock leg −20, total −7 rather than −20).
+- Expiry price 100: put worth 0 → option leg −2, **the whole premium is lost**.
+Protection has a cost, and you pay it every time even when no drop happens.
+
+**VIX ≠ something you can buy directly:** the [Cboe VIX page](https://www.cboe.com/tradable_products/vix/) explains that the VIX Index reflects expected volatility implied by SPX option prices; VIX futures have traded on Cboe Futures Exchange (CFE) since 2004, and VIX options are separate contracts. The [Cboe VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) specifically explains why the spot VIX value and the settlement VIX value differ. So: **the index rising does not mean the futures/options/related product you hold rises the same way**.
+
+**This lesson’s stance:** risk literacy only. No hedge-return promise of any kind, no recommendation of any option or VIX product; the labs in this lesson do not use options.
+</Callout>
+
 ## Labs (offline synthetic)
 
 Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
@@ -192,6 +207,8 @@ Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
 5. Treating stress-table years as strategy return promises.
 6. Running trend rules in chop without costs.
 7. Mapping a news “correction” straight onto the course regime enum.
+8. Treating a bought put as “free insurance” and ignoring the premium; treating moves in the VIX Index as moves in VIX futures/options/related products.
+
 
 ## Practice (1:1)
 
@@ -201,6 +218,8 @@ Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
 4. **ex4** — Reproduce Lab D: compare filtered vs smoothed the day before first stress; one sentence on leakage.
 5. **ex5** — Write three-column cards for playbooks A–D (ID / response / failure) with **no** trade-recommendation sentences.
 6. **done1** — One-page hard-rules + debunk checklist; attach CNBC/AP links and a “news ≠ regime” paragraph.
+7. **ex6** — hand-calc the put toy in the risk box (expiry prices 80 and 100, including premium); **done when**: you write the two numbers +13 / −2 and one sentence on why spot VIX differs from the VIX futures settlement value.
+
 
 ## Quiz
 
@@ -210,12 +229,13 @@ Run: `examples/p6/04_market_regimes_crisis.py` (charts under `public/p6/`).
 <Quiz id="p6mrc-q4" question="Teaching point of corr→1?" options={["Diversification always strengthens", "Assets fall together in crises; book loss ≈ single-name crash", "Equals a price limit", "Proves CPPI is risk-free"]} answer={1} explanation="Lab C: stress corr≈0.99, common shock≈−8%." />
 <Quiz id="p6mrc-q5" question="US MWCB 7/13/20% levels are, in this course?" options={["A buy signal", "A sell signal", "Mechanism literacy — not a trade signal", "Kelly formula inputs"]} answer={1} explanation="Halts pause trading to cool the tape; they do not issue alpha instructions." />
 <Quiz id="p6mrc-q6" question="After reading Moreira–Muir (2017) with Cederburg et al. (2020), vol targeting should be treated as?" options={["Guaranteed Sharpe uplift / course alpha", "Risk-scaling engineering; OOS value is cautious — no return promise", "A substitute for the compliance lesson", "A synonym for HMM smoothing"]} answer={1} explanation="One paper shows appeal; the other stresses real-time/OOS versions are not systematically better." />
+<Quiz id="crisis-put" question="A bought put expires worthless. Per OIC, what does the buyer lose?" options={["Nothing, options are insurance", "Up to the entire premium paid", "Unlimited", "Only half"]} answer={1} explanation="OIC: if options expire with no value the loss can be the entire premium; unlimited risk belongs to an uncovered writer." />
 
 ## Done when
 
 Four playbook cards + Labs A–D numbers matching the lesson + a short “news ≠ regime” note (with verified links) + hard-rules checklist. Smoothed probabilities must not appear in the “live-usable” column.
 
-**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.
+**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.; OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) and [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks); Cboe [VIX product page](https://www.cboe.com/tradable_products/vix/) and [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) (all verified 2026-11-07).
 
 <Summary>
 **Takeaways**: regimes must be operational and causal; smoothed HMM leaks; write failure modes for every playbook; circuit breakers and news “corrections” are not course trade signals; vol management is risk engineering, not a return promise.  

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**15 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
+This lesson (~**16 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz + 1h SSE trading-rule versions) covers **compliance basics** for retail/programmatic trading in China (securities **and** futures), the US, and crypto at a high level — plus research ethics. Prereqs: `paper-trading-infra`.
 
 **Goals:** write a risk-preference page; log failures honestly; refuse “guaranteed Sharpe” pitches.
 
@@ -33,6 +33,25 @@ Nothing here is legal, compliance, or investment advice. Thresholds and effectiv
 - **Hub (fetched OK):** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
 - **Verified:** Mainland exchanges’ NB Program Trading Reporting Requirements **effective 2026-01-12**; CCEPs/TTEPs submit via HKEX ECP from that date; existing investors had a transition window through **2026-04-10**. SSE/SZSE thresholds (computed separately) include high automation of order elements, fast order rate, many stocks + high turnover, or customized software — **TWAP/VWAP-only simple splitting is generally not the trigger**. Primary texts live on SSE/SZSE; HKEX page is the English hub. Complements onshore securities 〔2024〕8 / futures 〔2025〕12 — Stock Connect northbound has its **own** reporting channel.
 
+
+## SSE Trading Rules (2026 revision) — rules have versions too
+
+**Facts (verified on the [SSE official site](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)):** the Shanghai Stock Exchange issued the *Trading Rules of the Shanghai Stock Exchange (2026 Revision)*, document no. **SSE Fa [2026] No. 41 (上证发〔2026〕41号)**, published 2026-04-24, **effective from 2026-07-06**; the *Trading Rules (2023 Revision)* published 2023-02-17 (上证发〔2023〕32号) are **repealed at the same time**. The notice also says that certain provisions not yet implemented **remain deferred** (see Attachment 3, the list of deferred provisions), with implementation dates to be announced separately.
+
+| Version | Document no. | Published | Applicable window (only the verified part) |
+|------|------|------|------|
+| 2023 revision | 上证发〔2023〕32号 | 2023-02-17 | until 2026-07-05 (repealed from 2026-07-06) |
+| 2026 revision | 上证发〔2026〕41号 | 2026-04-24 | effective from 2026-07-06; some provisions still deferred |
+
+**Why a backtest cares:** price limits, order entry and trading sessions decide “can this fill today, and at what price.” When a backtest spans 2026-07-06, **pick the rule version in force on each trade date**, instead of applying today’s rules to all of history. Deferred provisions should **not** enter a backtest before an official implementation date is announced.
+
+```python
+def sse_rule_version(trade_date: str) -> str:
+    # illustrates version switching only; the official text governs the details
+    return "2026" if trade_date >= "2026-07-06" else "2023"
+```
+
+Learning only; the official SSE text governs the details; not legal or investment advice.
 
 ## United States — market access, shorts, margin, algo supervision
 
@@ -157,6 +176,8 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 4. Conflating securities 〔2024〕8 with futures 〔2025〕12 — markets and exchanges differ.
 5. Offering personalised trading advice from this course.
 6. Skipping the “date checked” stamp.
+7. Applying today’s trading rules to the whole historical backtest; treating still-deferred provisions as in force.
+
 
 ## Practice (1:1)
 
@@ -165,6 +186,8 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 3. **ex3** — Pitch audit: rewrite a “guaranteed Sharpe” ad into compliant language.
 4. **ex4** — Fill the official-source table with URL + date checked.
 5. **done1** — Ethics checklist complete.
+6. **ex5** — rule-version table: write the 2023/2026 rows for the SSE Trading Rules (document no., published, effective) and a function that switches version by trade date; **done when**: 2026-07-03 returns 2023 and 2026-07-06 returns 2026.
+
 
 ## Quiz
 
@@ -185,12 +208,13 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 <Quiz id="p7ce-esma" question="ESMA74-1505669079-10311 (2026-02-26) is mainly?" options={["An HFT recipe license", "A non-binding algo-trading supervisory briefing: definition / material-change retest / 2× stress / PTC / outsourcing liability / AI Act+RTS6 Art.9 — literacy only", "Repeal of MiFID II", "HK-only"]} answer={1} explanation="Fetched official PDF; not legal advice; not a license checklist." />
 <Quiz id="p7ce-esma2" question="Under the ESMA briefing, does a human click automatically make trading non-algo?" options={["Yes, always excluded", "No — if an algorithm already determined order parameters, it can still be algo trading", "Crypto only", "Only commissions matter"]} answer={1} explanation="Human authorisation does not negate algorithm-determined parameters." />
 <Quiz id="p7ce-sfc" question="SFC Circular 24EC55 (fetched) mainly?" options={["A trading alpha license for GenAI", "HK expectations for GenAI LMs; high-risk advice/research → human-in-the-loop — awareness only", "Abolishes FINRA 3110", "Only for HFT"]} answer={1} explanation="Issued 2024-11-12; not legal advice." />
+<Quiz id="ce-sse2026" question="When do the SSE Trading Rules (2026 revision) take effect, and what about the 2023 version?" options={["From 2026-04-24, 2023 stays in force", "From 2026-07-06, 2023 repealed at the same time", "From 2027-01-01", "Futures only"]} answer={1} explanation="上证发〔2026〕41号: effective 2026-07-06, 2023 version repealed; some provisions still deferred. Backtests switch versions by date." />
 
 ## Done when
 
 Ethics checklist checked; official-source table filled with URLs and **2026-11-04** check date; risk-preference page written.
 
-**Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK; n_sources=19). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf); FR PDA withdrawal. Canvas m14; AFML scientific ethics.
+**Sources:** all rows in `examples/p7/02_compliance_sources.py` (fetched OK; n_sources=19). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf); FR PDA withdrawal. Canvas m14; AFML scientific ethics.; SSE Trading Rules (2026 Revision) notice page ([link](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml), verified 2026-11-07).
 
 <Summary>
 **Takeaways**: cite official text + date; CN securities 〔2024〕8 + futures 〔2025〕12 report-before-trade & exchange HFT standards; US 15c3-5 / Reg SHO / 4210-IML via 26-10+26-11 / 15-09; crypto via PBoC 2021 + non-binding SEC/CFTC staff note; EU ESMA algo-trading briefing (non-binding).  

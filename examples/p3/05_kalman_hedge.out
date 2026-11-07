@@ -1,0 +1,14 @@
+=== Kalman hedge ratio (true beta 1.0 -> 1.5 at t=150) ===
+t=140: true=1.00 filtered=1.0124 smoothed=1.0259
+t=149: true=1.00 filtered=1.0090 smoothed=1.2098
+t=155: true=1.50 filtered=1.4300 smoothed=1.4595
+t=170: true=1.50 filtered=1.5165 smoothed=1.5063
+mean |beta error| filtered=0.0137 smoothed=0.0122
+-> smoothed looks 'better' because it already saw the future
+=== future-perturbation test (change data after t0=200) ===
+max |filtered change| for t<=t0: 0.000000
+max |smoothed change| for t<=t0: 0.345708
+-> a causal signal must pass: future edits do not change past values
+=== spread signal using lagged filtered beta (beta_{t-1}) ===
+spread std (filtered, lagged) = 1.7823
+disclaimer: synthetic; learning only

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**22 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+This lesson (~**23 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
 
 **Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
 
@@ -133,6 +133,27 @@ c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches@cost_aware 41/500
 
 Choose band width **inside** validation (cost-in-CV) — not after peeking at OOS. Thin pointer in `execution-slippage` (TCA / participation caps sit next to this logic).
 
+## Mini-lab: weight drift & constraint consistency
+
+**Intuition:** your target weights hold only at the moment you rebalance. Afterwards assets move differently and the actual weights “drift” on their own; and the constraints themselves may contradict each other (no solution at all).
+
+**Formula:** without trading, drifted weight `w_i' = w_i · g_i / Σ_j (w_j · g_j)` (`g_i` = cumulative growth factor over the period); one-way turnover back to target `= ½ · Σ_i |w_i − w_i'|`. The simplest consistency check: with per-asset cap and n assets, if `n × cap < 1` the weights can never sum to 1.
+
+**Numeric example (`examples/p6/05_weight_drift.py`, seed=3, synthetic, 4 assets, target 30/30/20/20%, cap 33%):**
+
+```text
+cap=0.33, n=4: max total = 1.32 -> feasible
+cap=0.20, n=4: max total = 0.80 -> INFEASIBLE (cannot sum to 1)
+A: target=0.3000 drifted=0.3462
+sum drifted = 1.0000; cap breached: ['A']
+one-way turnover = 0.0476; cost @ 10bp = 0.000048 of NAV
+assets outside +/-2% band: ['A', 'C']
+```
+
+How to read it: the target satisfies the 33% cap, but after 63 days without trading A has drifted to 34.6% — **the cap is already breached**. So check constraints on the **drifted actual weights**, not only on the target you set. With cap=20% the constraints have no solution and should raise an error before any optimisation.
+
+disclaimer: synthetic data; learning only, not investment advice.
+
 ## Common mistakes / pitfalls
 
 - Ignoring alpha decay and always full-rebalancing to target under costs.
@@ -145,6 +166,8 @@ Choose band width **inside** validation (cost-in-CV) — not after peeking at OO
 5. Treating 1/N as universally optimal rather than a tough benchmark (DeMiguel et al.).
 6. Inverting a singular/ill-conditioned Σ when HRP would have avoided the inverse.
 7. Ignoring dendrogram clusters and treating every ticker as an independent risk bet.
+8. Checking constraints only on target weights, ignoring drifted actual weights; optimising before checking the constraints are feasible (e.g. n×cap &lt; 1).
+
 
 ## Practice (1:1)
 
@@ -154,6 +177,8 @@ Choose band width **inside** validation (cost-in-CV) — not after peeking at OO
 4. **ex4** — Walk-forward MV vs LedoitWolf vs 1/N; record shrinkage intensity.
 5. **done1** — Sizing comparison table + one-page risk preference (half-Kelly rationale).
 6. **ex5** — HRP dendrogram + allocation table vs ERC/inv-vol on the toy panel; **done when** cluster sums and charts match the lesson.
+7. **ex6** — run `05_weight_drift.py`; **done when**: the feasible/infeasible lines, A drifted to 0.3462 breaching the cap, and one-way turnover 0.0476 print.
+
 
 ## Quiz
 
@@ -168,12 +193,13 @@ Choose band width **inside** validation (cost-in-CV) — not after peeking at OO
 
 <Quiz id="p6prs-q-decay" question="As trading costs rise with decaying alpha, the cost-aware no-trade band should?" options={["Always shrink to zero", "Widen — trade less; 不交易也是决策", "Ignore lag terms", "Maximize switches"]} answer={1} explanation="arXiv:2502.04284 / lab: c↑ → half-band↑ → switches↓." />
 <Quiz id="p6prs-q-nt" question="A no-trade region means?" options={["Always rebalance to target daily", "Do not trade when close enough to target; trade toward the boundary if outside", "Ban all costs", "Maximize turnover"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 spirit." />
+<Quiz id="pr-drift" question="4 assets, each capped at 20%, weights must sum to 1. What happens?" options={["Always solvable", "Infeasible: at most 80%", "The cap relaxes itself", "Only costs are affected"]} answer={1} explanation="n×cap=0.8<1, the constraints contradict each other; raise an error before optimising." />
 
 ## Done when
 
 Sizing comparison table (Kelly / vol-target / RP / MV–LW–1/N) plus a risk-preference page stating why you cap below full Kelly.
 
-**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11; [arXiv:2502.04284](https://arxiv.org/abs/2502.04284) Ma & Smith alpha decay + costs; [Brandt–Santa-Clara–Valkanov RFS 2009](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695); optional [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) NAME-ONLY.
+**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11; [arXiv:2502.04284](https://arxiv.org/abs/2502.04284) Ma & Smith alpha decay + costs; [Brandt–Santa-Clara–Valkanov RFS 2009](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695); optional [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) NAME-ONLY.; weight-drift / constraint-consistency is an in-house synthetic mini-lab (`examples/p6/05_weight_drift.py`).
 
 <Summary>
 **Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; HRP allocates on a tree without inverting Σ; MV needs shrinkage and an honest 1/N foil.  

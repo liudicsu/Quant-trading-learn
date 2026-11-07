@@ -1,0 +1,14 @@
+=== 1. constraint consistency check (before any optimisation) ===
+cap=0.33, n=4: max total = 1.32 -> feasible
+cap=0.20, n=4: max total = 0.80 -> INFEASIBLE (cannot sum to 1)
+=== 2. drift over 63 days without trading ===
+A: target=0.3000 drifted=0.3462
+B: target=0.3000 drifted=0.3015
+C: target=0.2000 drifted=0.1643
+D: target=0.2000 drifted=0.1881
+sum drifted = 1.0000; cap breached: ['A']
+=== 3. rebalance back to target ===
+one-way turnover = 0.0476; cost @ 10bp = 0.000048 of NAV
+assets outside +/-2% band: ['A', 'C']
+-> check constraints on DRIFTED weights, not only on the target you set
+disclaimer: synthetic; learning only

@@ -12,6 +12,10 @@ Routes: `/[locale]/phase/<phaseSlug>/<lessonSlug>`.
 
 **Written so far:** full bodies for **P0–P9** (zh+en), 28 lessons.
 
+**Hours:** 362h full / 342h skip-P0 (exact; per-lesson sub-items sum to each total).
+
+`shap` is optional everywhere (root and `examples/p5/requirements.txt`); `examples/p5/02` skips its SHAP block without it.
+
 ## Develop
 
 ```bash

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**10 hours**: 4h concepts + 5h lab + 1h write-up) builds **Engle–Granger** pairs, compares static vs rolling hedges, and demonstrates the **in-sample vs rolling cointegration** pitfall. Prereq: `mean-reversion`.
+This lesson (~**12 hours**: 4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio) builds **Engle–Granger** pairs, compares static vs rolling hedges, and demonstrates the **in-sample vs rolling cointegration** pitfall. Prereq: `mean-reversion`.
 
 **Goals:** rolling-beta spread; discuss broken legs; EG two-step with MacKinnon note.
 
@@ -95,6 +95,29 @@ chart /workspace/Quant-trading-learn/public/p3/pairs_nav.png
 disclaimer: synthetic; learning only
 ```
 
+## Optional: Kalman dynamic hedge ratio (filter vs smoother)
+
+**Intuition:** the hedge ratio β may drift slowly. Rolling OLS estimates β on a fixed window; a Kalman filter treats β as a hidden state that “only wanders a little each day” and updates its estimate every time a new data point arrives.
+
+**Model:** state equation `β_t = β_(t−1) + w_t`, observation equation `y_t = β_t · x_t + v_t` (`w_t, v_t` are noise with variances Q, R).
+
+**The key filter vs smoother difference (per the [statsmodels state-space docs](https://www.statsmodels.org/stable/statespace.html)):** the docs state that “filtered” output at time t is an estimate conditional on **observations up through time t** (one-sided); “smoothed” output is conditional on **the entire set of observations in the dataset** (two-sided). So a **smoothed β uses future data** — fine for after-the-fact analysis, never for generating that day’s trading signal.
+
+**Numeric example (`examples/p3/05_kalman_hedge.py`, seed=5, synthetic; true β jumps from 1.0 to 1.5 at t=150):**
+
+```text
+t=149: true=1.00 filtered=1.0090 smoothed=1.2098
+mean |beta error| filtered=0.0137 smoothed=0.0122
+max |filtered change| for t<=t0: 0.000000
+max |smoothed change| for t<=t0: 0.345708
+```
+
+How to read it: at t=149 the jump has not happened yet, yet the smoothed β has already moved “early” to 1.21 — it saw the future. The smoothed error is smaller only because it peeked at the answer. **Future-perturbation test:** edit the data after t0=200; filtered values for t≤t0 do not change at all (0.000000), while smoothed values do (0.3457). A causal signal must pass this test.
+
+**Practice:** build the spread with the one-period-lagged filtered β (`β_(t−1)`); the choice of Q and R is itself a parameter and counts toward your trial count.
+
+disclaimer: synthetic data; learning only, not investment advice.
+
 ## Common mistakes / pitfalls
 
 1. Trading high corr without EG / residual stationarity.
@@ -102,6 +125,8 @@ disclaimer: synthetic; learning only
 3. Checking cointegration only once on the full sample.
 4. Costing one leg only (lab forces n_legs=2).
 5. Estimating β including the test window.
+6. Generating historical signals from the Kalman **smoothed** β (look-ahead leak); or using the same-period filtered β without a one-period lag.
+
 
 ## Practice (1:1)
 
@@ -109,6 +134,8 @@ disclaimer: synthetic; learning only
 2. **ex2** — static vs rolling net SR.
 3. **ex3** — rolling p-value pitfall paragraph + chart.
 4. **done1** — costed pairs notebook filed.
+5. **ex4** — (optional) run `05_kalman_hedge.py`; **done when**: filtered/smoothed β at t=149 and the two future-perturbation lines (filtered change = 0, smoothed change > 0) print, plus one sentence explaining the leak.
+
 
 ## Quiz
 
@@ -117,12 +144,13 @@ disclaimer: synthetic; learning only
 <Quiz id="q3-roll" question="Rolling coint p-values teach that?" options={["Full-sample p is enough", "Relationships can flip across windows", "Costs vanish", "β is constant"]} answer={1} explanation="In-sample-only pitfall." />
 <Quiz id="q4-corr" question="High return correlation alone means?" options={["Guaranteed cointegration", "Not enough for a tradeable spread", "Zero costs", "Automatic OOS edge"]} answer={1} explanation="Corr ≠ coint." />
 <Quiz id="q5-legs" question="Pairs costs in this lab use?" options={["n_legs=1", "n_legs=2 with stack + √impact", "No impact ever", "Only borrow"]} answer={1} explanation="Shared cost model." />
+<Quiz id="q6-kalman" question="Per the statsmodels docs, the smoothed state estimate at time t is conditional on?" options={["Only observations up through t", "The entire set of observations in the dataset (including after t)", "Only the period before t", "Exactly the same as filtered"]} answer={1} explanation="Smoothed is two-sided and uses future data, so never a trading signal; use the lagged filtered value." />
 
 ## Done when
 
 EG for two pairs + rolling p demo + costed notebook + quizzes (≈10h depth).
 
-**Sources:** Engle–Granger / MacKinnon via statsmodels; Stern pairs; Canvas m8; quants.md W13/W14.
+**Sources:** Engle–Granger / MacKinnon via statsmodels; Stern pairs; Canvas m8; quants.md W13/W14.; statsmodels state-space docs (filtered vs smoothed definitions, [link](https://www.statsmodels.org/stable/statespace.html), verified 2026-11-07).
 
 <Summary>
 **Takeaways**: EG+MacKinnon, rolling coint pitfall, rolling hedge, 2-leg costs.  

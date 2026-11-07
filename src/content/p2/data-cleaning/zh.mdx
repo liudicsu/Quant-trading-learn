@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **17 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **19 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -173,6 +173,42 @@ ASSERTS_OK
 </Callout>
 
 
+## 数据版本、公司行为与交易日历
+
+**直觉：** 同一只股票、同一段时间，换一个「数据版本」或「计算口径」，月收益就可能不同。回测数字只有在你写清**用的是哪个版本**时才可复现。
+
+**真实例子（已在 Ken French 数据库官网核实）：** [Ken French Data Library](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html) 说明，CRSP 旧版 Legacy（FIZ）文件在 2024 年 12 月的数据发布后停止；**从 2025 年 1 月的数据发布开始**，美国研究收益改用新版 Flat File Format 2.0（CIZ）生成。官网特别指出：FIZ 的月收益是「逐月持有期收益、分红在月末再投资」；CIZ 的月收益是「**日收益复利**、分红在**除息日**再投资」。官网同时提供基于旧版 FIZ 的历史数据。
+
+**公式：** 设第 d 天总收益 `r_d = (P_d + D_d) / P_(d−1) − 1`（`D_d` 只在除息日非零），则 CIZ 口径的月收益 `R_m = Π_(d in m) (1 + r_d) − 1`；月末再投资口径近似为 `(P_end + D) / P_start − 1`。
+
+**数值例子（`examples/p2/05_data_versions_calendar.py`，seed=7，合成数据）：** 同一组价格与一次 2.0 的分红：
+
+```text
+Jan month-end reinvest  : -0.102533
+Jan ex-date reinvest    : -0.104362
+difference (bp)         : -18.28
+```
+
+两种口径相差约 18 bp——数据没错，是**口径不同**。
+
+**公司行为（拆分）：** 2 拆 1 当天，未复权价从 51.0 变成 25.6，算出 −49.8% 的「假暴跌」；复权后当天收益只有 +0.39%：
+
+```text
+raw daily ret     : [0.02, -0.498, 0.0117]
+adjusted daily ret: [0.02, 0.0039, 0.0117]
+```
+
+**交易日历：** 两个市场假期不同（B 市场 04-04 休市）。把 B 的**收益**向前填充（ffill）会在休市日「编出」一笔收益；正确做法是按各自日历对齐，或只用两边都开市的交集日：
+
+```text
+A days=8 B days=7 inner-join days=7
+ffill rows where B return is a stale copy: 1
+```
+
+**实操要点：** 数据说明书里写明：数据来源 + 版本/发布月份 + 收益口径（分红何时再投资）+ 复权方法 + 所用交易日历。更换版本后，先复跑旧结果，再比较。
+
+disclaimer: 合成数据；仅供学习。
+
 ## 常见错误 / 陷阱
 
 1. 用今日成分回测十年。  
@@ -185,6 +221,8 @@ ASSERTS_OK
 7. 在未声明的不同 tape 上比较时钟。
 8. 涨跌停 / 停牌收盘价先滚均值再删行（上游污染）。
 9. 把 2507.07107 的 headline Sharpe / 213 因子当成课程 alpha。
+10. 换了数据版本（如 FIZ→CIZ）却不记录，把口径差当成策略变化；对**收益**做 ffill 跨休市日；用未复权价算拆分日收益。
+
 
 ## 练习（与任务清单 1:1）
 
@@ -195,6 +233,8 @@ ASSERTS_OK
 5. **ex5**：说明 PIT 滞后；**完成标准**：写出 lag=5 与 lookahead 一句。
 6. **ex6**：信息 bar 时钟——打印合成 tape 上时间/成交量/美元 bar 数量；**完成标准**：与课内表一致。
 7. **ex7**：跑 mask-first 玩具；**完成标准**：打印表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。
+8. **ex8**：跑 `05_data_versions_calendar.py`；**完成标准**：打印两种月收益口径差（≈ −18.28 bp）、拆分 raw/adj 收益与日历交集天数，并在数据说明书里补「版本 + 口径 + 日历」三行。
+
 
 ## 测验
 
@@ -208,12 +248,13 @@ ASSERTS_OK
 <Quiz id="q9-mask" question="上游污染（2507.07107）的核心失败是？" options={["佣金算错", "不可成交的涨跌停收盘价在行过滤前进入滚动算子", "只要复权", "必须用美元 bar"]} answer={1} explanation="事后删行修不了已污染的均值/相关/秩；要用 Boolean mask-first。" />
 <Quiz id="q10-mask2" question="本课对 2507.07107 的 Sharpe 2.05/1.63 立场？" options={["课程必达 alpha", "REJECT — 只教 mask 契约与污染诊断", "替代 PIT", "证明 213 因子"]} answer={1} explanation="排伪：headline Sharpe / 因子引擎不作课程 edge。" />
 <Quiz id="q8-cryptopit" question="Crypto PIT 审计先于 alpha（2608.25348 指针）要求？" options={["同 bar 成交 OK", "禁止同 bar；资金费率滞后；禁止回填；OI 谨慎", "忽略可得性时间", "总是使用 OI"]} answer={1} explanation="可得性掩码清单；完整实验见 P8 TSFM/crypto。" />
+<Quiz id="q9-ciz" question="Ken French 官网说明，2025 年 1 月起使用的 CRSP CIZ 文件中，月收益如何计算？" options={["逐月持有期收益、分红月末再投资", "日收益复利、分红在除息日再投资", "只算价格变化，不含分红", "与旧版完全相同"]} answer={1} explanation="官网原文：CIZ 月收益是日收益复利，分红在除息日再投资；旧版 FIZ 是月末再投资。所以要记录数据版本。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅契约+诊断；REJECT headline Sharpe）。
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅契约+诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  

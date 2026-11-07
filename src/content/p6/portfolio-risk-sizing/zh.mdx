@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **22 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **23 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -133,6 +133,27 @@ c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches@cost_aware 41/500
 
 带宽须在验证**内部**选定（cost-in-CV）——不可偷看 OOS。`execution-slippage` 有薄指针（TCA / 参与率上限与此相邻）。
 
+## 小实验：权重漂移与约束一致性
+
+**直觉：** 你设定的目标权重只在调仓那一刻成立。之后各资产涨跌不同，实际权重会自己「漂」走；而且约束本身可能互相矛盾（根本没有解）。
+
+**公式：** 不交易时，漂移后权重 `w_i' = w_i · g_i / Σ_j (w_j · g_j)`（`g_i` 为期间累计增长倍数）；回到目标的单边换手 `= ½ · Σ_i |w_i − w_i'|`。约束一致性的最简单检查：每个资产上限 cap、资产数 n，若 `n × cap < 1`，权重之和不可能等于 1。
+
+**数值例子（`examples/p6/05_weight_drift.py`，seed=3，合成数据，4 个资产，目标 30/30/20/20%，上限 33%）：**
+
+```text
+cap=0.33, n=4: max total = 1.32 -> feasible
+cap=0.20, n=4: max total = 0.80 -> INFEASIBLE (cannot sum to 1)
+A: target=0.3000 drifted=0.3462
+sum drifted = 1.0000; cap breached: ['A']
+one-way turnover = 0.0476; cost @ 10bp = 0.000048 of NAV
+assets outside +/-2% band: ['A', 'C']
+```
+
+读法：目标权重满足 33% 上限，但 63 天不交易后 A 漂到 34.6%，**已经违反上限**。所以约束要在**漂移后的实际权重**上检查，而不只在你设定的目标上检查。设 cap=20% 时约束本身无解，应在优化前就报错。
+
+disclaimer: 合成数据；仅供学习，不构成投资建议。
+
 ## 常见错误 / 陷阱
 
 - 忽略 alpha 衰减，有成本仍天天满仓再平衡到目标。
@@ -145,6 +166,8 @@ c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches@cost_aware 41/500
 5. 把 1/N 当成万能最优，而非强硬基准（DeMiguel 等）。
 6. 在奇异/病态 Σ 上硬做求逆，而 HRP 本可避开求逆。
 7. 忽略树状簇，把每只票都当成独立风险赌注。
+8. 只在目标权重上检查约束，忽略漂移后的实际权重；没先检查约束是否有解（如 n×cap &lt; 1）就开始优化。
+
 
 ## 练习（1:1）
 
@@ -154,6 +177,8 @@ c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches@cost_aware 41/500
 4. **ex4** — 滚动 MV vs LedoitWolf vs 1/N；记录收缩强度。
 5. **done1** — 仓位对照表 + 一页风险偏好（半 Kelly 理由）。
 6. **ex5** — 玩具面板上的 HRP 树状图 + 配置表对照 ERC/逆波动；**完成标准**：簇权重和与图与课内一致。
+7. **ex6** — 跑 `05_weight_drift.py`；**完成标准**：打印可行/不可行两行、A 漂移后 0.3462 且违反上限、单边换手 0.0476。
+
 
 ## 测验
 
@@ -168,12 +193,13 @@ c=1.00: naive_half≈1.250  cost_aware_half≈1.375  switches@cost_aware 41/500
 
 <Quiz id="p6prs-q-decay" question="alpha 衰减且成本上升时，成本感知无交易半带宽应？" options={["永远缩到 0", "变宽——少交易；不交易也是决策", "忽略滞后项", "最大化切换次数"]} answer={1} explanation="arXiv:2502.04284 / 实验：c↑ → 半带宽↑ → 切换↓。" />
 <Quiz id="p6prs-q-nt" question="无交易区意味着？" options={["每天都再平衡到目标", "足够接近目标则不交易；越界则朝边界交易", "禁止一切成本", "最大化换手"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 精神。" />
+<Quiz id="pr-drift" question="4 个资产、每个上限 20%，要求权重和为 1，会怎样？" options={["一定有解", "无解：最多只能到 80%", "上限自动放宽", "只影响成本"]} answer={1} explanation="n×cap=0.8<1，约束互相矛盾，应在优化前报错。" />
 
 ## 完成标准
 
 仓位对照表（Kelly / 波动目标 / RP / MV–LW–1/N）+ 一页风险偏好，写明为何把仓位压在满 Kelly 之下。
 
-**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。
+**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。；权重漂移/约束一致性为本站合成小实验（`examples/p6/05_weight_drift.py`）。
 
 <Summary>
 **要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；HRP 在树上配置且不反演 Σ；MV 需要收缩并以 1/N 作诚实对照。  

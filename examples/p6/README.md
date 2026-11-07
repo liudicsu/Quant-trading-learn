@@ -10,6 +10,7 @@ python 01_portfolio_risk_sizing.py   # Kelly / half-Kelly, vol target, risk pari
 python 02_execution_slippage.py      # TWAP/VWAP, Almgren–Chriss, implementation shortfall, TCA
 python 03_risk_systems_lab.py        # VaR/CVaR, Kupiec/Christoffersen, stress, drawdown rules
 python 04_market_regimes_crisis.py   # causal regime detectors, stress toys, HMM filtered vs smoothed
+python 05_weight_drift.py            # weight drift & constraint consistency (synthetic)
 ```
 
 Each script has a matching `.out` with its expected stdout; capture **stdout only** when refreshing them.

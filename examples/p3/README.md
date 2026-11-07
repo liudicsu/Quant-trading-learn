@@ -12,6 +12,7 @@ python 01_momentum_trend.py
 python 02_mean_reversion.py
 python 03_pairs_stat_arb.py
 python 04_strategy_compare_lab.py
+python 05_kalman_hedge.py          # optional: Kalman hedge ratio, filter vs smoother leak (synthetic)
 ```
 
 Charts land in `public/p3/`.

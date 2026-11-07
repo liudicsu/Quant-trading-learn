@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**17 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**19 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -173,6 +173,42 @@ Do **not** ship the paper's Sharpe **2.05** (synthetic) / **1.63** (real), **213
 </Callout>
 
 
+## Data versions, corporate actions & trading calendars
+
+**Intuition:** the same stock over the same period can show a different monthly return under a different “data version” or calculation convention. A backtest number is reproducible only if you write down **which version you used**.
+
+**Real example (verified on Ken French’s official site):** the [Ken French Data Library](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html) states that CRSP’s Legacy (FIZ) files were discontinued after the December 2024 data release; **beginning with the January 2025 data release**, US research returns are generated from the new Flat File Format 2.0 (CIZ). The site highlights: FIZ monthly returns are “month to month holding period returns with dividends reinvested at month-end”; CIZ monthly returns are “**compounded daily returns** with dividends reinvested on their **ex-dates**.” The site also keeps historical data based on the legacy FIZ format.
+
+**Formula:** with daily total return `r_d = (P_d + D_d) / P_(d−1) − 1` (`D_d` non-zero only on the ex-date), the CIZ-style monthly return is `R_m = Π_(d in m) (1 + r_d) − 1`; the month-end-reinvest style is roughly `(P_end + D) / P_start − 1`.
+
+**Numeric example (`examples/p2/05_data_versions_calendar.py`, seed=7, synthetic):** the same prices and one dividend of 2.0:
+
+```text
+Jan month-end reinvest  : -0.102533
+Jan ex-date reinvest    : -0.104362
+difference (bp)         : -18.28
+```
+
+The two conventions differ by about 18 bp — the data are not wrong; the **convention differs**.
+
+**Corporate action (split):** on a 2-for-1 split day the raw price goes from 51.0 to 25.6, producing a fake −49.8% “crash”; the adjusted return that day is only +0.39%:
+
+```text
+raw daily ret     : [0.02, -0.498, 0.0117]
+adjusted daily ret: [0.02, 0.0039, 0.0117]
+```
+
+**Trading calendar:** two markets have different holidays (market B is closed on 04-04). Forward-filling B’s **returns** (ffill) “invents” a return on a closed day; align by each market’s own calendar, or use only the intersection of open days:
+
+```text
+A days=8 B days=7 inner-join days=7
+ffill rows where B return is a stale copy: 1
+```
+
+**Practical rule:** the data sheet states: source + version/release month + return convention (when dividends are reinvested) + adjustment method + trading calendar used. After a version change, rerun the old result first, then compare.
+
+disclaimer: synthetic data; learning only.
+
 ## Common mistakes / pitfalls
 
 1. Backtesting a decade with today’s members only.  
@@ -183,6 +219,8 @@ Do **not** ship the paper's Sharpe **2.05** (synthetic) / **1.63** (real), **213
 5. No hash / no version.
 6. Treating info bars as an HFT execution recipe rather than a research sampling clock.
 7. Comparing clocks on different underlying tapes without saying so.
+8. Switching data versions (e.g. FIZ→CIZ) without recording it, mistaking a convention change for a strategy change; ffilling **returns** across closed days; computing split-day returns on raw prices.
+
 
 ## Practice (1:1 with the checklist)
 
@@ -193,6 +231,8 @@ Do **not** ship the paper's Sharpe **2.05** (synthetic) / **1.63** (real), **213
 5. **ex5** — PIT lag note; **done when** lag=5 and a look-ahead sentence appear.
 6. **ex6** — Info-bar clocks: print time/volume/dollar bar counts on the synthetic tape; **done when** counts match the lesson table.
 7. **ex7**: Run the mask-first toy; **done when** apparent vs realisable IC, MA sketch, and ASSERT_mask_first_demo_ok print.
+8. **ex8**: run `05_data_versions_calendar.py`; **done when**: the two monthly-convention difference (≈ −18.28 bp), split raw/adj returns and calendar intersection days print, and the data sheet gains three lines “version + convention + calendar”.
+
 
 ## Quiz
 
@@ -206,12 +246,13 @@ Do **not** ship the paper's Sharpe **2.05** (synthetic) / **1.63** (real), **213
 <Quiz id="q9-mask" question="Upstream contamination (2507.07107) fails because?" options={["Commissions wrong", "Non-executable limit closes enter rolling ops before row filters", "Adj only", "Must use dollar bars"]} answer={1} explanation="Post-hoc drops cannot un-poison aggregates; use Boolean mask-first." />
 <Quiz id="q10-mask2" question="Course stance on 2507.07107 Sharpe 2.05/1.63?" options={["Required alpha target", "REJECT — teach mask contract + diagnosis only", "Replaces PIT", "Proves 213 factors"]} answer={1} explanation="Debunk: headline Sharpe / factor engine are not course edge." />
 <Quiz id="q8-cryptopit" question="Crypto PIT audit before alpha (2608.25348 pointer) requires?" options={["Same-bar fills OK", "No same-bar; funding lag; no backfill; careful OI", "Ignore availability time", "Always use OI"]} answer={1} explanation="Availability-masked checklist; full lab in P8 TSFM/crypto." />
+<Quiz id="q9-ciz" question="Per Ken French’s site, how are monthly returns built in the CRSP CIZ files used from January 2025?" options={["Month-to-month holding period, dividends reinvested at month-end", "Compounded daily returns, dividends reinvested on ex-dates", "Price change only, no dividends", "Identical to the legacy files"]} answer={1} explanation="Site text: CIZ monthly returns are compounded daily returns with dividends reinvested on ex-dates; legacy FIZ reinvested at month-end. So record the data version." />
 
 ## Done when
 
 - Rerunnable pipeline + sheet + quizzes  
 
-**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (contract+diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.
+**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (contract+diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.; Ken French Data Library FIZ→CIZ note ([link](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), verified 2026-11-07).
 
 <Summary>
 **Takeaways** (incl. mask-first): hashes, survivorship, PIT, timezone look-ahead, adj declarations.  

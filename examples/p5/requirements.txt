@@ -5,4 +5,4 @@ scikit-learn
 matplotlib
 statsmodels
 lightgbm
-shap
+# shap optional — install if available; 02_modern_ml_pipelines.py skips the SHAP block without it

@@ -30,24 +30,24 @@
 | `microstructure-orders` | P1 | 7 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
-| `data-cleaning` | P2 | 17 | 3 | 否 | eval-lab |
+| `data-cleaning` | P2 | 19 | 3 | 否 | eval-lab |
 | `backtest-traps` | P2 | 28 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 6 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
 | `mean-reversion` | P3 | 7 | 3 | 否 | momentum-trend |
-| `pairs-stat-arb` | P3 | 10 | 3 | 否 | mean-reversion |
+| `pairs-stat-arb` | P3 | 12 | 3 | 否 | mean-reversion |
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
 | `factor-workflow` | P4 | 24 | 4 | 否 | strategy-compare-lab, backtest-traps |
 | `factor-portfolio-lab` | P4 | 8 | 4 | 否 | factor-workflow |
 | `ml-leakage-control` | P5 | 21 | 5 | 否 | factor-workflow, backtest-traps |
 | `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
-| `portfolio-risk-sizing` | P6 | 22 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
+| `portfolio-risk-sizing` | P6 | 23 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
 | `execution-slippage` | P6 | 13 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
 | `risk-systems-lab` | P6 | 8 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
-| `market-regimes-crisis` | P6 | 11 | 4 | 否 | risk-systems-lab |
+| `market-regimes-crisis` | P6 | 12 | 4 | 否 | risk-systems-lab |
 | `paper-trading-infra` | P7 | 14 | 3 | 否 | market-regimes-crisis |
-| `compliance-ethics` | P7 | 15 | 2 | 否 | paper-trading-infra |
+| `compliance-ethics` | P7 | 16 | 2 | 否 | paper-trading-infra |
 | `frontier-llm-agents` | P8 | 29 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
 | `frontier-tsfm-altdata-crypto` | P8 | 19 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
 | `capstone` | P9 | 24 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
@@ -60,19 +60,19 @@
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
 | P1 | 市场语言与度量 / Market language & measurement | 4 | 27h | ~4.5 周 | ~2.3 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 59h | ~9.8 周 | ~4.9 周 | Research infrastructure / scientific method for backtests |
-| P3 | 经典策略族 / Classic strategy families | 4 | 30h | ~5.0 周 | ~2.5 周 | Classic alpha templates before factors/ML |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 61h | ~10.2 周 | ~5.1 周 | Research infrastructure / scientific method for backtests |
+| P3 | 经典策略族 / Classic strategy families | 4 | 32h | ~5.3 周 | ~2.7 周 | Classic alpha templates before factors/ML |
 | P4 | 因子研究 / Factor research | 2 | 32h | ~5.3 周 | ~2.7 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
-| P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 54h | ~9.0 周 | ~4.5 周 | Portfolio construction / execution / controls / regimes |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 29h | ~4.8 周 | ~2.4 周 | Operationalization and professional norms |
+| P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 56h | ~9.3 周 | ~4.7 周 | Portfolio construction / execution / controls / regimes |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 30h | ~5.0 周 | ~2.5 周 | Operationalization and professional norms |
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 24h | ~4.0 周 | ~2.0 周 | Synthesis |
 
-**全量（含 P0）：精确 355 学时（跳过 P0 为 335）。** 6h/周 ≈ 59.2 周；12h/周 ≈ 29.6 周。
-**跳过 P0 后：精确 335 学时。** 6h/周 ≈ 55.8 周；12h/周 ≈ 27.9 周。
+**全量（含 P0）：精确 362 学时（跳过 P0 为 342）。** 6h/周 ≈ 60.3 周；12h/周 ≈ 30.2 周。
+**跳过 P0 后：精确 342 学时。** 6h/周 ≈ 57.0 周；12h/周 ≈ 28.5 周。
 
-精确合计：**355h 全量 / 335h 跳过 P0**。对外可表述为约 **330–370h 全量 / 310–350h 跳过基础**（含个人复盘缓冲）。
+精确合计：**362h 全量 / 342h 跳过 P0**。对外可表述为约 **330–370h 全量 / 310–350h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -94,7 +94,7 @@
 | 条目 | 来源 | 类型 | 归属课 |
 |------|------|------|--------|
 | 假设→数据→回测→风险→执行主链 | QuantStart SAT；Canvas 教程 | classic | `贯穿 P1–P7` |
-| JoinQuant 审讯室 | lookmori 8周；聚宽教程 | classic | `backtest-traps` |
+| JoinQuant 审讯室 | 聚宽教程（第三方 lookmori 8 周镜像已移除：持续 500） | classic | `backtest-traps` |
 | AFML 标签/purge/回测当CV/虚假发现 | LdP AFML；@lopezdeprado | classic | `backtest-traps / ml-leakage-control / factor-workflow` |
 | Factor Mirage | @lopezdeprado | classic | `factor-workflow` |
 | IC 优先于规则堆砌 | @alin_alphapilot | classic | `factor-workflow` |
@@ -936,3 +936,15 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - New P6 lesson after `risk-systems-lab` (+11h): operational regimes, causal detectors, four playbooks, Hamilton filter vs smoother leak, MWCB/2016 CN halt literacy, 2026-11-05 news≠regime box (CNBC/AP verified).
 - Fixed `portfolio-risk-sizing` table/opener inconsistency → **22h** (aligned with curriculum.ts).
 - Hours: **355 full / 335 skip-P0**; lessonCount 28.
+
+## Formal-audit revision pack (base 50c33f9)
+
+- Q1 hour sub-items now sum to totals: `backtest-traps` 5+19+4=28; `factor-workflow` 5+15+3+1=24; `frontier-tsfm-altdata-crypto` 5+6+5+2+1=19.
+- Q2 removed third-party `joinquant-8w` (lookmori.cn, persistent 500); `quantstart-sat` 503 noted, unchanged.
+- Q3 Gatheral 2010 (QF 10(7) 749–759) verified via Crossref; link → RePEc journal record.
+- Q6 SSE Trading Rules 2026 revision (上证发〔2026〕41号, effective 2026-07-06, 2023 rev. repealed, some provisions deferred) → `compliance-ethics` (+1h).
+- Q7 Ken French FIZ→CIZ (Jan 2025 release) + corporate actions + calendars lab → `data-cleaning` (+2h, `examples/p2/05`).
+- Q8 Optional Kalman hedge ratio, filter vs smoother (statsmodels docs) → `pairs-stat-arb` (+2h, `examples/p3/05`).
+- Q9 Options/VIX risk box (OIC + Cboe) → `market-regimes-crisis` (+1h).
+- Q10 Weight drift & constraint consistency mini-lab → `portfolio-risk-sizing` (+1h, `examples/p6/05`).
+- Hours: **362 full / 342 skip-P0**; lessonCount 28.

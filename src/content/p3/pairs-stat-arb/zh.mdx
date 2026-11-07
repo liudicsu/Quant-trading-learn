@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **10 学时**：概念 4h + 实验 5h + 写作成文 1h）实现 **Engle–Granger** 配对，对照静态 vs 滚动对冲，并演示**样本内一次协整 vs 滚动协整**陷阱。前置：`mean-reversion`。
+本课（约 **12 学时**：概念 4h + 实验 5h + 写作成文 1h + Kalman 动态对冲比选修 2h）实现 **Engle–Granger** 配对，对照静态 vs 滚动对冲，并演示**样本内一次协整 vs 滚动协整**陷阱。前置：`mean-reversion`。
 
 **课内目标：** 滚动 beta 价差；讨论腿断裂；EG 两步法 + MacKinnon 说明。
 
@@ -95,6 +95,29 @@ chart /workspace/Quant-trading-learn/public/p3/pairs_nav.png
 disclaimer: synthetic; learning only
 ```
 
+## 选修：Kalman 动态对冲比（filter vs smoother）
+
+**直觉：** 对冲比 β 可能慢慢变化。滚动 OLS 用固定窗口估 β；Kalman 滤波把 β 当成一个「每天只会小幅游走」的隐藏状态，每来一个新数据就更新一次估计。
+
+**模型：** 状态方程 `β_t = β_(t−1) + w_t`，观测方程 `y_t = β_t · x_t + v_t`（`w_t, v_t` 是噪声，方差 Q、R）。
+
+**filter 与 smoother 的关键区别（以 [statsmodels 状态空间文档](https://www.statsmodels.org/stable/statespace.html) 为准）：** 文档写明，「filtered」输出在 t 时刻是基于**截至 t 的观测**的估计（单侧）；「smoothed」输出是基于**数据集中全部观测**的估计（双侧）。所以 **smoothed β 用到了未来数据**，只能用于事后分析，不能用来生成当天的交易信号。
+
+**数值例子（`examples/p3/05_kalman_hedge.py`，seed=5，合成数据；真实 β 在 t=150 从 1.0 跳到 1.5）：**
+
+```text
+t=149: true=1.00 filtered=1.0090 smoothed=1.2098
+mean |beta error| filtered=0.0137 smoothed=0.0122
+max |filtered change| for t<=t0: 0.000000
+max |smoothed change| for t<=t0: 0.345708
+```
+
+读法：t=149 时跳变还没发生，smoothed 却已经「提前」升到 1.21——它看到了未来。smoothed 误差更小，只是因为它偷看了答案。**未来扰动测试**：把 t0=200 之后的数据改掉，filtered 在 t≤t0 的值完全不变（0.000000），smoothed 却变了（0.3457）。一个因果信号必须通过这个测试。
+
+**实操：** 信号用滞后一期的 filtered β（`β_(t−1)`）构造价差；Q、R 的选择本身也是一个参数，要计入试验次数。
+
+disclaimer: 合成数据；仅供学习，不构成投资建议。
+
 ## 常见错误 / 陷阱
 
 1. 只看高相关不做 EG/残差平稳。
@@ -102,6 +125,8 @@ disclaimer: synthetic; learning only
 3. 只在全样本检查一次协整。
 4. 只计一条腿成本（实验强制 n_legs=2）。
 5. 估 β 时混入测试窗。
+6. 用 Kalman **smoothed** β 生成历史信号（前视泄漏）；或用当期 filtered β 而不滞后一期。
+
 
 ## 练习（1:1）
 
@@ -109,6 +134,8 @@ disclaimer: synthetic; learning only
 2. **ex2** — 静态 vs 滚动净夏普。
 3. **ex3** — 滚动 p 陷阱段 + 图。
 4. **done1** — 含成本配对 notebook 入库。
+5. **ex4** — （选修）跑 `05_kalman_hedge.py`；**完成标准**：打印 t=149 的 filtered/smoothed β，以及未来扰动测试两行（filtered 变化 = 0，smoothed 变化 > 0），并用一句话解释泄漏。
+
 
 ## 测验
 
@@ -117,12 +144,13 @@ disclaimer: synthetic; learning only
 <Quiz id="q3-roll" question="滚动 coint p 说明？" options={["全样本 p 就够", "关系可在不同窗口翻转", "成本消失", "β 恒定"]} answer={1} explanation="仅样本内一次的陷阱。" />
 <Quiz id="q4-corr" question="仅有高收益相关意味着？" options={["保证协整", "不足以构成可交易价差", "零成本", "自动 OOS 优势"]} answer={1} explanation="相关 ≠ 协整。" />
 <Quiz id="q5-legs" question="本课配对成本使用？" options={["n_legs=1", "n_legs=2 且含堆叠+√冲击", "永不计冲击", "只计借券"]} answer={1} explanation="统一成本模型。" />
+<Quiz id="q6-kalman" question="按 statsmodels 文档，smoothed 状态估计在 t 时刻基于什么？" options={["只基于截至 t 的观测", "基于数据集中全部观测（含 t 之后）", "只基于 t 之前一期", "与 filtered 完全相同"]} answer={1} explanation="smoothed 是双侧估计，用到了未来数据，不能当交易信号；信号用滞后的 filtered 值。" />
 
 ## 完成标准
 
 两对 EG + 滚动 p 演示 + 含成本 notebook + 测验（约 10h 深度）。
 
-**来源：** Engle–Granger / MacKinnon（statsmodels）；Stern 配对；Canvas m8；quants.md W13/W14。
+**来源：** Engle–Granger / MacKinnon（statsmodels）；Stern 配对；Canvas m8；quants.md W13/W14。；statsmodels 状态空间文档（filtered vs smoothed 定义，[链接](https://www.statsmodels.org/stable/statespace.html)，2026-11-07 核实）。
 
 <Summary>
 **要点**：EG+MacKinnon、滚动协整陷阱、滚动对冲、双腿成本。  

@@ -56,11 +56,11 @@ export const COURSE_META = {
     zh: "阶段由知识依赖簇导出，不是月历格子",
     en: "Phases come from dependency clusters, not a calendar grid",
   },
-  hoursFull: 355,
-  hoursSkipFoundations: 335,
+  hoursFull: 362,
+  hoursSkipFoundations: 342,
   hoursRangeLabel: {
-    zh: "精确 355h 全量 / 335h 跳过 P0（对外约 330–370h / 310–350h）",
-    en: "Exact 355h full / 335h skip P0 (public range ~330–370h / 310–350h)",
+    zh: "精确 362h 全量 / 342h 跳过 P0（对外约 330–370h / 310–350h）",
+    en: "Exact 362h full / 342h skip P0 (public range ~330–370h / 310–350h)",
   },
   lessonCount: 28,
   phaseCount: 10,
@@ -412,10 +412,10 @@ const phase_P2_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "数据与清洗", en: "Data & cleaning" },
     summary: { zh: "复权、停牌、缺失、幸存者、PIT；mask-first 反上游污染；数据说明书。", en: "Adjustments,halts,missingness,survivorship,PIT; mask-first vs upstream contamination; data sheet." },
-    hours: 17,
+    hours: 19,
     difficulty: 3,
     skippable: false,
-    hourBasis: "5h concepts + 6h pipeline lab incl mask-first + 2h info-bars + 1h crypto-PIT + 3h docs/quiz",
+    hourBasis: "5h concepts + 6h pipeline lab incl mask-first + 2h info-bars + 1h crypto-PIT + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab",
     prereqs: ["eval-lab"],
     goals: [
       { zh: "版本化下载与哈希。", en: "Version downloads and hashes." },
@@ -436,6 +436,7 @@ const phase_P2_lessons: Lesson[] = [
       { zh: "说明 PIT 滞后；完成标准：lag=5 + lookahead 一句。", en: "PIT lag note; done when lag=5 and a look-ahead sentence appear." },
       { zh: "信息 bar 时钟；完成标准：与课内表一致。", en: "Info-bar clocks; done when counts match the lesson table." },
       { zh: "跑 mask-first 玩具；完成标准：表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。", en: "Run mask-first toy; done when apparent vs realisable IC, MA sketch, ASSERT_mask_first_demo_ok print." },
+      { zh: "数据版本/公司行为/交易日历实验。", en: "Data versions / corporate actions / calendar lab." },
     ],
     quizTopics: [
       { zh: "幸存者偏差", en: "Survivorship" },
@@ -458,6 +459,7 @@ const phase_P2_lessons: Lesson[] = [
       { id: "ex5", text: { zh: "说明 PIT 滞后；完成标准：lag=5 + lookahead 一句。", en: "PIT lag note; done when lag=5 and a look-ahead sentence appear." } },
       { id: "ex6", text: { zh: "信息 bar 时钟；完成标准：与课内表一致。", en: "Info-bar clocks; done when counts match the lesson table." } },
       { id: "ex7", text: { zh: "跑 mask-first 玩具；完成标准：表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。", en: "Run mask-first toy; done when apparent vs realisable IC, MA sketch, ASSERT_mask_first_demo_ok print." } },
+      { id: "ex8", text: { zh: "跑数据版本/公司行为/日历实验；完成标准：口径差≈−18.28bp、拆分raw/adj、日历交集，并补说明书三行。", en: "Run data-version/corporate-action/calendar lab; done when ≈−18.28bp convention gap, split raw/adj, calendar intersection print and data sheet gains three lines." } },
     ],
   },
   {
@@ -468,7 +470,7 @@ const phase_P2_lessons: Lesson[] = [
     hours: 28,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 14h multi-labs (CPCV + one-switch + PBO/CSCV + admission gates) + 4h write-up — HEAVY",
+    hourBasis: "5h concepts + 19h multi-labs (CPCV + one-switch + PBO/CSCV + admission gates) + 4h write-up — HEAVY",
     prereqs: ["data-cleaning", "stats-probability-basics"],
     goals: [
       { zh: "作弊vs诚实对照。", en: "Cheat vs honest controls." },
@@ -707,10 +709,10 @@ const phase_P3_lessons: Lesson[] = [
     status: "ready",
     title: { zh: "配对与统计套利入门", en: "Pairs & intro statistical arb" },
     summary: { zh: "价差、滚动对冲比、相关≠可交易。", en: "Spreads, rolling hedge, correlation≠tradeable." },
-    hours: 10,
+    hours: 12,
     difficulty: 3,
     skippable: false,
-    hourBasis: "4h concepts + 5h lab + 1h write-up",
+    hourBasis: "4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio (filter vs smoother)",
     prereqs: ["mean-reversion"],
     goals: [
       { zh: "滚动beta价差。", en: "Rolling-beta spread." },
@@ -725,6 +727,7 @@ const phase_P3_lessons: Lesson[] = [
       { zh: "滚动价差与z。", en: "Rolling spread and z." },
       { zh: "静态vs滚动。", en: "Static vs rolling." },
       { zh: "冲击/断腿说明。", en: "Shock/broken-leg note." },
+      { zh: "（选修）Kalman动态对冲比filter vs smoother。", en: "(Optional) Kalman hedge ratio filter vs smoother." },
     ],
     quizTopics: [
       { zh: "相关vs协整", en: "Corr vs cointegration" },
@@ -744,6 +747,7 @@ const phase_P3_lessons: Lesson[] = [
       { id: "ex2", text: { zh: "静态vs滚动；完成标准：两净夏普。", en: "Static vs rolling; done when both net SR print." } },
       { id: "ex3", text: { zh: "冲击/断腿说明段。", en: "Shock/broken-leg paragraph." } },
       { id: "done1", text: { zh: "含成本配对notebook。", en: "Costed pairs notebook." } },
+      { id: "ex4", text: { zh: "（选修）Kalman对冲比；完成标准：t=149 filtered/smoothed β与未来扰动测试两行。", en: "(Optional) Kalman hedge; done when t=149 filtered/smoothed β and the two future-perturbation lines print." } },
     ],
   },
   {
@@ -797,7 +801,7 @@ const phase_P4_lessons: Lesson[] = [
     hours: 24,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 12h labs (incl Detzel + NMV 2016 taxonomy + w34898 + HXZ + admission) + 3h write-up + 1h crowding→LLM bridge — HEAVY",
+    hourBasis: "5h concepts + 15h labs (incl Detzel + NMV 2016 taxonomy + w34898 + HXZ + admission) + 3h write-up + 1h crowding→LLM bridge — HEAVY",
     prereqs: ["strategy-compare-lab", "backtest-traps"],
     goals: [
       { zh: "实现Spearman IC。", en: "Implement Spearman IC." },
@@ -990,10 +994,10 @@ const phase_P6_lessons: Lesson[] = [
       zh: "Kelly/半Kelly、波动目标、逆波动与ERC、HRP层级风险平价、MV vs 1/N、Ledoit–Wolf。",
       en: "Kelly/half-Kelly, vol targeting, inv-vol & ERC, HRP, MV vs 1/N, Ledoit–Wolf.",
     },
-    hours: 22,
+    hours: 23,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h concepts + 13h labs (incl HRP + Brandt no-trade + alpha-decay band) + 4h writing — HEAVY",
+    hourBasis: "5h concepts + 13h labs (incl HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab — HEAVY",
     prereqs: ["returns-vol-corr", "strategy-compare-lab"],
     goals: [
       { zh: "三种仓位层对照。", en: "Compare three sizing layers." },
@@ -1010,6 +1014,7 @@ const phase_P6_lessons: Lesson[] = [
       { zh: "Kelly满/半/2×模拟表。", en: "Kelly full/half/2× simulation table." },
       { zh: "MV vs LedoitWolf vs 1/N滚动。", en: "Walk-forward MV vs LedoitWolf vs 1/N." },
       { zh: "风险偏好一页（半Kelly理由）。", en: "Risk-preference page (half-Kelly rationale)." },
+      { zh: "权重漂移与约束一致性。", en: "Weight drift & constraint consistency." },
     ],
     quizTopics: [
       { zh: "满Kelly问题与半Kelly权衡", en: "Full-Kelly problem and half-Kelly trade-off" },
@@ -1030,6 +1035,8 @@ const phase_P6_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "逆波动 vs ERC vs 等权。", en: "Inv-vol vs ERC vs EW." } },
       { id: "ex4", text: { zh: "MV vs LedoitWolf vs 1/N滚动。", en: "Walk-forward MV vs LedoitWolf vs 1/N." } },
       { id: "done1", text: { zh: "仓位对照表+风险偏好一页。", en: "Sizing table + risk-preference page." } },
+      { id: "ex5", text: { zh: "HRP树状图+配置表对照ERC/逆波动；完成标准：与课内一致。", en: "HRP dendrogram + allocation vs ERC/inv-vol; done when matching the lesson." } },
+      { id: "ex6", text: { zh: "权重漂移实验；完成标准：可行/不可行、A=0.3462越限、换手0.0476。", en: "Weight-drift lab; done when feasible/infeasible, A=0.3462 breach, turnover 0.0476 print." } },
     ],
   },
   {
@@ -1140,10 +1147,10 @@ const phase_P6_lessons: Lesson[] = [
       zh: "可操作regime、因果检测栈、四场景剧本、HMM过滤vs平滑泄漏、熔断识字、新闻≠regime。",
       en: "Operational regimes, causal detector stack, four playbooks, HMM filter vs smoother leak, circuit-breaker literacy, news≠regime.",
     },
-    hours: 11,
+    hours: 12,
     difficulty: 4,
     skippable: false,
-    hourBasis: "4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review",
+    hourBasis: "4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review + 1h options/VIX risk box",
     prereqs: ["risk-systems-lab"],
     goals: [
       { zh: "写出可操作、可因果的regime定义。", en: "Write an operational, causal regime definition." },
@@ -1161,6 +1168,7 @@ const phase_P6_lessons: Lesson[] = [
       { zh: "固定/波动目标/DD刹车：只比vol与maxDD。", en: "Fixed/vol-target/DD brake: vol & maxDD only." },
       { zh: "相关→1压力PnL。", en: "Corr→1 stress PnL." },
       { zh: "HMM过滤vs平滑泄漏对照。", en: "HMM filter vs smoother leakage foil." },
+      { zh: "期权/VIX风险框手算。", en: "Options/VIX risk-box hand calc." },
     ],
     quizTopics: [
       { zh: "因果滞后与平滑泄漏", en: "Causal lag and smoother leakage" },
@@ -1182,6 +1190,7 @@ const phase_P6_lessons: Lesson[] = [
       { id: "ex4", text: { zh: "HMM过滤vs平滑泄漏对照。", en: "HMM filter vs smoother leakage foil." } },
       { id: "ex5", text: { zh: "四场景三栏卡片（无买卖推荐）。", en: "Four playbook three-column cards (no trade advice)." } },
       { id: "done1", text: { zh: "硬规则+排伪+新闻≠regime短文。", en: "Hard rules + debunk + news≠regime note." } },
+      { id: "ex6", text: { zh: "看跌期权玩具手算；完成标准：+13/−2 与 spot VIX≠期货结算一句。", en: "Put toy hand calc; done when +13/−2 and one sentence spot VIX ≠ futures settlement." } },
     ],
   },
 ];
@@ -1245,10 +1254,10 @@ const phase_P7_lessons: Lesson[] = [
       zh: "中美程序化/接入/卖空/保证金与加密官方状态；香港证监会 GenAI；ESMA 算法交易简报识字；非法律意见；研究伦理。",
       en: "CN/US programmatic, access, short sale, margin & crypto official status; HK SFC GenAI; ESMA algo-trading briefing literacy; not legal advice; research ethics.",
     },
-    hours: 15,
+    hours: 16,
     difficulty: 2,
     skippable: false,
-    hourBasis: "8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz",
+    hourBasis: "8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h SSE trading-rule versions (2026 rev.)",
     prereqs: ["paper-trading-infra"],
     goals: [
       { zh: "写风险偏好。", en: "Write risk preference." },
@@ -1266,6 +1275,7 @@ const phase_P7_lessons: Lesson[] = [
       { zh: "三次失败。", en: "Three failures." },
       { zh: "话术审计。", en: "Pitch audit." },
       { zh: "官方来源表。", en: "Official-source table." },
+      { zh: "上交所交易规则版本表与按日期切换。", en: "SSE trading-rule version table + date switch." },
     ],
     quizTopics: [
       { zh: "选择性汇报危害", en: "Harm of selective reporting" },
@@ -1286,6 +1296,7 @@ const phase_P7_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "话术审计。", en: "Pitch audit." } },
       { id: "ex4", text: { zh: "官方来源表。", en: "Official-source table." } },
       { id: "done1", text: { zh: "伦理清单勾选完成。", en: "Ethics checklist complete." } },
+      { id: "ex5", text: { zh: "上交所规则版本表；完成标准：2026-07-03→2023，2026-07-06→2026。", en: "SSE rule-version table; done when 2026-07-03→2023 and 2026-07-06→2026." } },
     ],
   },
 ];
@@ -1343,7 +1354,7 @@ const phase_P8_lessons: Lesson[] = [
     hours: 19,
     difficulty: 4,
     skippable: false,
-    hourBasis: "5h papers + 5h design + 4h funding/liquidation/ADL/EWS/path-funding foils + 2h structure/PIT + SaR name-drop — HEAVY",
+    hourBasis: "5h papers + 6h design + 5h funding/liquidation/ADL/EWS/path-funding foils + 2h structure/PIT + 1h SaR name-drop — HEAVY",
     prereqs: ["modern-ml-pipelines", "data-cleaning", "execution-slippage"],
     goals: [
       { zh: "概括TSFM日频超额收益谨慎结论。", en: "Summarize cautious TSFM daily excess-return findings." },
@@ -1571,7 +1582,6 @@ export const OPTIONAL_TOOL_LINKS: Record<string, string> = {
   "ml4t-repo": "https://github.com/stefan-jansen/machine-learning-for-trading",
   "quant-wiki": "https://github.com/LLMQuant/quant-wiki",
   "joinquant-zero": "https://www.joinquant.com/community/post/detailMobile?postId=13149",
-  "joinquant-8w": "http://lookmori.cn/",
   "nautilus": "https://github.com/nautechsystems/nautilus_trader",
   "nautilus-parity": "https://nautilustrader.io/blog/why-nautilustrader-exists/",
   "chain-of-alpha": "https://arxiv.org/abs/2508.06312",

@@ -1,0 +1,14 @@
+=== A. monthly return conventions (same data) ===
+Jan month-end reinvest  : -0.102533
+Jan ex-date reinvest    : -0.104362
+difference (bp)         : -18.28
+-> same prices, different conventions => record which data VERSION you used
+=== B. 2-for-1 split ===
+raw daily ret     : [0.02, -0.498, 0.0117]
+adjusted daily ret: [0.02, 0.0039, 0.0117]
+-> raw shows a fake -49.8% 'crash'; adjusted shows the economic move
+=== C. trading calendars ===
+A days=8 B days=7 inner-join days=7
+ffill rows where B return is a stale copy: 1
+-> forward-filling a RETURN invents a trade on a closed day; use the right calendar
+disclaimer: synthetic; learning only
