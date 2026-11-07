@@ -1,4 +1,4 @@
-=== 1. band = tier from PRIOR CLOSE, centre = MOVING reference price ===
+=== 1. tier from PRIOR CLOSE; centre, width and bounds from MOVING reference price ===
 tier1 prior_close= 50.00 ref= 50.00 closing_window=False -> band +/-5.00% = [47.5000, 52.5000] doubled=False
 tier1 prior_close= 50.00 ref= 50.00 closing_window=True  -> band +/-10.00% = [45.0000, 55.0000] doubled=True
 tier2 prior_close= 50.00 ref= 50.00 closing_window=False -> band +/-10.00% = [45.0000, 55.0000] doubled=False

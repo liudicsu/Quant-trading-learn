@@ -147,15 +147,33 @@ Activity clocks produce **more** bars with **smaller** per-bar moves on the same
 
 Hitting a limit or a pause affects only the third question, and it depends on side and size; it does not by itself mean the price “did not exist” or “cannot be used as information”. Whether a public, quality-checked historical trade price enters the features is decided by the research protocol; “cannot order now” does not imply “information unavailable”. The US analogue is an explicit state such as **no matching during a pause / no executable quote**, not erasing legitimate prices printed before the pause.
 
-**Boolean mask-first contract (this lesson’s toy protocol):**
+**Boolean mask-first (this toy’s optional conservative protocol):**
 
-1. At load time build `obs[t,i]` (public at decision time), `quality[t,i]` (clean) and `trade[t,i,side,size]` (toy setting: not halted ∧ not at the limit on that side ∧ past seasoning) separately; the toy combines them into `M[t,i]`.
+1. At load time build `obs[t,i]` (public at decision time), `quality[t,i]` (clean) and `trade[t,i,side,size]` (toy setting: not halted ∧ not at the limit on that side ∧ past seasoning) separately; the toy optionally combines them into a conservative `M[t,i]` (see the three-mask lab below).
 2. Every rolling operator reads **only** cells with `M=1`; any `M=0` in the window → mark output unreliable (conservative).
 3. **Post-hoc row drops cannot un-poison** aggregates already computed.
 
+### Three independent masks (lab printout, hand-made 4 days × 2 stocks)
+
+`examples/p2/01_data_cleaning.py` builds `obs` (released before the decision), `quality` (not a bad print) and `trade[t,i,side,size]` (by side and size) separately. Features use only `obs ∧ quality`; orders look only at `trade`.
+
+```text
+d1 AAA close= 11.0 obs=1 quality=1 feature_uses=1 buy100=0 sell100=1 sell10000=0
+d2 BBB close= 99.0 obs=1 quality=0 feature_uses=0 buy100=0 sell100=0 sell10000=0
+d3 AAA close= 11.3 obs=0 quality=1 feature_uses=0 buy100=1 sell100=1 sell10000=1
+ASSERT_A observable+clean but buy not executable -> feature keeps it, buy order rejected: OK
+ASSERT_B observable but bad quality -> excluded from features: OK
+ASSERT_C clean but not observable at decision -> excluded from features: OK
+ASSERT_D same cell: sell100 ok, sell10000 not, buy not -> trade mask is per side/size: OK
+ASSERT_E optional toy protocol M = obs & quality & trade[buy,100] drops 1 extra cell (d1 AAA): OK
+three_mask_summary: feature_cells_used 6 of 8; protocol_M_cells 5 of 8
+```
+
+Takeaways: d1 AAA is public and clean, so it **still counts as information**, even though an order of that side/size cannot be filled; d2 BBB is public but a bad print, so it stays out of features; d3 AAA is clean but not yet released at decision time, so it stays out. Combining all three into one conservative `M` is only this toy’s **optional research protocol**, not a general contract.
+
 ### Five-close sketch (lab printout)
 
-| day | close | tradable? | naive MA3 | mask-first MA3 |
+| day | close | toy protocol M | naive MA3 | mask-first MA3 |
 |-----|-------|-----------|-----------|----------------|
 | 0 | 10.0 | 1 | — | — |
 | 1 | 10.1 | 1 | — | — |
@@ -277,7 +295,7 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 4. **ex4** — survivorship means; **done when** both means match the lesson.  
 5. **ex5** — PIT lag note; **done when** lag=5 and a look-ahead sentence appear.
 6. **ex6** — Info-bar clocks: print time/volume/dollar bar counts on the synthetic tape; **done when** counts match the lesson table.
-7. **ex7**: Run the mask-first toy; **done when** apparent vs realisable IC, MA sketch, and ASSERT_mask_first_demo_ok print.
+7. **ex7**: Run the mask-first toy; **done when** apparent vs realisable IC, the MA sketch, three-mask ASSERT_A–E all OK (observable-but-bad-quality / clean-but-not-executable for a side/size / not yet released) and ASSERT_mask_first_demo_ok print.
 8. **ex8**: run `05_data_versions_calendar.py`; **done when**: the two monthly-convention difference (≈ −18.28 bp), split raw/adj returns and calendar intersection days print, and the data sheet gains three lines “version + convention + calendar”.
 9. **ex-us-src** — for three sources write `source / licence / availability_ts / allowed_use_checked_on`; **done when**: the FRED row says the service terms must be checked (R16) and the yfinance row says “personal use only, not official”.
 10. **ex-us-ca** — run section D of `05_data_versions_calendar.py` and explain why double-counting gives 0.0230; **done when**: you name the step that adds the dividend twice.

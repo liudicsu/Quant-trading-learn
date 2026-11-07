@@ -61,7 +61,8 @@ teach: time bars sample the clock; tick/volume/dollar bars sample activity — b
 intuition: if news hits and 1000 trades arrive in one minute, time bars still emit one 1-min bar, while tick/volume/dollar bars emit many — returning the series closer to an 'information clock'.
 toy_counts {'time50': 100, 'vol200': 241, 'dollar': 231}
 
-=== mask-first / upstream contamination (arXiv:2507.07107; Boolean mask contract) ===
+=== mask-first / upstream contamination (arXiv:2507.07107; OPTIONAL conservative toy protocol) ===
+protocol_label: this toy DELIBERATELY sets limit rows as non-executable and combines obs/quality/trade into one conservative M; not a market law (see three-mask section below)
 cite: https://arxiv.org/abs/2507.07107 — upstream contamination: limit closes enter rolling ops BEFORE row filter
 paper_ablation_cite: no-mask apparent IC +18% while realised Sharpe −0.44 vs full mask (author ablation)
 REJECT_as_course_alpha: Sharpe 2.05 synthetic / 1.63 real; 213-factor GPU engine; AdjMSE γ system
@@ -74,13 +75,29 @@ toy_SR_fantasy_contam 3.007
 toy_SR_realisable_contam 0.914
 toy_SR_mask_first 0.814
 toy_SR_gap_fantasy_minus_realisable 2.093
-teach: contaminated rolling features make limit-chasing look predictive (high apparent IC / fantasy SR); realisable fill on the same features collapses — mask-first Boolean contract refuses non-executable closes in the window.
-boolean_mask_contract: M[t,i]=tradable; every rolling op must ignore cells with M=0; post-hoc row drop CANNOT un-poison aggregates already computed.
+teach: contaminated rolling features make limit-chasing look predictive (high apparent IC / fantasy SR); realisable fill on the same features collapses — under this toy protocol the combined M refuses closes the toy marks non-executable.
+toy_protocol_M: M[t,i] = obs AND quality AND trade (toy-set; conservative research choice, not a general contract); rolling ops here ignore M=0; post-hoc row drop CANNOT un-poison aggregates already computed.
 
 === rolling MA contamination sketch (5 closes) ===
 closes [10.0, 10.1, 10.2, 11.2, 10.3]
-tradable_mask [1, 1, 1, 0, 1]
+toy_protocol_M (toy-set non-executable at index 3) [1, 1, 1, 0, 1]
 MA3_naive [None, None, 10.1, 10.5, 10.5667]
 MA3_mask_first [None, None, 10.1, 10.15, 10.25]
-teach: day-index-3 limit print 11.2 enters naive MA for indices 3–4; mask-first never reads it.
+teach: day-index-3 limit print 11.2 enters naive MA for indices 3–4; under the toy protocol mask-first never reads it.
+
+=== three independent masks: obs / quality / trade[t,i,side,size] (hand-made, R38) ===
+d0 AAA close= 10.0 obs=1 quality=1 feature_uses=1 buy100=1 sell100=1 sell10000=1
+d0 BBB close= 20.0 obs=1 quality=1 feature_uses=1 buy100=1 sell100=1 sell10000=1
+d1 AAA close= 11.0 obs=1 quality=1 feature_uses=1 buy100=0 sell100=1 sell10000=0
+d1 BBB close= 20.2 obs=1 quality=1 feature_uses=1 buy100=1 sell100=1 sell10000=1
+d2 AAA close= 11.1 obs=1 quality=1 feature_uses=1 buy100=1 sell100=1 sell10000=1
+d2 BBB close= 99.0 obs=1 quality=0 feature_uses=0 buy100=0 sell100=0 sell10000=0
+d3 AAA close= 11.3 obs=0 quality=1 feature_uses=0 buy100=1 sell100=1 sell10000=1
+d3 BBB close= 20.5 obs=1 quality=1 feature_uses=1 buy100=1 sell100=1 sell10000=1
+ASSERT_A observable+clean but buy not executable -> feature keeps it, buy order rejected: OK
+ASSERT_B observable but bad quality -> excluded from features: OK
+ASSERT_C clean but not observable at decision -> excluded from features: OK
+ASSERT_D same cell: sell100 ok, sell10000 not, buy not -> trade mask is per side/size: OK
+ASSERT_E optional toy protocol M = obs & quality & trade[buy,100] drops 1 extra cell (d1 AAA): OK
+three_mask_summary: feature_cells_used 6 of 8; protocol_M_cells 5 of 8
 ASSERT_mask_first_demo_ok

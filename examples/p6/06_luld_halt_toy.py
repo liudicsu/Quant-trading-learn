@@ -5,7 +5,8 @@ Percentage parameters (LULD Plan Amendment 20, Appendix A; checked_on 2026-11-08
   The day's PRICE TIER comes from the prior trading day's primary-listing close (not the moving reference):
   Tier 1: > $3 -> 5%; $0.75..$3 (inclusive) -> 20%; < $0.75 -> lesser of $0.15 or 75% of reference
   Tier 2: > $3 -> 10%; $0.75..$3 (inclusive) -> 20%; < $0.75 -> lesser of $0.15 or 75% of reference
-  The band is then centred on the moving reference price (usually mean of eligible trades, prior 5 min).
+  The moving reference price (usually mean of eligible trades, prior 5 min) does NOT reselect the tier;
+  it sets the centre and, with the fixed tier parameters, the band width and bounds (Plan Sec. V(A)).
   Last 25 min of regular hours (or before an early close): double for all Tier 1 and for Tier 2 whose
   price tier is <= $3 (not Tier 2 > $3). Ordinary non-leveraged toy only.
   No opening doubling since Amendment 18 (2020-02-24).
@@ -25,7 +26,8 @@ def price_tier(prior_listing_close: float) -> str:
 
 def band(tier: int, prior_listing_close: float, moving_ref: float, closing_window: bool) -> tuple[float, float, float, bool]:
     """Step 1: percentage + doubling eligibility from the day's price tier (prior close).
-    Step 2: centre the band on the dynamic (moving) reference price."""
+    Step 2: the moving reference price sets the centre AND enters the width/bounds:
+    width = pct * moving_ref (or min(0.15, 0.75 * moving_ref) below $0.75); it never reselects the tier."""
     pt = price_tier(prior_listing_close)
     eligible_double = tier == 1 or pt != "gt3"     # Tier 2 above $3 is not doubled at the close
     doubled = closing_window and eligible_double
@@ -40,7 +42,7 @@ def band(tier: int, prior_listing_close: float, moving_ref: float, closing_windo
     return width / moving_ref, moving_ref - width, moving_ref + width, doubled
 
 
-print("=== 1. band = tier from PRIOR CLOSE, centre = MOVING reference price ===")
+print("=== 1. tier from PRIOR CLOSE; centre, width and bounds from MOVING reference price ===")
 for tier, pc, ref, cw in [(1, 50.0, 50.0, False), (1, 50.0, 50.0, True), (2, 50.0, 50.0, False), (2, 50.0, 50.0, True), (2, 2.0, 2.0, True), (1, 0.50, 0.50, False)]:
     p, lo_, hi_, d = band(tier, pc, ref, cw)
     print(f"tier{tier} prior_close={pc:>6.2f} ref={ref:>6.2f} closing_window={str(cw):5s} -> band +/-{p:.2%} = [{lo_:.4f}, {hi_:.4f}] doubled={d}")

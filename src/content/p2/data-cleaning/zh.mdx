@@ -149,13 +149,31 @@ ASSERTS_OK
 
 **布尔 mask-first 契约（本课 toy 协议）：**
 
-1. 数据加载时分别构造 `obs[t,i]`（决策时已公开）、`quality[t,i]`（质量合格）与 `trade[t,i,side,size]`（toy 设定：非停牌 ∧ 非触限方向 ∧ 过观察期），toy 里合成为 `M[t,i]`。
+1. 数据加载时分别构造 `obs[t,i]`（决策时已公开）、`quality[t,i]`（质量合格）与 `trade[t,i,side,size]`（toy 设定：非停牌 ∧ 非触限方向 ∧ 过观察期），toy 里可选地合成为保守 `M[t,i]`（见下方三 mask 实验）。
 2. 每个滚动算子**只读** `M=1` 的格子；窗内出现 `M=0` → 输出一并标记不可靠（保守）。
 3. **事后删行修不了**已经写进均值的脏收盘价。
 
+### 三个独立 mask（实验打印，手写 4 天 × 2 只）
+
+`examples/p2/01_data_cleaning.py` 分别构造 `obs`（决策时已发布）、`quality`（非错价）与 `trade[t,i,side,size]`（按方向、数量）。特征只用 `obs ∧ quality`；下单只看 `trade`。
+
+```text
+d1 AAA close= 11.0 obs=1 quality=1 feature_uses=1 buy100=0 sell100=1 sell10000=0
+d2 BBB close= 99.0 obs=1 quality=0 feature_uses=0 buy100=0 sell100=0 sell10000=0
+d3 AAA close= 11.3 obs=0 quality=1 feature_uses=0 buy100=1 sell100=1 sell10000=1
+ASSERT_A observable+clean but buy not executable -> feature keeps it, buy order rejected: OK
+ASSERT_B observable but bad quality -> excluded from features: OK
+ASSERT_C clean but not observable at decision -> excluded from features: OK
+ASSERT_D same cell: sell100 ok, sell10000 not, buy not -> trade mask is per side/size: OK
+ASSERT_E optional toy protocol M = obs & quality & trade[buy,100] drops 1 extra cell (d1 AAA): OK
+three_mask_summary: feature_cells_used 6 of 8; protocol_M_cells 5 of 8
+```
+
+要点：d1 AAA 已公开且干净，**仍可作为信息**，只是这个方向/数量的单子成交不了；d2 BBB 公开但是错价，不进特征；d3 AAA 干净但决策时尚未发布，不进特征。把三者合成一个保守 `M` 只是本 toy 的**可选研究协议**，不是通用契约。
+
 ### 五步收盘价草图（实验打印）
 
-| 日 | close | 可交易? | 朴素 MA3 | mask-first MA3 |
+| 日 | close | toy 协议 M | 朴素 MA3 | mask-first MA3 |
 |----|-------|---------|----------|----------------|
 | 0 | 10.0 | 1 | — | — |
 | 1 | 10.1 | 1 | — | — |
@@ -279,7 +297,7 @@ SYN_MACRO_2 没有发布时间 → 排除
 4. **ex4**：复现幸存者均值对比；**完成标准**：两均值与课内一致。  
 5. **ex5**：说明 PIT 滞后；**完成标准**：写出 lag=5 与 lookahead 一句。
 6. **ex6**：信息 bar 时钟——打印合成 tape 上时间/成交量/美元 bar 数量；**完成标准**：与课内表一致。
-7. **ex7**：跑 mask-first 玩具；**完成标准**：打印表观 vs 可实现 IC、MA 草图、ASSERT_mask_first_demo_ok。
+7. **ex7**：跑 mask-first 玩具；**完成标准**：打印表观 vs 可实现 IC、MA 草图、三 mask 的 ASSERT_A–E 均 OK（可观测但质量差 / 质量合格但某方向数量不可执行 / 未发布）以及 ASSERT_mask_first_demo_ok。
 8. **ex8**：跑 `05_data_versions_calendar.py`；**完成标准**：打印两种月收益口径差（≈ −18.28 bp）、拆分 raw/adj 收益与日历交集天数，并在数据说明书里补「版本 + 口径 + 日历」三行。
 9. **ex-us-src** — 为三个数据源各写一行 `source / licence / availability_ts / allowed_use_checked_on`；**完成标准**：FRED 行写明需核对服务条款（R16），yfinance 行写明「仅个人使用、非官方」。
 10. **ex-us-ca** — 运行 `05_data_versions_calendar.py` D 节，解释分红重复计入为何得到 0.0230；**完成标准**：指出哪一步加了两次分红。

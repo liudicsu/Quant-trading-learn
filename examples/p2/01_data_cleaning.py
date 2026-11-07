@@ -163,7 +163,8 @@ print("toy_counts", {"time50": len(time_bars), "vol200": len(vol_bars), "dollar"
 
 # --- Mask-first / upstream contamination toy (arXiv:2507.07107 spirit) ---
 # Learning only. HARD REJECT paper Sharpe 2.05/1.63, 213-factor engine, AdjMSE as course alpha.
-print("\n=== mask-first / upstream contamination (arXiv:2507.07107; Boolean mask contract) ===")
+print("\n=== mask-first / upstream contamination (arXiv:2507.07107; OPTIONAL conservative toy protocol) ===")
+print("protocol_label: this toy DELIBERATELY sets limit rows as non-executable and combines obs/quality/trade into one conservative M; not a market law (see three-mask section below)")
 print("cite: https://arxiv.org/abs/2507.07107 — upstream contamination: limit closes enter rolling ops BEFORE row filter")
 print("paper_ablation_cite: no-mask apparent IC +18% while realised Sharpe −0.44 vs full mask (author ablation)")
 print("REJECT_as_course_alpha: Sharpe 2.05 synthetic / 1.63 real; 213-factor GPU engine; AdjMSE γ system")
@@ -253,10 +254,10 @@ print("toy_SR_mask_first", round(sr_mask, 3))
 print("toy_SR_gap_fantasy_minus_realisable", round(sr_fant - sr_real_c, 3))
 print(
     "teach: contaminated rolling features make limit-chasing look predictive (high apparent IC / fantasy SR); "
-    "realisable fill on the same features collapses — mask-first Boolean contract refuses non-executable closes in the window."
+    "realisable fill on the same features collapses — under this toy protocol the combined M refuses closes the toy marks non-executable."
 )
 print(
-    "boolean_mask_contract: M[t,i]=tradable; every rolling op must ignore cells with M=0; "
+    "toy_protocol_M: M[t,i] = obs AND quality AND trade (toy-set; conservative research choice, not a general contract); rolling ops here ignore M=0; "
     "post-hoc row drop CANNOT un-poison aggregates already computed."
 )
 
@@ -268,8 +269,47 @@ closes_m5 = closes.astype(float).copy()
 closes_m5[~mask5] = np.nan
 ma_mask = [float("nan")] * 2 + [float(np.nanmean(closes_m5[i - 2 : i + 1])) for i in range(2, 5)]
 print("closes", closes.tolist())
-print("tradable_mask", mask5.astype(int).tolist())
+print("toy_protocol_M (toy-set non-executable at index 3)", mask5.astype(int).tolist())
 print("MA3_naive", [None if pd.isna(x) else round(float(x), 4) for x in ma_naive])
 print("MA3_mask_first", [None if (isinstance(x, float) and np.isnan(x)) else round(x, 4) for x in ma_mask])
-print("teach: day-index-3 limit print 11.2 enters naive MA for indices 3–4; mask-first never reads it.")
+print("teach: day-index-3 limit print 11.2 enters naive MA for indices 3–4; under the toy protocol mask-first never reads it.")
+print("\n=== three independent masks: obs / quality / trade[t,i,side,size] (hand-made, R38) ===")
+# Hand-made panel: 4 days x 2 stocks. decision at 15:55 ET each day.
+days, names = ["d0", "d1", "d2", "d3"], ["AAA", "BBB"]
+close = np.array([[10.0, 20.0], [11.0, 20.2], [11.1, 99.0], [11.3, 20.5]])
+released_before_decision = np.array([[1, 1], [1, 1], [1, 1], [0, 1]], dtype=bool)   # d3 AAA value arrives after decision
+clean = np.array([[1, 1], [1, 1], [1, 0], [1, 1]], dtype=bool)                      # d2 BBB 99.0 is a bad print
+SIDES, SIZES = ("buy", "sell"), (100, 10_000)
+obs = released_before_decision
+quality = clean
+trade = np.ones((4, 2, 2, 2), dtype=bool)        # [t, i, side, size]
+trade[1, 0, 0, :] = False                         # d1 AAA at limit-up (toy): buys not executable at any size
+trade[1, 0, 1, 1] = False                         # ...sells executable for 100 shares only (toy depth)
+trade[2, 1, :, :] = False                         # d2 BBB halted (toy): nothing executable
+feat_ok = obs & quality                           # information filter for features
+feature_input = np.where(feat_ok, close, np.nan)
+def can_trade(t, i, side, size):
+    return bool(trade[t, i, SIDES.index(side), SIZES.index(size)])
+for t_ in range(4):
+    for i_ in range(2):
+        print(f"{days[t_]} {names[i_]} close={close[t_, i_]:>5.1f} obs={int(obs[t_, i_])} quality={int(quality[t_, i_])} "
+              f"feature_uses={int(feat_ok[t_, i_])} buy100={int(can_trade(t_, i_, 'buy', 100))} "
+              f"sell100={int(can_trade(t_, i_, 'sell', 100))} sell10000={int(can_trade(t_, i_, 'sell', 10_000))}")
+# A: observable + good quality but NOT executable for a buy -> still usable as information
+assert feat_ok[1, 0] and np.isfinite(feature_input[1, 0]) and not can_trade(1, 0, "buy", 100)
+print("ASSERT_A observable+clean but buy not executable -> feature keeps it, buy order rejected: OK")
+# B: observable but bad quality -> excluded from features (even though it is public)
+assert obs[2, 1] and not quality[2, 1] and np.isnan(feature_input[2, 1])
+print("ASSERT_B observable but bad quality -> excluded from features: OK")
+# C: not yet released at decision time -> excluded from features even though clean
+assert quality[3, 0] and not obs[3, 0] and np.isnan(feature_input[3, 0])
+print("ASSERT_C clean but not observable at decision -> excluded from features: OK")
+# D: executability depends on side and size
+assert can_trade(1, 0, "sell", 100) and not can_trade(1, 0, "sell", 10_000) and not can_trade(1, 0, "buy", 100)
+print("ASSERT_D same cell: sell100 ok, sell10000 not, buy not -> trade mask is per side/size: OK")
+# E: the combined conservative protocol is stricter than the information filter
+M_protocol = feat_ok & trade[:, :, SIDES.index("buy"), SIZES.index(100)]
+assert (M_protocol != feat_ok).sum() == 1 and not M_protocol[1, 0]
+print("ASSERT_E optional toy protocol M = obs & quality & trade[buy,100] drops 1 extra cell (d1 AAA): OK")
+print("three_mask_summary: feature_cells_used", int(feat_ok.sum()), "of 8; protocol_M_cells", int(M_protocol.sum()), "of 8")
 print("ASSERT_mask_first_demo_ok")
