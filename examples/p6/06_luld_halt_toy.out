@@ -1,10 +1,19 @@
-=== 1. band widths (reference price = avg of prior 5 min) ===
-tier1 ref= 50.00 closing_window=False -> band +/-5.00% = [47.5000, 52.5000]
-tier1 ref= 50.00 closing_window=True  -> band +/-10.00% = [45.0000, 55.0000]
-tier2 ref= 50.00 closing_window=False -> band +/-10.00% = [45.0000, 55.0000]
-tier2 ref= 50.00 closing_window=True  -> band +/-10.00% = [45.0000, 55.0000]
-tier2 ref=  2.00 closing_window=True  -> band +/-40.00% = [1.2000, 2.8000]
-tier1 ref=  0.50 closing_window=False -> band +/-30.00% = [0.3500, 0.6500]
+=== 1. band = tier from PRIOR CLOSE, centre = MOVING reference price ===
+tier1 prior_close= 50.00 ref= 50.00 closing_window=False -> band +/-5.00% = [47.5000, 52.5000] doubled=False
+tier1 prior_close= 50.00 ref= 50.00 closing_window=True  -> band +/-10.00% = [45.0000, 55.0000] doubled=True
+tier2 prior_close= 50.00 ref= 50.00 closing_window=False -> band +/-10.00% = [45.0000, 55.0000] doubled=False
+tier2 prior_close= 50.00 ref= 50.00 closing_window=True  -> band +/-10.00% = [45.0000, 55.0000] doubled=False
+tier2 prior_close=  2.00 ref=  2.00 closing_window=True  -> band +/-40.00% = [1.2000, 2.8000] doubled=True
+tier1 prior_close=  0.50 ref=  0.50 closing_window=False -> band +/-30.00% = [0.3500, 0.6500] doubled=False
+=== 1b. boundary tests (prior close sets the tier, not the moving ref) ===
+PASS cross $3 up:   prior 2.90 -> ref 3.10: tier2 -> +/-20.00% [2.4800, 3.7200] doubled=False
+PASS cross $3 down: prior 3.10 -> ref 2.90: tier2 -> +/-10.00% [2.6100, 3.1900] doubled=False
+PASS cross $0.75 up:   prior 0.74 -> ref 0.76: tier2 -> +/-19.74% [0.6100, 0.9100] doubled=False
+PASS cross $0.75 down: prior 0.75 -> ref 0.74: tier2 -> +/-20.00% [0.5920, 0.8880] doubled=False
+PASS closing: Tier2 prior 3.10 (not eligible): tier2 -> +/-10.00% [2.7900, 3.4100] doubled=False
+PASS closing: Tier2 prior 2.90 (eligible): tier2 -> +/-40.00% [1.8600, 4.3400] doubled=True
+PASS closing: Tier1 prior 50.00 (eligible): tier1 -> +/-10.00% [45.0000, 55.0000] doubled=True
+tests passed: 7/7
 === 2. toy single-stock path: limit state -> 5-min halt -> reopen gap ===
 t=13: limit state > 15 s (20s) -> trading pause; no new fills while halted
 t=73: reopen at 37.20 (gap from band 38.00)

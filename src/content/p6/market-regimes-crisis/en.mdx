@@ -210,12 +210,13 @@ MWCB (market-wide circuit breakers) is already on the site; this adds the single
 
 **LULD tiers (per review item R12):** LULD is not a fixed all-day limit relative to the prior close. The bands sit around a dynamic reference price; the applicable percentage tier is set for the day, per the Plan, from the prior trading day’s primary-market closing price and similar: in the ordinary non-leveraged example, for a price tier above $3 Tier 1 is 5% and Tier 2 is 10%; from $0.75 to $3 (inclusive) both are 20%; below $0.75 the band is the lesser of $0.15 or 75% of the reference price. In the last 25 minutes before the regular close, only all Tier 1 stocks and Tier 2 stocks with a price tier not above $3 use doubled parameters; on early-close days it is the last 25 minutes before the early close. Tier 2 stocks above $3 are not uniformly doubled at the close. Amendment 18, implemented 2020-02-24, removed the 09:30–09:45 New York opening doubling for all stocks; do not repeat the old description. ETF/ETP tiering and leveraged products must be checked against the current official list/Plan, not guessed from the ticker name.
 
-The reference price is usually the mean of eligible trades over the prior 5 minutes; opening/reopening have special provisions. The synthetic state machine below is **not a complete rule engine**.
+The reference price is usually the mean of eligible trades over the prior 5 minutes; opening/reopening have special provisions. The lab keeps two inputs apart: the **prior trading day’s primary-listing close** sets the day’s price tier (percentage and closing-doubling eligibility), while the **moving reference price** only sets the centre of the band. The synthetic state machine below is **not a complete rule engine** and covers ordinary non-leveraged stocks only.
 
 **Lab:** `examples/p6/06_luld_halt_toy.py`:
 
 ```text
 Tier1 $50: ±5%, closing window ±10%; Tier2 $50: ±10% in both windows; Tier2 $2 closing window ±40%; Tier1 $0.50: ±30%
+boundary tests 7/7 pass: Tier2 prior close 2.90 → ref 3.10 stays ±20%; prior 3.10 → ref 2.90 is ±10%; prior 0.74 → ref 0.76 is $0.15 (±19.74%); prior 0.75 → ref 0.74 is ±20%; closing window: Tier2 prior 3.10 not doubled (±10%), prior 2.90 doubled (±40%), Tier1 doubled (±10%)
 t=13 Limit State lasts 20s > 15s → pause; reopens at t=73 at 37.20 (lower band 38.00)
 A stop at 38.50 fills at 37.20 (gap); the 10.5% drop triggers the SHO 201 price test
 ```

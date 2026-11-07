@@ -1,0 +1,20 @@
+rule: FINRA Rule 4210 intraday margin amendments (Regulatory Notice 26-10)  (checked_on 2026-11-08; read by the author, not fetched by this script)
+  sec_approval      2026-04-14
+  notice_published  2026-04-20
+  effective         2026-06-04
+  phase_in_end      2027-10-20
+account categories:
+  margin            new (d)(2) intraday margin deficit applies to customer margin accounts
+  good_faith        excluded from the (d)(2) intraday margin deficit per Notice text
+  portfolio_margin  excluded from (d)(2); intraday risk handled under new (g)(1)(J)/(K)
+  cash              not a margin account; outside this toy
+PASS before_effective           trade=2026-05-01 acct=margin           adopted=None broker_checked_on=None -> old_pdt
+PASS phase_in_not_adopted       trade=2026-08-01 acct=margin           adopted=2027-03-01 broker_checked_on=2026-11-08 -> old_pdt
+PASS phase_in_adopted           trade=2026-08-01 acct=margin           adopted=2026-07-01 broker_checked_on=2026-11-08 -> intraday_margin
+PASS phase_in_unknown           trade=2026-08-01 acct=margin           adopted=None broker_checked_on=None -> needs_broker_verification
+PASS adoption_unconfirmed       trade=2026-08-01 acct=margin           adopted=2026-07-01 broker_checked_on=None -> needs_broker_verification
+PASS after_phase_in_end         trade=2027-11-01 acct=margin           adopted=None broker_checked_on=None -> intraday_margin
+PASS portfolio_margin_account   trade=2026-08-01 acct=portfolio_margin adopted=2026-07-01 broker_checked_on=2026-11-08 -> not_subject_to_d2_deficit
+PASS cash_account               trade=2026-08-01 acct=cash             adopted=None broker_checked_on=None -> out_of_scope_cash
+cases passed: 8/8
+disclaimer: toy only; confirm with your broker and the current rule text

@@ -9,7 +9,7 @@
 **必须教会：** 本站是学习材料，**不是**投资建议或律师备忘录；不懂则零仓位；只引用**官方**文本；标注核验日期。
 
 <Callout type="warn" title="非法律意见 — 规则会变">
-以下内容不构成法律、合规或投资建议。文中阈值与生效日期均来自 **2026-11-04（Asia/Shanghai）** 抓取并阅读的官方页面。实盘行动前请重新阅读**现行**官方文本。若官方页无法抓取，我们会如实说明，绝不臆造。
+以下内容不构成法律、合规或投资建议。文中阈值与生效日期均为作者在各来源的 checked_on 日期（多数为 **2026-11-04**，美国主线与跨境框为 **2026-11-08**，Asia/Shanghai）阅读官方页面所得，各行日期可不同；`examples/p7/02_compliance_sources.py` 只打印本地台账，不联网。实盘行动前请重新阅读**现行**官方文本。若官方页无法读取，我们会如实说明，绝不臆造。
 </Callout>
 
 ## 美国主线：PDT 继任规则 — 四个日期 + 迁移状态
@@ -27,40 +27,47 @@
 
 **版本练习的正确写法（按审阅报告 R04）：** FINRA 示例分别记录 SEC 批准日、Notice 发布日期、规则生效日、迁移期截止日，并加入 `member_adoption_date` / `broker_checked_on` 与适用账户类别。2026-06-04 至 2027-10-20 期间，不得只凭交易日期断言某会员/账户已迁移；迁移状态未知时输出 `needs_broker_verification`。不得由本地 toy 给出法律合规保证。
 
-```python
-def pdt_regime(trade_date: str, member_adoption_date: str | None) -> str:
-    if trade_date < "2026-06-04":
-        return "old_pdt"
-    if member_adoption_date is None:
-        return "needs_broker_verification" if trade_date <= "2027-10-20" else "intraday_margin"
-    return "intraday_margin" if trade_date >= member_adoption_date else "old_pdt"
+实验 `examples/p7/04_finra_migration_fixture.py` 读入手写 fixture `examples/p7/data/finra_26_10_fixture.json`（四个日期 + `member_adoption_date` / `broker_checked_on` / `account_category`），离线跑 8 个案例并断言：
+
+```text
+PASS before_effective           trade=2026-05-01 acct=margin -> old_pdt
+PASS phase_in_not_adopted       trade=2026-08-01 adopted=2027-03-01 -> old_pdt
+PASS phase_in_adopted           trade=2026-08-01 adopted=2026-07-01 -> intraday_margin
+PASS phase_in_unknown           trade=2026-08-01 adopted=None -> needs_broker_verification
+PASS adoption_unconfirmed       adopted=2026-07-01 broker_checked_on=None -> needs_broker_verification
+PASS after_phase_in_end         trade=2027-11-01 -> intraday_margin
+PASS portfolio_margin_account   -> not_subject_to_d2_deficit
+PASS cash_account               -> out_of_scope_cash
+cases passed: 8/8
 ```
+
+账户类别（2026-11-08 作者阅读 26-10）：(d)(2) 日内保证金缺口适用于客户**保证金账户**，**不含** good faith 账户与组合保证金账户（组合保证金另由新 (g)(1)(J)/(K) 处理日内风险）；现金账户不是保证金账户，不在本 toy 范围。
 
 ## 美国 — 市场接入、卖空、保证金、算法督导
 
 ### SEC Rule 15c3-5（市场接入规则）
 
-- **来源（已抓取）：** https://www.ecfr.gov/current/title-17/chapter-II/part-240/subject-group-ECFRc8401dcba174f73/section-240.15c3-5
+- **来源（作者按 checked_on 阅读）：** https://www.ecfr.gov/current/title-17/chapter-II/part-240/subject-group-ECFRc8401dcba174f73/section-240.15c3-5
 - **已核验：** 有市场接入的券商须建立事前**信用/资本**与**错单**控制；监管控制（受限证券、授权用户、即时成交回报）；控制权原则上由券商**直接排他**掌握；**至少每年**审查并由 **CEO 证明**。
 
 ### Regulation SHO — Rule 201 熔断
 
-- **来源（已抓取）：** https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201
+- **来源（作者按 checked_on 阅读）：** https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201
 - **已核验：** 标的相对前一日上市市场收盘下跌 **10%** 及以上时，交易中心须防止以不高于 NBB 的价格执行/展示卖空，适用于**当日剩余及次日**（含若干例外与 “short exempt”）。
 
 ### FINRA Rule 4210 与原 PDT 框架
 
-- **Rule 4210（已抓取）：** https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210 — 现行文本含 **IML（日内保证金水平）** 及 (d)(2) 赤字/补足规则。
-- **Regulatory Notice 26-10（已抓取）：** https://www.finra.org/rules-guidance/notices/26-10 — **2026-04-20** 发布；修订 **2026-06-04** 生效，会员可过渡至 **2027-10-20**。明确以日内保证金标准**整体取代**原日内交易保证金制度，包括 **pattern day trader** 认定次数与 **$25,000** 最低权益。教学上把 PDT 作为**历史背景**，把 **IML** 作为核验日下的现行 4210 路径。
+- **Rule 4210（作者按 checked_on 阅读）：** https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210 — 现行文本含 **IML（日内保证金水平）** 及 (d)(2) 赤字/补足规则。
+- **Regulatory Notice 26-10（作者按 checked_on 阅读）：** https://www.finra.org/rules-guidance/notices/26-10 — **2026-04-20** 发布；修订 **2026-06-04** 生效，会员可过渡至 **2027-10-20**。明确以日内保证金标准**整体取代**原日内交易保证金制度，包括 **pattern day trader** 认定次数与 **$25,000** 最低权益。教学上把 PDT 作为**历史背景**，把 **IML** 作为核验日下的现行 4210 路径。
 
 ### FINRA Regulatory Notice 26-11（IMD / IML 解释）
 
-- **来源（已抓取）：** https://www.finra.org/rules-guidance/notices/26-11 — **2026-05-19** 发布；**2026-06-04** 生效（与 26-10 同日）。
+- **来源（作者按 checked_on 阅读）：** https://www.finra.org/rules-guidance/notices/26-11 — **2026-05-19** 发布；**2026-06-04** 生效（与 26-10 同日）。
 - **已核验：** 发布/更新 Rule 4210 关于新日内保证金标准的解释——包括如何计算 **IMD**（intraday margin deficit）与 **IML**（intraday margin level）、入金、市况变动、强平等示例——并**删除**过时 PDT 日内交易解释。紧挨 26-10 的短更新：26-10 = 规则变更；26-11 = 会员如何落地 IMD/IML + 投资者教育链接。
 
 ### FINRA Regulatory Notice 15-09
 
-- **来源（已抓取）：** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**。算法策略督导有效实践：风险评估、代码变更、测试、交易系统监控、合规沟通；并引用 15c3-5 与 Reg SHO。
+- **来源（作者按 checked_on 阅读）：** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**。算法策略督导有效实践：风险评估、代码变更、测试、交易系统监控、合规沟通；并引用 15c3-5 与 Reg SHO。
 
 ## 跨境身份边界：税务 / 外汇 / CRS 识字框（中国居民读者）
 
@@ -82,23 +89,23 @@ def pdt_regime(trade_date: str, member_adoption_date: str | None) -> str:
 
 ### 证监会《证券市场程序化交易管理规定（试行）》
 
-- **来源（已抓取）：** https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html — 证监会公告〔2024〕8号
+- **来源（作者按 checked_on 阅读）：** https://www.gov.cn/gongbao/2024/issue_11426/202406/content_6959680.html — 证监会公告〔2024〕8号
 - **已核验：** 公布落款 2024-05-11；**自 2024-10-08 起施行**。程序化交易=计算机程序自动生成或下达指令在交易所交易。投资者须报告账户/资金/策略/软件等；**先报告、后交易**。交易所对异常交易重点监控；**具体数量阈值由交易所规定**，本规定正文未写死数字。高频交易作定性描述，细则与差异化收费由交易所明确。
 
 ### 上交所 / 深交所实施细则
 
-- **上交所答记者问（已抓取，日期 2025-04-03）：** https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml 。明确细则 **2025-07-07** 起施行。高频认定（上交所表述）：单账户每秒申报、撤单合计最高 **≥300** 笔，或全日最高 **≥20,000** 笔。四类异常行为构成要件有说明；具体监控指标由交易所运行。
-- **深交所细则 PDF（已抓取）：** https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf — 第33条高频阈值同为 **300 / 20,000**；第18条四类异常；**2025-07-07** 起施行。
-- **深交所发布通知（已抓取）：** https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html — 深证上〔2025〕292号，2025-04-03 发布，2025-07-07 施行。
+- **上交所答记者问（作者按 checked_on 阅读；文件日期 2025-04-03）：** https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20250403_10776805.shtml 。明确细则 **2025-07-07** 起施行。高频认定（上交所表述）：单账户每秒申报、撤单合计最高 **≥300** 笔，或全日最高 **≥20,000** 笔。四类异常行为构成要件有说明；具体监控指标由交易所运行。
+- **深交所细则 PDF（作者按 checked_on 阅读）：** https://docs.static.szse.cn/www/lawrules/rule/trade/current/W020250403603802169453.pdf — 第33条高频阈值同为 **300 / 20,000**；第18条四类异常；**2025-07-07** 起施行。
+- **深交所发布通知（作者按 checked_on 阅读）：** https://www.szse.cn/lawrules/rule/trade/current/t20250403_612770.html — 深证上〔2025〕292号，2025-04-03 发布，2025-07-07 施行。
 
 ### 证监会《期货市场程序化交易管理规定（试行）》〔2025〕12号
 
-- **来源（已抓取）：** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 证监会公告〔2025〕12号；亦见 [csrc.gov.cn 发布稿](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml)（2025-06-13）。
+- **来源（作者按 checked_on 阅读）：** https://www.gov.cn/gongbao/2025/issue_12226/202508/content_7036966.html — 证监会公告〔2025〕12号；亦见 [csrc.gov.cn 发布稿](https://www.csrc.gov.cn/csrc/c100028/c7564353/content.shtml)（2025-06-13）。
 - **已核验：** **2025-06-13** 公布；**自 2025-10-09 起施行**。期货程序化交易=计算机程序自动生成或下达指令在期货交易所交易。**先报告、后交易：** 客户向期货公司报告 → 期货公司核查 → 交易所确认 → 方可交易。高频交易在证监会文本中为定性描述；**具体高频标准由期货交易所制定**，可差异化手续费/报撤单收费/限额。主机托管与席位公平；异常报撤重点监控。施行前已开展者，**6 个月内**达到第 7–12 条报告要求。与证券〔2024〕8 号互补——勿混两个市场。
 
 ### 港股通北向 — 程序化交易报告（生效 2026-01-12）
 
-- **汇总页（已抓取）：** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
+- **汇总页（作者按 checked_on 阅读）：** [HKEX Northbound Program Trading Reporting](https://www.hkex.com.hk/Mutual-Market/Stock-Connect/Reference-Materials/Northbound-Program-Trading-Reporting?sc_lang=en)
 - **已核验：** 内地交易所北向程序化交易报告要求自 **2026-01-12** 起生效；CCEP/TTEP 自该日起经 HKEX ECP 提交；存量投资者过渡期至 **2026-04-10**。沪/深门槛（分别计算）包括高度自动化下单、瞬时申报速率、多标的高换手、或定制软件等——**仅用非定制简单 TWAP/VWAP 拆单一般不触发**。正文以沪深交易所为准；HKEX 页为英文枢纽。与在岸证券〔2024〕8 / 期货〔2025〕12 互补——北向有**独立**报告通道。
 
 
@@ -125,12 +132,12 @@ def sse_rule_version(trade_date: str) -> str:
 
 ### 中国 — 人民银行等 银发〔2021〕237号
 
-- **来源（已抓取）：** https://www.gov.cn/zhengce/zhengceku/2021-10/08/content_5641404.htm — 成文 **2021-09-15**。
+- **来源（作者按 checked_on 阅读）：** https://www.gov.cn/zhengce/zhengceku/2021-10/08/content_5641404.htm — 成文 **2021-09-15**。
 - **已核验要点：** 虚拟货币**不具**法偿性；相关业务活动属**非法金融活动**并禁止；境外交易所向境内居民提供服务同样禁止；违背公序良俗的民事行为无效等；金融机构不得提供相关服务。
 
 ### 美国 — SEC/CFTC 工作人员声明
 
-- **来源（已抓取）：** https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225 — **2025-09-02** SEC–CFTC **工作人员**联合声明。
+- **来源（作者按 checked_on 阅读）：** https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225 — **2025-09-02** SEC–CFTC **工作人员**联合声明。
 - **已核验：** 工作人员认为现行法律**并不禁止**已注册交易所开展**某些**现货加密资产产品交易；声明自陈**不是**委员会规则、**不创设**新义务。只作方向性备注，不是牌照。
 
 ## 研究伦理（始终适用）
@@ -170,7 +177,7 @@ n_sources=33 us_first_block=19 fields_complete=True
 
 ## 香港证监会通函 24EC55 — GenAI 语言模型（知晓即可）
 
-与 FINRA GenAI 主题相邻的亚洲对照：[香港证监会（SFC）通函 24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)（《致持牌法团通函 — 生成式人工智能语言模型的使用》），**2024-11-12** 发出、即时生效（官方页已抓取）。
+与 FINRA GenAI 主题相邻的亚洲对照：[香港证监会（SFC）通函 24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)（《致持牌法团通函 — 生成式人工智能语言模型的使用》），**2024-11-12** 发出、即时生效（作者按 checked_on 阅读官方页）。
 
 **仅知晓（不是执照，非法律意见）：**
 
@@ -189,7 +196,7 @@ n_sources=33 us_first_block=19 fields_complete=True
 
 **仅识字（不是执照清单，不是 HFT 教程，非法律意见）：**
 
-| 主题 | 简报精神（已抓取 PDF） |
+| 主题 | 简报精神（作者按 checked_on 阅读的官方 PDF） |
 |------|------------------------|
 | 算法定义 | 计算机算法决定订单任一参数（价/量/时点/是否发起等）即属算法交易；**人类点击授权 ≠ 自动排除**（若参数已由算法决定） |
 | 重大变更复测 | 逻辑/范围/风控/外部依赖变更后复测；**含 ML 重训 / 自适应能力**（一系列小重标定也可累积成重大变更） |
@@ -226,29 +233,30 @@ n_sources=33 us_first_block=19 fields_complete=True
 3. **ex3** — 话术审计：把「保证夏普」广告改成合规表述。
 4. **ex4** — 官方来源表：URL + 核验日期。
 5. **done1** — 伦理清单勾选完成。
-6. **ex5** — 规则版本表（主例 FINRA）：写出 SEC 批准日/Notice 发布日/生效日/迁移期截止日四行，加 `member_adoption_date`、`broker_checked_on`、账户类别字段，并实现 `pdt_regime`；**完成标准**：2026-05-01→old_pdt，2026-08-01 且迁移未知→needs_broker_verification。对照：上交所 2023/2026 版本行（2026-07-03→2023，2026-07-06→2026）。
+6. **ex5** — 规则版本表（**比较示例：上交所**）：为上交所交易规则写 2023/2026 两行（文号、发布日、生效日），并写出按交易日期切换版本的函数；**完成标准**：2026-07-03 返回 2023，2026-07-06 返回 2026。美股主例见 ex7。
 7. **ex6** — 跨境识字卡：用自己的话写出 W-8BEN 交给谁、协定 10% 的条件、洗售 61 个日历日窗口、中国 20% 与限额抵免/次年 3–6 月申报、CRS≠新税种、5 万美元≠证券投资许可；**完成标准**：六点齐全且无任何个人税额计算或汇路建议。
+8. **ex7** — FINRA 迁移 fixture（美股主例）：运行 `04_finra_migration_fixture.py`，再自己加一个案例（迁移期内、`member_adoption_date` 已知但 `broker_checked_on` 为空）；**完成标准**：输出 `needs_broker_verification`，原 8/8 案例仍通过。
 
 
 ## 测验
 
-<Quiz id="p7ce-q1" question="证监会 2024 程序化规定（已抓取）生效日？" options={["2023-01-01", "2024-10-08", "2025-07-07", "永不"]} answer={1} explanation="公告〔2024〕8号：2024-10-08 起施行。" />
-<Quiz id="p7ce-q2" question="沪深高频认定（已抓取 2025 细则）包括？" options={["任意两笔成交", "每秒≥300 笔或全日≥20000 笔申报撤单峰值", "仅零股", "Kelly f*>0.5"]} answer={1} explanation="上交所答问与深交所第33条。" />
+<Quiz id="p7ce-q1" question="证监会 2024 程序化规定（作者按 checked_on 阅读）生效日？" options={["2023-01-01", "2024-10-08", "2025-07-07", "永不"]} answer={1} explanation="公告〔2024〕8号：2024-10-08 起施行。" />
+<Quiz id="p7ce-q2" question="沪深高频认定（2025 细则，作者按 checked_on 阅读）包括？" options={["任意两笔成交", "每秒≥300 笔或全日≥20000 笔申报撤单峰值", "仅零股", "Kelly f*>0.5"]} answer={1} explanation="上交所答问与深交所第33条。" />
 <Quiz id="p7ce-q3" question="SEA Rule 15c3-5 主要要求？" options={["免费裸接入", "市场接入的事前风控与年度 CEO 证明", "保证成交", "加密质押"]} answer={1} explanation="Market Access Rule。" />
 <Quiz id="p7ce-q4" question="Reg SHO Rule 201 大致在何时触发？" options={["波动 1%", "相对前收跌 10%（上市市场）", "周跌 50%", "任意上涨"]} answer={1} explanation="10% 熔断。" />
 <Quiz id="p7ce-fy2026" question="SEC FY2026 检查重点中新兴金融科技主要关注？" options={["全面禁止 AI", "自动化工具/AI/算法/另类数据——表述、运营vs披露、监督", "仅加密场所", "恢复 PDA 原案"]} answer={1} explanation="知晓即可；撤回 S7-12-23 ≠ 无剩余义务。" />
 <Quiz id="p7ce-genai" question="FINRA 2026 GenAI/Agents 章节主要是？" options={["新的交易 alpha 执照", "技术中立的监督主题（自主性、可审计、护栏）— 2026 新增", "废除 Rule 3110", "仅限 HFT"]} answer={1} explanation="仅知晓 — 非法律意见。" />
 <Quiz id="p7ce-pda" question="SEC 2025-06 撤回 S7-12-23 意味着？" options={["所有 AI 合规义务消失", "该 PDA 利益冲突提案不会按原案定稿；其他义务仍在", "Reg BI 废除", "只剩加密规则"]} answer={1} explanation="撤回 ≠ 无剩余义务；非法律意见。" />
-<Quiz id="p7ce-q5" question="FINRA Notice 26-10（已抓取）的含义？" options={["新设 PDT $25k", "以内日保证金标准取代原 PDT 次数/$25k 制度（2026-06-04 生效）", "废除保证金", "仅适用于加密"]} answer={1} explanation="Notice 26-10 取代日内交易保证金旧制。" />
-<Quiz id="p7ce-q6" question="央行 2021 通知（已抓取）对虚拟货币相关业务的定性？" options={["鼓励金融科技", "属非法金融活动并禁止", "银行强制开展", "完全不管"]} answer={1} explanation="银发〔2021〕237号高层次状态。" />
-<Quiz id="p7ce-q7" question="证监会期货程序化规定〔2025〕12（已抓取）生效日？" options={["2024-10-08", "2025-10-09", "2026-06-04", "永不"]} answer={1} explanation="公告〔2025〕12号：2025-10-09 起施行；期货先报告后交易。" />
+<Quiz id="p7ce-q5" question="FINRA Notice 26-10（作者按 checked_on 阅读）的含义？" options={["新设 PDT $25k", "以内日保证金标准取代原 PDT 次数/$25k 制度（2026-06-04 生效）", "废除保证金", "仅适用于加密"]} answer={1} explanation="Notice 26-10 取代日内交易保证金旧制。" />
+<Quiz id="p7ce-q6" question="央行 2021 通知（作者按 checked_on 阅读）对虚拟货币相关业务的定性？" options={["鼓励金融科技", "属非法金融活动并禁止", "银行强制开展", "完全不管"]} answer={1} explanation="银发〔2021〕237号高层次状态。" />
+<Quiz id="p7ce-q7" question="证监会期货程序化规定〔2025〕12（作者按 checked_on 阅读）生效日？" options={["2024-10-08", "2025-10-09", "2026-06-04", "永不"]} answer={1} explanation="公告〔2025〕12号：2025-10-09 起施行；期货先报告后交易。" />
 <Quiz id="p7ce-q8" question="FINRA Notice 26-11 主要是？" options={["恢复 PDT $25k", "发布新日内保证金的 IMD/IML 解释（2026-06-04 生效）", "废除保证金", "仅加密"]} answer={1} explanation="26-11 通过 Rule 4210 IMD/IML 解释落地 26-10。" />
 
 <Quiz id="p7ce-q9" question="港股通北向程序化交易报告（已核验）生效日？" options={["2024-10-08", "2025-10-09", "2026-01-12", "永不"]} answer={2} explanation="HKEX 汇总页：2026-01-12 生效。" />
 
-<Quiz id="p7ce-esma" question="ESMA74-1505669079-10311（2026-02-26）主要是？" options={["HFT 配方执照", "非约束性算法交易监管简报：定义/重大变更复测/2×压力/PTC/外包责任/AI Act+RTS6 Art.9 — 仅识字", "废除 MiFID II", "仅限香港"]} answer={1} explanation="已抓取官方 PDF；非法律意见；非执照清单。" />
+<Quiz id="p7ce-esma" question="ESMA74-1505669079-10311（2026-02-26）主要是？" options={["HFT 配方执照", "非约束性算法交易监管简报：定义/重大变更复测/2×压力/PTC/外包责任/AI Act+RTS6 Art.9 — 仅识字", "废除 MiFID II", "仅限香港"]} answer={1} explanation="作者按 checked_on 阅读的官方 PDF；非法律意见；非执照清单。" />
 <Quiz id="p7ce-esma2" question="ESMA 简报下，人类点击授权是否自动使交易非算法？" options={["是，一律排除", "否 — 若算法已决定订单参数，仍可属算法交易", "仅加密适用", "只看佣金"]} answer={1} explanation="人机协同不否定算法已决定参数。" />
-<Quiz id="p7ce-sfc" question="香港证监会（SFC）通函 24EC55（已抓取）主要是？" options={["GenAI 交易 alpha 执照", "香港对 GenAI 语言模型的期望；高风险建议/研究 → 人在回路 — 仅知晓", "废除 FINRA 3110", "仅限 HFT"]} answer={1} explanation="2024-11-12 发出；非法律意见。" />
+<Quiz id="p7ce-sfc" question="香港证监会（SFC）通函 24EC55（作者按 checked_on 阅读）主要是？" options={["GenAI 交易 alpha 执照", "香港对 GenAI 语言模型的期望；高风险建议/研究 → 人在回路 — 仅知晓", "废除 FINRA 3110", "仅限 HFT"]} answer={1} explanation="2024-11-12 发出；非法律意见。" />
 <Quiz id="ce-sse2026" question="上交所交易规则（2026年修订）何时起施行？2023 版怎样？" options={["2026-04-24 起施行，2023 版继续有效", "2026-07-06 起施行，2023 版同时废止", "2027-01-01 起施行", "只适用于期货"]} answer={1} explanation="上证发〔2026〕41号：2026-07-06 起施行，2023 版同时废止；部分条文继续暂缓。回测应按日期切换版本。" />
 <Quiz id="ce-pdt-phase" question="2026-08-01 的一笔交易，券商迁移状态未知，按本课规则函数应输出？" options={["old_pdt", "intraday_margin", "needs_broker_verification", "illegal"]} answer={2} explanation="规则 2026-06-04 生效，但迁移期到 2027-10-20；状态未知时必须核实券商（R04）。" />
 <Quiz id="ce-wash61" question="洗售规则的时间窗口是？" options={["卖出后 30 个营业日", "卖出前后各 30 个日历日，含当日共 61 个日历日", "只看同一天", "T+1 交收日"]} answer={1} explanation="IRC §1091：前 30 日至后 30 日；按日历日计算。" />

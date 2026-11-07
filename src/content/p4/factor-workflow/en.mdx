@@ -79,23 +79,6 @@ The observed ~4.5–6% rate at \|t\|>2 is **right in line with pure noise**. Tha
 
 
 
-## Harvey–Sancetta–Zhao (NBER w34898, 2026): t ≥ 3 and local FDR
-
-Next to HLZ (2016) and Detzel costs: [What Threshold Should be Applied to Tests of Factor Models?](https://www.nber.org/papers/w34898) (Harvey, Sancetta & Zhao) argue proper inference needs dependence across tests, a correct null, and selection-bias mitigation. Their framework yields a **lower bound**: use a **t-statistic cutoff of at least 3.0**. Prefer the **NBER URL** (DOI pages may 500).
-
-They also advocate the **local False Discovery Rate** — roughly the probability the null is true **given** the realized test statistic. A classical **p-value is not** P(null | data).
-
-Lab sketch:
-
-```text
-noise_t≈1.2: two-sided_p≈0.2301  localFDR_sketch≈0.957
-borderline_t≈2.0: two-sided_p≈0.0455  localFDR_sketch≈0.668
-HLZ_bar_t≈3.0: two-sided_p≈0.0027  localFDR_sketch≈0.091
-planted_t=4.2: two-sided_p≈0.0000  localFDR_sketch≈0.003
-```
-
-Statistical clearance still needs **economic** significance after costs (Detzel bridge).
-
 ## Cost-aware factor ranking (Detzel–Novy-Marx–Velikov)
 
 [Model Comparison with Transaction Costs](https://doi.org/10.1111/jofi.13225) (Detzel, Novy-Marx & Velikov, *Journal of Finance* 2023) shows that **ignoring trading costs biases tests toward high-turnover factors / models**. Gross Sharpe crowns can reverse once costs enter.
@@ -235,6 +218,23 @@ chart /workspace/Quant-trading-learn/public/p4/quantile_bars.png
 disclaimer: strong panel MU is inflated for teaching; weak panel is the realistic foil — learning only
 ```
 
+
+## Harvey–Sancetta–Zhao (NBER w34898, 2026): t ≥ 3 and local FDR
+
+Next to HLZ (2016) and Detzel costs: [What Threshold Should be Applied to Tests of Factor Models?](https://www.nber.org/papers/w34898) (Harvey, Sancetta & Zhao) argue proper inference needs dependence across tests, a correct null, and selection-bias mitigation. Their framework yields a **lower bound**: use a **t-statistic cutoff of at least 3.0**. Prefer the **NBER URL** (DOI pages may 500).
+
+They also advocate the **local False Discovery Rate** — roughly the probability the null is true **given** the realized test statistic. A classical **p-value is not** P(null | data).
+
+Lab sketch:
+
+```text
+noise_t≈1.2: two-sided_p≈0.2301  localFDR_sketch≈0.957
+borderline_t≈2.0: two-sided_p≈0.0455  localFDR_sketch≈0.668
+HLZ_bar_t≈3.0: two-sided_p≈0.0027  localFDR_sketch≈0.091
+planted_t=4.2: two-sided_p≈0.0000  localFDR_sketch≈0.003
+```
+
+Statistical clearance still needs **economic** significance after costs (Detzel bridge).
 
 ## Admission gates pointer + Hou–Xue–Zhang replication failure rates
 

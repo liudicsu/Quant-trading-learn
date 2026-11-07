@@ -27,30 +27,30 @@
 | `stats-probability-basics` | P0 | 8 | 2 | 是 | python-pandas-timeseries |
 | `basic-finance-markets` | P0 | 5 | 1 | 是 | — |
 | `markets-language` | P1 | 5 | 2 | 否 | basic-finance-markets |
-| `microstructure-orders` | P1 | 7 | 2 | 否 | markets-language |
+| `microstructure-orders` | P1 | 9 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
-| `data-cleaning` | P2 | 19 | 3 | 否 | eval-lab |
+| `data-cleaning` | P2 | 25 | 3 | 否 | eval-lab |
 | `backtest-traps` | P2 | 28 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 6 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
 | `mean-reversion` | P3 | 7 | 3 | 否 | momentum-trend |
-| `pairs-stat-arb` | P3 | 12 | 3 | 否 | mean-reversion |
+| `pairs-stat-arb` | P3 | 13 | 3 | 否 | mean-reversion |
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
-| `factor-workflow` | P4 | 24 | 4 | 否 | strategy-compare-lab, backtest-traps |
+| `factor-workflow` | P4 | 25 | 4 | 否 | strategy-compare-lab, backtest-traps |
 | `factor-portfolio-lab` | P4 | 8 | 4 | 否 | factor-workflow |
 | `ml-leakage-control` | P5 | 21 | 5 | 否 | factor-workflow, backtest-traps |
 | `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
 | `portfolio-risk-sizing` | P6 | 23 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
-| `execution-slippage` | P6 | 13 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
+| `execution-slippage` | P6 | 14 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
 | `risk-systems-lab` | P6 | 8 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
-| `market-regimes-crisis` | P6 | 12 | 4 | 否 | risk-systems-lab |
-| `paper-trading-infra` | P7 | 14 | 3 | 否 | market-regimes-crisis |
-| `compliance-ethics` | P7 | 16 | 2 | 否 | paper-trading-infra |
+| `market-regimes-crisis` | P6 | 13 | 4 | 否 | risk-systems-lab |
+| `paper-trading-infra` | P7 | 17 | 3 | 否 | market-regimes-crisis |
+| `compliance-ethics` | P7 | 19 | 2 | 否 | paper-trading-infra |
 | `frontier-llm-agents` | P8 | 29 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
 | `frontier-tsfm-altdata-crypto` | P8 | 19 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
-| `capstone` | P9 | 24 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
+| `capstone` | P9 | 26 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
 
 **程序员建议：** 对 P0 三课做测验；通过则跳过，把时间补给 P2/P4/P5/P6 的重课。
 
@@ -135,7 +135,7 @@
 
 说明：`classic`=主干必教；`niche`=先前 X/Canvas 非主流或糙而实用路径；`frontier`=2024–2026 已核验新方法（强调批判与防泄漏，不承诺收益）。
 
-## 5. 分课大纲（自洽）
+## 5. 分课大纲（课时/难度/Basis 与 `src/lib/curriculum.ts` 同步，由 `tools/check-hours.mjs` 校验）
 
 ### P0 · 零基础准备（可测验跳过）（Zero-basis foundations (test-out OK)）— 20h / 3 课
 
@@ -214,11 +214,11 @@
   - 市场/基准一页纸。
 - **Method tags:** classic: QuantStart beginner books; Default: US-listed stocks/ETFs in USD; Chinese supplement: JoinQuant 初识量化
 
-### P1 · 市场语言与度量（Market language & measurement）— 25h / 4 课
+### P1 · 市场语言与度量（Market language & measurement）— 29h / 4 课
 
 **阶段目标：** 用交易语言说话，并用收益/风险指标诚实评价玩具信号。
 
-**6h/周 ≈ 4.2 周；12h/周 ≈ 2.1 周。**
+**6h/周 ≈ 4.8 周；12h/周 ≈ 2.4 周。**
 
 #### `markets-language` — 市场与交易语言 / Markets & trading vocabulary
 - **Hours:** 5h · **Difficulty:** 2/5 · **Basis:** 2h concepts + 2.5h exercises + 0.5h quiz
@@ -244,7 +244,7 @@
 - **Method tags:** classic: Canvas m1; QuantStart SAT process | niche: Awesome Systematic Trading (paperswithbacktest GitHub)
 
 #### `microstructure-orders` — 微观结构与订单 / Microstructure & orders
-- **Hours:** 7h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz
+- **Hours:** 9h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution)
 - **Prereqs:** `markets-language`
 - **Summary:** 价差、mid、市价/限价、滑点；同bar零成本过乐观。
 - **Goals:**
@@ -290,7 +290,7 @@
 - **Method tags:** classic: Canvas m3; QuantStart performance; Chinese supplement: JoinQuant returns/risk tutorial
 
 #### `eval-lab` — 评估实验：基准与诚实指标 / Evaluation lab: benchmarks & honest metrics
-- **Hours:** 5h · **Difficulty:** 2/5 · **Basis:** 1.5h concepts + 3h lab + 0.5h quiz
+- **Hours:** 7h · **Difficulty:** 2/5 · **Basis:** 1.5h concepts + 3h lab + 0.5h PyFolio map + 0.5h base-rate pointer + 1.5h quiz
 - **Prereqs:** `returns-vol-corr`, `microstructure-orders`
 - **Summary:** 成本后指标表；玩具信号 vs 买入持有。
 - **Goals:**
@@ -309,14 +309,14 @@
   - 对照表+三句结论。
 - **Method tags:** classic: Canvas eval; pyfolio tear-sheet docs; Chinese supplement: JoinQuant 策略评价 | niche: @FG731314/2115609441748001008 risk-adjusted traits
 
-### P2 · 数据与诚实回测（Data & honest backtests）— 40h / 4 课
+### P2 · 数据与诚实回测（Data & honest backtests）— 67h / 4 课
 
 **阶段目标：** 可版本化数据+陷阱审讯+成本+引擎假设。
 
-**6h/周 ≈ 6.7 周；12h/周 ≈ 3.3 周。**
+**6h/周 ≈ 11.2 周；12h/周 ≈ 5.6 周。**
 
 #### `data-cleaning` — 数据与清洗 / Data & cleaning
-- **Hours:** 10h · **Difficulty:** 3/5 · **Basis:** 4h concepts + 5h pipeline lab + 1h docs/quiz
+- **Hours:** 25h · **Difficulty:** 3/5 · **Basis:** 5h concepts + 6h pipeline lab incl mask-first + 2h info-bars + 1h crypto-PIT + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources/licensing/PIT lab (EDGAR/FRED terms R16/Ken French/CRSP/yfinance/Massive/Alpaca) + 2h corporate actions & delisting (R21) + 1h ALFRED revision as-of
 - **Prereqs:** `eval-lab`
 - **Summary:** 复权、停牌、缺失、幸存者、PIT；数据说明书。
 - **Goals:**
@@ -339,7 +339,7 @@
 - **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; US source map: SEC EDGAR / ALFRED / Ken French / CRSP docs; Chinese supplement: JoinQuant data docs | niche: @pyquantnews 45 APIs (2116517809920327801); OpenBB quantitative docs; Binance Vision + @sera00111 crypto data notes | frontier: Alt-data awareness; deeper in P8
 
 #### `backtest-traps` — 回测陷阱与过拟合审讯 / Backtest traps & overfitting interrogation
-- **Hours:** 16h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 9h multi-labs + 2h write-up — HEAVY
+- **Hours:** 28h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 19h multi-labs (CPCV + one-switch + PBO/CSCV + admission gates) + 4h write-up — HEAVY
 - **Prereqs:** `data-cleaning`, `stats-probability-basics`
 - **Summary:** 前瞻、walk-forward、PSR/DSR、试验次数、幸存者回顾。
 - **Goals:**
@@ -384,7 +384,7 @@
 - **Method tags:** classic: Canvas costs; QuantStart TCA; NYU TCA themes
 
 #### `engines-vectorized-event` — 回测引擎：向量化与事件驱动 / Backtest engines: vectorized & event-driven
-- **Hours:** 8h · **Difficulty:** 3/5 · **Basis:** 3h concepts + 4h compare lab + 1h optional docs
+- **Hours:** 8h · **Difficulty:** 3/5 · **Basis:** 3h concepts + 4h compare lab + 1h docs
 - **Prereqs:** `costs-in-backtest`
 - **Summary:** VectorBT vs Zipline/Backtrader；同构引擎概念。
 - **Goals:**
@@ -406,11 +406,11 @@
   - 假设段+双成交对照。
 - **Method tags:** classic: VectorBT; Zipline Reloaded; Backtrader; Canvas engines | niche: @RoundtableSpace/2111272232249143360 engine list | frontier: NautilusTrader shared-kernel architecture docs
 
-### P3 · 经典策略族（Classic strategy families）— 30h / 4 课
+### P3 · 经典策略族（Classic strategy families）— 33h / 4 课
 
 **阶段目标：** 复现动量/回归/配对并做对照。
 
-**6h/周 ≈ 5.0 周；12h/周 ≈ 2.5 周。**
+**6h/周 ≈ 5.5 周；12h/周 ≈ 2.8 周。**
 
 #### `momentum-trend` — 动量与趋势 / Momentum & trend
 - **Hours:** 8h · **Difficulty:** 3/5 · **Basis:** 3h concepts + 4.5h labs + 0.5h quiz
@@ -456,7 +456,7 @@
 - **Method tags:** classic: Canvas m7; Stern counter-trend; OU/AR(1) half-life | niche: quants.md reversal samples as foils | further reading: Chan Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
 #### `pairs-stat-arb` — 配对与统计套利入门 / Pairs & intro statistical arb
-- **Hours:** 10h · **Difficulty:** 3/5 · **Basis:** 4h concepts + 5h lab + 1h write-up
+- **Hours:** 13h · **Difficulty:** 3/5 · **Basis:** 4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio (filter vs smoother) + 1h US short-sale constraints (Reg SHO layers, borrow, dividends)
 - **Prereqs:** `mean-reversion`
 - **Summary:** 价差、滚动对冲比、相关≠可交易。
 - **Goals:**
@@ -497,14 +497,14 @@
   - 对照报告入库。
 - **Method tags:** classic: Canvas comparison spirit; Same-protocol comparison rules | niche: Critique open strategy dumps (quants.md) as hypothesis sources only | further reading: Chan Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
-### P4 · 因子研究（Factor research）— 21h / 2 课
+### P4 · 因子研究（Factor research）— 33h / 2 课
 
 **阶段目标：** IC/分层/组合化的可重复因子工作流。
 
-**6h/周 ≈ 3.5 周；12h/周 ≈ 1.8 周。**
+**6h/周 ≈ 5.5 周；12h/周 ≈ 2.8 周。**
 
 #### `factor-workflow` — 因子研究工作流 / Factor research workflow
-- **Hours:** 14h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 7h labs + 2h write-up — HEAVY
+- **Hours:** 25h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 15h labs (incl Detzel + NMV 2016 taxonomy + w34898 + HXZ + admission) + 3h write-up + 1h crowding→LLM bridge — HEAVY + 1h US factor benchmark alignment (percent, missing markers, Mkt-RF+RF, compounding)
 - **Prereqs:** `strategy-compare-lab`, `backtest-traps`
 - **Summary:** IC、分层、衰减、中性化直觉；拒绝堆参数。
 - **Goals:**
@@ -531,7 +531,7 @@
 - **Method tags:** classic: Canvas m9; AFML/Factor Mirage; @alin_alphapilot IC-first; Qlib Alpha158 ref | niche: quant-wiki factor map (@bkdgiffug) | frontier: LLM formulaic alpha mining after this; formalized in P8
 
 #### `factor-portfolio-lab` — 因子到组合实验 / Factor-to-portfolio lab
-- **Hours:** 7h · **Difficulty:** 4/5 · **Basis:** 2h concepts + 4.5h lab + 0.5h quiz
+- **Hours:** 8h · **Difficulty:** 4/5 · **Basis:** 2.5h concepts + 4.5h lab + 1h quiz
 - **Prereqs:** `factor-workflow`
 - **Summary:** 换手、简单中性化、多因子合成诚实评估。
 - **Goals:**
@@ -553,14 +553,14 @@
   - 因子→组合小报告。
 - **Method tags:** classic: Canvas m9 ext; Qlib portfolio/backtest optional
 
-### P5 · 机器学习与现代流水线（ML & modern pipelines）— 22h / 2 课
+### P5 · 机器学习与现代流水线（ML & modern pipelines）— 32h / 2 课
 
 **阶段目标：** 防泄漏ML + 可复现现代流水线基线。
 
-**6h/周 ≈ 3.7 周；12h/周 ≈ 1.8 周。**
+**6h/周 ≈ 5.3 周；12h/周 ≈ 2.7 周。**
 
 #### `ml-leakage-control` — 机器学习防泄漏 / ML anti-leakage
-- **Hours:** 14h · **Difficulty:** 5/5 · **Basis:** 5h AFML concepts + 7h labs + 2h write-up — HEAVY
+- **Hours:** 21h · **Difficulty:** 5/5 · **Basis:** 6h AFML concepts + 12h labs (fracdiff/uniqueness/meta/CPCV + one-switch + KTD/Mirage pointers) + 3h write-up — HEAVY
 - **Prereqs:** `factor-workflow`, `backtest-traps`
 - **Summary:** 时间切分、特征shift、标签直觉、purge/embargo、元标签、试验次数。
 - **Goals:**
@@ -588,7 +588,7 @@
 - **Method tags:** classic: Canvas m10; AFML labeling/CV; ML4T notebooks | frontier: LLM-generated features still need these controls (bridge to P8)
 
 #### `modern-ml-pipelines` — 现代ML量化流水线（Qlib等） / Modern ML quant pipelines (Qlib et al.)
-- **Hours:** 8h · **Difficulty:** 4/5 · **Basis:** 3h architecture + 4h mini-pipeline + 1h optional Qlib
+- **Hours:** 11h · **Difficulty:** 4/5 · **Basis:** 3h architecture + 5h mini-pipeline + 2h SFI/Transformer foil + 1h optional Qlib
 - **Prereqs:** `ml-leakage-control`, `data-cleaning`
 - **Summary:** 简单模型打底的可复现流水线；可选Qlib；不神话深度学习。
 - **Goals:**
@@ -611,14 +611,14 @@
   - 可复现小流水线+检查清单。
 - **Method tags:** classic: Qlib Quick Start; ML4T end-to-end; Canvas m10 | niche: @quantscience_ stack; ML4T high-engagement X posts | frontier: Qlib Transformer/Localformer as optional controls under same anti-leakage protocol; RD-Agent automation deferred to P8
 
-### P6 · 风险、仓位与执行（Risk, sizing & execution）— 54h / 4 课
+### P6 · 风险、仓位与执行（Risk, sizing & execution）— 58h / 4 课
 
 **阶段目标：** 仓位层、执行成本与硬约束工程化。
 
-**6h/周 ≈ 4.3 周；12h/周 ≈ 2.2 周。**
+**6h/周 ≈ 9.7 周；12h/周 ≈ 4.8 周。**
 
 #### `portfolio-risk-sizing` — 组合、风险与仓位 / Portfolio, risk & position sizing
-- **Hours:** 22h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 13h labs (incl HRP + Brandt no-trade + alpha-decay band) + 4h writing — HEAVY
+- **Hours:** 23h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 13h labs (incl HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab — HEAVY
 - **Prereqs:** `returns-vol-corr`, `strategy-compare-lab`
 - **Summary:** 波动目标、回撤熔断、Kelly上界直觉、历史VaR。
 - **Goals:**
@@ -642,7 +642,7 @@
 - **Method tags:** classic: Canvas m11; QuantStart VaR/Kelly; UChicago FINM risk
 
 #### `execution-slippage` — 执行与滑点 / Execution & slippage
-- **Hours:** 13h · **Difficulty:** 3/5 · **Basis:** 5h concepts (√/Gatheral + public metaorder IRF) + 6.5h experiments + 1.5h quiz
+- **Hours:** 14h · **Difficulty:** 3/5 · **Basis:** 5h concepts (√/Gatheral + public metaorder IRF) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA (IEX vs SIP arrival, stale NBBO, capacity)
 - **Prereqs:** `costs-in-backtest`, `portfolio-risk-sizing`
 - **Summary:** 参与率、冲击示意、TWAP/VWAP直觉。
 - **Goals:**
@@ -684,7 +684,7 @@
 
 
 #### `market-regimes-crisis` — 市场状态与危机剧本 / Market regimes & crisis playbooks
-- **Hours:** 11h · **Difficulty:** 4/5 · **Basis:** 4.5h concepts + 5h labs + 1.5h quiz/review
+- **Hours:** 13h · **Difficulty:** 4/5 · **Basis:** 4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO 201 comparison (R12 tiers, Amendment 18)
 - **Prereqs:** `risk-systems-lab`
 - **Summary:** 可操作 regime、因果检测栈、四场景剧本、HMM 过滤 vs 平滑泄漏、熔断识字、新闻≠regime。
 - **Goals:**
@@ -707,14 +707,14 @@
   - 四场景卡片 + 实验数字一致 + 新闻≠regime 短文。
 - **Method tags:** classic: Hamilton 1989; NYSE Rule 7.12; CPPI literacy | niche: CSRC/SSE 2016 suspension | frontier: Moreira–Muir 2017 JF; Cederburg et al. 2020 JFE
 
-### P7 · 纸面与伦理（Paper trading & ethics）— 14h / 2 课
+### P7 · 纸面与伦理（Paper trading & ethics）— 36h / 2 课
 
 **阶段目标：** 纸面闭环与合规/研究伦理。
 
-**6h/周 ≈ 2.3 周；12h/周 ≈ 1.2 周。**
+**6h/周 ≈ 6.0 周；12h/周 ≈ 3.0 周。**
 
 #### `paper-trading-infra` — 纸面交易与迷你基建 / Paper trading & mini infra
-- **Hours:** 14h · **Difficulty:** 3/5 · **Basis:** 3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map
+- **Hours:** 17h · **Difficulty:** 3/5 · **Basis:** 3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map + 2h US broker paper differences & adapter fixture + 1h Shanghai-timezone reconciliation
 - **Prereqs:** `market-regimes-crisis`
 - **Summary:** 信号→目标→日志；≥5日；冻结版本。
 - **Goals:**
@@ -736,7 +736,7 @@
 - **Method tags:** classic: Canvas m13; QuantStart paper-before-live; Alpaca / IBKR paper docs (document-level only); Chinese supplement: JoinQuant 模拟交易 | niche: Qbot/Atlas reference architecture; Nautilus isomorphic paper/sim concept
 
 #### `compliance-ethics` — 合规、风险心态与研究伦理 / Compliance, risk mindset & research ethics
-- **Hours:** 4h · **Difficulty:** 2/5 · **Basis:** 2h reading + 1.5h writing + 0.5h quiz
+- **Hours:** 19h · **Difficulty:** 2/5 · **Basis:** 8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29)
 - **Prereqs:** `paper-trading-infra`
 - **Summary:** 先生存；学习≠投顾；拒绝选择性汇报。
 - **Goals:**
@@ -757,14 +757,14 @@
   - 伦理清单勾选完成。
 - **Method tags:** classic: Canvas m14; AFML scientific ethics | frontier: LLM/agent research must obey same ethics/hold-out (link P8)
 
-### P8 · 前沿与非主流方法（Frontier & unconventional methods）— 16h / 2 课
+### P8 · 前沿与非主流方法（Frontier & unconventional methods）— 48h / 2 课
 
 **阶段目标：** 在经典纪律之上批判性接触LLM agent、TSFM、另类数据与Crypto/链上。
 
-**6h/周 ≈ 2.7 周；12h/周 ≈ 1.3 周。**
+**6h/周 ≈ 8.0 周；12h/周 ≈ 4.0 周。**
 
 #### `frontier-llm-agents` — 前沿：LLM / 多智能体量化研发 / Frontier: LLM / multi-agent quant R&D
-- **Hours:** 8h · **Difficulty:** 5/5 · **Basis:** 4h guided reading + 3h critical exercises + 1h rules rewrite
+- **Hours:** 29h · **Difficulty:** 5/5 · **Basis:** 5h reading + 12h critical exercises (KTD/Xia/Mirage/five sins/FINSABER/OpenPM/CLQT/AQuA/recoverability) + 2h rules + 3h sealed leaderboard + 7h process diagnosis — HEAVY
 - **Prereqs:** `factor-workflow`, `ml-leakage-control`, `modern-ml-pipelines`, `compliance-ethics`
 - **Summary:** RD-Agent(Q)、公式化alpha挖掘、Quant-Arena：批判性试用，不替代防泄漏。
 - **Goals:**
@@ -787,7 +787,7 @@
 - **Method tags:** niche: XQuant Spec+AI run-first as motivation only (@_zheergen) | frontier: microsoft/RD-Agent + R&D-Agent(Q) arXiv:2505.15155 (NeurIPS 2025 only as arXiv comment — verify proceedings); Chain-of-Alpha arXiv:2508.06312; LLM+MCTS arXiv:2505.11122; Quant-Arena arXiv:2610.30113; Glasserman&Lin arXiv:2309.17322; Lopez-Lira/Tang/Zhu arXiv:2504.14765; Five sins arXiv:2602.14233; FINSABER arXiv:2505.07078; OpenPM arXiv:2608.09988
 
 #### `frontier-tsfm-altdata-crypto` — 前沿：时序基础模型 · 另类数据 · Crypto/链上 / Frontier: TSFMs · alt-data · crypto/on-chain
-- **Hours:** 8h · **Difficulty:** 4/5 · **Basis:** 4h paper/docs + 3h design exercises + 1h optional pull
+- **Hours:** 19h · **Difficulty:** 4/5 · **Basis:** 5h papers + 6h design + 5h funding/liquidation/ADL/EWS/path-funding foils + 2h structure/PIT + 1h SaR name-drop — HEAVY
 - **Prereqs:** `modern-ml-pipelines`, `data-cleaning`, `execution-slippage`
 - **Summary:** Chronos/TimesFM金融评测的谨慎结论；另类数据；CCXT/资金费率/链上。
 - **Goals:**
@@ -810,14 +810,14 @@
   - TSFM谨慎备忘+另类数据时间规则一页。
 - **Method tags:** niche: @sera00111 Crypto toolchain; Funding/on-chain pipeline examples as structure refs | frontier: Chronos/TimesFM finance evals e.g. arXiv:2511.18578; Trading Strategy GMX CCXT adapters 2025; OpenBB-style alt/market data aggregation
 
-### P9 · 结业项目（Capstone）— 24h / 1 课
+### P9 · 结业项目（Capstone）— 26h / 1 课
 
 **阶段目标：** 端到端诚实交付。
 
-**6h/周 ≈ 4.0 周；12h/周 ≈ 2.0 周。**
+**6h/周 ≈ 4.3 周；12h/周 ≈ 2.2 周。**
 
 #### `capstone` — 结业项目：诚实的小策略 / Capstone: an honest small strategy
-- **Hours:** 24h · **Difficulty:** 5/5 · **Basis:** 6h design/data + 10h backtest/OOS + 4h paper + 4h writing — project
+- **Hours:** 26h · **Difficulty:** 5/5 · **Basis:** 6h design/data + 10h backtest/OOS + 4h paper + 4h writing — project + 2h US research contract (offline JSON checker)
 - **Prereqs:** `paper-trading-infra`, `compliance-ethics`, `factor-workflow`, `portfolio-risk-sizing`
 - **Summary:** 假设→PIT→含成本walk-forward→DSR(N=全部)→仓位→TCA→纸面对账→合规→报告模板与量规。
 - **Goals:**
@@ -957,5 +957,10 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - Phase totals: P0 20, P1 29, P2 67, P3 33, P4 33, P5 32, P6 58, P7 36, P8 48, P9 26.
 - Review items implemented with the review's wording: R04, R12, R16, R21, R25, R28, R29.
 - New offline labs: p1/05, p2/06 (+ data/us_fixtures), p2/05 section D, p3/06, p4/03, p6/06, p6/07, p7/03, p9/02 (+ us_research_contract.json); p7/02 rewritten (n_sources=33, US first). No real FRED / yfinance downloads or caches.
-- Note: the per-lesson detail blocks in section 4 above are historical snapshots; curriculum.ts is the source of truth for per-lesson hours.
+- Section 5 per-lesson Hours/Difficulty/Basis lines and phase headings are synced from `src/lib/curriculum.ts` (R31) and checked in CI by `tools/check-hours.mjs`; other prose in section 5 (summaries, task wording) may lag curriculum.ts, which remains the source of truth.
 
+
+## Recheck fixes R30–R37 (2026-11-08)
+
+- Hours unchanged: 382 full / 362 skip-P0, 28 lessons. `npm run check` (CI) runs `tools/check-hours.mjs` (curriculum.ts, README, messages zh/en, V2 knowledge map + phase table + section 5, 56 MDX headers), `tools/check-quiz.mjs` (zero-based answers, zh/en parity, p6mrc-q5 semantics) and `tools/check-structure.mjs` (zh/en heading/quiz order).
+- New offline lab: `examples/p7/04_finra_migration_fixture.py` (R34). LULD toy separates prior-close price tier from moving reference price with 7 boundary tests (R32).

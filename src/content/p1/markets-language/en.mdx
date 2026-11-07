@@ -35,6 +35,10 @@ beta = cov(r, r_m) / var(r_m);  alpha_d = mean(r) − beta * mean(r_m)
 
 At least five (the script prints six): bid-ask spread, commissions, slippage/impact, borrow/financing, delayed fills, taxes (venue-dependent). Gross-only stories that ignore frictions are dishonest — the last P1 lesson quantifies this.
 
+<Callout type="info" title="US default scope (cross-reference)">
+The default market is **US-listed stocks / non-leveraged ETFs in USD**. The US mechanics behind the friction list above — T+1 settlement, cash vs margin accounts, NBBO/SIP/IEX, sessions — are in [P1 Microstructure & orders](../microstructure-orders/); FINRA intraday-margin migration and cross-border tax/FX boundaries are in [P7 Compliance](../../paper-ethics/compliance-ethics/).
+</Callout>
+
 ## Three-sentence research goal (template)
 
 The script fills a reproducible template: **market/sample → constraints & annualization → success criteria (net Sharpe/drawdown, frozen OOS)**. Goals must be testable, not merely “sound smart.”

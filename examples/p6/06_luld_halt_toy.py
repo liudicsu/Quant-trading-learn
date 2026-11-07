@@ -2,36 +2,70 @@
 Learning only — not investment advice. NOT a complete LULD rule engine.
 
 Percentage parameters (LULD Plan Amendment 20, Appendix A; checked_on 2026-11-08):
-  Tier 1: ref > $3 -> 5%; $0.75..$3 -> 20%; < $0.75 -> lesser of $0.15 or 75%
-  Tier 2: ref > $3 -> 10%; $0.75..$3 -> 20%; < $0.75 -> lesser of $0.15 or 75%
-  Last 25 min of regular hours: double for all Tier 1 and Tier 2 priced <= $3 (not Tier 2 > $3).
+  The day's PRICE TIER comes from the prior trading day's primary-listing close (not the moving reference):
+  Tier 1: > $3 -> 5%; $0.75..$3 (inclusive) -> 20%; < $0.75 -> lesser of $0.15 or 75% of reference
+  Tier 2: > $3 -> 10%; $0.75..$3 (inclusive) -> 20%; < $0.75 -> lesser of $0.15 or 75% of reference
+  The band is then centred on the moving reference price (usually mean of eligible trades, prior 5 min).
+  Last 25 min of regular hours (or before an early close): double for all Tier 1 and for Tier 2 whose
+  price tier is <= $3 (not Tier 2 > $3). Ordinary non-leveraged toy only.
   No opening doubling since Amendment 18 (2020-02-24).
 """
 from __future__ import annotations
 import numpy as np
 
 
-def band_pct(tier: int, ref: float, closing_window: bool) -> tuple[float, str]:
-    if ref > 3.0:
-        pct = 0.05 if tier == 1 else 0.10
-        doubled = closing_window and tier == 1
-    elif ref >= 0.75:
-        pct, doubled = 0.20, closing_window
+def price_tier(prior_listing_close: float) -> str:
+    """Price tier for the WHOLE day, fixed from the prior trading day's primary-listing close."""
+    if prior_listing_close > 3.0:
+        return "gt3"
+    if prior_listing_close >= 0.75:
+        return "0.75-3"          # $0.75 to $3, both ends inclusive
+    return "lt0.75"
+
+
+def band(tier: int, prior_listing_close: float, moving_ref: float, closing_window: bool) -> tuple[float, float, float, bool]:
+    """Step 1: percentage + doubling eligibility from the day's price tier (prior close).
+    Step 2: centre the band on the dynamic (moving) reference price."""
+    pt = price_tier(prior_listing_close)
+    eligible_double = tier == 1 or pt != "gt3"     # Tier 2 above $3 is not doubled at the close
+    doubled = closing_window and eligible_double
+    if pt == "gt3":
+        width = (0.05 if tier == 1 else 0.10) * moving_ref
+    elif pt == "0.75-3":
+        width = 0.20 * moving_ref
     else:
-        width = min(0.15, 0.75 * ref)
-        return (2 * width if closing_window else width) / ref, "abs"
-    return (2 * pct if doubled else pct), "pct"
+        width = min(0.15, 0.75 * moving_ref)
+    if doubled:
+        width *= 2
+    return width / moving_ref, moving_ref - width, moving_ref + width, doubled
 
 
-print("=== 1. band widths (reference price = avg of prior 5 min) ===")
-for tier, ref, cw in [(1, 50.0, False), (1, 50.0, True), (2, 50.0, False), (2, 50.0, True), (2, 2.0, True), (1, 0.50, False)]:
-    p, _ = band_pct(tier, ref, cw)
-    print(f"tier{tier} ref={ref:>6.2f} closing_window={str(cw):5s} -> band +/-{p:.2%} = [{ref*(1-p):.4f}, {ref*(1+p):.4f}]")
+print("=== 1. band = tier from PRIOR CLOSE, centre = MOVING reference price ===")
+for tier, pc, ref, cw in [(1, 50.0, 50.0, False), (1, 50.0, 50.0, True), (2, 50.0, 50.0, False), (2, 50.0, 50.0, True), (2, 2.0, 2.0, True), (1, 0.50, 0.50, False)]:
+    p, lo_, hi_, d = band(tier, pc, ref, cw)
+    print(f"tier{tier} prior_close={pc:>6.2f} ref={ref:>6.2f} closing_window={str(cw):5s} -> band +/-{p:.2%} = [{lo_:.4f}, {hi_:.4f}] doubled={d}")
+
+print("=== 1b. boundary tests (prior close sets the tier, not the moving ref) ===")
+TESTS = [
+    # name, tier, prior_close, moving_ref, closing_window, expected pct
+    ("cross $3 up:   prior 2.90 -> ref 3.10", 2, 2.90, 3.10, False, 0.20),
+    ("cross $3 down: prior 3.10 -> ref 2.90", 2, 3.10, 2.90, False, 0.10),
+    ("cross $0.75 up:   prior 0.74 -> ref 0.76", 2, 0.74, 0.76, False, 0.15 / 0.76),
+    ("cross $0.75 down: prior 0.75 -> ref 0.74", 2, 0.75, 0.74, False, 0.20),
+    ("closing: Tier2 prior 3.10 (not eligible)", 2, 3.10, 3.10, True, 0.10),
+    ("closing: Tier2 prior 2.90 (eligible)", 2, 2.90, 3.10, True, 0.40),
+    ("closing: Tier1 prior 50.00 (eligible)", 1, 50.0, 50.0, True, 0.10),
+]
+for name, tier, pc, ref, cw, exp in TESTS:
+    p, lo_, hi_, d = band(tier, pc, ref, cw)
+    assert abs(p - exp) < 1e-12, (name, p, exp)
+    print(f"PASS {name}: tier{tier} -> +/-{p:.2%} [{lo_:.4f}, {hi_:.4f}] doubled={d}")
+print(f"tests passed: {len(TESTS)}/{len(TESTS)}")
 
 print("=== 2. toy single-stock path: limit state -> 5-min halt -> reopen gap ===")
 rng = np.random.default_rng(21)
 ref, tier = 40.0, 1
-lo, hi = ref * (1 - 0.05), ref * (1 + 0.05)
+_, lo, hi, _ = band(tier, 40.0, ref, False)
 prices = list(40 + np.cumsum(rng.normal(0, 0.05, 80)))
 prices[10:14] = [lo, lo, lo, lo]           # offer sits at lower band (limit state)
 limit_start, seconds_per_tick = 10, 5       # 4 ticks x 5 s = 20 s > 15 s -> pause

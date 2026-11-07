@@ -204,7 +204,7 @@ disclaimer: synthetic weak panel — learning only
 
 ## 指针 — Mask-first 上游污染
 
-与决策时泄漏开关相邻（A 股比较案例；美股同理适用于停牌/LULD 暂停行）：涨跌停不可成交收盘价若在行过滤前进入滚动特征，会抬高表观 IC、压低可实现夏普。详见 `data-cleaning` [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)。**REJECT** 该文 Sharpe 2.05/1.63 作课程 edge。
+与决策时泄漏开关相邻（A 股比较案例）：被研究协议**设定为不可执行**的涨跌停收盘价若在行过滤前进入滚动特征，会抬高表观 IC、压低可实现夏普。这是 toy 的保守假设，不是「触限即无成交」的定律；要把**信息可用性**（决策时是否已公开）、**信息质量**与**按方向/数量的可执行性**分开判断。美股对应是暂停期间不撮合、无可执行报价等明确状态，不等于删除暂停前的合法价格。详见 `data-cleaning` [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)。**REJECT** 该文 Sharpe 2.05/1.63 作课程 edge。
 
 ## 指针 — 一键切换的决策时点泄漏
 
@@ -261,7 +261,7 @@ disclaimer: synthetic weak panel — learning only
 <Quiz id="q7-frac" question="玩具里整数 d=1 与分数差分 d≈0.4 主要说明？" options={["费用下降", "两者都可平稳但分数差分保留更多自相关/记忆", "可跳过 purge", "元标签发明方向"]} answer={1} explanation="AFML 第5章平稳–记忆权衡。" />
 <Quiz id="q8-uniq" question="平均唯一性会下调哪些标签的权重？" options={["仅高成交额", "与许多并发事件重叠者", "ADF 失败", "使用 LightGBM"]} answer={1} explanation="AFML 第4章并发标签。" />
 <Quiz id="q9-meta" question="元标签的任务是？" options={["用新方向替换主方向", "过滤何时交易/跳过主方向", "去掉 purge", "只最大化准确率"]} answer={1} explanation="AFML 第3章 — 做与不做。" />
-<Quiz id="q-mask-upstream" question="涨跌停收盘价先滚均值再删行（2507.07107）最像哪类失败？" options={["纯佣金误差", "上游污染 / 决策时特征泄漏近亲 — 表观 IC↑、可实现夏普↓", "只要波动缩放", "CPCV 替代"]} answer={1} explanation="主机在 data-cleaning；mask-first 契约。REJECT 该文 headline Sharpe。" />
+<Quiz id="q-mask-upstream" question="把 toy 设定为不可执行的涨跌停收盘价先滚均值再删行（2507.07107）最像哪类失败？" options={["纯佣金误差", "上游污染 / 决策时特征泄漏近亲 — 表观 IC↑、可实现夏普↓", "只要波动缩放", "CPCV 替代"]} answer={1} explanation="主机在 data-cleaning；mask-first 契约。REJECT 该文 headline Sharpe。" />
 
 
 ## 完成标准

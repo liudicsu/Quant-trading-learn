@@ -9,7 +9,7 @@ This lesson (~**19 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY20
 **Must-teach:** this site is learning material, **not** investment advice or a law firm memo; zero size if you do not understand; cite **official** texts only; mark the date checked.
 
 <Callout type="warn" title="Not legal advice — rules change">
-Nothing here is legal, compliance, or investment advice. Thresholds and effective dates below were verified from official pages checked **2026-11-04 (Asia/Shanghai)**. Re-read the **current** official text before any real-world action. If a page cannot be fetched, we say so instead of guessing.
+Nothing here is legal, compliance, or investment advice. Thresholds and effective dates below were read by the author on each source’s checked_on date (mostly **2026-11-04**; the US main line and the cross-border box **2026-11-08**, Asia/Shanghai), so rows may carry different dates; `examples/p7/02_compliance_sources.py` only prints a local ledger and does not go online. Re-read the **current** official text before any real-world action. If a page cannot be fetched, we say so instead of guessing.
 </Callout>
 
 ## US main line: the PDT successor rule — four dates + phase-in status
@@ -27,14 +27,21 @@ The new intraday margin standards **replace in their entirety** the old PDT day-
 
 **Correct version exercise (per review item R04):** the FINRA example records, separately, the SEC approval date, the Notice publication date, the rule effective date and the phase-in end date, and adds `member_adoption_date` / `broker_checked_on` plus the applicable account category. Between 2026-06-04 and 2027-10-20, do not assert from the trade date alone that a member/account has migrated; when migration status is unknown, output `needs_broker_verification`. A local toy must not give any legal-compliance guarantee.
 
-```python
-def pdt_regime(trade_date: str, member_adoption_date: str | None) -> str:
-    if trade_date < "2026-06-04":
-        return "old_pdt"
-    if member_adoption_date is None:
-        return "needs_broker_verification" if trade_date <= "2027-10-20" else "intraday_margin"
-    return "intraday_margin" if trade_date >= member_adoption_date else "old_pdt"
+Lab `examples/p7/04_finra_migration_fixture.py` reads the hand-made fixture `examples/p7/data/finra_26_10_fixture.json` (four dates + `member_adoption_date` / `broker_checked_on` / `account_category`), runs 8 cases offline and asserts them:
+
+```text
+PASS before_effective           trade=2026-05-01 acct=margin -> old_pdt
+PASS phase_in_not_adopted       trade=2026-08-01 adopted=2027-03-01 -> old_pdt
+PASS phase_in_adopted           trade=2026-08-01 adopted=2026-07-01 -> intraday_margin
+PASS phase_in_unknown           trade=2026-08-01 adopted=None -> needs_broker_verification
+PASS adoption_unconfirmed       adopted=2026-07-01 broker_checked_on=None -> needs_broker_verification
+PASS after_phase_in_end         trade=2027-11-01 -> intraday_margin
+PASS portfolio_margin_account   -> not_subject_to_d2_deficit
+PASS cash_account               -> out_of_scope_cash
+cases passed: 8/8
 ```
+
+Account categories (26-10 read by the author on 2026-11-08): the (d)(2) intraday margin deficit applies to customer **margin accounts**, **other than** good faith accounts and portfolio margin accounts (portfolio margin handles intraday risk under new (g)(1)(J)/(K)); a cash account is not a margin account and is outside this toy.
 
 ## United States — market access, shorts, margin, algo supervision
 
@@ -59,6 +66,10 @@ def pdt_regime(trade_date: str, member_adoption_date: str | None) -> str:
 - **Verified:** publishes / updates Rule 4210 interpretations for the new intraday margin standards — including how to compute **IMD** (intraday margin deficit) and **IML** (intraday margin level), deposits, market moves, and liquidation examples — and **deletes** obsolete PDT day-trading interpretations. Short update next to 26-10: 26-10 = rule change; 26-11 = how members implement IMD/IML in practice + investor education links.
 
 
+
+### FINRA Regulatory Notice 15-09
+
+- **Source (checked 2026-11-04):** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**. Guidance on supervising algorithmic strategies: risk assessment, code change control, testing, trading-system monitors, compliance communication; references 15c3-5 and Reg SHO.
 
 ## Cross-border identity boundaries: tax / FX / CRS literacy box (readers resident in China)
 
@@ -119,16 +130,6 @@ def sse_rule_version(trade_date: str) -> str:
 
 Learning only; the official SSE text governs the details; not legal or investment advice.
 
-## SEC withdrawal of PDA conflicts proposal (S7-12-23) — awareness
-
-On **2025-06-17** the SEC published a Federal Register notice [withdrawing several 2022–2023 proposed rulemakings](https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions), including **Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers** (File No. **S7-12-23**; originally 88 FR 53960).
-
-**Teach carefully:** **withdrawn ≠ no remaining duties.** Advisers Act fiduciary duties, Reg BI, firm policies, and other existing rules still apply. If the Commission pursues related topics later, it would repropose. **Not legal advice.**
-
-### FINRA Regulatory Notice 15-09
-
-- **Source (checked 2026-11-04):** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**. Guidance on supervising algorithmic strategies: risk assessment, code change control, testing, trading-system monitors, compliance communication; references 15c3-5 and Reg SHO.
-
 ## Crypto — high-level official status only
 
 ### China — PBoC et al. 银发〔2021〕237号
@@ -158,6 +159,12 @@ n_sources=33 us_first_block=19 fields_complete=True
 ```
 
 
+## SEC withdrawal of PDA conflicts proposal (S7-12-23) — awareness
+
+On **2025-06-17** the SEC published a Federal Register notice [withdrawing several 2022–2023 proposed rulemakings](https://www.federalregister.gov/documents/2025/06/17/2025-11110/withdrawal-of-proposed-regulatory-actions), including **Conflicts of Interest Associated With the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers** (File No. **S7-12-23**; originally 88 FR 53960).
+
+**Teach carefully:** **withdrawn ≠ no remaining duties.** Advisers Act fiduciary duties, Reg BI, firm policies, and other existing rules still apply. If the Commission pursues related topics later, it would repropose. **Not legal advice.**
+
 ## SEC FY2026 Exam Priorities + FINRA 2026 GenAI / Agents — awareness
 
 Complements the PDA-conflicts proposal **withdrawal** (S7-12-23): **withdrawal ≠ no remaining duties.**
@@ -170,7 +177,7 @@ Complements the PDA-conflicts proposal **withdrawal** (S7-12-23): **withdrawal �
 
 ## SFC Circular 24EC55 — GenAI language models (HK)
 
-Asia peer to FINRA GenAI themes: [SFC Circular 24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55) (*Circular to licensed corporations — Use of generative AI language models*), issued **2024-11-12**, immediate effect (official page fetched).
+Asia peer to FINRA GenAI themes: [SFC Circular 24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55) (*Circular to licensed corporations — Use of generative AI language models*), issued **2024-11-12**, immediate effect (official page read by the author on checked_on).
 
 **Awareness (not a license, not legal advice):**
 
@@ -228,8 +235,9 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 3. **ex3** — Pitch audit: rewrite a “guaranteed Sharpe” ad into compliant language.
 4. **ex4** — Fill the official-source table with URL + date checked.
 5. **done1** — Ethics checklist complete.
-6. **ex5** — rule-version table (main example FINRA): four rows for SEC approval / Notice published / effective / phase-in end, plus `member_adoption_date`, `broker_checked_on` and account-category fields, and implement `pdt_regime`; **done when**: 2026-05-01→old_pdt and 2026-08-01 with unknown migration→needs_broker_verification. Comparison: the SSE 2023/2026 version rows (2026-07-03→2023, 2026-07-06→2026).
+6. **ex5** — rule-version table (**comparison example: SSE**): write the 2023/2026 rows for the SSE Trading Rules (document no., published, effective) and a function that switches version by trade date; **done when**: 2026-07-03 returns 2023 and 2026-07-06 returns 2026. The US main example is ex7.
 7. **ex6** — cross-border literacy card: in your own words, who receives W-8BEN, the conditions for the treaty 10%, the 61-calendar-day wash-sale window, China’s 20% with capped credit / filing in Mar–Jun next year, CRS ≠ a new tax, USD 50,000 ≠ securities-investment licence; **done when**: all six points are present with no personal tax calculation and no remittance advice.
+8. **ex7** — FINRA migration fixture (US main example): run `04_finra_migration_fixture.py`, then add your own case (inside the phase-in, `member_adoption_date` known but `broker_checked_on` empty); **done when**: it outputs `needs_broker_verification` and the original 8/8 cases still pass.
 
 
 ## Quiz

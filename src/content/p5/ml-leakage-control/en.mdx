@@ -204,7 +204,7 @@ Scoring many purged fold combinations yields a **distribution** of OOS metrics �
 
 ## Pointer — Mask-first upstream contamination
 
-Next to decision-time leakage switches (A-share comparison case; the same applies to US halted/LULD-paused rows): non-executable limit closes that enter rolling features before row filters raise apparent IC and cut realisable Sharpe. See `data-cleaning` [arXiv:2507.07107](https://arxiv.org/abs/2507.07107). **REJECT** paper Sharpe 2.05/1.63 as course edge.
+Next to decision-time leakage switches (A-share comparison case): limit closes that the research protocol **sets as non-executable**, if they enter rolling features before row filters, raise apparent IC and cut realisable Sharpe. This is a conservative toy assumption, not a law that “touching the limit means no fill”; judge **information availability** (public at decision time), **information quality** and **executability by side and size** separately. The US analogue is an explicit state such as no matching during a pause / no executable quote, not deleting legitimate pre-pause prices. See `data-cleaning` [arXiv:2507.07107](https://arxiv.org/abs/2507.07107). **REJECT** paper Sharpe 2.05/1.63 as course edge.
 
 ## Pointer — one-switch decision-time leakage
 
@@ -261,7 +261,7 @@ Host detail in `frontier-llm-agents`:
 <Quiz id="q7-frac" question="Integer d=1 vs fracdiff d≈0.4 in the toy mainly shows?" options={["Fees fall", "Both can be stationary but fracdiff keeps more autocorr/memory", "Purge is optional", "Meta labels invent side"]} answer={1} explanation="AFML ch.5 stationarity–memory trade-off." />
 <Quiz id="q8-uniq" question="Average uniqueness down-weights labels that?" options={["Have high dollar volume only", "Overlap many concurrent events", "Fail ADF", "Use LightGBM"]} answer={1} explanation="AFML ch.4 concurrent labels." />
 <Quiz id="q9-meta" question="Meta-labeling’s job is to?" options={["Replace the primary side with a new direction", "Filter when to trade/skip a primary side", "Remove purge", "Maximize accuracy alone"]} answer={1} explanation="AFML ch.3 — trade vs skip." />
-<Quiz id="q-mask-upstream" question="Limit closes in rolling means before row filters (2507.07107) most resemble?" options={["Commission typos only", "Upstream contamination / kin to decision-time feature leakage — apparent IC↑, realisable Sharpe↓", "Vol-scaling only", "CPCV substitute"]} answer={1} explanation="Host in data-cleaning; mask-first contract. REJECT paper headline Sharpes." />
+<Quiz id="q-mask-upstream" question="Limit closes the toy marks non-executable, rolled into means before row filters (2507.07107), most resemble?" options={["Commission typos only", "Upstream contamination / kin to decision-time feature leakage — apparent IC↑, realisable Sharpe↓", "Vol-scaling only", "CPCV substitute"]} answer={1} explanation="Host in data-cleaning; mask-first contract. REJECT paper headline Sharpes." />
 
 
 ## Done when

@@ -10,7 +10,8 @@
     "build": "next build",
     "postbuild": "node tools/postbuild.mjs",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check": "node tools/check-hours.mjs && node tools/check-quiz.mjs && node tools/check-structure.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

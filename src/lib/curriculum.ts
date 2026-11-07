@@ -425,7 +425,7 @@ const phase_P2_lessons: Lesson[] = [
       { zh: "写数据说明书。", en: "Write data sheet." },
     ],
     mustTeach: [
-      { zh: '涨跌停收盘价不可在行过滤前进入滚动算子（mask-first）。', en: 'Limit closes must not enter rolling ops before row filters (mask-first).' },
+      { zh: '玩具协议保守设定触限收盘价对指定方向/数量不可执行，且不可在行过滤前进入滚动算子（mask-first）；这不是触限即无成交的定律，信息可用性、信息质量与按方向/数量的可执行性分开判断。', en: 'The toy protocol conservatively treats limit closes as non-executable for the given side/size and keeps them out of rolling ops before row filters (mask-first); this is not a law that touching the limit means no fill — judge information availability, information quality and side/size executability separately.' },
       { zh: "今日成分≠历史宇宙。", en: "Today's constituents ≠ historical universe." },
       { zh: "基本面需PIT。", en: "Fundamentals need PIT." },
       { zh: "时区混乱可前瞻一天。", en: "Timezone mess can lookahead a day." },
@@ -1284,7 +1284,7 @@ const phase_P7_lessons: Lesson[] = [
     mustTeach: [
       { zh: 'ESMA74-1505669079-10311（2026-02-26）非约束：算法定义/重大变更复测/2×压力/PTC/外包责任 — 仅识字。', en: 'ESMA74-1505669079-10311 (2026-02-26) non-binding: algo definition/material-change retest/2× stress/PTC/outsourcing liability — literacy only.' },
       { zh: "本站学习材料非投资建议；不懂则零仓位。", en: "Site materials are not investment advice; zero size if unclear." },
-      { zh: "只引用已抓取官方文本并标注核验日期。", en: "Cite fetched official texts with date checked." },
+      { zh: "只引用作者按 checked_on 阅读过的官方文本并标注日期；台账脚本只打印本地记录，不联网。", en: "Cite only official texts the author read on checked_on, with the date; the ledger script only prints a local record and does not go online." },
       { zh: "证监会2024程序化规定；沪深细则高频300/20000；15c3-5；Reg SHO；4210/Notice26-10；15-09；银发237号；SEC/CFTC工作人员声明。", en: "CSRC 2024 programmatic rules; SSE/SZSE HFT 300/20000; 15c3-5; Reg SHO; 4210/Notice26-10; 15-09; PBoC 237; SEC/CFTC staff statement." },
     ],
     exercises: [
@@ -1292,8 +1292,9 @@ const phase_P7_lessons: Lesson[] = [
       { zh: "三次失败。", en: "Three failures." },
       { zh: "话术审计。", en: "Pitch audit." },
       { zh: "官方来源表。", en: "Official-source table." },
-      { zh: "上交所交易规则版本表与按日期切换。", en: "SSE trading-rule version table + date switch." },
+      { zh: "比较示例：上交所交易规则版本表与按日期切换。", en: "Comparison example: SSE trading-rule version table + date switch." },
       { zh: "跨境税务/外汇/CRS 识字卡。", en: "Cross-border tax/FX/CRS literacy card." },
+      { zh: "FINRA 四日期 + 会员迁移 fixture 验收。", en: "FINRA four-date + member-migration fixture acceptance." },
     ],
     quizTopics: [
       { zh: "选择性汇报危害", en: "Harm of selective reporting" },
@@ -1314,8 +1315,9 @@ const phase_P7_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "话术审计。", en: "Pitch audit." } },
       { id: "ex4", text: { zh: "官方来源表。", en: "Official-source table." } },
       { id: "done1", text: { zh: "伦理清单勾选完成。", en: "Ethics checklist complete." } },
-      { id: "ex5", text: { zh: "上交所规则版本表；完成标准：2026-07-03→2023，2026-07-06→2026。", en: "SSE rule-version table; done when 2026-07-03→2023 and 2026-07-06→2026." } },
+      { id: "ex5", text: { zh: "比较示例：上交所规则版本表；完成标准：2026-07-03→2023，2026-07-06→2026。", en: "Comparison example: SSE rule-version table; done when 2026-07-03→2023 and 2026-07-06→2026." } },
       { id: "ex6", text: { zh: "跨境识字卡六点；完成标准：六点齐全且无个人税额计算或汇路建议。", en: "Six-point cross-border literacy card; done when all six appear with no personal tax calculation or remittance advice." } },
+      { id: "ex7", text: { zh: "运行 04 FINRA 迁移 fixture 并新增迁移期内 broker_checked_on 为空的案例；完成标准：输出 needs_broker_verification 且 8/8 原案例通过。", en: "Run the 04 FINRA migration fixture and add an in-phase-in case with empty broker_checked_on; done when it outputs needs_broker_verification and the 8/8 original cases pass." } },
     ],
   },
 ];
