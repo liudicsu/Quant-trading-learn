@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**6 hours**: 2h concepts + 3.5h coding + 0.5h quiz) splits friction into **four parts**, adds a **square-root impact** capacity demo, and keeps the combined bps ladder. Prereq: `backtest-traps`.
+This lesson (~**6.75 hours**: 2h concepts + 3.5h coding + 0.5h quiz + 0.75h Rule 605 effective spread) splits friction into **four parts**, adds a **square-root impact** capacity demo, and keeps the combined bps ladder. Prereq: `backtest-traps`.
 
 **Goals:** implement each cost with a numeric example; stacked breakdown; capital capacity chart.
 
@@ -131,6 +131,47 @@ saved_plot public/p2/capacity_sensitivity.png
 ASSERTS_OK
 ```
 
+## Calibrating half-spread with amended Rule 605 (checked 2026-11-08)
+
+**What it is:** Rule 605 requires market centers and larger brokers (100,000 or more customer accounts) to publish monthly order-execution-quality reports. The amended rule's compliance date is 2026-08-01; detailed monthly reports are pipe-delimited ASCII files with 55 fields, free to download, and the summary report uses the OES CSV schema (SEC staff FAQ, [SEC](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)). This lesson **did not read the field-definition source, so it names no fields**.
+
+**Effective spread (FAQ Question 27, Example 27-1):** `effective_spread = 2 × |exec_price − mid at receipt|`. Example: a market order to buy 3000 shares is received at 3:30 p.m., NBBO 25.30 / 25.60, mid 25.45; 400 shares fill at 25.50 (0.10), 1000 at 25.55 (0.20), 1600 at 25.60 (0.30). Weighted by **executed shares** (FAQ Question 37), the average is $0.24.
+
+**Three pitfalls (605 data ≠ your real cost):**
+
+1. **Covered orders only:** orders received during regular trading hours while an NBBO is disseminated (Q9).
+2. **Special handling excluded:** e.g. fill-or-kill and average-price orders (Q11); non-IOC pegged orders (Q14); directed orders excluded at the receiving broker (Q12); market/marketable limit orders received while the NBB or NBO is outside the LULD bands (Q16); an NBBO crossed for 30 seconds or more (Q19); orders received during a halt or within 5 minutes before one and still outstanding (Q20).
+3. **Regular hours only:** executions outside regular trading hours are excluded (Q28), so pre-market, after-hours and overnight costs are **invisible**.
+
+It is an **aggregate** over the reporter's covered orders, not your own fill cost and not a broker ranking. Use it only to sanity-check the **order of magnitude** of this lesson's 5 bps half-spread.
+
+**Timeline:** price improvement versus the best available displayed price is collected from 2026-11-01, and November reports are due by the end of December 2026 (Q39).
+
+**Lab:** `examples/p2/07_rule605_effective_spread.py` (synthetic fixture; part B reproduces FAQ Example 38-1):
+
+```text
+=== A. SEC FAQ Example 27-1 (market buy 3000 sh; NBBO 25.30 x 25.60 at receipt) ===
+fill  400 @ 25.50: effective spread = 2 x |25.50 - 25.45| = 0.10
+fill 1000 @ 25.55: effective spread = 2 x |25.55 - 25.45| = 0.20
+fill 1600 @ 25.60: effective spread = 2 x |25.60 - 25.45| = 0.30
+share-weighted effective spread = 0.2400 USD  (FAQ: 0.10/0.20/0.30 weighted by 400/1000/1600)
+=== B. FAQ Example 38-1 share-weighted average percentage price improvement ===
+net price improvement = 2.00 USD; sum(mid x shares) = 35,092; pct = 0.005699%
+=== C. toy covered-order filter, then share-weighted effective spread (synthetic) ===
+excluded  o4: ('special_handling', 'fill-or-kill')
+excluded  o5: ('special_handling', 'non-IOC pegged')
+excluded  o6: ('directed_order_at_receiving_broker', True)
+excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
+excluded  o8: ('outside_regular_hours', True)
+excluded  o9: ('nbbo_crossed_30s_or_more', True)
+excluded o10: ('received_within_5min_before_halt_and_outstanding', True)
+covered orders: 3 (1000 sh) -> share-weighted effective spread 2.00 bps, implied half 1.00 bps
+if you (wrongly) ignore the exclusions: 21.41 bps
+lesson assumption: half-spread 5 bps -> compare ORDER OF MAGNITUDE only; 605 = reporter aggregate,
+covered orders, regular hours only; it is not your own fill cost and not a broker ranking.
+ASSERT_rule605_toy_ok
+```
+
 ## Common mistakes / pitfalls
 
 1. Posting zero-cost equity curves as live evidence.
@@ -138,6 +179,7 @@ ASSERTS_OK
 3. Treating toy bps as an exchange’s official tariff.
 4. Scaling capital without rescaling Q/ADV in the impact term.
 5. Changing the signal after seeing the cost ladder (leakage).
+6. Treating a Rule 605 effective spread as your own real cost; forgetting it covers only regular-hours covered orders and excludes special-handling orders; guessing field names without reading the field-definition source.
 
 ## Practice (1:1 with the checklist)
 
@@ -146,6 +188,7 @@ ASSERTS_OK
 3. **ex3** — Combined bps ladder; **done when** ≥3 tiers show monotone worsening.
 4. **ex4** — Capacity table + chart; **done when** Sharpe falls as capital rises.
 5. **ex5** — Cite Almgren et al. 2005 √ vs 3/5 note; **done when** one accurate sentence appears.
+6. **ex-605** — Run `07_rule605_effective_spread.py` and hand-compute the Example 27-1 weighted average; **done when**: you get $0.24 and list at least three excluded order types.
 
 ## Quiz
 
@@ -154,12 +197,13 @@ ASSERTS_OK
 <Quiz id="q3-alm" question="Almgren et al. 2005 on temporary impact vs exact √?" options={["Proved √ is exact always", "Preferred ≈3/5 power on their sample; √ remains a common reduced form", "Banned all impact models", "Ignored volatility"]} answer={1} explanation="They reject β=1/2 at 95% for that desk dataset." />
 <Quiz id="q4-cap" question="Larger capital with √ impact usually?" options={["Raises net Sharpe here", "Increases impact drag and worsens net Sharpe", "Removes commission", "Fixes look-ahead"]} answer={1} explanation="Capacity table." />
 <Quiz id="q5-zero" question="Zero-cost backtest curves are?" options={["Live proof", "Not live evidence", "Required by PSR", "ADV estimates"]} answer={1} explanation="Missing frictions." />
+<Quiz id="cb-605" question="Amended Rule 605 effective-spread statistics include…" options={["Pre-market, after-hours and overnight fills", "Covered orders received in regular hours, excluding special-handling orders", "Every order in your own account", "All fill-or-kill orders"]} answer={1} explanation="FAQ Q9, Q11, Q28: regular-hours covered orders only; special handling and executions outside regular hours are excluded." />
 
 ## Done when
 
 - Four-part net path + breakdown + capacity chart + quizzes
 
-**Sources:** classic — Canvas costs; QuantStart/NYU TCA themes. Impact — Almgren et al. 2005 ([PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)).
+**Sources:** classic — Canvas costs; QuantStart/NYU TCA themes. Impact — Almgren et al. 2005 ([PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)).; Rule 605 (checked 2026-11-08): [SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)
 
 <Summary>
 **Takeaways**: commission, half-spread, slippage, √ impact, capacity.  

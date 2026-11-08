@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **17 学时**：设计 3h + 运行/日志 6h + 一致性清单/断言 3h + 模板 1h + 基建名录 1h + 美股券商纸面差异与适配器 fixture 2h + 上海时区对账 1h）在**合成数据**上建立纸面闭环：信号→目标→模拟成交→日志→对账→漂移指标，以及熔断与实盘−回测缺口的数值分解。前置：`risk-systems-lab`。
+本课（约 **17.5 学时**：设计 3h + 运行/日志 6h + 一致性清单/断言 3h + 模板 1h + 基建名录 1h + 美股券商纸面差异与适配器 fixture 2h + 上海时区对账 1h + 隔夜时段 fixture 0.5h）在**合成数据**上建立纸面闭环：信号→目标→模拟成交→日志→对账→漂移指标，以及熔断与实盘−回测缺口的数值分解。前置：`risk-systems-lab`。
 
 **课内目标：** CSV/模拟撮合；产出日报日志；说明纸面验证的是流程而非 alpha。
 
@@ -125,6 +125,33 @@ intents=6 unique_orders_sent=5（重复重试被忽略）
 
 **上海时区对账：** 按**纽约交易日**归档成交，不按上海日历；夏令时切换和提前收盘日要单独测试。
 
+## 隔夜时段：交易日、上海时间与订单限制（2026-11-08 核实）
+
+只读文档 + 本地 fixture，不接 API。下面的券商规则以 Alpaca 24/5 文档为例（[Alpaca](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)），**不是**推荐券商，其他券商规则可能不同。
+
+- **时段：** Alpaca 隔夜时段 20:00–04:00 ET，经 BOATS（ATS）。交易所隔夜盘计划 2026-12-06 上线，取决于系统改造（[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[CTA FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)）。
+- **订单：** 隔夜只接受限价单，有效期只能是 day 或 gtc。
+- **交易日：** 隔夜时段是**新交易日**的开始，从该日按 T+1 交收（文档例子：周一 21:00 ET 成交 → 交易日周二 → 周三交收）；在除息日的隔夜时段买入拿不到该次分红。
+- **标的：** 资产接口有 `overnight_tradable` 与 `overnight_halted` 字段；可交易名单可能有限。文档同时写「all NMS securities」与名单可能有限，以字段为准。
+- **停牌：** Alpaca 写隔夜停牌时订单被接受并挂起；而交易所在监管停牌时会**拒绝**订单（34-106042）。两者不同，对账时别混用。
+- **行情：** 免费计划下 BOATS 最新成交和历史数据延迟 15 分钟，最新报价是「real-time indicative」。
+
+**实验：** `examples/p7/05_overnight_session_fixture.py` + `examples/p7/fixtures/overnight_sessions_fixture.json`（假期只忽略周末，是玩具简化）：
+
+```text
+n1 SYNA ET Mon 11-09 21:00 | Shanghai Tue 11-10 10:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
+n2 SYNA ET Mon 11-09 21:05 | Shanghai Tue 11-10 10:05 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | market/day -> rejected: overnight accepts limit orders only
+n3 SYNA ET Mon 11-09 21:10 | Shanghai Tue 11-10 10:10 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/ioc -> rejected: overnight TIF must be day or gtc
+n4 SYNB ET Mon 11-09 22:00 | Shanghai Tue 11-10 11:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/gtc -> accepted but pending: overnight_halted=true (broker holds it; exchange halts would reject)
+n5 SYNC ET Mon 11-09 23:00 | Shanghai Tue 11-10 12:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> rejected: overnight_tradable=false
+n6 SYNA ET Tue 11-10 10:15 | Shanghai Tue 11-10 23:15 | regular     | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | market/day -> accepted
+n7 SYNA ET Tue 11-10 19:30 | Shanghai Wed 11-11 08:30 | after_hours | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
+n8 SYNA ET Fri 11-13 21:30 | Shanghai Sat 11-14 10:30 | overnight   | trade_date 2026-11-16 | settle(T+1) 2026-11-17 | limit/day -> rejected: no overnight session on Friday evening
+assertions passed: 8/8
+note: a Monday 21:00 ET order shows a TUESDAY trade date and Shanghai Tuesday 10:00 (EST, UTC-5).
+exchange Overnight Protected Hours 21:00-04:00 ET = 10:00-17:00 Shanghai while US is on EST (planned 2026-12-06).
+```
+
 ## 常见错误 / 陷阱
 
 1. 看到纸面盈亏就改信号规则。
@@ -133,6 +160,7 @@ intents=6 unique_orders_sent=5（重复重试被忽略）
 4. 成交 CSV 与权益不对账。
 5. 在学习仓库里塞券商 API / 下单路由。
 6. 用上海日期归档美股成交，导致一笔成交「跨日」；以为 Alpaca 纸面会模拟分红或校验盘口数量。
+7. 按 ET 日历日给隔夜成交定交易日（应归到下一交易日）；隔夜下市价单或 IOC；以为所有股票都能隔夜交易而不看 `overnight_tradable`。
 
 ## 练习（1:1）
 
@@ -142,6 +170,7 @@ intents=6 unique_orders_sent=5（重复重试被忽略）
 4. **ex4** — 熔断单元用例（缺口/回撤/总敞口）。
 5. **done1** — ≥5 日日志包 + 缺口表 + 熔断演示。
 6. **ex-us-paper** — 在 `03_paper_adapter_fixture.py` 中再加一条重复 client_order_id 的意图；**完成标准**：unique_orders_sent 不变。
+7. **ex-us-overnight** — 在 fixture 里加一笔周二 20:30 ET 的限价单；**完成标准**：输出交易日为周三、北京时间周三 09:30，且被接受。
 
 ## 测验
 
@@ -155,12 +184,13 @@ intents=6 unique_orders_sent=5（重复重试被忽略）
 <Quiz id="p7pt-q7" question="arXiv:2610.21846 六缺陷主要教？" options={["保证实盘夏普", "回测与实盘路径漂移处 — 协议/清单，不是盈亏", "HFT 延迟食谱", "期权做市"]} answer={1} explanation="只讲协议；原文不作盈亏主张。" />
 <Quiz id="p7pt-q8" question="下列哪项属于六类缺陷？" options={["把 UTC 时间戳当成纽约时间", "永赚 LLM", "FactFin 夏普表", "Deep RL alpha"]} answer={0} explanation="时区/时钟漂移是已记录缺陷。" />
 <Quiz id="pt-alp" question="Alpaca 纸面交易文档说明？" options={["会模拟分红", "按 NBBO 模拟成交，但不按 NBBO 数量校验", "等于实盘", "使用深度簿"]} answer={1} explanation="Alpaca paper 文档；分红不模拟。" />
+<Quiz id="pt-overnight" question="按 Alpaca 文档，周一 21:00 ET 的隔夜成交交易日是？" options={["周一", "周二", "周三", "不确定"]} answer={1} explanation="隔夜时段是新交易日的开始，周一 21:00 ET 成交的交易日是周二，周三交收。" />
 
 ## 完成标准
 
 ≥5 日（实验 360）日志包、摩擦缺口表、熔断演示，每行带冻结版本号。
 
-**来源：** Canvas m13；纸面先于实盘纪律（中文补充：聚宽模拟交易教程）；QuantStart paper 笔记；P6 风险熔断模式；Qbot + Atlas GitHub（仅基建点名）；一致性 [arXiv:2610.21846](https://arxiv.org/abs/2610.21846)。；[Alpaca paper](https://docs.alpaca.markets/docs/paper-trading)、[IBKR paper 词汇表](https://www.interactivebrokers.com/campus/glossary-terms/paper-trading-account/)（2026-11-08 核实）。
+**来源：** Canvas m13；纸面先于实盘纪律（中文补充：聚宽模拟交易教程）；QuantStart paper 笔记；P6 风险熔断模式；Qbot + Atlas GitHub（仅基建点名）；一致性 [arXiv:2610.21846](https://arxiv.org/abs/2610.21846)。；[Alpaca paper](https://docs.alpaca.markets/docs/paper-trading)、[IBKR paper 词汇表](https://www.interactivebrokers.com/campus/glossary-terms/paper-trading-account/)（2026-11-08 核实）。；隔夜时段（2026-11-08 核实）：[Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)、[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)
 
 <Summary>
 **要点**：冻结版本 → 全量日志 → 对账 → 分解缺口 → 缺口/回撤/敞口熔断。  

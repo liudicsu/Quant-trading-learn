@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
+This lesson (~**14.25 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA + 0.25h Rule 605 vs FINRA 21-23) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
 
 **Goals:** add participation / schedule discipline; write a one-page execution sheet tied to the shared cost model.
 
@@ -152,6 +152,10 @@ NBBO stale by 1 tick → 4.00 bps (overstated)
 
 Reports must record: feed, quote_ts, decision_ts, fill_ts.
 
+## Rule 605 vs FINRA 21-23: public statistics vs broker duty (checked 2026-11-08)
+
+They do not overlap: **Rule 605** is the monthly public execution-quality **statistics** from market centers and larger brokers (calculation in `costs-in-backtest`, [SEC FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)); **FINRA 21-23** is about a broker's best-execution **duty** and regular reviews under Rule 5310, which is not only about price ([FINRA](https://www.finra.org/rules-guidance/notices/21-23)). 605 data can be one input to such a review, but it covers only regular-hours covered orders, so it cannot replace your own arrival-price TCA or rank brokers.
+
 ## Common mistakes / pitfalls
 
 1. Backtesting fills at mid with zero schedule / impact.
@@ -185,12 +189,13 @@ Reports must record: feed, quote_ts, decision_ts, fill_ts.
 <Quiz id="p6ex-q9" question="2501.17096 main warning on public-data metaorder IRFs?" options={["Public TIM always yields perfect concave paths", "Often near-linear paths + weak reversion — unlike real metaorder stylized facts; large-impact estimates go wrong", "Proves α=1 is alpha", "Replaces Perold IS"]} answer={1} explanation="Protocol/warn; LMF + modified TIM α are literacy only." />
 <Quiz id="p6ex-q8" question="Double-√ literacy (2502.16246) says metaorder √ mainly comes from?" options={["Only Kyle λ", "Child √ volume + inverse-√ time decay (mechanical foil)", "Guaranteed informed flow", "RL execution"]} answer={1} explanation="Child √ + decay → metaorder √; scramble foil." />
 <Quiz id="es-feed" question="The same fill shows different slippage vs IEX and SIP. This means?" options={["Routing alpha found", "The arrival benchmark depends on the feed, which must be reported", "IEX is wrong", "No timestamps needed"]} answer={1} explanation="A benchmark-choice issue." />
+<Quiz id="es-605" question="How does a Rule 605 report relate to FINRA 21-23?" options={["605 is the best-execution duty itself", "605 is public execution-quality statistics; 21-23 covers the broker's best-execution duty and reviews", "Both look only at price", "605 replaces your own TCA"]} answer={1} explanation="605 is statistics; 21-23 is a duty and is not only about price." />
 
 ## Done when
 
 Execution assumptions (schedule, participation caps, AC λ or heuristic, IS benchmark) live in the shared main config — same model research and paper trading use.
 
-**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche); no-trade pointer [arXiv:2502.04284](https://arxiv.org/abs/2502.04284); double-√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965); Gatheral 2010 “No-dynamic-arbitrage and market impact”, DOI 10.1080/14697680903373692 (Crossref-verified; journal record [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)); public-data metaorder impact challenge [arXiv:2501.17096](https://arxiv.org/abs/2501.17096).
+**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche); no-trade pointer [arXiv:2502.04284](https://arxiv.org/abs/2502.04284); double-√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965); Gatheral 2010 “No-dynamic-arbitrage and market impact”, DOI 10.1080/14697680903373692 (Crossref-verified; journal record [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)); public-data metaorder impact challenge [arXiv:2501.17096](https://arxiv.org/abs/2501.17096).; Rule 605 (checked 2026-11-08): [SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)
 
 <Summary>
 **Takeaways**: schedule consciously; AC gives a cost–risk frontier; measure IS vs arrival; limits are not free.  

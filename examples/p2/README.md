@@ -16,3 +16,5 @@ python examples/p2/05_data_versions_calendar.py   # FIZ/CIZ conventions, split a
 Charts land in `public/p2/` (`cost_ladder.png`, `dsr_vs_N.png`, `cost_breakdown.png`, `capacity_sensitivity.png`).
 
 - US-first pack (2026-11-08): `06_us_data_sources_pit.py — EDGAR/ALFRED-shaped self-made fixtures (data/us_fixtures), PIT vs naive latest; no real FRED/yfinance downloads (R16). 05 adds section D: ledger vs split-adjusted vs total return, delisting flag.`
+
+- N2 (2026-11-08): `07_rule605_effective_spread.py` — amended Rule 605 (SEC staff FAQ): Example 27-1 effective spread (0.24), Example 38-1 price improvement (0.005699%), toy covered-order filters on a synthetic fixture. No 605 field names.

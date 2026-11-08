@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**17 hours**: 3h design + 6h running/logging + 3h parity checklist/asserts + 1h template + 1h infra name-map + 2h US broker paper differences & adapter fixture + 1h Shanghai-timezone reconciliation) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
+This lesson (~**17.5 hours**: 3h design + 6h running/logging + 3h parity checklist/asserts + 1h template + 1h infra name-map + 2h US broker paper differences & adapter fixture + 1h Shanghai-timezone reconciliation + 0.5h overnight-session fixture) builds a **paper-trading loop on synthetic data**: signal → target → simulated fill → log → reconcile → drift metrics, plus kill switches and a numeric live-vs-backtest gap. Prereqs: `risk-systems-lab`.
 
 **Goals:** CSV/sim paper matching; emit daily logs; explain what paper validates (process, not alpha).
 
@@ -126,6 +126,33 @@ reconcile gap: o4 expected 40 got 0
 
 **Shanghai-timezone reconciliation:** file fills by **New York trading date**, not the Shanghai calendar; test DST switches and early-close days separately.
 
+## Overnight session: trade date, Shanghai time and order limits (checked 2026-11-08)
+
+Docs + local fixture only, no API. The broker rules below use Alpaca's 24/5 doc as an example ([Alpaca](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)); this is **not** a broker recommendation, and other brokers may differ.
+
+- **Hours:** Alpaca's overnight session is 20:00–04:00 ET via BOATS (an ATS). Exchange overnight sessions are planned for 2026-12-06, dependent on systems changes ([SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [CTA FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)).
+- **Orders:** overnight accepts limit orders only, with time-in-force day or gtc only.
+- **Trade date:** the overnight session starts a **new trade date** and settles T+1 from it (doc example: Monday 21:00 ET trade → trade date Tuesday → settles Wednesday); buying in the overnight session on the ex-dividend date does not get that dividend.
+- **Symbols:** the assets API has `overnight_tradable` and `overnight_halted` fields; the tradable list may be limited. The doc says both “all NMS securities” and that the list may be limited, so trust the fields.
+- **Halts:** Alpaca says orders are accepted and held pending during an overnight halt, whereas exchanges **reject** orders under a Regulatory Halt (34-106042). They differ, so do not mix them up when reconciling.
+- **Data:** on the free plan, BOATS latest trades and historical data are 15-minute delayed, and latest quotes are “real-time indicative”.
+
+**Lab:** `examples/p7/05_overnight_session_fixture.py` + `examples/p7/fixtures/overnight_sessions_fixture.json` (holidays other than weekends are ignored, a toy simplification):
+
+```text
+n1 SYNA ET Mon 11-09 21:00 | Shanghai Tue 11-10 10:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
+n2 SYNA ET Mon 11-09 21:05 | Shanghai Tue 11-10 10:05 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | market/day -> rejected: overnight accepts limit orders only
+n3 SYNA ET Mon 11-09 21:10 | Shanghai Tue 11-10 10:10 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/ioc -> rejected: overnight TIF must be day or gtc
+n4 SYNB ET Mon 11-09 22:00 | Shanghai Tue 11-10 11:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/gtc -> accepted but pending: overnight_halted=true (broker holds it; exchange halts would reject)
+n5 SYNC ET Mon 11-09 23:00 | Shanghai Tue 11-10 12:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> rejected: overnight_tradable=false
+n6 SYNA ET Tue 11-10 10:15 | Shanghai Tue 11-10 23:15 | regular     | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | market/day -> accepted
+n7 SYNA ET Tue 11-10 19:30 | Shanghai Wed 11-11 08:30 | after_hours | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
+n8 SYNA ET Fri 11-13 21:30 | Shanghai Sat 11-14 10:30 | overnight   | trade_date 2026-11-16 | settle(T+1) 2026-11-17 | limit/day -> rejected: no overnight session on Friday evening
+assertions passed: 8/8
+note: a Monday 21:00 ET order shows a TUESDAY trade date and Shanghai Tuesday 10:00 (EST, UTC-5).
+exchange Overnight Protected Hours 21:00-04:00 ET = 10:00-17:00 Shanghai while US is on EST (planned 2026-12-06).
+```
+
 ## Common mistakes / pitfalls
 
 1. Editing signal rules after seeing paper P&amp;L.
@@ -134,6 +161,7 @@ reconcile gap: o4 expected 40 got 0
 4. No recon between fills CSV and equity.
 5. Shipping broker API keys or order routers in the learning repo.
 6. Filing US fills by Shanghai date so one fill “crosses days”; assuming Alpaca paper simulates dividends or checks book size.
+7. Dating an overnight trade by its ET calendar day (it belongs to the next trade date); sending market or IOC orders overnight; assuming every stock trades overnight without checking `overnight_tradable`.
 
 ## Practice (1:1)
 
@@ -143,6 +171,7 @@ reconcile gap: o4 expected 40 got 0
 4. **ex4** — Kill-switch unit cases (gap / DD / gross).
 5. **done1** — ≥5-day log pack + gap table + kill demo.
 6. **ex-us-paper** — add another intent with a duplicate client_order_id in `03_paper_adapter_fixture.py`; **done when**: unique_orders_sent does not change.
+7. **ex-us-overnight** — Add a Tuesday 20:30 ET limit order to the fixture; **done when**: the output shows trade date Wednesday, Beijing Wednesday 09:30, and the order accepted.
 
 ## Quiz
 
@@ -156,12 +185,13 @@ reconcile gap: o4 expected 40 got 0
 <Quiz id="p7pt-q7" question="arXiv:2610.21846 six defects mainly teach?" options={["A guaranteed live Sharpe", "Where BT and live paths drift — protocol/checklist, not PnL", "HFT latency recipes", "Options MM"]} answer={1} explanation="Protocol only; paper makes no profitability claim." />
 <Quiz id="p7pt-q8" question="Which is one of the six defect classes?" options={["UTC timestamps read as NY time", "Always-profitable LLM", "FactFin Sharpe table", "Deep RL alpha"]} answer={0} explanation="Clock / timezone drift was a documented defect." />
 <Quiz id="pt-alp" question="Alpaca’s paper trading docs say?" options={["Dividends are simulated", "Fills are simulated against the NBBO but quantity is not checked against NBBO size", "It equals live", "It uses the deep book"]} answer={1} explanation="Alpaca paper docs; dividends are not simulated." />
+<Quiz id="pt-overnight" question="Per Alpaca's doc, what is the trade date of a Monday 21:00 ET overnight trade?" options={["Monday", "Tuesday", "Wednesday", "Undefined"]} answer={1} explanation="The overnight session starts a new trade date: a Monday 21:00 ET trade is dated Tuesday and settles Wednesday." />
 
 ## Done when
 
 ≥5-day (lab: 360) log pack, friction gap table, kill-switch demo, frozen version string in every row.
 
-**Sources:** Canvas m13; paper-before-live discipline (Chinese supplement: JoinQuant simulated-trading tutorials); QuantStart paper notes; P6 risk kill patterns; Qbot + Atlas GitHub (infra name-drops only); parity [arXiv:2610.21846](https://arxiv.org/abs/2610.21846).; [Alpaca paper](https://docs.alpaca.markets/docs/paper-trading), [IBKR paper glossary](https://www.interactivebrokers.com/campus/glossary-terms/paper-trading-account/) (checked 2026-11-08).
+**Sources:** Canvas m13; paper-before-live discipline (Chinese supplement: JoinQuant simulated-trading tutorials); QuantStart paper notes; P6 risk kill patterns; Qbot + Atlas GitHub (infra name-drops only); parity [arXiv:2610.21846](https://arxiv.org/abs/2610.21846).; [Alpaca paper](https://docs.alpaca.markets/docs/paper-trading), [IBKR paper glossary](https://www.interactivebrokers.com/campus/glossary-terms/paper-trading-account/) (checked 2026-11-08).; overnight session (checked 2026-11-08): [Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api), [SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)
 
 <Summary>
 **Takeaways**: freeze version → log everything → reconcile → decompose gaps → kill on gap/DD/gross.  

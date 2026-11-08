@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**9 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution)) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
+This lesson (~**9.75 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution) + 0.5h overnight trading & overnight price bands + 0.25h Rule 612/610(c) version trap) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
 
 **Goals:** hand-calc mid and market-buy bps; write a fill/cost sheet; compare close vs next-open (and shift) narratives.
 
@@ -109,6 +109,23 @@ NBBO 99.99 x100 / 100.02 x100; single-venue spread 0.07 vs NBBO 0.03; 500-share 
 
 Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 
+## Overnight trading and version traps (checked 2026-11-08)
+
+**1. Overnight trading: planned, not “already market-wide 24/5”.**
+
+- **ATS overnight sessions already exist:** some brokers offer overnight trading 20:00–04:00 ET through an alternative trading system (ATS). For example, Alpaca's doc says its overnight session runs 8:00 PM–4:00 AM ET via BOATS (an ATS) and accepts limit orders only ([Alpaca](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)). Whether you can trade depends on the broker and the stock.
+- **Exchange overnight sessions: planned for 2026-12-06, dependent on systems changes.** SEC 34-106042 says overnight protections are “expected to commence on December 6, 2026”, subject to systems changes by the SIP Processors ([SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)); the CTA FAQ also gives 2026-12-06, “dependent on Listing Exchange readiness and regulatory approvals”, with a test-symbol-only Pre-Launch from 2026-11-08 to 12-05 ([CTA FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)).
+- **Trade-date assignment:** the CTA FAQ treats 21:00 to 20:00 the next day as **one trading day**; trades 21:00–24:00 count under the **next calendar date**.
+- **Shanghai time:** on 2026-12-06 the US is on standard time (EST, UTC−5), so 21:00–04:00 ET = 10:00–17:00 Beijing time.
+
+**2. Overnight price bands (LULD Plan Amendment No. 27, Phase 1).** Overnight Protected Hours run Sunday–Thursday 21:00 ET to 04:00 ET the next day. The Primary Listing Exchange computes two reference prices: the official Closing Price, and the consolidated last sale at 19:30 ET (Amendment No. 29 moved the time from 19:45 to 19:30; that change is in effect **temporarily, for no more than 120 days**, and is out for comment, [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)). The lower band is 20% below the lower reference price and the upper band is 20% above the higher one, with a minimum distance ($3 if the Closing Price is $1 or more, $1 if it is below $1). There is **no automatic Trading Pause**; the Primary Listing Exchange may declare a Regulatory Halt. This is only Phase 1 of two; this lesson says nothing about Phase 2. Details are in `market-regimes-crisis`.
+
+**3. Version trap: Rule 612 ($0.005 tick) and Rule 610(c) (access-fee caps).** Like Rule 611 above, “written in a rule ≠ in force today”:
+
+- The 2024 adopting release (34-101070) set a `0.005` dollar minimum increment for quotes and orders priced at $1 or more in **certain** NMS stocks, and cut the access-fee caps to `0.001` dollars per share (price $1 or more) and `0.1%` of the quote (below $1).
+- Scope in eCFR §242.612: only stocks whose time-weighted average quoted spread over the evaluation period is `TWAQS <= 0.015` dollars get `0.005`; the others stay at `0.01`; quotes below $1 use `0.0001` ([eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)).
+- **Compliance date pushed back:** SEC 34-105656 (2026-06-11) extended the compliance dates for Rules 612, 610(c) and 600(b)(89)(i)(F) to the **first business day of November 2027** ([SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)). So as of 2026-11-08, **do not** assume in a backtest that every stock already quotes in half-cents.
+
 ## Common mistakes / pitfalls
 
 1. Treating mid as the market-buy fill.
@@ -117,6 +134,7 @@ Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 4. Treating toy bps as a real exchange schedule.
 5. Asking for / designing HFT recipes (out of scope).
 6. Treating T+1 as “24 hours” or settling a Friday trade on Saturday; calling the Rule 611 rescission proposal “repealed”; assuming pre-market always starts at 04:00.
+7. Writing exchange overnight trading as “the US is already market-wide 24/5”, or assuming every broker and every stock can trade overnight; treating overnight price bands as limit-up/limit-down or a fill guarantee; assuming the $0.005 tick already applies to every stock.
 
 ## Practice (1:1 with the checklist)
 
@@ -126,6 +144,7 @@ Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 4. **ex4** — Run the script; **done when** optimistic vs honest NAVs match the lesson.
 5. **ex5** — Why impact/latency stay intuitive only; **done when** ≥2 sentences refuse an HFT recipe.
 6. **ex-us1** — run `05_us_market_mechanics.py`, hand-compute settlement for the 2026-11-25 and 2026-11-27 trades and compare; **done when**: both match and you can explain skipping Thanksgiving (2026-11-26).
+7. **ex-overnight** — Convert a Monday 21:00 ET overnight trade to Beijing time and state its trade date; then explain in one sentence why Rule 612 cannot be assumed in force as of 2026-11-08; **done when**: Beijing Tuesday 10:00, trade date Tuesday, and the November 2027 compliance date from 34-105656 is cited.
 
 ## Quiz
 
@@ -136,13 +155,15 @@ Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 <Quiz id="q5-hft" question="This lesson’s stance on impact/latency?" options={["Ship HFT parameters", "Intuition only — no HFT recipes", "Ignore them", "Same as commissions"]} answer={1} explanation="Course boundary: intuition, not recipes." />
 <Quiz id="mo-t1" question="A US trade on 2026-11-25 (Wed) settles T+1 on?" options={["2026-11-26", "2026-11-27", "2026-11-30", "Same day"]} answer={1} explanation="11-26 is Thanksgiving; the next business day is 11-27." />
 <Quiz id="mo-611" question="As of 2026-11-08, Rule 611 is?" options={["Repealed", "Subject to an SEC rescission proposal, still a proposal", "Never existed", "A-share only"]} answer={1} explanation="S7-2026-20 is a proposal; the eCFR still lists §242.611." />
+<Quiz id="mo-overnight" question="As of 2026-11-08, what is the status of US exchange overnight trading?" options={["Already market-wide 24/5", "Planned for 2026-12-06, dependent on systems changes", "Rejected by the SEC", "Offered by every broker"]} answer={1} explanation="SEC 34-106042 and the CTA FAQ both give 2026-12-06, conditional on systems changes / readiness." />
+<Quiz id="mo-612" question="As of 2026-11-08, the Rule 612 $0.005 minimum increment is…" options={["In force for every stock", "Compliance date extended to the first business day of November 2027, and only for some stocks", "Struck down by a court", "Only for stocks below $1"]} answer={1} explanation="34-105656 extended the compliance date; eCFR §242.612 uses 0.005 only when TWAQS is at most $0.015." />
 
 ## Done when
 
 - Cost one-pager + script + quizzes
 - You can explain mid / market side / same-bar look-ahead
 
-**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer).; US main line (checked 2026-11-08): [SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62), [NYSE hours](https://www.nyse.com/markets/hours-calendars), [SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).
+**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer).; US main line (checked 2026-11-08): [SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62), [NYSE hours](https://www.nyse.com/markets/hours-calendars), [SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).; overnight & version traps (checked 2026-11-08): [SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf), [CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf), [Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api), [SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf), [eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)
 
 <Summary>
 **Takeaways**: mid, market-buy bps, honest fill timing, cost sheet.  

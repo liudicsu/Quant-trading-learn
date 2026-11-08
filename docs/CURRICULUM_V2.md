@@ -27,12 +27,12 @@
 | `stats-probability-basics` | P0 | 8 | 2 | 是 | python-pandas-timeseries |
 | `basic-finance-markets` | P0 | 5 | 1 | 是 | — |
 | `markets-language` | P1 | 5 | 2 | 否 | basic-finance-markets |
-| `microstructure-orders` | P1 | 9 | 2 | 否 | markets-language |
+| `microstructure-orders` | P1 | 9.75 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
 | `data-cleaning` | P2 | 25 | 3 | 否 | eval-lab |
 | `backtest-traps` | P2 | 28 | 4 | 否 | data-cleaning, stats-probability-basics |
-| `costs-in-backtest` | P2 | 6 | 3 | 否 | backtest-traps |
+| `costs-in-backtest` | P2 | 6.75 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
 | `mean-reversion` | P3 | 7 | 3 | 否 | momentum-trend |
@@ -43,10 +43,10 @@
 | `ml-leakage-control` | P5 | 21 | 5 | 否 | factor-workflow, backtest-traps |
 | `modern-ml-pipelines` | P5 | 11 | 4 | 否 | ml-leakage-control, data-cleaning |
 | `portfolio-risk-sizing` | P6 | 23 | 4 | 否 | returns-vol-corr, strategy-compare-lab |
-| `execution-slippage` | P6 | 14 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
+| `execution-slippage` | P6 | 14.25 | 3 | 否 | costs-in-backtest, portfolio-risk-sizing |
 | `risk-systems-lab` | P6 | 8 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
-| `market-regimes-crisis` | P6 | 13 | 4 | 否 | risk-systems-lab |
-| `paper-trading-infra` | P7 | 17 | 3 | 否 | market-regimes-crisis |
+| `market-regimes-crisis` | P6 | 13.5 | 4 | 否 | risk-systems-lab |
+| `paper-trading-infra` | P7 | 17.5 | 3 | 否 | market-regimes-crisis |
 | `compliance-ethics` | P7 | 19 | 2 | 否 | paper-trading-infra |
 | `frontier-llm-agents` | P8 | 29 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
 | `frontier-tsfm-altdata-crypto` | P8 | 19 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
@@ -59,20 +59,20 @@
 | 阶段 | 名称 | 课数 | 总课时 | 6h/周 | 12h/周 | 依赖簇 |
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
-| P1 | 市场语言与度量 / Market language & measurement | 4 | 29h | ~4.8 周 | ~2.4 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 67h | ~11.2 周 | ~5.6 周 | Research infrastructure / scientific method for backtests |
+| P1 | 市场语言与度量 / Market language & measurement | 4 | 29.75h | ~5.0 周 | ~2.5 周 | Market concepts + evaluation language |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 67.75h | ~11.3 周 | ~5.6 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 33h | ~5.5 周 | ~2.8 周 | Classic alpha templates before factors/ML |
 | P4 | 因子研究 / Factor research | 2 | 33h | ~5.5 周 | ~2.8 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
-| P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 58h | ~9.7 周 | ~4.8 周 | Portfolio construction / execution / controls / regimes |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 36h | ~6.0 周 | ~3.0 周 | Operationalization and professional norms |
+| P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 58.75h | ~9.8 周 | ~4.9 周 | Portfolio construction / execution / controls / regimes |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 36.5h | ~6.1 周 | ~3.0 周 | Operationalization and professional norms |
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 26h | ~4.3 周 | ~2.2 周 | Synthesis |
 
-**全量（含 P0）：精确 382 学时（跳过 P0 为 362）。** 6h/周 ≈ 63.7 周；12h/周 ≈ 31.8 周。
-**跳过 P0 后：精确 362 学时。** 6h/周 ≈ 60.3 周；12h/周 ≈ 30.2 周。
+**全量（含 P0）：精确 384.75 学时（跳过 P0 为 364.75）。** 6h/周 ≈ 64.1 周；12h/周 ≈ 32.1 周。
+**跳过 P0 后：精确 364.75 学时。** 6h/周 ≈ 60.8 周；12h/周 ≈ 30.4 周。
 
-精确合计：**382h 全量 / 362h 跳过 P0**。对外可表述为约 **350–390h 全量 / 330–370h 跳过基础**（含个人复盘缓冲）。
+精确合计：**384.75h 全量 / 364.75h 跳过 P0**。对外可表述为约 **350–390h 全量 / 330–370h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -214,7 +214,7 @@
   - 市场/基准一页纸。
 - **Method tags:** classic: QuantStart beginner books; Default: US-listed stocks/ETFs in USD; Chinese supplement: JoinQuant 初识量化
 
-### P1 · 市场语言与度量（Market language & measurement）— 29h / 4 课
+### P1 · 市场语言与度量（Market language & measurement）— 29.75h / 4 课
 
 **阶段目标：** 用交易语言说话，并用收益/风险指标诚实评价玩具信号。
 
@@ -244,7 +244,7 @@
 - **Method tags:** classic: Canvas m1; QuantStart SAT process | niche: Awesome Systematic Trading (paperswithbacktest GitHub)
 
 #### `microstructure-orders` — 微观结构与订单 / Microstructure & orders
-- **Hours:** 9h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution)
+- **Hours:** 9.75h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution) + 0.5h overnight trading & overnight LULD bands (planned 2026-12-06) + 0.25h Rule 612/610(c) version trap
 - **Prereqs:** `markets-language`
 - **Summary:** 价差、mid、市价/限价、滑点；同bar零成本过乐观。
 - **Goals:**
@@ -309,7 +309,7 @@
   - 对照表+三句结论。
 - **Method tags:** classic: Canvas eval; pyfolio tear-sheet docs; Chinese supplement: JoinQuant 策略评价 | niche: @FG731314/2115609441748001008 risk-adjusted traits
 
-### P2 · 数据与诚实回测（Data & honest backtests）— 67h / 4 课
+### P2 · 数据与诚实回测（Data & honest backtests）— 67.75h / 4 课
 
 **阶段目标：** 可版本化数据+陷阱审讯+成本+引擎假设。
 
@@ -364,7 +364,7 @@
 - **Method tags:** classic: Canvas m5; Backtest interrogation discipline; Chinese supplement: JoinQuant 审讯室 posts; AFML backtest-as-CV; @AfuOnTheWay三坑; @lopezdeprado虚假发现 | niche: (XQuant tag dropped — unverified this batch) | classic+: Bailey-LdP 2012 PSR / 2014 DSR; AFML ch.7/14 | frontier: Quant-Arena arXiv:2610.30113 sealed hold-out; When Alpha Disappears arXiv:2605.23959 one-switch
 
 #### `costs-in-backtest` — 成本写入回测 / Costs in the backtest
-- **Hours:** 6h · **Difficulty:** 3/5 · **Basis:** 2h concepts + 3.5h coding + 0.5h quiz
+- **Hours:** 6.75h · **Difficulty:** 3/5 · **Basis:** 2h concepts + 3.5h coding + 0.5h quiz + 0.75h Rule 605 effective spread (FAQ Example 27-1, covered-order filters)
 - **Prereqs:** `backtest-traps`
 - **Summary:** 四段成本+√冲击；堆叠分解与容量。
 - **Goals:**
@@ -611,7 +611,7 @@
   - 可复现小流水线+检查清单。
 - **Method tags:** classic: Qlib Quick Start; ML4T end-to-end; Canvas m10 | niche: @quantscience_ stack; ML4T high-engagement X posts | frontier: Qlib Transformer/Localformer as optional controls under same anti-leakage protocol; RD-Agent automation deferred to P8
 
-### P6 · 风险、仓位与执行（Risk, sizing & execution）— 58h / 4 课
+### P6 · 风险、仓位与执行（Risk, sizing & execution）— 58.75h / 4 课
 
 **阶段目标：** 仓位层、执行成本与硬约束工程化。
 
@@ -642,7 +642,7 @@
 - **Method tags:** classic: Canvas m11; QuantStart VaR/Kelly; UChicago FINM risk
 
 #### `execution-slippage` — 执行与滑点 / Execution & slippage
-- **Hours:** 14h · **Difficulty:** 3/5 · **Basis:** 5h concepts (√/Gatheral + public metaorder IRF) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA (IEX vs SIP arrival, stale NBBO, capacity)
+- **Hours:** 14.25h · **Difficulty:** 3/5 · **Basis:** 5h concepts (√/Gatheral + public metaorder IRF) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA (IEX vs SIP arrival, stale NBBO, capacity) + 0.25h Rule 605 vs FINRA 21-23
 - **Prereqs:** `costs-in-backtest`, `portfolio-risk-sizing`
 - **Summary:** 参与率、冲击示意、TWAP/VWAP直觉。
 - **Goals:**
@@ -684,7 +684,7 @@
 
 
 #### `market-regimes-crisis` — 市场状态与危机剧本 / Market regimes & crisis playbooks
-- **Hours:** 13h · **Difficulty:** 4/5 · **Basis:** 4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO 201 comparison (R12 tiers, Amendment 18)
+- **Hours:** 13.5h · **Difficulty:** 4/5 · **Basis:** 4.5h concepts + 5h labs (path/overlays/corr/HMM) + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO 201 comparison (R12 tiers, Amendment 18) + 0.5h overnight LULD price bands (Amendment 27/29, Phase 1)
 - **Prereqs:** `risk-systems-lab`
 - **Summary:** 可操作 regime、因果检测栈、四场景剧本、HMM 过滤 vs 平滑泄漏、熔断识字、新闻≠regime。
 - **Goals:**
@@ -707,14 +707,14 @@
   - 四场景卡片 + 实验数字一致 + 新闻≠regime 短文。
 - **Method tags:** classic: Hamilton 1989; NYSE Rule 7.12; CPPI literacy | niche: CSRC/SSE 2016 suspension | frontier: Moreira–Muir 2017 JF; Cederburg et al. 2020 JFE
 
-### P7 · 纸面与伦理（Paper trading & ethics）— 36h / 2 课
+### P7 · 纸面与伦理（Paper trading & ethics）— 36.5h / 2 课
 
 **阶段目标：** 纸面闭环与合规/研究伦理。
 
 **6h/周 ≈ 6.0 周；12h/周 ≈ 3.0 周。**
 
 #### `paper-trading-infra` — 纸面交易与迷你基建 / Paper trading & mini infra
-- **Hours:** 17h · **Difficulty:** 3/5 · **Basis:** 3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map + 2h US broker paper differences & adapter fixture + 1h Shanghai-timezone reconciliation
+- **Hours:** 17.5h · **Difficulty:** 3/5 · **Basis:** 3h design + 6h running/logging + 3h parity checklist + 1h template + 1h infra name-map + 2h US broker paper differences & adapter fixture + 1h Shanghai-timezone reconciliation + 0.5h overnight-session fixture (trade date, Shanghai time, order limits)
 - **Prereqs:** `market-regimes-crisis`
 - **Summary:** 信号→目标→日志；≥5日；冻结版本。
 - **Goals:**
@@ -964,3 +964,10 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 
 - Hours unchanged: 382 full / 362 skip-P0, 28 lessons. `npm run check` (CI) runs `tools/check-hours.mjs` (curriculum.ts, README, messages zh/en, V2 knowledge map + phase table + section 5, 56 MDX headers), `tools/check-quiz.mjs` (zero-based answers, zh/en parity, p6mrc-q5 semantics) and `tools/check-structure.mjs` (zh/en heading/quiz order).
 - New offline lab: `examples/p7/04_finra_migration_fixture.py` (R34). LULD toy separates prior-close price tier from moving reference price with 7 boundary tests (R32).
+
+## Daily new content N1–N3 (2026-11-08)
+
+- Hours: **384.75 full / 364.75 skip-P0**; 28 lessons; P0 stays 20h. `tools/check-hours.mjs` now accepts decimal hours (0.25 / 0.5).
+- N1 overnight trading + overnight LULD bands Phase 1 (SEC 34-106042 Amendment 27; 34-106624 Amendment 29, 19:45→19:30 ET, temporary ≤120 days; planned 2026-12-06, dependent on systems changes): `microstructure-orders` +0.5h, `market-regimes-crisis` +0.5h (one comparison-table row + `examples/p6/08_overnight_bands_toy.py`), `paper-trading-infra` +0.5h (`examples/p7/05_overnight_session_fixture.py` + `examples/p7/fixtures/overnight_sessions_fixture.json`).
+- N2 amended Rule 605 (SEC staff FAQ): `costs-in-backtest` +0.75h (`examples/p2/07_rule605_effective_spread.py`, FAQ Examples 27-1 and 38-1), `execution-slippage` +0.25h (605 vs FINRA 21-23). No 605 field names (schema source not read).
+- N3 Rule 612 $0.005 tick / 610(c) access-fee caps (34-101070; compliance extended to the first business day of November 2027 by 34-105656; scope per eCFR §242.612): `microstructure-orders` +0.25h, next to the Rule 611 status box.

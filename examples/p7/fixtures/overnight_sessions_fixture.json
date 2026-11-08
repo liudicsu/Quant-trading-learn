@@ -1,0 +1,23 @@
+{
+  "checked_on": "2026-11-08",
+  "sources": {
+    "alpaca_24_5": "https://docs.alpaca.markets/us/docs/245-trading-for-trading-api",
+    "luld_amendment_27": "https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf",
+    "cta_eth_faq": "https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf"
+  },
+  "assets": [
+    {"symbol": "SYNA", "overnight_tradable": true, "overnight_halted": false},
+    {"symbol": "SYNB", "overnight_tradable": true, "overnight_halted": true},
+    {"symbol": "SYNC", "overnight_tradable": false, "overnight_halted": false}
+  ],
+  "orders": [
+    {"id": "n1", "symbol": "SYNA", "et": "2026-11-09T21:00:00", "type": "limit", "tif": "day"},
+    {"id": "n2", "symbol": "SYNA", "et": "2026-11-09T21:05:00", "type": "market", "tif": "day"},
+    {"id": "n3", "symbol": "SYNA", "et": "2026-11-09T21:10:00", "type": "limit", "tif": "ioc"},
+    {"id": "n4", "symbol": "SYNB", "et": "2026-11-09T22:00:00", "type": "limit", "tif": "gtc"},
+    {"id": "n5", "symbol": "SYNC", "et": "2026-11-09T23:00:00", "type": "limit", "tif": "day"},
+    {"id": "n6", "symbol": "SYNA", "et": "2026-11-10T10:15:00", "type": "market", "tif": "day"},
+    {"id": "n7", "symbol": "SYNA", "et": "2026-11-10T19:30:00", "type": "limit", "tif": "day"},
+    {"id": "n8", "symbol": "SYNA", "et": "2026-11-13T21:30:00", "type": "limit", "tif": "day"}
+  ]
+}

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **14.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -152,6 +152,10 @@ Alpaca Basic 实时只有 IEX（[Alpaca](https://docs.alpaca.markets/docs/about-
 
 报告必须记录：feed、quote_ts、decision_ts、fill_ts。
 
+## Rule 605 与 FINRA 21-23：公开统计 vs 券商义务（2026-11-08 核实）
+
+两者不重复：**Rule 605** 是市场中心和较大券商每月公开的执行质量**统计**（计算方法见 `costs-in-backtest`，[SEC FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)）；**FINRA 21-23** 讲的是券商在 Rule 5310 下的最佳执行**义务**和定期审查，不只看价格（[FINRA](https://www.finra.org/rules-guidance/notices/21-23)）。605 数据可以作为审查时的一个输入，但它只含常规时段覆盖订单，不能替代你自己的到达价 TCA，也不能用来给券商排名。
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -185,12 +189,13 @@ Alpaca Basic 实时只有 IEX（[Alpaca](https://docs.alpaca.markets/docs/about-
 <Quiz id="p6ex-q9" question="2501.17096 对公开数据元订单 IRF 的主要警告？" options={["公开 TIM 总给出完美凹路径", "常呈近线性路径+弱回撤，与真实元订单 stylized facts 不符 — 估大单冲击易估歪", "证明 α=1 是 alpha", "替代 Perold IS"]} answer={1} explanation="协议/警告；LMF + 修正 TIM α 仅识字。" />
 <Quiz id="p6ex-q8" question="双 √ 识字（2502.16246）说元订单 √ 主要来自？" options={["只有 Kyle λ", "子单成交量 √ + 时间逆 √ 衰减（机械箔）", "保证知情流", "RL 执行"]} answer={1} explanation="子单 √ + 衰减 → 元订单 √；打乱箔。" />
 <Quiz id="es-feed" question="同一成交在 IEX 与 SIP 基准下滑点不同，说明？" options={["发现了路由 alpha", "到达价基准取决于 feed，报告须写明", "IEX 是错的", "无需记录时间戳"]} answer={1} explanation="基准选择问题。" />
+<Quiz id="es-605" question="Rule 605 报告与 FINRA 21-23 的关系？" options={["605 就是最佳执行义务本身", "605 是公开执行质量统计，21-23 讲券商的最佳执行义务与审查", "两者都只看价格", "605 可替代自己的 TCA"]} answer={1} explanation="605 是统计；21-23 是义务，且不只看价格。" />
 
 ## 完成标准
 
 执行假设（日程、参与率上限、AC λ 或启发式、IS 基准）写入共用主配置——研究与纸面交易使用同一模型。
 
-**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。
+**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **13 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **13.5 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -207,6 +207,7 @@
 | MWCB | 全市场指数单日大跌 | 全市场暂停交易 |
 | LULD | 个股价格触及动态价格带，Limit State 15 秒未退出 | 主上市交易所通常宣布 5 分钟暂停（可延长） |
 | Reg SHO 201 | 个股较前一日收盘下跌 ≥10% | 当日剩余时间及次日限制卖空价格（[eCFR](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)） |
+| 隔夜价格带（第一阶段，计划 2026-12-06） | 隔夜保护时段（周日至周四 21:00–次日 04:00 ET）个股报价/成交超出隔夜价格带 | 交易中心须阻止带外成交和显示报价；**无**自动暂停，主上市交易所可宣布监管停牌（[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)） |
 
 **LULD 价格档（按审阅报告 R12）：** LULD 不是相对昨收的固定全天涨跌停。价格带围绕动态参考价；适用百分比档在当日按计划规定以前一交易日主上市市场收盘价等确定：普通非杠杆示例中，价格档大于 3 美元时 Tier1 为 5%、Tier2 为 10%；0.75 至 3 美元（含两端）两者均 20%；低于 0.75 美元时带宽取 0.15 美元与参考价 75% 的较小值。常规收盘前最后 25 分钟，仅所有 Tier1 以及价格档不高于 3 美元的 Tier2 使用双倍参数；提前收盘日对应提前收盘前最后 25 分钟。大于 3 美元的 Tier2 不因收盘统一翻倍。2020-02-24 实施的 Amendment 18 已取消所有股票开盘 09:30–09:45 纽约时段翻倍，不能沿用旧说法。ETF/ETP 分层和杠杆品种须按现行官方名单/计划另核，不由 ticker 名称猜测。
 
@@ -223,6 +224,34 @@ t=13 Limit State 持续 20s > 15s → 暂停；t=73 以 37.20 复牌（价格带
 38.50 的止损单成交于 37.20（缺口）；下跌 10.5% 触发 SHO 201 价格测试
 ```
 
+## 隔夜 LULD 价格带（第一阶段，2026-11-08 核实）
+
+**状态：** LULD 计划第 27 号修正案（SEC 34-106042，2026-08-05 批准）新增隔夜保护；预计 2026-12-06 开始，取决于 SIP 处理器的系统改造（[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)）。这是两阶段中的第一阶段。
+
+- **时段：** 周日至周四 21:00 ET 到次日 04:00 ET（隔夜保护时段）。
+- **两个参考价**（按公司行为调整）：主上市市场官方收盘价；19:30 ET 时的合并最后整手成交价。19:30 来自第 29 号修正案（原为 19:45；**临时生效、不超过 120 天**，在征求意见，[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)）。
+- **价格带：** `lower = min(低参考价 × 0.8, 低参考价 − 最小距离)`，`upper = max(高参考价 × 1.2, 高参考价 + 最小距离)`；最小距离：收盘价不低于 1 美元时 3 美元，低于 1 美元时 1 美元。杠杆 ETP 的 20% 和最小距离都乘以杠杆倍数。
+- **时间线：** 20:55 前发给处理器，21:00 前公布。
+- **触及价格带：** 交易中心须阻止带外成交和显示报价；**不会**像常规时段那样自动进入 Limit State 再暂停。主上市交易所可以宣布监管停牌；停牌期间订单被拒绝，且该股票当晚隔夜时段不再恢复。
+- **不是**涨跌停，也**不**保证成交。第二阶段的内容本课不写。
+
+**实验：** `examples/p6/08_overnight_bands_toy.py`（合成价格；「下限不低于 0」是玩具选择，不是规则原文）：
+
+```text
+case                         close  consol  lev  -> lower   upper
+large cap, quiet evening     200.00  201.00  1.0  ->  160.00  241.20
+after-hours news gap          50.00   44.00  1.0  ->   35.20   60.00
+low price: $3 minimum binds    8.00    8.10  1.0  ->    5.00   11.10
+sub-$1 close: $1 minimum       0.80    0.85  1.0  ->    0.00    1.85
+2x leveraged ETP              40.00   40.00  2.0  ->   24.00   56.00
+tests passed: 5/5
+timeline (ET): consolidated price snapshot 19:30 (Amendment 29; was 19:45) -> bands to Processors by 20:55
+-> public before 21:00 -> Overnight Protected Hours 21:00 (Sun-Thu) to 04:00 next calendar day
+hitting a band: NO automatic Trading Pause (regular hours: Limit State 15 s -> pause);
+the Primary Listing Exchange MAY declare a Regulatory Halt; then orders are rejected and the stock
+does not reopen during that night's Overnight Protected Hours. Bands are not a fill guarantee.
+```
+
 ## 常见错误 / 陷阱
 
 1. 用当日收盘算当日状态再当日交易（前瞻）。
@@ -234,6 +263,7 @@ t=13 Limit State 持续 20s > 15s → 暂停；t=73 以 37.20 复牌（价格带
 7. 把新闻「correction」直接映射成课程 regime 枚举值。
 8. 把买看跌期权当成「免费保险」，不计权利金；把 VIX 指数的涨跌当成 VIX 期货/期权/相关产品的涨跌。
 9. 把 LULD 当成相对昨收的固定 10% 涨跌停；沿用已取消的开盘 09:30–09:45 翻倍；以为所有 Tier2 收盘都翻倍。
+10. 把隔夜价格带当成涨跌停或成交保证；以为隔夜触带会像常规时段一样自动暂停 5 分钟；把 19:30 参考价时间当成永久规则（第 29 号修正案是临时生效）。
 
 
 ## 练习（1:1）
@@ -246,6 +276,7 @@ t=13 Limit State 持续 20s > 15s → 暂停；t=73 以 37.20 复牌（价格带
 6. **done1** — 一页「硬规则 + 排伪」清单；附 CNBC/AP 链接与「新闻≠regime」段落。
 7. **ex6** — 手算风险框里的看跌期权玩具（到期价 80 与 100 两种情形，含权利金）；**完成标准**：写出 +13 / −2 两个数，并用一句话说明 spot VIX 与 VIX 期货结算值不同。
 8. **ex-luld** — 运行 `06_luld_halt_toy.py`，解释为何 Tier2 $50 在收盘窗口不翻倍而 Tier2 $2 翻倍；**完成标准**：引用 R12 的价格档规则。
+9. **ex-ovb** — 运行 `08_overnight_bands_toy.py`，手算「after-hours news gap」一行（收盘 50、19:30 价 44）；**完成标准**：得到 35.20 / 60.00，并说明为何下限用 44、上限用 50。
 
 
 ## 测验
@@ -258,12 +289,13 @@ t=13 Limit State 持续 20s > 15s → 暂停；t=73 以 37.20 复牌（价格带
 <Quiz id="p6mrc-q6" question="Moreira–Muir（2017）与 Cederburg 等（2020）并读后，波动目标应视为？" options={["保证提高 Sharpe 的课程 alpha", "风险缩放工程；样本外价值需谨慎，不作收益承诺", "替代合规课", "HMM 平滑的同义词"]} answer={1} explanation="一篇展示吸引力，一篇强调实时/OOS 并不系统性更好。" />
 <Quiz id="crisis-put" question="买入的看跌期权到期一文不值，买方损失多少？（按 OIC 说明）" options={["零，期权是保险", "可以是全部已付权利金", "无限", "只损失一半"]} answer={1} explanation="OIC：期权到期无价值时，损失可以是全部权利金；无限风险属于未备兑卖方。" />
 <Quiz id="rc-luld" question="价格 50 美元的 Tier2 股票，在常规收盘前最后 25 分钟的 LULD 百分比是？" options={["5%", "10%", "20%", "无限制"]} answer={1} explanation="大于 3 美元的 Tier2 不因收盘翻倍。" />
+<Quiz id="rc-ovb" question="第一阶段隔夜价格带被触及时会发生什么？" options={["自动暂停 5 分钟", "交易中心阻止带外成交；无自动暂停，主上市交易所可宣布监管停牌", "保证按带价成交", "全市场熔断"]} answer={1} explanation="SEC 34-106042：隔夜无自动 Trading Pause，可由主上市交易所宣布 Regulatory Halt。" />
 
 ## 完成标准
 
 四场景卡片 + 实验 A–D 数字与课内一致 + 「新闻≠regime」短文（含已核验链接）+ 硬规则清单。平滑概率不得出现在「实盘可用」列。
 
-**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。
+**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

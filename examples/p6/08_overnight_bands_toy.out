@@ -1,0 +1,12 @@
+case                         close  consol  lev  -> lower   upper
+large cap, quiet evening     200.00  201.00  1.0  ->  160.00  241.20
+after-hours news gap          50.00   44.00  1.0  ->   35.20   60.00
+low price: $3 minimum binds    8.00    8.10  1.0  ->    5.00   11.10
+sub-$1 close: $1 minimum       0.80    0.85  1.0  ->    0.00    1.85
+2x leveraged ETP              40.00   40.00  2.0  ->   24.00   56.00
+tests passed: 5/5
+timeline (ET): consolidated price snapshot 19:30 (Amendment 29; was 19:45) -> bands to Processors by 20:55
+-> public before 21:00 -> Overnight Protected Hours 21:00 (Sun-Thu) to 04:00 next calendar day
+hitting a band: NO automatic Trading Pause (regular hours: Limit State 15 s -> pause);
+the Primary Listing Exchange MAY declare a Regulatory Halt; then orders are rejected and the stock
+does not reopen during that night's Overnight Protected Hours. Bands are not a fill guarantee.

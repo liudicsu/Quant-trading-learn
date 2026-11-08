@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**13 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO comparison) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
+This lesson (~**13.5 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO comparison + 0.5h overnight LULD price bands) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
 
 **Goals:** write an engineering definition of regime; build a `shift(1)` detector stack; draft identification / engineering response / failure modes for four playbooks; spot look-ahead in smoothed HMM probabilities; separate news-day volatility from a defined regime.
 
@@ -207,6 +207,7 @@ MWCB (market-wide circuit breakers) is already on the site; this adds the single
 | MWCB | Large one-day drop in the market index | Market-wide trading halt |
 | LULD | A stock hits its dynamic price band and the Limit State is not exited within 15 seconds | The primary listing exchange usually declares a 5-minute pause (can be extended) |
 | Reg SHO 201 | A stock falls ≥10% from the prior day’s close | Short-sale price restriction for the rest of the day and the next day ([eCFR](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)) |
+| Overnight price bands (Phase 1, planned 2026-12-06) | During Overnight Protected Hours (Sun–Thu 21:00 to 04:00 ET next day) a stock trades/quotes outside its overnight band | Trading centers must prevent out-of-band trades and displayed quotes; **no** automatic pause, the Primary Listing Exchange may declare a Regulatory Halt ([SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)) |
 
 **LULD tiers (per review item R12):** LULD is not a fixed all-day limit relative to the prior close. The bands sit around a dynamic reference price; the applicable percentage tier is set for the day, per the Plan, from the prior trading day’s primary-market closing price and similar: in the ordinary non-leveraged example, for a price tier above $3 Tier 1 is 5% and Tier 2 is 10%; from $0.75 to $3 (inclusive) both are 20%; below $0.75 the band is the lesser of $0.15 or 75% of the reference price. In the last 25 minutes before the regular close, only all Tier 1 stocks and Tier 2 stocks with a price tier not above $3 use doubled parameters; on early-close days it is the last 25 minutes before the early close. Tier 2 stocks above $3 are not uniformly doubled at the close. Amendment 18, implemented 2020-02-24, removed the 09:30–09:45 New York opening doubling for all stocks; do not repeat the old description. ETF/ETP tiering and leveraged products must be checked against the current official list/Plan, not guessed from the ticker name.
 
@@ -223,6 +224,34 @@ t=13 Limit State lasts 20s > 15s → pause; reopens at t=73 at 37.20 (lower band
 A stop at 38.50 fills at 37.20 (gap); the 10.5% drop triggers the SHO 201 price test
 ```
 
+## Overnight LULD price bands (Phase 1, checked 2026-11-08)
+
+**Status:** LULD Plan Amendment No. 27 (SEC 34-106042, approved 2026-08-05) adds overnight protections, expected to start on 2026-12-06, subject to systems changes by the SIP Processors ([SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)). This is Phase 1 of two.
+
+- **Hours:** Sunday–Thursday 21:00 ET to 04:00 ET the next day (Overnight Protected Hours).
+- **Two reference prices** (adjusted for corporate actions): the listing market's official Closing Price; the consolidated last round-lot sale at 19:30 ET. The 19:30 time comes from Amendment No. 29 (was 19:45; in effect **temporarily, for no more than 120 days**, out for comment, [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)).
+- **Bands:** `lower = min(low_ref × 0.8, low_ref − min_dist)`, `upper = max(high_ref × 1.2, high_ref + min_dist)`; minimum distance: $3 if the Closing Price is $1 or more, $1 if it is below $1. For leveraged ETPs both the 20% and the minimum are multiplied by the leverage ratio.
+- **Timeline:** sent to the Processors by 20:55, published before 21:00.
+- **Hitting a band:** trading centers must prevent out-of-band trades and displayed quotes; there is **no** automatic Limit State → pause as in regular hours. The Primary Listing Exchange may declare a Regulatory Halt; during it orders are rejected, and the stock does not reopen in that night's Overnight Protected Hours.
+- It is **not** limit-up/limit-down and does **not** guarantee a fill. This lesson says nothing about Phase 2.
+
+**Lab:** `examples/p6/08_overnight_bands_toy.py` (synthetic prices; “lower band floored at 0” is a toy choice, not rule text):
+
+```text
+case                         close  consol  lev  -> lower   upper
+large cap, quiet evening     200.00  201.00  1.0  ->  160.00  241.20
+after-hours news gap          50.00   44.00  1.0  ->   35.20   60.00
+low price: $3 minimum binds    8.00    8.10  1.0  ->    5.00   11.10
+sub-$1 close: $1 minimum       0.80    0.85  1.0  ->    0.00    1.85
+2x leveraged ETP              40.00   40.00  2.0  ->   24.00   56.00
+tests passed: 5/5
+timeline (ET): consolidated price snapshot 19:30 (Amendment 29; was 19:45) -> bands to Processors by 20:55
+-> public before 21:00 -> Overnight Protected Hours 21:00 (Sun-Thu) to 04:00 next calendar day
+hitting a band: NO automatic Trading Pause (regular hours: Limit State 15 s -> pause);
+the Primary Listing Exchange MAY declare a Regulatory Halt; then orders are rejected and the stock
+does not reopen during that night's Overnight Protected Hours. Bands are not a fill guarantee.
+```
+
 ## Common mistakes / traps
 
 1. Computing today’s state from today’s close, then trading the same bar (look-ahead).
@@ -234,6 +263,7 @@ A stop at 38.50 fills at 37.20 (gap); the 10.5% drop triggers the SHO 201 price 
 7. Mapping a news “correction” straight onto the course regime enum.
 8. Treating a bought put as “free insurance” and ignoring the premium; treating moves in the VIX Index as moves in VIX futures/options/related products.
 9. Treating LULD as a fixed 10% limit vs the prior close; repeating the removed 09:30–09:45 opening doubling; assuming every Tier 2 doubles at the close.
+10. Treating overnight price bands as limit-up/down or a fill guarantee; assuming an overnight band hit triggers an automatic 5-minute pause as in regular hours; treating the 19:30 reference time as permanent (Amendment No. 29 is in effect temporarily).
 
 
 ## Practice (1:1)
@@ -246,6 +276,7 @@ A stop at 38.50 fills at 37.20 (gap); the 10.5% drop triggers the SHO 201 price 
 6. **done1** — One-page hard-rules + debunk checklist; attach CNBC/AP links and a “news ≠ regime” paragraph.
 7. **ex6** — hand-calc the put toy in the risk box (expiry prices 80 and 100, including premium); **done when**: you write the two numbers +13 / −2 and one sentence on why spot VIX differs from the VIX futures settlement value.
 8. **ex-luld** — run `06_luld_halt_toy.py` and explain why Tier 2 at $50 does not double in the closing window but Tier 2 at $2 does; **done when**: you cite the R12 tier rule.
+9. **ex-ovb** — Run `08_overnight_bands_toy.py` and hand-compute the “after-hours news gap” row (close 50, 19:30 price 44); **done when**: you get 35.20 / 60.00 and explain why the lower band uses 44 and the upper uses 50.
 
 
 ## Quiz
@@ -258,12 +289,13 @@ A stop at 38.50 fills at 37.20 (gap); the 10.5% drop triggers the SHO 201 price 
 <Quiz id="p6mrc-q6" question="After reading Moreira–Muir (2017) with Cederburg et al. (2020), vol targeting should be treated as?" options={["Guaranteed Sharpe uplift / course alpha", "Risk-scaling engineering; OOS value is cautious — no return promise", "A substitute for the compliance lesson", "A synonym for HMM smoothing"]} answer={1} explanation="One paper shows appeal; the other stresses real-time/OOS versions are not systematically better." />
 <Quiz id="crisis-put" question="A bought put expires worthless. Per OIC, what does the buyer lose?" options={["Nothing, options are insurance", "Up to the entire premium paid", "Unlimited", "Only half"]} answer={1} explanation="OIC: if options expire with no value the loss can be the entire premium; unlimited risk belongs to an uncovered writer." />
 <Quiz id="rc-luld" question="A $50 Tier 2 stock in the last 25 minutes before the regular close has an LULD percentage of?" options={["5%", "10%", "20%", "No limit"]} answer={1} explanation="Tier 2 stocks above $3 are not doubled at the close." />
+<Quiz id="rc-ovb" question="What happens when a Phase 1 overnight price band is reached?" options={["An automatic 5-minute pause", "Trading centers block out-of-band trades; no automatic pause, the Primary Listing Exchange may declare a Regulatory Halt", "A fill at the band price is guaranteed", "A market-wide circuit breaker"]} answer={1} explanation="SEC 34-106042: no automatic Trading Pause overnight; the Primary Listing Exchange may declare a Regulatory Halt." />
 
 ## Done when
 
 Four playbook cards + Labs A–D numbers matching the lesson + a short “news ≠ regime” note (with verified links) + hard-rules checklist. Smoothed probabilities must not appear in the “live-usable” column.
 
-**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.; OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) and [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks); Cboe [VIX product page](https://www.cboe.com/tradable_products/vix/) and [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) (all verified 2026-11-07).; [LULD Plan](https://www.luldplan.com/), [Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf), [Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/), [Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201) (checked 2026-11-08).
+**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.; OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) and [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks); Cboe [VIX product page](https://www.cboe.com/tradable_products/vix/) and [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) (all verified 2026-11-07).; [LULD Plan](https://www.luldplan.com/), [Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf), [Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/), [Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201) (checked 2026-11-08).; overnight bands (checked 2026-11-08): [SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)
 
 <Summary>
 **Takeaways**: regimes must be operational and causal; smoothed HMM leaks; write failure modes for every playbook; circuit breakers and news “corrections” are not course trade signals; vol management is risk engineering, not a return promise.  

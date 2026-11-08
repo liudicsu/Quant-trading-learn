@@ -1,0 +1,20 @@
+=== A. SEC FAQ Example 27-1 (market buy 3000 sh; NBBO 25.30 x 25.60 at receipt) ===
+fill  400 @ 25.50: effective spread = 2 x |25.50 - 25.45| = 0.10
+fill 1000 @ 25.55: effective spread = 2 x |25.55 - 25.45| = 0.20
+fill 1600 @ 25.60: effective spread = 2 x |25.60 - 25.45| = 0.30
+share-weighted effective spread = 0.2400 USD  (FAQ: 0.10/0.20/0.30 weighted by 400/1000/1600)
+=== B. FAQ Example 38-1 share-weighted average percentage price improvement ===
+net price improvement = 2.00 USD; sum(mid x shares) = 35,092; pct = 0.005699%
+=== C. toy covered-order filter, then share-weighted effective spread (synthetic) ===
+excluded  o4: ('special_handling', 'fill-or-kill')
+excluded  o5: ('special_handling', 'non-IOC pegged')
+excluded  o6: ('directed_order_at_receiving_broker', True)
+excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
+excluded  o8: ('outside_regular_hours', True)
+excluded  o9: ('nbbo_crossed_30s_or_more', True)
+excluded o10: ('received_within_5min_before_halt_and_outstanding', True)
+covered orders: 3 (1000 sh) -> share-weighted effective spread 2.00 bps, implied half 1.00 bps
+if you (wrongly) ignore the exclusions: 21.41 bps
+lesson assumption: half-spread 5 bps -> compare ORDER OF MAGNITUDE only; 605 = reporter aggregate,
+covered orders, regular hours only; it is not your own fill cost and not a broker ranking.
+ASSERT_rule605_toy_ok

@@ -17,3 +17,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 `04_market_regimes_crisis.py` uses offline synthetic data only (seed=11).
 
 - US-first pack (2026-11-08): `06_luld_halt_toy.py — LULD tiers (R12) + halt toy (not a rule engine); 07_feed_tca_toy.py — IEX vs SIP arrival, stale NBBO, capacity.`
+
+- N1 (2026-11-08): `08_overnight_bands_toy.py` — LULD overnight price bands Phase 1 (SEC 34-106042 / 34-106624; planned 2026-12-06, dependent on systems changes), 5 synthetic cases; not a rule engine.
