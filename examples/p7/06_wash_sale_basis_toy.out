@@ -1,0 +1,8 @@
+IRS Pub 550 Example 1: cost 1,000 -> sold 750 -> rebought 800 on day +10
+wash sale: True, disallowed loss 250, new basis 1050
+later sale of the new shares at 1200: gain 150 (not 400): the 250 loss was postponed, not lost
+rebought on day +31: wash sale False, loss 250 allowed
+bought 30 days BEFORE the sale: wash sale True (the window runs both ways)
+assertions passed: 4/4
+ASSERT_wash_sale_basis_ok
+disclaimer: equal quantities only; pre-tax backtests stay the course default; not tax advice

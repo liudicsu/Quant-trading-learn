@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **19 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **19.5 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -78,6 +78,20 @@ cases passed: 8/8
 **W-8BEN 与股息预扣：** [IRS 说明](https://www.irs.gov/instructions/iw8ben)：外国个人把 W-8BEN 交给**扣缴义务人/付款人**，不是交给 IRS；外国人取得的某些美国来源收入（含股息）一般按 30% 征税，协定可降低。[中美税收协定](https://www.irs.gov/pub/irs-trty/china.pdf) 第 9 条：对方居民且为受益所有人时，来源国对股息所征税款不超过毛额的 10%（另见 [IRS 协定说明](https://www.irs.gov/individuals/international-taxpayers/claiming-tax-treaty-benefits)）。**中国国籍 ≠ 中国税收居民 ≠ 自动享受协定**；预扣不是全部税负的最终结算。
 
 **洗售（wash sale，按审阅报告 R25）：** 在适用美国该项所得税规则的情形下，股票/证券亏损出售或处分日前 30 个日历日至后 30 个日历日（含出售日，共 61 个日历日）内，购买/应税交换取得实质相同证券，或订立取得该证券的合同/期权等，可能触发 [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/) 的亏损扣除限制。它不是禁止交易，也不是保证免税；一般替代证券成本基础调整等另按 IRS 规定处理（[Pub. 550](https://www.irs.gov/publications/p550)），不能宣称所有情形都仅递延。
+
+**洗售：亏损是被推迟，不是消失（2026-11-10 核实）。** [IRS Publication 550](https://www.irs.gov/publications/p550)：亏损因洗售规则被禁止扣除时，要把这笔亏损加到新买入股票的成本里。新股票的持有期也要接上原来卖出那批股票的持有期。IRS 的例子：用 1,000 美元买 100 股，750 美元卖出，30 天内又用 800 美元买回 100 股：250 美元亏损不能扣除，新股票的成本基础是 1,050 美元。本课回测仍默认**税前**；如果要做税后模拟，必须按税务批次（tax lot）记账，并对每一批检查 61 天窗口。这些规则是否适用于你本人，本课不作判断（见上面的身份提醒）。
+
+实验 `examples/p7/06_wash_sale_basis_toy.py`（只处理买卖数量相同的情形）：
+
+```text
+IRS Pub 550 Example 1: cost 1,000 -> sold 750 -> rebought 800 on day +10
+wash sale: True, disallowed loss 250, new basis 1050
+later sale of the new shares at 1200: gain 150 (not 400): the 250 loss was postponed, not lost
+rebought on day +31: wash sale False, loss 250 allowed
+bought 30 days BEFORE the sale: wash sale True (the window runs both ways)
+assertions passed: 4/4
+ASSERT_wash_sale_basis_ok
+```
 
 **中国个人所得税（按审阅报告 R28）：** 居民个人的境内外所得依中国[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)规定纳税（在中国境内有住所，或无住所而一个纳税年度内居住累计满 183 天的个人为居民个人）；涉及无住所个人等情形另依适用规定核对，不仅凭国籍判断。财产转让所得适用 20% 比例税率，应纳税所得额一般为转让收入减财产原值及合理费用后的余额；利息、股息、红利所得亦有 20% 法定比例税率，具体减免/协定与所得性质另核。境外已依法实际缴纳的所得税可在规定限额内抵免，非无条件全额抵免；符合规定的超限部分可向后五个纳税年度结转（[公告 2020 年第 3 号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)）。居民个人取得境外所得原则上于次年 3 月 1 日至 6 月 30 日申报。不能由美国预扣完毕推出中国无需申报或无需补税。
 
@@ -224,6 +238,7 @@ n_sources=33 us_first_block=19 fields_complete=True
 6. 不标注「核验日期」。
 7. 把现行交易规则套到全部历史回测上；把仍暂缓实施的条文当作已生效。
 8. 只凭交易日期断言券商/账户已迁移到新日内保证金（2026-06-04 至 2027-10-20 有迁移期）；把 5 万美元购汇额度当成境外证券投资许可；以为美国预扣完毕就不用在中国申报。
+9. 说洗售亏损「永久消失」：它会加到新股票的成本里，等新股票卖出时再体现。
 
 
 ## 练习（1:1）
@@ -236,6 +251,7 @@ n_sources=33 us_first_block=19 fields_complete=True
 6. **ex5** — 规则版本表（**比较示例：上交所**）：为上交所交易规则写 2023/2026 两行（文号、发布日、生效日），并写出按交易日期切换版本的函数；**完成标准**：2026-07-03 返回 2023，2026-07-06 返回 2026。美股主例见 ex7。
 7. **ex6** — 跨境识字卡：用自己的话写出 W-8BEN 交给谁、协定 10% 的条件、洗售 61 个日历日窗口、中国 20% 与限额抵免/次年 3–6 月申报、CRS≠新税种、5 万美元≠证券投资许可；**完成标准**：六点齐全且无任何个人税额计算或汇路建议。
 8. **ex7** — FINRA 迁移 fixture（美股主例）：运行 `04_finra_migration_fixture.py`，再自己加一个案例（迁移期内、`member_adoption_date` 已知但 `broker_checked_on` 为空）；**完成标准**：输出 `needs_broker_verification`，原 8/8 案例仍通过。
+9. **ex-wash** — 运行 `06_wash_sale_basis_toy.py`，把买回日分别改成第 +30 天和第 +31 天；**完成标准**：第 +30 天触发洗售（成本基础 1050），第 +31 天不触发，与函数结果一致。
 
 
 ## 测验
@@ -260,13 +276,14 @@ n_sources=33 us_first_block=19 fields_complete=True
 <Quiz id="ce-sse2026" question="上交所交易规则（2026年修订）何时起施行？2023 版怎样？" options={["2026-04-24 起施行，2023 版继续有效", "2026-07-06 起施行，2023 版同时废止", "2027-01-01 起施行", "只适用于期货"]} answer={1} explanation="上证发〔2026〕41号：2026-07-06 起施行，2023 版同时废止；部分条文继续暂缓。回测应按日期切换版本。" />
 <Quiz id="ce-pdt-phase" question="2026-08-01 的一笔交易，券商迁移状态未知，按本课规则函数应输出？" options={["old_pdt", "intraday_margin", "needs_broker_verification", "illegal"]} answer={2} explanation="规则 2026-06-04 生效，但迁移期到 2027-10-20；状态未知时必须核实券商（R04）。" />
 <Quiz id="ce-wash61" question="洗售规则的时间窗口是？" options={["卖出后 30 个营业日", "卖出前后各 30 个日历日，含当日共 61 个日历日", "只看同一天", "T+1 交收日"]} answer={1} explanation="IRC §1091：前 30 日至后 30 日；按日历日计算。" />
+<Quiz id="ce-washbasis" question="按 IRS Pub 550：用 1,000 美元买 100 股，750 美元卖出，30 天内用 800 美元买回 100 股。新股票的成本基础是？" options={["800 美元", "1,050 美元", "750 美元", "1,000 美元"]} answer={1} explanation="被禁止扣除的 250 美元亏损加到新股票 800 美元的成本上。" />
 <Quiz id="ce-fx50k" question="个人每年等值 5 万美元购汇便利化额度意味着？" options={["可以自由买美股", "是年度便利额度；额度购汇汇出需真实经常项目用途，不包括投资境外证券", "自动免税", "可替别人购汇"]} answer={1} explanation="外汇局上海/陕西分局 FAQ；不提供任何绕道方案。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

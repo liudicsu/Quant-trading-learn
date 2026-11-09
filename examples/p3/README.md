@@ -18,3 +18,5 @@ python 05_kalman_hedge.py          # optional: Kalman hedge ratio, filter vs smo
 Charts land in `public/p3/`.
 
 - US-first pack (2026-11-08): `06_us_short_constraints.py — Reg SHO layers, locate/borrow fee/dividend owed on a synthetic pair.`
+
+- enrich7 (2026-11-10): `07_short_data_pit.py` — FINRA short interest by publish date (real 2026 calendar), short volume vs short interest (FINRA 10.7% example), FTD as a balance, SR-FINRA-2026-012 withdrawn (8 assertions).

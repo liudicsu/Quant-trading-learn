@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **25.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -246,6 +246,7 @@ disclaimer: 合成数据；仅供学习。
 | yfinance | README：与 Yahoo 无关联、未经 Yahoo 认可或审核；Apache 许可；仅供个人使用（[README](https://github.com/ranaroussi/yfinance)） | 官方数据或可自由再分发 |
 | Massive（原 Polygon.io） | 免费档为日终数据、每分钟 5 次调用；各资产类别分开订阅；专业用途需商业许可（[Massive](https://massive.com/stocks)） | 免费实时或 20 年历史 |
 | Alpaca Basic | 免费；实时仅 IEX；30 个 WebSocket 标的；历史自 2016 年；最近 15 分钟限制（[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)） | 免费实时 SIP |
+| FINRA 空头持仓 / 每日卖空成交量；SEC FTD | 每月两次的空头仓位，约 7 个营业日后发布；场外卖空成交流量；未交付余额（见 `pairs-stat-arb`、[FINRA](https://www.finra.org/finra-data/browse-catalog/equity-short-interest)、[SEC](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data)） | 结算日当天就能用；卖空成交量 = 空头持仓；FTD = 裸卖空 |
 
 **FRED/ALFRED 条款（按审阅报告 R16）：** FRED/ALFRED 的 API 访问须同时核对服务/API 条款及各 series 上游权利；公共可读、免费或 series 标注公有领域，不等于服务获取方式与下游开发、模型训练、存储、缓存、归档或再分发当然获许。截至 2026-11-08，官方条款对上述用途列有限制。本课程只分发自造的 FRED/ALFRED 形状 fixture，不提供真实下载、缓存或模型训练默认路径；真实用途在获得适用许可前不执行。（[FRED 法律条款](https://fred.stlouisfed.org/legal/)）
 
@@ -273,6 +274,40 @@ SYN_MACRO_2 没有发布时间 → 排除
 
 **ALFRED 修订 as-of：** 用 `merge_asof` 按**发布时间**（不是观测日期）对齐；没有发布时间的序列不能进入特征。
 
+## 分红日期与 yfinance 的 auto_adjust 陷阱（2026-11-10 核实）
+
+**1. 现金分红的四个日期。** 公司先宣布分红（宣布日），再确定股东名单（登记日），之后股票开始不带这次分红交易（除息日），最后发放现金（派息日）。决定你能不能拿到分红的是**除息日**：在除息日当天或之后买入，就拿不到这一次分红。美国交收改为 T+1 之后，investor.gov 写明除息日**一般就是登记日**；登记日不是营业日时，除息日是它之前的一个营业日（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)）。页面的例子：宣布日 2026-03-02，登记日 2026-03-16，除息日 2026-03-16，派息日 2026-03-17。
+
+- **例外：** 分红达到股价的 25% 或以上时，除息日推迟到派息日**之后**的下一个营业日。股票股利（包括以股票形式派发的拆股）的除息日一般也在派发之后；在这之前卖出的人要随附一张「due bill」，把新股交给买方。
+- **回测记账：** 总收益在**除息日**计入（这天价格下调），现金在**派息日**才到账。两者分开记，分红绝不能算两次。`05_data_versions_calendar.py` D 节的重复计入实验，讲的是同一件事的下一层。
+- **进阶：** 数据商的 `ex_date` 字段可能缺失，或者被误填成派息日。要检查除息日不晚于派息日（25% 以上的特别分红除外）。
+
+**2. 版本陷阱：yfinance 改了 `Close` 的含义。** yfinance 0.2.51（2024-12-19 发布）把 `yf.download()` 的 `auto_adjust` 默认值改成 `True`，和 `Ticker.history()` 保持一致；0.2.53（2025-02-15）起，调用时不写这个参数会给出警告（[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)）。官方文档描述了两种返回形状（[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)）：
+
+| 调用方式 | `Close` 是什么 | `Adj Close` 列 |
+|---|---|---|
+| `auto_adjust=True`（0.2.51 起默认） | 同时对拆股**和**分红调整 | 没有 |
+| `auto_adjust=False` | Yahoo 原样返回的价格，**已经做过拆股调整** | 有，另外对分红调整 |
+
+- 所以同一个列名 `Close` 在不同版本下含义不同，而且 Yahoo 拿不到完全未复权的价格。这和本课「用未复权价记股数和现金」的口径不一样。
+- 工程规则：锁定版本；`auto_adjust` 一律显式写出；检查列名；把字段含义写进数据说明书。当前版本 1.8.0（2026-11-03）新增了对「没有对应拆股的类拆股跳变」的价格修复（repair）；修复会改动数据，要记录开关状态。
+- yfinance 仍是只供个人使用的非官方封装（见上面的数据源表）；课程默认不下载。
+
+**实验：** `examples/p2/08_dividend_dates_yf_shapes.py`（离线，不导入 yfinance；「True」形状用的是 Yahoo 式的乘法分红因子）：
+
+```text
+normal, record Mon: record 2026-03-16 (Mon) pay None ratio 0.00 -> ex 2026-03-16 (Mon)
+record on Sunday: record 2026-03-15 (Sun) pay None ratio 0.00 -> ex 2026-03-13 (Fri)
+special dividend >= 25%: record 2026-03-16 (Mon) pay 2026-03-17 ratio 0.30 -> ex 2026-03-18 (Wed)
+buy on 2026-03-13 -> gets this dividend: True
+buy on 2026-03-16 -> gets this dividend: False
+total return on ex-date: +0.1000% (price-only would show -0.4000%)
+auto_adjust=True  -> auto_adjusted_close
+auto_adjust=False -> split_adjusted_close_plus_adj
+ex-date return: Close(True) +0.5000% vs Close(False) -0.4950%
+assertions passed: 11/11
+```
+
 ## 常见错误 / 陷阱
 
 1. 用今日成分回测十年。  
@@ -287,6 +322,7 @@ SYN_MACRO_2 没有发布时间 → 排除
 9. 把 2507.07107 的 headline Sharpe / 213 因子当成课程 alpha。
 10. 换了数据版本（如 FIZ→CIZ）却不记录，把口径差当成策略变化；对**收益**做 ffill 跨休市日；用未复权价算拆分日收益。
 11. 把 raw 收盘价当作可成交价；把 FRED series 的公有领域标注当作 FRED 服务/缓存/模型训练许可；把 yfinance 当官方数据。
+12. 以为除息日当天买入也能拿到分红；在除息日和派息日各记一次分红；升级 yfinance 却不显式写 `auto_adjust`，让 `Close` 的含义悄悄改变。
 
 
 ## 练习（与任务清单 1:1）
@@ -301,6 +337,7 @@ SYN_MACRO_2 没有发布时间 → 排除
 8. **ex8**：跑 `05_data_versions_calendar.py`；**完成标准**：打印两种月收益口径差（≈ −18.28 bp）、拆分 raw/adj 收益与日历交集天数，并在数据说明书里补「版本 + 口径 + 日历」三行。
 9. **ex-us-src** — 为三个数据源各写一行 `source / licence / availability_ts / allowed_use_checked_on`；**完成标准**：FRED 行写明需核对服务条款（R16），yfinance 行写明「仅个人使用、非官方」。
 10. **ex-us-ca** — 运行 `05_data_versions_calendar.py` D 节，解释分红重复计入为何得到 0.0230；**完成标准**：指出哪一步加了两次分红。
+11. **ex-div** — 运行 `08_dividend_dates_yf_shapes.py`；写出登记日为 2026-03-15（周日）时的除息日，以及 30% 特别分红、派息日 2026-03-17 时的除息日，再说明哪种 yfinance 调用会返回 `Adj Close` 列；**完成标准**：2026-03-13、2026-03-18、`auto_adjust=False`，与输出一致。
 
 
 ## 测验
@@ -318,12 +355,14 @@ SYN_MACRO_2 没有发布时间 → 排除
 <Quiz id="q9-ciz" question="Ken French 官网说明，2025 年 1 月起使用的 CRSP CIZ 文件中，月收益如何计算？" options={["逐月持有期收益、分红月末再投资", "日收益复利、分红在除息日再投资", "只算价格变化，不含分红", "与旧版完全相同"]} answer={1} explanation="官网原文：CIZ 月收益是日收益复利，分红在除息日再投资；旧版 FIZ 是月末再投资。所以要记录数据版本。" />
 <Quiz id="dc-fred" question="某 FRED series 标注为公有领域，这意味着？" options={["可以随意缓存并训练模型", "仍须核对 FRED/ALFRED 服务/API 条款；官方条款对缓存、模型训练等列有限制", "必须付费", "数据不准"]} answer={1} explanation="R16：series 权利 ≠ 服务条款。" />
 <Quiz id="dc-raw" question="raw（未复权）收盘价主要用于？" options={["自动视为可成交价格", "历史名义价格尺度与股数/现金账本", "计算总收益时直接使用", "替代 NBBO"]} answer={1} explanation="R21：能否成交还要看报价、状态、流动性与成交模型。" />
+<Quiz id="dc-exdiv" question="在美国 T+1 下，你在除息日当天买入股票，能拿到这次分红吗？" options={["能，派息前买入都算", "不能，除息日当天或之后买入都拿不到", "只要持有到派息日就能", "只有保证金账户能"]} answer={1} explanation="investor.gov：在除息日当天或之后买入，拿不到下一次分红。" />
+<Quiz id="dc-yfadj" question="yfinance 0.2.51 及以后，yf.download() 不写 auto_adjust 时返回的 Close 是？" options={["完全未复权", "对拆股和分红都调整过，且没有 Adj Close 列", "只做拆股调整，另附 Adj Close", "延迟一天的价格"]} answer={1} explanation="0.2.51 把 download() 默认改为 auto_adjust=True；官方文档写明这种模式下没有单独的 Adj Close 列。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；分红日期与 yfinance（2026-11-10 核实）：[investor.gov 除息日](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)、[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)、[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  

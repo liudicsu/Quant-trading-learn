@@ -1,0 +1,19 @@
+=== A. contract unit ===
+premium $4.00 per share x 100 shares = $400.00 per contract
+=== B. expiry P&L per contract (premium included) ===
+S_T     long_call  short_put  covered_call
+  80.0    -300.00   -1750.00      -1700.00
+ 100.0    -300.00     250.00        300.00
+ 120.0    1700.00     250.00        300.00
+short put worst case (stock to 0): -9750.00
+=== C/D. BSM reference price and put-call parity ===
+BSM(S=100,K=100,r=5%,T=1,vol=20%): call 10.4506 put 5.5735
+parity: C-P 4.8771 vs S-K*exp(-rT) 4.8771
+synthetic market call 11.20 vs model 10.4506: a gap is model error or inputs, NOT alpha
+=== E. dividends and early assignment (teaching flag) ===
+call ITM=True extrinsic 0.10 dividend 0.50 -> assignment risk before ex-date: True
+call ITM=True extrinsic 0.80 dividend 0.50 -> assignment risk before ex-date: False
+call ITM=False extrinsic 0.05 dividend 0.50 -> assignment risk before ex-date: False
+assertions passed: 9/9
+ASSERT_options_toy_ok
+disclaimer: synthetic numbers; learning only; read the OCC ODD before trading options

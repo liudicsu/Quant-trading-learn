@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**13.5 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO comparison + 0.5h overnight LULD price bands) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
+This lesson (~**15.25 hours**: 4.5h concepts + 5h labs + 1.5h quiz/review + 1h options/VIX risk box + 1h MWCB/LULD/Reg SHO comparison + 0.5h overnight LULD price bands + 1.5h US options basics (contract unit, exercise style, put-call parity, BSM as a reference, dividends and early assignment) + 0.25h MWCB Level 3 resumption under 23/5) teaches an **operational, causal** reading of market “regimes” and crisis stress — **not** a forecast of tomorrow’s return, and **not** a timing holy grail. Prereq: `risk-systems-lab` (lagged risk estimates, drawdown brakes).
 
 **Goals:** write an engineering definition of regime; build a `shift(1)` detector stack; draft identification / engineering response / failure modes for four playbooks; spot look-ahead in smoothed HMM probabilities; separate news-day volatility from a defined regime.
 
@@ -104,7 +104,7 @@ Each playbook has three columns: **identification (causal) → engineering respo
 
 **Mechanism literacy (not signals):**
 
-- **US market-wide circuit breakers (MWCB):** NYSE Rule 7.12 et al. trigger off S&P 500 decline vs prior close — **7% / 13% / 20%** (Levels 1/2/3); Levels 1/2 before 15:25 typically halt ~15 minutes; Level 3 halts for the rest of the day (confirm live exchange rules; learning use).
+- **US market-wide circuit breakers (MWCB):** NYSE Rule 7.12 et al. trigger off S&P 500 decline vs prior close — **7% / 13% / 20%** (Levels 1/2/3); Levels 1/2 before 15:25 typically halt ~15 minutes; Level 3 halts trading until **4:00 a.m. ET or later on the following trading day** (NYSE and Nasdaq rule text since autumn 2026; it used to say "the rest of the day"; see the MWCB section below; confirm live exchange rules; learning use).
 - **A-share price limits:** limit-up/down change path shape; backtests that ignore limits overstate fillable size.
 - **2016 China index circuit-breaker trial:** after rapid controversy that halts accelerated selling, the CSRC suspended the mechanism effective 2016-01-08 (SSE English notice / CSRC statements) — **suspension itself teaches: mechanisms change behaviour; they are not alpha switches**.
 
@@ -176,6 +176,37 @@ Protection has a cost, and you pay it every time even when no drop happens.
 
 **This lesson’s stance:** risk literacy only. No hedge-return promise of any kind, no recommendation of any option or VIX product; the labs in this lesson do not use options.
 </Callout>
+
+### 8b. US equity options: the minimum a quant learner needs (checked 2026-11-10)
+
+Before buying or selling an option, US investors must read the **Options Disclosure Document** (ODD, "Characteristics and Risks of Standardized Options"); the current version is dated **June 2024** ([OCC ODD page](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)). The points below quote it.
+
+- **Contract unit:** "the unit of trading for most options on equity securities is 100 shares". A quoted premium of $4 per share costs **$400 per contract**. Beginners often get this wrong by a factor of 100.
+- **Exercise style:** an American-style option can be exercised at any time before expiration; every European-style option traded today can be exercised only on its expiration date. US single-stock options are mostly American-style; index options may be European-style and cash-settled, so read the contract specification.
+- **Assignment:** a seller (writer) can be assigned, meaning forced to fulfil the contract. An uncovered writer can face very large losses (see the OIC note above).
+- **Dividends:** "As a general rule, no adjustment is made for ordinary cash dividends." So near the ex-dividend date (see `data-cleaning`), a call holder may exercise early to collect the dividend, and a call writer may be assigned before the ex-date.
+- **Settlement:** since 2024-05-28, physically settled stock options settle on the first business day after exercise (T+1).
+
+**Advanced: two pieces of theory, used only as references.**
+
+- **Put-call parity** (European options, no dividends; Stoll 1969): `C - P = S - K * exp(-r * T)`. It comes from no-arbitrage alone, with no model. American options satisfy only inequalities, not this equality.
+- **Black-Scholes-Merton** (Black & Scholes 1973; Merton 1973) gives a reference price under constant volatility, lognormal prices and no frictions. When the model price and the market price differ, that is a sign the assumptions do not hold, **not** a "mispricing" or alpha. Implied volatility is the number you back out of a market price; it is not a forecast.
+
+**Lab:** `examples/p6/09_options_basics_toy.py` (synthetic numbers, `math` only; output excerpt):
+
+```text
+premium $4.00 per share x 100 shares = $400.00 per contract
+S_T     long_call  short_put  covered_call
+  80.0    -300.00   -1750.00      -1700.00
+ 100.0    -300.00     250.00        300.00
+ 120.0    1700.00     250.00        300.00
+short put worst case (stock to 0): -9750.00
+BSM(S=100,K=100,r=5%,T=1,vol=20%): call 10.4506 put 5.5735
+parity: C-P 4.8771 vs S-K*exp(-rT) 4.8771
+assertions passed: 9/9
+```
+
+**Boundaries:** no option product or strategy is recommended; no "sell options for income"; no 0DTE; no implied-volatility trading signals.
 
 ## Labs (offline synthetic)
 
@@ -252,6 +283,26 @@ the Primary Listing Exchange MAY declare a Regulatory Halt; then orders are reje
 does not reopen during that night's Overnight Protected Hours. Bands are not a fill guarantee.
 ```
 
+## MWCB Level 3 under 23/5 trading (checked 2026-11-10)
+
+Exchange overnight sessions are planned from 2026-12-06 (see above). The old MWCB text said a Level 3 halt lasts "for the remainder of the trading day". Under 23/5 trading a reader could conclude that trading reopens in the 21:00 ET overnight session the same evening. **That is wrong.**
+
+- NYSE filed SR-NYSE-2026-43, effective on filing, replacing that phrase with: trading halts "until 4:00 a.m. ET or later on the following trading day". NYSE says this is "not intended to make any substantive changes to the MWCB mechanism" and that the other SROs intend to file the same change ([SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)).
+- Nasdaq filed the same change to its Rule 4121 (SR-NASDAQ-2026-080, effective on filing), noting its Night Session would otherwise allow a 21:00 ET reopening ([SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)).
+- So write "NYSE and Nasdaq have changed their rules and other exchanges are coordinating", not "the whole market has one rule". Check each venue's current rulebook.
+- The 7% / 13% / 20% levels and the 3:25 p.m. rule for Levels 1/2 are unchanged.
+
+**Lab:** `examples/p6/10_mwcb_overnight_resume_toy.py` (toy calendar, weekdays only):
+
+```text
+S&P 500 decline 7% / 13% / 20% -> levels 1 / 2 / 3
+Level 3 at 2026-12-09 13:00 ET -> earliest resume 2026-12-10 04:00 ET (or later)
+order at 2026-12-09 21:00 ET -> rejected (MWCB L3 halt)
+order at 2026-12-10 04:00 ET -> not blocked by the L3 halt (actual reopening may be later)
+Level 3 on Friday 2026-12-11 -> earliest resume 2026-12-14 04:00 ET
+assertions passed: 4/4
+```
+
 ## Common mistakes / traps
 
 1. Computing today’s state from today’s close, then trading the same bar (look-ahead).
@@ -264,6 +315,7 @@ does not reopen during that night's Overnight Protected Hours. Bands are not a f
 8. Treating a bought put as “free insurance” and ignoring the premium; treating moves in the VIX Index as moves in VIX futures/options/related products.
 9. Treating LULD as a fixed 10% limit vs the prior close; repeating the removed 09:30–09:45 opening doubling; assuming every Tier 2 doubles at the close.
 10. Treating overnight price bands as limit-up/down or a fill guarantee; assuming an overnight band hit triggers an automatic 5-minute pause as in regular hours; treating the 19:30 reference time as permanent (Amendment No. 29 is in effect temporarily).
+11. Reading a $4 option quote as $4 per contract instead of $400; treating a BSM model-vs-market gap as alpha; forgetting that ordinary dividends do not adjust option terms; assuming a Level 3 circuit breaker reopens in the same evening's overnight session.
 
 
 ## Practice (1:1)
@@ -277,6 +329,7 @@ does not reopen during that night's Overnight Protected Hours. Bands are not a f
 7. **ex6** — hand-calc the put toy in the risk box (expiry prices 80 and 100, including premium); **done when**: you write the two numbers +13 / −2 and one sentence on why spot VIX differs from the VIX futures settlement value.
 8. **ex-luld** — run `06_luld_halt_toy.py` and explain why Tier 2 at $50 does not double in the closing window but Tier 2 at $2 does; **done when**: you cite the R12 tier rule.
 9. **ex-ovb** — Run `08_overnight_bands_toy.py` and hand-compute the “after-hours news gap” row (close 50, 19:30 price 44); **done when**: you get 35.20 / 60.00 and explain why the lower band uses 44 and the upper uses 50.
+10. **ex-opt** — Run `09_options_basics_toy.py`; write the cost of one contract quoted at $4, the short-put worst case, and the parity gap; then run `10_mwcb_overnight_resume_toy.py` and state the earliest resumption after a Wednesday 13:00 ET Level 3; **done when**: $400, −9750.00, a gap below 1e-9, and Thursday 04:00 ET, matching the outputs.
 
 
 ## Quiz
@@ -290,12 +343,15 @@ does not reopen during that night's Overnight Protected Hours. Bands are not a f
 <Quiz id="crisis-put" question="A bought put expires worthless. Per OIC, what does the buyer lose?" options={["Nothing, options are insurance", "Up to the entire premium paid", "Unlimited", "Only half"]} answer={1} explanation="OIC: if options expire with no value the loss can be the entire premium; unlimited risk belongs to an uncovered writer." />
 <Quiz id="rc-luld" question="A $50 Tier 2 stock in the last 25 minutes before the regular close has an LULD percentage of?" options={["5%", "10%", "20%", "No limit"]} answer={1} explanation="Tier 2 stocks above $3 are not doubled at the close." />
 <Quiz id="rc-ovb" question="What happens when a Phase 1 overnight price band is reached?" options={["An automatic 5-minute pause", "Trading centers block out-of-band trades; no automatic pause, the Primary Listing Exchange may declare a Regulatory Halt", "A fill at the band price is guaranteed", "A market-wide circuit breaker"]} answer={1} explanation="SEC 34-106042: no automatic Trading Pause overnight; the Primary Listing Exchange may declare a Regulatory Halt." />
+<Quiz id="rc-optunit" question="A US equity option is quoted at a premium of $4. What does one contract cost (before fees)?" options={["$4", "$400", "$40", "$4,000"]} answer={1} explanation="OCC ODD: the unit of trading for most equity options is 100 shares, so $4 per share is $400 per contract." />
+<Quiz id="rc-bsm" question="The BSM model price is below the market price of a call. In this course that means…" options={["The call is mispriced, an alpha signal", "The model assumptions (constant vol, no frictions) do not match the market; it is a reference, not a signal", "Put-call parity is broken", "The exchange made an error"]} answer={1} explanation="BSM is a reference model; a model-vs-market gap is not alpha." />
+<Quiz id="rc-mwcb3" question="Under NYSE SR-NYSE-2026-43, after a Level 3 MWCB halt at 13:00 ET, trading may resume…" options={["At 21:00 ET the same evening", "At 4:00 a.m. ET or later on the following trading day", "After 15 minutes", "Only after an SEC order"]} answer={1} explanation="The rule now reads until 4:00 a.m. ET or later on the following trading day; Nasdaq made the same change." />
 
 ## Done when
 
 Four playbook cards + Labs A–D numbers matching the lesson + a short “news ≠ regime” note (with verified links) + hard-rules checklist. Smoothed probabilities must not appear in the “live-usable” column.
 
-**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.; OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) and [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks); Cboe [VIX product page](https://www.cboe.com/tradable_products/vix/) and [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) (all verified 2026-11-07).; [LULD Plan](https://www.luldplan.com/), [Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf), [Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/), [Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201) (checked 2026-11-08).; overnight bands (checked 2026-11-08): [SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)
+**Sources (read and used above):** Hamilton 1989 *Econometrica* 57(2); Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513); Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015); NYSE Rule 7.12 / SEC MWCB investor bulletin (7/13/20%); SSE / CSRC public notices on the 2016-01 circuit-breaker suspension; CNBC 2026-11-05 live updates; AP 2026-11-05 markets piece; CPPI gap/cash-lock literacy (textbook-level); bridges to `risk-systems-lab` / `portfolio-risk-sizing`.; OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) and [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks); Cboe [VIX product page](https://www.cboe.com/tradable_products/vix/) and [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/) (all verified 2026-11-07).; [LULD Plan](https://www.luldplan.com/), [Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf), [Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/), [Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201) (checked 2026-11-08).; overnight bands (checked 2026-11-08): [SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf); options basics & MWCB 23/5 (checked 2026-11-10): [OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document), Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062), Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143), Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x), [SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf), [SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)
 
 <Summary>
 **Takeaways**: regimes must be operational and causal; smoothed HMM leaks; write failure modes for every playbook; circuit breakers and news “corrections” are not course trade signals; vol management is risk engineering, not a return promise.  

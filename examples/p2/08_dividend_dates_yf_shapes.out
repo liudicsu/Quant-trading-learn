@@ -1,0 +1,19 @@
+=== A. ex-dividend date (investor.gov examples) ===
+normal, record Mon: record 2026-03-16 (Mon) pay None ratio 0.00 -> ex 2026-03-16 (Mon)
+record on Sunday: record 2026-03-15 (Sun) pay None ratio 0.00 -> ex 2026-03-13 (Fri)
+special dividend >= 25%: record 2026-03-16 (Mon) pay 2026-03-17 ratio 0.30 -> ex 2026-03-18 (Wed)
+buy on 2026-03-13 -> gets this dividend: True
+buy on 2026-03-16 -> gets this dividend: False
+=== B. ledger: ex-date vs pay-date (100 shares, $0.50 dividend) ===
+2026-03-13 price: px 100.00 receivable 0.00 cash 0.00 total 10000.00
+2026-03-16 ex-date: price drops, dividend receivable: px 99.60 receivable 50.00 cash 0.00 total 10010.00
+2026-03-17 pay-date: receivable -> cash: px 99.80 receivable 0.00 cash 50.00 total 10030.00
+total return on ex-date: +0.1000% (price-only would show -0.4000%)
+=== C. yfinance-like return shapes (synthetic, 2-for-1 split + $1 dividend) ===
+auto_adjust=True  -> auto_adjusted_close
+auto_adjust=False -> split_adjusted_close_plus_adj
+ex-date return: Close(True) +0.5000% vs Close(False) -0.4950%
+call without auto_adjust rejected: True
+assertions passed: 11/11
+ASSERT_dividend_yf_ok
+disclaimer: synthetic fixtures; learning only

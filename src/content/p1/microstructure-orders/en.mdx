@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**10 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution) + 0.5h overnight trading & overnight price bands + 0.25h Rule 612/610(c) version trap + HK T+1 plan comparison 0.25h) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
+This lesson (~**11 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution) + 0.5h overnight trading & overnight price bands + 0.25h Rule 612/610(c) version trap + HK T+1 plan comparison 0.25h + 0.5h official close, closing auction & MOC cutoff + 0.5h tiered round lots & odd-lot quotes) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
 
 **Goals:** hand-calc mid and market-buy bps; write a fill/cost sheet; compare close vs next-open (and shift) narratives.
 
@@ -136,6 +136,44 @@ Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 - Scope in eCFR §242.612: only stocks whose time-weighted average quoted spread over the evaluation period is `TWAQS <= 0.015` dollars get `0.005`; the others stay at `0.01`; quotes below $1 use `0.0001` ([eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)).
 - **Compliance date pushed back:** SEC 34-105656 (2026-06-11) extended the compliance dates for Rules 612, 610(c) and 600(b)(89)(i)(F) to the **first business day of November 2027** ([SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)). So as of 2026-11-08, **do not** assume in a backtest that every stock already quotes in half-cents.
 
+## Closing auction and round lots (checked 2026-11-10)
+
+**1. Where the daily "close" comes from.** On a normal day the listing exchange runs a **closing auction** at 4:00 p.m. ET, and its price becomes the **official closing price**. Nasdaq calls it the NOCP (Nasdaq Official Closing Price, [Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf)). It is not always equal to the last trade printed on the consolidated tape, and trades after 4:00 p.m. do not change it. Different data vendors may define a daily `close` differently, so write down in your data note which close you use.
+
+**2. The backtest trap: signal from the close, filled at the same close.** If you compute a signal from today's closing price and assume you also bought at that same closing price, you used information you could not have had when the order had to be sent. That is look-ahead. For NYSE-listed stocks, the NYSE auction page says that after **3:50 p.m. ET** Market-on-Close / Limit-on-Close (MOC/LOC) orders are only accepted if they offset the published imbalance, and cancel requests are rejected ([NYSE Auctions](https://www.nyse.com/trade/auctions)). So an honest "fill at the close" backtest needs a signal that is ready **before 3:50 p.m. ET**, or it should fill at the next tradable time instead. Other exchanges and other NYSE markets use different schedules; this lesson only uses the NYSE-listed time.
+
+- In Beijing time, 3:50 p.m. ET is 03:50 the next day during US daylight time and 04:50 the next day during US standard time.
+- Advanced note: auction imbalance feeds are often paid exchange data, so do not assume they are free features.
+
+**3. "One lot" is no longer always 100 shares.** Under 17 CFR 242.600(b)(93), in effect since **2025-11-03**, the round lot depends on the stock's average closing price on its primary listing exchange during the prior evaluation period ([eCFR §242.600](https://www.ecfr.gov/current/title-17/section-242.600); [SEC 90 FR 51420](https://www.federalregister.gov/d/2025-19926)):
+
+| Average closing price | Round lot |
+|---|---|
+| $250.00 or less | 100 shares |
+| $250.01 to $1,000.00 | 40 shares |
+| $1,000.01 to $10,000.00 | 10 shares |
+| $10,000.01 or more | 1 share |
+
+- The tier is reset on the first business day of May (using March) and of November (using September). Newly listed stocks start at 100 shares. The latest reset was 2026-11-02; this lesson names no specific stocks.
+- Why it matters for data: the NBBO is built from round-lot quotes, and displayed quote sizes are rounded down to whole round lots. When a high-priced stock's lot shrinks, quote sizes before and after the change are not directly comparable. Treat the change date as a data-version break.
+
+**4. Odd-lot quotes (BOLO).** Since **2026-04-27** the SIP also publishes each exchange's best odd-lot bid and offer and a consolidated Best Odd Lot Order (BOLO). Odd-lot quotes are **not protected** under Regulation NMS and do not change the NBBO, so a BOLO can lock or cross the NBBO without that being a regulatory lock or cross ([UTP SIP Odd Lot FAQ v1.2](https://www.utpplan.com/DOC/Nasdaq%20UTP%20SIP%20Odd%20Lot%20Quotes%20FAQ%20Finalized%20Version%201.2.pdf)). Odd-lot **depth** information is exempted until the first business day of **May 2028** ([SEC 34-104612](https://www.sec.gov/files/rules/exorders/2026/34-104612.pdf)). Keep this separate from the Rule 612 half-cent tick above: that one is a different rule with a November 2027 compliance date.
+
+**Lab:** `examples/p1/06_close_auction_roundlot.py` (local synthetic data only):
+
+```text
+last trade 15:59:59 100.07 | official close (auction) 100.03 | after-hours last 100.4
+signal ready 15:45 ET -> free MOC entry allowed: True
+signal ready 15:55 ET -> free MOC entry allowed: False
+signal ready 16:00 ET -> free MOC entry allowed: False
+2026-07-01 15:50 ET = Shanghai 2026-07-02 03:50
+2026-12-01 15:50 ET = Shanghai 2026-12-02 04:50
+avg close $250.01 -> round lot 40; $1,000.01 -> 10; $10,000.01 -> 1
+135 shares at lot 40 -> displayed 120; 39 shares odd lot: True
+lot 40: NBB 499.9 (round lots only) | BOLO bid 499.95 (odd lot, better price, not protected)
+assertions passed: 17/17
+```
+
 ## Common mistakes / pitfalls
 
 1. Treating mid as the market-buy fill.
@@ -145,6 +183,7 @@ Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 5. Asking for / designing HFT recipes (out of scope).
 6. Treating T+1 as “24 hours” or settling a Friday trade on Saturday; calling the Rule 611 rescission proposal “repealed”; assuming pre-market always starts at 04:00.
 7. Writing exchange overnight trading as “the US is already market-wide 24/5”, or assuming every broker and every stock can trade overnight; treating overnight price bands as limit-up/limit-down or a fill guarantee; assuming the $0.005 tick already applies to every stock.
+8. Treating the daily close as the last trade without checking the vendor's definition; computing a signal from the 4:00 p.m. close and filling at that same close; assuming one lot is always 100 shares, or that a better odd-lot quote moves the NBBO.
 
 ## Practice (1:1 with the checklist)
 
@@ -155,6 +194,7 @@ Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 5. **ex5** — Why impact/latency stay intuitive only; **done when** ≥2 sentences refuse an HFT recipe.
 6. **ex-us1** — run `05_us_market_mechanics.py`, hand-compute settlement for the 2026-11-25 and 2026-11-27 trades and compare; **done when**: both match and you can explain skipping Thanksgiving (2026-11-26).
 7. **ex-overnight** — Convert a Monday 21:00 ET overnight trade to Beijing time and state its trade date; then explain in one sentence why Rule 612 cannot be assumed in force as of 2026-11-08; **done when**: Beijing Tuesday 10:00, trade date Tuesday, and the November 2027 compliance date from 34-105656 is cited.
+8. **ex-close** — Run `06_close_auction_roundlot.py`; state the latest ET time a close-fill signal must be ready for an NYSE-listed stock and its Beijing time in July and December, then give the round lot for average closing prices of $250.01 and $1,000.01; **done when**: 15:50 ET, 03:50 / 04:50 next day Beijing, and 40 / 10 shares, matching the output.
 
 ## Quiz
 
@@ -167,13 +207,15 @@ Formulas in code: `spread = ask - bid`, `mid = (bid + ask) / 2`.
 <Quiz id="mo-611" question="As of 2026-11-08, Rule 611 is?" options={["Repealed", "Subject to an SEC rescission proposal, still a proposal", "Never existed", "A-share only"]} answer={1} explanation="S7-2026-20 is a proposal; the eCFR still lists §242.611." />
 <Quiz id="mo-overnight" question="As of 2026-11-08, what is the status of US exchange overnight trading?" options={["Already market-wide 24/5", "Planned for 2026-12-06, dependent on systems changes", "Rejected by the SEC", "Offered by every broker"]} answer={1} explanation="SEC 34-106042 and the CTA FAQ both give 2026-12-06, conditional on systems changes / readiness." />
 <Quiz id="mo-612" question="As of 2026-11-08, the Rule 612 $0.005 minimum increment is…" options={["In force for every stock", "Compliance date extended to the first business day of November 2027, and only for some stocks", "Struck down by a court", "Only for stocks below $1"]} answer={1} explanation="34-105656 extended the compliance date; eCFR §242.612 uses 0.005 only when TWAQS is at most $0.015." />
+<Quiz id="mo-close" question="For an NYSE-listed stock, an honest backtest that fills at the official close needs the signal ready…" options={["Any time before midnight", "Before the 3:50 p.m. ET MOC/LOC entry cutoff", "After the 4:00 p.m. close is printed", "Only on early-close days"]} answer={1} explanation="After 3:50 p.m. ET NYSE only accepts MOC/LOC orders that offset the imbalance and rejects cancels; a signal computed from the 4:00 p.m. close cannot trade at that close." />
+<Quiz id="mo-lot" question="Since 2025-11-03, the round lot for a stock whose prior-period average close was $600 is…" options={["100 shares", "40 shares", "10 shares", "1 share"]} answer={1} explanation="17 CFR 242.600(b)(93): $250.01 to $1,000.00 is 40 shares." />
 
 ## Done when
 
 - Cost one-pager + script + quizzes
 - You can explain mid / market side / same-bar look-ahead
 
-**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer).; US main line (checked 2026-11-08): [SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62), [NYSE hours](https://www.nyse.com/markets/hours-calendars), [SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).; overnight & version traps (checked 2026-11-08): [SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf), [CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf), [Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api), [SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf), [eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)
+**Sources:** classic — Canvas m2; NYU MATH-GA 2708 (pointer).; US main line (checked 2026-11-08): [SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62), [NYSE hours](https://www.nyse.com/markets/hours-calendars), [SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).; overnight & version traps (checked 2026-11-08): [SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf), [SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf), [CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf), [Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api), [SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf), [eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612); closing auction and round lots (checked 2026-11-10): [NYSE Auctions](https://www.nyse.com/trade/auctions), [Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf), [eCFR §242.600](https://www.ecfr.gov/current/title-17/section-242.600), [SEC 90 FR 51420](https://www.federalregister.gov/d/2025-19926), [SEC 34-104612](https://www.sec.gov/files/rules/exorders/2026/34-104612.pdf), [UTP SIP Odd Lot FAQ](https://www.utpplan.com/DOC/Nasdaq%20UTP%20SIP%20Odd%20Lot%20Quotes%20FAQ%20Finalized%20Version%201.2.pdf)
 
 <Summary>
 **Takeaways**: mid, market-buy bps, honest fill timing, cost sheet.  

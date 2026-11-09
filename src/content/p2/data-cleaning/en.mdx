@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**25 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources & licensing/PIT lab + 2h corporate actions & delisting + 1h ALFRED revision as-of) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**25.75 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources & licensing/PIT lab + 2h corporate actions & delisting + 1h ALFRED revision as-of + 0.5h dividend dates under T+1 + 0.25h yfinance auto_adjust version trap) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -246,6 +246,7 @@ disclaimer: synthetic data; learning only.
 | yfinance | README: not affiliated, endorsed, or vetted by Yahoo; Apache licence; intended for personal use only ([README](https://github.com/ranaroussi/yfinance)) | Official, or free to redistribute |
 | Massive (formerly Polygon.io) | Free tier is end-of-day data at 5 API calls/min; separate subscriptions per asset class; professional use needs a business licence ([Massive](https://massive.com/stocks)) | Free real-time or 20-year history |
 | Alpaca Basic | Free; real-time is IEX only; 30 WebSocket symbols; history since 2016; latest-15-minutes restriction ([Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)) | Free real-time SIP |
+| FINRA short interest / daily short volume; SEC FTD | Twice-monthly short positions published ~7 business days later; off-exchange short-sale flow; outstanding fail balances (see `pairs-stat-arb`, [FINRA](https://www.finra.org/finra-data/browse-catalog/equity-short-interest), [SEC](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data)) | Usable on the settlement date; short volume = short interest; FTD = naked shorting |
 
 **FRED/ALFRED terms (per review item R16):** API access to FRED/ALFRED must be checked against both the service/API terms and each series’ upstream rights; being publicly readable, free, or a series marked public domain does not mean the way the service is accessed, or downstream development, model training, storing, caching, archiving or redistribution, is automatically permitted. As of 2026-11-08 the official terms list restrictions on those uses. This course distributes only self-made FRED/ALFRED-shaped fixtures and provides no default path for real downloads, caching or model training; real use is not performed until the applicable permission is obtained. ([FRED legal terms](https://fred.stlouisfed.org/legal/))
 
@@ -273,6 +274,40 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 
 **ALFRED revision as-of:** align with `merge_asof` on **release time** (not observation date); a series with no release time cannot enter the features.
 
+## Dividend dates and the yfinance auto_adjust trap (checked 2026-11-10)
+
+**1. Four dates of a cash dividend.** A company announces a dividend (declaration date), fixes who is on its books (record date), the stock starts trading without the dividend (ex-dividend date), and the cash is paid (payment date). What decides whether you get the dividend is the **ex-dividend date**: if you buy on the ex-date or later, you do not get this payment. Since US settlement moved to T+1, investor.gov says the ex-date is **usually the record date**, or one business day before it if the record date is not a business day ([investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)). Its example: declared 2026-03-02, record 2026-03-16, ex-date 2026-03-16, paid 2026-03-17.
+
+- **Exception:** if the dividend is 25% or more of the stock's value, the ex-date is deferred to one business day **after** the payment date. Stock dividends (including splits paid as stock) also usually go ex after the distribution; someone who sells before that delivers a "due bill" for the new shares.
+- **Backtest bookkeeping:** book the total return on the **ex-date** (the price drops that day) but receive the cash on the **payment date**. Keep them separate, and never count the dividend twice. The double-count lab in section D of `05_data_versions_calendar.py` is the same idea one level down.
+- **Advanced:** vendor `ex_date` fields can be missing or filled with the payment date. Check that ex-date is not after the payment date except for the 25%+ case.
+
+**2. Version trap: yfinance changed what `Close` means.** yfinance 0.2.51 (released 2024-12-19) changed `yf.download()` so that `auto_adjust` defaults to `True`, matching `Ticker.history()`; 0.2.53 (2025-02-15) started warning when you do not pass it ([yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)). The official docs describe the two shapes ([yfinance price adjustment](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)):
+
+| Call | What `Close` is | `Adj Close` column |
+|---|---|---|
+| `auto_adjust=True` (default since 0.2.51) | adjusted for splits **and** dividends | none |
+| `auto_adjust=False` | Yahoo's price as returned, **already split-adjusted** | yes, also dividend-adjusted |
+
+- So the same column name `Close` changes meaning across versions, and Yahoo does not give you a fully unadjusted price. That differs from this lesson's rule of using raw prices for the share and cash ledger.
+- Engineering rules: pin the version, always write `auto_adjust` explicitly, check the column names, and record the field meaning in your data sheet. The current release, 1.8.0 (2026-11-03), added a price-repair fix for split-like jumps without a matching split; repair changes the data, so log whether it was on.
+- yfinance remains an unofficial wrapper for personal use (see the source table above); the course does not download by default.
+
+**Lab:** `examples/p2/08_dividend_dates_yf_shapes.py` (offline, no yfinance import; the "True" shape uses the Yahoo-style multiplicative dividend factor):
+
+```text
+normal, record Mon: record 2026-03-16 (Mon) pay None ratio 0.00 -> ex 2026-03-16 (Mon)
+record on Sunday: record 2026-03-15 (Sun) pay None ratio 0.00 -> ex 2026-03-13 (Fri)
+special dividend >= 25%: record 2026-03-16 (Mon) pay 2026-03-17 ratio 0.30 -> ex 2026-03-18 (Wed)
+buy on 2026-03-13 -> gets this dividend: True
+buy on 2026-03-16 -> gets this dividend: False
+total return on ex-date: +0.1000% (price-only would show -0.4000%)
+auto_adjust=True  -> auto_adjusted_close
+auto_adjust=False -> split_adjusted_close_plus_adj
+ex-date return: Close(True) +0.5000% vs Close(False) -0.4950%
+assertions passed: 11/11
+```
+
 ## Common mistakes / pitfalls
 
 1. Backtesting a decade with today’s members only.  
@@ -285,6 +320,7 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 7. Comparing clocks on different underlying tapes without saying so.
 8. Switching data versions (e.g. FIZ→CIZ) without recording it, mistaking a convention change for a strategy change; ffilling **returns** across closed days; computing split-day returns on raw prices.
 9. Treating the raw close as an executable price; treating a FRED series’ public-domain label as permission for the FRED service, caching or model training; calling yfinance official data.
+10. Assuming you get the dividend if you buy on the ex-date; booking the dividend on both the ex-date and the payment date; upgrading yfinance without writing `auto_adjust` explicitly, so `Close` silently changes meaning.
 
 
 ## Practice (1:1 with the checklist)
@@ -299,6 +335,7 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 8. **ex8**: run `05_data_versions_calendar.py`; **done when**: the two monthly-convention difference (≈ −18.28 bp), split raw/adj returns and calendar intersection days print, and the data sheet gains three lines “version + convention + calendar”.
 9. **ex-us-src** — for three sources write `source / licence / availability_ts / allowed_use_checked_on`; **done when**: the FRED row says the service terms must be checked (R16) and the yfinance row says “personal use only, not official”.
 10. **ex-us-ca** — run section D of `05_data_versions_calendar.py` and explain why double-counting gives 0.0230; **done when**: you name the step that adds the dividend twice.
+11. **ex-div** — Run `08_dividend_dates_yf_shapes.py`; give the ex-date for a record date of Sunday 2026-03-15 and for a 30% dividend paid 2026-03-17, then say which yfinance call returns an `Adj Close` column; **done when**: 2026-03-13, 2026-03-18 and `auto_adjust=False`, matching the output.
 
 
 ## Quiz
@@ -316,12 +353,14 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 <Quiz id="q9-ciz" question="Per Ken French’s site, how are monthly returns built in the CRSP CIZ files used from January 2025?" options={["Month-to-month holding period, dividends reinvested at month-end", "Compounded daily returns, dividends reinvested on ex-dates", "Price change only, no dividends", "Identical to the legacy files"]} answer={1} explanation="Site text: CIZ monthly returns are compounded daily returns with dividends reinvested on ex-dates; legacy FIZ reinvested at month-end. So record the data version." />
 <Quiz id="dc-fred" question="A FRED series is marked public domain. This means?" options={["You may freely cache it and train models", "You still must check the FRED/ALFRED service/API terms, which restrict caching, model training and more", "It must be paid for", "The data is wrong"]} answer={1} explanation="R16: series rights ≠ service terms." />
 <Quiz id="dc-raw" question="Raw (unadjusted) close prices are mainly for?" options={["Automatically executable prices", "The historical nominal price scale and share/cash ledger", "Direct use as total return", "Replacing the NBBO"]} answer={1} explanation="R21: executability depends on quotes, status, liquidity and the fill model." />
+<Quiz id="dc-exdiv" question="Under US T+1, you buy a stock on its ex-dividend date. Do you get that dividend?" options={["Yes, any purchase before payment counts", "No, buying on the ex-date or later does not get it", "Only if you hold until the payment date", "Only in a margin account"]} answer={1} explanation="investor.gov: if you purchase on the ex-dividend date or after, you will not receive the next dividend payment." />
+<Quiz id="dc-yfadj" question="With yfinance 0.2.51 or later, yf.download() without auto_adjust returns a Close that is…" options={["Fully unadjusted", "Adjusted for splits and dividends, with no Adj Close column", "Split-adjusted only, plus Adj Close", "Delayed by one day"]} answer={1} explanation="0.2.51 changed the download() default to auto_adjust=True; the docs say there is no separate Adj Close column in that mode." />
 
 ## Done when
 
 - Rerunnable pipeline + sheet + quizzes  
 
-**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (optional conservative protocol + diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.; Ken French Data Library FIZ→CIZ note ([link](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), verified 2026-11-07).; US data sources (checked 2026-11-08): [FRED terms](https://fred.stlouisfed.org/legal/), [FRED key](https://fred.stlouisfed.org/docs/api/api_key.html), [ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html), [EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces), [Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), [CRSP](https://www.crsp.org/research/crsp-us-stock-databases/), [yfinance](https://github.com/ranaroussi/yfinance), [Massive](https://massive.com/stocks), [Alpaca](https://docs.alpaca.markets/docs/about-market-data-api), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).
+**Sources:** classic — Canvas m4; QuantStart securities master; Qlib data layer; AFML ch.2 bars; mask-first / upstream contamination [arXiv:2507.07107](https://arxiv.org/abs/2507.07107) (optional conservative protocol + diagnosis only; REJECT headline Sharpes). niche — Vision/@sera00111, OpenBB docs, @pyquantnews API post linked above.; Ken French Data Library FIZ→CIZ note ([link](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), verified 2026-11-07).; US data sources (checked 2026-11-08): [FRED terms](https://fred.stlouisfed.org/legal/), [FRED key](https://fred.stlouisfed.org/docs/api/api_key.html), [ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html), [EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces), [Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html), [CRSP](https://www.crsp.org/research/crsp-us-stock-databases/), [yfinance](https://github.com/ranaroussi/yfinance), [Massive](https://massive.com/stocks), [Alpaca](https://docs.alpaca.markets/docs/about-market-data-api), [FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23).; dividend dates & yfinance (checked 2026-11-10): [investor.gov ex-dividend dates](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and), [yfinance price adjustment](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html), [yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)
 
 <Summary>
 **Takeaways** (incl. mask-first): hashes, survivorship, PIT, timezone look-ahead, adj declarations.  

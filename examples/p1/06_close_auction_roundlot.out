@@ -1,0 +1,23 @@
+=== A. official close vs last trade (synthetic day) ===
+last trade 15:59:59 100.07 | official close (auction) 100.03 | after-hours last 100.4
+data note: close field = official_close_auction (after-hours trades do not change it)
+=== B. NYSE MOC/LOC cutoff 15:50 ET ===
+signal ready 15:45 ET -> free MOC entry allowed: True
+signal ready 15:55 ET -> free MOC entry allowed: False
+signal ready 16:00 ET -> free MOC entry allowed: False
+2026-07-01 15:50 ET = Shanghai 2026-07-02 03:50
+2026-12-01 15:50 ET = Shanghai 2026-12-02 04:50
+=== C. tiered round lots (prior evaluation-period avg close) ===
+avg close $250.00 -> round lot 100
+avg close $250.01 -> round lot 40
+avg close $1,000.00 -> round lot 40
+avg close $1,000.01 -> round lot 10
+avg close $10,000.00 -> round lot 10
+avg close $10,000.01 -> round lot 1
+135 shares at lot 40 -> displayed 120; 39 shares odd lot: True
+2026-11-10 operative period: ('2026-11-02', '2027-04-30', 'Sep-2026 evaluation')
+=== D. odd-lot quote does not move the NBBO (stock with lot 40) ===
+lot 40: NBB 499.9 (round lots only) | BOLO bid 499.95 (odd lot, better price, not protected)
+assertions passed: 17/17
+ASSERT_close_roundlot_ok
+disclaimer: synthetic fixtures; learning only

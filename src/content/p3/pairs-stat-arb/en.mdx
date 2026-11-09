@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**13 hours**: 4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio + 1h US short-sale constraints) builds **Engle–Granger** pairs, compares static vs rolling hedges, and demonstrates the **in-sample vs rolling cointegration** pitfall. Prereq: `mean-reversion`.
+This lesson (~**14 hours**: 4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio + 1h US short-sale constraints + 1h short-side public data: short interest, short volume, FTD) builds **Engle–Granger** pairs, compares static vs rolling hedges, and demonstrates the **in-sample vs rolling cointegration** pitfall. Prereq: `mean-reversion`.
 
 **Goals:** rolling-beta spread; discuss broken legs; EG two-step with MacKinnon note.
 
@@ -131,6 +131,43 @@ short leg rejected or flat on 25 of 60 days; borrow fee 0.00556; dividend owed 0
 
 The numbers only show that constraints change results; they are **not** a verdict on the strategy.
 
+## Short-side public data: three datasets, three meanings (checked 2026-11-10)
+
+If you add short-side data to a pairs or factor study, first know what each public file measures and **when it became public**.
+
+| Dataset | What it is | When it is public | Common wrong reading |
+|---|---|---|---|
+| FINRA short interest | A **stock**: open short positions member firms report under FINRA Rule 4560, **twice a month** (settlement dates around the 15th and month-end) | Firms report by 6 p.m. ET on the 2nd business day; FINRA publishes on about the **7th business day** after the settlement date (see FINRA's yearly calendar) | Joining it on the settlement date |
+| FINRA daily short sale volume | A **flow**: short-sale trades reported to FINRA's TRF/ADF/ORF (off-exchange) during normal hours | Daily | Calling it "short interest" or "the market's short ratio" |
+| SEC fails-to-deliver (FTD) | An outstanding **balance** of fails at NSCC's CNS system on each settlement date | First half of a month around month-end; second half around the 15th of the next month | Reading it as daily new fails or proof of naked shorting |
+
+- **Point-in-time rule:** in FINRA's 2026 calendar, the 2026-10-15 snapshot is published on 2026-10-26. A signal on 2026-10-23 may use only the 2026-09-30 snapshot (published 2026-10-09). Joining by settlement date is look-ahead.
+- **Short volume is not short interest.** FINRA's Information Notice of 2019-05-10 says the daily file "does not—and is not intended to—equate to short interest". Its example: off-exchange data alone shows a 20% short ratio; adding the exchange volume gives 10.7% for the same day.
+- **FTD:** the SEC says the figure "is not a daily amount of fails" and that fails are "not evidence of abusive short selling or 'naked' short selling".
+- **Proposal is not rule:** FINRA proposed weekly short-interest reporting in SR-FINRA-2026-012 (May 2026). The SEC page marks it **withdrawn on 2026-08-05**, so twice-monthly reporting still applies.
+
+**Lab:** `examples/p3/07_short_data_pit.py` (real FINRA calendar dates, synthetic positions):
+
+```text
+=== 1. short interest: publish-date alignment ===
+settlement 2026-09-30 -> published 2026-10-09
+settlement 2026-10-15 -> published 2026-10-26
+settlement 2026-10-30 -> published 2026-11-10
+signal 2026-10-23: point-in-time uses settlement 2026-09-30 (published 2026-10-09), shares short 1,000,000
+signal 2026-10-23: naive join would use settlement 2026-10-15 (not public until 2026-10-26) -> look-ahead
+=== 2. daily short sale volume is off-exchange only ===
+off-exchange only: 3,000 / 15,000 = 0.20
+with exchange volume added: 15,000 / 140,000 = 0.1071  (FINRA notice example: 10.7%)
+=== 3. FTD is a balance, not a daily flow ===
+balance 100 -> 100: new fails today = unknown (could be 0, or 100 settled and 100 new)
+=== 4. proposal is not rule ===
+SR-FINRA-2026-012 (weekly reporting): withdrawn 2026-08-05; current: twice monthly
+assertions passed: 8/8
+ASSERT_short_data_pit_ok
+```
+
+**Boundary:** these datasets are taught for their meaning and timing only. This course gives no "short squeeze" or trading signal built from them.
+
 ## Common mistakes / pitfalls
 
 1. Trading high corr without EG / residual stationarity.
@@ -140,6 +177,7 @@ The numbers only show that constraints change results; they are **not** a verdic
 5. Estimating β including the test window.
 6. Generating historical signals from the Kalman **smoothed** β (look-ahead leak); or using the same-period filtered β without a one-period lag.
 7. A backtest where the short leg is always borrowable, fee-free and pays no dividends.
+8. Joining short interest on its settlement date instead of its publish date; calling FINRA daily short volume "short interest"; reading an FTD balance as new daily fails or proof of naked shorting.
 
 
 ## Practice (1:1)
@@ -150,6 +188,7 @@ The numbers only show that constraints change results; they are **not** a verdic
 4. **done1** — costed pairs notebook filed.
 5. **ex4** — (optional) run `05_kalman_hedge.py`; **done when**: filtered/smoothed β at t=149 and the two future-perturbation lines (filtered change = 0, smoothed change > 0) print, plus one sentence explaining the leak.
 6. **ex-us-short** — double the borrow fee in `06_us_short_constraints.py`; **done when**: you report the change in constrained_pair and explain its direction.
+7. **ex-short-pit** — run `07_short_data_pit.py`; change the signal date to 2026-10-26 and report which snapshot is used; **done when**: you get the 2026-10-15 snapshot, and you can explain why 2026-10-23 still gets 2026-09-30.
 
 
 ## Quiz
@@ -161,12 +200,14 @@ The numbers only show that constraints change results; they are **not** a verdic
 <Quiz id="q5-legs" question="Pairs costs in this lab use?" options={["n_legs=1", "n_legs=2 with stack + √impact", "No impact ever", "Only borrow"]} answer={1} explanation="Shared cost model." />
 <Quiz id="q6-kalman" question="Per the statsmodels docs, the smoothed state estimate at time t is conditional on?" options={["Only observations up through t", "The entire set of observations in the dataset (including after t)", "Only the period before t", "Exactly the same as filtered"]} answer={1} explanation="Smoothed is two-sided and uses future data, so never a trading signal; use the lagged filtered value." />
 <Quiz id="ps-sho" question="Reg SHO Rule 203(b) requires?" options={["A locate before a short sale", "A ban on all short sales", "T+0 settlement", "A fixed borrow fee"]} answer={0} explanation="Rule 203(b) is the locate requirement." />
+<Quiz id="ps-sipit" question="FINRA publishes the 2026-10-15 short interest snapshot on 2026-10-26. On 2026-10-23, which snapshot may a backtest use?" options={["2026-10-15", "2026-09-30 (published 2026-10-09)", "2026-10-30", "Any of them"]} answer={1} explanation="Align by publish date; the 10-15 snapshot is not public until 10-26." />
+<Quiz id="ps-ftd" question="Per the SEC, the fails-to-deliver figure is?" options={["The number of new fails each day", "An outstanding balance on each settlement date; not evidence of naked shorting", "Total short volume", "Short interest"]} answer={1} explanation="SEC: the figure is not a daily amount of fails and is not evidence of abusive or naked short selling." />
 
 ## Done when
 
 EG for two pairs + rolling p demo + costed notebook + quizzes (≈10h depth).
 
-**Sources:** Engle–Granger / MacKinnon via statsmodels; Stern pairs; Canvas m8; quants.md W13/W14.; statsmodels state-space docs (filtered vs smoothed definitions, [link](https://www.statsmodels.org/stable/statespace.html), verified 2026-11-07).; [SEC Reg SHO](https://www.sec.gov/investor/pubs/regsho.htm), [Rule 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201) (checked 2026-11-08).
+**Sources:** Engle–Granger / MacKinnon via statsmodels; Stern pairs; Canvas m8; quants.md W13/W14.; statsmodels state-space docs (filtered vs smoothed definitions, [link](https://www.statsmodels.org/stable/statespace.html), verified 2026-11-07).; [SEC Reg SHO](https://www.sec.gov/investor/pubs/regsho.htm), [Rule 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201) (checked 2026-11-08).; short-side data (checked 2026-11-10): [FINRA short interest](https://www.finra.org/finra-data/browse-catalog/equity-short-interest), [FINRA reporting calendar](https://www.finra.org/filing-reporting/regulatory-filing-systems/short-interest), [FINRA Rule 4560](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4560), [FINRA Information Notice 5/10/19](https://www.finra.org/rules-guidance/notices/information-notice-051019), [FINRA daily short sale volume](https://www.finra.org/finra-data/browse-catalog/short-sale-volume-data/daily-short-sale-volume-files), [SEC FTD data](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data), [SR-FINRA-2026-012 (withdrawn)](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-finra-2026-012)
 
 <Summary>
 **Takeaways**: EG+MacKinnon, rolling coint pitfall, rolling hedge, 2-leg costs.  

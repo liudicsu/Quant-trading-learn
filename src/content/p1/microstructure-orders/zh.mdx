@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **10 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **11 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 分档整手与碎股报价 0.5h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -136,6 +136,44 @@ NBBO 99.99 x100 / 100.02 x100；单一交易所价差 0.07 vs NBBO 0.03；买 50
 - eCFR §242.612 的范围：只有在评估期内时间加权平均报价价差 `TWAQS <= 0.015` 美元的股票才用 `0.005`，否则仍是 `0.01`；低于 1 美元的报价是 `0.0001`（[eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)）。
 - **合规日已推迟：** SEC 34-105656（2026-06-11）把 Rule 612、610(c) 和 600(b)(89)(i)(F) 的合规日推迟到 **2027 年 11 月的第一个营业日**（[SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)）。所以截至 2026-11-08，**不要**在回测里假设所有股票已按半美分报价。
 
+## 收盘竞价与整手（2026-11-10 核实）
+
+**1. 日线的「收盘价」从哪来。** 正常交易日，上市交易所在美东时间（ET）16:00 举行**收盘竞价**，竞价价格就是**官方收盘价**。Nasdaq 把它叫作 NOCP（Nasdaq 官方收盘价，[Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf)）。它不一定等于合并行情里的最后一笔成交，16:00 之后的盘后成交也不会改变它。不同数据商对日线 `close` 的定义可能不一样，所以要在数据说明里写清你用的是哪一种收盘价。
+
+**2. 回测陷阱：用收盘价算信号，又按同一个收盘价成交。** 如果你用今天的收盘价算出信号，又假设按这个收盘价买入，就用到了下单那一刻还拿不到的信息，这就是偷看未来（look-ahead）。对 NYSE 上市股票，NYSE 竞价页面写明：**15:50 ET** 之后，收盘市价单/收盘限价单（MOC/LOC）只接受与公布的不平衡方向相反的单，撤单请求会被拒绝（[NYSE Auctions](https://www.nyse.com/trade/auctions)）。所以一个诚实的「按收盘价成交」回测，信号必须在 **15:50 ET 之前**就能算出来；否则应改成在下一个可成交时点成交。其他交易所以及 NYSE 旗下其他市场的时间表不同，本课只用 NYSE 上市股票的时间。
+
+- 换成北京时间：美国夏令时期间，15:50 ET 是次日 03:50；美国冬令时期间是次日 04:50。
+- 进阶：竞价不平衡数据常是收费的交易所数据，不要默认它是免费可得的特征。
+
+**3. 「一手」不再总是 100 股。** 按 17 CFR 242.600(b)(93)，自 **2025-11-03** 起，一手（round lot）的股数取决于这只股票上一评估期在主上市交易所的平均收盘价（[eCFR §242.600](https://www.ecfr.gov/current/title-17/section-242.600)；[SEC 90 FR 51420](https://www.federalregister.gov/d/2025-19926)）：
+
+| 平均收盘价 | 一手 |
+|---|---|
+| 250.00 美元及以下 | 100 股 |
+| 250.01 至 1,000.00 美元 | 40 股 |
+| 1,000.01 至 10,000.00 美元 | 10 股 |
+| 10,000.01 美元及以上 | 1 股 |
+
+- 每年 5 月第一个营业日（用 3 月数据）和 11 月第一个营业日（用 9 月数据）重新定档；新上市股票先按 100 股。最近一次重定档是 2026-11-02；本课不点名具体股票。
+- 对数据的影响：NBBO 由整手报价组成，显示的报价数量按整手向下取整。高价股的一手变小以后，变化前后的报价数量不能直接比较，要把变化日当成一个数据版本断点。
+
+**4. 碎股报价（BOLO）。** 自 **2026-04-27** 起，SIP 还发布各交易所的最优碎股买卖价，以及合并的最优碎股报价（Best Odd Lot Order，BOLO）。碎股报价**不受** Reg NMS 保护，也不改变 NBBO，所以 BOLO 可能和 NBBO 锁价或交叉，但这不算监管意义上的锁价或交叉（[UTP SIP 碎股 FAQ v1.2](https://www.utpplan.com/DOC/Nasdaq%20UTP%20SIP%20Odd%20Lot%20Quotes%20FAQ%20Finalized%20Version%201.2.pdf)）。碎股**深度**信息被豁免，推迟到 **2028 年 5 月**第一个营业日（[SEC 34-104612](https://www.sec.gov/files/rules/exorders/2026/34-104612.pdf)）。不要把它和上面 Rule 612 的半美分报价单位混在一起：那是另一条规则，合规日是 2027 年 11 月。
+
+**实验：** `examples/p1/06_close_auction_roundlot.py`（纯本地合成数据）：
+
+```text
+last trade 15:59:59 100.07 | official close (auction) 100.03 | after-hours last 100.4
+signal ready 15:45 ET -> free MOC entry allowed: True
+signal ready 15:55 ET -> free MOC entry allowed: False
+signal ready 16:00 ET -> free MOC entry allowed: False
+2026-07-01 15:50 ET = Shanghai 2026-07-02 03:50
+2026-12-01 15:50 ET = Shanghai 2026-12-02 04:50
+avg close $250.01 -> round lot 40; $1,000.01 -> 10; $10,000.01 -> 1
+135 shares at lot 40 -> displayed 120; 39 shares odd lot: True
+lot 40: NBB 499.9 (round lots only) | BOLO bid 499.95 (odd lot, better price, not protected)
+assertions passed: 17/17
+```
+
 ## 常见错误 / 陷阱
 
 1. 用 mid 当市价买成交价。
@@ -145,6 +183,7 @@ NBBO 99.99 x100 / 100.02 x100；单一交易所价差 0.07 vs NBBO 0.03；买 50
 5. 索要/设计 HFT 配方（本课明确不做）。
 6. 把 T+1 当成「24 小时」或把周五成交算成周六交收；把 Rule 611 撤销提案写成「已废除」；假设盘前统一 04:00 开始。
 7. 把交易所隔夜盘写成「美国已经全市场 24/5」，或以为所有券商、所有股票都能隔夜交易；把隔夜价格带当成涨跌停或成交保证；以为 0.005 美元报价单位已对所有股票生效。
+8. 不查数据商定义就把日线收盘价当成最后一笔成交；用 16:00 收盘价算信号又按同一收盘价成交；以为一手永远是 100 股，或以为更优的碎股报价会改变 NBBO。
 
 ## 练习（与任务清单 1:1）
 
@@ -155,6 +194,7 @@ NBBO 99.99 x100 / 100.02 x100；单一交易所价差 0.07 vs NBBO 0.03；买 50
 5. **ex5**：说明冲击/延迟为何只留直觉；**完成标准**：≥2 句且拒绝 HFT 配方。
 6. **ex-us1** — 运行 `05_us_market_mechanics.py`，把 2026-11-25 和 2026-11-27 两笔交易的交收日手算一遍并与输出核对；**完成标准**：两日期一致且能解释为何跳过感恩节（2026-11-26）。
 7. **ex-overnight** — 把周一 21:00 ET 的一笔隔夜成交换算成北京时间，并写出它的交易日；再用一句话说明 Rule 612 为何截至 2026-11-08 还不能假设生效；**完成标准**：北京时间周二 10:00、交易日为周二，并引用 34-105656 的 2027 年 11 月合规日。
+8. **ex-close** — 运行 `06_close_auction_roundlot.py`；写出 NYSE 上市股票「按收盘价成交」的信号最晚要在几点（ET）前算出，以及 7 月和 12 月对应的北京时间；再写出平均收盘价 250.01 美元和 1,000.01 美元时的一手股数；**完成标准**：15:50 ET、北京时间次日 03:50 / 04:50、40 股 / 10 股，与输出一致。
 
 ## 测验
 
@@ -167,13 +207,15 @@ NBBO 99.99 x100 / 100.02 x100；单一交易所价差 0.07 vs NBBO 0.03；买 50
 <Quiz id="mo-611" question="截至 2026-11-08，Rule 611 的状态是？" options={["已废除", "SEC 发布了撤销提案，仍是提案", "从未存在", "只适用 A 股"]} answer={1} explanation="S7-2026-20 是提案；eCFR 仍列 §242.611。" />
 <Quiz id="mo-overnight" question="截至 2026-11-08，美国交易所隔夜交易的状态是？" options={["已经全市场 24/5", "计划 2026-12-06 上线，取决于系统改造", "已被 SEC 否决", "所有券商都已提供"]} answer={1} explanation="SEC 34-106042 与 CTA FAQ 都写 2026-12-06，并以系统/准备情况为前提。" />
 <Quiz id="mo-612" question="Rule 612 的 0.005 美元最小报价单位截至 2026-11-08？" options={["已对所有股票生效", "合规日推迟到 2027 年 11 月第一个营业日，且只适用部分股票", "已被法院撤销", "只适用低于 1 美元的股票"]} answer={1} explanation="34-105656 推迟合规日；eCFR §242.612 只对 TWAQS 不高于 0.015 美元的股票用 0.005。" />
+<Quiz id="mo-close" question="对 NYSE 上市股票，诚实地按官方收盘价成交的回测，信号必须在什么时候算出？" options={["午夜之前都行", "15:50 ET 的 MOC/LOC 截止时间之前", "16:00 收盘价公布之后", "只在提前收盘日"]} answer={1} explanation="15:50 ET 之后 NYSE 只接受与不平衡方向相反的 MOC/LOC 单且拒绝撤单；用 16:00 收盘价算出的信号不可能按同一收盘价成交。" />
+<Quiz id="mo-lot" question="自 2025-11-03 起，上一评估期平均收盘价为 600 美元的股票，一手是？" options={["100 股", "40 股", "10 股", "1 股"]} answer={1} explanation="17 CFR 242.600(b)(93)：250.01 至 1,000.00 美元为 40 股。" />
 
 ## 完成标准
 
 - 成本假设一页 + 跑通脚本 + 测验
 - 能解释 mid/市价侧/同 bar 前瞻
 
-**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。；美股主线（2026-11-08 核实）：[SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62)、[NYSE 交易时间](https://www.nyse.com/markets/hours-calendars)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；隔夜与版本陷阱（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)、[CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)、[Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)、[SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)、[eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)
+**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。；美股主线（2026-11-08 核实）：[SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62)、[NYSE 交易时间](https://www.nyse.com/markets/hours-calendars)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；隔夜与版本陷阱（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)、[CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)、[Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)、[SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)、[eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)；收盘竞价与整手（2026-11-10 核实）：[NYSE Auctions](https://www.nyse.com/trade/auctions)、[Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf)、[eCFR §242.600](https://www.ecfr.gov/current/title-17/section-242.600)、[SEC 90 FR 51420](https://www.federalregister.gov/d/2025-19926)、[SEC 34-104612](https://www.sec.gov/files/rules/exorders/2026/34-104612.pdf)、[UTP SIP 碎股 FAQ](https://www.utpplan.com/DOC/Nasdaq%20UTP%20SIP%20Odd%20Lot%20Quotes%20FAQ%20Finalized%20Version%201.2.pdf)
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

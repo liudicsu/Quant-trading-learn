@@ -1,0 +1,16 @@
+=== 1. short interest: publish-date alignment ===
+settlement 2026-09-30 -> published 2026-10-09
+settlement 2026-10-15 -> published 2026-10-26
+settlement 2026-10-30 -> published 2026-11-10
+signal 2026-10-23: point-in-time uses settlement 2026-09-30 (published 2026-10-09), shares short 1,000,000
+signal 2026-10-23: naive join would use settlement 2026-10-15 (not public until 2026-10-26) -> look-ahead
+=== 2. daily short sale volume is off-exchange only ===
+off-exchange only: 3,000 / 15,000 = 0.20
+with exchange volume added: 15,000 / 140,000 = 0.1071  (FINRA notice example: 10.7%)
+=== 3. FTD is a balance, not a daily flow ===
+balance 100 -> 100: new fails today = unknown (could be 0, or 100 settled and 100 new)
+=== 4. proposal is not rule ===
+SR-FINRA-2026-012 (weekly reporting): withdrawn 2026-08-05; current: twice monthly
+assertions passed: 8/8
+ASSERT_short_data_pit_ok
+disclaimer: synthetic positions/volumes; real FINRA schedule dates; no squeeze signals; learning only

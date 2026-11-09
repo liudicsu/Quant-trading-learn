@@ -12,3 +12,5 @@ Offline synthetic examples for Phase P1. Learning only — not investment advice
 Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
 
 - US-first pack (2026-11-08): `05_us_market_mechanics.py — US T+1, NYSE sessions in Shanghai time, toy NBBO (offline).`
+
+- enrich7 (2026-11-10): `06_close_auction_roundlot.py` — official close vs last trade, NYSE MOC 15:50 ET cutoff in Shanghai time, tiered round lots, BOLO vs NBBO (17 assertions).
