@@ -1610,7 +1610,6 @@ export function lessonKey(phaseId: string, lessonSlug: string) {
 }
 
 export const OPTIONAL_TOOL_LINKS: Record<string, string> = {
-  "quantstart-sat": "https://www.quantstart.com/successful-algorithmic-trading-ebook/",
   "qlib-docs": "https://qlib.readthedocs.io/en/stable/",
   "qlib-github": "https://github.com/microsoft/qlib",
   "rd-agent": "https://github.com/microsoft/RD-Agent",

@@ -59,5 +59,13 @@ for (const [file, id, must, mustNot] of STEM) {
   if (miss.length || bad.length) fail(`${file}: ${id} stem/explanation missing ${JSON.stringify(miss)} or contains ${JSON.stringify(bad)}`);
   else console.log(`ok   ${id} stem/explanation: ${file.split("/").pop()}`);
 }
+// R49: answer-position distribution after the deterministic shuffle used by Quiz.tsx (keep in sync).
+function fnv1a(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; }
+const optionOrder = (id, n) => Array.from({ length: n }, (_, i) => i).sort((a, b) => fnv1a(`${id}#${a}`) - fnv1a(`${id}#${b}`) || a - b);
+const pos = {};
+for (const [id, q] of all.zh) { const p = optionOrder(id, q.opts.length).indexOf(q.a); pos[p] = (pos[p] || 0) + 1; }
+const total = all.zh.size;
+for (const [p, c] of Object.entries(pos)) if (c / total > 0.5) fail(`displayed answer position ${p + 1} holds ${c}/${total} (> 50%)`);
+console.log(`ok   displayed answer positions: ${Object.entries(pos).sort().map(([p, c]) => `#${+p + 1}=${c}`).join(" ")} of ${total}`);
 console.log(errors ? `quiz check FAILED (${errors})` : `quiz check PASSED: ${n} quiz pairs zh/en, ${SEM.length} semantic assertions`);
 process.exit(errors ? 1 : 0);

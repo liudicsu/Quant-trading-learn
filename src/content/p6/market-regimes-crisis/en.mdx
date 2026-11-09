@@ -182,10 +182,12 @@ Protection has a cost, and you pay it every time even when no drop happens.
 Before buying or selling an option, US investors must read the **Options Disclosure Document** (ODD, "Characteristics and Risks of Standardized Options"); the current version is dated **June 2024** ([OCC ODD page](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document), [official PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf), checked 2026-11-10). The points below quote it, with printed page numbers.
 
 - **Contract unit:** "the unit of trading for most options on equity securities is 100 shares" (p.8). A quoted premium of $4 per share costs **$400 per contract**. Beginners often get this wrong by a factor of 100.
-- **Exercise style:** an American-style option can be exercised at any time before expiration; as of the June 2024 ODD, every European-style option then traded can be exercised only on its expiration date (p.7). US single-stock options are mostly American-style; index options may be European-style and cash-settled, so read the contract specification.
+- **Exercise style:** an American-style option can be exercised at any time before expiration; as of the June 2024 ODD, every European-style option then traded can be exercised only on its expiration date (p.7).
 - **Assignment:** a seller (writer) can be assigned, meaning forced to fulfil the contract. An uncovered writer can face very large losses (see the OIC note above).
 - **Dividends:** "As a general rule, no adjustment is made for ordinary cash dividends" (p.18). So near the ex-dividend date (see `data-cleaning`), a call holder may exercise early to collect the dividend, and the ODD says a call writer's chance of being assigned "may increase" as the ex-date approaches (p.19). The lab's "extrinsic value below the dividend" flag is a teaching rule of thumb, not an ODD rule.
 - **Settlement:** since 2024-05-28, physically settled stock options settle on the first business day after exercise (T+1) (p.57).
+
+Outside the ODD: OCC's [standard equity option specifications](https://www.theocc.com/clearance-and-settlement/clearing/equity-options-product-specifications) list the exercise style as **American-style**; index options may be European-style and cash-settled, so always read the contract specification (checked 2026-11-10).
 
 **Advanced: two pieces of theory, used only as references.**
 

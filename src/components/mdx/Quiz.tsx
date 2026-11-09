@@ -17,6 +17,23 @@ export interface QuizProps {
 
 type Phase = "idle" | "correct" | "incorrect";
 
+// R49: deterministic option order per quiz id (same id in zh/en -> same order).
+// Keep in sync with tools/check-quiz.mjs. `selected` and `answer` stay ORIGINAL indices.
+function fnv1a(s: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+
+export function optionOrder(id: string, n: number): number[] {
+  return Array.from({ length: n }, (_, i) => i).sort(
+    (a, b) => fnv1a(`${id}#${a}`) - fnv1a(`${id}#${b}`) || a - b,
+  );
+}
+
 function QuestionMarkIcon() {
   return (
     <svg
@@ -114,7 +131,8 @@ export function Quiz({
 
       {options ? (
         <ul className="mt-4 space-y-2">
-          {options.map((option, index) => {
+          {optionOrder(id, options.length).map((index) => {
+            const option = options[index];
             const checked = selected === index;
             const showCorrect = showReveal && index === answer;
             return (

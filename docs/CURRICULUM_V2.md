@@ -940,7 +940,7 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 ## Formal-audit revision pack (base 50c33f9)
 
 - Q1 hour sub-items now sum to totals: `backtest-traps` 5+19+4=28; `factor-workflow` 5+15+3+1=24; `frontier-tsfm-altdata-crypto` 5+6+5+2+1=19.
-- Q2 removed third-party `joinquant-8w` (lookmori.cn, persistent 500); `quantstart-sat` 503 noted, unchanged.
+- Q2 removed third-party `joinquant-8w` (lookmori.cn, persistent 500); `quantstart-sat` 503 noted, unchanged; removed 2026-11-10 (R52: site unreachable, entry unused).
 - Q3 Gatheral 2010 (QF 10(7) 749–759) verified via Crossref; link → RePEc journal record.
 - Q6 SSE Trading Rules 2026 revision (上证发〔2026〕41号, effective 2026-07-06, 2023 rev. repealed, some provisions deferred) → `compliance-ethics` (+1h).
 - Q7 Ken French FIZ→CIZ (Jan 2025 release) + corporate actions + calendars lab → `data-cleaning` (+2h, `examples/p2/05`).
