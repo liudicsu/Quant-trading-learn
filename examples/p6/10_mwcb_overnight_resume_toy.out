@@ -3,6 +3,7 @@ Level 3 at 2026-12-09 13:00 ET -> earliest resume 2026-12-10 04:00 ET (or later)
 order at 2026-12-09 21:00 ET -> rejected (MWCB L3 halt)
 order at 2026-12-10 04:00 ET -> not blocked by the L3 halt (actual reopening may be later)
 Level 3 on Friday 2026-12-11 -> earliest resume 2026-12-14 04:00 ET
-assertions passed: 4/4
+order at 2026-12-13 20:00 ET (Sunday) -> rejected (MWCB L3 halt)
+assertions passed: 5/5
 ASSERT_mwcb_resume_ok
-disclaimer: toy calendar (weekdays only); NYSE + Nasdaq rule text; other exchanges coordinating; learning only
+disclaimer: toy calendar (weekdays only); filings by 17 exchanges, not all venues; learning only

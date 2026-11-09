@@ -73,6 +73,7 @@ for px, lot in ((250.00, 100), (250.01, 40), (1000.00, 40), (1000.01, 10), (1000
 
 
 def display_size(shares: int, lot: int) -> int:
+    # Reg NMS 600(b)(26)(iii) states this for competing consolidators; check your feed's own spec.
     return shares // lot * lot
 
 

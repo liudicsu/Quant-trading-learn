@@ -1,13 +1,18 @@
 """Wash sale: the disallowed loss moves into the new shares' basis (checked 2026-11-10).
 
-Source: IRS Publication 550, "Wash Sales" (Example 1: buy 100 shares for
-$1,000, sell them for $750, buy 100 again within 30 days for $800 ->
-$250 loss disallowed, new basis $1,050). Applies only if US tax rules apply
-to you; readers resident in China should not assume US individual tax rules
-apply automatically. Equal share quantities only (partial-quantity rules are
-not modelled here). Learning only, not tax or investment advice.
+Source: IRS Publication 550 (2025), "Wash Sales", incl. "More or less stock
+bought than sold": replacement shares bought within 30 days BEFORE or AFTER
+the sale are matched to the shares sold in the order they were bought,
+beginning with the first shares bought. All three cases below are the IRS's
+own examples.
+Not modelled (read Pub 550): repurchase inside an IRA/Roth IRA (the
+disallowed loss is NOT added to the new basis there), purchases by a spouse
+or a corporation you control (also a wash sale), options/contracts.
+Applies only if US tax rules apply to you; readers resident in China should
+not assume US individual tax rules apply automatically.
+Learning only, not tax or investment advice.
 """
-from datetime import date, timedelta
+from datetime import date
 
 
 def in_window(sale_day, buy_day):
@@ -15,33 +20,47 @@ def in_window(sale_day, buy_day):
     return abs((buy_day - sale_day).days) <= 30
 
 
-def wash_sale(cost_old, proceeds, cost_new, sale_day, buy_day):
-    loss = cost_old - proceeds
-    if loss <= 0 or not in_window(sale_day, buy_day):
-        return {"wash": False, "disallowed": 0.0, "new_basis": cost_new}
-    return {"wash": True, "disallowed": loss, "new_basis": cost_new + loss}
+def wash_sale(sale_day, shares_sold, loss, buys):
+    """buys: list of (day, shares, cost) of replacement lots (not the lot sold).
+
+    Returns (disallowed, deductible, per-lot basis adjustments)."""
+    per_share = loss / shares_sold
+    left = shares_sold
+    adj = []
+    for day, sh, cost in sorted(buys, key=lambda b: b[0]):
+        m = min(sh, left) if in_window(sale_day, day) else 0
+        left -= m
+        adj.append((day, sh, cost, m * per_share))
+    disallowed = sum(a[3] for a in adj)
+    return disallowed, loss - disallowed, adj
 
 
 checks = 0
-sale = date(2026, 6, 1)
-r = wash_sale(1000, 750, 800, sale, sale + timedelta(days=10))
-print("IRS Pub 550 Example 1: cost 1,000 -> sold 750 -> rebought 800 on day +10")
-print(f"wash sale: {r['wash']}, disallowed loss {r['disallowed']:.0f}, new basis {r['new_basis']:.0f}")
-assert r["wash"] and r["disallowed"] == 250 and r["new_basis"] == 1050; checks += 1
+print("A. IRS main example: 100 sh bought 1,000, sold 750, 100 sh rebought 800 within 30 days")
+dis, ded, adj = wash_sale(date(2026, 6, 1), 100, 250, [(date(2026, 6, 11), 100, 800)])
+print(f"   disallowed {dis:.0f}, deductible {ded:.0f}, new basis {adj[0][2] + adj[0][3]:.0f}")
+assert dis == 250 and ded == 0 and adj[0][2] + adj[0][3] == 1050; checks += 1
+dis31, _, _ = wash_sale(date(2026, 6, 1), 100, 250, [(date(2026, 7, 2), 100, 800)])
+print(f"   rebought on day +31 instead: disallowed {dis31:.0f}")
+assert dis31 == 0; checks += 1
 
-later = 1200
-print(f"later sale of the new shares at {later}: gain {later - r['new_basis']:.0f} (not {later - 800:.0f}): the 250 loss was postponed, not lost")
-assert later - r["new_basis"] == 150; checks += 1
+print("B. IRS 'less bought than sold' example: lots bought BEFORE the sale count too")
+buys = [(date(2024, 12, 13), 50, 2750), (date(2024, 12, 20), 25, 1125)]
+dis, ded, adj = wash_sale(date(2025, 1, 3), 100, 1000, buys)
+for d, sh, c, a in adj:
+    print(f"   lot {d} {sh} sh cost {c}: +{a:.0f} -> basis {c + a:.0f}")
+print(f"   disallowed {dis:.0f}, deductible {ded:.0f}")
+assert dis == 750 and ded == 250; checks += 1
+assert [c + a for _, _, c, a in adj] == [3250, 1375]; checks += 1
 
-r31 = wash_sale(1000, 750, 800, sale, sale + timedelta(days=31))
-print(f"rebought on day +31: wash sale {r31['wash']}, loss 250 allowed")
-assert not r31["wash"]; checks += 1
+print("C. IRS 'more bought than sold' example: match in purchase order")
+buys = [(date(2025, 2, d), 50, 0) for d in (3, 4, 5, 6)]   # costs not given; adjustments only
+dis, ded, adj = wash_sale(date(2025, 1, 29), 100, 1000, buys)
+for d, sh, c, a in adj:
+    print(f"   lot {d} {sh} sh: basis adjustment +{a:.0f}")
+assert dis == 1000 and [a for *_, a in adj] == [500, 500, 0, 0]; checks += 1
 
-rb = wash_sale(1000, 750, 800, sale, sale - timedelta(days=30))
-print(f"bought 30 days BEFORE the sale: wash sale {rb['wash']} (the window runs both ways)")
-assert rb["wash"]; checks += 1
-
-print(f"assertions passed: {checks}/4")
-assert checks == 4
+print(f"assertions passed: {checks}/5")
+assert checks == 5
 print("ASSERT_wash_sale_basis_ok")
-print("disclaimer: equal quantities only; pre-tax backtests stay the course default; not tax advice")
+print("disclaimer: taxable-account toy; IRA/Roth, spouse and controlled-corporation cases not modelled; not tax advice")

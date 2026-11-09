@@ -736,7 +736,7 @@
 - **Method tags:** classic: Canvas m13; QuantStart paper-before-live; Alpaca / IBKR paper docs (document-level only); Chinese supplement: JoinQuant 模拟交易 | niche: Qbot/Atlas reference architecture; Nautilus isomorphic paper/sim concept
 
 #### `compliance-ethics` — 合规、风险心态与研究伦理 / Compliance, risk mindset & research ethics
-- **Hours:** 19.5h · **Difficulty:** 2/5 · **Basis:** 8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 Example 1)
+- **Hours:** 19.5h · **Difficulty:** 2/5 · **Basis:** 8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 examples, purchase-order matching)
 - **Prereqs:** `paper-trading-infra`
 - **Summary:** 先生存；学习≠投顾；拒绝选择性汇报。
 - **Goals:**

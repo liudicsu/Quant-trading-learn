@@ -1,8 +1,15 @@
-IRS Pub 550 Example 1: cost 1,000 -> sold 750 -> rebought 800 on day +10
-wash sale: True, disallowed loss 250, new basis 1050
-later sale of the new shares at 1200: gain 150 (not 400): the 250 loss was postponed, not lost
-rebought on day +31: wash sale False, loss 250 allowed
-bought 30 days BEFORE the sale: wash sale True (the window runs both ways)
-assertions passed: 4/4
+A. IRS main example: 100 sh bought 1,000, sold 750, 100 sh rebought 800 within 30 days
+   disallowed 250, deductible 0, new basis 1050
+   rebought on day +31 instead: disallowed 0
+B. IRS 'less bought than sold' example: lots bought BEFORE the sale count too
+   lot 2024-12-13 50 sh cost 2750: +500 -> basis 3250
+   lot 2024-12-20 25 sh cost 1125: +250 -> basis 1375
+   disallowed 750, deductible 250
+C. IRS 'more bought than sold' example: match in purchase order
+   lot 2025-02-03 50 sh: basis adjustment +500
+   lot 2025-02-04 50 sh: basis adjustment +500
+   lot 2025-02-05 50 sh: basis adjustment +0
+   lot 2025-02-06 50 sh: basis adjustment +0
+assertions passed: 5/5
 ASSERT_wash_sale_basis_ok
-disclaimer: equal quantities only; pre-tax backtests stay the course default; not tax advice
+disclaimer: taxable-account toy; IRA/Roth, spouse and controlled-corporation cases not modelled; not tax advice

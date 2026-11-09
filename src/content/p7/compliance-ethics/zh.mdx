@@ -79,17 +79,24 @@ cases passed: 8/8
 
 **洗售（wash sale，按审阅报告 R25）：** 在适用美国该项所得税规则的情形下，股票/证券亏损出售或处分日前 30 个日历日至后 30 个日历日（含出售日，共 61 个日历日）内，购买/应税交换取得实质相同证券，或订立取得该证券的合同/期权等，可能触发 [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/) 的亏损扣除限制。它不是禁止交易，也不是保证免税；一般替代证券成本基础调整等另按 IRS 规定处理（[Pub. 550](https://www.irs.gov/publications/p550)），不能宣称所有情形都仅递延。
 
-**洗售：亏损是被推迟，不是消失（2026-11-10 核实）。** [IRS Publication 550](https://www.irs.gov/publications/p550)：亏损因洗售规则被禁止扣除时，要把这笔亏损加到新买入股票的成本里。新股票的持有期也要接上原来卖出那批股票的持有期。IRS 的例子：用 1,000 美元买 100 股，750 美元卖出，30 天内又用 800 美元买回 100 股：250 美元亏损不能扣除，新股票的成本基础是 1,050 美元。本课回测仍默认**税前**；如果要做税后模拟，必须按税务批次（tax lot）记账，并对每一批检查 61 天窗口。这些规则是否适用于你本人，本课不作判断（见上面的身份提醒）。
+**洗售：亏损是被推迟，不是消失（2026-11-10 核实）。** [IRS Publication 550](https://www.irs.gov/publications/p550)：亏损因洗售规则被禁止扣除时，要把这笔亏损加到新买入股票的成本里。新股票的持有期也要接上原来卖出那批股票的持有期。IRS 的例子：用 1,000 美元买 100 股，750 美元卖出，30 天内又用 800 美元买回 100 股：250 美元亏损不能扣除，新股票的成本基础是 1,050 美元。如果买回的股数比卖出的多或少，Pub 550 把卖出前后 30 天内买入的股票，按买入的先后顺序和卖出的股票逐股配对。例外：如果是在 IRA 或 Roth IRA 里买回，被禁止扣除的亏损**不**加到任何成本里；配偶或你控制的公司买入，也算洗售。本课回测仍默认**税前**；如果要做税后模拟，必须按税务批次（tax lot）记账，并对每一批检查 61 天窗口。这些规则是否适用于你本人，本课不作判断（见上面的身份提醒）。
 
-实验 `examples/p7/06_wash_sale_basis_toy.py`（只处理买卖数量相同的情形）：
+实验 `examples/p7/06_wash_sale_basis_toy.py`（用 IRS 原文的三个例子；只处理普通应税账户）：
 
 ```text
-IRS Pub 550 Example 1: cost 1,000 -> sold 750 -> rebought 800 on day +10
-wash sale: True, disallowed loss 250, new basis 1050
-later sale of the new shares at 1200: gain 150 (not 400): the 250 loss was postponed, not lost
-rebought on day +31: wash sale False, loss 250 allowed
-bought 30 days BEFORE the sale: wash sale True (the window runs both ways)
-assertions passed: 4/4
+A. IRS main example: 100 sh bought 1,000, sold 750, 100 sh rebought 800 within 30 days
+   disallowed 250, deductible 0, new basis 1050
+   rebought on day +31 instead: disallowed 0
+B. IRS 'less bought than sold' example: lots bought BEFORE the sale count too
+   lot 2024-12-13 50 sh cost 2750: +500 -> basis 3250
+   lot 2024-12-20 25 sh cost 1125: +250 -> basis 1375
+   disallowed 750, deductible 250
+C. IRS 'more bought than sold' example: match in purchase order
+   lot 2025-02-03 50 sh: basis adjustment +500
+   lot 2025-02-04 50 sh: basis adjustment +500
+   lot 2025-02-05 50 sh: basis adjustment +0
+   lot 2025-02-06 50 sh: basis adjustment +0
+assertions passed: 5/5
 ASSERT_wash_sale_basis_ok
 ```
 
@@ -238,7 +245,7 @@ n_sources=33 us_first_block=19 fields_complete=True
 6. 不标注「核验日期」。
 7. 把现行交易规则套到全部历史回测上；把仍暂缓实施的条文当作已生效。
 8. 只凭交易日期断言券商/账户已迁移到新日内保证金（2026-06-04 至 2027-10-20 有迁移期）；把 5 万美元购汇额度当成境外证券投资许可；以为美国预扣完毕就不用在中国申报。
-9. 说洗售亏损「永久消失」：它会加到新股票的成本里，等新股票卖出时再体现。
+9. 说洗售亏损「永久消失」：在普通应税账户里，它会加到新股票的成本里，等新股票卖出时再体现（在 IRA/Roth 里买回是例外）；只检查卖出之后的买入。
 
 
 ## 练习（1:1）

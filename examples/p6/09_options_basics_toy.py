@@ -84,6 +84,8 @@ print("=== E. dividends and early assignment (teaching flag) ===")
 
 
 def early_assignment_risk(call_itm: bool, extrinsic: float, dividend: float) -> bool:
+    # Teaching rule of thumb, NOT an OCC/ODD rule. The ODD (p.19) only says a call writer's chance of
+    # assignment "may increase" as the ex-date approaches.
     return call_itm and extrinsic < dividend
 
 

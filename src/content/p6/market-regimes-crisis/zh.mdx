@@ -104,7 +104,7 @@
 
 **机制识字（不是信号）：**
 
-- **美股市场熔断（MWCB）：** NYSE Rule 7.12 等以标普 500 相对前收跌幅为触发——**7% / 13% / 20%**（Level 1/2/3）；Level 1/2 在 15:25 前通常暂停约 15 分钟，Level 3 停止交易，直到**下一交易日 04:00 ET 或更晚**（NYSE 和 Nasdaq 自 2026 年秋起的规则原文；以前写的是「当日剩余时段」，见下文 MWCB 一节；以交易所现行规则为准，学习用）。
+- **美股市场熔断（MWCB）：** NYSE Rule 7.12 等以标普 500 相对前收跌幅为触发——**7% / 13% / 20%**（Level 1/2/3）；Level 1/2 在 15:25 前通常暂停约 15 分钟，Level 3 停止交易，直到**下一交易日 04:00 ET 或更晚**（NYSE、Nasdaq 等交易所自 2026 年秋起的规则原文；以前写的是「当日剩余时段」，见下文 MWCB 一节；以交易所现行规则为准，学习用）。
 - **A 股涨跌停：** 价格限制改变路径形状；回测若忽略限售/涨跌停会高估可成交量。
 - **2016 年 A 股指数熔断试行：** 实施后很快出现「熔断加速抛售」争议，证监会决定自 2016-01-08 起暂停实施（见上交所英文稿 / 证监会说明）——**暂停本身说明：机制会改变行为，不是 alpha 开关**。
 
@@ -179,18 +179,18 @@
 
 ### 8b. 美股期权：量化学习者需要的最少知识（2026-11-10 核实）
 
-在美国买卖期权之前，投资者必须阅读**期权披露文件**（ODD，《标准化期权的特征与风险》），现行版本是 **2024 年 6 月**版（[OCC ODD 页面](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)）。下面几点都引自这份文件。
+在美国买卖期权之前，投资者必须阅读**期权披露文件**（ODD，《标准化期权的特征与风险》），现行版本是 **2024 年 6 月**版（[OCC ODD 页面](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、[官方 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)，2026-11-10 核实）。下面几点都引自这份文件，并标出印刷页码。
 
-- **合约单位：** 多数股票期权的交易单位是 100 股。报价「每股权利金 4 美元」，一张合约要付 **400 美元**。新手常在这里算错 100 倍。
-- **行权方式：** 美式期权在到期前任何时间都能行权；目前交易的欧式期权都只能在到期日行权。美国个股期权多为美式；指数期权可能是欧式、现金结算，要看合约规格。
+- **合约单位：** 多数股票期权的交易单位是 100 股（p.8）。报价「每股权利金 4 美元」，一张合约要付 **400 美元**。新手常在这里算错 100 倍。
+- **行权方式：** 美式期权在到期前任何时间都能行权；截至 ODD 2024-06 版，当时交易的欧式期权都只能在到期日行权（p.7）。美国个股期权多为美式；指数期权可能是欧式、现金结算，要看合约规格。
 - **指派：** 卖方（writer）可能被「指派」，也就是被动履约。无保护的卖方可能承受非常大的亏损（见上面 OIC 的说明）。
-- **股息：** 文件写明「一般情况下，普通现金股息不调整期权条款」。所以临近除息日（见 `data-cleaning`）时，持有看涨期权的人可能提前行权去拿股息，卖出看涨期权的人可能在除息日前被指派。
-- **交收：** 自 2024-05-28 起，实物交割的股票期权在行权后的第一个营业日交收（T+1）。
+- **股息：** 文件写明「一般情况下，普通现金股息不调整期权条款」（p.18）。所以临近除息日（见 `data-cleaning`）时，持有看涨期权的人可能提前行权去拿股息；ODD 说卖出看涨期权的人被指派的概率在临近除息日时「可能上升」（p.19）。实验里「时间价值低于股息」这个判断只是教学用的经验法则，不是 ODD 的规则。
+- **交收：** 自 2024-05-28 起，实物交割的股票期权在行权后的第一个营业日交收（T+1）（p.57）。
 
 **进阶：两块理论，只作参照。**
 
 - **看跌看涨平价**（欧式、无股息；Stoll 1969）：`C - P = S - K * exp(-r * T)`。它只依赖无套利，不依赖任何模型。美式期权只满足不等式，不满足这个等式。
-- **Black-Scholes-Merton**（Black & Scholes 1973；Merton 1973）在波动率恒定、价格对数正态、无摩擦的假设下给出一个参照价格。模型价和市场价对不上，说明假设不成立，**不是**「错价」或 alpha。隐含波动率是从市场价格反推出来的数，不是对未来的预测。
+- **Black-Scholes-Merton**（Black & Scholes 1973；Merton 1973）在波动率恒定、价格对数正态、无摩擦的假设下给出一个参照价格。模型价和市场价对不上，说明假设不成立，**不是**「错价」或 alpha。隐含波动率是从期权价格反推出来的：ODD 说它反映的是市场对未来波动的预测，实际波动可能和它不符。把它当成市场隐含的估计，不保证兑现，也不是交易信号。
 
 **实验：** `examples/p6/09_options_basics_toy.py`（合成数字，只用 `math`；输出节选）：
 
@@ -287,9 +287,9 @@ does not reopen during that night's Overnight Protected Hours. Bands are not a f
 
 交易所隔夜盘计划从 2026-12-06 开始（见上文）。旧的 MWCB 条文写的是 Level 3 熔断「暂停当日剩余时段」。在 23/5 交易下，读者可能推出：当天晚上 21:00 ET 的隔夜时段就会恢复交易。**这是错的。**
 
-- NYSE 提交了 SR-NYSE-2026-43，提交即生效，把这句话改成：停止交易「直到下一交易日 04:00 ET 或更晚」。NYSE 说明这「不打算对 MWCB 机制做任何实质改变」，并表示其他自律组织（SRO）也打算提交同样的修改（[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)）。
+- NYSE 提交了 SR-NYSE-2026-43，提交即生效，把这句话改成：停止交易「直到下一交易日 04:00 ET 或更晚」。NYSE 说明这「不打算对 MWCB 机制做任何实质改变」，并表示其他自律组织（SRO）也打算提交同样的修改。NYSE 旧规则对 UTP 证券本来就是 07:00 ET 才恢复，所以「或更晚」这几个字很重要（[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)）。
 - Nasdaq 对其 Rule 4121 做了同样的修改（SR-NASDAQ-2026-080，提交即生效），并说明不改的话，它的夜间时段会允许 21:00 ET 重新开盘（[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)）。
-- 所以要写「NYSE 和 Nasdaq 已改规则，其他交易所在协调跟进」，不要写成「全市场已统一」。以各交易所现行规则为准。
+- 截至 2026-11-10，提交了同样修改并即时生效的还有：NYSE 系其余 4 家（Arca、American、National、Texas）、Nasdaq PHLX 和 Nasdaq Texas、Cboe 系 4 家股票交易所（例如 SR-CboeBZX-2026-077，[SEC 34-106582](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf)）、MEMX、MIAX Pearl、IEX、LTSE 和 MX2。FINRA、Nasdaq BX、NYSE Chicago、24X 还没查到同类文件，所以**不要**写成「全市场已统一」。各家的运作日由自己公告（Nasdaq 写明与其他 SRO 协调确定），以各交易所现行规则为准。
 - 7% / 13% / 20% 三档，以及 15:25 之后 Level 1/2 不再停牌的规定，都没有变。
 
 **实验：** `examples/p6/10_mwcb_overnight_resume_toy.py`（玩具日历，只算工作日）：
@@ -300,7 +300,8 @@ Level 3 at 2026-12-09 13:00 ET -> earliest resume 2026-12-10 04:00 ET (or later)
 order at 2026-12-09 21:00 ET -> rejected (MWCB L3 halt)
 order at 2026-12-10 04:00 ET -> not blocked by the L3 halt (actual reopening may be later)
 Level 3 on Friday 2026-12-11 -> earliest resume 2026-12-14 04:00 ET
-assertions passed: 4/4
+order at 2026-12-13 20:00 ET (Sunday) -> rejected (MWCB L3 halt)
+assertions passed: 5/5
 ```
 
 ## 常见错误 / 陷阱
@@ -345,13 +346,13 @@ assertions passed: 4/4
 <Quiz id="rc-ovb" question="第一阶段隔夜价格带被触及时会发生什么？" options={["自动暂停 5 分钟", "交易中心阻止带外成交；无自动暂停，主上市交易所可宣布监管停牌", "保证按带价成交", "全市场熔断"]} answer={1} explanation="SEC 34-106042：隔夜无自动 Trading Pause，可由主上市交易所宣布 Regulatory Halt。" />
 <Quiz id="rc-optunit" question="一只美股期权报价权利金 4 美元，一张合约要付多少钱（不含费用）？" options={["4 美元", "400 美元", "40 美元", "4,000 美元"]} answer={1} explanation="OCC ODD：多数股票期权的交易单位是 100 股，每股 4 美元就是每张 400 美元。" />
 <Quiz id="rc-bsm" question="看涨期权的 BSM 模型价低于市场价，在本课中意味着？" options={["期权错价，是 alpha 信号", "模型假设（恒定波动率、无摩擦）和市场不符；它是参照，不是信号", "看跌看涨平价被打破", "交易所出错了"]} answer={1} explanation="BSM 只是参照模型；模型价和市场价的差不是 alpha。" />
-<Quiz id="rc-mwcb3" question="按 NYSE SR-NYSE-2026-43，13:00 ET 触发 Level 3 熔断后，最早何时可以恢复交易？" options={["当晚 21:00 ET", "下一交易日 04:00 ET 或更晚", "15 分钟后", "必须等 SEC 下令"]} answer={1} explanation="条文现为「直到下一交易日 04:00 ET 或更晚」；Nasdaq 做了同样修改。" />
+<Quiz id="rc-mwcb3" question="按 NYSE SR-NYSE-2026-43，13:00 ET 触发 Level 3 熔断后，最早何时可以恢复交易？" options={["当晚 21:00 ET", "下一交易日 04:00 ET 或更晚", "15 分钟后", "必须等 SEC 下令"]} answer={1} explanation="条文现为「直到下一交易日 04:00 ET 或更晚」；Nasdaq、Cboe 等也做了同样修改，但截至 2026-11-10 并非所有交易场所都已提交。" />
 
 ## 完成标准
 
 四场景卡片 + 实验 A–D 数字与课内一致 + 「新闻≠regime」短文（含已核验链接）+ 硬规则清单。平滑概率不得出现在「实盘可用」列。
 
-**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)
+**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)、[OCC ODD 2024-06 版 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)、[SEC 34-106582（Cboe BZX）](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf)
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

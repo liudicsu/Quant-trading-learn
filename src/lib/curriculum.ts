@@ -1288,7 +1288,7 @@ const phase_P7_lessons: Lesson[] = [
     hours: 19.5,
     difficulty: 2,
     skippable: false,
-    hourBasis: "8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 Example 1)",
+    hourBasis: "8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 examples, purchase-order matching)",
     prereqs: ["paper-trading-infra"],
     goals: [
       { zh: "分开记录 FINRA 规则四个日期与券商迁移状态（未知输出 needs_broker_verification）。", en: "Record FINRA’s four rule dates separately from broker migration status (unknown → needs_broker_verification)." },

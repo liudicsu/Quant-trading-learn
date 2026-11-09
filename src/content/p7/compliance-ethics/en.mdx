@@ -81,17 +81,24 @@ Literacy only: status, tax residence and beneficial ownership decide which rules
 
 **Wash sale (per review item R25):** where the relevant US income-tax rules apply, acquiring substantially identical stock or securities by purchase or taxable exchange, or entering into a contract or option to acquire them, within the period from 30 calendar days before to 30 calendar days after the loss sale or disposition (including the sale date, 61 calendar days in total) may trigger the loss-deduction limit in [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/). It is not a trading ban and not a guaranteed tax exemption; the general basis adjustment of the replacement securities etc. follows IRS rules ([Pub. 550](https://www.irs.gov/publications/p550)), and you cannot claim every case is merely a deferral.
 
-**Wash sale: the loss is postponed, not lost (checked 2026-11-10).** [IRS Publication 550](https://www.irs.gov/publications/p550): "If your loss was disallowed because of the wash sale rules, add the disallowed loss to the cost of the new stock or securities." The holding period of the new shares also includes that of the shares sold. In the IRS example, you buy 100 shares for $1,000, sell them for $750, and buy 100 again within 30 days for $800: the $250 loss is disallowed and the new basis is $1,050. This course's backtests stay **pre-tax**; an after-tax simulation would need tax-lot accounting and a 61-day check for every lot. Whether any of this applies to you is not decided here (see the identity note above).
+**Wash sale: the loss is postponed, not lost (checked 2026-11-10).** [IRS Publication 550](https://www.irs.gov/publications/p550): "If your loss was disallowed because of the wash sale rules, add the disallowed loss to the cost of the new stock or securities." The holding period of the new shares also includes that of the shares sold. In the IRS example, you buy 100 shares for $1,000, sell them for $750, and buy 100 again within 30 days for $800: the $250 loss is disallowed and the new basis is $1,050. If you buy more or fewer shares than you sold, Pub 550 matches the replacement shares bought within 30 days **before or after** the sale to the shares sold, in the order you bought them. Exceptions: if the replacement is bought inside your IRA or Roth IRA, the disallowed loss is **not** added to any basis; a purchase by your spouse or by a corporation you control is also a wash sale. This course's backtests stay **pre-tax**; an after-tax simulation would need tax-lot accounting and a 61-day check for every lot. Whether any of this applies to you is not decided here (see the identity note above).
 
-Lab `examples/p7/06_wash_sale_basis_toy.py` (equal quantities only):
+Lab `examples/p7/06_wash_sale_basis_toy.py` (the IRS's own three examples; taxable account only):
 
 ```text
-IRS Pub 550 Example 1: cost 1,000 -> sold 750 -> rebought 800 on day +10
-wash sale: True, disallowed loss 250, new basis 1050
-later sale of the new shares at 1200: gain 150 (not 400): the 250 loss was postponed, not lost
-rebought on day +31: wash sale False, loss 250 allowed
-bought 30 days BEFORE the sale: wash sale True (the window runs both ways)
-assertions passed: 4/4
+A. IRS main example: 100 sh bought 1,000, sold 750, 100 sh rebought 800 within 30 days
+   disallowed 250, deductible 0, new basis 1050
+   rebought on day +31 instead: disallowed 0
+B. IRS 'less bought than sold' example: lots bought BEFORE the sale count too
+   lot 2024-12-13 50 sh cost 2750: +500 -> basis 3250
+   lot 2024-12-20 25 sh cost 1125: +250 -> basis 1375
+   disallowed 750, deductible 250
+C. IRS 'more bought than sold' example: match in purchase order
+   lot 2025-02-03 50 sh: basis adjustment +500
+   lot 2025-02-04 50 sh: basis adjustment +500
+   lot 2025-02-05 50 sh: basis adjustment +0
+   lot 2025-02-06 50 sh: basis adjustment +0
+assertions passed: 5/5
 ASSERT_wash_sale_basis_ok
 ```
 
@@ -240,7 +247,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 6. Skipping the “date checked” stamp.
 7. Applying today’s trading rules to the whole historical backtest; treating still-deferred provisions as in force.
 8. Asserting from the trade date alone that a broker/account has moved to the new intraday margin (phase-in 2026-06-04 to 2027-10-20); treating the USD 50,000 FX quota as a licence for overseas securities; assuming US withholding means no Chinese filing.
-9. Saying a wash-sale loss is "gone forever": it is added to the new shares' basis and shows up when they are sold.
+9. Saying a wash-sale loss is "gone forever": in a taxable account it is added to the new shares' basis and shows up when they are sold (an IRA/Roth repurchase is the exception); checking only purchases after the sale.
 
 
 ## Practice (1:1)

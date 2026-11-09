@@ -20,4 +20,4 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 
 - N1 (2026-11-08): `08_overnight_bands_toy.py` — LULD overnight price bands Phase 1 (SEC 34-106042 / 34-106624; planned 2026-12-06, dependent on systems changes), 5 synthetic cases; not a rule engine.
 
-- enrich7 (2026-11-10): `09_options_basics_toy.py` — 100-share contract unit, expiry P&L with premium, BSM as a reference, put-call parity, early-assignment flag (9 assertions); `10_mwcb_overnight_resume_toy.py` — Level 3 resumes 04:00 ET or later next trading day under 23/5 (4 assertions).
+- enrich7 (2026-11-10): `09_options_basics_toy.py` — 100-share contract unit, expiry P&L with premium, BSM as a reference, put-call parity, early-assignment flag (9 assertions); `10_mwcb_overnight_resume_toy.py` — Level 3 resumes 04:00 ET or later next trading day under 23/5, Sunday overnight still halted (5 assertions).
