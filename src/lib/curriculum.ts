@@ -568,7 +568,7 @@ const phase_P2_lessons: Lesson[] = [
       { id: "ex3", text: { zh: "合并 bps 阶梯；完成标准：≥3 档单调变差。", en: "Combined bps ladder; done when ≥3 tiers worsen." } },
       { id: "ex4", text: { zh: "容量表+图；完成标准：资金升则净夏普降。", en: "Capacity table+chart; done when Sharpe falls as capital rises." } },
       { id: "ex5", text: { zh: "引用 Almgren 2005 √ vs 3/5；完成标准：一句准确。", en: "Cite Almgren 2005 √ vs 3/5; done when one accurate sentence appears." } },
-      { id: "ex-605", text: { zh: "运行 07 脚本手算例 27-1；完成标准：0.24 美元并列出三类排除订单。", en: "Run script 07 and hand-compute Example 27-1; done when $0.24 and three excluded order types are listed." } },
+      { id: "ex-605", text: { zh: "运行 07 脚本手算例 27-1；完成标准：0.24 美元、解释带符号 ES 与 −2.8555 bps，并列出三类排除订单和两类 NMLO 例外。", en: "Run script 07 and hand-compute Example 27-1; done when $0.24, the signed ES and −2.8555 bps are explained, and three excluded order types plus two NMLO exceptions are listed." } },
     ],
 
   },

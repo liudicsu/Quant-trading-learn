@@ -1,20 +1,25 @@
 === A. SEC FAQ Example 27-1 (market buy 3000 sh; NBBO 25.30 x 25.60 at receipt) ===
-fill  400 @ 25.50: effective spread = 2 x |25.50 - 25.45| = 0.10
-fill 1000 @ 25.55: effective spread = 2 x |25.55 - 25.45| = 0.20
-fill 1600 @ 25.60: effective spread = 2 x |25.60 - 25.45| = 0.30
+fill  400 @ 25.50: buy effective spread = 2 x (25.50 - 25.45) = 0.10
+fill 1000 @ 25.55: buy effective spread = 2 x (25.55 - 25.45) = 0.20
+fill 1600 @ 25.60: buy effective spread = 2 x (25.60 - 25.45) = 0.30
 share-weighted effective spread = 0.2400 USD  (FAQ: 0.10/0.20/0.30 weighted by 400/1000/1600)
 === B. FAQ Example 38-1 share-weighted average percentage price improvement ===
 net price improvement = 2.00 USD; sum(mid x shares) = 35,092; pct = 0.005699%
-=== C. toy covered-order filter, then share-weighted effective spread (synthetic) ===
+=== C. toy report coverage, then signed effective spread (synthetic) ===
 excluded  o4: ('special_handling', 'fill-or-kill')
 excluded  o5: ('special_handling', 'non-IOC pegged')
 excluded  o6: ('directed_order_at_receiving_broker', True)
 excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
-excluded  o8: ('outside_regular_hours', True)
+excluded  o8: ('received_outside_regular_hours', True)
 excluded  o9: ('nbbo_crossed_30s_or_more', True)
-excluded o10: ('received_within_5min_before_halt_and_outstanding', True)
-covered orders: 3 (1000 sh) -> share-weighted effective spread 2.00 bps, implied half 1.00 bps
-if you (wrongly) ignore the exclusions: 21.41 bps
+excluded o10: ('received_less_than_5min_before_halt_and_outstanding', True)
+covered  o11 (NMLO): received pre-open, later executable in regular hours
+covered  o12 (NMLO): received during a halt, executable after resumption
+report coverage: 5 orders; ES computed for 3 market/marketable orders (1000 sh)
+avg signed ES = -0.0100 USD; avg mid = 35.02 USD; avg % effective spread = -2.8555 bps
+(toy mean of per-order bps = -1.9992 bps -- a different statistic, do not call it the 605 number)
+if you (wrongly) ignore the exclusions: 23.13 bps
+negative here = fills on the customer's side of the mid in THIS toy sample; not a negative fee, not a promise.
 lesson assumption: half-spread 5 bps -> compare ORDER OF MAGNITUDE only; 605 = reporter aggregate,
-covered orders, regular hours only; it is not your own fill cost and not a broker ranking.
+covered orders; it is not your own fill cost and not a broker ranking.
 ASSERT_rule605_toy_ok

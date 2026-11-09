@@ -135,13 +135,15 @@ ASSERTS_OK
 
 **What it is:** Rule 605 requires market centers and larger brokers (100,000 or more customer accounts) to publish monthly order-execution-quality reports. The amended rule's compliance date is 2026-08-01; detailed monthly reports are pipe-delimited ASCII files with 55 fields, free to download, and the summary report uses the OES CSV schema (SEC staff FAQ, [SEC](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)). This lesson **did not read the field-definition source, so it names no fields**.
 
-**Effective spread (FAQ Question 27, Example 27-1):** `effective_spread = 2 × |exec_price − mid at receipt|`. Example: a market order to buy 3000 shares is received at 3:30 p.m., NBBO 25.30 / 25.60, mid 25.45; 400 shares fill at 25.50 (0.10), 1000 at 25.55 (0.20), 1600 at 25.60 (0.30). Weighted by **executed shares** (FAQ Question 37), the average is $0.24.
+**Effective spread (17 CFR §242.600(b)(8); FAQ Question 27, Example 27-1):** keep the **direction sign**: for a buy `ES = 2 × (exec_price − mid)`, for a sell `ES = 2 × (mid − exec_price)`. A negative value means the fill landed on the customer's favourable side of the mid; it is not a "negative fee". This example is a market order, so the mid is taken at receipt; other order types use other benchmark times set by the rule (e.g. midpoint-or-better limit orders use the time they first become executable). Example: a market order to buy 3000 shares is received at 3:30 p.m., NBBO 25.30 / 25.60, mid 25.45; 400 shares fill at 25.50 (0.10), 1000 at 25.55 (0.20), 1600 at 25.60 (0.30). Weighted by **executed shares** (FAQ Question 37), the average is $0.24.
+
+**Converting to a percentage (§242.600(b)(10)):** the official measure is share-weighted average ES ÷ share-weighted average mid, **not** the average of per-order bps. With different mids the two give different numbers (see lab part C).
 
 **Three pitfalls (605 data ≠ your real cost):**
 
-1. **Covered orders only:** orders received during regular trading hours while an NBBO is disseminated (Q9).
-2. **Special handling excluded:** e.g. fill-or-kill and average-price orders (Q11); non-IOC pegged orders (Q14); directed orders excluded at the receiving broker (Q12); market/marketable limit orders received while the NBB or NBO is outside the LULD bands (Q16); an NBBO crossed for 30 seconds or more (Q19); orders received during a halt or within 5 minutes before one and still outstanding (Q20).
-3. **Regular hours only:** executions outside regular trading hours are excluded (Q28), so pre-market, after-hours and overnight costs are **invisible**.
+1. **Covered orders only:** generally orders received during regular trading hours while an NBBO is disseminated (Q9). Two exceptions are included: a **non-marketable limit order (NMLO) received pre-open**, for the remainder that becomes executable in regular hours (Q28); and an **NMLO received during a halt**, once it first becomes executable after trading resumes (Q20). Being in the report does not mean an ES is computed for it: plain NMLOs get no ES (Q30).
+2. **Special handling excluded:** e.g. fill-or-kill and average-price orders (Q11); non-IOC pegged orders (Q14); directed orders excluded at the receiving broker (Q12); market/marketable limit orders received while the NBB or NBO is outside the LULD bands (Q16); an NBBO crossed for 30 seconds or more (Q19); market/marketable limit orders received during a halt, and orders received **less than 5 minutes** before a halt (for NMLOs, first executable) that are still outstanding when it starts (Q20).
+3. **Regular hours only:** executions outside regular trading hours are excluded (Q28), so pre-market, after-hours and overnight costs are **invisible**. Keep three times apart: receipt, first executable, execution.
 
 It is an **aggregate** over the reporter's covered orders, not your own fill cost and not a broker ranking. Use it only to sanity-check the **order of magnitude** of this lesson's 5 bps half-spread.
 
@@ -151,24 +153,29 @@ It is an **aggregate** over the reporter's covered orders, not your own fill cos
 
 ```text
 === A. SEC FAQ Example 27-1 (market buy 3000 sh; NBBO 25.30 x 25.60 at receipt) ===
-fill  400 @ 25.50: effective spread = 2 x |25.50 - 25.45| = 0.10
-fill 1000 @ 25.55: effective spread = 2 x |25.55 - 25.45| = 0.20
-fill 1600 @ 25.60: effective spread = 2 x |25.60 - 25.45| = 0.30
+fill  400 @ 25.50: buy effective spread = 2 x (25.50 - 25.45) = 0.10
+fill 1000 @ 25.55: buy effective spread = 2 x (25.55 - 25.45) = 0.20
+fill 1600 @ 25.60: buy effective spread = 2 x (25.60 - 25.45) = 0.30
 share-weighted effective spread = 0.2400 USD  (FAQ: 0.10/0.20/0.30 weighted by 400/1000/1600)
 === B. FAQ Example 38-1 share-weighted average percentage price improvement ===
 net price improvement = 2.00 USD; sum(mid x shares) = 35,092; pct = 0.005699%
-=== C. toy covered-order filter, then share-weighted effective spread (synthetic) ===
+=== C. toy report coverage, then signed effective spread (synthetic) ===
 excluded  o4: ('special_handling', 'fill-or-kill')
 excluded  o5: ('special_handling', 'non-IOC pegged')
 excluded  o6: ('directed_order_at_receiving_broker', True)
 excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
-excluded  o8: ('outside_regular_hours', True)
+excluded  o8: ('received_outside_regular_hours', True)
 excluded  o9: ('nbbo_crossed_30s_or_more', True)
-excluded o10: ('received_within_5min_before_halt_and_outstanding', True)
-covered orders: 3 (1000 sh) -> share-weighted effective spread 2.00 bps, implied half 1.00 bps
-if you (wrongly) ignore the exclusions: 21.41 bps
+excluded o10: ('received_less_than_5min_before_halt_and_outstanding', True)
+covered  o11 (NMLO): received pre-open, later executable in regular hours
+covered  o12 (NMLO): received during a halt, executable after resumption
+report coverage: 5 orders; ES computed for 3 market/marketable orders (1000 sh)
+avg signed ES = -0.0100 USD; avg mid = 35.02 USD; avg % effective spread = -2.8555 bps
+(toy mean of per-order bps = -1.9992 bps -- a different statistic, do not call it the 605 number)
+if you (wrongly) ignore the exclusions: 23.13 bps
+negative here = fills on the customer's side of the mid in THIS toy sample; not a negative fee, not a promise.
 lesson assumption: half-spread 5 bps -> compare ORDER OF MAGNITUDE only; 605 = reporter aggregate,
-covered orders, regular hours only; it is not your own fill cost and not a broker ranking.
+covered orders; it is not your own fill cost and not a broker ranking.
 ASSERT_rule605_toy_ok
 ```
 
@@ -179,7 +186,7 @@ ASSERT_rule605_toy_ok
 3. Treating toy bps as an exchange’s official tariff.
 4. Scaling capital without rescaling Q/ADV in the impact term.
 5. Changing the signal after seeing the cost ladder (leakage).
-6. Treating a Rule 605 effective spread as your own real cost; forgetting it covers only regular-hours covered orders and excludes special-handling orders; guessing field names without reading the field-definition source.
+6. Treating a Rule 605 effective spread as your own real cost; writing the signed effective spread as an absolute value, or passing off a mean of per-order bps as the official percentage; forgetting it covers only covered orders (with the NMLO exceptions) and excludes special-handling orders; guessing field names without reading the field-definition source.
 
 ## Practice (1:1 with the checklist)
 
@@ -188,7 +195,7 @@ ASSERT_rule605_toy_ok
 3. **ex3** — Combined bps ladder; **done when** ≥3 tiers show monotone worsening.
 4. **ex4** — Capacity table + chart; **done when** Sharpe falls as capital rises.
 5. **ex5** — Cite Almgren et al. 2005 √ vs 3/5 note; **done when** one accurate sentence appears.
-6. **ex-605** — Run `07_rule605_effective_spread.py` and hand-compute the Example 27-1 weighted average; **done when**: you get $0.24 and list at least three excluded order types.
+6. **ex-605** — Run `07_rule605_effective_spread.py` and hand-compute the Example 27-1 weighted average; **done when**: you get $0.24, explain why part C is negative and why the official percentage is −2.8555 bps rather than −1.9992 bps, and list at least three excluded order types plus the two included NMLO exceptions.
 
 ## Quiz
 
@@ -197,7 +204,7 @@ ASSERT_rule605_toy_ok
 <Quiz id="q3-alm" question="Almgren et al. 2005 on temporary impact vs exact √?" options={["Proved √ is exact always", "Preferred ≈3/5 power on their sample; √ remains a common reduced form", "Banned all impact models", "Ignored volatility"]} answer={1} explanation="They reject β=1/2 at 95% for that desk dataset." />
 <Quiz id="q4-cap" question="Larger capital with √ impact usually?" options={["Raises net Sharpe here", "Increases impact drag and worsens net Sharpe", "Removes commission", "Fixes look-ahead"]} answer={1} explanation="Capacity table." />
 <Quiz id="q5-zero" question="Zero-cost backtest curves are?" options={["Live proof", "Not live evidence", "Required by PSR", "ADV estimates"]} answer={1} explanation="Missing frictions." />
-<Quiz id="cb-605" question="Amended Rule 605 effective-spread statistics include…" options={["Pre-market, after-hours and overnight fills", "Covered orders received in regular hours, excluding special-handling orders", "Every order in your own account", "All fill-or-kill orders"]} answer={1} explanation="FAQ Q9, Q11, Q28: regular-hours covered orders only; special handling and executions outside regular hours are excluded." />
+<Quiz id="cb-605" question="Amended Rule 605 effective-spread statistics include…" options={["Pre-market, after-hours and overnight fills", "Covered orders (including exceptions such as pre-open NMLOs and NMLOs executable after a halt), excluding special-handling orders", "Every order in your own account", "All fill-or-kill orders"]} answer={1} explanation="FAQ Q9, Q11, Q20, Q28: covered orders are generally received in regular hours, but pre-open NMLOs and NMLOs received during a halt that become executable after it are included; special-handling orders are excluded." />
 
 ## Done when
 

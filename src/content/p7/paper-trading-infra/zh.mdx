@@ -136,18 +136,25 @@ intents=6 unique_orders_sent=5（重复重试被忽略）
 - **停牌：** Alpaca 写隔夜停牌时订单被接受并挂起；而交易所在监管停牌时会**拒绝**订单（34-106042）。两者不同，对账时别混用。
 - **行情：** 免费计划下 BOATS 最新成交和历史数据延迟 15 分钟，最新报价是「real-time indicative」。
 
-**实验：** `examples/p7/05_overnight_session_fixture.py` + `examples/p7/fixtures/overnight_sessions_fixture.json`（假期只忽略周末，是玩具简化）：
+**实验：** `examples/p7/05_overnight_session_fixture.py` + `examples/p7/fixtures/overnight_sessions_fixture.json`（按券商文档，交易周从周日晚上到周五晚上：纽约时间周五 20:00 起到周日 20:00 前的订单一律拒绝；只建模周末，其他休市日和交收假日**没有建模**，是玩具简化。被拒订单不显示成交日和交收日）：
 
 ```text
-n1 SYNA ET Mon 11-09 21:00 | Shanghai Tue 11-10 10:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
-n2 SYNA ET Mon 11-09 21:05 | Shanghai Tue 11-10 10:05 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | market/day -> rejected: overnight accepts limit orders only
-n3 SYNA ET Mon 11-09 21:10 | Shanghai Tue 11-10 10:10 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/ioc -> rejected: overnight TIF must be day or gtc
-n4 SYNB ET Mon 11-09 22:00 | Shanghai Tue 11-10 11:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/gtc -> accepted but pending: overnight_halted=true (broker holds it; exchange halts would reject)
-n5 SYNC ET Mon 11-09 23:00 | Shanghai Tue 11-10 12:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> rejected: overnight_tradable=false
-n6 SYNA ET Tue 11-10 10:15 | Shanghai Tue 11-10 23:15 | regular     | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | market/day -> accepted
-n7 SYNA ET Tue 11-10 19:30 | Shanghai Wed 11-11 08:30 | after_hours | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
-n8 SYNA ET Fri 11-13 21:30 | Shanghai Sat 11-14 10:30 | overnight   | trade_date 2026-11-16 | settle(T+1) 2026-11-17 | limit/day -> rejected: no overnight session on Friday evening
-assertions passed: 8/8
+ n1 SYNA ET Mon 11-09 21:00 | Shanghai Tue 11-10 10:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
+ n2 SYNA ET Mon 11-09 21:05 | Shanghai Tue 11-10 10:05 | overnight   | trade_date -          | settle(T+1) -          | market/day -> rejected: overnight accepts limit orders only
+ n3 SYNA ET Mon 11-09 21:10 | Shanghai Tue 11-10 10:10 | overnight   | trade_date -          | settle(T+1) -          | limit/ioc -> rejected: overnight TIF must be day or gtc
+ n4 SYNB ET Mon 11-09 22:00 | Shanghai Tue 11-10 11:00 | overnight   | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/gtc -> accepted but pending: overnight_halted=true (broker holds it; exchange halts would reject)
+ n5 SYNC ET Mon 11-09 23:00 | Shanghai Tue 11-10 12:00 | overnight   | trade_date -          | settle(T+1) -          | limit/day -> rejected: overnight_tradable=false
+ n6 SYNA ET Tue 11-10 10:15 | Shanghai Tue 11-10 23:15 | regular     | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | market/day -> accepted
+ n7 SYNA ET Tue 11-10 19:30 | Shanghai Wed 11-11 08:30 | after_hours | trade_date 2026-11-10 | settle(T+1) 2026-11-11 | limit/day -> accepted
+ n8 SYNA ET Fri 11-13 21:30 | Shanghai Sat 11-14 10:30 | closed      | trade_date -          | settle(T+1) -          | limit/day -> rejected: weekly closure (Fri 20:00 to Sun 20:00 ET)
+ n9 SYNA ET Sat 11-14 01:00 | Shanghai Sat 11-14 14:00 | closed      | trade_date -          | settle(T+1) -          | limit/day -> rejected: weekly closure (Fri 20:00 to Sun 20:00 ET)
+n10 SYNA ET Sat 11-14 21:00 | Shanghai Sun 11-15 10:00 | closed      | trade_date -          | settle(T+1) -          | limit/day -> rejected: weekly closure (Fri 20:00 to Sun 20:00 ET)
+n11 SYNA ET Sun 11-15 01:00 | Shanghai Sun 11-15 14:00 | closed      | trade_date -          | settle(T+1) -          | limit/day -> rejected: weekly closure (Fri 20:00 to Sun 20:00 ET)
+n12 SYNA ET Sun 11-15 19:59 | Shanghai Mon 11-16 08:59 | closed      | trade_date -          | settle(T+1) -          | limit/day -> rejected: weekly closure (Fri 20:00 to Sun 20:00 ET)
+n13 SYNA ET Sun 11-15 20:00 | Shanghai Mon 11-16 09:00 | overnight   | trade_date 2026-11-16 | settle(T+1) 2026-11-17 | limit/day -> accepted
+n14 SYNA ET Mon 11-16 01:00 | Shanghai Mon 11-16 14:00 | overnight   | trade_date 2026-11-16 | settle(T+1) 2026-11-17 | limit/day -> accepted
+n15 SYNA ET Fri 11-13 19:59 | Shanghai Sat 11-14 08:59 | after_hours | trade_date 2026-11-13 | settle(T+1) 2026-11-16 | limit/day -> accepted
+assertions passed: 15/15
 note: a Monday 21:00 ET order shows a TUESDAY trade date and Shanghai Tuesday 10:00 (EST, UTC-5).
 exchange Overnight Protected Hours 21:00-04:00 ET = 10:00-17:00 Shanghai while US is on EST (planned 2026-12-06).
 ```

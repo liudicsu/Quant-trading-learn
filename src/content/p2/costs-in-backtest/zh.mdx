@@ -135,13 +135,15 @@ ASSERTS_OK
 
 **是什么：** Rule 605 要求市场中心和较大的券商（客户账户数达 10 万及以上）每月公开订单执行质量报告。修订后的规则合规日为 2026-08-01；详细月报是竖线分隔的 ASCII 文件，共 55 个字段，可免费下载；摘要报告用 OES 的 CSV 格式（SEC 员工 FAQ，[SEC](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)）。本课**没有读字段定义原文，所以不写字段名**。
 
-**有效价差（FAQ 第 27 题，例 27-1）：** `effective_spread = 2 × |成交价 − 收单时 mid|`。例子：15:30 收到买 3000 股的市价单，NBBO 25.30 / 25.60，mid 25.45；400 股成交于 25.50（0.10）、1000 股于 25.55（0.20）、1600 股于 25.60（0.30）。按**成交股数**加权（FAQ 第 37 题），平均 0.24 美元。
+**有效价差（17 CFR §242.600(b)(8)；FAQ 第 27 题，例 27-1）：** 要**保留方向符号**：买单 `ES = 2 × (成交价 − mid)`，卖单 `ES = 2 × (mid − 成交价)`。结果为负，表示成交价落在 mid 对客户有利的一侧，不是「负手续费」。本例是市价单，mid 取收单时刻；其他订单类型的基准时刻按条款另定（例如 midpoint-or-better 限价单看首次可执行时刻）。例子：15:30 收到买 3000 股的市价单，NBBO 25.30 / 25.60，mid 25.45；400 股成交于 25.50（0.10）、1000 股于 25.55（0.20）、1600 股于 25.60（0.30）。按**成交股数**加权（FAQ 第 37 题），平均 0.24 美元。
+
+**换算成百分比（§242.600(b)(10)）：** 官方口径是「按股数加权的平均 ES ÷ 按股数加权的平均 mid」，**不是**先把每笔换成 bps 再平均。两者在 mid 不同的样本里会给出不同数字（见实验 C 部分）。
 
 **三个坑（605 数据 ≠ 你的真实成本）：**
 
-1. **只统计「覆盖订单」：** 常规交易时段、有 NBBO 时收到的订单（第 9 题）。
-2. **排除特殊处理订单：** 例如 fill-or-kill、均价订单（第 11 题）；非 IOC 的挂钩订单（第 14 题）；在接收券商处排除定向订单（第 12 题）；NBB 或 NBO 在 LULD 价格带外时收到的市价/可成交限价单（第 16 题）；NBBO 交叉 30 秒及以上（第 19 题）；停牌期间或停牌前 5 分钟内收到且仍未完成的订单（第 20 题）。
-3. **只含常规时段：** 常规时段之外的成交不计入（第 28 题），所以盘前、盘后、隔夜成本**看不到**。
+1. **只统计「覆盖订单」：** 一般是常规交易时段、有 NBBO 时收到的订单（第 9 题）。但有两个例外会被纳入：**盘前收到的非可成交限价单（NMLO）**，之后在常规时段变为可执行的剩余部分（第 28 题）；**停牌期间收到的 NMLO**，在恢复交易后首次可执行时纳入（第 20 题）。另外，纳入报告不等于会为它算有效价差：普通 NMLO 不计算 ES（第 30 题）。
+2. **排除特殊处理订单：** 例如 fill-or-kill、均价订单（第 11 题）；非 IOC 的挂钩订单（第 14 题）；在接收券商处排除定向订单（第 12 题）；NBB 或 NBO 在 LULD 价格带外时收到的市价/可成交限价单（第 16 题）；NBBO 交叉 30 秒及以上（第 19 题）；停牌期间收到的市价/可成交限价单，以及在停牌前**不足 5 分钟**内收到（NMLO 看首次可执行时刻）且停牌时仍有未完成部分的订单（第 20 题）。
+3. **只含常规时段：** 常规时段之外的成交不计入（第 28 题），所以盘前、盘后、隔夜成本**看不到**。注意区分三个时刻：收单、首次可执行、成交。
 
 它是报告方所有覆盖订单的**汇总**，不是你自己的成交成本，也不是券商排名。用法：只拿来检查本课 5 bps 半价差假设的**量级**。
 
@@ -151,24 +153,29 @@ ASSERTS_OK
 
 ```text
 === A. SEC FAQ Example 27-1 (market buy 3000 sh; NBBO 25.30 x 25.60 at receipt) ===
-fill  400 @ 25.50: effective spread = 2 x |25.50 - 25.45| = 0.10
-fill 1000 @ 25.55: effective spread = 2 x |25.55 - 25.45| = 0.20
-fill 1600 @ 25.60: effective spread = 2 x |25.60 - 25.45| = 0.30
+fill  400 @ 25.50: buy effective spread = 2 x (25.50 - 25.45) = 0.10
+fill 1000 @ 25.55: buy effective spread = 2 x (25.55 - 25.45) = 0.20
+fill 1600 @ 25.60: buy effective spread = 2 x (25.60 - 25.45) = 0.30
 share-weighted effective spread = 0.2400 USD  (FAQ: 0.10/0.20/0.30 weighted by 400/1000/1600)
 === B. FAQ Example 38-1 share-weighted average percentage price improvement ===
 net price improvement = 2.00 USD; sum(mid x shares) = 35,092; pct = 0.005699%
-=== C. toy covered-order filter, then share-weighted effective spread (synthetic) ===
+=== C. toy report coverage, then signed effective spread (synthetic) ===
 excluded  o4: ('special_handling', 'fill-or-kill')
 excluded  o5: ('special_handling', 'non-IOC pegged')
 excluded  o6: ('directed_order_at_receiving_broker', True)
 excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
-excluded  o8: ('outside_regular_hours', True)
+excluded  o8: ('received_outside_regular_hours', True)
 excluded  o9: ('nbbo_crossed_30s_or_more', True)
-excluded o10: ('received_within_5min_before_halt_and_outstanding', True)
-covered orders: 3 (1000 sh) -> share-weighted effective spread 2.00 bps, implied half 1.00 bps
-if you (wrongly) ignore the exclusions: 21.41 bps
+excluded o10: ('received_less_than_5min_before_halt_and_outstanding', True)
+covered  o11 (NMLO): received pre-open, later executable in regular hours
+covered  o12 (NMLO): received during a halt, executable after resumption
+report coverage: 5 orders; ES computed for 3 market/marketable orders (1000 sh)
+avg signed ES = -0.0100 USD; avg mid = 35.02 USD; avg % effective spread = -2.8555 bps
+(toy mean of per-order bps = -1.9992 bps -- a different statistic, do not call it the 605 number)
+if you (wrongly) ignore the exclusions: 23.13 bps
+negative here = fills on the customer's side of the mid in THIS toy sample; not a negative fee, not a promise.
 lesson assumption: half-spread 5 bps -> compare ORDER OF MAGNITUDE only; 605 = reporter aggregate,
-covered orders, regular hours only; it is not your own fill cost and not a broker ranking.
+covered orders; it is not your own fill cost and not a broker ranking.
 ASSERT_rule605_toy_ok
 ```
 
@@ -179,7 +186,7 @@ ASSERT_rule605_toy_ok
 3. 把玩具 bps 当成交易所官费。
 4. 放大资金却不重算 Q/ADV 冲击项。
 5. 看完成本阶梯再改信号（泄漏）。
-6. 把 Rule 605 报告里的有效价差当成你自己的真实成本；忘了它只含常规时段的覆盖订单、排除特殊处理订单；在没读字段定义原文时猜字段名。
+6. 把 Rule 605 报告里的有效价差当成你自己的真实成本；把带符号的有效价差写成绝对值，或用逐笔 bps 的平均冒充官方百分比；忘了它只含覆盖订单（有 NMLO 例外）、排除特殊处理订单；在没读字段定义原文时猜字段名。
 
 ## 练习（与任务清单 1:1）
 
@@ -188,7 +195,7 @@ ASSERT_rule605_toy_ok
 3. **ex3**：合并 bps 阶梯；**完成标准**：≥3 档单调变差。
 4. **ex4**：容量表 + 图；**完成标准**：资金上升时净夏普变差。
 5. **ex5**：引用 Almgren 等 2005 的 √ vs 3/5 说明；**完成标准**：一句准确表述。
-6. **ex-605** — 运行 `07_rule605_effective_spread.py`，手算例 27-1 的加权平均；**完成标准**：得到 0.24 美元，并列出至少三类被排除的订单。
+6. **ex-605** — 运行 `07_rule605_effective_spread.py`，手算例 27-1 的加权平均；**完成标准**：得到 0.24 美元，说明 C 部分为何得到负值、为何官方百分比是 −2.8555 bps 而不是 −1.9992 bps，并列出至少三类被排除的订单和两类被纳入的 NMLO 例外。
 
 ## 测验
 
@@ -197,7 +204,7 @@ ASSERT_rule605_toy_ok
 <Quiz id="q3-alm" question="Almgren 等 2005 对精确 √ 临时冲击？" options={["证明 √ 永远精确", "在其样本上更偏好约 3/5 幂；√ 仍是常见简化", "禁止一切冲击模型", "忽略波动率"]} answer={1} explanation="该桌样本在 95% 水平拒绝 β=1/2。" />
 <Quiz id="q4-cap" question="√ 冲击下更大资金通常？" options={["提高净夏普", "加大冲击拖累、净夏普变差", "取消佣金", "修复前瞻"]} answer={1} explanation="容量表。" />
 <Quiz id="q5-zero" question="零成本回测曲线是？" options={["实盘证明", "不能当实盘论据", "PSR 必需", "ADV 估计"]} answer={1} explanation="缺摩擦。" />
-<Quiz id="cb-605" question="修订后 Rule 605 的有效价差统计包含？" options={["盘前、盘后和隔夜成交", "常规时段收到的覆盖订单，排除特殊处理订单", "你自己账户的所有订单", "所有 fill-or-kill 订单"]} answer={1} explanation="FAQ 第 9、11、28 题：只统计常规时段覆盖订单，排除特殊处理和常规时段外成交。" />
+<Quiz id="cb-605" question="修订后 Rule 605 的有效价差统计包含？" options={["盘前、盘后和隔夜成交", "覆盖订单（含盘前 NMLO 和停牌后可执行 NMLO 等例外），排除特殊处理订单", "你自己账户的所有订单", "所有 fill-or-kill 订单"]} answer={1} explanation="FAQ 第 9、11、20、28 题：覆盖订单一般是常规时段收单，但盘前收到的 NMLO 和停牌期间收到、恢复后可执行的 NMLO 也会纳入；特殊处理订单排除。" />
 
 ## 完成标准
 
