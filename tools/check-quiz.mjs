@@ -35,6 +35,8 @@ for (const d of dirs) {
 const SEM = [
   ["p6mrc-q5", "zh", "不是交易信号", "卖出信号"],
   ["p6mrc-q5", "en", "not a trade signal", "A sell signal"],
+  ["cb-605", "zh", "排除特殊处理订单", "你自己账户的所有订单"],
+  ["cb-605", "en", "excluding special-handling orders", "Every order in your own account"],
 ];
 for (const [id, lang, right, wrong] of SEM) {
   const q = all[lang].get(id);
@@ -44,6 +46,18 @@ for (const [id, lang, right, wrong] of SEM) {
   const wi = q.opts.findIndex((o) => o.includes(wrong));
   if (wi < 0 || wi === q.a) fail(`${id}/${lang}: "${wrong}" must exist and be graded wrong`);
   else console.log(`ok   ${id}/${lang}: answer=${q.a} "${correct}" correct; "${q.opts[wi]}" graded wrong`);
+}
+// stem/explanation assertions (R45): cb-605 asks about report COVERAGE, and must say plain NMLOs get no ES.
+const STEM = [
+  ["src/content/p2/costs-in-backtest/zh.mdx", "cb-605", ["覆盖订单范围", "普通 NMLO 不计 ES"], ["有效价差统计包含"]],
+  ["src/content/p2/costs-in-backtest/en.mdx", "cb-605", ["covered-order scope", "plain NMLOs get no ES"], ["effective-spread statistics include"]],
+];
+for (const [file, id, must, mustNot] of STEM) {
+  const line = fs.readFileSync(path.join(R, file), "utf8").split("\n").find((l) => l.includes(`id="${id}"`)) || "";
+  if (!line) { fail(`${file}: ${id} not found`); continue; }
+  const miss = must.filter((s) => !line.includes(s)), bad = mustNot.filter((s) => line.includes(s));
+  if (miss.length || bad.length) fail(`${file}: ${id} stem/explanation missing ${JSON.stringify(miss)} or contains ${JSON.stringify(bad)}`);
+  else console.log(`ok   ${id} stem/explanation: ${file.split("/").pop()}`);
 }
 console.log(errors ? `quiz check FAILED (${errors})` : `quiz check PASSED: ${n} quiz pairs zh/en, ${SEM.length} semantic assertions`);
 process.exit(errors ? 1 : 0);

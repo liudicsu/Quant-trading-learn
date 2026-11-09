@@ -12,10 +12,12 @@ excluded  o6: ('directed_order_at_receiving_broker', True)
 excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
 excluded  o8: ('received_outside_regular_hours', True)
 excluded  o9: ('nbbo_crossed_30s_or_more', True)
-excluded o10: ('received_less_than_5min_before_halt_and_outstanding', True)
+excluded o10: ('halt', '<5 min before halt (receipt), outstanding')
+excluded o13: ('halt', '<5 min before halt (first executable), outstanding')
 covered  o11 (NMLO): received pre-open, later executable in regular hours
 covered  o12 (NMLO): received during a halt, executable after resumption
-report coverage: 5 orders; ES computed for 3 market/marketable orders (1000 sh)
+covered  o14 (NMLO): received 2 min before halt, first executable only after resumption
+report coverage: 6 orders; ES computed for 3 market/marketable orders (1000 sh)
 avg signed ES = -0.0100 USD; avg mid = 35.02 USD; avg % effective spread = -2.8555 bps
 (toy mean of per-order bps = -1.9992 bps -- a different statistic, do not call it the 605 number)
 if you (wrongly) ignore the exclusions: 23.13 bps

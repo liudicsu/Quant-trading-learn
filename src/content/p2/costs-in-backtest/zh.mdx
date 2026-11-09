@@ -166,10 +166,12 @@ excluded  o6: ('directed_order_at_receiving_broker', True)
 excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
 excluded  o8: ('received_outside_regular_hours', True)
 excluded  o9: ('nbbo_crossed_30s_or_more', True)
-excluded o10: ('received_less_than_5min_before_halt_and_outstanding', True)
+excluded o10: ('halt', '<5 min before halt (receipt), outstanding')
+excluded o13: ('halt', '<5 min before halt (first executable), outstanding')
 covered  o11 (NMLO): received pre-open, later executable in regular hours
 covered  o12 (NMLO): received during a halt, executable after resumption
-report coverage: 5 orders; ES computed for 3 market/marketable orders (1000 sh)
+covered  o14 (NMLO): received 2 min before halt, first executable only after resumption
+report coverage: 6 orders; ES computed for 3 market/marketable orders (1000 sh)
 avg signed ES = -0.0100 USD; avg mid = 35.02 USD; avg % effective spread = -2.8555 bps
 (toy mean of per-order bps = -1.9992 bps -- a different statistic, do not call it the 605 number)
 if you (wrongly) ignore the exclusions: 23.13 bps
@@ -204,7 +206,7 @@ ASSERT_rule605_toy_ok
 <Quiz id="q3-alm" question="Almgren 等 2005 对精确 √ 临时冲击？" options={["证明 √ 永远精确", "在其样本上更偏好约 3/5 幂；√ 仍是常见简化", "禁止一切冲击模型", "忽略波动率"]} answer={1} explanation="该桌样本在 95% 水平拒绝 β=1/2。" />
 <Quiz id="q4-cap" question="√ 冲击下更大资金通常？" options={["提高净夏普", "加大冲击拖累、净夏普变差", "取消佣金", "修复前瞻"]} answer={1} explanation="容量表。" />
 <Quiz id="q5-zero" question="零成本回测曲线是？" options={["实盘证明", "不能当实盘论据", "PSR 必需", "ADV 估计"]} answer={1} explanation="缺摩擦。" />
-<Quiz id="cb-605" question="修订后 Rule 605 的有效价差统计包含？" options={["盘前、盘后和隔夜成交", "覆盖订单（含盘前 NMLO 和停牌后可执行 NMLO 等例外），排除特殊处理订单", "你自己账户的所有订单", "所有 fill-or-kill 订单"]} answer={1} explanation="FAQ 第 9、11、20、28 题：覆盖订单一般是常规时段收单，但盘前收到的 NMLO 和停牌期间收到、恢复后可执行的 NMLO 也会纳入；特殊处理订单排除。" />
+<Quiz id="cb-605" question="Rule 605 报告的覆盖订单范围包含？" options={["盘前、盘后和隔夜成交", "覆盖订单（含盘前 NMLO 和停牌后可执行 NMLO 等例外），排除特殊处理订单", "你自己账户的所有订单", "所有 fill-or-kill 订单"]} answer={1} explanation="FAQ 第 9、11、20、28 题：覆盖订单一般是常规时段收单，但盘前收到的 NMLO 和停牌期间收到、恢复后可执行的 NMLO 也会纳入；特殊处理订单排除。纳入报告不等于计算 ES：普通 NMLO 不计 ES（第 30 题）。" />
 
 ## 完成标准
 

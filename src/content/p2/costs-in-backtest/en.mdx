@@ -166,10 +166,12 @@ excluded  o6: ('directed_order_at_receiving_broker', True)
 excluded  o7: ('nbb_or_nbo_outside_luld_bands', True)
 excluded  o8: ('received_outside_regular_hours', True)
 excluded  o9: ('nbbo_crossed_30s_or_more', True)
-excluded o10: ('received_less_than_5min_before_halt_and_outstanding', True)
+excluded o10: ('halt', '<5 min before halt (receipt), outstanding')
+excluded o13: ('halt', '<5 min before halt (first executable), outstanding')
 covered  o11 (NMLO): received pre-open, later executable in regular hours
 covered  o12 (NMLO): received during a halt, executable after resumption
-report coverage: 5 orders; ES computed for 3 market/marketable orders (1000 sh)
+covered  o14 (NMLO): received 2 min before halt, first executable only after resumption
+report coverage: 6 orders; ES computed for 3 market/marketable orders (1000 sh)
 avg signed ES = -0.0100 USD; avg mid = 35.02 USD; avg % effective spread = -2.8555 bps
 (toy mean of per-order bps = -1.9992 bps -- a different statistic, do not call it the 605 number)
 if you (wrongly) ignore the exclusions: 23.13 bps
@@ -204,7 +206,7 @@ ASSERT_rule605_toy_ok
 <Quiz id="q3-alm" question="Almgren et al. 2005 on temporary impact vs exact √?" options={["Proved √ is exact always", "Preferred ≈3/5 power on their sample; √ remains a common reduced form", "Banned all impact models", "Ignored volatility"]} answer={1} explanation="They reject β=1/2 at 95% for that desk dataset." />
 <Quiz id="q4-cap" question="Larger capital with √ impact usually?" options={["Raises net Sharpe here", "Increases impact drag and worsens net Sharpe", "Removes commission", "Fixes look-ahead"]} answer={1} explanation="Capacity table." />
 <Quiz id="q5-zero" question="Zero-cost backtest curves are?" options={["Live proof", "Not live evidence", "Required by PSR", "ADV estimates"]} answer={1} explanation="Missing frictions." />
-<Quiz id="cb-605" question="Amended Rule 605 effective-spread statistics include…" options={["Pre-market, after-hours and overnight fills", "Covered orders (including exceptions such as pre-open NMLOs and NMLOs executable after a halt), excluding special-handling orders", "Every order in your own account", "All fill-or-kill orders"]} answer={1} explanation="FAQ Q9, Q11, Q20, Q28: covered orders are generally received in regular hours, but pre-open NMLOs and NMLOs received during a halt that become executable after it are included; special-handling orders are excluded." />
+<Quiz id="cb-605" question="The covered-order scope of a Rule 605 report includes…" options={["Pre-market, after-hours and overnight fills", "Covered orders (including exceptions such as pre-open NMLOs and NMLOs executable after a halt), excluding special-handling orders", "Every order in your own account", "All fill-or-kill orders"]} answer={1} explanation="FAQ Q9, Q11, Q20, Q28: covered orders are generally received in regular hours, but pre-open NMLOs and NMLOs received during a halt that become executable after it are included; special-handling orders are excluded. Being in the report is not the same as getting an ES: plain NMLOs get no ES (Q30)." />
 
 ## Done when
 
