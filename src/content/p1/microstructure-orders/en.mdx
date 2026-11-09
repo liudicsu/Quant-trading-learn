@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**9.75 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution) + 0.5h overnight trading & overnight price bands + 0.25h Rule 612/610(c) version trap) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
+This lesson (~**10 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution) + 0.5h overnight trading & overnight price bands + 0.25h Rule 612/610(c) version trap + HK T+1 plan comparison 0.25h) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
 
 **Goals:** hand-calc mid and market-buy bps; write a fill/cost sheet; compare close vs next-open (and shift) narratives.
 
@@ -93,6 +93,16 @@ ASSERTS_OK
 **Default scope:** US-listed stocks, USD. This is mechanism literacy, not broker rules or investment advice.
 
 - **T+1:** since 2024-05-28 most US securities trades settle **one business day** after the trade date ([SEC](https://www.sec.gov/newsroom/press-releases/2024-62)). It is not “24 hours”, and it does not mean you cannot sell the same day. Weekends and exchange holidays are not business days.
+
+**Settlement-cycle comparison (checked 2026-11-09; HK is supplementary reading):**
+
+| Market | Cycle | Status |
+|---|---|---|
+| US stocks | T+1 | **In effect** since 2024-05-28 ([SEC](https://www.sec.gov/newsroom/press-releases/2024-62)) |
+| HK stocks (incl. Southbound Connect) | T+2 today → planned T+1 | HKEX consultation conclusions (2026-10-16): target **H2 2028**, market-readiness target 2028-09, subject to market readiness and regulatory approval; the Q4 2027 date in the 2026-04 consultation paper is no longer used. **Planned ≠ in effect** ([HKEX conclusions](https://www.hkex.com.hk/-/media/HKEX-Market/Services/Settlement-and-Depository/Accelerated-Settlement-for-the-Hong-Kong-Cash-Market-T1/T1ConsultationConclusion.pdf), [SFC 26PR171](https://apps.sfc.hk/edistributionWeb/gateway/EN/news-and-announcements/news/doc?refNo=26PR171)) |
+| Northbound Connect (Mainland securities) | Outside HK T+1 scope | Settles under Mainland rules |
+
+HK scope: secondary-market exchange trades and physical settlement after stock-option exercise/assignment are in; ETP creations/redemptions align "where practicable"; primary-market deals such as IPOs and structured-product issuance/expiry are out.
 - **Cash vs margin account:** a cash account buys with settled funds; a margin account borrows from the broker and has maintenance margin. The PDT successor rule and its phase-in are in `compliance-ethics` (not repeated here).
 - **NBBO / SIP / IEX:** the NBBO is the consolidated **best bid + best offer** across exchanges; the SIP is the processor that publishes consolidated data. A single venue (e.g. IEX) can show a wider spread than the NBBO.
 - **Rule 611 (Order Protection Rule) status box:** on 2026-06-11 the SEC issued a **proposal** to rescind Rule 611 (S7-2026-20, Release 34-105655, comments due 2026-08-17); as of 2026-11-08 it is still a proposal and the eCFR still lists §242.611. **Do not write “repealed”** ([SEC](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)).

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **9.75 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **10 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -93,6 +93,16 @@ ASSERTS_OK
 **默认场景：** 美国上市股票、美元。下面是机制识字，不是券商规则或投资建议。
 
 - **T+1：** 自 2024-05-28 起，多数美国证券交易在成交后**下一个营业日**交收（[SEC](https://www.sec.gov/newsroom/press-releases/2024-62)）。不是「24 小时」，也不意味着当天不能卖。周末与交易所假日不算营业日。
+
+**交收周期对照（2026-11-09 核实；港股为补充阅读）：**
+
+| 市场 | 交收周期 | 状态 |
+|---|---|---|
+| 美股 | T+1 | 2024-05-28 起**已实施**（[SEC](https://www.sec.gov/newsroom/press-releases/2024-62)） |
+| 港股（含南向港股通） | 目前 T+2 → 计划 T+1 | HKEX 2026-10-16 咨询总结：目标 **2028 年下半年**，市场就绪目标 2028-09，取决于市场准备情况与监管批准；2026-04 咨询稿的 2027 年第四季度已不再沿用。**计划 ≠ 已实施**（[HKEX 咨询总结](https://www.hkex.com.hk/-/media/HKEX-Market/Services/Settlement-and-Depository/Accelerated-Settlement-for-the-Hong-Kong-Cash-Market-T1/T1ConsultationConclusion.pdf)、[SFC 26PR171](https://apps.sfc.hk/edistributionWeb/gateway/EN/news-and-announcements/news/doc?refNo=26PR171)） |
+| 北向沪深股通（内地证券） | 不在港股 T+1 范围内 | 按内地市场规则交收 |
+
+港股范围：二级市场交易所交易、股票期权行权/指派后的实物交收纳入；ETP 申购赎回为「在可行情况下」对齐；IPO 等一级市场、结构性产品发行与到期不在范围内。
 - **现金账户 vs 保证金账户：** 现金账户用已交收资金买入；保证金账户借券商的钱，适用维持保证金。PDT 继任规则及迁移期见 `compliance-ethics`（本课不重复）。
 - **NBBO / SIP / IEX：** NBBO 是各交易所中**最高买价 + 最低卖价**的合并报价；SIP 是发布合并行情的证券信息处理器。只看单一交易所（例如 IEX）看到的价差可能比 NBBO 宽。
 - **Rule 611（订单保护规则）状态框：** SEC 于 2026-06-11 发布撤销 Rule 611 的**提案**（S7-2026-20，Release 34-105655，意见截止 2026-08-17）；截至 2026-11-08，它仍是提案，eCFR 仍列 §242.611。**不要写成「已废除」**（[SEC](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)）。

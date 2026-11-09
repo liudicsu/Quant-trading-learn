@@ -27,7 +27,7 @@
 | `stats-probability-basics` | P0 | 8 | 2 | 是 | python-pandas-timeseries |
 | `basic-finance-markets` | P0 | 5 | 1 | 是 | — |
 | `markets-language` | P1 | 5 | 2 | 否 | basic-finance-markets |
-| `microstructure-orders` | P1 | 9.75 | 2 | 否 | markets-language |
+| `microstructure-orders` | P1 | 10 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 8 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
 | `data-cleaning` | P2 | 25 | 3 | 否 | eval-lab |
@@ -59,7 +59,7 @@
 | 阶段 | 名称 | 课数 | 总课时 | 6h/周 | 12h/周 | 依赖簇 |
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
-| P1 | 市场语言与度量 / Market language & measurement | 4 | 29.75h | ~5.0 周 | ~2.5 周 | Market concepts + evaluation language |
+| P1 | 市场语言与度量 / Market language & measurement | 4 | 30h | ~5.0 周 | ~2.5 周 | Market concepts + evaluation language |
 | P2 | 数据与诚实回测 / Data & honest backtests | 4 | 67.75h | ~11.3 周 | ~5.6 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 33h | ~5.5 周 | ~2.8 周 | Classic alpha templates before factors/ML |
 | P4 | 因子研究 / Factor research | 2 | 33h | ~5.5 周 | ~2.8 周 | Cross-sectional research methods |
@@ -69,10 +69,10 @@
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 26h | ~4.3 周 | ~2.2 周 | Synthesis |
 
-**全量（含 P0）：精确 384.75 学时（跳过 P0 为 364.75）。** 6h/周 ≈ 64.1 周；12h/周 ≈ 32.1 周。
-**跳过 P0 后：精确 364.75 学时。** 6h/周 ≈ 60.8 周；12h/周 ≈ 30.4 周。
+**全量（含 P0）：精确 385 学时（跳过 P0 为 365）。** 6h/周 ≈ 64.2 周；12h/周 ≈ 32.1 周。
+**跳过 P0 后：精确 365 学时。** 6h/周 ≈ 60.8 周；12h/周 ≈ 30.4 周。
 
-精确合计：**384.75h 全量 / 364.75h 跳过 P0**。对外可表述为约 **350–390h 全量 / 330–370h 跳过基础**（含个人复盘缓冲）。
+精确合计：**385h 全量 / 365h 跳过 P0**。对外可表述为约 **350–390h 全量 / 330–370h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -214,7 +214,7 @@
   - 市场/基准一页纸。
 - **Method tags:** classic: QuantStart beginner books; Default: US-listed stocks/ETFs in USD; Chinese supplement: JoinQuant 初识量化
 
-### P1 · 市场语言与度量（Market language & measurement）— 29.75h / 4 课
+### P1 · 市场语言与度量（Market language & measurement）— 30h / 4 课
 
 **阶段目标：** 用交易语言说话，并用收益/风险指标诚实评价玩具信号。
 
@@ -244,7 +244,7 @@
 - **Method tags:** classic: Canvas m1; QuantStart SAT process | niche: Awesome Systematic Trading (paperswithbacktest GitHub)
 
 #### `microstructure-orders` — 微观结构与订单 / Microstructure & orders
-- **Hours:** 9.75h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution) + 0.5h overnight trading & overnight LULD bands (planned 2026-12-06) + 0.25h Rule 612/610(c) version trap
+- **Hours:** 10h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution) + 0.5h overnight trading & overnight LULD bands (planned 2026-12-06) + 0.25h Rule 612/610(c) version trap + 0.25h HK T+1 plan comparison
 - **Prereqs:** `markets-language`
 - **Summary:** 价差、mid、市价/限价、滑点；同bar零成本过乐观。
 - **Goals:**
@@ -971,3 +971,4 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - N1 overnight trading + overnight LULD bands Phase 1 (SEC 34-106042 Amendment 27; 34-106624 Amendment 29, 19:45→19:30 ET, temporary ≤120 days; planned 2026-12-06, dependent on systems changes): `microstructure-orders` +0.5h, `market-regimes-crisis` +0.5h (one comparison-table row + `examples/p6/08_overnight_bands_toy.py`), `paper-trading-infra` +0.5h (`examples/p7/05_overnight_session_fixture.py` + `examples/p7/fixtures/overnight_sessions_fixture.json`).
 - N2 amended Rule 605 (SEC staff FAQ): `costs-in-backtest` +0.75h (`examples/p2/07_rule605_effective_spread.py`, FAQ Examples 27-1 and 38-1), `execution-slippage` +0.25h (605 vs FINRA 21-23). No 605 field names (schema source not read).
 - N3 Rule 612 $0.005 tick / 610(c) access-fee caps (34-101070; compliance extended to the first business day of November 2027 by 34-105656; scope per eCFR §242.612): `microstructure-orders` +0.25h, next to the Rule 611 status box.
+- N4 (2026-11-09): HK T+1 plan table in `microstructure-orders` (+0.25h). Hours: **385 full / 365 skip-P0**; P1 30h; 28 lessons.
