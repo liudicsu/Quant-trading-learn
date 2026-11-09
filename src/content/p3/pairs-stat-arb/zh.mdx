@@ -196,7 +196,7 @@ ASSERT_short_data_pit_ok
 <Quiz id="q1-eg" question="Engle–Granger 第二步检验？" options={["只检验对冲 β", "OLS 残差是否平稳（协整）", "只有 ADV", "只有 Rf"]} answer={1} explanation="对残差做 ADF/coint。" />
 <Quiz id="q2-mac" question="为何不能对 EG 残差直接用普通 ADF p？" options={["它们永远相同", "残差临界值不同（MacKinnon）；普通表反保守", "ADF 非法", "只适用于周频"]} answer={1} explanation="MacKinnon EG 表。" />
 <Quiz id="q3-roll" question="滚动 coint p 说明？" options={["全样本 p 就够", "关系可在不同窗口翻转", "成本消失", "β 恒定"]} answer={1} explanation="仅样本内一次的陷阱。" />
-<Quiz id="q4-corr" question="仅有高收益相关意味着？" options={["保证协整", "不足以构成可交易价差", "零成本", "自动 OOS 优势"]} answer={1} explanation="相关 ≠ 协整。" />
+<Quiz id="pairs-q4-corr" question="仅有高收益相关意味着？" options={["保证协整", "不足以构成可交易价差", "零成本", "自动 OOS 优势"]} answer={1} explanation="相关 ≠ 协整。" />
 <Quiz id="q5-legs" question="本课配对成本使用？" options={["n_legs=1", "n_legs=2 且含堆叠+√冲击", "永不计冲击", "只计借券"]} answer={1} explanation="统一成本模型。" />
 <Quiz id="q6-kalman" question="按 statsmodels 文档，smoothed 状态估计在 t 时刻基于什么？" options={["只基于截至 t 的观测", "基于数据集中全部观测（含 t 之后）", "只基于 t 之前一期", "与 filtered 完全相同"]} answer={1} explanation="smoothed 是双侧估计，用到了未来数据，不能当交易信号；信号用滞后的 filtered 值。" />
 <Quiz id="ps-sho" question="Reg SHO Rule 203(b) 要求？" options={["卖空前完成借券定位（locate）", "禁止所有卖空", "T+0 交收", "固定借券费"]} answer={0} explanation="Rule 203(b) 是 locate 要求。" />

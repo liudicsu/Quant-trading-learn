@@ -23,7 +23,7 @@ for (const p of fs.readdirSync(R + "src/content")) for (const l of fs.readdirSyn
 let n = 0; const all = { zh: new Map(), en: new Map() };
 for (const d of dirs) {
   const zh = quizzes(d + "/zh.mdx"), en = quizzes(d + "/en.mdx");
-  for (const [id, q] of zh) { all.zh.set(id, q); n++;
+  for (const [id, q] of zh) { if (all.zh.has(id)) fail(`${d}: quiz id ${id} duplicated across lessons (R54: ids must be site-unique)`); all.zh.set(id, q); n++;
     const e = en.get(id);
     if (!e) { fail(`${d}: ${id} missing in en`); continue; }
     if (e.opts.length !== q.opts.length) fail(`${d}: ${id} option count zh ${q.opts.length} en ${e.opts.length}`);
@@ -65,7 +65,7 @@ const optionOrder = (id, n) => Array.from({ length: n }, (_, i) => i).sort((a, b
 const pos = {};
 for (const [id, q] of all.zh) { const p = optionOrder(id, q.opts.length).indexOf(q.a); pos[p] = (pos[p] || 0) + 1; }
 const total = all.zh.size;
-for (const [p, c] of Object.entries(pos)) if (c / total > 0.5) fail(`displayed answer position ${p + 1} holds ${c}/${total} (> 50%)`);
+for (const [p, c] of Object.entries(pos)) if (c / total > 0.5) fail(`displayed answer position ${+p + 1} holds ${c}/${total} (> 50%)`);
 console.log(`ok   displayed answer positions: ${Object.entries(pos).sort().map(([p, c]) => `#${+p + 1}=${c}`).join(" ")} of ${total}`);
 console.log(errors ? `quiz check FAILED (${errors})` : `quiz check PASSED: ${n} quiz pairs zh/en, ${SEM.length} semantic assertions`);
 process.exit(errors ? 1 : 0);

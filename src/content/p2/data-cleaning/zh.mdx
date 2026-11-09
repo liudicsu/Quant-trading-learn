@@ -278,9 +278,9 @@ SYN_MACRO_2 没有发布时间 → 排除
 
 **1. 现金分红的四个日期。** 公司先宣布分红（宣布日），再确定股东名单（登记日），之后股票开始不带这次分红交易（除息日），最后发放现金（派息日）。决定你能不能拿到分红的是**除息日**：在除息日当天或之后买入，就拿不到这一次分红。美国交收改为 T+1 之后，investor.gov 写明除息日**一般就是登记日**；登记日不是营业日时，除息日是它之前的一个营业日（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)）。页面的例子：宣布日 2026-03-02，登记日 2026-03-16，除息日 2026-03-16，派息日 2026-03-17。
 
-- **例外：** 分红达到股价的 25% 或以上时，除息日推迟到派息日**之后**的下一个营业日。股票股利（包括以股票形式派发的拆股）的除息日一般也在派发之后；在这之前卖出的人要随附一张「due bill」，把新股交给买方。
+- **例外：** 现金分红、股票股利或拆股达到股价的 25% 或以上时，除息日推迟到派发日**之后**的下一个营业日（[FINRA Rule 11140(b)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11140)）；在登记日和这个除息日之间卖出的人要随附一张「due bill」，把这笔派发交给买方。低于 25% 的股票股利按常规处理：除息日等于登记日。
 - **回测记账：** 总收益在**除息日**计入（这天价格下调），现金在**派息日**才到账。两者分开记，分红绝不能算两次。`05_data_versions_calendar.py` D 节的重复计入实验，讲的是同一件事的下一层。
-- **进阶：** 数据商的 `ex_date` 字段可能缺失，或者被误填成派息日。要检查除息日不晚于派息日（25% 以上的特别分红、股票股利和拆股除外）。
+- **进阶：** 数据商的 `ex_date` 字段可能缺失，或者被误填成派息日。要检查除息日不晚于派息日（达到 25% 或以上的现金分红、股票股利或拆股除外）。
 
 **2. 版本陷阱：yfinance 改了 `Close` 的含义。** yfinance 0.2.51（2024-12-19 发布）把 `yf.download()` 的 `auto_adjust` 默认值改成 `True`，和 `Ticker.history()` 保持一致；0.2.53（2025-02-15）起，调用时不写这个参数会给出警告（[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)）。官方文档描述了两种返回形状（[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)）：
 
