@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **6.75 学时**：概念 2h + 编码 3.5h + 测验 0.5h + Rule 605 有效价差 0.75h）把摩擦拆成**四段**，加上**平方根冲击**的容量演示，并保留合并 bps 阶梯。前置：`backtest-traps`。
+本课（约 **7.25 学时**：概念 2h + 编码 3.5h + 测验 0.5h + Rule 605 有效价差 0.75h + 卖出监管费（SEC 第 31 条费用与 FINRA TAF，按日期取费率）0.5h）把摩擦拆成**四段**，加上**平方根冲击**的容量演示，并保留合并 bps 阶梯。前置：`backtest-traps`。
 
 **课内目标：** 每段成本有数值例子；堆叠分解图；资金容量图。
 
@@ -181,6 +181,35 @@ covered orders; it is not your own fill cost and not a broker ranking.
 ASSERT_rule605_toy_ok
 ```
 
+## 卖出时的监管费：SEC 第 31 条费用和 FINRA TAF（2026-11-11 核实）
+
+**是什么。** 卖出美国上市股票时（买入不收），会被收两笔很小的费用。券商通常会把它们转给你，在成交确认单上单独列出。
+
+1. **SEC 第 31 条费用（Section 31 fee）。** 交易所和 FINRA 按“覆盖范围内的卖出金额”向 SEC 交费，券商再转嫁给客户。费率按每 100 万美元卖出金额计，年中也会调整，目的是让全年收入正好等于 SEC 的预算额度。最近的费率：2025-05-13 及以前为每百万美元 27.80 美元；2025-05-14 起为 **0.00 美元**，因为 2025 财年的额度已经收齐（[SEC 2025 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2025-2)）；2026-04-04 及以后的卖出为每百万美元 **20.60 美元**（[SEC 2026 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2026-2)）。2026 财年公告写明，这个费率一直有效，直到“确定 SEC 2027 财年拨款额的立法生效后 60 个日历日”。截至 2026-11-11，[SEC 费率公告页](https://www.sec.gov/rules-regulations/fee-rate-advisories)上没有更新的第 31 条费率公告。
+2. **FINRA 交易活动费（Trading Activity Fee，TAF）。** 按卖出股数收，每笔有上限。FINRA 的[费用调整表](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2024-019/fee-adjustment-schedule)对股票（covered equity security）的规定：2025 年每股 0.000166 美元（每笔最多 8.30 美元）；2026 年 0.000195 美元（最多 9.79 美元）；2027 年 0.000232 美元（最多 11.61 美元）。之后 FINRA 又决定，2026-10-01 至 2026-12-31 的交易**暂停**收取 TAF，2027-01-01 恢复（[SR-FINRA-2026-021](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-021)；SEC Release 34-106409，91 FR 60435）。
+
+**算一遍（2026-06-15 卖出 1,000 股、每股 50 美元，共 50,000 美元）：** SEC 费用 = 50,000 × 20.60 ÷ 1,000,000 = 1.03 美元；TAF = 1,000 × 0.000195 = 0.195 美元。同样一笔在 2026-11-11 卖出，要交 1.03 美元的 SEC 费用，但没有 TAF。换成基点，每百万美元 20.60 美元约等于卖出金额的 **0.2 bps**，比本课玩具佣金 2 bps 小得多。更大的风险是**日期弄错**：费率按成交日不同，而且最近两年里既出现过 0.00 的时段，也出现过暂停。
+
+**回测规则：** 建一张带生效日期的费率表，每笔成交按成交日去查；只对卖出收；不要把今天的费率写死用在整段回测上。各家券商的取整和减免方式不同（有的把每项费用取整到美分，有的对小额卖出免收 TAF），要精确到美分，先看你自己券商的收费页面。本课不讲部分券商也会转嫁的综合审计追踪（CAT）费用。
+
+**实验：** `examples/p2/13_regulatory_fees_toy.py`（本地运行，不联网）：
+
+```text
+=== A. which rate applies on which trade date (sells only) ===
+2026-06-15 buy  1000 sh @ 50.00 (USD 50,000): SEC fee 0.0000  TAF 0.0000
+2025-08-01 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 0.0000  TAF 0.1660
+2026-06-15 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.1950
+2026-11-11 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.0000
+2027-01-04 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [check for a newer SEC advisory]
+=== B. the TAF cap binds on large share counts ===
+2026-06-15 sell 100,000 sh @ 5.00: raw TAF 19.50 -> capped 9.79; SEC fee 10.30
+=== C. size versus this lesson's toy commission ===
+SEC fee at $20.60 per million = 0.206 bps of sale proceeds (sells only); toy commission = 2 bps each way
+round trip at 2026-06-15 on USD 50,000: buy 0 + sell SEC 1.03 + TAF 0.195 = 1.225 USD
+rule: store fee schedules with effective dates; never hard-code one rate for the whole backtest.
+assertions passed: 8/8
+```
+
 ## 常见错误 / 陷阱
 
 1. 把零成本曲线当实盘证据。
@@ -189,6 +218,7 @@ ASSERT_rule605_toy_ok
 4. 放大资金却不重算 Q/ADV 冲击项。
 5. 看完成本阶梯再改信号（泄漏）。
 6. 把 Rule 605 报告里的有效价差当成你自己的真实成本；把带符号的有效价差写成绝对值，或用逐笔 bps 的平均冒充官方百分比；忘了它只含覆盖订单（有 NMLO 例外）、排除特殊处理订单；在没读字段定义原文时猜字段名。
+7. 对买入也收第 31 条费用或 TAF；整段回测只用一个费率（SEC 费率在 2025-05-14 至 2026-04-03 为 0.00，TAF 在 2026-10-01 至 2026-12-31 暂停）。
 
 ## 练习（与任务清单 1:1）
 
@@ -198,6 +228,7 @@ ASSERT_rule605_toy_ok
 4. **ex4**：容量表 + 图；**完成标准**：资金上升时净夏普变差。
 5. **ex5**：引用 Almgren 等 2005 的 √ vs 3/5 说明；**完成标准**：一句准确表述。
 6. **ex-605** — 运行 `07_rule605_effective_spread.py`，手算例 27-1 的加权平均；**完成标准**：得到 0.24 美元，说明 C 部分为何得到负值、为何官方百分比是 −2.8555 bps 而不是 −1.9992 bps，并列出至少三类被排除的订单和两类被纳入的 NMLO 例外。
+7. **ex-regfee** — 运行 `13_regulatory_fees_toy.py`，再手算 2026-05-01 和 2026-10-15 各卖出 2,000 股、每股 25 美元时的 SEC 费用和 TAF；**完成标准**：2026-05-01 为 1.03 美元和 0.39 美元，2026-10-15 为 1.03 美元和 0 美元，并能说出买入为什么两项都不收。
 
 ## 测验
 
@@ -207,12 +238,13 @@ ASSERT_rule605_toy_ok
 <Quiz id="q4-cap" question="√ 冲击下更大资金通常？" options={["提高净夏普", "加大冲击拖累、净夏普变差", "取消佣金", "修复前瞻"]} answer={1} explanation="容量表。" />
 <Quiz id="q5-zero" question="零成本回测曲线是？" options={["实盘证明", "不能当实盘论据", "PSR 必需", "ADV 估计"]} answer={1} explanation="缺摩擦。" />
 <Quiz id="cb-605" question="Rule 605 报告的覆盖订单范围包含？" options={["盘前、盘后和隔夜成交", "覆盖订单（含盘前 NMLO 和停牌后可执行 NMLO 等例外），排除特殊处理订单", "你自己账户的所有订单", "所有 fill-or-kill 订单"]} answer={1} explanation="FAQ 第 9、11、20、28 题：覆盖订单一般是常规时段收单，但盘前收到的 NMLO 和停牌期间收到、恢复后可执行的 NMLO 也会纳入；特殊处理订单排除。纳入报告不等于计算 ES：普通 NMLO 不计 ES（第 30 题）。" />
+<Quiz id="cb-regfee" question="你的回测在 2026-11-11 卖出 1,000 股、每股 50 美元。这笔卖出应计哪些监管费？" options={["都不计，因为监管费只对买入收", "按每百万美元 20.60 美元计 SEC 第 31 条费用（1.03 美元），不计 FINRA TAF，因为 TAF 在 2026-10-01 至 2026-12-31 暂停", "计 0.195 美元的 FINRA TAF，不计 SEC 费用，因为 SEC 费率是 0.00", "每笔买卖都按固定 2 bps 收"]} answer={1} explanation="两项都只对卖出收。SEC 2026 财年公告：2026-04-04 起每百万美元 20.60 美元（50,000 × 20.60 ÷ 1,000,000 = 1.03 美元）。SR-FINRA-2026-021 暂停 2026-10-01 至 2026-12-31 的交易的 TAF。SEC 费率为 0.00 的时段是 2025-05-14 至 2026-04-03。" />
 
 ## 完成标准
 
 - 四段净路径 + 分解图 + 容量图 + 测验
 
-**来源：** classic — Canvas costs；QuantStart/NYU TCA 主题。冲击 — Almgren 等 2005（[PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)）。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)
+**来源：** classic — Canvas costs；QuantStart/NYU TCA 主题。冲击 — Almgren 等 2005（[PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)）。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)；监管费（2026-11-11 核实）：[SEC 费率公告](https://www.sec.gov/rules-regulations/fee-rate-advisories)、[2026 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2026-2)、[2025 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2025-2)、[FINRA 费用调整表](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2024-019/fee-adjustment-schedule)、[SR-FINRA-2026-021](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-021)
 
 <Summary>
 **要点**：佣金、半价差、滑点、√ 冲击、容量。  

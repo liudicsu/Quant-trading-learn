@@ -1,0 +1,13 @@
+=== A. the NYSE open can print after 09:30 ===
+daily bar label 09:30, official open printed 09:31:40 -> do not assume the open is 09:30:00
+=== B. Nasdaq MOO entry cutoff 09:28 ET ===
+signal ready 09:20:00 ET -> new MOO accepted for today's cross: True
+signal ready 09:27:59 ET -> new MOO accepted for today's cross: True
+signal ready 09:28:00 ET -> new MOO accepted for today's cross: False
+signal ready 09:29:00 ET -> new MOO accepted for today's cross: False
+2026-07-01 09:28 ET = Shanghai 2026-07-01 21:28; 2026-12-01 09:28 ET = Shanghai 2026-12-01 22:28
+=== C. signal from today's open, filled at today's open = look-ahead ===
+signal uses today's official open; fill at today's official open -> look-ahead: True
+honest options: (1) signal from data available before 09:28 ET -> MOO in today's cross;
+                (2) signal uses the official open (50.12) -> fill at a later tradable time
+assertions passed: 5/5

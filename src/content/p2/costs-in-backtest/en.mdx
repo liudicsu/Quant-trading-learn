@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**6.75 hours**: 2h concepts + 3.5h coding + 0.5h quiz + 0.75h Rule 605 effective spread) splits friction into **four parts**, adds a **square-root impact** capacity demo, and keeps the combined bps ladder. Prereq: `backtest-traps`.
+This lesson (~**7.25 hours**: 2h concepts + 3.5h coding + 0.5h quiz + 0.75h Rule 605 effective spread + 0.5h SEC Section 31 fee & FINRA TAF on sells (dated fee schedules)) splits friction into **four parts**, adds a **square-root impact** capacity demo, and keeps the combined bps ladder. Prereq: `backtest-traps`.
 
 **Goals:** implement each cost with a numeric example; stacked breakdown; capital capacity chart.
 
@@ -181,6 +181,35 @@ covered orders; it is not your own fill cost and not a broker ranking.
 ASSERT_rule605_toy_ok
 ```
 
+## Sell-side regulatory fees: SEC Section 31 fee and FINRA TAF (checked 2026-11-11)
+
+**What they are.** Two small fees are charged on **sales** of US-listed stocks, not on purchases. Your broker usually passes them on to you as separate lines on the trade confirmation.
+
+1. **SEC Section 31 fee.** Exchanges and FINRA pay the SEC a fee based on the dollar amount of covered sales, and brokers pass it on. The rate is set per million dollars of sale proceeds and changes during the year so that total collections match the SEC's budget. Recent rates: $27.80 per million through 2025-05-13; **$0.00** from 2025-05-14, because the FY2025 amount had already been collected ([SEC advisory FY2025](https://www.sec.gov/rules-regulations/fee-rate-advisories/2025-2)); **$20.60 per million** for sales on or after 2026-04-04 ([SEC advisory FY2026](https://www.sec.gov/rules-regulations/fee-rate-advisories/2026-2)). The FY2026 advisory says this rate lasts "until 60 calendar days after legislation is enacted that sets the amount of the Commission's fiscal year 2027 appropriation". As of 2026-11-11 the [SEC fee-rate page](https://www.sec.gov/rules-regulations/fee-rate-advisories) lists no newer Section 31 advisory.
+2. **FINRA Trading Activity Fee (TAF).** Charged per share sold, with a cap per trade. FINRA's [fee schedule](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2024-019/fee-adjustment-schedule) for covered equity securities: 2025 $0.000166 per share (max $8.30 per trade); 2026 $0.000195 (max $9.79); 2027 $0.000232 (max $11.61). FINRA then **paused** the TAF for transactions from 2026-10-01 through 2026-12-31, resuming on 2027-01-01 ([SR-FINRA-2026-021](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-021); SEC Release 34-106409, 91 FR 60435).
+
+**Worked example (sale of 1,000 shares at $50 = $50,000, on 2026-06-15):** SEC fee = 50,000 × 20.60 ÷ 1,000,000 = $1.03; TAF = 1,000 × 0.000195 = $0.195. The same sale on 2026-11-11 pays the $1.03 SEC fee but no TAF. In basis points, $20.60 per million is about **0.2 bps** of the sale amount, so it is small next to this lesson's 2 bps toy commission. The bigger risk is **getting the date wrong**: rates differ by trade date, and both a $0.00 period and a pause exist in the last two years.
+
+**Backtest rule:** keep a fee table with effective dates and look up the rate on each trade date; charge it on sells only; do not hard-code today's rate across a whole backtest. Brokers round and waive in their own ways (some round each fee to the cent, some waive the TAF on small sales), so read your own broker's fee page before using exact cents. This lesson does not cover the Consolidated Audit Trail (CAT) fees that some brokers also pass on.
+
+**Lab:** `examples/p2/13_regulatory_fees_toy.py` (local, no network):
+
+```text
+=== A. which rate applies on which trade date (sells only) ===
+2026-06-15 buy  1000 sh @ 50.00 (USD 50,000): SEC fee 0.0000  TAF 0.0000
+2025-08-01 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 0.0000  TAF 0.1660
+2026-06-15 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.1950
+2026-11-11 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.0000
+2027-01-04 sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [check for a newer SEC advisory]
+=== B. the TAF cap binds on large share counts ===
+2026-06-15 sell 100,000 sh @ 5.00: raw TAF 19.50 -> capped 9.79; SEC fee 10.30
+=== C. size versus this lesson's toy commission ===
+SEC fee at $20.60 per million = 0.206 bps of sale proceeds (sells only); toy commission = 2 bps each way
+round trip at 2026-06-15 on USD 50,000: buy 0 + sell SEC 1.03 + TAF 0.195 = 1.225 USD
+rule: store fee schedules with effective dates; never hard-code one rate for the whole backtest.
+assertions passed: 8/8
+```
+
 ## Common mistakes / pitfalls
 
 1. Posting zero-cost equity curves as live evidence.
@@ -189,6 +218,7 @@ ASSERT_rule605_toy_ok
 4. Scaling capital without rescaling Q/ADV in the impact term.
 5. Changing the signal after seeing the cost ladder (leakage).
 6. Treating a Rule 605 effective spread as your own real cost; writing the signed effective spread as an absolute value, or passing off a mean of per-order bps as the official percentage; forgetting it covers only covered orders (with the NMLO exceptions) and excludes special-handling orders; guessing field names without reading the field-definition source.
+7. Charging the Section 31 fee or TAF on buys; using one fee rate for every year of a backtest (the SEC rate was $0.00 from 2025-05-14 to 2026-04-03, and the TAF is paused for 2026-10-01 to 2026-12-31).
 
 ## Practice (1:1 with the checklist)
 
@@ -198,6 +228,7 @@ ASSERT_rule605_toy_ok
 4. **ex4** — Capacity table + chart; **done when** Sharpe falls as capital rises.
 5. **ex5** — Cite Almgren et al. 2005 √ vs 3/5 note; **done when** one accurate sentence appears.
 6. **ex-605** — Run `07_rule605_effective_spread.py` and hand-compute the Example 27-1 weighted average; **done when**: you get $0.24, explain why part C is negative and why the official percentage is −2.8555 bps rather than −1.9992 bps, and list at least three excluded order types plus the two included NMLO exceptions.
+7. **ex-regfee** — Run `13_regulatory_fees_toy.py`, then compute by hand the SEC fee and TAF for selling 2,000 shares at $25 on 2026-05-01 and on 2026-10-15; **done when**: $1.03 and $0.39 on 2026-05-01, $1.03 and $0 on 2026-10-15, and you can say why a buy pays neither.
 
 ## Quiz
 
@@ -207,12 +238,13 @@ ASSERT_rule605_toy_ok
 <Quiz id="q4-cap" question="Larger capital with √ impact usually?" options={["Raises net Sharpe here", "Increases impact drag and worsens net Sharpe", "Removes commission", "Fixes look-ahead"]} answer={1} explanation="Capacity table." />
 <Quiz id="q5-zero" question="Zero-cost backtest curves are?" options={["Live proof", "Not live evidence", "Required by PSR", "ADV estimates"]} answer={1} explanation="Missing frictions." />
 <Quiz id="cb-605" question="The covered-order scope of a Rule 605 report includes…" options={["Pre-market, after-hours and overnight fills", "Covered orders (including exceptions such as pre-open NMLOs and NMLOs executable after a halt), excluding special-handling orders", "Every order in your own account", "All fill-or-kill orders"]} answer={1} explanation="FAQ Q9, Q11, Q20, Q28: covered orders are generally received in regular hours, but pre-open NMLOs and NMLOs received during a halt that become executable after it are included; special-handling orders are excluded. Being in the report is not the same as getting an ES: plain NMLOs get no ES (Q30)." />
+<Quiz id="cb-regfee" question="Your backtest sells 1,000 shares at $50 on 2026-11-11. Which regulatory fees should it charge on that sale?" options={["None, because regulatory fees apply only to purchases", "The SEC Section 31 fee at $20.60 per million ($1.03) and no FINRA TAF, because the TAF is paused from 2026-10-01 to 2026-12-31", "A FINRA TAF of $0.195 and no SEC fee, because the SEC rate is $0.00", "A fixed 2 bps fee on every trade, buy or sell"]} answer={1} explanation="Both fees apply to sales only. SEC advisory FY2026: $20.60 per million from 2026-04-04 (50,000 × 20.60 ÷ 1,000,000 = $1.03). SR-FINRA-2026-021 pauses the TAF for transactions from 2026-10-01 through 2026-12-31. The $0.00 SEC rate ran from 2025-05-14 to 2026-04-03." />
 
 ## Done when
 
 - Four-part net path + breakdown + capacity chart + quizzes
 
-**Sources:** classic — Canvas costs; QuantStart/NYU TCA themes. Impact — Almgren et al. 2005 ([PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)).; Rule 605 (checked 2026-11-08): [SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)
+**Sources:** classic — Canvas costs; QuantStart/NYU TCA themes. Impact — Almgren et al. 2005 ([PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)).; Rule 605 (checked 2026-11-08): [SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms); regulatory fees (checked 2026-11-11): [SEC fee rate advisories](https://www.sec.gov/rules-regulations/fee-rate-advisories), [FY2026 advisory](https://www.sec.gov/rules-regulations/fee-rate-advisories/2026-2), [FY2025 advisory](https://www.sec.gov/rules-regulations/fee-rate-advisories/2025-2), [FINRA fee adjustment schedule](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2024-019/fee-adjustment-schedule), [SR-FINRA-2026-021](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-021)
 
 <Summary>
 **Takeaways**: commission, half-spread, slippage, √ impact, capacity.  

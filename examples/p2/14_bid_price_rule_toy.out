@@ -1,0 +1,15 @@
+=== A. counting consecutive business days ===
+29 closes below $1.00 -> no bid-price flag
+30 closes below $1.00 -> deficient; 180-calendar-day compliance period starts at Nasdaq's notice
+30 closes below $1.00, reverse split 8 months ago -> deficient; reverse split in prior year -> no compliance period, delisting determination
+10 closes at or below $0.10 -> delisting determination + suspended on Nasdaq (<= $0.10 for 10 business days)
+notice on 2026-03-02 -> 180 calendar days end 2026-08-29
+=== B. a 1-for-10 reverse split in the raw series ===
+raw close-to-close on the split day +916.7% (fake); holder return +1.67%
+after the split: 9 closes >= $1.00 -> regained? False; needs 10
+=== C. rule status is data too ===
+bid_price_30d   in force  34-102245 amendments approved 2025-01-17
+low_price_0.10  in force  34-104318 approved 2025-12-05, operative 45 days later
+mvls_5m         stayed    34-105971 approved 2026-07-22, then stayed; check sec.gov before use
+rule: a reverse split near $1 is a listing-status event; keep the delisting flag and the split ratio.
+assertions passed: 8/8

@@ -1,0 +1,9 @@
+=== A. IRS Pub 550 FIFO example: 130 shares sold in April 2025 ===
+lots used [('2010', 50), ('2011-01', 80)] -> basis 1,380
+=== B. same sale with adequate identification (toy choice) ===
+told the broker: [('2013-12', 100), ('2011-01', 30)], written confirmation received -> basis 1,230
+without the written confirmation this identification does not count -> FIFO basis 1,380
+=== C. stock (not certain mutual fund shares): no average price per share ===
+toy average of remaining lots 10.2857/share -> 130 x avg = 1,337.14 (not allowed for this stock)
+backtest/ledger rule: store lots (date, shares, cost); record the lot method next to every sale.
+assertions passed: 3/3

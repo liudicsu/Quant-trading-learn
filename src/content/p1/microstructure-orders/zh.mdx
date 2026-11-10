@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **11.5 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **11.75 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -175,11 +175,37 @@ lot 40: NBB 499.9 (round lots only) | BOLO bid 499.95 (odd lot, better price, no
 assertions passed: 17/17
 ```
 
+## 开盘竞价：日线里的“开盘价”从哪来（2026-11-11 核实）
+
+**1. 开盘价是竞价价格，而且可能在 9:30 之后才出来。** 每个上市交易所都有**开盘竞价**。在 NYSE，美东时间 6:30 起可以下单，8:00 起公布不平衡信息，9:30 开盘竞价流程开始；NYSE 页面还写明，订单“在 DMM 为该股票开盘之前都可以下达和撤销，而开盘可能发生在 9:30 之后”（[NYSE Auctions](https://www.nyse.com/trade/auctions)；DMM 是 NYSE 给每只股票指定的做市商）。在 Nasdaq，开盘撮合（Opening Cross）产生 **Nasdaq 官方开盘价（NOOP）**；如果某只股票没有开盘撮合，NOOP 就是 9:30 及以后第一笔可计入最新成交价的成交（[Nasdaq 开收盘撮合 FAQ](https://nasdaqtrader.com/content/ProductsServices/Trading/Crosses/openclose_faqs.pdf)）。所以日线里的 `open` 不一定是“9:30:00 的一笔成交”。和收盘价一样，要在数据说明里写清你的数据商用的是哪个开盘价。
+
+**2. 回测陷阱和收盘时一样。** “用今天的开盘价算信号，再按今天的开盘价成交”，用到了下单截止时你还不可能知道的价格。在 Nasdaq，美东时间 9:28 截止之后提交的开盘市价单（MOO）不被接受（同一 FAQ）。所以诚实的“按开盘价成交”，要求信号只用 **美东 9:28 之前**就能拿到的数据（Nasdaq 上市股票）；否则就应该在之后可交易的时间成交。其他交易所的开盘单截止时间不同；本课只用上面两个时间。
+
+- 换成北京时间：美东 9:28 在美国夏令时是当天 21:28，冬令时是当天 22:28。
+
+**实验：** `examples/p1/09_open_auction_toy.py`（只用本地合成数据）：
+
+```text
+=== A. the NYSE open can print after 09:30 ===
+daily bar label 09:30, official open printed 09:31:40 -> do not assume the open is 09:30:00
+=== B. Nasdaq MOO entry cutoff 09:28 ET ===
+signal ready 09:20:00 ET -> new MOO accepted for today's cross: True
+signal ready 09:27:59 ET -> new MOO accepted for today's cross: True
+signal ready 09:28:00 ET -> new MOO accepted for today's cross: False
+signal ready 09:29:00 ET -> new MOO accepted for today's cross: False
+2026-07-01 09:28 ET = Shanghai 2026-07-01 21:28; 2026-12-01 09:28 ET = Shanghai 2026-12-01 22:28
+=== C. signal from today's open, filled at today's open = look-ahead ===
+signal uses today's official open; fill at today's official open -> look-ahead: True
+honest options: (1) signal from data available before 09:28 ET -> MOO in today's cross;
+                (2) signal uses the official open (50.12) -> fill at a later tradable time
+assertions passed: 5/5
+```
+
 ## 代币化股票场所（TSV）：单独的数据来源（2026-11-10 核实）
 
 从 2026-09-17 起，SEC 的一份豁免令（[Release 34-106402](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)）允许 **TSV**（Tokenized Securities Venue，代币化证券交易场所）在满足条件时不按交易所对待。TSV 是一种链上场所，交易代表美国上市股票的代币，用 **AMM**（自动做市商：按公式给成交定价的资金池，而不是订单簿）撮合。它的法律状态见 `compliance-ethics`；这里只讲数据。
 
-- **TSV 成交不是交易所成交。** 命令写明，满足条件的 TSV 不是交易所，也不受 Regulation NMS 约束。它的成交不是交易所成交，资金池价格也不是交易所报价。
+- **TSV 成交不是交易所成交。** 命令写明，满足条件的 TSV 不是交易所，也不受 Regulation NMS 约束：因为它被豁免于“交易所”的定义，所以在 Regulation NMS 下不算交易中心（trading center）或市场中心（market center）。这个结论只针对 TSV 本身。命令没有给参与 TSV 交易的券商（broker-dealer）任何 Regulation NMS 豁免；命令第 VI 节第 7 问正在就“是否应该给”征求意见。它的成交不是交易所成交，资金池价格也不是交易所报价。
 - **价格的形成方式不同。** AMM 资金池一般按池内两种资产的数量比例定价；命令自己也提醒，代币价格可能偏离传统形式股票的价格。
 - **数据格式自成一套。** TSV 要以美元计价、机器可读的格式公开最近 30 天的成交数据，每笔成交后 10 分钟内更新；成交时间应使用 UTC，“日成交量”是 TSV 发布时点之前的 24 小时，不是美东 09:30–16:00 的交易时段。
 - **停牌会同步。** 主上市交易所暂停交易标的股票时，TSV 要同时停止交易对应代币。
@@ -198,6 +224,7 @@ assertions passed: 17/17
 8. 不查数据商定义就把日线收盘价当成最后一笔成交；用 16:00 收盘价算信号又按同一收盘价成交；以为一手永远是 100 股，或以为更优的碎股报价会改变 NBBO。
 9. 把 SIPC 当成防市场亏损的保险，或者把它和银行存款的 FDIC 保险混为一谈。
 10. 把 TSV（代币化股票场所）的成交并进交易所 bar，或把 TSV 成交当成交易所成交、NBBO 报价；不换算就拿 UTC 的 TSV 时间和美东的交易所时间比较。
+11. 用今天的官方开盘价算信号，再按同一个开盘价成交；以为日线里的 `open` 都是 9:30:00 整的一笔成交。
 
 ## 练习（与任务清单 1:1）
 
@@ -209,6 +236,7 @@ assertions passed: 17/17
 6. **ex-us1** — 运行 `05_us_market_mechanics.py`，把 2026-11-25 和 2026-11-27 两笔交易的交收日手算一遍并与输出核对；**完成标准**：两日期一致且能解释为何跳过感恩节（2026-11-26）。
 7. **ex-overnight** — 把周一 21:00 ET 的一笔隔夜成交换算成北京时间，并写出它的交易日；再用一句话说明 Rule 612 为何截至 2026-11-08 还不能假设生效；**完成标准**：北京时间周二 10:00、交易日为周二，并引用 34-105656 的 2027 年 11 月合规日。
 8. **ex-close** — 运行 `06_close_auction_roundlot.py`；写出 NYSE 上市股票「按收盘价成交」的信号最晚要在几点（ET）前算出，以及 7 月和 12 月对应的北京时间；再写出平均收盘价 250.01 美元和 1,000.01 美元时的一手股数；**完成标准**：15:50 ET、北京时间次日 03:50 / 04:50、40 股 / 10 股，与输出一致。
+9. **ex-open** — 运行 `09_open_auction_toy.py`；写出 Nasdaq 上市股票「按开盘价成交」的信号最晚要在美东几点前准备好，以及它在 7 月和 12 月对应的北京时间；**完成标准**：美东 09:28 之前，北京时间 21:28 / 22:28，与输出一致，再用一句话说明 NYSE 的开盘价为什么可能在 09:30 之后才出来。
 
 ## 测验
 
@@ -225,13 +253,14 @@ assertions passed: 17/17
 <Quiz id="mo-lot" question="自 2025-11-03 起，上一评估期平均收盘价为 600 美元的股票，一手是？" options={["100 股", "40 股", "10 股", "1 股"]} answer={1} explanation="17 CFR 242.600(b)(93)：250.01 至 1,000.00 美元为 40 股。" />
 <Quiz id="mo-sipc" question="按 SIPC 官网，下面哪种情况 SIPC 不保护？" options={["会员券商倒闭，账户里的股票丢失", "会员券商倒闭，账户里用于买卖证券的现金丢失（在 $250,000 以内）", "你持有的股票价格下跌了 40%", "非美国公民在会员券商的账户里股票丢失"]} answer={2} explanation="SIPC 保护会员券商倒闭时丢失的现金和证券，上限 $500,000（现金 $250,000）；不保护价格下跌，也不要求客户是美国居民或公民。" />
 <Quiz id="mo-tsv-data" question="你手上有某只股票的交易所日线，和同一只股票代币在 TSV 上的成交文件。回测应该怎么做？" options={["把 TSV 成交并进交易所日线，补齐缺失的日子", "把 TSV 价格当成 NBBO 报价", "把 TSV 数据当成单独来源，打上 venue 标记，比较前先把 UTC 时间换成美东时间", "丢掉交易所日线，因为链上数据更透明"]} answer={2} explanation="按 SEC 34-106402，满足条件的 TSV 不是交易所，也不受 Regulation NMS 约束；AMM 价格可能偏离上市股票，TSV 成交时间按 UTC 报告。" />
+<Quiz id="mo-open" question="对一只 Nasdaq 上市股票，诚实的回测要按官方开盘价成交开盘市价单（MOO），信号需要在什么时候准备好？" options={["美东 9:28 的 MOO 下单截止之前，而且只用那时已能拿到的数据", "官方开盘价出来以后，这样信号可以用上它", "美东 16:00 之前任何时候都行", "只在没有开盘撮合的日子"]} answer={0} explanation="按 Nasdaq 开收盘撮合 FAQ，美东 9:28 截止之后提交的 MOO 订单不被接受，而开盘撮合产生 Nasdaq 官方开盘价。用这个开盘价算出的信号，赶不上同一次撮合。" />
 
 ## 完成标准
 
 - 成本假设一页 + 跑通脚本 + 测验
 - 能解释 mid/市价侧/同 bar 前瞻
 
-**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。；美股主线（2026-11-08 核实）：[SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62)、[NYSE 交易时间](https://www.nyse.com/markets/hours-calendars)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；隔夜与版本陷阱（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)、[CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)、[Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)、[SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)、[eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)；收盘竞价与整手（2026-11-10 核实）：[NYSE Auctions](https://www.nyse.com/trade/auctions)、[Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf)、[eCFR §242.600](https://www.ecfr.gov/current/title-17/section-242.600)、[SEC 90 FR 51420](https://www.federalregister.gov/d/2025-19926)、[SEC 34-104612](https://www.sec.gov/files/rules/exorders/2026/34-104612.pdf)、[UTP SIP 碎股 FAQ](https://www.utpplan.com/DOC/Nasdaq%20UTP%20SIP%20Odd%20Lot%20Quotes%20FAQ%20Finalized%20Version%201.2.pdf)、[SIPC：What SIPC Protects](https://www.sipc.org/for-investors/what-sipc-protects)（2026-11-10 核实）；代币化股票场所（2026-11-10 核实）：[SEC Release 34-106402](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)
+**来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。；美股主线（2026-11-08 核实）：[SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62)、[NYSE 交易时间](https://www.nyse.com/markets/hours-calendars)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；隔夜与版本陷阱（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)、[CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)、[Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)、[SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)、[eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)；收盘竞价与整手（2026-11-10 核实）：[NYSE Auctions](https://www.nyse.com/trade/auctions)、[Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf)、[eCFR §242.600](https://www.ecfr.gov/current/title-17/section-242.600)、[SEC 90 FR 51420](https://www.federalregister.gov/d/2025-19926)、[SEC 34-104612](https://www.sec.gov/files/rules/exorders/2026/34-104612.pdf)、[UTP SIP 碎股 FAQ](https://www.utpplan.com/DOC/Nasdaq%20UTP%20SIP%20Odd%20Lot%20Quotes%20FAQ%20Finalized%20Version%201.2.pdf)、[SIPC：What SIPC Protects](https://www.sipc.org/for-investors/what-sipc-protects)（2026-11-10 核实）；代币化股票场所（2026-11-10 核实）：[SEC Release 34-106402](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)；开盘竞价（2026-11-11 核实）：[NYSE Auctions](https://www.nyse.com/trade/auctions)、[Nasdaq 开收盘撮合 FAQ](https://nasdaqtrader.com/content/ProductsServices/Trading/Crosses/openclose_faqs.pdf)
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

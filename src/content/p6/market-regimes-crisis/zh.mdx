@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **15.25 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **15.5 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -306,6 +306,22 @@ order at 2026-12-13 20:00 ET (Sunday) -> rejected (MWCB L3 halt)
 assertions passed: 5/5
 ```
 
+## SEC 暂停交易与交易所停牌的区别（2026-11-11 核实）
+
+上面三层刹车都是**交易所或 NMS 计划的机制**：价格动得太猛时暂停交易。另一种工具属于 SEC 自己。
+
+- **是什么。** 按《证券交易法》第 12(k)(1)(A) 条，SEC 认为公共利益和保护投资者需要时，可以用命令“即时暂停任何证券的交易……期限不超过 10 个营业日”（[15 U.S.C. 78l(k)](https://www.law.cornell.edu/uscode/text/15/78l)）。SEC 网站有这类命令的公开列表（[SEC Trading Suspensions](https://www.sec.gov/enforcement-litigation/trading-suspensions)）。
+- **最近的例子。** SEC Release 34-106668 暂停了一家在英属维尔京群岛注册、总部在香港的控股公司的证券交易，时间从美东 2026-10-15 04:00 到 2026-10-28 23:59。命令写的理由：不明身份的人通过社交媒体向投资者推荐买入、持有或卖出该股票，并要求发送交易截图，这些推荐“看起来是为了人为抬高价格和成交量”，可能构成操纵（[命令 PDF](https://www.sec.gov/files/litigation/suspensions/2026/34-106668-ts.pdf)）。SEC 列表显示 2025 和 2026 年有多份类似命令。本课不点名任何股票，对任何公司也不作命令原文之外的判断。
+- **换成北京时间。** 美东 2026-10-15 04:00（夏令时）是北京时间当天 16:00；美东 2026-10-28 23:59 是北京时间 2026-10-29 11:59。
+
+| | 交易所停牌 / LULD 暂停 / MWCB | SEC 暂停交易 |
+|---|---|---|
+| 谁决定 | 上市交易所或 NMS 计划 | SEC，以命令形式 |
+| 为什么 | 价格波动、待公布消息、监管原因 | 公共利益和保护投资者（例如可能的操纵、对公开信息的疑问） |
+| 多久 | 几分钟，最长到下一个交易日（MWCB Level 3） | 最长 10 个营业日 |
+
+**回测规则：** 把 SEC 暂停交易列表当成带日期的事件表载入，暂停窗口内的每一行都标为**不可交易**（即 `data-cleaning` 里 mask-first 的做法）；不要把价格前向填充成好像能成交，恢复交易时要预期跳空。被 SEC 认为可能涉及操纵的价量暴涨，不是值得学习的动量形态；要打标记，不要当正常数据喂给模型。仅供学习：这不是法律意见，也不是“该避开或该买”的股票名单。
+
 ## 常见错误 / 陷阱
 
 1. 用当日收盘算当日状态再当日交易（前瞻）。
@@ -319,6 +335,7 @@ assertions passed: 5/5
 9. 把 LULD 当成相对昨收的固定 10% 涨跌停；沿用已取消的开盘 09:30–09:45 翻倍；以为所有 Tier2 收盘都翻倍。
 10. 把隔夜价格带当成涨跌停或成交保证；以为隔夜触带会像常规时段一样自动暂停 5 分钟；把 19:30 参考价时间当成永久规则（第 29 号修正案是临时生效）。
 11. 把 4 美元的期权报价当成一张合约 4 美元（实际是 400 美元）；把 BSM 模型价和市场价的差当成 alpha；忘了普通股息不调整期权条款；以为 Level 3 熔断后当晚隔夜时段就恢复交易。
+12. 把 SEC 暂停交易当成当天就结束的普通交易所停牌；在暂停窗口里前向填充价格；把被 SEC 认为可能涉及操纵的价格暴涨当成正常动量拿去训练模型。
 
 
 ## 练习（1:1）
@@ -333,6 +350,7 @@ assertions passed: 5/5
 8. **ex-luld** — 运行 `06_luld_halt_toy.py`，解释为何 Tier2 $50 在收盘窗口不翻倍而 Tier2 $2 翻倍；**完成标准**：引用 R12 的价格档规则。
 9. **ex-ovb** — 运行 `08_overnight_bands_toy.py`，手算「after-hours news gap」一行（收盘 50、19:30 价 44）；**完成标准**：得到 35.20 / 60.00，并说明为何下限用 44、上限用 50。
 10. **ex-opt** — 运行 `09_options_basics_toy.py`，写出报价 4 美元的一张合约要付多少钱、卖出看跌的最坏亏损、平价关系的误差；再运行 `10_mwcb_overnight_resume_toy.py`，写出周三 13:00 ET 触发 Level 3 后最早何时恢复；**完成标准**：400 美元、−9750.00、误差小于 1e-9、周四 04:00 ET，与输出一致。
+11. **ex-suspend** — 根据 SEC 暂停交易命令 34-106668，写出窗口起止的美东时间和北京时间，并标出回测里哪些日线行不可交易；**完成标准**：美东 2026-10-15 04:00 = 北京 16:00，美东 2026-10-28 23:59 = 北京 2026-10-29 11:59，2026-10-15 至 2026-10-28 的每个交易日都被屏蔽。
 
 
 ## 测验
@@ -349,12 +367,13 @@ assertions passed: 5/5
 <Quiz id="rc-optunit" question="一只美股期权报价权利金 4 美元，一张合约要付多少钱（不含费用）？" options={["4 美元", "400 美元", "40 美元", "4,000 美元"]} answer={1} explanation="OCC ODD：多数股票期权的交易单位是 100 股，每股 4 美元就是每张 400 美元。" />
 <Quiz id="rc-bsm" question="看涨期权的 BSM 模型价低于市场价，在本课中意味着？" options={["期权错价，是 alpha 信号", "模型假设（恒定波动率、无摩擦）和市场不符；它是参照，不是信号", "看跌看涨平价被打破", "交易所出错了"]} answer={1} explanation="BSM 只是参照模型；模型价和市场价的差不是 alpha。" />
 <Quiz id="rc-mwcb3" question="按 NYSE SR-NYSE-2026-43，13:00 ET 触发 Level 3 熔断后，最早何时可以恢复交易？" options={["当晚 21:00 ET", "下一交易日 04:00 ET 或更晚", "15 分钟后", "必须等 SEC 下令"]} answer={1} explanation="条文现为「直到下一交易日 04:00 ET 或更晚」；Nasdaq、Cboe 等也做了同样修改，但截至 2026-11-10 并非所有交易场所都已提交。" />
+<Quiz id="rc-suspend" question="SEC 暂停交易和交易所的 LULD 暂停有什么不同？" options={["是同一件事的两个名字", "SEC 暂停交易最多 15 分钟", "标普 500 跌 7% 时会自动触发 SEC 暂停交易", "SEC 为保护投资者以命令决定，最长可达 10 个营业日；LULD 暂停是自动的价格带机制"]} answer={3} explanation="《证券交易法》第 12(k)(1)(A) 条允许 SEC 即时暂停某只证券的交易，期限不超过 10 个营业日。LULD 暂停是 NMS 计划的价格带机制；标普 500 跌 7% 是 MWCB 第一级的触发条件。" />
 
 ## 完成标准
 
 四场景卡片 + 实验 A–D 数字与课内一致 + 「新闻≠regime」短文（含已核验链接）+ 硬规则清单。平滑概率不得出现在「实盘可用」列。
 
-**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)、[OCC ODD 2024-06 版 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)、[SEC 34-106582（Cboe BZX）](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf)
+**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)、[OCC ODD 2024-06 版 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)、[SEC 34-106582（Cboe BZX）](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf) SEC 暂停交易（2026-11-11 核实）：[15 U.S.C. 78l(k)](https://www.law.cornell.edu/uscode/text/15/78l)、[SEC 暂停交易列表](https://www.sec.gov/enforcement-litigation/trading-suspensions)、[SEC 34-106668](https://www.sec.gov/files/litigation/suspensions/2026/34-106668-ts.pdf)。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

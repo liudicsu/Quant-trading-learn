@@ -25,3 +25,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 - enrich9 (2026-11-10): `08_self_trade_pattern_toy.py` — same-algo self-trade prevention, layering-style pattern flag for human review (not a legal finding), wash sale vs wash trade glossary (5 assertions; synthetic events). `02_compliance_sources.py` gains 15 U.S.C. 78i, FINRA 5210 and SEC 2026-37 (CAT review) rows: n_sources=36.
 
 - enrich10 (2026-11-10): `02_compliance_sources.py` gains the SEC Innovation Exemption order (Release 34-106402) and the Atkins and Uyeda statements (tokenized NMS stock); the 15 U.S.C. 78i row is now compared with the current US Code through PL 119-138: n_sources=39.
+
+- enrich11 (2026-11-11): `09_tax_lot_toy.py` — IRS Pub 550 FIFO example (basis 1,380), adequate identification with written confirmation (1,230), no average price per share for stock (3 assertions; not tax advice).
