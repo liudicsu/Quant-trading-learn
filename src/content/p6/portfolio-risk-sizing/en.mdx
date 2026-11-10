@@ -180,7 +180,7 @@ The 50%/25% figures above are "strategy-based" margin. [FINRA Rule 4210(g)](http
 
 The toy below simplifies by valuing options at expiry intrinsic value only. Long 100 shares at 100 needs $5,000 of Reg T initial margin and $2,500 of FINRA maintenance margin, while the largest loss across the ±15% scenarios is $1,500. Adding one 95-strike put bought for 2 cuts the largest loss to $700. Hedges count, but even unhedged positions can need less, so the same money can carry more leverage and more risk. These accounts are only for customers approved for uncovered option writing, are not available for IRAs, and require a special risk disclosure. In research, state which margin regime you assume.
 
-**Lab:** new section D of `examples/p6/11_margin_call_toy.py` (sections A–C above are unchanged). The rule says "ten equidistant intervals (valuation points)"; the toy reads that as 10 evenly spaced points from −15% to +15% including both ends, which is one reading of the text. Real calculations use an SEC-approved theoretical pricing model, not intrinsic value:
+**Lab:** new section D of `examples/p6/11_margin_call_toy.py` (sections A–C above are unchanged). The rule says "ten equidistant intervals (valuation points)"; the toy reads that as 10 evenly spaced points from −15% to +15% including both ends, which is one reading of the text. Another common reading is five points each side (e.g. ±3%…±15%); in this example both readings give the same maximum loss (both occur at the −15% endpoint). Real calculations use an SEC-approved theoretical pricing model, not intrinsic value:
 
 ```text
 === D. portfolio margin (toy) ===

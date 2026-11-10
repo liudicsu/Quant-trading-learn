@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **20.5 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **20.75 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -71,11 +71,11 @@ cases passed: 8/8
 
 ### 写交易算法前要知道的红线：wash trade、自成交、扰乱性报价、CAT（核实于 2026-11-10）
 
-只是知识普及，不是法律意见。先分清两个容易混的词。下面税务识字框里的 wash sale（洗售）是税法概念；**wash trade** 是市场操纵：为了制造“交易很活跃”的假象，做一笔受益所有权其实没有变化的成交。美国《证券交易法》第 9(a) 条禁止这类成交和事先约好的对敲，也禁止为了诱使别人买卖而连续交易、制造活跃假象或推高压低价格（[15 U.S.C. 78i](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)，govinfo 2023 版）。
+只是知识普及，不是法律意见。先分清两个容易混的词。下面税务识字框里的 wash sale（洗售）是税法概念；**wash trade** 是市场操纵：为了制造“交易很活跃”的假象，做一笔受益所有权其实没有变化的成交。美国《证券交易法》第 9(a) 条禁止这类成交和事先约好的对敲，也禁止为了诱使别人买卖而连续交易、制造活跃假象或推高压低价格（[15 U.S.C. 78i](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)，govinfo 2023 版；第 9(a) 条与截至 Pub. L. 119-138 的[现行文本](https://uscode.house.gov/us/usc/119-138/t15/s78i/)一致）。
 
 对写代码的人来说，有两条规则最相关。第一，自成交：同一家公司自己的买单和卖单撞上了。[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210) 补充材料 .02 说，意外发生的自成交一般仍算真实成交，但公司必须有程序，审查并防止同一个算法或相关算法反复产生自成交。所以下单层要做自成交防护，并留日志。第二，同一条规则的补充材料 .03 列出了两种被禁止的“扰乱性报价和交易”模式：一是在一侧挂多档限价单，等供需看起来变了，在另一侧成交，再把挂单撤掉；二是在最优买卖价（NBBO）内侧挂单把价差收窄，等别人跟进后，在另一侧跟他们成交。规则针对的是“频繁出现的模式”，跨多个交易所做也算。FINRA 5210 补充材料 .03(c) 写明：事件顺序不改变适用性，针对的是频繁出现的模式。
 
-最后，要假定你的订单记录是可以追溯的：CAT 是 SEC 依据 Rule 613（2012-07-11 通过）要求建立的综合审计追踪。SEC 在 2026-04-16 发起了对 CAT 的全面审查并征求公众意见（[SEC 新闻稿 2026-37](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)），审查结果尚未出来。
+最后，要假定你的订单记录是可以追溯的：CAT 是 SEC 依据 Rule 613（2012-07-11 通过）要求建立的综合审计追踪。SEC 在 2026-04-16 发起了对 CAT 的全面审查并征求公众意见（[SEC 新闻稿 2026-37](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)）；征求意见已于 2026-06-22 截止（File S7-2026-12，Release 34-105251，[Federal Register](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)），审查结果尚未出来。
 
 实验 `examples/p7/08_self_trade_pattern_toy.py`（只用标准库，纯合成事件）阻止同一算法的自成交，并把“一侧挂多档、另一侧成交、再撤掉挂单”的日志标记出来交给人工复核。玩具的标记依赖事件顺序，所以把成交挪到撤单之后就不再标记；按 FINRA 5210 补充材料 .03(c)，顺序调换仍应复核。标记只是提示复核，不是违规认定：
 
@@ -206,6 +206,23 @@ def sse_rule_version(trade_date: str) -> str:
 - **来源（作者按 checked_on 阅读）：** https://www.sec.gov/newsroom/speeches-statements/sec-cftc-project-crypto-090225 — **2025-09-02** SEC–CFTC **工作人员**联合声明。
 - **已核验：** 工作人员认为现行法律**并不禁止**已注册交易所开展**某些**现货加密资产产品交易；声明自陈**不是**委员会规则、**不创设**新义务。只作方向性备注，不是牌照。
 
+### 美国 — SEC「创新豁免」：代币化 NMS 股票（核实于 2026-11-10）
+
+先解释三个词。**NMS 股票**大致就是在美国全国性证券交易所上市的股票（Regulation NMS 管的那一类）。**代币化** NMS 股票是把这只股票记成区块链上的代币。**TSV**（Tokenized Securities Venue，代币化证券交易场所）是一种链上场所，用 **AMM**（自动做市商：由两种资产组成的资金池，按公式给每笔成交定价，而不是靠订单簿撮合）让这类代币的买卖双方成交。
+
+SEC 在 2026-09-17 发布命令，给出**临时、有条件**的豁免（[Release 34-106402，File 4-927](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)；2026-09-22 刊登在 Federal Register，[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)）。满足条件的 TSV 不算“交易所”（exchange）；用自有资本向 TSV 的 AMM 资金池提供代币化 NMS 股票的流动性提供者（“Covered Firm”）可以不算“交易商”（dealer）。反欺诈和反操纵条款仍然完全适用（[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)）。
+
+| 项目 | 状态（官方原文，核实于 2026-11-10） |
+|------|------|
+| 性质 | 依据《证券交易法》第 36(a)(1) 条发布的临时、有条件豁免令；不是正式规则 |
+| 期限 | 2026-09-17 起生效，至 2031-09-17 止（命令第 V 节；新闻稿写的是“发布后五年到期”）；SEC 可以修改期限或其他条款 |
+| 征求意见 | File 4-927；命令没有写截止日，截至 2026-11-10，SEC 的[创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)仍列出提交意见的方式（[已公开的意见](https://www.sec.gov/rules-regulations/public-comments/4-927)） |
+| 范围限制 | 限制可交易代码数和成交量，按涨跌停（LULD）分档：Tier 1 最多 75 个代码，且每个代码不超过该只股票上月日均成交股数的 0.25%；Tier 2 最多 250 个代码、不超过 2.5% |
+
+命令和 [新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment) 里的其他条件：代币要让持有人享有与同类传统股票相同的权利（Atkins 声明点名了分红和投票权）；只提供合成敞口的代币（例如代币化的证券型掉期）不在范围内；由与发行人无关的第三方代币化的股票，TSV 上线前要书面通知发行人并给它反对的机会；智能合约要可审计、公开，并部署在公开、无许可的链上；主上市交易所暂停交易标的股票时，TSV 要同时停止交易对应代币；TSV 要公开其运营和交易情况。Atkins 声明还写明：TSV 必须是美国人士（U.S. person）并遵守 OFAC 制裁规定，准入是许可制。[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726) 说，以美元计价的成交数据（价格、数量、时间、资金池地址、日终资金池规模、日成交量）会公开。
+
+**怎么理解：** 豁免已经发布，TSV 要满足这些条件才能依靠它。出现在 SEC「已提交 TSV 通知」名单上，不代表该机构符合定义或条件（SEC 页面原话）。本课不点名、也不推荐任何场所或产品。对回测数据的影响见 `microstructure-orders`。仅供学习，不是法律意见。
+
 ## 研究伦理（始终适用）
 
 - 学习 ≠ 受监管投资建议。
@@ -219,7 +236,7 @@ def sse_rule_version(trade_date: str) -> str:
 ### 真实运行输出
 
 ```
-n_sources=36 us_first_block=22 fields_complete=True
+n_sources=39 us_first_block=25 fields_complete=True
 ```
 
 
@@ -239,7 +256,7 @@ n_sources=36 us_first_block=22 fields_complete=True
 - **[FINRA 2026 年度监管报告 — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)**（**2026 新增**）：规则（含 FINRA Rule 3110 监督）保持技术中立。新兴智能体主题：自主性、范围/权限、可审计性、数据敏感度、领域知识、奖励错位，以及 GenAI 偏见/幻觉/隐私。可考虑人在回路、访问/数据监控、动作日志、护栏。
 - **FY2027 更新（核实于 2026-11-10）：** SEC 在 2026-10-23 公布了检查司 2027 财年检查重点（[新闻稿 2026-109](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)）。新闻稿列出的重点之一是 “Emerging technologies, including super intelligence and other advanced technologies that may affect market operations, compliance, fraud prevention, and investor protection.” 请重新阅读这份新闻稿，不要假定上面的 FY2026 清单仍是最新的。
 
-**仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=36`。
+**仅知晓 — 非法律意见。** 引用时给官方页标注日期。实验：`examples/p7/02_compliance_sources.py` 中 `n_sources=39`。
 
 
 ## 香港证监会通函 24EC55 — GenAI 语言模型（知晓即可）
@@ -253,7 +270,7 @@ n_sources=36 us_first_block=22 fields_complete=True
 - **高风险用途** — 提供投资建议、意见或研究报告 — 需要额外缓释：客户可见输出前的**人在回路**审阅、验证/持续监控、提示鲁棒性测试，以及正在与 AI 互动的持续披露。
 - 与 FINRA 2026 GenAI/Agents、SEC FY2026 Emerging FinTech 并列阅读：**美国某提案撤回 ≠ 其他司法辖区没有义务**。
 
-实验行：`examples/p7/02_compliance_sources.py` 中 `sfc_24ec55`（`n_sources=36`）。
+实验行：`examples/p7/02_compliance_sources.py` 中 `sfc_24ec55`（`n_sources=39`）。
 
 
 
@@ -274,7 +291,7 @@ n_sources=36 us_first_block=22 fields_complete=True
 
 与亚洲同侪（SFC 24EC55、FINRA GenAI）一起读：**某司法辖区撤回某提案 ≠ 其他辖区无义务。**
 
-实验行：`examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026`（`n_sources=36`）。
+实验行：`examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026`（`n_sources=39`）。
 
 ## 常见错误 / 陷阱
 
@@ -294,6 +311,7 @@ n_sources=36 us_first_block=22 fields_complete=True
 8. 只凭交易日期断言券商/账户已迁移到新日内保证金（2026-06-04 至 2027-10-20 有迁移期）；把 5 万美元购汇额度当成境外证券投资许可；以为美国预扣完毕就不用在中国申报。
 9. 说洗售亏损「永久消失」：在普通应税账户里，它会加到新股票的成本里，等新股票卖出时再体现（在 IRA/Roth 里买回是例外）；只检查卖出之后的买入。
 10. 把买入后正好一年卖出当成“长期”（必须超过一年，从买入次日数起）；报税后回测收益却不写清是谁的税、什么假设。
+11. 把 SEC 创新豁免（34-106402）当成正式规则，或当成某个代币化股票场所已满足条件的证明；把只跟踪价格的合成代币当成代币化 NMS 股票；写成“2031 年前到期”（命令写的是至 2031-09-17）。
 
 
 ## 练习（1:1）
@@ -336,12 +354,13 @@ n_sources=36 us_first_block=22 fields_complete=True
 <Quiz id="ce-holding-period" question="按 IRS Topic 409，2025-03-10 买入的股票，最早哪天卖出才算长期资本利得？" options={["2026-03-11", "2026-03-10", "2025-09-10（半年）", "持有期只看交收日，不看交易日"]} answer={0} explanation="从买入次日数起，必须“超过一年”。2026-03-10 正好一年，不够。" />
 <Quiz id="ce-fx50k" question="个人每年等值 5 万美元购汇便利化额度意味着？" options={["可以自由买美股", "是年度便利额度；额度购汇汇出需真实经常项目用途，不包括投资境外证券", "自动免税", "可替别人购汇"]} answer={1} explanation="外汇局上海/陕西分局 FAQ；不提供任何绕道方案。" />
 <Quiz id="ce-wash-trade" question="下面哪一项属于《证券交易法》第 9(a)(1) 条禁止的 wash trade？" options={["亏损卖出后 30 天内买回同一只股票", "为了制造交易活跃的假象，做一笔受益所有权没有变化的成交", "两个互不相关的策略意外撞单，公司有防护程序并做了审查", "在 NBBO 价格挂单等待成交"]} answer={1} explanation="“亏损卖出后 30 天内买回同一只股票”是税法的 wash sale；“两个互不相关的策略意外撞单，公司有防护程序并做了审查”按 FINRA 5210 补充材料 .02 一般算真实的自成交，但同一算法反复出现要防止。" />
+<Quiz id="ce-tsv-exemption" question="截至 2026-11-10，SEC 针对代币化 NMS 股票的「创新豁免」（Release 34-106402）是什么？" options={["一条正式规则，把所有代币化股票平台都注册为交易所", "一项永久批准，连只跟踪股价的合成代币也包括在内", "临时、有条件的豁免：满足条件的 TSV 不算交易所，至 2031-09-17 止", "禁止在美国交易代币化股票"]} answer={2} explanation="命令给出临时、有条件的豁免：TSV 不算交易所，Covered Firm 不算交易商，2026-09-17 起至 2031-09-17 止。只提供合成敞口的产品不在范围内；TSV 要满足条件才能依靠豁免。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)；代币化 NMS 股票与来源更新（2026-11-10 核实）：[SEC Release 34-106402（创新豁免令）](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)、[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)、[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726)、[SEC 创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)、[File 4-927 意见](https://www.sec.gov/rules-regulations/public-comments/4-927)；CAT 概念文件 [Federal Register 2026-07651](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)；[15 U.S.C. 78i 现行文本（截至 Pub. L. 119-138）](https://uscode.house.gov/us/usc/119-138/t15/s78i/)
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

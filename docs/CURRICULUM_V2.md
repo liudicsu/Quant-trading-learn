@@ -27,7 +27,7 @@
 | `stats-probability-basics` | P0 | 8 | 2 | 是 | python-pandas-timeseries |
 | `basic-finance-markets` | P0 | 5 | 1 | 是 | — |
 | `markets-language` | P1 | 5.5 | 2 | 否 | basic-finance-markets |
-| `microstructure-orders` | P1 | 11.25 | 2 | 否 | markets-language |
+| `microstructure-orders` | P1 | 11.5 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 9 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
 | `data-cleaning` | P2 | 27.75 | 3 | 否 | eval-lab |
@@ -47,7 +47,7 @@
 | `risk-systems-lab` | P6 | 8 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
 | `market-regimes-crisis` | P6 | 15.25 | 4 | 否 | risk-systems-lab |
 | `paper-trading-infra` | P7 | 17.5 | 3 | 否 | market-regimes-crisis |
-| `compliance-ethics` | P7 | 20.5 | 2 | 否 | paper-trading-infra |
+| `compliance-ethics` | P7 | 20.75 | 2 | 否 | paper-trading-infra |
 | `frontier-llm-agents` | P8 | 29 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
 | `frontier-tsfm-altdata-crypto` | P8 | 19 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
 | `capstone` | P9 | 26 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
@@ -59,20 +59,20 @@
 | 阶段 | 名称 | 课数 | 总课时 | 6h/周 | 12h/周 | 依赖簇 |
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
-| P1 | 市场语言与度量 / Market language & measurement | 4 | 32.75h | ~5.5 周 | ~2.7 周 | Market concepts + evaluation language |
+| P1 | 市场语言与度量 / Market language & measurement | 4 | 33h | ~5.5 周 | ~2.8 周 | Market concepts + evaluation language |
 | P2 | 数据与诚实回测 / Data & honest backtests | 4 | 71.75h | ~12.0 周 | ~6.0 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 34h | ~5.7 周 | ~2.8 周 | Classic alpha templates before factors/ML |
 | P4 | 因子研究 / Factor research | 2 | 33h | ~5.5 周 | ~2.8 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
 | P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 61.75h | ~10.3 周 | ~5.1 周 | Portfolio construction / execution / controls / regimes |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 38h | ~6.3 周 | ~3.2 周 | Operationalization and professional norms |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 38.25h | ~6.4 周 | ~3.2 周 | Operationalization and professional norms |
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 26h | ~4.3 周 | ~2.2 周 | Synthesis |
 
-**全量（含 P0）：精确 397.25 学时（跳过 P0 为 377.25）。** 6h/周 ≈ 66.2 周；12h/周 ≈ 33.1 周。
-**跳过 P0 后：精确 377.25 学时。** 6h/周 ≈ 62.9 周；12h/周 ≈ 31.4 周。
+**全量（含 P0）：精确 397.75 学时（跳过 P0 为 377.75）。** 6h/周 ≈ 66.3 周；12h/周 ≈ 33.1 周。
+**跳过 P0 后：精确 377.75 学时。** 6h/周 ≈ 63.0 周；12h/周 ≈ 31.5 周。
 
-精确合计：**397.25h 全量 / 377.25h 跳过 P0**。对外可表述为约 **350–397.25h 全量 / 330–377.25h 跳过基础**（含个人复盘缓冲）。
+精确合计：**397.75h 全量 / 377.75h 跳过 P0**。对外可表述为约 **350–397.75h 全量 / 330–377.75h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -214,7 +214,7 @@
   - 市场/基准一页纸。
 - **Method tags:** classic: QuantStart beginner books; Default: US-listed stocks/ETFs in USD; Chinese supplement: JoinQuant 初识量化
 
-### P1 · 市场语言与度量（Market language & measurement）— 32.75h / 4 课
+### P1 · 市场语言与度量（Market language & measurement）— 33h / 4 课
 
 **阶段目标：** 用交易语言说话，并用收益/风险指标诚实评价玩具信号。
 
@@ -244,7 +244,7 @@
 - **Method tags:** classic: Canvas m1; QuantStart SAT process | niche: Awesome Systematic Trading (paperswithbacktest GitHub)
 
 #### `microstructure-orders` — 微观结构与订单 / Microstructure & orders
-- **Hours:** 11.25h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution) + 0.5h overnight trading & overnight LULD bands (planned 2026-12-06) + 0.25h Rule 612/610(c) version trap + 0.25h HK T+1 plan comparison (target H2 2028, not in effect) + 0.5h official close/closing auction/NYSE MOC cutoff + 0.5h tiered round lots & odd-lot quotes (2025-11-03 / 2026-04-27) + 0.25h SIPC account protection (SIPC limits; not FDIC)
+- **Hours:** 11.5h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution) + 0.5h overnight trading & overnight LULD bands (planned 2026-12-06) + 0.25h Rule 612/610(c) version trap + 0.25h HK T+1 plan comparison (target H2 2028, not in effect) + 0.5h official close/closing auction/NYSE MOC cutoff + 0.5h tiered round lots & odd-lot quotes (2025-11-03 / 2026-04-27) + 0.25h SIPC account protection (SIPC limits; not FDIC) + 0.25h tokenized-stock venue (TSV) data separation (SEC 34-106402; TSV prints are not exchange prints)
 - **Prereqs:** `markets-language`
 - **Summary:** 价差、mid、市价/限价、滑点；同bar零成本过乐观。
 - **Goals:**
@@ -707,7 +707,7 @@
   - 四场景卡片 + 实验数字一致 + 新闻≠regime 短文。
 - **Method tags:** classic: Hamilton 1989; NYSE Rule 7.12; CPPI literacy | niche: CSRC/SSE 2016 suspension | frontier: Moreira–Muir 2017 JF; Cederburg et al. 2020 JFE
 
-### P7 · 纸面与伦理（Paper trading & ethics）— 38h / 2 课
+### P7 · 纸面与伦理（Paper trading & ethics）— 38.25h / 2 课
 
 **阶段目标：** 纸面闭环与合规/研究伦理。
 
@@ -736,7 +736,7 @@
 - **Method tags:** classic: Canvas m13; QuantStart paper-before-live; Alpaca / IBKR paper docs (document-level only); Chinese supplement: JoinQuant 模拟交易 | niche: Qbot/Atlas reference architecture; Nautilus isomorphic paper/sim concept
 
 #### `compliance-ethics` — 合规、风险心态与研究伦理 / Compliance, risk mindset & research ethics
-- **Hours:** 20.5h · **Difficulty:** 2/5 · **Basis:** 8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 examples, purchase-order matching) + 0.5h holding period & qualified dividends (IRS Topic 409 / Pub 550 / Pub 519) + 0.5h manipulation red lines & self-trade lab (15 U.S.C. 78i / FINRA 5210 / CAT review)
+- **Hours:** 20.75h · **Difficulty:** 2/5 · **Basis:** 8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 examples, purchase-order matching) + 0.5h holding period & qualified dividends (IRS Topic 409 / Pub 550 / Pub 519) + 0.5h manipulation red lines & self-trade lab (15 U.S.C. 78i / FINRA 5210 / CAT review) + 0.25h tokenized NMS stock Innovation Exemption status (SEC 34-106402, until 2031-09-17)
 - **Prereqs:** `paper-trading-infra`
 - **Summary:** 先生存；学习≠投顾；拒绝选择性汇报。
 - **Goals:**
@@ -975,3 +975,4 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - enrich7 (2026-11-10, US-first): official close / MOC 15:50 ET + tiered round lots & BOLO (`microstructure-orders` +1h); dividend dates under T+1 + yfinance `auto_adjust` trap (`data-cleaning` +0.75h); short interest / short volume / FTD point-in-time (`pairs-stat-arb` +1h); US options basics + MWCB Level 3 resumption under 23/5 (`market-regimes-crisis` +1.75h); wash-sale basis lab (`compliance-ethics` +0.5h). Hours: **390 full / 370 skip-P0**; 28 lessons.
 - enrich8 (2026-11-10, US-first): ETF NAV & premium/discount under Rule 6c-11 (`markets-language` +0.5h); leveraged/inverse ETF daily reset (`returns-vol-corr` +0.5h); filing deadlines & EDGAR 5:30 p.m. rule + delisting returns & PERMNO (CRSP CIZ) (`data-cleaning` +1h); index membership as-of, Russell semi-annual from 2026 (`backtest-traps` +0.5h); margin accounts Reg T 50% / FINRA 4210 25% (`portfolio-risk-sizing` +0.5h); Rule 606 routing & PFOF (`execution-slippage` +0.5h); holding period & qualified dividends (`compliance-ethics` +0.5h). Form 10-S semiannual reporting: proposed 2026-05-05, not adopted as of 2026-11-10. Hours: **394 full / 374 skip-P0**; 28 lessons; 265 quiz pairs.
 - enrich9 (2026-11-10, US-first): spin-offs & mergers in price series + insider/large-holder filing lags incl. FPI insiders from 2026-03-18 (`data-cleaning` +1h, `examples/p2/11`); risk-free rate from T-bill quotes (`returns-vol-corr` +0.5h, `examples/p1/08`); FOMC release times + IPO data traps (`backtest-traps` +0.75h, `examples/p2/12`); manipulation red lines (15 U.S.C. 78i, FINRA 5210 SM .02/.03, CAT review 2026-37) + self-trade toy (`compliance-ethics` +0.5h, `examples/p7/08`; ledger n_sources=36) and FY2027 exam priorities pointer (press release 2026-109); SIPC protection (`microstructure-orders` +0.25h); portfolio margin FINRA 4210(g) toy (`portfolio-risk-sizing` +0.25h, `examples/p6/11` section D). Hours: **397.25 full / 377.25 skip-P0**; 28 lessons; 273 quiz pairs.
+- enrich10 (2026-11-10, US-first): N5 SEC Innovation Exemption for tokenized NMS stock (Release 34-106402, File 4-927, 91 FR 60168 published 2026-09-22; effective 2026-09-17 until 2031-09-17; no comment closing date set) — status subsection + quiz `ce-tsv-exemption` (`compliance-ethics` +0.25h; ledger n_sources=39 with the order and the Atkins/Uyeda statements) and TSV prints are not exchange prints + quiz `mo-tsv-data` (`microstructure-orders` +0.25h). R67 second reading of the portfolio-margin valuation points (no hour change); R69 78i ledger status compared through PL 119-138 + CAT comment period closed 2026-06-22 (S7-2026-12, 34-105251); R70 Form 4 deadline counted from the execution date / deemed execution date. Hours: **397.75 full / 377.75 skip-P0**; P1 33h, P7 38.25h; 28 lessons; 275 quiz pairs.

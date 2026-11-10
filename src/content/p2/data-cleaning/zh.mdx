@@ -285,7 +285,7 @@ ASSERT_filing_dates_ok
 
 ## 内部人和大股东的申报，什么时候才算“已知”（核实于 2026-11-10）
 
-公司的董事、高管和持股超过 10% 的股东（统称“内部人”）买卖本公司股票，要报 Form 4（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)），期限通常是交易后的第二个营业日结束前（[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)）；视同执行日（16a-3(g)(4)）或迟报时更长。例如周五成交，最晚下周二报。持股超过 5% 的投资者一般要在五个营业日内报 13D，之后有重大变化要在两个营业日内修订；符合条件的机构投资者可以改报 13G，例如在季末后 45 天内报，13G 的期限因申报人类型而不同（[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)，[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)）。
+公司的董事、高管和持股超过 10% 的股东（统称“内部人”）买卖本公司股票，要报 Form 4（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)），期限是执行日后第二个营业日结束前；某些计划交易按 16a-3(g)(4) 的视同执行日起算（[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)）。例如周五成交，最晚下周二报。持股超过 5% 的投资者一般要在五个营业日内报 13D，之后有重大变化要在两个营业日内修订；符合条件的机构投资者可以改报 13G，例如在季末后 45 天内报，13G 的期限因申报人类型而不同（[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)，[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)）。
 
 回测时，信号能用的时间是申报被 EDGAR 接收以后，不是表格里的交易日期，否则就提前偷看了通常最多两个营业日；视同执行日（16a-3(g)(4)）或迟报时更长。21:40（美东）被接收的申报算当天按时提交，但当天的常规交易 16:00 已经结束，所以日线回测最早只能在下一个交易时段使用。
 

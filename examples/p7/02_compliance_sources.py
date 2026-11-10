@@ -184,7 +184,7 @@ SOURCES = [
     "source_url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm",
     "checked_on": "2026-11-10",
     "effective_from": "see source",
-    "status": "statute text per 2023 edition; later amendments not compared",
+    "status": "compared with current US Code through PL 119-138 (uscode.house.gov /us/usc/119-138/t15/s78i/): §78i(a) matches the 2023 edition; last amendment 2010 (PL 111-203)",
     "summary": "9(a)(1): no-change-in-beneficial-ownership trades / matched orders to create a false appearance of active trading; 9(a)(2): series of transactions to induce others. Wash TRADE (manipulation) != wash SALE (tax). Not legal advice."
   },
   {
@@ -208,6 +208,40 @@ SOURCES = [
     "effective_from": "n/a",
     "status": "concept release (2026-04-16); review not concluded",
     "summary": "Comprehensive review of CAT (funding/cost, regulatory purpose, structure/governance, design/scope). CAT exists under Rule 613 (adopted 2012-07-11). Do not predict the outcome."
+  },
+  {
+    "id": "sec_34_106402_innovation_exemption",
+    "title": "SEC Release 34-106402 (File 4-927) — Innovation Exemption order: TSVs exempt from 'exchange', Covered Firms from 'dealer' (tokenized NMS stock)",
+    "issuer": "SEC",
+    "jurisdiction": "US",
+    "source_url": "https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf",
+    "checked_on": "2026-11-10",
+    "effective_from": "2026-09-17",
+    "status": "temporary conditional exemptive order; effective 2026-09-17 until 2031-09-17 (section V); 91 FR 60168 (2026-09-22); no comment closing date set, SEC still accepting comments on checked_on",
+    "summary": "Section 36(a)(1) exemptions. Conditions incl. symbol/volume limits by LULD tier (Tier 1: 75 symbols, 0.25% of that stock's prior-month ADV; Tier 2: 250 symbols, 2.5%), same rights as traditional stock, synthetics excluded, issuer notice/objection for third-party tokens, public auditable smart contracts on a public permissionless ledger, halt with primary listing exchange, USD transaction data (UTC times), TSV not subject to Reg NMS. Not a final rule; no venue recommended; not legal advice.",
+    "fr": "https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities"
+  },
+  {
+    "id": "sec_atkins_innovation_exemption_2026",
+    "title": "Chairman Atkins — Statement on the Innovation Exemption (2026-09-17)",
+    "issuer": "SEC",
+    "jurisdiction": "US",
+    "source_url": "https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726",
+    "checked_on": "2026-11-10",
+    "effective_from": "n/a",
+    "status": "commissioner statement (explains the order; not the order itself)",
+    "summary": "Key conditions as stated: TSV must be a U.S. person and comply with OFAC sanctions; permissioned access; no synthetics, tokens carry the same rights incl. dividends and voting; issuers can object. Anti-fraud/anti-manipulation provisions apply in full."
+  },
+  {
+    "id": "sec_uyeda_innovation_exemption_2026",
+    "title": "Commissioner Uyeda — Statement on the Innovation Exemption (2026-09-17)",
+    "issuer": "SEC",
+    "jurisdiction": "US",
+    "source_url": "https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726",
+    "checked_on": "2026-11-10",
+    "effective_from": "n/a",
+    "status": "commissioner statement (explains the order; not the order itself)",
+    "summary": "Symbol limits and volume caps calibrated by LULD tiers; USD transaction data (price, size, time, pool address, end-of-day pool size, daily volume) public at regular intervals."
   },
   {
     "id": "irs_w8ben",

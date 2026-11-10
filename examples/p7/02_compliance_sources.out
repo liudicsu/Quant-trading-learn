@@ -63,7 +63,7 @@ checked_on = date the author read the page; re-check the official text before re
     summary: Proposal only; do not write “repealed”.
 [US] usc_78i: Securities Exchange Act Section 9(a) — 15 U.S.C. 78i (wash trades, matched orders, manipulative series)
     https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm
-    checked_on=2026-11-10 effective_from=see source status=statute text per 2023 edition; later amendments not compared
+    checked_on=2026-11-10 effective_from=see source status=compared with current US Code through PL 119-138 (uscode.house.gov /us/usc/119-138/t15/s78i/): §78i(a) matches the 2023 edition; last amendment 2010 (PL 111-203)
     summary: 9(a)(1): no-change-in-beneficial-ownership trades / matched orders to create a false appearance of active trading; 9(a)(2): series of transactions to induce others. Wash TRADE (manipulation) != wash SALE (tax). Not legal advice.
 [US] finra_5210: FINRA Rule 5210 Supplementary Material .02 (self-trades) and .03 (disruptive quoting and trading)
     https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210
@@ -73,6 +73,18 @@ checked_on = date the author read the page; re-check the official text before re
     https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources
     checked_on=2026-11-10 effective_from=n/a status=concept release (2026-04-16); review not concluded
     summary: Comprehensive review of CAT (funding/cost, regulatory purpose, structure/governance, design/scope). CAT exists under Rule 613 (adopted 2012-07-11). Do not predict the outcome.
+[US] sec_34_106402_innovation_exemption: SEC Release 34-106402 (File 4-927) — Innovation Exemption order: TSVs exempt from 'exchange', Covered Firms from 'dealer' (tokenized NMS stock)
+    https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf
+    checked_on=2026-11-10 effective_from=2026-09-17 status=temporary conditional exemptive order; effective 2026-09-17 until 2031-09-17 (section V); 91 FR 60168 (2026-09-22); no comment closing date set, SEC still accepting comments on checked_on
+    summary: Section 36(a)(1) exemptions. Conditions incl. symbol/volume limits by LULD tier (Tier 1: 75 symbols, 0.25% of that stock's prior-month ADV; Tier 2: 250 symbols, 2.5%), same rights as traditional stock, synthetics excluded, issuer notice/objection for third-party tokens, public auditable smart contracts on a public permissionless ledger, halt with primary listing exchange, USD transaction data (UTC times), TSV not subject to Reg NMS. Not a final rule; no venue recommended; not legal advice.
+[US] sec_atkins_innovation_exemption_2026: Chairman Atkins — Statement on the Innovation Exemption (2026-09-17)
+    https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726
+    checked_on=2026-11-10 effective_from=n/a status=commissioner statement (explains the order; not the order itself)
+    summary: Key conditions as stated: TSV must be a U.S. person and comply with OFAC sanctions; permissioned access; no synthetics, tokens carry the same rights incl. dividends and voting; issuers can object. Anti-fraud/anti-manipulation provisions apply in full.
+[US] sec_uyeda_innovation_exemption_2026: Commissioner Uyeda — Statement on the Innovation Exemption (2026-09-17)
+    https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726
+    checked_on=2026-11-10 effective_from=n/a status=commissioner statement (explains the order; not the order itself)
+    summary: Symbol limits and volume caps calibrated by LULD tiers; USD transaction data (price, size, time, pool address, end-of-day pool size, daily volume) public at regular intervals.
 [US tax (cross-border)] irs_w8ben: Instructions for Form W-8BEN
     https://www.irs.gov/instructions/iw8ben
     checked_on=2026-11-08 effective_from=see source status=current instructions
@@ -146,4 +158,4 @@ checked_on = date the author read the page; re-check the official text before re
     checked_on=2026-11-04 effective_from=see source status=non-binding briefing
     summary: Published 2026-02-26. Non-binding supervisory briefing (Art.29(2) ESMA Reg; not comply-or-explain). Algo definition: human click/authorisation ≠ out-of-scope if algorithm determined parameters. Material change retest incl. ML retrain/adaptive capabilities. Stress: 2× prior-6m peak messages/trades. PTC hard blocks mandatory / soft recommended. Outsourcing: firm remains liable. AI Act interaction + RTS 6 Art.9 annual self-assessment spirit. Literacy + Asia peers (SFC 24EC55 / FINRA GenAI); NOT a license checklist; not HFT how-to; not legal advice.
 saved /workspace/Quant-trading-learn/examples/p7/data/official_sources.json
-n_sources=36 us_first_block=22 fields_complete=True
+n_sources=39 us_first_block=25 fields_complete=True
