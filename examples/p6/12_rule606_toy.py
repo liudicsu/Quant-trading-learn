@@ -22,9 +22,9 @@ def check(cond, label):
 # venue -> (non-directed orders routed, shares routed, net dollars: + received, - paid)
 # 606(a) venue percentages are of order counts; cents-per-100 uses share counts.
 venues = {
-    "MM_A": (4_800, 1_200_000, 600.0),
-    "MM_B": (3_200, 800_000, 240.0),
-    "EXCH_C": (2_000, 500_000, -50.0),
+    "MM_A": (4_800, 1_200_000, 600.0),   # 250 shares/order
+    "MM_B": (3_200, 800_000, 240.0),     # 250 shares/order
+    "EXCH_C": (2_000, 1_500_000, -150.0),  # 750 shares/order; order share 20%, share share 42.9%
 }
 
 
@@ -33,14 +33,19 @@ def cents_per_100(shares, net_usd):
 
 
 total_orders = sum(o for o, _, _ in venues.values())
-print("venue   pct_of_orders  net_cents_per_100sh")
+total_shares = sum(s for _, s, _ in venues.values())
+print("venue   pct_of_orders  pct_of_shares  net_cents_per_100sh")
 res = {}
+pct_o, pct_s = {}, {}
 for v, (orders, shares, usd) in venues.items():
     res[v] = cents_per_100(shares, usd)
-    print(f"{v:<7} {orders / total_orders:>13.1%}  {res[v]:>19.4f}")
+    pct_o[v] = orders / total_orders
+    pct_s[v] = shares / total_shares
+    print(f"{v:<7} {pct_o[v]:>13.1%}  {pct_s[v]:>13.1%}  {res[v]:>19.4f}")
 check(res == {"MM_A": 5.0, "MM_B": 3.0, "EXCH_C": -1.0}, "net PFOF per 100 shares")
-check(abs(sum(o / total_orders for o, _, _ in venues.values()) - 1) < 1e-12, "routing orders sum to 100%")
-check(max(res, key=res.get) == "MM_A", "largest payer identified")
+check(abs(sum(pct_o.values()) - 1) < 1e-12 and abs(sum(pct_s.values()) - 1) < 1e-12, "both columns sum to 100%")
+check(round(pct_o["EXCH_C"], 4) == 0.2 and round(pct_s["EXCH_C"], 4) == 0.4286, "order-count vs share-count ranks differ")
+check(max(pct_o, key=pct_o.get) == "MM_A" and max(pct_s, key=pct_s.get) == "EXCH_C", "top venue depends on the unit")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_rule606_ok")
 print("reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only")

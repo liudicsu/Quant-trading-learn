@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **23.5 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h + 保证金账户（Reg T / FINRA 4210）0.5h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **23.75 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h + 保证金账户（Reg T / FINRA 4210）0.5h + 组合保证金（FINRA 4210(g)）0.25h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -174,6 +174,24 @@ assertions passed: 6/6
 ASSERT_margin_call_ok
 ```
 
+### 组合保证金：按压力情景定保证金（核实于 2026-11-10）
+
+上面讲的 50%/25% 是“按策略固定比例”的保证金。[FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210) 还允许券商对符合条件的账户改用“组合保证金”：把同一只股票和它的期权放在一组，在一组价格涨跌情景下用 SEC 批准的定价模型重新估值，取最大的理论亏损作为保证金。个股的情景范围是上下 15%。
+
+下面的玩具只用期权到期时的内在价值做简化：100 股、每股 100 的多头，按 Reg T 初始保证金要 $5,000，按 FINRA 维持保证金要 $2,500，按 ±15% 情景的最大亏损是 $1,500；如果再买一张行权价 95、权利金 2 的看跌期权，最大亏损降到 $700。对冲会被计入，但没有对冲时要求也可能更低，所以同样的钱可以加更高的杠杆，风险也更大。这种账户只开给获准做无保护卖出期权的客户，不适用于 IRA，开户前要签特别的风险披露。做研究时，要写清楚你假设的是哪种保证金制度。
+
+**实验：** `examples/p6/11_margin_call_toy.py` 新增的 D 节（上面 A–C 节不变）。规则原文是 “ten equidistant intervals (valuation points)”，玩具把它读成从 −15% 到 +15%、含两端的 10 个等距点，这只是一种读法；真实计算用 SEC 批准的理论定价模型，不是内在价值：
+
+```text
+=== D. portfolio margin (toy) ===
+valuation points (%): [-15.0, -11.67, -8.33, -5.0, -1.67, 1.67, 5.0, 8.33, 11.67, 15.0]
+stock only (100 sh @ 100): Reg T initial 5000.00, FINRA maint 2500.00, PM max loss 1500.00
+stock + 95 put (intrinsic-only toy, premium 2.00): PM max loss 700.00 (> per-contract minimum 37.50)
+assertions passed: 4/4
+ASSERT_portfolio_margin_ok
+disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules apply; learning only
+```
+
 ## 常见错误 / 陷阱
 
 - 忽略 alpha 衰减，有成本仍天天满仓再平衡到目标。
@@ -188,6 +206,7 @@ ASSERT_margin_call_ok
 7. 忽略树状簇，把每只票都当成独立风险赌注。
 8. 只在目标权重上检查约束，忽略漂移后的实际权重；没先检查约束是否有解（如 n×cap &lt; 1）就开始优化。
 9. 杠杆回测（波动目标权重超过 100%）不模拟追保、被动平仓和融资利息；默认券商维持比例就是 25%，而常见的券商标准是 30%–40%。
+10. 以为所有账户都按 50%/25%，或把组合保证金当成免费杠杆；回测用了更低的保证金要求，却不写清假设的是哪种保证金制度和开户条件。
 
 
 ## 练习（1:1）
@@ -199,6 +218,7 @@ ASSERT_margin_call_ok
 5. **done1** — 仓位对照表 + 一页风险偏好（半 Kelly 理由）。
 6. **ex5** — 玩具面板上的 HRP 树状图 + 配置表对照 ERC/逆波动；**完成标准**：簇权重和与图与课内一致。
 7. **ex6** — 跑 `05_weight_drift.py`；**完成标准**：打印可行/不可行两行、A 漂移后 0.3462 且违反上限、单边换手 0.0476。
+8. **ex-pm**（可选）— 在 `11_margin_call_toy.py` 的 D 节把看跌期权行权价改成 90；**完成标准**：打印新的最大亏损，并说明为什么行权价越低保护越少。
 
 
 ## 测验
@@ -216,12 +236,13 @@ ASSERT_margin_call_ok
 <Quiz id="p6prs-q-nt" question="无交易区意味着？" options={["每天都再平衡到目标", "足够接近目标则不交易；越界则朝边界交易", "禁止一切成本", "最大化换手"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 精神。" />
 <Quiz id="pr-drift" question="4 个资产、每个上限 20%，要求权重和为 1，会怎样？" options={["一定有解", "无解：最多只能到 80%", "上限自动放宽", "只影响成本"]} answer={1} explanation="n×cap=0.8<1，约束互相矛盾，应在优化前报错。" />
 <Quiz id="prs-margin-call" question="按 SEC 公告的例子：持仓市值 $12,000，借款 $8,000，券商维持比例 40%。结果是？" options={["没问题，权益 $4,000 高于 $3,000", "要追加 $800", "要追加 $4,800", "维持比例只看初始买入价，不用重算"]} answer={1} explanation="40% × $12,000 = $4,800；权益 $4,000，差 $800。第一个选项是 25% 的情况。" />
+<Quiz id="prs-portmargin" question="按 FINRA 4210(g)，组合保证金账户里，单只股票及其期权的保证金主要怎么定？" options={["固定为市值的 50%", "在上下 15% 的价格情景下重估，取最大理论亏损（另有每张合约的最低要求）", "由客户自己选择", "只看前一天的收盘价"]} answer={1} explanation="4210(g) 是按策略保证金之外的另一种做法：个股在 ±15% 范围内取 10 个估值点，取最大理论亏损，每张上市期权至少 $.375 × 乘数。" />
 
 ## 完成标准
 
 仓位对照表（Kelly / 波动目标 / RP / MV–LW–1/N）+ 一页风险偏好，写明为何把仓位压在满 Kelly 之下。
 
-**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。；权重漂移/约束一致性为本站合成小实验（`examples/p6/05_weight_drift.py`）。
+**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。；权重漂移/约束一致性为本站合成小实验（`examples/p6/05_weight_drift.py`）。；组合保证金（2026-11-10 核实）：[FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。
 
 <Summary>
 **要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；HRP 在树上配置且不反演 Σ；MV 需要收缩并以 1/N 作诚实对照。  

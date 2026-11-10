@@ -23,3 +23,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 - enrich7 (2026-11-10): `09_options_basics_toy.py` — 100-share contract unit, expiry P&L with premium, BSM as a reference, put-call parity, early-assignment flag (9 assertions); `10_mwcb_overnight_resume_toy.py` — Level 3 resumes 04:00 ET or later next trading day under 23/5, Sunday overnight still halted (5 assertions).
 
 - enrich8 (2026-11-10): `11_margin_call_toy.py` — Reg T 50% initial margin, FINRA 4210 25% vs 40% house maintenance on the SEC $16,000/$8,000/$12,000 example, margin-call trigger price (6 assertions). `12_rule606_toy.py` — synthetic Rule 606-style routing table, net PFOF in cents per 100 shares (3 assertions).
+
+- enrich9 (2026-11-10): `11_margin_call_toy.py` new section D — portfolio margin toy under FINRA 4210(g): ten equidistant valuation points read as −15%…+15% incl. both ends, stock-only vs stock + 95 put (intrinsic-only), $.375 per-contract floor (4 more assertions; sections A–C output unchanged).

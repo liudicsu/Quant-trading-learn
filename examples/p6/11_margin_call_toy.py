@@ -55,3 +55,46 @@ check(price < call_price(8000, 160, 0.40) and price >= call_price(8000, 160, 0.2
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_margin_call_ok")
 print("disclaimer: long-only toy; no interest, no intraday margin, broker may sell without notice; learning only")
+
+# ---------------- enrich9 (2026-11-10): portfolio margin toy ----------------
+# Source: FINRA Rule 4210(g) (alternative to "strategy-based" margin; ten equidistant valuation points;
+# +/-15% for an equity security or narrow-based index; greater of largest theoretical loss or $.375 x
+# multiplier per listed option; only for customers approved for uncovered options; not for IRAs).
+# Toy reading: "ten equidistant valuation points" = 10 evenly spaced points from -15% to +15% INCLUDING
+# both ends. Real calculations use an SEC-approved theoretical pricing model, not expiry intrinsic value.
+print("=== D. portfolio margin (toy) ===")
+pm_checks = 0
+
+
+def pm_check(cond, label):
+    global pm_checks
+    assert cond, label
+    pm_checks += 1
+
+
+S, n = 100.0, 100
+moves = [-0.15 + i * (0.30 / 9) for i in range(10)]
+
+
+def pnl_stock(m):
+    return S * m * n
+
+
+def pnl_hedged(m, K=95.0, prem=2.0):
+    """Long 100 shares + one 95-strike put bought for 2.00, valued at intrinsic only."""
+    return S * m * n + (max(K - S * (1 + m), 0.0) - prem) * n
+
+
+pm_stock = max(0.0, -min(pnl_stock(m) for m in moves))
+pm_hedged = max(-min(pnl_hedged(m) for m in moves), 0.375 * 100)
+regt_init, maint = 0.5 * S * n, 0.25 * S * n
+print(f"valuation points (%): {[round(m * 100, 2) for m in moves]}")
+print(f"stock only (100 sh @ 100): Reg T initial {regt_init:.2f}, FINRA maint {maint:.2f}, PM max loss {pm_stock:.2f}")
+print(f"stock + 95 put (intrinsic-only toy, premium 2.00): PM max loss {pm_hedged:.2f} (> per-contract minimum {0.375 * 100:.2f})")
+pm_check(len(moves) == 10 and abs(moves[0] + 0.15) < 1e-12 and abs(moves[-1] - 0.15) < 1e-12, "10 points incl. ends")
+pm_check(abs(pm_stock - 1500.0) < 1e-6, "pm stock")
+pm_check(abs(pm_hedged - 700.0) < 1e-6, "pm hedged")
+pm_check(pm_stock < maint < regt_init, "unhedged PM can be lower -> more leverage, more risk")
+print(f"assertions passed: {pm_checks}/{pm_checks}")
+print("ASSERT_portfolio_margin_ok")
+print("disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules apply; learning only")

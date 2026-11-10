@@ -21,3 +21,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 - enrich7 (2026-11-10): `06_wash_sale_basis_toy.py` — IRS Pub 550 three examples incl. more/less shares matched in purchase order, window before and after the sale (5 assertions; taxable account only).
 
 - enrich8 (2026-11-10): `07_holding_period_toy.py` — IRS Topic 409 more-than-one-year test, Pub 550 qualified-dividend 121-day window from the rule text (not the worked-example day counts), Pub 519 183-day note as text only (6 assertions; not tax advice).
+
+- enrich9 (2026-11-10): `08_self_trade_pattern_toy.py` — same-algo self-trade prevention, layering-style pattern flag for human review (not a legal finding), wash sale vs wash trade glossary (5 assertions; synthetic events). `02_compliance_sources.py` gains 15 U.S.C. 78i, FINRA 5210 and SEC 2026-37 (CAT review) rows: n_sources=36.

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**20 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE comparison) + 0.5h US four-date table & phase-in status + 2.5h cross-border tax/FX/CRS literacy box + 0.5h wash-sale basis lab + 0.5h holding period & qualified dividends) puts **US equities first** for the **compliance basics** of retail/programmatic trading (high level) and research ethics; mainland A-shares (securities and futures), Stock Connect and EU material are **labelled comparison reading**. Prereq: `paper-trading-infra`.
+This lesson (~**20.5 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE comparison) + 0.5h US four-date table & phase-in status + 2.5h cross-border tax/FX/CRS literacy box + 0.5h wash-sale basis lab + 0.5h holding period & qualified dividends + 0.5h manipulation red lines & self-trade lab (wash trade / FINRA 5210 / CAT)) puts **US equities first** for the **compliance basics** of retail/programmatic trading (high level) and research ethics; mainland A-shares (securities and futures), Stock Connect and EU material are **labelled comparison reading**. Prereq: `paper-trading-infra`.
 
 **Default scope:** US-listed stocks / non-leveraged ETFs, in USD. Chinese is the teaching language; it does not make China the default market.
 
@@ -70,6 +70,32 @@ Account categories (26-10 read by the author on 2026-11-08): the (d)(2) intraday
 ### FINRA Regulatory Notice 15-09
 
 - **Source (checked 2026-11-04):** https://www.finra.org/rules-guidance/notices/15-09 — **2015-03-26**. Guidance on supervising algorithmic strategies: risk assessment, code change control, testing, trading-system monitors, compliance communication; references 15c3-5 and Reg SHO.
+
+### Red lines before you write a trading algorithm: wash trades, self-trades, disruptive quoting, CAT (checked 2026-11-10)
+
+General information, not legal advice. First, separate two words that are easy to mix up. The wash sale in the tax box below is a tax concept. A **wash trade** is market manipulation: a trade that involves no change in beneficial ownership, done to create a false appearance of active trading. Section 9(a) of the Securities Exchange Act prohibits such trades and prearranged matched orders. It also prohibits a series of transactions that creates actual or apparent active trading, or moves the price, in order to induce others to buy or sell ([15 U.S.C. 78i](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm), govinfo 2023 edition).
+
+Two rules matter most for coders. One is self-trades, where a firm's own buy and sell orders meet. Supplementary Material .02 to [FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210) says unintentional self-trades are generally bona fide. But firms must have procedures to review for, and prevent, a pattern of self-trades from a single algorithm or related algorithms. In code, that means self-trade prevention at the order layer, plus logs. The other is Supplementary Material .03 to the same rule, which describes two prohibited patterns of "disruptive quoting and trading". In Type 1, a party places several limit orders at different prices on one side, the apparent supply and demand shifts, the party trades on the other side, and then cancels the original orders. In Type 2, a party narrows the spread with an order inside the NBBO, then trades on the other side against participants who joined the new inside price. The rule targets a frequent pattern, including one spread across several venues.
+
+Finally, assume your order history can be traced: the Consolidated Audit Trail (CAT) is the consolidated audit trail the SEC required under Rule 613 (adopted 2012-07-11). On 2026-04-16 the SEC began a comprehensive review of the CAT and asked for public comment ([SEC press release 2026-37](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)); that review has not concluded.
+
+Lab `examples/p7/08_self_trade_pattern_toy.py` (standard library, synthetic events) blocks a same-algo self-trade and flags a "layer one side, fill the other, cancel the layers" log for human review. A flag is only a prompt to review, not a finding of a violation:
+
+```text
+=== A. self-trade prevention at the order layer ===
+incoming algoA SELL 100@10.00 vs resting algoA BUY 100@10.00 -> blocked 1
+incoming algoB SELL 100@10.00 -> blocked 0 (this toy checks same algo only; real scope follows firm policy)
+=== B. pattern flag: layer one side, fill the other, cancel the layers ===
+3 bid layers -> sell fill -> cancel all layers: flagged for review True
+same layers cancelled with no other-side fill: flagged for review False
+a flag only asks a human to review the log; it is not a finding of a violation
+=== C. two words that are easy to mix up ===
+wash sale  -> tax: loss sale + repurchase within 30 days (IRS Pub 550)
+wash trade -> manipulation: no change in beneficial ownership (15 U.S.C. 78i(a)(1))
+assertions passed: 5/5
+ASSERT_self_trade_pattern_ok
+disclaimer: synthetic events; flags are review prompts, not legal findings; not legal advice; learning only
+```
 
 ## Cross-border identity boundaries: tax / FX / CRS literacy box (readers resident in China)
 
@@ -193,7 +219,7 @@ Learning only; the official SSE text governs the details; not legal or investmen
 ### Real run output
 
 ```
-n_sources=33 us_first_block=19 fields_complete=True
+n_sources=36 us_first_block=22 fields_complete=True
 ```
 
 
@@ -209,8 +235,9 @@ Complements the PDA-conflicts proposal **withdrawal** (S7-12-23): **withdrawal �
 
 - **[SEC Division of Examinations FY2026 Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities)** (page stamped ~2025-11-17; also [PDF](https://www.sec.gov/files/2026-exam-priorities.pdf)): Emerging Financial Technology focus — automated investment tools, AI, trading algorithms/platforms, alt-data. Exams may check fair/accurate AI representations; ops vs disclosures; algo advice vs investor profiles; policies supervising AI in fraud/AML/trading/back-office.
 - **[FINRA 2026 Annual Regulatory Oversight Report — GenAI / AI Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai)** (**NEW FOR 2026**): rules (incl. FINRA Rule 3110 Supervision) remain technology-neutral. Emerging agent themes: autonomy, scope/authority, auditability, data sensitivity, domain knowledge, reward misalignment, plus GenAI bias/hallucination/privacy. Consider human-in-the-loop, access/data monitoring, action logging, guardrails.
+- **FY2027 update (checked 2026-11-10):** on 2026-10-23 the SEC announced the Division of Examinations’ Fiscal Year 2027 examination priorities ([press release 2026-109](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)). One listed focus is "Emerging technologies, including super intelligence and other advanced technologies that may affect market operations, compliance, fraud prevention, and investor protection." Re-read that release instead of assuming the FY2026 list above is still current.
 
-**Awareness only — not legal advice.** Date-stamp official pages when you cite them. Lab row count: `n_sources=33` in `examples/p7/02_compliance_sources.py`.
+**Awareness only — not legal advice.** Date-stamp official pages when you cite them. Lab row count: `n_sources=36` in `examples/p7/02_compliance_sources.py`.
 
 
 ## SFC Circular 24EC55 — GenAI language models (HK)
@@ -224,7 +251,7 @@ Asia peer to FINRA GenAI themes: [SFC Circular 24EC55](https://apps.sfc.hk/edist
 - **High-risk use cases** — providing investment recommendations, advice, or research — need extra mitigations including **human-in-the-loop** review before client-facing output, validation / ongoing monitoring, prompt-robustness testing, and ongoing disclosures that the user is interacting with AI.
 - Complements FINRA 2026 GenAI/Agents supervision themes and SEC FY2026 Emerging FinTech exam focus: **withdrawal of a US proposal ≠ absence of duties elsewhere**.
 
-Lab row: `sfc_24ec55` in `examples/p7/02_compliance_sources.py` (`n_sources=33`).
+Lab row: `sfc_24ec55` in `examples/p7/02_compliance_sources.py` (`n_sources=36`).
 
 
 
@@ -246,7 +273,7 @@ EU peer (alongside FINRA GenAI / HK SFC 24EC55): [ESMA74-1505669079-10311 Superv
 
 Read with Asia peers (SFC 24EC55, FINRA GenAI): **a withdrawal elsewhere ≠ no duties here.**
 
-Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` (`n_sources=33`).
+Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` (`n_sources=36`).
 
 ## Common mistakes / pitfalls
 
@@ -255,6 +282,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 - Assuming PDA withdrawal erased all AI/advice duties (FY2026 exams still list Emerging FinTech).
 - Treating FINRA GenAI themes as a trading license or product alpha.
 - Treating SFC 24EC55 as a trading license rather than licensed-corporation expectations.
+- Mixing up a wash sale (tax) with a wash trade (manipulation); treating a toy self-trade or pattern flag as a legal finding.
 
 1. Quoting blog thresholds instead of exchange/CSRC text.
 2. Treating staff statements as final Commission rules.
@@ -279,6 +307,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 7. **ex6** — cross-border literacy card: in your own words, who receives W-8BEN, the conditions for the treaty 10%, the 61-calendar-day wash-sale window, China’s 20% with capped credit / filing in Mar–Jun next year, CRS ≠ a new tax, USD 50,000 ≠ securities-investment licence; **done when**: all six points are present with no personal tax calculation and no remittance advice.
 8. **ex7** — FINRA migration fixture (US main example): run `04_finra_migration_fixture.py`, then add your own case (inside the phase-in, `member_adoption_date` known but `broker_checked_on` empty); **done when**: it outputs `needs_broker_verification` and the original 8/8 cases still pass.
 9. **ex-wash** — run `06_wash_sale_basis_toy.py`; change the repurchase to day +30 and then day +31; **done when**: day +30 is a wash sale (basis 1050) and day +31 is not, matching the function.
+10. **ex-selftrade** (optional) — run `08_self_trade_pattern_toy.py`; move the sell fill to after the cancels; **done when**: the log is no longer flagged and you can explain in one sentence why a flag is not a legal finding.
 
 
 ## Quiz
@@ -306,12 +335,13 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 <Quiz id="ce-washbasis" question="Per IRS Pub 550: buy 100 shares for $1,000, sell for $750, rebuy 100 within 30 days for $800. What is the new basis?" options={["$800", "$1,050", "$750", "$1,000"]} answer={1} explanation="The $250 disallowed loss is added to the $800 cost of the new shares." />
 <Quiz id="ce-holding-period" question="Per IRS Topic 409, for stock bought on 2025-03-10, what is the earliest sale date that gives a long-term gain?" options={["2026-03-11", "2026-03-10", "2025-09-10 (six months)", "Holding period counts settlement dates, not trade dates"]} answer={0} explanation="Count from the day after purchase; the holding must be more than one year. 2026-03-10 is exactly one year, which is not enough." />
 <Quiz id="ce-fx50k" question="The USD 50,000 annual FX facilitation quota means?" options={["You may freely buy US stocks", "An annual quota; quota FX remitted abroad needs a genuine current-account purpose, excluding overseas securities", "Automatic tax exemption", "You may buy FX for others"]} answer={1} explanation="SAFE Shanghai/Shaanxi FAQs; no workaround schemes are provided." />
+<Quiz id="ce-wash-trade" question="Which of these is a wash trade prohibited by Section 9(a)(1) of the Exchange Act?" options={["Selling at a loss and buying the same stock back within 30 days", "A trade with no change in beneficial ownership, made to create a false appearance of active trading", "Two unrelated strategies that accidentally meet, at a firm that has prevention and review procedures", "Resting an order at the NBBO"]} answer={1} explanation="Option 1 is the tax wash sale; option 3 is generally a bona fide self-trade under FINRA 5210 SM .02, but a pattern from the same algorithm must be prevented." />
 
 ## Done when
 
 Ethics checklist checked; official-source table filled with URLs and **2026-11-04** check date; risk-preference page written.
 
-**Sources:** all rows in `examples/p7/02_compliance_sources.py` (read by the author on each row’s checked_on date; the script itself does not fetch; n_sources=33). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf); FR PDA withdrawal. Canvas m14; AFML scientific ethics.; SSE Trading Rules (2026 Revision) notice page ([link](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml), verified 2026-11-07).; FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11); IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben), [US–China treaty](https://www.irs.gov/pub/irs-trty/china.pdf), [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/), [Pub. 550](https://www.irs.gov/publications/p550); [China IIT Law](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html); [MOF/SAT 2020 No. 3](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm); [CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html); SAFE [Shanghai](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [Shaanxi](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQs (all checked 2026-11-08).; wash-sale basis (checked 2026-11-10): [IRS Publication 550](https://www.irs.gov/publications/p550)
+**Sources:** all rows in `examples/p7/02_compliance_sources.py` (read by the author on each row’s checked_on date; the script itself does not fetch; n_sources=36). SEC [FY2026 Exam Priorities](https://www.sec.gov/about/reports-publications/2026-examination-priorities); FINRA [2026 GenAI/Agents](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report/gen-ai); SFC [24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55); ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf); FR PDA withdrawal. Canvas m14; AFML scientific ethics.; SSE Trading Rules (2026 Revision) notice page ([link](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml), verified 2026-11-07).; FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11); IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben), [US–China treaty](https://www.irs.gov/pub/irs-trty/china.pdf), [IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/), [Pub. 550](https://www.irs.gov/publications/p550); [China IIT Law](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html); [MOF/SAT 2020 No. 3](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm); [CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html); SAFE [Shanghai](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [Shaanxi](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQs (all checked 2026-11-08).; wash-sale basis (checked 2026-11-10): [IRS Publication 550](https://www.irs.gov/publications/p550); manipulation red lines and exam priorities (checked 2026-11-10): [15 U.S.C. 78i (govinfo, 2023 edition)](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm), [FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210), [SEC press release 2026-37 (CAT review)](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources), [SEC press release 2026-109 (FY2027 exam priorities)](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)
 
 <Summary>
 **Takeaways**: cite official text + date; CN securities 〔2024〕8 + futures 〔2025〕12 report-before-trade & exchange HFT standards; US 15c3-5 / Reg SHO / 4210-IML via 26-10+26-11 / 15-09; crypto via PBoC 2021 + non-binding SEC/CFTC staff note; EU ESMA algo-trading briefing (non-binding).  

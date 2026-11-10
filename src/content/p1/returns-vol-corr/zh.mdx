@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **8.5 学时**：公式 3h + 编码 4h + 测验 1h + 杠杆/反向 ETF 每日重置 0.5h）实现年化波动、夏普、最大回撤（MDD），并画滚动波动与压力期相关。前置：pandas 时间序列、统计基础、市场语言。
+本课（约 **9 学时**：公式 3h + 编码 4h + 测验 1h + 杠杆/反向 ETF 每日重置 0.5h + 从 T-bill 报价取无风险利率 0.5h）实现年化波动、夏普、最大回撤（MDD），并画滚动波动与压力期相关。前置：pandas 时间序列、统计基础、市场语言。
 
 **课内目标：** 正确年化波动；实现夏普与 MDD；展示滚动相关在压力期升高。
 
@@ -28,6 +28,30 @@ Sharpe ≈ (mean(r) − Rf) / std(r) × √252
 </Formula>
 
 本课输出：σ_day≈0.0111，σ_ann≈0.176，Sharpe_Rf0≈0.664。
+
+## 无风险利率从哪里来（核实于 2026-11-10）
+
+上面的 Sharpe 用的是 Rf = 0，这只是教学简化。真实研究里，分子应该是“超额收益”，也就是策略收益减去同期的无风险利率。一个常见的教学示例是美国短期国债（T-bill）利率，但它不是唯一正确的选择；你用什么代理都要写进研究说明。要注意三件事。
+
+1. **报价里的贴现率不是你的收益率。** T-bill 按折价发行、到期付面值，官方报的“贴现率”按 360 天计算，而且分母是面值，不是你付的价格。TreasuryDirect 给的价格公式是：价格 = 面值 ×（1 − 贴现率 × 天数 ÷ 360）（[TreasuryDirect](https://www.treasurydirect.gov/marketable-securities/understanding-pricing/)）。下面的实验里，贴现率 4.00%、91 天，价格是 989.8889，按价格算的 365 天简单年化收益是 4.0970%，比 4.00% 高。Treasury 每日表里同时有 “BANK DISCOUNT” 和 “COUPON EQUIVALENT” 两列，回测要选一个并写明。
+2. **按时点取值。** Treasury 每天公布的 T-bill 利率，是纽约联储在每个营业日约 15:30（美东）取得的报价（[Treasury](https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics)），所以第 t 天的利率只能用在第 t+1 天的收益上。
+3. **频率换算。** 年化利率要换算成和收益同频率的利率，并写明换算方法。实验里，日均收益 0.05%、日波动 1% 时，Rf = 0 的 Sharpe 是 0.7937，Rf 取 4%（按 252 天平摊）时是 0.5417。
+
+**实验：** `examples/p1/08_tbill_rf_toy.py`（只用标准库，合成利率，不下载 Treasury 数据；“365 天简单年化”是教学写法，不是 Treasury 的 coupon equivalent 算法）：
+
+```text
+=== A. the discount rate is not your yield ===
+TreasuryDirect example (26 weeks, 0.145%): price 999.26694 -> 999.27
+4.00% discount, 91 days: price 989.8889, holding return 1.0214%, simple 365-day yield 4.0970%
+=== B. Sharpe with and without Rf (declare it) ===
+daily mean 0.0005, daily std 0.01: Sharpe Rf=0: 0.7937; Sharpe Rf=4%/252: 0.5417
+=== C. point in time: a ~15:30 ET quote on day t applies from day t+1 ===
+rf for the 2026-11-06 return uses the 2026-11-05 quote: 0.0400
+rf for the 2026-11-05 return (no earlier quote): None
+assertions passed: 7/7
+ASSERT_tbill_rf_ok
+disclaimer: synthetic rates; T-bill is a teaching proxy; no Treasury data downloaded; learning only
+```
 
 ## 最大回撤（路径依赖）
 
@@ -116,6 +140,7 @@ ASSERT_etf_nav_letf_ok
 4. 全样本相关掩盖压力期相关上升。
 5. 滚动窗过短却当精确真理。
 6. 把持有几周的 2 倍或反向 ETF 按“指数收益 × 2”回测，而不是按日复利。
+7. 把 T-bill 报价里的贴现率当成收益率；用第 t 天（约 15:30 美东才报出）的利率去减第 t 天的收益。
 
 ## 练习（与任务清单 1:1）
 
@@ -124,6 +149,7 @@ ASSERT_etf_nav_letf_ok
 3. **ex3**：滚动相关 + 压力窗标注；**完成标准**：打印压力窗均值相关。
 4. **ex4**：在 Rf=0 与 Rf_daily=0.0001 下各算一次夏普；**完成标准**：两数并写明参数。
 5. **ex5**：用三句话解释路径依赖；**完成标准**：提到顺序/峰值。
+6. **ex-rf**（可选）：运行 `08_tbill_rf_toy.py`，再把贴现率改成 5.00%；**完成标准**：打印新的价格和 365 天简单年化收益，并说明为什么它高于 5.00%。
 
 ## 测验
 
@@ -133,12 +159,13 @@ ASSERT_etf_nav_letf_ok
 <Quiz id="q4-corr" question="压力期常见现象？" options={["相关必降到 0", "资产相关往往升高", "波动消失", "夏普无定义"]} answer={1} explanation="共同冲击抬高相关。" />
 <Quiz id="q5-rf" question="本课教学夏普默认 Rf？" options={["必须 5%", "0，且须声明", "等于 σ", "等于 Alpha"]} answer={1} explanation="Rf=0 是教学约定，不是市场真理。" />
 <Quiz id="rv-letf-reset" question="指数两天走势为 −10%、+10%（1000→900→990）。一只每天都准确做到 2 倍的 ETF，从 1000 开始，两天后是多少？" options={["960", "980", "990", "1000"]} answer={0} explanation="第一天 1000 × 0.8 = 800，第二天 800 × 1.2 = 960（SEC 公告原例）。" />
+<Quiz id="rv-tbill-rf" question="Treasury 每日表里一只 T-bill 的 ‘BANK DISCOUNT’ 是 4.00%。下面哪种说法对？" options={["这就是持有到期的年化收益率", "它按 360 天、以面值为分母计算，按价格算的年化收益会略高于 4.00%", "它已经扣除了通胀", "它是当天开盘时的利率，可以用于当天的收益"]} answer={1} explanation="91 天、4.00% → 价格 989.8889，365 天简单年化 4.0970%；报价时点约 15:30 ET，只能用于下一天。" />
 
 ## 完成标准
 
 - 可复用指标函数 + 两张图 + 测验
 
-**来源：** classic — Canvas m3；QuantStart performance；中文补充：聚宽收益/风险教程。
+**来源：** classic — Canvas m3；QuantStart performance；中文补充：聚宽收益/风险教程。无风险利率（2026-11-10 核实）：[TreasuryDirect 定价说明](https://www.treasurydirect.gov/marketable-securities/understanding-pricing/)、[Treasury 利率统计](https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics)。
 
 <Summary>
 **要点**：√252 年化、声明 Rf 的夏普、路径依赖 MDD、滚动压力相关。  

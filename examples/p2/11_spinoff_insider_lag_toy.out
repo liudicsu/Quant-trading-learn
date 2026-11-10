@@ -1,0 +1,24 @@
+=== A. spin-off: the fake crash on the ex-distribution date ===
+parent close 100.00 -> ex-date 81.00; 0.5 child share per parent share, child closes 40.00
+raw parent return      : -19.0000%
+holder total return    : 1.0000%
+adjusted prior close   : 80.1980  adjusted return 1.0000%
+volume (not adjusted for spin-offs per CRSP guide): 1000000 -> 1400000
+=== B. linking the new security; when basis information appears ===
+DisPERMNO link: parent 10001 -> received 20002
+Form 8937 due (earlier of day 45 / Jan 15) for action 2026-11-02: 2026-12-17
+Form 8937 due (earlier of day 45 / Jan 15) for action 2026-12-20: 2027-01-15
+=== C. Form 4 / 13D / 13G deadlines (weekend roll only) ===
+Form 4 trade 2026-11-04 (Wed) -> due by end of 2026-11-06 (Fri)
+Form 4 trade 2026-11-06 (Fri) -> due by end of 2026-11-10 (Tue)
+13D: crossed 5% on 2026-08-03 (Mon) -> due 2026-08-10 (Mon)
+13G (45 days after 2026-09-30, Rule 0-3 weekend roll): raw 2026-11-14 (Sat) -> 2026-11-16
+=== D. the signal is usable after acceptance, not on the transaction date ===
+Form 4 for a 2026-11-04 trade accepted 2026-11-06 21:40 ET
+decision 2026-11-05 10:00 ET usable? False
+decision 2026-11-09 09:30 ET (next session open) usable? True
+FPI director trade 2026-02-10 -> Form 4 expected: False
+FPI director trade 2026-04-01 -> Form 4 expected: True (unless an exemptive order covers the jurisdiction)
+assertions passed: 15/15
+ASSERT_spinoff_insider_lag_ok
+disclaimer: synthetic data; holidays not handled; no Form 4 before 2026-03-18 != no insider trades; learning only

@@ -1,0 +1,15 @@
+=== A. FOMC statement time vs the trading session ===
+statement 2026-10-28 14:00 EDT -> Beijing 2026-10-29 02:00
+trade on the statement at the 2026-10-28 09:30 open? False (look-ahead)
+trade on the statement at 14:01 EDT? True
+=== B. minutes: three weeks after the policy decision ===
+3-week rule matches all 6 published 2026 minutes dates
+Oct 27-28 minutes projected by the 3-week rule: 2026-11-18 (projection; check the Fed calendar)
+=== C. IPO: the offering price is not your fill ===
+offering 20.00, first open 26.00, close 24.00
+day-1 return from IPO price 20.0000%; from first open -7.6923%
+listed 45 trading days, 60-day lookback -> signal None
+lock-up 180 calendar days after 2026-03-10: 2026-09-06 (Sun); take the real date from the prospectus
+assertions passed: 14/14
+ASSERT_event_time_ipo_ok
+disclaimer: synthetic prices; no FOMC or IPO strategy; learning only

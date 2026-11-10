@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**8.5 hours**: 3h formulas + 4h coding + 1h quiz + 0.5h leveraged/inverse ETF daily reset) implements annualized vol, Sharpe, max drawdown (MDD), and plots rolling vol plus stress-period correlation. Prereqs: pandas time series, stats basics, markets language.
+This lesson (~**9 hours**: 3h formulas + 4h coding + 1h quiz + 0.5h leveraged/inverse ETF daily reset + 0.5h risk-free rate from T-bill quotes) implements annualized vol, Sharpe, max drawdown (MDD), and plots rolling vol plus stress-period correlation. Prereqs: pandas time series, stats basics, markets language.
 
 **Goals:** annualize vol correctly; implement Sharpe and MDD; show rolling corr rising in stress.
 
@@ -28,6 +28,30 @@ Sharpe ≈ (mean(r) − Rf) / std(r) × √252
 </Formula>
 
 Lesson output: σ_day≈0.0111, σ_ann≈0.176, Sharpe_Rf0≈0.664.
+
+## Where the risk-free rate comes from (checked 2026-11-10)
+
+The Sharpe ratio above uses Rf = 0, which is a teaching shortcut. In real research the numerator is the excess return: the strategy's return minus the risk-free rate over the same period. US Treasury bill (T-bill) rates are a common teaching example, not the only correct choice; whatever proxy you use, write it down. Watch three things.
+
+1. **The quoted discount rate is not your yield.** T-bills are sold at a discount and pay face value at maturity. The quoted "discount rate" uses a 360-day year and divides by face value, not by the price you pay. TreasuryDirect gives the price formula: price = face value × (1 − discount rate × days ÷ 360) ([TreasuryDirect](https://www.treasurydirect.gov/marketable-securities/understanding-pricing/)). In the lab, a 4.00% discount rate on a 91-day bill gives a price of 989.8889, and the simple 365-day yield from that price is 4.0970%, higher than 4.00%. Treasury's daily table has both a "BANK DISCOUNT" and a "COUPON EQUIVALENT" column; pick one and say which.
+2. **Point in time.** Treasury's daily bill rates are quotes the New York Fed obtains at about 3:30 PM Eastern each business day ([Treasury](https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics)), so day t's rate can only be applied to day t+1's return.
+3. **Frequency.** Convert the annual rate to the same frequency as your returns and say how you did it. In the lab, with a daily mean of 0.05% and daily volatility of 1%, Sharpe is 0.7937 at Rf = 0 and 0.5417 with a 4% rate spread over 252 days.
+
+**Lab:** `examples/p1/08_tbill_rf_toy.py` (standard library, synthetic rates; no Treasury data is downloaded; the "simple 365-day yield" is a teaching formula, not Treasury's coupon-equivalent method):
+
+```text
+=== A. the discount rate is not your yield ===
+TreasuryDirect example (26 weeks, 0.145%): price 999.26694 -> 999.27
+4.00% discount, 91 days: price 989.8889, holding return 1.0214%, simple 365-day yield 4.0970%
+=== B. Sharpe with and without Rf (declare it) ===
+daily mean 0.0005, daily std 0.01: Sharpe Rf=0: 0.7937; Sharpe Rf=4%/252: 0.5417
+=== C. point in time: a ~15:30 ET quote on day t applies from day t+1 ===
+rf for the 2026-11-06 return uses the 2026-11-05 quote: 0.0400
+rf for the 2026-11-05 return (no earlier quote): None
+assertions passed: 7/7
+ASSERT_tbill_rf_ok
+disclaimer: synthetic rates; T-bill is a teaching proxy; no Treasury data downloaded; learning only
+```
 
 ## Max drawdown (path-dependent)
 
@@ -116,6 +140,7 @@ ASSERT_etf_nav_letf_ok
 4. Letting full-sample corr hide stress corr spikes.
 5. Treating tiny rolling windows as precise truth.
 6. Backtesting a 2x or inverse ETF held for weeks as "index return × 2" instead of compounding daily.
+7. Using a T-bill's quoted discount rate as its yield; subtracting day t's rate (quoted about 15:30 ET) from day t's return.
 
 ## Practice (1:1 with the checklist)
 
@@ -124,6 +149,7 @@ ASSERT_etf_nav_letf_ok
 3. **ex3** — Rolling corr + stress mark; **done when** stress-window mean corr prints.
 4. **ex4** — Sharpe at Rf=0 and Rf_daily=0.0001; **done when** both numbers and params are written.
 5. **ex5** — Three sentences on path dependence; **done when** order/peaks are mentioned.
+6. **ex-rf** (optional) — run `08_tbill_rf_toy.py`, then change the discount rate to 5.00%; **done when**: you print the new price and simple 365-day yield and say why the yield is above 5.00%.
 
 ## Quiz
 
@@ -133,12 +159,13 @@ ASSERT_etf_nav_letf_ok
 <Quiz id="q4-corr" question="In stress periods one often sees?" options={["Corr must fall to 0", "Cross-asset corr often rises", "Vol vanishes", "Sharpe undefined"]} answer={1} explanation="Common shocks lift correlation." />
 <Quiz id="q5-rf" question="This lesson’s teaching Sharpe default Rf?" options={["Must be 5%", "0, and must be declared", "Equal to σ", "Equal to Alpha"]} answer={1} explanation="Rf=0 is a teaching convention." />
 <Quiz id="rv-letf-reset" question="An index moves −10% then +10% (1000→900→990). A 2x ETF that hits its daily target exactly starts at 1000. Where is it after two days?" options={["960", "980", "990", "1000"]} answer={0} explanation="Day 1: 1000 × 0.8 = 800. Day 2: 800 × 1.2 = 960 (the SEC bulletin's own example)." />
+<Quiz id="rv-tbill-rf" question="A T-bill shows 4.00% in Treasury's 'BANK DISCOUNT' column. Which statement is right?" options={["It is the annualized yield to maturity", "It uses a 360-day year and divides by face value, so the yield based on price is slightly above 4.00%", "It is already net of inflation", "It is the opening rate, usable for the same day's return"]} answer={1} explanation="91 days at 4.00% gives a price of 989.8889 and a simple 365-day yield of 4.0970%; the quote is taken around 15:30 ET, so use it from the next day." />
 
 ## Done when
 
 - Reusable metric helpers + both plots + quizzes
 
-**Sources:** classic — Canvas m3; QuantStart performance; Chinese supplement: JoinQuant returns/risk tutorial.
+**Sources:** classic — Canvas m3; QuantStart performance; Chinese supplement: JoinQuant returns/risk tutorial. Risk-free rate (checked 2026-11-10): [TreasuryDirect pricing](https://www.treasurydirect.gov/marketable-securities/understanding-pricing/), [Treasury interest rate statistics](https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics).
 
 <Summary>
 **Takeaways**: √252 annualization, Sharpe with declared Rf, path-dependent MDD, stress rolling corr.  

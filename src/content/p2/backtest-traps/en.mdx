@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**28.5 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up + 0.5h index membership as of date) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**29.25 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up + 0.5h index membership as of date + 0.25h FOMC release times as event timestamps + 0.5h IPO data traps) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
 **Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
@@ -42,6 +42,25 @@ decision 2026-11-16: December preliminary list known? True
 members used on 2026-12-11: ['A', 'B', 'C']
 members used on 2026-12-14: ['A', 'B', 'E']
 assertions passed: 7/7
+```
+
+## IPOs: the offering price is not your fill (checked 2026-11-10)
+
+An IPO's offering price is negotiated between the company and its underwriters, based on market conditions, valuation and investor demand. The SEC's investor bulletin notes that underwriters often allocate most IPO shares to institutional and high-net-worth clients, and that individuals more commonly buy once the shares trade in the public market. It also warns that the offering price may bear little relationship to the trading price ([SEC investor bulletin](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)). So "buy at the IPO price" is usually not an executable assumption. In the lab, the offering price is 20, the first open is 26 and the close is 24. Measured from the offering price, day one returns +20%; bought at the open, it returns −7.69%.
+
+A newly public company typically has no prior reporting history and only a short price history. A signal that needs 60 trading days should output "no signal" until 60 days exist; do not quietly shorten the window. Filter the universe by listing date and document the rule. Insiders also usually sign lock-up agreements, and most prevent sales for 180 days; the terms are in the prospectus ([investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)). When a lock-up ends, many shares may become available for sale. Take the end date from the prospectus and company announcements; do not assume "IPO date + 180 days" for every stock.
+
+**Lab:** `examples/p2/12_event_time_ipo_toy.py` section C (synthetic prices; sections A–B are in the FOMC section below; the assertion count covers all three sections):
+
+```text
+=== C. IPO: the offering price is not your fill ===
+offering 20.00, first open 26.00, close 24.00
+day-1 return from IPO price 20.0000%; from first open -7.6923%
+listed 45 trading days, 60-day lookback -> signal None
+lock-up 180 calendar days after 2026-03-10: 2026-09-06 (Sun); take the real date from the prospectus
+assertions passed: 14/14
+ASSERT_event_time_ipo_ok
+disclaimer: synthetic prices; no FOMC or IPO strategy; learning only
 ```
 
 ## Walk-forward lab
@@ -326,6 +345,24 @@ Large positive Leakage Gain means the **protocol** made the future easier to see
 
 
 
+## FOMC: macro events have exact release times too (checked 2026-11-10)
+
+The Federal Reserve's Federal Open Market Committee (FOMC) holds eight scheduled meetings a year, plus others as needed, and releases the minutes three weeks after each policy decision ([Fed calendar](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)). Each policy statement has an exact release time. The 28 October 2026 statement, for example, says "For release at 2:00 p.m. EDT" ([statement](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)), which is 02:00 on 29 October in Beijing. Regular US trading runs 09:30–16:00 Eastern, so the news lands in the middle of the session.
+
+In a daily backtest, "trading" that statement at the same day's open is look-ahead, the same decision-time leak as EXEC_OPEN above. The earliest fill is after 14:00, which on daily bars usually means that day's close or the next open, and that close already contains part of the market's reaction. Minutes work the same way: a feature built from the minutes becomes usable on the release date, not the meeting date. 14:00 is the time printed on this one statement; read each statement page for its own time.
+
+**Lab:** `examples/p2/12_event_time_ipo_toy.py` sections A–B (the Oct 27–28 minutes date is a projection from the three-week rule, not a published date; the assertion count is shown in the IPO section above):
+
+```text
+=== A. FOMC statement time vs the trading session ===
+statement 2026-10-28 14:00 EDT -> Beijing 2026-10-29 02:00
+trade on the statement at the 2026-10-28 09:30 open? False (look-ahead)
+trade on the statement at 14:01 EDT? True
+=== B. minutes: three weeks after the policy decision ===
+3-week rule matches all 6 published 2026 minutes dates
+Oct 27-28 minutes projected by the 3-week rule: 2026-11-18 (projection; check the Fed calendar)
+```
+
 ## PBO / CSCV + evaporation curve — DSR ≠ leakage
 
 **Intuition:** Deflated Sharpe and PBO ask: *among many honest backtests, how often is the in-sample winner a fluke?* They do **not** ask: *was the information set contaminated?* [What survives honest evaluation?](https://arxiv.org/abs/2608.27734) (Gençay) makes both corrections **structural**: a registry that cannot express look-ahead, plus a **complete trial ledger** that indexes DSR/PBO to the agent’s own search. Classic PBO/CSCV: [Bailey et al. PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf).
@@ -384,6 +421,8 @@ after excess @ t=4: hit≈98.3% FDR≈0
 12. Running admission gates on absolute returns (silent reject of true signals).
 13. Treating gates / Minerva Seal as proof of higher expected returns.
 14. Building a historical universe from today's index members, or using a reconstitution list before its announcement date; hard-coding "Russell rebalances every June" for 2026 onward.
+15. Filling a signal on an FOMC statement (released 14:00 ET) at that day's open; dating a minutes-based feature to the meeting instead of the release.
+16. Assuming fills at the IPO offering price; computing a 60-day signal on a stock listed fewer than 60 trading days ago; assuming every lock-up ends exactly 180 days after the IPO.
 
 ## Practice (1:1 with the checklist)
 
@@ -395,6 +434,7 @@ after excess @ t=4: hit≈98.3% FDR≈0
 6. **ex6** — (Optional) purged/embargo note; **done when** purge/embargo counts print.
 7. **ex7** — CPCV toy: print \(C(6,2)\), path count, combo SR mean/std vs single hold-out; **done when** numbers match and `cpcv_sr_dist.png` exists.
 8. **ex8** — PBO/oracle: print oracle vs honest SRs, evaporation rows, CSCV PBO_hat, save `pbo_evaporation.png`; **done when** .out matches and disclaimer says teaching sketch.
+9. **ex9** (optional) — run `12_event_time_ipo_toy.py`; change the first open to 22; **done when**: you print the new day-one return from the open and explain why it still differs from the +20% measured from the offering price.
 
 ## Quiz
 
@@ -414,12 +454,14 @@ after excess @ t=4: hit≈98.3% FDR≈0
 <Quiz id="q-admit-excess" question="Why must gate criteria use excess returns?" options={["Fees only", "Absolute criteria can silently reject even true t=4 when market vol dominates", "DSR forbids excess", "PIT unused"]} answer={1} explanation="Paper Table 7 / lab compression foil absolute_SR≈1.594 vs excess_IR≈5.276." />
 <Quiz id="q10-execopen" question="EXEC_OPEN is illegal because?" options={["It uses next-open fills after close decisions", "It pairs same-day post-open bar fields with a same-day open fill", "It deletes costs", "It bans RankIC"]} answer={1} explanation="Finance-native execution-alignment leak." />
 <Quiz id="bt-index-recon" question="Can a backtest decision dated 2026-11-01 use the preliminary list for Russell's December 2026 reconstitution?" options={["Yes, the list will take effect anyway", "Yes, rank day (10-30) has passed", "No, the list comes out after the close on 2026-11-13, so using it earlier is look-ahead", "No, Russell only reconstitutes in June"]} answer={2} explanation="Rank day is not the announcement day. The last option describes the pre-2026 annual schedule." />
+<Quiz id="bt-fomc-time" question="In a daily backtest, a signal based on the 2026-10-28 FOMC statement (released 14:00 EDT) can be filled no earlier than…" options={["The 2026-10-28 open", "The 2026-10-27 close", "A price after 14:00 on 2026-10-28, which on daily bars usually means that day's close or the next open", "Only after the minutes are released"]} answer={2} explanation="The open is at 09:30, before the 14:00 release; option 4 confuses the statement with the minutes." />
+<Quiz id="bt-ipo-history" question="Offering price 20, first open 26, close 24. An ordinary account that buys at the open earns about what on day one?" options={["+20%, measured from the offering price", "About −7.69%", "+30%", "Returns cannot be computed for new listings"]} answer={1} explanation="24 ÷ 26 − 1 ≈ −7.69%; +20% assumes a fill at the offering price, while the SEC bulletin notes most IPO shares go to institutional and high-net-worth clients." />
 
 ## Done when
 
 - Walk-forward summary + PSR/DSR vs N + false-hit context + quizzes
 
-**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); admission gates [arXiv:2610.07701](https://arxiv.org/abs/2610.07701); MinervaScore NAME-ONLY [arXiv:2608.23808](https://arxiv.org/abs/2608.23808).
+**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); admission gates [arXiv:2610.07701](https://arxiv.org/abs/2610.07701); MinervaScore NAME-ONLY [arXiv:2608.23808](https://arxiv.org/abs/2608.23808). Event times and IPOs (checked 2026-11-10): [Fed FOMC calendar](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [FOMC statement 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm), [SEC investor bulletin: investing in an IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17), [investor.gov lock-up agreements](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements).
 
 <Summary>
 **Takeaways**: walk-forward tables, trial counts, PSR/DSR vs N, null false-hit math, survivorship/snooping recap.  

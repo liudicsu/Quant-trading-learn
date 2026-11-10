@@ -177,6 +177,39 @@ SOURCES = [
     "summary": "Proposal only; do not write “repealed”."
   },
   {
+    "id": "usc_78i",
+    "title": "Securities Exchange Act Section 9(a) — 15 U.S.C. 78i (wash trades, matched orders, manipulative series)",
+    "issuer": "US Code (govinfo, 2023 edition)",
+    "jurisdiction": "US",
+    "source_url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm",
+    "checked_on": "2026-11-10",
+    "effective_from": "see source",
+    "status": "statute text per 2023 edition; later amendments not compared",
+    "summary": "9(a)(1): no-change-in-beneficial-ownership trades / matched orders to create a false appearance of active trading; 9(a)(2): series of transactions to induce others. Wash TRADE (manipulation) != wash SALE (tax). Not legal advice."
+  },
+  {
+    "id": "finra_5210",
+    "title": "FINRA Rule 5210 Supplementary Material .02 (self-trades) and .03 (disruptive quoting and trading)",
+    "issuer": "FINRA",
+    "jurisdiction": "US",
+    "source_url": "https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210",
+    "checked_on": "2026-11-10",
+    "effective_from": "2017-04-03 (SR-FINRA-2017-004)",
+    "status": "in force per source text on checked_on",
+    "summary": "Unintentional self-trades generally bona fide, but firms must review for and prevent a pattern from a single or related algorithms; .03 Type 1 (layer one side, trade other side, cancel) and Type 2 (inside-NBBO order, trade against joiners); cross-venue patterns count."
+  },
+  {
+    "id": "sec_2026_37_cat_review",
+    "title": "SEC press release 2026-37 — concept release on the Consolidated Audit Trail (CAT) review",
+    "issuer": "SEC",
+    "jurisdiction": "US",
+    "source_url": "https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources",
+    "checked_on": "2026-11-10",
+    "effective_from": "n/a",
+    "status": "concept release (2026-04-16); review not concluded",
+    "summary": "Comprehensive review of CAT (funding/cost, regulatory purpose, structure/governance, design/scope). CAT exists under Rule 613 (adopted 2012-07-11). Do not predict the outcome."
+  },
+  {
     "id": "irs_w8ben",
     "title": "Instructions for Form W-8BEN",
     "issuer": "IRS",

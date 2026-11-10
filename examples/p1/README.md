@@ -16,3 +16,5 @@ Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
 - enrich7 (2026-11-10): `06_close_auction_roundlot.py` — official close vs last trade, NYSE MOC 15:50 ET cutoff in Shanghai time, tiered round lots, BOLO vs NBBO (17 assertions).
 
 - enrich8 (2026-11-10): `07_etf_nav_letf_toy.py` — Rule 6c-11 premium/discount and the >2%-for-more-than-7-days statement trigger, median spread, SEC 1000→900→990 / 2x 800→960 daily-reset example, choppy-path decay for 1x/2x/3x/−2x (7 assertions; used by `markets-language` and `returns-vol-corr`).
+
+- enrich9 (2026-11-10): `08_tbill_rf_toy.py` — TreasuryDirect bill price formula (999.27 example), 4.00%/91-day price and simple 365-day yield, Sharpe at Rf=0 vs 4%/252, prior-day rate as of each return (7 assertions; synthetic rates, no Treasury download).

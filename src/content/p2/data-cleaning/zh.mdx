@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **26.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **27.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -283,6 +283,33 @@ assertions passed: 9/9
 ASSERT_filing_dates_ok
 ```
 
+## 内部人和大股东的申报，什么时候才算“已知”（核实于 2026-11-10）
+
+公司的董事、高管和持股超过 10% 的股东（统称“内部人”）买卖本公司股票，要报 Form 4（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)），期限是交易后的第二个营业日结束前（[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)）。例如周五成交，最晚下周二报。持股超过 5% 的投资者一般要在五个营业日内报 13D，之后有重大变化要在两个营业日内修订；符合条件的机构投资者可以改报 13G，例如在季末后 45 天内报，13G 的期限因申报人类型而不同（[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)，[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)）。
+
+回测时，信号能用的时间是申报被 EDGAR 接收以后，不是表格里的交易日期，否则就提前偷看了最多两个营业日。21:40（美东）被接收的申报算当天按时提交，但当天的常规交易 16:00 已经结束，所以日线回测最早只能在下一个交易时段使用。
+
+还有一个 2026 年的变化：从 2026-03-18 起，外国私人发行人的董事和高管也要报 Form 4，但 SEC 已对加拿大、欧洲经济区、英国、澳大利亚等若干法域发了豁免令（[SEC](https://www.sec.gov/about/divisions-offices/division-corporation-finance/holding-foreign-insiders-accountable-act-section-16a-reporting-requirements)）；名单可能变化，请以 SEC 页面为准，不要照抄。所以对这类公司，2026-03-18 之前“没有 Form 4”不代表内部人没有交易，只是当时不用报；之后也要先查它是否在豁免名单里。
+
+**实验：** `examples/p2/11_spinoff_insider_lag_toy.py` 的 C–D 节（玩具日历：周末顺延，不处理美国联邦假日，例子日期都避开了假日；A–B 节见下面的分拆一节）：
+
+```text
+=== C. Form 4 / 13D / 13G deadlines (weekend roll only) ===
+Form 4 trade 2026-11-04 (Wed) -> due by end of 2026-11-06 (Fri)
+Form 4 trade 2026-11-06 (Fri) -> due by end of 2026-11-10 (Tue)
+13D: crossed 5% on 2026-08-03 (Mon) -> due 2026-08-10 (Mon)
+13G (45 days after 2026-09-30, Rule 0-3 weekend roll): raw 2026-11-14 (Sat) -> 2026-11-16
+=== D. the signal is usable after acceptance, not on the transaction date ===
+Form 4 for a 2026-11-04 trade accepted 2026-11-06 21:40 ET
+decision 2026-11-05 10:00 ET usable? False
+decision 2026-11-09 09:30 ET (next session open) usable? True
+FPI director trade 2026-02-10 -> Form 4 expected: False
+FPI director trade 2026-04-01 -> Form 4 expected: True (unless an exemptive order covers the jurisdiction)
+assertions passed: 15/15
+ASSERT_spinoff_insider_lag_ok
+disclaimer: synthetic data; holidays not handled; no Form 4 before 2026-03-18 != no insider trades; learning only
+```
+
 ## 未复权价、复权价与总收益；退市
 
 **raw 价格（按审阅报告 R21）：** raw（未复权）价格用于历史名义价格尺度与股数/现金账本；某策略能否以某价格和数量成交仍须结合当时会话、报价、交易状态、流动性及订单/成交模型判断，不以 raw OHLC 或最后成交价自动视为可执行。split-adjusted 与总收益序列各自记录调整范围；不得重复计入同一分红，拆股同时调整股数而不凭空创造财富。
@@ -301,7 +328,7 @@ ASSERT_filing_dates_ok
 
 ## 退市收益与永久标识（CRSP CIZ）（2026-11-10 核实）
 
-**退市不是“数据结束”，而是一笔要算进去的收益。** 一只股票退市后，你的最终结果不一定是最后一笔交易价：之后可能在场外还有成交，可能拿到清算或并购对价，也可能直接归零。CRSP（证券价格研究中心；自 2026-02-02 起归 Morningstar）把“退市后价值相对最后交易价”的收益叫退市收益。按 CRSP 的 CIZ 数据指南（2026-07 版；产品页：[CRSP US stock databases](https://www.crsp.org/research/crsp-us-stock-databases/)），月收益 MthRet 在适当时已经包含退市收益，所以用 CIZ 时不要再自己乘一遍。但有两种带标记的情况不包含：退市后超过 10 个交易日才有价值（标记 G），以及退市收益缺失（标记 M）。这两种情况要你自己决定怎么处理，并写进研究说明。Shumway（1997，《Journal of Finance》）发现，因破产等负面原因退市的股票，大多数没有正确的退市收益，而且缺掉的部分很大（[doi:10.1111/j.1540-6261.1997.tb03818.x](https://doi.org/10.1111/j.1540-6261.1997.tb03818.x)）。所以把这些股票直接删掉，或者把缺失当成 0，回测都会偏乐观。另外，股票代码（ticker）会改名，也会被别的公司重新使用，主键要用 PERMNO（CRSP 的永久证券编号）或 CIK（SEC 的公司编号）这类不变的编号，ticker 只当作随时间变化的属性来存。
+**退市不是“数据结束”，而是一笔要算进去的收益。** 一只股票退市后，你的最终结果不一定是最后一笔交易价：之后可能在场外还有成交，可能拿到清算或并购对价，也可能直接归零。CRSP（证券价格研究中心；自 2026-02-02 起归 [Morningstar](https://newsroom.morningstar.com/news/news-details/2026/Morningstar-Completes-Acquisition-of-CRSP-and-Extends-Relationship-with-Vanguard/default.aspx)）把“退市后价值相对最后交易价”的收益叫退市收益。按 CRSP 的 CIZ 数据指南（2026-07 版；产品页：[CRSP US stock databases](https://www.crsp.org/research/crsp-us-stock-databases/)），月收益 MthRet 在适当时已经包含退市收益，所以用 CIZ 时不要再自己乘一遍。但有两种带标记的情况不包含：退市后超过 10 个交易日才有价值（标记 G），以及退市收益缺失（标记 M）。这两种情况要你自己决定怎么处理，并写进研究说明。Shumway（1997，《Journal of Finance》）发现，因破产等负面原因退市的股票，大多数没有正确的退市收益，而且缺掉的部分很大（[doi:10.1111/j.1540-6261.1997.tb03818.x](https://doi.org/10.1111/j.1540-6261.1997.tb03818.x)）。所以把这些股票直接删掉，或者把缺失当成 0，回测都会偏乐观。另外，股票代码（ticker）会改名，也会被别的公司重新使用，主键要用 PERMNO（CRSP 的永久证券编号）或 CIK（SEC 的公司编号）这类不变的编号，ticker 只当作随时间变化的属性来存。
 
 **实验：** `examples/p2/10_delist_index_pit_toy.py`（合成证券；这里是 A–C 节，D 节属于 `backtest-traps`）：
 
@@ -315,6 +342,29 @@ all four names: -16.25%; survivors only: +7.50%
 merge on ticker 'XYZ': one 'history' of 4 years (two companies glued together)
 merge on PERMNO: [10001, 20002] -> two separate histories
 ...
+```
+
+## 分拆和并购：价格序列里的“假暴跌”和“突然消失”（核实于 2026-11-10）
+
+分拆（spin-off）是母公司把子公司的股票按持股比例分给自己的股东，子公司从此独立交易（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/spin-offs)）。新公司开始交易后，母公司的股价会被调低，因为它的估值里不再包含分出去的业务（[FINRA](https://www.finra.org/investors/insights/corporate-spinoffs)）。
+
+如果直接用原始收盘价算收益，除权日那天会出现一次“假暴跌”：下面的实验里，母公司从 100 跌到 81，原始收益是 −19%；但每股母公司同时分到 0.5 股子公司，子公司收盘 40，持有人的实际收益是 +1%。CRSP 的计算指南把分拆和拆股、股票股利一样当作“拆分类事件”，用价格调整因子在除权日处理；股数和成交量只按拆股和股票股利调整，分拆不调。收到的新股票在分配记录里用 DisPERMNO 关联回母公司。
+
+并购也一样要单独处理：被收购的股票会退市，最终收益来自并购对价，不能当作数据结束直接删掉（和上面的退市收益一节一起看）。还有一个时点问题：发行人要通过 IRS Form 8937 公布这次行动对成本基础的影响，期限是行动后第 45 天或次年 1 月 15 日，取较早者（[IRS](https://www.irs.gov/instructions/i8937)）。所以这类官方数字可能比除权日晚一个多月才出现。本课只讲数据和时点，不讲税务处理。
+
+**实验：** `examples/p2/11_spinoff_insider_lag_toy.py` 的 A–B 节（合成价格和 PERMNO；按价值计算的回调比例是教学写法，不是 CRSP 对任何真实事件的具体因子；断言条数打印在上面 D 节之后）：
+
+```text
+=== A. spin-off: the fake crash on the ex-distribution date ===
+parent close 100.00 -> ex-date 81.00; 0.5 child share per parent share, child closes 40.00
+raw parent return      : -19.0000%
+holder total return    : 1.0000%
+adjusted prior close   : 80.1980  adjusted return 1.0000%
+volume (not adjusted for spin-offs per CRSP guide): 1000000 -> 1400000
+=== B. linking the new security; when basis information appears ===
+DisPERMNO link: parent 10001 -> received 20002
+Form 8937 due (earlier of day 45 / Jan 15) for action 2026-11-02: 2026-12-17
+Form 8937 due (earlier of day 45 / Jan 15) for action 2026-12-20: 2027-01-15
 ```
 
 ## 分红日期与 yfinance 的 auto_adjust 陷阱（2026-11-10 核实）
@@ -368,6 +418,8 @@ assertions passed: 11/11
 12. 以为除息日当天买入也能拿到分红；在除息日和派息日各记一次分红；升级 yfinance 却不显式写 `auto_adjust`，让 `Close` 的含义悄悄改变。
 13. 把季度结束日当成 10-Q 或 13F 的可知日期；忽略 EDGAR 把 17:30（美东）以后开始传输的文件算作下一营业日提交。
 14. 对 CIZ 的 MthRet 再乘一次退市收益，或把标记 G/M 的月份默默记为 0；按 ticker 而不是 PERMNO/CIK 拼接历史。
+15. 用原始收盘价算分拆除权日收益（−19% 的假暴跌），或因为分拆去调整成交量；把被并购的股票当成“数据结束”直接删掉。
+16. 按 Form 4 的交易日期而不是 EDGAR 接收时间对齐信号；把外国私人发行人 2026-03-18 之前“没有 Form 4”理解成“内部人没交易”。
 
 
 ## 练习（与任务清单 1:1）
@@ -383,6 +435,7 @@ assertions passed: 11/11
 9. **ex-us-src** — 为三个数据源各写一行 `source / licence / availability_ts / allowed_use_checked_on`；**完成标准**：FRED 行写明需核对服务条款（R16），yfinance 行写明「仅个人使用、非官方」。
 10. **ex-us-ca** — 运行 `05_data_versions_calendar.py` D 节，解释分红重复计入为何得到 0.0230；**完成标准**：指出哪一步加了两次分红。
 11. **ex-div** — 运行 `08_dividend_dates_yf_shapes.py`；写出登记日为 2026-03-15（周日）时的除息日，以及 30% 特别分红、派息日 2026-03-17 时的除息日，再说明哪种 yfinance 调用会返回 `Adj Close` 列；**完成标准**：2026-03-13、2026-03-18、`auto_adjust=False`，与输出一致。
+12. **ex-spin-insider**（可选）— 运行 `11_spinoff_insider_lag_toy.py`，把子公司收盘价改成 30，把 Form 4 接收时间改成 2026-11-06 22:30 ET；**完成标准**：说出新的持有人收益，并说明为什么 22:00 以后接收的申报算下一个营业日提交。
 
 
 ## 测验
@@ -404,12 +457,14 @@ assertions passed: 11/11
 <Quiz id="dc-yfadj" question="yfinance 0.2.51 及以后，yf.download() 不写 auto_adjust 时返回的 Close 是？" options={["完全未复权", "对拆股和分红都调整过，且没有 Adj Close 列", "只做拆股调整，另附 Adj Close", "延迟一天的价格"]} answer={1} explanation="0.2.51 把 download() 默认改为 auto_adjust=True；官方文档写明这种模式下没有单独的 Adj Close 列。" />
 <Quiz id="dc-filing-lag" question="一家公司在 2026-02-26（周四）18:05 ET 通过 EDGAR 提交 10-K。按 Reg S-T Rule 13，它的官方 filing date 是？" options={["2026-02-27（周五）", "2026-02-26（周四）", "财年结束日 2025-12-31", "2026-03-02（下周一）"]} answer={0} explanation="美东 17:30 之后才开始传输，算作下一营业日提交。" />
 <Quiz id="dc-delist-ret" question="用 CRSP CIZ 的月收益 MthRet 做回测，遇到退市月份，正确做法是？" options={["再乘一次退市收益，确保不漏", "MthRet 在适当时已含退市收益，不要重复计算；对因缺失或超过 10 个交易日而被排除的情况另行处理并写明", "删掉所有退市股票，样本更干净", "退市当月收益一律记为 0"]} answer={1} explanation="按 CIZ 指南，MthRet 在适当时已含退市收益；标记 G、M 表示被排除，要自己显式处理。删掉或记 0 都会让结果偏乐观（Shumway 1997）。" />
+<Quiz id="dc-spinoff" question="母公司前一日收盘 100，分拆除权日收盘 81，每股母公司分到 0.5 股子公司，子公司收盘 40。持有人当天的收益是多少？" options={["−19%", "+1%", "+20%", "0%，分拆不影响收益"]} answer={1} explanation="(81 + 0.5 × 40) ÷ 100 − 1 = +1%；−19% 是只看原始价格得到的假暴跌。" />
+<Quiz id="dc-insider-lag" question="某董事在 2026-11-04（周三）卖出股票，Form 4 于 2026-11-06（周五）21:40 ET 被 EDGAR 接收。日线回测里，这条信号最早能在什么时候使用？" options={["2026-11-04 收盘，按交易日期", "2026-11-09（周一）开盘，即接收之后的下一个交易时段", "季度结束后", "2026-11-06（周五）收盘"]} answer={1} explanation="交易日期早于可用时点；22:00 前接收算当天按时提交，但 21:40 时当天的常规交易（到 16:00）已经结束，所以最早是下一个交易日开盘。日期和实验一致，避开了联邦假日。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；分红日期与 yfinance（2026-11-10 核实）：[investor.gov 除息日](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)、[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)、[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；分红日期与 yfinance（2026-11-10 核实）：[investor.gov 除息日](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)、[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)、[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)；分拆与内部人申报（2026-11-10 核实）：[investor.gov 分拆](https://www.investor.gov/introduction-investing/investing-basics/glossary/spin-offs)、[FINRA 分拆](https://www.finra.org/investors/insights/corporate-spinoffs)、[IRS Form 8937 说明](https://www.irs.gov/instructions/i8937)、[investor.gov Forms 3, 4 and 5](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)、[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)、[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)、[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)、[SEC HFIA 第 16(a) 条页面](https://www.sec.gov/about/divisions-offices/division-corporation-finance/holding-foreign-insiders-accountable-act-section-16a-reporting-requirements)
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  

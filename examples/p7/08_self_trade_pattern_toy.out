@@ -1,0 +1,13 @@
+=== A. self-trade prevention at the order layer ===
+incoming algoA SELL 100@10.00 vs resting algoA BUY 100@10.00 -> blocked 1
+incoming algoB SELL 100@10.00 -> blocked 0 (this toy checks same algo only; real scope follows firm policy)
+=== B. pattern flag: layer one side, fill the other, cancel the layers ===
+3 bid layers -> sell fill -> cancel all layers: flagged for review True
+same layers cancelled with no other-side fill: flagged for review False
+a flag only asks a human to review the log; it is not a finding of a violation
+=== C. two words that are easy to mix up ===
+wash sale  -> tax: loss sale + repurchase within 30 days (IRS Pub 550)
+wash trade -> manipulation: no change in beneficial ownership (15 U.S.C. 78i(a)(1))
+assertions passed: 5/5
+ASSERT_self_trade_pattern_ok
+disclaimer: synthetic events; flags are review prompts, not legal findings; not legal advice; learning only

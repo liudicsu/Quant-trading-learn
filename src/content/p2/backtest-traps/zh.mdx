@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **28.5 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **29.25 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -42,6 +42,25 @@ decision 2026-11-16: December preliminary list known? True
 members used on 2026-12-11: ['A', 'B', 'C']
 members used on 2026-12-14: ['A', 'B', 'E']
 assertions passed: 7/7
+```
+
+## 新股（IPO）：发行价不是你的成交价（核实于 2026-11-10）
+
+IPO 的发行价是公司和承销商根据市场情况、估值和询价谈出来的。SEC 的投资者公告说，发行时的股票通常大部分分给机构和高净值客户，个人投资者更常见的做法是上市后在二级市场买入；而且发行价可能和交易价相差很大（[SEC 投资者公告](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)）。所以回测里“按发行价买入”一般不可执行。下面的实验里，发行价 20、首日开盘 26、收盘 24：按发行价算首日 +20%，按开盘价买入是 −7.69%。
+
+新上市公司通常没有以前的报告历史，价格历史也很短：一个要用 60 个交易日的信号，上市不足 60 天就应该输出“无信号”，不要换成更短的窗口凑数。股票池要按上市日期过滤，并把规则写进研究说明。另外，公司内部人通常签有锁定协议，多数在 180 天内不能卖出，具体条款写在招股书里（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)）。锁定期到期时可能有大量股票进入市场。到期日要以招股书和公司公告为准，不能一律按“上市后 180 天”推算。
+
+**实验：** `examples/p2/12_event_time_ipo_toy.py` 的 C 节（合成价格；A–B 节见下面的 FOMC 一节；断言条数覆盖全部三节）：
+
+```text
+=== C. IPO: the offering price is not your fill ===
+offering 20.00, first open 26.00, close 24.00
+day-1 return from IPO price 20.0000%; from first open -7.6923%
+listed 45 trading days, 60-day lookback -> signal None
+lock-up 180 calendar days after 2026-03-10: 2026-09-06 (Sun); take the real date from the prospectus
+assertions passed: 14/14
+ASSERT_event_time_ipo_ok
+disclaimer: synthetic prices; no FOMC or IPO strategy; learning only
 ```
 
 ## Walk-forward 实验
@@ -326,6 +345,24 @@ EXEC_OPEN   SR≈20.816  LeakageGain_SR≈+21.556
 
 
 
+## FOMC：宏观事件也有精确的发布时间（核实于 2026-11-10）
+
+美联储的联邦公开市场委员会（FOMC）每年有 8 次例会，必要时还会加开；会议纪要在决议日后三周发布（[美联储日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)）。会后的政策声明有明确的发布时刻，例如 2026 年 10 月 28 日的声明写着“For release at 2:00 p.m. EDT”（[声明](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)），也就是北京时间 10 月 29 日凌晨 2 点。美股常规交易是 09:30–16:00（美东），这条消息出现在当天交易时段的中间。
+
+所以在日线回测里，用当天开盘价去“交易”当天下午才发布的声明，就是偷看未来，和上面的 EXEC_OPEN 是同一类决策时点泄漏；最早只能在 14:00 之后成交，日线上通常就是当天收盘或下一天开盘，而且当天的收盘价已经反映了一部分市场反应。纪要也一样：用纪要内容做特征时，可用日期是纪要发布那天，不是开会那天。14:00 只是这一份声明写的时刻，每份声明以它自己的页面为准。
+
+**实验：** `examples/p2/12_event_time_ipo_toy.py` 的 A–B 节（10 月 27–28 日会议的纪要日期是按三周规则推算的，不是已公布日期；断言条数见上面的 IPO 一节）：
+
+```text
+=== A. FOMC statement time vs the trading session ===
+statement 2026-10-28 14:00 EDT -> Beijing 2026-10-29 02:00
+trade on the statement at the 2026-10-28 09:30 open? False (look-ahead)
+trade on the statement at 14:01 EDT? True
+=== B. minutes: three weeks after the policy decision ===
+3-week rule matches all 6 published 2026 minutes dates
+Oct 27-28 minutes projected by the 3-week rule: 2026-11-18 (projection; check the Fed calendar)
+```
+
 ## PBO / CSCV + 蒸发曲线 — DSR ≠ 泄漏
 
 **直觉：** Deflated Sharpe 与 PBO 问的是：*在许多诚实回测里，样本内冠军有多大概率是运气？* 它们**不**问：*信息集是否被污染？* [What survives honest evaluation?](https://arxiv.org/abs/2608.27734)（Gençay）把两道修正做成**结构**：无法表达前瞻的工具注册表 + 用智能体自身搜索索引 DSR/PBO 的**完整试错账本**。经典 PBO/CSCV：[Bailey 等 PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)。
@@ -380,6 +417,8 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 
 8. 日历切分看似干净，但 TEMP_CENTER / EXEC_OPEN 仍在偷看。
 9. 用今天的指数成分构造历史股票池，或在公布日之前使用重构名单；2026 年以后仍写死“Russell 每年 6 月调整”。
+10. 用当天开盘价去成交基于 FOMC 声明（14:00 ET 发布）的信号；把基于纪要的特征记在开会日而不是纪要发布日。
+11. 假设能按 IPO 发行价成交；对上市不足 60 个交易日的股票硬算 60 天信号；以为所有锁定期都正好在上市后 180 天结束。
 
 ## 练习（与任务清单 1:1）
 
@@ -391,6 +430,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 6. **ex6**：（可选）purge/embargo 说明；**完成标准**：打印 purge/embargo 计数。
 7. **ex7**：CPCV 玩具——打印 \(C(6,2)\)、路径数、组合 SR 均值/标准差并对比单次留出；**完成标准**：数字与课内一致且存在 `cpcv_sr_dist.png`。
 8. **ex8**：PBO/预言机——打印 oracle vs 诚实 SR、蒸发曲线行、CSCV PBO_hat，保存 `pbo_evaporation.png`；**完成标准**：.out 一致且注明教学草图。
+9. **ex9**（可选）：运行 `12_event_time_ipo_toy.py`，把首日开盘价改成 22；**完成标准**：打印按开盘价算的新首日收益，并说明它为什么仍和按发行价算的 +20% 不同。
 
 ## 测验
 
@@ -410,12 +450,14 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="q-admit-excess" question="为何门槛准则必须用超额收益？" options={["只为手续费", "绝对准则可在市场波动主导时静默拒绝真 t=4", "DSR 禁止超额", "不用 PIT"]} answer={1} explanation="论文表7 / 实验 compression foil。" />
 <Quiz id="q10-execopen" question="EXEC_OPEN 不合法是因为？" options={["收盘决策后次日开盘成交", "用当日开盘后字段却假设当日开盘成交", "删除成本", "禁止 RankIC"]} answer={1} explanation="执行对齐类金融原生泄漏。" />
 <Quiz id="bt-index-recon" question="回测里一个 2026-11-01 的决策，能否使用 Russell 2026 年 12 月重构的初步增删名单？" options={["能，名单最终会生效", "能，排名日 10-30 已经过了", "不能，名单 2026-11-13 收盘后才公布，之前使用就是偷看未来", "不能，Russell 只在 6 月调整"]} answer={2} explanation="排名日不是公布日。最后一个选项是 2026 年以前的旧制度。" />
+<Quiz id="bt-fomc-time" question="日线回测里，一个根据 2026-10-28 FOMC 声明（14:00 EDT 发布）下单的信号，最早能按哪个价格成交？" options={["2026-10-28 开盘价", "2026-10-27 收盘价", "2026-10-28 14:00 之后的价格，日线上一般是当天收盘或下一天开盘", "会议纪要发布后才能交易"]} answer={2} explanation="开盘在 09:30，早于 14:00 的发布；第四项混淆了声明和纪要。" />
+<Quiz id="bt-ipo-history" question="发行价 20，首日开盘 26，收盘 24。一个普通账户在开盘时买入，首日收益约是多少？" options={["+20%，按发行价算", "约 −7.69%", "+30%", "新股不能算收益"]} answer={1} explanation="24 ÷ 26 − 1 ≈ −7.69%；+20% 假设了按发行价成交，SEC 公告说大部分发行份额分给机构和高净值客户。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。
+**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

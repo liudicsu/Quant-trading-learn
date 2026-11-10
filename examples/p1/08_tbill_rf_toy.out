@@ -1,0 +1,11 @@
+=== A. the discount rate is not your yield ===
+TreasuryDirect example (26 weeks, 0.145%): price 999.26694 -> 999.27
+4.00% discount, 91 days: price 989.8889, holding return 1.0214%, simple 365-day yield 4.0970%
+=== B. Sharpe with and without Rf (declare it) ===
+daily mean 0.0005, daily std 0.01: Sharpe Rf=0: 0.7937; Sharpe Rf=4%/252: 0.5417
+=== C. point in time: a ~15:30 ET quote on day t applies from day t+1 ===
+rf for the 2026-11-06 return uses the 2026-11-05 quote: 0.0400
+rf for the 2026-11-05 return (no earlier quote): None
+assertions passed: 7/7
+ASSERT_tbill_rf_ok
+disclaimer: synthetic rates; T-bill is a teaching proxy; no Treasury data downloaded; learning only
