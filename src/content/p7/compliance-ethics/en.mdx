@@ -75,11 +75,11 @@ Account categories (26-10 read by the author on 2026-11-08): the (d)(2) intraday
 
 General information, not legal advice. First, separate two words that are easy to mix up. The wash sale in the tax box below is a tax concept. A **wash trade** is market manipulation: a trade that involves no change in beneficial ownership, done to create a false appearance of active trading. Section 9(a) of the Securities Exchange Act prohibits such trades and prearranged matched orders. It also prohibits a series of transactions that creates actual or apparent active trading, or moves the price, in order to induce others to buy or sell ([15 U.S.C. 78i](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm), govinfo 2023 edition).
 
-Two rules matter most for coders. One is self-trades, where a firm's own buy and sell orders meet. Supplementary Material .02 to [FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210) says unintentional self-trades are generally bona fide. But firms must have procedures to review for, and prevent, a pattern of self-trades from a single algorithm or related algorithms. In code, that means self-trade prevention at the order layer, plus logs. The other is Supplementary Material .03 to the same rule, which describes two prohibited patterns of "disruptive quoting and trading". In Type 1, a party places several limit orders at different prices on one side, the apparent supply and demand shifts, the party trades on the other side, and then cancels the original orders. In Type 2, a party narrows the spread with an order inside the NBBO, then trades on the other side against participants who joined the new inside price. The rule targets a frequent pattern, including one spread across several venues.
+Two rules matter most for coders. One is self-trades, where a firm's own buy and sell orders meet. Supplementary Material .02 to [FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210) says unintentional self-trades are generally bona fide. But firms must have procedures to review for, and prevent, a pattern of self-trades from a single algorithm or related algorithms. In code, that means self-trade prevention at the order layer, plus logs. The other is Supplementary Material .03 to the same rule, which describes two prohibited patterns of "disruptive quoting and trading". In Type 1, a party places several limit orders at different prices on one side, the apparent supply and demand shifts, the party trades on the other side, and then cancels the original orders. In Type 2, a party narrows the spread with an order inside the NBBO, then trades on the other side against participants who joined the new inside price. The rule targets a frequent pattern, including one spread across several venues. FINRA 5210 SM .03(c): the order of events does not change applicability; the rule targets frequently occurring patterns.
 
 Finally, assume your order history can be traced: the Consolidated Audit Trail (CAT) is the consolidated audit trail the SEC required under Rule 613 (adopted 2012-07-11). On 2026-04-16 the SEC began a comprehensive review of the CAT and asked for public comment ([SEC press release 2026-37](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)); that review has not concluded.
 
-Lab `examples/p7/08_self_trade_pattern_toy.py` (standard library, synthetic events) blocks a same-algo self-trade and flags a "layer one side, fill the other, cancel the layers" log for human review. A flag is only a prompt to review, not a finding of a violation:
+Lab `examples/p7/08_self_trade_pattern_toy.py` (standard library, synthetic events) blocks a same-algo self-trade and flags a "layer one side, fill the other, cancel the layers" log for human review. The toy flag depends on event order, so moving the fill after the cancels means it no longer flags the log; under FINRA 5210 SM .03(c), the swapped sequence should still be reviewed. A flag is only a prompt to review, not a finding of a violation:
 
 ```text
 === A. self-trade prevention at the order layer ===
@@ -88,11 +88,13 @@ incoming algoB SELL 100@10.00 -> blocked 0 (this toy checks same algo only; real
 === B. pattern flag: layer one side, fill the other, cancel the layers ===
 3 bid layers -> sell fill -> cancel all layers: flagged for review True
 same layers cancelled with no other-side fill: flagged for review False
+3 bid layers -> cancel all layers -> sell fill: flagged for review False
+swapped order still should be reviewed True (FINRA 5210 SM .03(c): event order does not change applicability; this toy only flags one event order)
 a flag only asks a human to review the log; it is not a finding of a violation
 === C. two words that are easy to mix up ===
-wash sale  -> tax: loss sale + repurchase within 30 days (IRS Pub 550)
+wash sale  -> tax: loss sale + repurchase within 30 days before or after the sale (IRS Pub 550)
 wash trade -> manipulation: no change in beneficial ownership (15 U.S.C. 78i(a)(1))
-assertions passed: 5/5
+assertions passed: 7/7
 ASSERT_self_trade_pattern_ok
 disclaimer: synthetic events; flags are review prompts, not legal findings; not legal advice; learning only
 ```
@@ -282,7 +284,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 - Assuming PDA withdrawal erased all AI/advice duties (FY2026 exams still list Emerging FinTech).
 - Treating FINRA GenAI themes as a trading license or product alpha.
 - Treating SFC 24EC55 as a trading license rather than licensed-corporation expectations.
-- Mixing up a wash sale (tax) with a wash trade (manipulation); treating a toy self-trade or pattern flag as a legal finding.
+- Mixing up a wash sale (tax) with a wash trade (manipulation); treating a toy self-trade or pattern flag as a legal finding; treating a swapped event order that the toy no longer flags as a compliance approach.
 
 1. Quoting blog thresholds instead of exchange/CSRC text.
 2. Treating staff statements as final Commission rules.
@@ -307,7 +309,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 7. **ex6** — cross-border literacy card: in your own words, who receives W-8BEN, the conditions for the treaty 10%, the 61-calendar-day wash-sale window, China’s 20% with capped credit / filing in Mar–Jun next year, CRS ≠ a new tax, USD 50,000 ≠ securities-investment licence; **done when**: all six points are present with no personal tax calculation and no remittance advice.
 8. **ex7** — FINRA migration fixture (US main example): run `04_finra_migration_fixture.py`, then add your own case (inside the phase-in, `member_adoption_date` known but `broker_checked_on` empty); **done when**: it outputs `needs_broker_verification` and the original 8/8 cases still pass.
 9. **ex-wash** — run `06_wash_sale_basis_toy.py`; change the repurchase to day +30 and then day +31; **done when**: day +30 is a wash sale (basis 1050) and day +31 is not, matching the function.
-10. **ex-selftrade** (optional) — run `08_self_trade_pattern_toy.py`; move the sell fill to after the cancels; **done when**: the log is no longer flagged and you can explain in one sentence why a flag is not a legal finding.
+10. **ex-selftrade** (optional) — run `08_self_trade_pattern_toy.py`; move the sell fill to after the cancels; **done when**: the toy may no longer flag the log, and you can explain that this is a limitation of the toy, not a compliance approach (FINRA 5210 SM .03(c) says event order does not change applicability; a flag is only a review prompt, not a finding of a violation).
 
 
 ## Quiz
@@ -335,7 +337,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 <Quiz id="ce-washbasis" question="Per IRS Pub 550: buy 100 shares for $1,000, sell for $750, rebuy 100 within 30 days for $800. What is the new basis?" options={["$800", "$1,050", "$750", "$1,000"]} answer={1} explanation="The $250 disallowed loss is added to the $800 cost of the new shares." />
 <Quiz id="ce-holding-period" question="Per IRS Topic 409, for stock bought on 2025-03-10, what is the earliest sale date that gives a long-term gain?" options={["2026-03-11", "2026-03-10", "2025-09-10 (six months)", "Holding period counts settlement dates, not trade dates"]} answer={0} explanation="Count from the day after purchase; the holding must be more than one year. 2026-03-10 is exactly one year, which is not enough." />
 <Quiz id="ce-fx50k" question="The USD 50,000 annual FX facilitation quota means?" options={["You may freely buy US stocks", "An annual quota; quota FX remitted abroad needs a genuine current-account purpose, excluding overseas securities", "Automatic tax exemption", "You may buy FX for others"]} answer={1} explanation="SAFE Shanghai/Shaanxi FAQs; no workaround schemes are provided." />
-<Quiz id="ce-wash-trade" question="Which of these is a wash trade prohibited by Section 9(a)(1) of the Exchange Act?" options={["Selling at a loss and buying the same stock back within 30 days", "A trade with no change in beneficial ownership, made to create a false appearance of active trading", "Two unrelated strategies that accidentally meet, at a firm that has prevention and review procedures", "Resting an order at the NBBO"]} answer={1} explanation="Option 1 is the tax wash sale; option 3 is generally a bona fide self-trade under FINRA 5210 SM .02, but a pattern from the same algorithm must be prevented." />
+<Quiz id="ce-wash-trade" question="Which of these is a wash trade prohibited by Section 9(a)(1) of the Exchange Act?" options={["Selling at a loss and buying the same stock back within 30 days", "A trade with no change in beneficial ownership, made to create a false appearance of active trading", "Two unrelated strategies that accidentally meet, at a firm that has prevention and review procedures", "Resting an order at the NBBO"]} answer={1} explanation="“Selling at a loss and buying the same stock back within 30 days” is the tax wash sale; “Two unrelated strategies that accidentally meet, at a firm that has prevention and review procedures” is generally a bona fide self-trade under FINRA 5210 SM .02, but a pattern from the same algorithm must be prevented." />
 
 ## Done when
 

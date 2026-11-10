@@ -235,7 +235,7 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 <Quiz id="p6prs-q-decay" question="alpha 衰减且成本上升时，成本感知无交易半带宽应？" options={["永远缩到 0", "变宽——少交易；不交易也是决策", "忽略滞后项", "最大化切换次数"]} answer={1} explanation="arXiv:2502.04284 / 实验：c↑ → 半带宽↑ → 切换↓。" />
 <Quiz id="p6prs-q-nt" question="无交易区意味着？" options={["每天都再平衡到目标", "足够接近目标则不交易；越界则朝边界交易", "禁止一切成本", "最大化换手"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 精神。" />
 <Quiz id="pr-drift" question="4 个资产、每个上限 20%，要求权重和为 1，会怎样？" options={["一定有解", "无解：最多只能到 80%", "上限自动放宽", "只影响成本"]} answer={1} explanation="n×cap=0.8<1，约束互相矛盾，应在优化前报错。" />
-<Quiz id="prs-margin-call" question="按 SEC 公告的例子：持仓市值 $12,000，借款 $8,000，券商维持比例 40%。结果是？" options={["没问题，权益 $4,000 高于 $3,000", "要追加 $800", "要追加 $4,800", "维持比例只看初始买入价，不用重算"]} answer={1} explanation="40% × $12,000 = $4,800；权益 $4,000，差 $800。第一个选项是 25% 的情况。" />
+<Quiz id="prs-margin-call" question="按 SEC 公告的例子：持仓市值 $12,000，借款 $8,000，券商维持比例 40%。结果是？" options={["没问题，权益 $4,000 高于 $3,000", "要追加 $800", "要追加 $4,800", "维持比例只看初始买入价，不用重算"]} answer={1} explanation="40% × $12,000 = $4,800；权益 $4,000，差 $800。“没问题，权益 $4,000 高于 $3,000”是 25% 维持比例的情况。" />
 <Quiz id="prs-portmargin" question="按 FINRA 4210(g)，组合保证金账户里，单只股票及其期权的保证金主要怎么定？" options={["固定为市值的 50%", "在上下 15% 的价格情景下重估，取最大理论亏损（另有每张合约的最低要求）", "由客户自己选择", "只看前一天的收盘价"]} answer={1} explanation="4210(g) 是按策略保证金之外的另一种做法：个股在 ±15% 范围内取 10 个估值点，取最大理论亏损，每张上市期权至少 $.375 × 乘数。" />
 
 ## 完成标准

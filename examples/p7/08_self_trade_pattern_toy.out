@@ -4,10 +4,12 @@ incoming algoB SELL 100@10.00 -> blocked 0 (this toy checks same algo only; real
 === B. pattern flag: layer one side, fill the other, cancel the layers ===
 3 bid layers -> sell fill -> cancel all layers: flagged for review True
 same layers cancelled with no other-side fill: flagged for review False
+3 bid layers -> cancel all layers -> sell fill: flagged for review False
+swapped order still should be reviewed True (FINRA 5210 SM .03(c): event order does not change applicability; this toy only flags one event order)
 a flag only asks a human to review the log; it is not a finding of a violation
 === C. two words that are easy to mix up ===
-wash sale  -> tax: loss sale + repurchase within 30 days (IRS Pub 550)
+wash sale  -> tax: loss sale + repurchase within 30 days before or after the sale (IRS Pub 550)
 wash trade -> manipulation: no change in beneficial ownership (15 U.S.C. 78i(a)(1))
-assertions passed: 5/5
+assertions passed: 7/7
 ASSERT_self_trade_pattern_ok
 disclaimer: synthetic events; flags are review prompts, not legal findings; not legal advice; learning only

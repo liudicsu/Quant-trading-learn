@@ -59,6 +59,26 @@ for (const [file, id, must, mustNot] of STEM) {
   if (miss.length || bad.length) fail(`${file}: ${id} stem/explanation missing ${JSON.stringify(miss)} or contains ${JSON.stringify(bad)}`);
   else console.log(`ok   ${id} stem/explanation: ${file.split("/").pop()}`);
 }
+// R64: quiz fields must not refer to an option by display or source position (shuffle would make it wrong).
+// Catch "option 1", "first/last option", "第N项", "第一个选项", "最后一项", "第二选", and similar.
+// Do not flag rule names such as "option 606", or ordinary words such as "哪一项" / "equity options".
+const POS_RE = /\boption\s*(?:#|no\.?\s*|number\s*)?(?:[1-9]|one|two|three|four|five|1st|2nd|3rd|4th|5th)\b|\b(?:the\s+)?(?:first|second|third|fourth|fifth|last)\s+option\b|第\s*[一二三四五六七八九十两零\d]+\s*(?:项|个选项|个选择|选)|最后一项|最后一个选项|选项\s*[一二三四五六七八九十两零\d]+/i;
+for (const d of dirs) {
+  for (const lang of ["zh", "en"]) {
+    const file = `${d}/${lang}.mdx`;
+    const text = fs.readFileSync(file, "utf8");
+    for (const m of text.matchAll(/<Quiz\s+id="([^"]+)"([\s\S]*?)\/>/g)) {
+      const id = m[1], body = m[2];
+      const fields = [];
+      const q = body.match(/question="([^"]*)"/); if (q) fields.push(["question", q[1]]);
+      const e = body.match(/explanation="([^"]*)"/); if (e) fields.push(["explanation", e[1]]);
+      const o = body.match(/options=\{(\[[\s\S]*?\])\}/); if (o) fields.push(["options", o[1]]);
+      for (const [field, val] of fields) {
+        if (POS_RE.test(val)) fail(`${file}: ${id} ${field} refers to an option by position`);
+      }
+    }
+  }
+}
 // R49: answer-position distribution after the deterministic shuffle used by Quiz.tsx (keep in sync).
 function fnv1a(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; }
 function optionOrder(id, n) {
