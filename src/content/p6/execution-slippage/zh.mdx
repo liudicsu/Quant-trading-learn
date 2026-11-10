@@ -158,15 +158,15 @@ Alpaca Basic 实时只有 IEX（[Alpaca](https://docs.alpaca.markets/docs/about-
 
 ## Rule 606：你的订单被送去了哪里，券商收了多少钱（2026-11-10 核实）
 
-**路由报告和执行质量报告要一起看。** 订单流付费（PFOF）指券商因为把客户订单送到某个做市商或交易所，而收到的现金或其他好处（[Rule 10b-10(d)(8)](https://www.ecfr.gov/current/title-17/section-240.10b-10) 的定义）。[Rule 606](https://www.ecfr.gov/current/title-17/section-242.606) 要求每家券商每季度公开一份报告，覆盖“非定向”（客户没有指定交易场所）且“held”（券商必须立即执行、对价格和时间没有自由裁量）的订单：按月列出主要送到了哪 10 个去向，以及在每个去向上，市价单、可成交限价单、不可成交限价单分别收到（或付出）的净 PFOF，既给总额也给每股金额。S&P 500 成分股、其他股票、期权分开列；报告在季度结束后一个月内发布，网上保留三年。客户也可以要求券商披露过去六个月自己订单的去向。上一节的 Rule 605 讲执行质量，606 讲订单去向和钱，两张表要合起来看。本课不下“PFOF 一定好或一定坏”的结论。状态：SEC 2022 年提出的“订单竞争规则”和“最佳执行条例”两项提案，已在 2025-06-12 正式撤回（[SEC](https://www.sec.gov/rules-regulations/2025/06/order-competition-rule)），目前都没有生效。
+**路由报告和执行质量报告要一起看。** 订单流付费（PFOF）指券商因为把客户订单送到某个做市商或交易所，而收到的现金或其他好处（[Rule 10b-10(d)(8)](https://www.ecfr.gov/current/title-17/section-240.10b-10) 的定义）。[Rule 606](https://www.ecfr.gov/current/title-17/section-242.606) 要求每家券商每季度公开一份报告，覆盖两类“非定向”（客户没有指定交易场所）订单：对 NMS 股票，是以“held”方式提交的（券商必须立即执行、对价格和时间没有自由裁量）；对期权，是客户订单。报告按月列出收到这类订单最多的 10 个去向，再加上任何占比达到 5% 或以上的去向。对每个去向，要列出来自 PFOF、利润分成、交易费和返佣的净额，既给总金额也给每股金额，并按四类订单分开：市价单、可成交限价单、不可成交限价单，以及其他。S&P 500 成分股、其他股票、期权分开列；报告在季度结束后一个月内发布，网上保留三年。客户也可以要求券商披露过去六个月自己订单的去向。上一节的 Rule 605 讲执行质量，606 讲订单去向和钱，两张表要合起来看。本课不下“PFOF 一定好或一定坏”的结论。状态：SEC 2022 年提出的“订单竞争规则”和“最佳执行条例”两项提案，已在 2025-06-12 正式撤回（[SEC](https://www.sec.gov/rules-regulations/2025/06/order-competition-rule)），目前都没有生效。
 
 **实验：** `examples/p6/12_rule606_toy.py`（合成的 606 风格表；单位和 606(b)(3) 一样，是“每 100 股美分、四位小数”）：
 
 ```text
-venue   share_of_orders  net_cents_per_100sh
-MM_A              48.0%               5.0000
-MM_B              32.0%               3.0000
-EXCH_C            20.0%              -1.0000
+venue   pct_of_orders  net_cents_per_100sh
+MM_A            48.0%               5.0000
+MM_B            32.0%               3.0000
+EXCH_C          20.0%              -1.0000
 assertions passed: 3/3
 ASSERT_rule606_ok
 reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only

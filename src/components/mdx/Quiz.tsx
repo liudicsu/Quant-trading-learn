@@ -29,9 +29,17 @@ function fnv1a(s: string): number {
 }
 
 export function optionOrder(id: string, n: number): number[] {
-  return Array.from({ length: n }, (_, i) => i).sort(
-    (a, b) => fnv1a(`${id}#${a}`) - fnv1a(`${id}#${b}`) || a - b,
-  );
+  // Seeded Fisher–Yates; keep in sync with tools/check-quiz.mjs.
+  let s = fnv1a(id);
+  const a = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) {
+    s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+    const j = Math.floor((s / 4294967296) * (i + 1));
+    const tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+  }
+  return a;
 }
 
 function QuestionMarkIcon() {

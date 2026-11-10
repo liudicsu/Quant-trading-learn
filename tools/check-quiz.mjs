@@ -61,7 +61,12 @@ for (const [file, id, must, mustNot] of STEM) {
 }
 // R49: answer-position distribution after the deterministic shuffle used by Quiz.tsx (keep in sync).
 function fnv1a(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; }
-const optionOrder = (id, n) => Array.from({ length: n }, (_, i) => i).sort((a, b) => fnv1a(`${id}#${a}`) - fnv1a(`${id}#${b}`) || a - b);
+function optionOrder(id, n) {
+  let s = fnv1a(id);
+  const a = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; const j = Math.floor((s / 4294967296) * (i + 1)); const tmp = a[i]; a[i] = a[j]; a[j] = tmp; }
+  return a;
+}
 const pos = {};
 for (const [id, q] of all.zh) { const p = optionOrder(id, q.opts.length).indexOf(q.a); pos[p] = (pos[p] || 0) + 1; }
 const total = all.zh.size;

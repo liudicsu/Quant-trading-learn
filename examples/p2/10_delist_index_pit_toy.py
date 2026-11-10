@@ -1,7 +1,7 @@
 """Delisting returns, permanent IDs vs tickers, and index membership as of a date (checked 2026-11-10).
 
 Sources: CRSP US Stock Databases Guide for CIZ (July 2026): MthRet "Will include delisting returns
-if appropriate"; aggregate delisting flags G (excluded, value more than 10 days after delisting) and
+if appropriate"; aggregate delisting flags G (excluded, value more than 10 trading days after delisting) and
 M (excluded, delisting return missing); PERMNO = "CRSP unique permanent security level identifier".
 Shumway (1997, JF 52(1):327-340): correct delisting returns are missing for most negative-reason
 delists, and the omitted returns are large. FTSE Russell 2026 schedule: semi-annual (June and December);
@@ -25,9 +25,9 @@ def compound(rets):
 
 
 print("=== A. a delisting is a return, not 'end of data' ===")
-before, dl = [0.02, -0.01, 0.03], -0.30
-print(f"last three months only: {compound(before):+.2%}; including delisting return -30%: {compound(before + [dl]):+.2%}")
-check(round(compound(before), 4) == 0.0401 and round(compound(before + [dl]), 4) == -0.2719, "delisting changes the result")
+before, dl = [0.02, -0.01, 0.03], -0.42  # made-up toy figure, not a literature substitute
+print(f"last three months only: {compound(before):+.2%}; including delisting return -42%: {compound(before + [dl]):+.2%}")
+check(round(compound(before), 4) == 0.0401 and round(compound(before + [dl]), 4) == -0.3967, "delisting changes the result")
 
 
 def month_return(mth_ret, del_flag):

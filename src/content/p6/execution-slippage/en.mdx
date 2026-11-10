@@ -158,15 +158,15 @@ They do not overlap: **Rule 605** is the monthly public execution-quality **stat
 
 ## Rule 606: where your orders went, and what your broker was paid (checked 2026-11-10)
 
-**Routing reports complement execution-quality reports.** Payment for order flow (PFOF) is cash or any other benefit a broker receives for routing customer orders to a particular market maker or exchange ([Rule 10b-10(d)(8)](https://www.ecfr.gov/current/title-17/section-240.10b-10)). [Rule 606](https://www.ecfr.gov/current/title-17/section-242.606) requires every broker to publish a quarterly report on "non-directed" orders (the customer did not pick the venue) that were "held" (the broker must execute them promptly, with no discretion over price or time). Month by month, it lists the top ten venues and, for each venue, the net PFOF received or paid on market, marketable limit and non-marketable limit orders, both in total dollars and per share. S&P 500 stocks, other stocks and options get separate sections. The report is due within one month after the quarter ends and stays online for three years. A customer can also ask the broker for the routing of their own orders over the prior six months. Rule 605 (previous section) covers execution quality; 606 covers routing and money. Read them together. This lesson does not claim PFOF makes fills better or worse. Status: the SEC's 2022 Order Competition Rule and Regulation Best Execution proposals were formally withdrawn on 2025-06-12 ([SEC](https://www.sec.gov/rules-regulations/2025/06/order-competition-rule)); neither is in force.
+**Routing reports complement execution-quality reports.** Payment for order flow (PFOF) is cash or any other benefit a broker receives for routing customer orders to a particular market maker or exchange ([Rule 10b-10(d)(8)](https://www.ecfr.gov/current/title-17/section-240.10b-10)). [Rule 606](https://www.ecfr.gov/current/title-17/section-242.606) requires every broker to publish a quarterly report on two groups of "non-directed" orders (the customer did not pick the venue): for NMS stocks, those submitted as "held" (the broker must execute them promptly, with no discretion over price or time); for options, customer orders. Month by month, it lists the ten venues that received the most of these orders, plus any other venue that received 5% or more. For each venue, it shows the net amount from PFOF, profit-sharing, transaction fees, and rebates, both in total dollars and per share, broken out across four order types: market, marketable limit, non-marketable limit, and other. S&P 500 stocks, other stocks and options get separate sections. The report is due within one month after the quarter ends and stays online for three years. A customer can also ask the broker for the routing of their own orders over the prior six months. Rule 605 (previous section) covers execution quality; 606 covers routing and money. Read them together. This lesson does not claim PFOF makes fills better or worse. Status: the SEC's 2022 Order Competition Rule and Regulation Best Execution proposals were formally withdrawn on 2025-06-12 ([SEC](https://www.sec.gov/rules-regulations/2025/06/order-competition-rule)); neither is in force.
 
 **Lab:** `examples/p6/12_rule606_toy.py` (synthetic 606-style table; same "cents per 100 shares, four decimals" unit as 606(b)(3)):
 
 ```text
-venue   share_of_orders  net_cents_per_100sh
-MM_A              48.0%               5.0000
-MM_B              32.0%               3.0000
-EXCH_C            20.0%              -1.0000
+venue   pct_of_orders  net_cents_per_100sh
+MM_A            48.0%               5.0000
+MM_B            32.0%               3.0000
+EXCH_C          20.0%              -1.0000
 assertions passed: 3/3
 ASSERT_rule606_ok
 reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only

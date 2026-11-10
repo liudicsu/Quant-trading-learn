@@ -301,13 +301,13 @@ ASSERT_filing_dates_ok
 
 ## 退市收益与永久标识（CRSP CIZ）（2026-11-10 核实）
 
-**退市不是“数据结束”，而是一笔要算进去的收益。** 一只股票退市后，你的最终结果不一定是最后一笔交易价：之后可能在场外还有成交，可能拿到清算或并购对价，也可能直接归零。CRSP（芝加哥大学的证券价格研究中心）把“退市后价值相对最后交易价”的收益叫退市收益。按 CRSP 的 CIZ 数据指南（2026-07 版；产品页：[CRSP US stock databases](https://www.crsp.org/research/crsp-us-stock-databases/)），月收益 MthRet 在适当时已经包含退市收益，所以用 CIZ 时不要再自己乘一遍。但有两种带标记的情况不包含：退市后超过 10 天才有价值（标记 G），以及退市收益缺失（标记 M）。这两种情况要你自己决定怎么处理，并写进研究说明。Shumway（1997，《Journal of Finance》）发现，因破产等负面原因退市的股票，大多数没有正确的退市收益，而且缺掉的部分很大（[doi:10.1111/j.1540-6261.1997.tb03818.x](https://doi.org/10.1111/j.1540-6261.1997.tb03818.x)）。所以把这些股票直接删掉，或者把缺失当成 0，回测都会偏乐观。另外，股票代码（ticker）会改名，也会被别的公司重新使用，主键要用 PERMNO（CRSP 的永久证券编号）或 CIK（SEC 的公司编号）这类不变的编号，ticker 只当作随时间变化的属性来存。
+**退市不是“数据结束”，而是一笔要算进去的收益。** 一只股票退市后，你的最终结果不一定是最后一笔交易价：之后可能在场外还有成交，可能拿到清算或并购对价，也可能直接归零。CRSP（证券价格研究中心；自 2026-02-02 起归 Morningstar）把“退市后价值相对最后交易价”的收益叫退市收益。按 CRSP 的 CIZ 数据指南（2026-07 版；产品页：[CRSP US stock databases](https://www.crsp.org/research/crsp-us-stock-databases/)），月收益 MthRet 在适当时已经包含退市收益，所以用 CIZ 时不要再自己乘一遍。但有两种带标记的情况不包含：退市后超过 10 个交易日才有价值（标记 G），以及退市收益缺失（标记 M）。这两种情况要你自己决定怎么处理，并写进研究说明。Shumway（1997，《Journal of Finance》）发现，因破产等负面原因退市的股票，大多数没有正确的退市收益，而且缺掉的部分很大（[doi:10.1111/j.1540-6261.1997.tb03818.x](https://doi.org/10.1111/j.1540-6261.1997.tb03818.x)）。所以把这些股票直接删掉，或者把缺失当成 0，回测都会偏乐观。另外，股票代码（ticker）会改名，也会被别的公司重新使用，主键要用 PERMNO（CRSP 的永久证券编号）或 CIK（SEC 的公司编号）这类不变的编号，ticker 只当作随时间变化的属性来存。
 
 **实验：** `examples/p2/10_delist_index_pit_toy.py`（合成证券；这里是 A–C 节，D 节属于 `backtest-traps`）：
 
 ```text
 === A. a delisting is a return, not 'end of data' ===
-last three months only: +4.01%; including delisting return -30%: -27.19%
+last three months only: +4.01%; including delisting return -42%: -39.67%
 flag M -> delisting return excluded (flag M): choose and document a treatment
 === B. survivorship: drop the dead and the mean looks better ===
 all four names: -16.25%; survivors only: +7.50%
@@ -403,7 +403,7 @@ assertions passed: 11/11
 <Quiz id="dc-exdiv" question="在美国 T+1 下，你在除息日当天买入股票，能拿到这次分红吗？" options={["能，派息前买入都算", "不能，除息日当天或之后买入都拿不到", "只要持有到派息日就能", "只有保证金账户能"]} answer={1} explanation="investor.gov：在除息日当天或之后买入，拿不到下一次分红。" />
 <Quiz id="dc-yfadj" question="yfinance 0.2.51 及以后，yf.download() 不写 auto_adjust 时返回的 Close 是？" options={["完全未复权", "对拆股和分红都调整过，且没有 Adj Close 列", "只做拆股调整，另附 Adj Close", "延迟一天的价格"]} answer={1} explanation="0.2.51 把 download() 默认改为 auto_adjust=True；官方文档写明这种模式下没有单独的 Adj Close 列。" />
 <Quiz id="dc-filing-lag" question="一家公司在 2026-02-26（周四）18:05 ET 通过 EDGAR 提交 10-K。按 Reg S-T Rule 13，它的官方 filing date 是？" options={["2026-02-27（周五）", "2026-02-26（周四）", "财年结束日 2025-12-31", "2026-03-02（下周一）"]} answer={0} explanation="美东 17:30 之后才开始传输，算作下一营业日提交。" />
-<Quiz id="dc-delist-ret" question="用 CRSP CIZ 的月收益 MthRet 做回测，遇到退市月份，正确做法是？" options={["再乘一次退市收益，确保不漏", "MthRet 在适当时已含退市收益，不要重复计算；对因缺失或超过 10 天而被排除的情况另行处理并写明", "删掉所有退市股票，样本更干净", "退市当月收益一律记为 0"]} answer={1} explanation="按 CIZ 指南，MthRet 在适当时已含退市收益；标记 G、M 表示被排除，要自己显式处理。删掉或记 0 都会让结果偏乐观（Shumway 1997）。" />
+<Quiz id="dc-delist-ret" question="用 CRSP CIZ 的月收益 MthRet 做回测，遇到退市月份，正确做法是？" options={["再乘一次退市收益，确保不漏", "MthRet 在适当时已含退市收益，不要重复计算；对因缺失或超过 10 个交易日而被排除的情况另行处理并写明", "删掉所有退市股票，样本更干净", "退市当月收益一律记为 0"]} answer={1} explanation="按 CIZ 指南，MthRet 在适当时已含退市收益；标记 G、M 表示被排除，要自己显式处理。删掉或记 0 都会让结果偏乐观（Shumway 1997）。" />
 
 ## 完成标准
 

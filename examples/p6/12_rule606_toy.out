@@ -1,7 +1,7 @@
-venue   share_of_orders  net_cents_per_100sh
-MM_A              48.0%               5.0000
-MM_B              32.0%               3.0000
-EXCH_C            20.0%              -1.0000
+venue   pct_of_orders  net_cents_per_100sh
+MM_A            48.0%               5.0000
+MM_B            32.0%               3.0000
+EXCH_C          20.0%              -1.0000
 assertions passed: 3/3
 ASSERT_rule606_ok
 reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only
