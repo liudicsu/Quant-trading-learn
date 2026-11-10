@@ -351,9 +351,9 @@ merge on PERMNO: [10001, 20002] -> two separate histories
 **The rules, in order (Nasdaq Rule 5810(c)(3)(A), as described in SEC orders):**
 
 1. **Failure:** the closing bid is below $1.00 for **30 consecutive business days**. The company then gets a compliance period of **180 calendar days** from Nasdaq's notice; some Nasdaq Capital Market companies can get a second 180 days. It regains compliance with a closing bid of $1.00 or more for at least **10 consecutive business days** ([SEC 34-102245](https://www.sec.gov/files/rules/sro/nasdaq/2025/34-102245.pdf), 2025-01-17).
-2. **Reverse split in the prior year:** if the company effected a reverse split over the prior one-year period, it gets **no** compliance period and Nasdaq issues a delisting determination (same order). A company can still appeal to a Hearings Panel.
+2. **Recent reverse splits:** if the company effected a reverse split over the prior one-year period, or effected one or more reverse splits over the prior two-year period with a cumulative ratio of **250 shares or more to one**, it gets **no** compliance period and Nasdaq issues a delisting determination (Rule 5810(c)(3)(A)(iv), [SEC 34-100767 Exhibit 5](https://www.sec.gov/files/rules/sro/nasdaq/2024/34-100767-ex5.pdf); see also 34-102245). A company can still appeal to a Hearings Panel.
 3. **$0.10 rule:** a closing bid of $0.10 or less for ten consecutive business days leads to a delisting determination and **suspension** of trading on Nasdaq, with no compliance period. The SEC approved this on 2025-12-05, and it became operative 45 days later ([SEC 34-104318, 90 FR 57225](https://www.federalregister.gov/documents/2025/12/10/2025-22398/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-amendment-no-1-and)).
-4. **A rule that is approved but not in force:** a new $5 million Market Value of Listed Securities requirement was approved on 2026-07-22 ([SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)), then stayed when the Commission agreed to review it; Nasdaq's 2026-10-05 filing describes the stay as continuing "pending further order of the Commission" ([SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)). Do not apply it in a backtest until the SEC lifts the stay.
+4. **A rule that is approved but not in force:** a new $5 million Market Value of Listed Securities requirement was approved on 2026-07-22 ([SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)), then automatically stayed on 2026-07-29, when notices of intention to petition for review were filed (SEC Rule of Practice 431(e)). On 2026-09-11 the Commission granted review and kept the approval order stayed "pending further order" ([SEC 34-106338](https://www.sec.gov/files/rules/other/2026/34-106338.pdf)). Nasdaq filed on 2026-09-25, and the SEC noticed it on 2026-10-05 in 34-106594, moving the effective date to after the stay is lifted ([SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)). Do not apply it in a backtest until the SEC lifts the stay.
 
 **Backtest rules:** adjust the split day with the split ratio (see the corporate-actions section above); keep a `listing_status` column with the dates of the deficiency notice, delisting determination and suspension; when a stock is suspended and moves to the over-the-counter market, book the delisting return (see the CIZ section) instead of dropping it. These are listing rules, not trading signals; this lesson does not claim that reverse splits predict returns. NYSE has its own, different price rules, not covered here.
 
@@ -364,6 +364,8 @@ merge on PERMNO: [10001, 20002] -> two separate histories
 29 closes below $1.00 -> no bid-price flag
 30 closes below $1.00 -> deficient; 180-calendar-day compliance period starts at Nasdaq's notice
 30 closes below $1.00, reverse split 8 months ago -> deficient; reverse split in prior year -> no compliance period, delisting determination
+30 closes below $1.00, one 1-for-300 split 14 months ago -> deficient; reverse splits >= 250:1 over prior two years -> no compliance period, delisting determination
+30 closes below $1.00, 1-for-10 then 1-for-20 (200:1) over two years, none in prior year -> deficient; 180-calendar-day compliance period starts at Nasdaq's notice
 10 closes at or below $0.10 -> delisting determination + suspended on Nasdaq (<= $0.10 for 10 business days)
 notice on 2026-03-02 -> 180 calendar days end 2026-08-29
 === B. a 1-for-10 reverse split in the raw series ===
@@ -374,7 +376,7 @@ bid_price_30d   in force  34-102245 amendments approved 2025-01-17
 low_price_0.10  in force  34-104318 approved 2025-12-05, operative 45 days later
 mvls_5m         stayed    34-105971 approved 2026-07-22, then stayed; check sec.gov before use
 rule: a reverse split near $1 is a listing-status event; keep the delisting flag and the split ratio.
-assertions passed: 8/8
+assertions passed: 10/10
 ```
 
 ## Spin-offs and mergers: the fake crash and the sudden disappearance (checked 2026-11-10)
@@ -468,7 +470,7 @@ assertions passed: 11/11
 10. **ex-us-ca** — run section D of `05_data_versions_calendar.py` and explain why double-counting gives 0.0230; **done when**: you name the step that adds the dividend twice.
 11. **ex-div** — Run `08_dividend_dates_yf_shapes.py`; give the ex-date for a record date of Sunday 2026-03-15 and for a 30% dividend paid 2026-03-17, then say which yfinance call returns an `Adj Close` column; **done when**: 2026-03-13, 2026-03-18 and `auto_adjust=False`, matching the output.
 12. **ex-spin-insider** (optional) — run `11_spinoff_insider_lag_toy.py`; change the child close to 30 and the Form 4 acceptance to 2026-11-06 22:30 ET; **done when**: you can say the new holder return and why a filing accepted after 22:00 counts as filed the next business day.
-13. **ex-bidprice** — Run `14_bid_price_rule_toy.py`; change section A so the reverse split happened 14 months earlier, and state the new result; **done when**: you say the 180-day compliance period applies again (the split is outside the prior one-year period) and why 9 closes at $1.05 are not enough to regain compliance.
+13. **ex-bidprice** — Run `14_bid_price_rule_toy.py`; change section A so the reverse split happened 14 months earlier, and state the new result; **done when**: you say the 180-day compliance period applies again, because the split is outside the prior one-year period and this 1-for-10 split leaves the two-year cumulative ratio below 250:1; you also say that if the split 14 months ago had been 1-for-300 there would still be no compliance period (check with `status(b, False, 300)`); and you explain why 9 closes at $1.05 are not enough to regain compliance.
 
 
 ## Quiz

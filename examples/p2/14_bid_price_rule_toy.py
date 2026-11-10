@@ -5,11 +5,16 @@ Sources:
   business days = failure (Rule 5810(c)(3)(A)); 180-calendar-day compliance period; compliance = at
   least $1.00 for 10 consecutive business days; no compliance period if the company effected a reverse
   stock split over the prior one-year period.
+- SEC Release 34-100767 (2024, Exhibit 5), Rule 5810(c)(3)(A)(iv): also no compliance period if the
+  company effected one or more reverse stock splits over the prior two-year period with a cumulative
+  ratio of 250 shares or more to one.
 - SEC Release 34-104318 (2025-12-05, SR-NASDAQ-2025-065; 90 FR, 2025-12-10): closing bid of $0.10 or
   less for ten consecutive business days -> Staff Delisting Determination, trading suspended on Nasdaq,
   no compliance period; operative 45 days after approval.
 - SEC Release 34-105971 (2026-07-22, SR-NASDAQ-2026-004): new $5 million Market Value of Listed
-  Securities requirement; stayed by the Commission (34-106594, 2026-10-05, describes the stay).
+  Securities requirement; automatically stayed 2026-07-29 under Rule of Practice 431(e) when notices of
+  intention to petition for review were filed; 34-106338 (2026-09-11) granted review and kept the stay;
+  34-106594 (filed 2026-09-25, noticed 2026-10-05) makes it operative only after the stay ends.
 Rows are business days (no calendar). Synthetic prices; no real company. Learning only.
 """
 from datetime import date, timedelta
@@ -32,12 +37,15 @@ def run_below(bids, level, strict=True):
     return n
 
 
-def status(bids, reverse_split_within_1y=False):
+def status(bids, reverse_split_within_1y=False, cumulative_ratio_2y=1.0):
+    """cumulative_ratio_2y: product of reverse-split ratios over the prior two years (1-for-300 -> 300)."""
     if run_below(bids, 0.10, strict=False) >= 10:
         return "delisting determination + suspended on Nasdaq (<= $0.10 for 10 business days)"
     if run_below(bids, 1.00) >= 30:
         if reverse_split_within_1y:
             return "deficient; reverse split in prior year -> no compliance period, delisting determination"
+        if cumulative_ratio_2y >= 250:
+            return "deficient; reverse splits >= 250:1 over prior two years -> no compliance period, delisting determination"
         return "deficient; 180-calendar-day compliance period starts at Nasdaq's notice"
     return "no bid-price flag"
 
@@ -51,6 +59,10 @@ print(f"30 closes below $1.00, reverse split 8 months ago -> {status(b, True)}")
 check(status(a) == "no bid-price flag", "29 is not 30")
 check(status(b).startswith("deficient; 180"), "30 consecutive")
 check("no compliance period" in status(b, True), "prior-year reverse split")
+print(f"30 closes below $1.00, one 1-for-300 split 14 months ago -> {status(b, False, 300)}")
+print(f"30 closes below $1.00, 1-for-10 then 1-for-20 (200:1) over two years, none in prior year -> {status(b, False, 10 * 20)}")
+check("250:1" in status(b, False, 300), "cumulative 2-year ratio >= 250:1")
+check(status(b, False, 200).startswith("deficient; 180"), "below 250:1 and outside one year")
 c = [0.80] * 20 + [0.09] * 10
 print(f"10 closes at or below $0.10 -> {status(c)}")
 check(status(c).startswith("delisting determination"), "$0.10 rule")

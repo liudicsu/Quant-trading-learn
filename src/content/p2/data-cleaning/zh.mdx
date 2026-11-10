@@ -351,9 +351,9 @@ merge on PERMNO: [10001, 20002] -> two separate histories
 **规则按顺序（Nasdaq Rule 5810(c)(3)(A)，以 SEC 命令中的描述为准）：**
 
 1. **不达标：** 收盘买价（closing bid）连续 **30 个营业日**低于 1.00 美元。之后公司从 Nasdaq 通知之日起有 **180 个日历日**的整改期；部分 Nasdaq Capital Market 公司可再获 180 天。收盘买价连续至少 **10 个营业日**不低于 1.00 美元，才算恢复达标（[SEC 34-102245](https://www.sec.gov/files/rules/sro/nasdaq/2025/34-102245.pdf)，2025-01-17）。
-2. **前一年内做过反向拆股：** 如果公司在之前一年内做过反向拆股，就**没有**整改期，Nasdaq 直接作出退市决定（同一命令）。公司仍可向听证小组（Hearings Panel）申诉。
+2. **近期做过反向拆股：** 如果公司在之前一年内做过反向拆股，或者在之前两年内做过一次或多次反向拆股、累计比例达到 **250 股并 1 股或更高**，就**没有**整改期，Nasdaq 直接作出退市决定（Rule 5810(c)(3)(A)(iv)，[SEC 34-100767 附件 5](https://www.sec.gov/files/rules/sro/nasdaq/2024/34-100767-ex5.pdf)；另见 34-102245）。公司仍可向听证小组（Hearings Panel）申诉。
 3. **0.10 美元规则：** 收盘买价连续十个营业日不高于 0.10 美元，就作出退市决定并在 Nasdaq **暂停交易**，没有整改期。SEC 于 2025-12-05 批准，批准 45 天后生效（[SEC 34-104318，90 FR 57225](https://www.federalregister.gov/documents/2025/12/10/2025-22398/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-amendment-no-1-and)）。
-4. **已批准、但没生效的规则：** 新的“上市证券市值不低于 500 万美元”要求在 2026-07-22 获批（[SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)），随后因 SEC 决定复审而被暂缓（stay）；Nasdaq 2026-10-05 的文件写明，暂缓状态持续到“委员会另有命令为止”（[SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)）。SEC 解除暂缓之前，回测里不要套用它。
+4. **已批准、但没生效的规则：** 新的“上市证券市值不低于 500 万美元”要求在 2026-07-22 获批（[SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)），2026-07-29 有人提交了申请复审的意向通知，按 SEC 程序规则 Rule 431(e) 批准命令自动暂缓（stay）；2026-09-11 SEC 同意复审，并让暂缓继续有效，直到“委员会另有命令”（[SEC 34-106338](https://www.sec.gov/files/rules/other/2026/34-106338.pdf)）。Nasdaq 于 2026-09-25 提交修改，SEC 在 2026-10-05 以 34-106594 公告，把生效时间改到暂缓解除之后（[SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)）。SEC 解除暂缓之前，回测里不要套用它。
 
 **回测规则：** 拆股当天用拆股比例复权（见上文公司行为一节）；加一列 `listing_status`，记下不达标通知、退市决定和暂停交易的日期；股票被暂停并转到场外市场（OTC）时，要记退市收益（见 CIZ 一节），不要直接删掉。这些是上市规则，不是交易信号；本课不主张反向拆股能预测收益。NYSE 有另一套不同的价格规则，本课不讲。
 
@@ -364,6 +364,8 @@ merge on PERMNO: [10001, 20002] -> two separate histories
 29 closes below $1.00 -> no bid-price flag
 30 closes below $1.00 -> deficient; 180-calendar-day compliance period starts at Nasdaq's notice
 30 closes below $1.00, reverse split 8 months ago -> deficient; reverse split in prior year -> no compliance period, delisting determination
+30 closes below $1.00, one 1-for-300 split 14 months ago -> deficient; reverse splits >= 250:1 over prior two years -> no compliance period, delisting determination
+30 closes below $1.00, 1-for-10 then 1-for-20 (200:1) over two years, none in prior year -> deficient; 180-calendar-day compliance period starts at Nasdaq's notice
 10 closes at or below $0.10 -> delisting determination + suspended on Nasdaq (<= $0.10 for 10 business days)
 notice on 2026-03-02 -> 180 calendar days end 2026-08-29
 === B. a 1-for-10 reverse split in the raw series ===
@@ -374,7 +376,7 @@ bid_price_30d   in force  34-102245 amendments approved 2025-01-17
 low_price_0.10  in force  34-104318 approved 2025-12-05, operative 45 days later
 mvls_5m         stayed    34-105971 approved 2026-07-22, then stayed; check sec.gov before use
 rule: a reverse split near $1 is a listing-status event; keep the delisting flag and the split ratio.
-assertions passed: 8/8
+assertions passed: 10/10
 ```
 
 ## 分拆和并购：价格序列里的“假暴跌”和“突然消失”（核实于 2026-11-10）
@@ -470,7 +472,7 @@ assertions passed: 11/11
 10. **ex-us-ca** — 运行 `05_data_versions_calendar.py` D 节，解释分红重复计入为何得到 0.0230；**完成标准**：指出哪一步加了两次分红。
 11. **ex-div** — 运行 `08_dividend_dates_yf_shapes.py`；写出登记日为 2026-03-15（周日）时的除息日，以及 30% 特别分红、派息日 2026-03-17 时的除息日，再说明哪种 yfinance 调用会返回 `Adj Close` 列；**完成标准**：2026-03-13、2026-03-18、`auto_adjust=False`，与输出一致。
 12. **ex-spin-insider**（可选）— 运行 `11_spinoff_insider_lag_toy.py`，把子公司收盘价改成 30，把 Form 4 接收时间改成 2026-11-06 22:30 ET；**完成标准**：说出新的持有人收益，并说明为什么 22:00 以后接收的申报算下一个营业日提交。
-13. **ex-bidprice** — 运行 `14_bid_price_rule_toy.py`；把 A 节改成反向拆股发生在 14 个月前，写出新结果；**完成标准**：说出 180 天整改期重新适用（拆股已在之前一年之外），并说明为什么 9 个 1.05 美元的收盘价还不够恢复达标。
+13. **ex-bidprice** — 运行 `14_bid_price_rule_toy.py`；把 A 节改成反向拆股发生在 14 个月前，写出新结果；**完成标准**：说出 180 天整改期重新适用，因为拆股已在之前一年之外，而且这次 10 并 1 的拆股让两年累计比例低于 250 比 1；再说出如果 14 个月前那次是 300 并 1，仍然没有整改期（用 `status(b, False, 300)` 验证）；并说明为什么 9 个 1.05 美元的收盘价还不够恢复达标。
 
 
 ## 测验

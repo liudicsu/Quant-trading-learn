@@ -1,7 +1,8 @@
 """Sell-side regulatory fees in a cost model: SEC Section 31 fee and FINRA TAF (checked 2026-11-11).
 
 Sources:
-- SEC Fee Rate Advisory FY2025 (2025-04-08): $0.00 per million from 2025-05-14 (was $27.80).
+- SEC Fee Rate Advisory #2 FY2024 (2024-04-17): $27.80 per million for covered sales on charge dates on or
+  after 2024-05-22. SEC Fee Rate Advisory FY2025 (2025-04-08): $0.00 per million from charge date 2025-05-14.
 - SEC Fee Rate Advisory FY2026 (2026-02-27): $20.60 per million for covered sales on charge dates on or
   after 2026-04-04, "until 60 calendar days after legislation is enacted that sets the amount of the
   Commission's fiscal year 2027 appropriation". As of 2026-11-11 the SEC fee-rate page lists no FY2027
@@ -10,10 +11,14 @@ Sources:
   (max $8.30/trade), 2026 $0.000195 (max $9.79), 2027 $0.000232 (max $11.61).
 - SR-FINRA-2026-021 (SEC Release 34-106409, 91 FR 60435): TAF paused for transactions 2026-10-01 through
   2026-12-31; assessment resumes 2027-01-01.
+- 17 CFR 240.31(a)(3): the charge date is the settlement date for covered sales an SRO reports from
+  designated clearing agency data, and the trade date for all other covered sales. This toy assumes the
+  first case and US T+1 settlement on the next weekday (no holiday calendar).
+The SEC rate is looked up by charge date (= settlement date here); the TAF by trade date.
 Both fees are assessed on SALES only. Brokers pass them through in their own way (rounding, small-order
 waivers), so this toy prints unrounded amounts. Learning only; not a broker fee schedule.
 """
-from datetime import date
+from datetime import date, timedelta
 
 checks = 0
 
@@ -26,7 +31,7 @@ def check(cond, label):
 
 # (first charge date, USD per million of sale proceeds, note)
 SEC31 = [
-    (date(2025, 1, 1), 27.80, "toy table starts here; FY2025 advisory: $27.80 through 2025-05-13"),
+    (date(2024, 5, 22), 27.80, "FY2024 advisory #2: from charge date 2024-05-22"),
     (date(2025, 5, 14), 0.00, "FY2025 advisory: appropriation collected"),
     (date(2026, 4, 4), 20.60, "FY2026 advisory; ends 60 days after FY2027 appropriation is enacted"),
 ]
@@ -38,6 +43,14 @@ TAF = [
     (date(2027, 1, 1), date(2027, 12, 31), 0.000232, 11.61),
 ]
 CHECKED_ON = date(2026, 11, 11)
+
+
+def settle_t1(trade):
+    """Next weekday (toy: ignores exchange holidays)."""
+    d = trade + timedelta(days=1)
+    while d.weekday() >= 5:
+        d += timedelta(days=1)
+    return d
 
 
 def sec31_rate(d):
@@ -59,15 +72,15 @@ def reg_fees(side, shares, price, d):
     """Return (sec_fee, taf, flag). Buys pay neither fee."""
     if side == "buy":
         return 0.0, 0.0, ""
-    rate, _ = sec31_rate(d)
+    rate, _ = sec31_rate(settle_t1(d))  # charge date = settlement date
     sec = shares * price * rate / 1_000_000
-    per_share, cap = taf_rule(d)
+    per_share, cap = taf_rule(d)  # TAF: trade date
     taf = min(shares * per_share, cap)
     flag = " [check for a newer SEC advisory]" if d > CHECKED_ON else ""
     return sec, taf, flag
 
 
-print("=== A. which rate applies on which trade date (sells only) ===")
+print("=== A. SEC rate by charge date (settlement, T+1), TAF by trade date (sells only) ===")
 cases = [
     ("buy", 1000, 50.0, date(2026, 6, 15)),
     ("sell", 1000, 50.0, date(2025, 8, 1)),
@@ -79,13 +92,20 @@ out = {}
 for side, sh, px, d in cases:
     sec, taf, flag = reg_fees(side, sh, px, d)
     out[(side, d)] = (sec, taf)
-    print(f"{d} {side:4s} {sh} sh @ {px:.2f} (USD {sh * px:,.0f}): SEC fee {sec:.4f}  TAF {taf:.4f}{flag}")
+    print(f"trade {d} (settle {settle_t1(d)}) {side:4s} {sh} sh @ {px:.2f} (USD {sh * px:,.0f}): SEC fee {sec:.4f}  TAF {taf:.4f}{flag}")
 check(out[("buy", date(2026, 6, 15))] == (0.0, 0.0), "buys pay no Section 31 fee or TAF")
 check(out[("sell", date(2025, 8, 1))][0] == 0.0, "SEC rate was $0.00 from 2025-05-14")
 check(abs(out[("sell", date(2026, 6, 15))][0] - 1.03) < 1e-9, "50,000 x 20.60 / 1e6 = 1.03")
 check(abs(out[("sell", date(2026, 6, 15))][1] - 0.195) < 1e-9, "1000 x 0.000195")
 check(out[("sell", date(2026, 11, 11))][1] == 0.0, "TAF paused 2026-10-01..2026-12-31")
 check(abs(out[("sell", date(2027, 1, 4))][1] - 0.232) < 1e-9, "2027 TAF 0.000232")
+
+print("=== A2. boundary: trade date vs charge date ===")
+b_sec, b_taf, _ = reg_fees("sell", 1000, 50.0, date(2025, 5, 13))
+print(f"trade 2025-05-13 (Tue) settles {settle_t1(date(2025, 5, 13))} -> SEC rate {sec31_rate(settle_t1(date(2025, 5, 13)))[0]:.2f}/M, SEC fee {b_sec:.4f} (by trade date it would be 27.80/M = 1.3900)")
+check(settle_t1(date(2025, 5, 13)) == date(2025, 5, 14) and b_sec == 0.0, "05-13 sale settles 05-14 -> $0.00")
+check(settle_t1(date(2026, 4, 10)) == date(2026, 4, 13), "Friday trade settles Monday")
+print(f"trade 2026-04-10 (Fri) settles {settle_t1(date(2026, 4, 10))} (Mon) -> SEC rate {sec31_rate(settle_t1(date(2026, 4, 10)))[0]:.2f}/M")
 
 print("=== B. the TAF cap binds on large share counts ===")
 sec, taf, _ = reg_fees("sell", 100_000, 5.0, date(2026, 6, 15))
