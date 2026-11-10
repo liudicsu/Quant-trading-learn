@@ -1,0 +1,16 @@
+=== A. a delisting is a return, not 'end of data' ===
+last three months only: +4.01%; including delisting return -30%: -27.19%
+flag M -> delisting return excluded (flag M): choose and document a treatment
+=== B. survivorship: drop the dead and the mean looks better ===
+all four names: -16.25%; survivors only: +7.50%
+=== C. tickers get reused; key on a permanent ID ===
+merge on ticker 'XYZ': one 'history' of 4 years (two companies glued together)
+merge on PERMNO: [10001, 20002] -> two separate histories
+=== D. index membership as of a date (Russell December 2026 schedule) ===
+decision 2026-11-01: December preliminary list known? False
+decision 2026-11-16: December preliminary list known? True
+members used on 2026-12-11: ['A', 'B', 'C']
+members used on 2026-12-14: ['A', 'B', 'E']
+assertions passed: 7/7
+ASSERT_delist_index_pit_ok
+disclaimer: synthetic securities and membership; schedule dates from FTSE Russell; learning only

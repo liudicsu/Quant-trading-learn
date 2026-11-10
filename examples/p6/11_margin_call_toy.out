@@ -1,0 +1,12 @@
+=== A. Reg T initial margin ===
+buy $16,000 of stock -> may borrow at most $8,000
+=== B. SEC bulletin example: value falls to $12,000, loan $8,000 ===
+maintenance 25%: equity $4,000 vs required $3,000 -> ok
+maintenance 40%: equity $4,000 vs required $4,800 -> margin call $800
+=== C. trigger price (160 shares bought at $100, loan $8,000) ===
+maintenance 25%: call when price < 66.6667
+maintenance 40%: call when price < 83.3333
+price 75.00: below 40% trigger? True; below 25% trigger? False
+assertions passed: 6/6
+ASSERT_margin_call_ok
+disclaimer: long-only toy; no interest, no intraday margin, broker may sell without notice; learning only

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14.25 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA + 0.25h Rule 605 vs FINRA 21-23) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
+This lesson (~**14.75 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA + 0.25h Rule 605 vs FINRA 21-23 + 0.5h Rule 606 routing & PFOF) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
 
 **Goals:** add participation / schedule discipline; write a one-page execution sheet tied to the shared cost model.
 
@@ -156,6 +156,22 @@ Reports must record: feed, quote_ts, decision_ts, fill_ts.
 
 They do not overlap: **Rule 605** is the monthly public execution-quality **statistics** from market centers and larger brokers (calculation in `costs-in-backtest`, [SEC FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)); **FINRA 21-23** is about a broker's best-execution **duty** and regular reviews under Rule 5310, which is not only about price ([FINRA](https://www.finra.org/rules-guidance/notices/21-23)). 605 data can be one input to such a review, but it covers only regular-hours covered orders, so it cannot replace your own arrival-price TCA or rank brokers.
 
+## Rule 606: where your orders went, and what your broker was paid (checked 2026-11-10)
+
+**Routing reports complement execution-quality reports.** Payment for order flow (PFOF) is cash or any other benefit a broker receives for routing customer orders to a particular market maker or exchange ([Rule 10b-10(d)(8)](https://www.ecfr.gov/current/title-17/section-240.10b-10)). [Rule 606](https://www.ecfr.gov/current/title-17/section-242.606) requires every broker to publish a quarterly report on "non-directed" orders (the customer did not pick the venue) that were "held" (the broker must execute them promptly, with no discretion over price or time). Month by month, it lists the top ten venues and, for each venue, the net PFOF received or paid on market, marketable limit and non-marketable limit orders, both in total dollars and per share. S&P 500 stocks, other stocks and options get separate sections. The report is due within one month after the quarter ends and stays online for three years. A customer can also ask the broker for the routing of their own orders over the prior six months. Rule 605 (previous section) covers execution quality; 606 covers routing and money. Read them together. This lesson does not claim PFOF makes fills better or worse. Status: the SEC's 2022 Order Competition Rule and Regulation Best Execution proposals were formally withdrawn on 2025-06-12 ([SEC](https://www.sec.gov/rules-regulations/2025/06/order-competition-rule)); neither is in force.
+
+**Lab:** `examples/p6/12_rule606_toy.py` (synthetic 606-style table; same "cents per 100 shares, four decimals" unit as 606(b)(3)):
+
+```text
+venue   share_of_orders  net_cents_per_100sh
+MM_A              48.0%               5.0000
+MM_B              32.0%               3.0000
+EXCH_C            20.0%              -1.0000
+assertions passed: 3/3
+ASSERT_rule606_ok
+reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only
+```
+
 ## Common mistakes / pitfalls
 
 1. Backtesting fills at mid with zero schedule / impact.
@@ -166,6 +182,7 @@ They do not overlap: **Rule 605** is the monthly public execution-quality **stat
 6. Using public-tape IRFs as real metaorder costs without noting missing concavity/reversion.
 7. Calibrating α / impact kernels as course edge.
 8. Computing slippage against IEX quotes as if they were the NBBO, without stating the feed.
+9. Reading a Rule 606 table as an execution-quality verdict, or a Rule 605 report as a routing and PFOF disclosure; quoting the withdrawn 2022 Order Competition Rule as if it were in force.
 
 ## Practice (1:1)
 
@@ -190,6 +207,7 @@ They do not overlap: **Rule 605** is the monthly public execution-quality **stat
 <Quiz id="p6ex-q8" question="Double-√ literacy (2502.16246) says metaorder √ mainly comes from?" options={["Only Kyle λ", "Child √ volume + inverse-√ time decay (mechanical foil)", "Guaranteed informed flow", "RL execution"]} answer={1} explanation="Child √ + decay → metaorder √; scramble foil." />
 <Quiz id="es-feed" question="The same fill shows different slippage vs IEX and SIP. This means?" options={["Routing alpha found", "The arrival benchmark depends on the feed, which must be reported", "IEX is wrong", "No timestamps needed"]} answer={1} explanation="A benchmark-choice issue." />
 <Quiz id="es-605" question="How does a Rule 605 report relate to FINRA 21-23?" options={["605 is the best-execution duty itself", "605 is public execution-quality statistics; 21-23 covers the broker's best-execution duty and reviews", "Both look only at price", "605 replaces your own TCA"]} answer={1} explanation="605 is statistics; 21-23 is a duty and is not only about price." />
+<Quiz id="es-606" question="What does a quarterly Rule 606 report mainly tell you?" options={["Price improvement and effective spread per order", "A verdict on whether the broker met best execution", "The top venues for non-directed orders and net PFOF per order type at each venue", "Exchange circuit-breaker thresholds"]} answer={2} explanation="Price improvement and effective spread are Rule 605 territory; best execution is a FINRA duty (5310 / Notice 21-23), not a conclusion a 606 report gives." />
 
 ## Done when
 

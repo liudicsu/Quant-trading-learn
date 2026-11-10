@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **14.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -156,6 +156,22 @@ Alpaca Basic 实时只有 IEX（[Alpaca](https://docs.alpaca.markets/docs/about-
 
 两者不重复：**Rule 605** 是市场中心和较大券商每月公开的执行质量**统计**（计算方法见 `costs-in-backtest`，[SEC FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)）；**FINRA 21-23** 讲的是券商在 Rule 5310 下的最佳执行**义务**和定期审查，不只看价格（[FINRA](https://www.finra.org/rules-guidance/notices/21-23)）。605 数据可以作为审查时的一个输入，但它只含常规时段覆盖订单，不能替代你自己的到达价 TCA，也不能用来给券商排名。
 
+## Rule 606：你的订单被送去了哪里，券商收了多少钱（2026-11-10 核实）
+
+**路由报告和执行质量报告要一起看。** 订单流付费（PFOF）指券商因为把客户订单送到某个做市商或交易所，而收到的现金或其他好处（[Rule 10b-10(d)(8)](https://www.ecfr.gov/current/title-17/section-240.10b-10) 的定义）。[Rule 606](https://www.ecfr.gov/current/title-17/section-242.606) 要求每家券商每季度公开一份报告，覆盖“非定向”（客户没有指定交易场所）且“held”（券商必须立即执行、对价格和时间没有自由裁量）的订单：按月列出主要送到了哪 10 个去向，以及在每个去向上，市价单、可成交限价单、不可成交限价单分别收到（或付出）的净 PFOF，既给总额也给每股金额。S&P 500 成分股、其他股票、期权分开列；报告在季度结束后一个月内发布，网上保留三年。客户也可以要求券商披露过去六个月自己订单的去向。上一节的 Rule 605 讲执行质量，606 讲订单去向和钱，两张表要合起来看。本课不下“PFOF 一定好或一定坏”的结论。状态：SEC 2022 年提出的“订单竞争规则”和“最佳执行条例”两项提案，已在 2025-06-12 正式撤回（[SEC](https://www.sec.gov/rules-regulations/2025/06/order-competition-rule)），目前都没有生效。
+
+**实验：** `examples/p6/12_rule606_toy.py`（合成的 606 风格表；单位和 606(b)(3) 一样，是“每 100 股美分、四位小数”）：
+
+```text
+venue   share_of_orders  net_cents_per_100sh
+MM_A              48.0%               5.0000
+MM_B              32.0%               3.0000
+EXCH_C            20.0%              -1.0000
+assertions passed: 3/3
+ASSERT_rule606_ok
+reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -166,6 +182,7 @@ Alpaca Basic 实时只有 IEX（[Alpaca](https://docs.alpaca.markets/docs/about-
 6. 用公开盘口 IRF 直接当真实元订单成本，却不提凹/回撤缺失。
 7. 标定 α / 冲击核当成课程 edge。
 8. 用 IEX 报价当 NBBO 计算滑点，却不在报告中写明 feed。
+9. 把 Rule 606 路由表当成执行质量的结论，或把 Rule 605 报告当成路由和 PFOF 披露；把已撤回的 2022 年订单竞争规则当成现行规则。
 
 ## 练习（1:1）
 
@@ -190,6 +207,7 @@ Alpaca Basic 实时只有 IEX（[Alpaca](https://docs.alpaca.markets/docs/about-
 <Quiz id="p6ex-q8" question="双 √ 识字（2502.16246）说元订单 √ 主要来自？" options={["只有 Kyle λ", "子单成交量 √ + 时间逆 √ 衰减（机械箔）", "保证知情流", "RL 执行"]} answer={1} explanation="子单 √ + 衰减 → 元订单 √；打乱箔。" />
 <Quiz id="es-feed" question="同一成交在 IEX 与 SIP 基准下滑点不同，说明？" options={["发现了路由 alpha", "到达价基准取决于 feed，报告须写明", "IEX 是错的", "无需记录时间戳"]} answer={1} explanation="基准选择问题。" />
 <Quiz id="es-605" question="Rule 605 报告与 FINRA 21-23 的关系？" options={["605 就是最佳执行义务本身", "605 是公开执行质量统计，21-23 讲券商的最佳执行义务与审查", "两者都只看价格", "605 可替代自己的 TCA"]} answer={1} explanation="605 是统计；21-23 是义务，且不只看价格。" />
+<Quiz id="es-606" question="Rule 606 季度报告主要告诉你什么？" options={["每笔订单的价格改善和有效价差", "券商是否尽到最佳执行义务的结论", "非定向订单主要送往哪些去向，以及各类订单在每个去向上的净 PFOF", "交易所的熔断阈值"]} answer={2} explanation="价格改善和有效价差属于 Rule 605；最佳执行是 FINRA 的义务（5310 / 21-23），不是 606 报告给出的结论。" />
 
 ## 完成标准
 

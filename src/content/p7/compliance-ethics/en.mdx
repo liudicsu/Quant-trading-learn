@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**19.5 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE comparison) + 0.5h US four-date table & phase-in status + 2.5h cross-border tax/FX/CRS literacy box + 0.5h wash-sale basis lab) puts **US equities first** for the **compliance basics** of retail/programmatic trading (high level) and research ethics; mainland A-shares (securities and futures), Stock Connect and EU material are **labelled comparison reading**. Prereq: `paper-trading-infra`.
+This lesson (~**20 hours**: 8h reading (incl. Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA algo-trading supervisory briefing**) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE comparison) + 0.5h US four-date table & phase-in status + 2.5h cross-border tax/FX/CRS literacy box + 0.5h wash-sale basis lab + 0.5h holding period & qualified dividends) puts **US equities first** for the **compliance basics** of retail/programmatic trading (high level) and research ethics; mainland A-shares (securities and futures), Stock Connect and EU material are **labelled comparison reading**. Prereq: `paper-trading-infra`.
 
 **Default scope:** US-listed stocks / non-leveraged ETFs, in USD. Chinese is the teaching language; it does not make China the default market.
 
@@ -100,6 +100,23 @@ C. IRS 'more bought than sold' example: match in purchase order
    lot 2025-02-06 50 sh: basis adjustment +0
 assertions passed: 5/5
 ASSERT_wash_sale_basis_ok
+```
+
+**US capital gains: more than one year makes it long-term (checked 2026-11-10; general information, not tax advice).** For a US taxpayer, a gain or loss on stock held more than one year is long-term, and one held one year or less is short-term. Count from the day after you bought through the day you sold ([IRS Topic 409](https://www.irs.gov/taxtopics/tc409)). For example, a stock bought on 2025-03-10 and sold on 2026-03-10 has been held exactly one year, which is not "more than one year", so the result is short-term. Selling on 2026-03-11 makes it long-term. Net short-term gains are taxed at ordinary income rates. Long-term gains usually face lower rates; the rates and thresholds change each year, so check the IRS page. Dividends have a similar test. To be a "qualified dividend", the stock generally must be held more than 60 days during the 121-day period that begins 60 days before the ex-dividend date, counting the sale day but not the purchase day ([IRS Pub 550](https://www.irs.gov/publications/p550)). Rules differ if you are not a US tax resident. IRS Pub 519 says a nonresident alien present in the US for less than 183 days in the year is generally exempt from US tax on capital gains, unless the gains are effectively connected with a US trade or business. Dividends are generally withheld at 30% or a lower treaty rate ([IRS Pub 519](https://www.irs.gov/publications/p519)). Read this alongside the W-8BEN note above. This lesson does not decide which status applies to you, and Chinese tax residents also need China's individual income tax rules (below). Backtests report pre-tax returns by default. If you report after-tax returns, state whose taxes and which assumptions you used.
+
+Lab `examples/p7/07_holding_period_toy.py` (day counts follow the rule text only):
+
+```text
+=== A. short- vs long-term ===
+bought 2025-03-10, sold 2026-03-10: short-term
+bought 2025-03-10, sold 2026-03-11: long-term
+=== B. qualified-dividend holding test (ex-date 2026-03-16) ===
+121-day window: 2026-01-15 to 2026-05-15
+bought 2026-03-01, sold 2026-04-30: 60 days in window -> not more than 60
+bought 2026-03-10, sold 2026-05-10: 61 days in window -> more than 60
+nonresident, 120 days in the US: Pub 519: capital gains generally exempt unless effectively connected; dividends generally 30% or treaty rate
+assertions passed: 6/6
+ASSERT_holding_period_ok
 ```
 
 **China individual income tax (per review item R28):** a resident individual’s domestic and foreign income is taxed under China’s [Individual Income Tax Law](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html) (an individual with a domicile in China, or without a domicile but residing in China for a cumulative 183 days in a tax year, is a resident individual); cases such as individuals without a domicile are checked under the applicable rules, not judged by nationality alone. Income from property transfer is taxed at a 20% proportional rate, and taxable income is generally transfer proceeds minus the original value of the property and reasonable expenses; interest, dividends and bonuses also carry a 20% statutory proportional rate, with reliefs/treaties and income character checked separately. Income tax actually and lawfully paid abroad can be credited within the prescribed limit, not as an unconditional full credit; the qualifying excess may be carried forward for the next five tax years ([MOF/SAT Announcement 2020 No. 3](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)). A resident individual with foreign income generally files between 1 March and 30 June of the following year. US withholding being complete does not imply no Chinese filing or no additional Chinese tax.
@@ -248,6 +265,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 7. Applying today’s trading rules to the whole historical backtest; treating still-deferred provisions as in force.
 8. Asserting from the trade date alone that a broker/account has moved to the new intraday margin (phase-in 2026-06-04 to 2027-10-20); treating the USD 50,000 FX quota as a licence for overseas securities; assuming US withholding means no Chinese filing.
 9. Saying a wash-sale loss is "gone forever": in a taxable account it is added to the new shares' basis and shows up when they are sold (an IRA/Roth repurchase is the exception); checking only purchases after the sale.
+10. Calling a sale exactly one year after purchase "long-term" (it must be more than one year, counted from the day after purchase); reporting after-tax backtest returns without saying whose taxes and which assumptions.
 
 
 ## Practice (1:1)
@@ -286,6 +304,7 @@ Lab row: `examples/p7/02_compliance_sources.py` → `esma74_algo_briefing_2026` 
 <Quiz id="ce-pdt-phase" question="A trade on 2026-08-01, broker migration status unknown: what does this lesson’s function return?" options={["old_pdt", "intraday_margin", "needs_broker_verification", "illegal"]} answer={2} explanation="Effective 2026-06-04 but phase-in runs to 2027-10-20; unknown status needs broker verification (R04)." />
 <Quiz id="ce-wash61" question="The wash-sale window is?" options={["30 business days after the sale", "30 calendar days before to 30 after, 61 calendar days including the sale date", "Same day only", "The T+1 settlement date"]} answer={1} explanation="IRC §1091: 30 days before through 30 days after; calendar days." />
 <Quiz id="ce-washbasis" question="Per IRS Pub 550: buy 100 shares for $1,000, sell for $750, rebuy 100 within 30 days for $800. What is the new basis?" options={["$800", "$1,050", "$750", "$1,000"]} answer={1} explanation="The $250 disallowed loss is added to the $800 cost of the new shares." />
+<Quiz id="ce-holding-period" question="Per IRS Topic 409, for stock bought on 2025-03-10, what is the earliest sale date that gives a long-term gain?" options={["2026-03-11", "2026-03-10", "2025-09-10 (six months)", "Holding period counts settlement dates, not trade dates"]} answer={0} explanation="Count from the day after purchase; the holding must be more than one year. 2026-03-10 is exactly one year, which is not enough." />
 <Quiz id="ce-fx50k" question="The USD 50,000 annual FX facilitation quota means?" options={["You may freely buy US stocks", "An annual quota; quota FX remitted abroad needs a genuine current-account purpose, excluding overseas securities", "Automatic tax exemption", "You may buy FX for others"]} answer={1} explanation="SAFE Shanghai/Shaanxi FAQs; no workaround schemes are provided." />
 
 ## Done when

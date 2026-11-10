@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **8 学时**：公式 3h + 编码 4h + 测验 1h）实现年化波动、夏普、最大回撤（MDD），并画滚动波动与压力期相关。前置：pandas 时间序列、统计基础、市场语言。
+本课（约 **8.5 学时**：公式 3h + 编码 4h + 测验 1h + 杠杆/反向 ETF 每日重置 0.5h）实现年化波动、夏普、最大回撤（MDD），并画滚动波动与压力期相关。前置：pandas 时间序列、统计基础、市场语言。
 
 **课内目标：** 正确年化波动；实现夏普与 MDD；展示滚动相关在压力期升高。
 
@@ -82,6 +82,32 @@ saved_plot public/p1/rolling_corr_stress.png
 ASSERTS_OK
 ```
 
+## 杠杆和反向 ETF 每天重置（2026-11-10 核实）
+
+**长期收益不是“指数 × 倍数”。** 2 倍杠杆 ETF 的目标是“每天”的收益是指数的 2 倍，反向 ETF 的目标是每天收益等于指数的相反数。SEC 的投资者公告举了一个例子：指数第一天从 1000 跌 10% 到 900，第二天涨 10% 到 990，两天合计跌 1%；2 倍 ETF 第一天跌 20% 到 800，第二天涨 20% 到 960，两天合计跌 4%。两天里它每天都完成了目标，但两天合计的跌幅是指数的 4 倍，不是 2 倍（[SEC 投资者公告](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-alerts/sec)）。行情来回震荡时，这种偏离会越积越大，这和上面最大回撤一样是“路径依赖”。所以回测长期持有杠杆 ETF，必须按日复利计算，不能把指数累计收益直接乘以倍数。真实产品还有费用和融资成本，下面的玩具实验没有计入。本站默认研究“非杠杆 ETF”，原因就在这里。
+
+**实验：** `examples/p1/07_etf_nav_letf_toy.py`（B–C 节；A 节属于 `markets-language`）：
+
+```text
+=== A. premium / discount (Rule 6c-11 definition) ===
+market 50.10 vs NAV 50.00 -> +0.20% (premium)
+market 49.75 vs NAV 50.00 -> -0.50% (discount)
+|prem/disc| 2.1% for 8 days -> statement needed: True
+|prem/disc| 2.1% for 7 days -> statement needed: False
+median bid-ask spread of 5 synthetic quotes: 0.08%
+=== B. SEC two-day example: daily target hit, two-day result is not 2x ===
+index: 1000 -> 900 -> 990  (-1%)
+2x   : 1000 -> 800 -> 960  (-4%)
+-2x  : 1000 -> 1200 -> 960  (-4%)
+=== C. choppy market: +5% / -5% repeated for 20 days ===
++1x final 975.2794
++2x final 904.3821
++3x final 796.4668
+-2x final 904.3821
+assertions passed: 7/7
+ASSERT_etf_nav_letf_ok
+```
+
 ## 常见错误 / 陷阱
 
 1. 用 ×252 去年化波动（应为 √252）。
@@ -89,6 +115,7 @@ ASSERTS_OK
 3. 只报收益不报 MDD。
 4. 全样本相关掩盖压力期相关上升。
 5. 滚动窗过短却当精确真理。
+6. 把持有几周的 2 倍或反向 ETF 按“指数收益 × 2”回测，而不是按日复利。
 
 ## 练习（与任务清单 1:1）
 
@@ -105,6 +132,7 @@ ASSERTS_OK
 <Quiz id="q3-mdd" question="MDD 主要依赖？" options={["只依赖均值", "净值路径（顺序）", "只依赖最后一天", "只依赖 Beta"]} answer={1} explanation="回撤是路径统计量。" />
 <Quiz id="q4-corr" question="压力期常见现象？" options={["相关必降到 0", "资产相关往往升高", "波动消失", "夏普无定义"]} answer={1} explanation="共同冲击抬高相关。" />
 <Quiz id="q5-rf" question="本课教学夏普默认 Rf？" options={["必须 5%", "0，且须声明", "等于 σ", "等于 Alpha"]} answer={1} explanation="Rf=0 是教学约定，不是市场真理。" />
+<Quiz id="rv-letf-reset" question="指数两天走势为 −10%、+10%（1000→900→990）。一只每天都准确做到 2 倍的 ETF，从 1000 开始，两天后是多少？" options={["960", "980", "990", "1000"]} answer={0} explanation="第一天 1000 × 0.8 = 800，第二天 800 × 1.2 = 960（SEC 公告原例）。" />
 
 ## 完成标准
 

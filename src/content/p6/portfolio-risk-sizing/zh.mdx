@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **23 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **23.5 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h + 保证金账户（Reg T / FINRA 4210）0.5h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -154,6 +154,26 @@ assets outside +/-2% band: ['A', 'C']
 
 disclaimer: 合成数据；仅供学习，不构成投资建议。
 
+## 保证金账户：最多借一半，权益不能低于 25%（2026-11-10 核实）
+
+**美股账户加杠杆有规则。** 美联储的 [Regulation T](https://www.ecfr.gov/current/title-12/section-220.12)（简称 Reg T）规定，买入可融资的股票时，初始保证金是市值的 50%，也就是最多借一半。买入以后，[FINRA Rule 4210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)（FINRA 是美国金融业监管局，管券商的自律组织）要求账户里的“权益”（持仓市值减去借款）始终不低于多头持仓市值的 25%，这叫维持保证金。保证金账户还要求至少 $2,000 的权益（如果买入金额更小，就付清全款）。券商可以定得更严，SEC 的投资者公告说常见是 30%–40%（[SEC 投资者公告](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-29)）。公告的例子：买 $16,000 股票，自己出 $8,000、借 $8,000；股票跌到 $12,000 时，权益是 $4,000。按 25% 算要求 $3,000，没问题；按 40% 算要求 $4,800，差 $800，会收到追加保证金通知。券商也可以不通知，直接卖掉你的股票。只做多、不再入金时，触发价可以这样算：触发价 = 借款 ÷（股数 ×（1 − 维持比例））。FINRA 2026 年的盘中保证金新规（见 `compliance-ethics`）“不改变常规维持保证金要求”，是在它上面再加一层。上面的波动目标如果要求权重超过 100%，多出来的就是借的钱：用杠杆做回测时，必须模拟追保和被动平仓，并计入融资利息。
+
+**实验：** `examples/p6/11_margin_call_toy.py`（只做多的玩具，不计利息）：
+
+```text
+=== A. Reg T initial margin ===
+buy $16,000 of stock -> may borrow at most $8,000
+=== B. SEC bulletin example: value falls to $12,000, loan $8,000 ===
+maintenance 25%: equity $4,000 vs required $3,000 -> ok
+maintenance 40%: equity $4,000 vs required $4,800 -> margin call $800
+=== C. trigger price (160 shares bought at $100, loan $8,000) ===
+maintenance 25%: call when price < 66.6667
+maintenance 40%: call when price < 83.3333
+price 75.00: below 40% trigger? True; below 25% trigger? False
+assertions passed: 6/6
+ASSERT_margin_call_ok
+```
+
 ## 常见错误 / 陷阱
 
 - 忽略 alpha 衰减，有成本仍天天满仓再平衡到目标。
@@ -167,6 +187,7 @@ disclaimer: 合成数据；仅供学习，不构成投资建议。
 6. 在奇异/病态 Σ 上硬做求逆，而 HRP 本可避开求逆。
 7. 忽略树状簇，把每只票都当成独立风险赌注。
 8. 只在目标权重上检查约束，忽略漂移后的实际权重；没先检查约束是否有解（如 n×cap &lt; 1）就开始优化。
+9. 杠杆回测（波动目标权重超过 100%）不模拟追保、被动平仓和融资利息；默认券商维持比例就是 25%，而常见的券商标准是 30%–40%。
 
 
 ## 练习（1:1）
@@ -194,6 +215,7 @@ disclaimer: 合成数据；仅供学习，不构成投资建议。
 <Quiz id="p6prs-q-decay" question="alpha 衰减且成本上升时，成本感知无交易半带宽应？" options={["永远缩到 0", "变宽——少交易；不交易也是决策", "忽略滞后项", "最大化切换次数"]} answer={1} explanation="arXiv:2502.04284 / 实验：c↑ → 半带宽↑ → 切换↓。" />
 <Quiz id="p6prs-q-nt" question="无交易区意味着？" options={["每天都再平衡到目标", "足够接近目标则不交易；越界则朝边界交易", "禁止一切成本", "最大化换手"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 精神。" />
 <Quiz id="pr-drift" question="4 个资产、每个上限 20%，要求权重和为 1，会怎样？" options={["一定有解", "无解：最多只能到 80%", "上限自动放宽", "只影响成本"]} answer={1} explanation="n×cap=0.8<1，约束互相矛盾，应在优化前报错。" />
+<Quiz id="prs-margin-call" question="按 SEC 公告的例子：持仓市值 $12,000，借款 $8,000，券商维持比例 40%。结果是？" options={["没问题，权益 $4,000 高于 $3,000", "要追加 $800", "要追加 $4,800", "维持比例只看初始买入价，不用重算"]} answer={1} explanation="40% × $12,000 = $4,800；权益 $4,000，差 $800。第一个选项是 25% 的情况。" />
 
 ## 完成标准
 

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**23 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+This lesson (~**23.5 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab + 0.5h margin accounts (Reg T / FINRA 4210) — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
 
 **Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
 
@@ -154,6 +154,26 @@ How to read it: the target satisfies the 33% cap, but after 63 days without trad
 
 disclaimer: synthetic data; learning only, not investment advice.
 
+## Margin accounts: borrow at most half, keep equity at or above 25% (checked 2026-11-10)
+
+**Leverage in a US stock account has rules.** Under the Federal Reserve's [Regulation T](https://www.ecfr.gov/current/title-12/section-220.12) (Reg T), initial margin on a marginable stock is 50% of its value, so you can borrow at most half. After the purchase, [FINRA Rule 4210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210) (FINRA, the Financial Industry Regulatory Authority, is the self-regulator for US brokers) requires your equity (position value minus the loan) to stay at or above 25% of the long market value. That is maintenance margin. A margin account also needs at least $2,000 of equity, or the full cost if the purchase is smaller. Brokers may set stricter "house" levels; the SEC says 30%–40% is typical ([SEC investor bulletin](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-29)). The bulletin's example: buy $16,000 of stock with $8,000 of your own money and $8,000 borrowed. If the stock falls to $12,000, equity is $4,000. A 25% requirement needs $3,000, so you are fine. A 40% requirement needs $4,800, so you are $800 short and get a margin call. The broker may also sell your shares without notice. For a long-only position with no new deposits, the trigger price is: loan ÷ (shares × (1 − maintenance ratio)). FINRA's 2026 intraday margin rule (see `compliance-ethics`) "does not change the regular maintenance margin requirements"; it adds a layer on top. When volatility targeting above asks for a weight above 100%, that is borrowed money: a leveraged backtest must simulate margin calls, forced liquidation and financing interest.
+
+**Lab:** `examples/p6/11_margin_call_toy.py` (long-only toy, no interest):
+
+```text
+=== A. Reg T initial margin ===
+buy $16,000 of stock -> may borrow at most $8,000
+=== B. SEC bulletin example: value falls to $12,000, loan $8,000 ===
+maintenance 25%: equity $4,000 vs required $3,000 -> ok
+maintenance 40%: equity $4,000 vs required $4,800 -> margin call $800
+=== C. trigger price (160 shares bought at $100, loan $8,000) ===
+maintenance 25%: call when price < 66.6667
+maintenance 40%: call when price < 83.3333
+price 75.00: below 40% trigger? True; below 25% trigger? False
+assertions passed: 6/6
+ASSERT_margin_call_ok
+```
+
 ## Common mistakes / pitfalls
 
 - Ignoring alpha decay and always full-rebalancing to target under costs.
@@ -167,6 +187,7 @@ disclaimer: synthetic data; learning only, not investment advice.
 6. Inverting a singular/ill-conditioned Σ when HRP would have avoided the inverse.
 7. Ignoring dendrogram clusters and treating every ticker as an independent risk bet.
 8. Checking constraints only on target weights, ignoring drifted actual weights; optimising before checking the constraints are feasible (e.g. n×cap &lt; 1).
+9. Running a leveraged backtest (vol-target weight above 100%) without margin-call checks, forced selling or financing interest; assuming 25% is your broker's level when house levels are often 30%–40%.
 
 
 ## Practice (1:1)
@@ -194,6 +215,7 @@ disclaimer: synthetic data; learning only, not investment advice.
 <Quiz id="p6prs-q-decay" question="As trading costs rise with decaying alpha, the cost-aware no-trade band should?" options={["Always shrink to zero", "Widen — trade less; 不交易也是决策", "Ignore lag terms", "Maximize switches"]} answer={1} explanation="arXiv:2502.04284 / lab: c↑ → half-band↑ → switches↓." />
 <Quiz id="p6prs-q-nt" question="A no-trade region means?" options={["Always rebalance to target daily", "Do not trade when close enough to target; trade toward the boundary if outside", "Ban all costs", "Maximize turnover"]} answer={1} explanation="Brandt–Santa-Clara–Valkanov RFS 2009 spirit." />
 <Quiz id="pr-drift" question="4 assets, each capped at 20%, weights must sum to 1. What happens?" options={["Always solvable", "Infeasible: at most 80%", "The cap relaxes itself", "Only costs are affected"]} answer={1} explanation="n×cap=0.8<1, the constraints contradict each other; raise an error before optimising." />
+<Quiz id="prs-margin-call" question="SEC bulletin example: position $12,000, loan $8,000, house maintenance 40%. What happens?" options={["Fine, $4,000 equity beats $3,000", "$800 margin call", "$4,800 margin call", "Maintenance is checked only against the purchase price"]} answer={1} explanation="40% × $12,000 = $4,800 required; equity is $4,000, so $800 short. The first option is the 25% case." />
 
 ## Done when
 

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**8 hours**: 3h formulas + 4h coding + 1h quiz) implements annualized vol, Sharpe, max drawdown (MDD), and plots rolling vol plus stress-period correlation. Prereqs: pandas time series, stats basics, markets language.
+This lesson (~**8.5 hours**: 3h formulas + 4h coding + 1h quiz + 0.5h leveraged/inverse ETF daily reset) implements annualized vol, Sharpe, max drawdown (MDD), and plots rolling vol plus stress-period correlation. Prereqs: pandas time series, stats basics, markets language.
 
 **Goals:** annualize vol correctly; implement Sharpe and MDD; show rolling corr rising in stress.
 
@@ -82,6 +82,32 @@ saved_plot public/p1/rolling_corr_stress.png
 ASSERTS_OK
 ```
 
+## Leveraged and inverse ETFs reset daily (checked 2026-11-10)
+
+**Long-run returns are not "index × multiple".** A 2x leveraged ETF aims for twice the index's return each day. An inverse ETF aims for the opposite of the index's return each day. The SEC's investor bulletin gives an example. An index falls 10% from 1000 to 900 on day 1, then rises 10% to 990 on day 2, for a two-day loss of 1%. A 2x ETF falls 20% to 800, then rises 20% to 960, for a two-day loss of 4%. It hit its target on both days, yet over two days it lost four times what the index lost, not twice ([SEC investor bulletin](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-alerts/sec)). In choppy markets the gap keeps growing, which is the same path dependence you saw with max drawdown above. To backtest holding a leveraged ETF for longer than a day, compound daily; never multiply the index's cumulative return. Real funds also carry fees and financing costs that the toy below leaves out. This is why the site's default research market says "non-leveraged ETFs".
+
+**Lab:** `examples/p1/07_etf_nav_letf_toy.py` (sections B–C; section A belongs to `markets-language`):
+
+```text
+=== A. premium / discount (Rule 6c-11 definition) ===
+market 50.10 vs NAV 50.00 -> +0.20% (premium)
+market 49.75 vs NAV 50.00 -> -0.50% (discount)
+|prem/disc| 2.1% for 8 days -> statement needed: True
+|prem/disc| 2.1% for 7 days -> statement needed: False
+median bid-ask spread of 5 synthetic quotes: 0.08%
+=== B. SEC two-day example: daily target hit, two-day result is not 2x ===
+index: 1000 -> 900 -> 990  (-1%)
+2x   : 1000 -> 800 -> 960  (-4%)
+-2x  : 1000 -> 1200 -> 960  (-4%)
+=== C. choppy market: +5% / -5% repeated for 20 days ===
++1x final 975.2794
++2x final 904.3821
++3x final 796.4668
+-2x final 904.3821
+assertions passed: 7/7
+ASSERT_etf_nav_letf_ok
+```
+
 ## Common mistakes / pitfalls
 
 1. Annualizing vol with ×252 instead of √252.
@@ -89,6 +115,7 @@ ASSERTS_OK
 3. Reporting returns without MDD.
 4. Letting full-sample corr hide stress corr spikes.
 5. Treating tiny rolling windows as precise truth.
+6. Backtesting a 2x or inverse ETF held for weeks as "index return × 2" instead of compounding daily.
 
 ## Practice (1:1 with the checklist)
 
@@ -105,6 +132,7 @@ ASSERTS_OK
 <Quiz id="q3-mdd" question="MDD mainly depends on?" options={["Mean alone", "The NAV path (order)", "The last day only", "Beta alone"]} answer={1} explanation="Drawdown is a path statistic." />
 <Quiz id="q4-corr" question="In stress periods one often sees?" options={["Corr must fall to 0", "Cross-asset corr often rises", "Vol vanishes", "Sharpe undefined"]} answer={1} explanation="Common shocks lift correlation." />
 <Quiz id="q5-rf" question="This lesson’s teaching Sharpe default Rf?" options={["Must be 5%", "0, and must be declared", "Equal to σ", "Equal to Alpha"]} answer={1} explanation="Rf=0 is a teaching convention." />
+<Quiz id="rv-letf-reset" question="An index moves −10% then +10% (1000→900→990). A 2x ETF that hits its daily target exactly starts at 1000. Where is it after two days?" options={["960", "980", "990", "1000"]} answer={0} explanation="Day 1: 1000 × 0.8 = 800. Day 2: 800 × 1.2 = 960 (the SEC bulletin's own example)." />
 
 ## Done when
 

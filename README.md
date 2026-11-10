@@ -12,7 +12,7 @@ Routes: `/[locale]/phase/<phaseSlug>/<lessonSlug>`.
 
 **Written so far:** full bodies for **P0–P9** (zh+en), 28 lessons.
 
-**Hours:** 390h full / 370h skip-P0 (exact; per-lesson sub-items sum to each total).
+**Hours:** 394h full / 374h skip-P0 (exact; per-lesson sub-items sum to each total).
 
 **Default scope:** US-listed stocks / non-leveraged ETFs in USD (US-first). Chinese is a teaching language, not the default market; A-share / HK / EU material is labelled comparison reading. All labs run offline on synthetic or hand-made fixtures.
 

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**25.75 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources & licensing/PIT lab + 2h corporate actions & delisting + 1h ALFRED revision as-of + 0.5h dividend dates under T+1 + 0.25h yfinance auto_adjust version trap) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**26.75 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources & licensing/PIT lab + 2h corporate actions & delisting + 1h ALFRED revision as-of + 0.5h dividend dates under T+1 + 0.25h yfinance auto_adjust version trap + 0.5h filing deadlines & EDGAR dates + 0.5h delisting returns & permanent IDs) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -258,6 +258,31 @@ ALFRED as-known: 2.0 / 2.3 / 2.4; final value 2.4 backfilled into the past → 2
 SYN_MACRO_2 has no release time → excluded
 ```
 
+## When is a financial report "known"? Filing deadlines and EDGAR filing dates (checked 2026-11-10)
+
+**The period-end date is not the date you knew the numbers.** On the last day of a quarter, nobody has that quarter's report yet. Per the SEC form instructions, an annual report on Form 10-K is due 60 days after fiscal year-end for large accelerated filers, 75 days for accelerated filers and 90 days for everyone else ([Form 10-K](https://www.sec.gov/files/form10-k.pdf)); the filer categories are SEC size tiers based mainly on the market value of shares held by the public. A quarterly report on Form 10-Q is due in 40 days (large accelerated and accelerated filers) or 45 days (everyone else) ([Form 10-Q](https://www.sec.gov/files/form10-q.pdf)). A current report on Form 8-K, for events such as an acquisition or a CEO change, is generally due within four business days of the event ([investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/form-8-k)). EDGAR (the SEC's filing system) also treats a filing whose transmission starts after 5:30 p.m. Eastern as filed on the next business day ([Reg S-T Rule 13](https://www.ecfr.gov/current/title-17/section-232.13); insider Forms 3/4/5, Schedules 13D/13G and Form 144 get until 10 p.m.). The official "filing date" and the acceptance time can therefore differ by a day, so store both. In a backtest, use the acceptance timestamp when you have it, and act no earlier than the next tradable moment after it (this is what the EDGAR-shaped as-of join in the lab above does). If all you have is the period-end date, push it forward by at least the statutory deadline; never use the period-end date itself. Deadlines are upper bounds: many companies file earlier, so this fallback is conservative, not exact. Institutional holdings on Form 13F (managers with at least $100 million in certain US securities) are due within 45 days after quarter-end; for 3Q 2026 that is 2026-11-16 ([SEC FAQ](https://www.sec.gov/rules-regulations/staff-guidance/division-investment-management-frequently-asked-questions/frequently-asked-questions-about-form-13f)). A 13F-based signal becomes usable on the filing date, not the quarter-end. Status: on 2026-05-05 the SEC proposed letting companies file semiannual reports on a new Form 10-S instead of quarterly 10-Qs ([SEC press release](https://www.sec.gov/newsroom/press-releases/2026-42-sec-proposes-amendments-permit-optional-semiannual-reporting-public-companies)). It was proposed on 2026-05-05 and is not adopted as of 2026-11-10, so quarterly reporting is unchanged.
+
+**Lab:** `examples/p2/09_filing_dates_toy.py` (toy calendar: weekends roll forward, US federal holidays are not handled):
+
+```text
+=== A. EDGAR filing date vs transmission time (Reg S-T Rule 13) ===
+transmission starts 2026-02-26 Thu 17:30 ET -> filing date 2026-02-26 Thu
+transmission starts 2026-02-26 Thu 18:05 ET -> filing date 2026-02-27 Fri
+=== B. statutory deadlines (weekend roll only) ===
+10-K period end 2025-12-31 (large filer): due 2026-03-02 Mon
+10-K period end 2025-12-31 (other filer): due 2026-03-31 Tue
+10-Q period end 2026-09-30 (large filer): due 2026-11-09 Mon
+10-Q period end 2026-09-30 (other filer): due 2026-11-16 Mon
+=== C. 13F: holdings as of quarter-end, public up to 45 days later ===
+3Q 2026 Form 13F due 2026-11-16 (SEC FAQ table: November 16, 2026)
+=== D. the period-end trap ===
+decision on period end 2026-09-30: value = None
+decision 2026-11-17, no filing timestamp (assume latest legal date): value = 123.0
+decision 2026-11-03, filed 2026-10-29: value = 123.0
+assertions passed: 9/9
+ASSERT_filing_dates_ok
+```
+
 ## Raw vs adjusted prices and total return; delisting
 
 **Raw prices (per review item R21):** raw (unadjusted) prices are used for the historical nominal price scale and the share/cash ledger; whether a strategy could trade at a given price and size still depends on the session, quotes, trading status, liquidity and the order/fill model at that time — raw OHLC or the last trade price is not automatically executable. Split-adjusted and total-return series each record their adjustment scope; never count the same dividend twice, and a split adjusts the share count too rather than creating wealth out of nothing.
@@ -274,11 +299,29 @@ double-counted dividend gives 0.0230 vs correct 0.0066; delisting: missing retur
 
 **ALFRED revision as-of:** align with `merge_asof` on **release time** (not observation date); a series with no release time cannot enter the features.
 
+## Delisting returns and permanent IDs (CRSP CIZ) (checked 2026-11-10)
+
+**A delisting is not "end of data"; it is a return you must book.** After a stock delists, your final outcome is not necessarily the last trade price. It may trade over the counter, pay a liquidation or merger consideration, or go to zero. CRSP (the Center for Research in Security Prices) calls the return from the last trade price to the post-delisting value the delisting return. Per the CRSP CIZ guide (July 2026 edition; product page: [CRSP US stock databases](https://www.crsp.org/research/crsp-us-stock-databases/)), the monthly return MthRet already includes delisting returns where appropriate, so do not apply them a second time. It excludes them in two flagged cases: the post-delisting value comes more than 10 days after delisting (flag G), or the delisting return is missing (flag M). You must decide how to treat those two cases and document the choice. Shumway (1997, *Journal of Finance*) found that most stocks delisted for bankruptcy and other negative reasons lack a correct delisting return, and that the omitted returns are large ([doi:10.1111/j.1540-6261.1997.tb03818.x](https://doi.org/10.1111/j.1540-6261.1997.tb03818.x)). Dropping those stocks, or treating missing values as zero, makes a backtest look too good. Also, tickers change and get reused by other companies. Key your data on a permanent ID such as PERMNO (CRSP's permanent security identifier) or CIK (the SEC's company identifier), and store the ticker as a time-varying attribute.
+
+**Lab:** `examples/p2/10_delist_index_pit_toy.py` (synthetic securities; sections A–C here, section D belongs to `backtest-traps`):
+
+```text
+=== A. a delisting is a return, not 'end of data' ===
+last three months only: +4.01%; including delisting return -30%: -27.19%
+flag M -> delisting return excluded (flag M): choose and document a treatment
+=== B. survivorship: drop the dead and the mean looks better ===
+all four names: -16.25%; survivors only: +7.50%
+=== C. tickers get reused; key on a permanent ID ===
+merge on ticker 'XYZ': one 'history' of 4 years (two companies glued together)
+merge on PERMNO: [10001, 20002] -> two separate histories
+...
+```
+
 ## Dividend dates and the yfinance auto_adjust trap (checked 2026-11-10)
 
 **1. Four dates of a cash dividend.** A company announces a dividend (declaration date), fixes who is on its books (record date), the stock starts trading without the dividend (ex-dividend date), and the cash is paid (payment date). What decides whether you get the dividend is the **ex-dividend date**: if you buy on the ex-date or later, you do not get this payment. Since US settlement moved to T+1, investor.gov says the ex-date is **usually the record date**, or one business day before it if the record date is not a business day ([investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)). Its example: declared 2026-03-02, record 2026-03-16, ex-date 2026-03-16, paid 2026-03-17.
 
-- **Exception:** if a cash dividend, stock dividend or split is 25% or more of the stock's value, the ex-date is deferred to one business day **after** the payment date ([FINRA Rule 11140(b)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11140)); someone who sells between the record date and that ex-date delivers a "due bill" for the distribution. A stock dividend below 25% follows the normal rule: ex-date equals the record date.
+- **Exception:** if a cash dividend, stock dividend or split is 25% or more of the stock's value, the ex-date is deferred to one business day **after** the payment date ([FINRA Rule 11140(b)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11140)); someone who sells between the record date and that ex-date delivers a "due bill" for the distribution ([FINRA Rule 11630](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11630)). For ADRs and foreign securities, FINRA designates the ex-date separately (11140(b)(3)). A stock dividend below 25% follows the normal rule: ex-date equals the record date.
 - **Backtest bookkeeping:** book the total return on the **ex-date** (the price drops that day) but receive the cash on the **payment date**. Keep them separate, and never count the dividend twice. The double-count lab in section D of `05_data_versions_calendar.py` is the same idea one level down.
 - **Advanced:** vendor `ex_date` fields can be missing or filled with the payment date. Check that ex-date is not after the payment date, except for cash dividends, stock dividends or splits of 25% or more.
 
@@ -321,6 +364,8 @@ assertions passed: 11/11
 8. Switching data versions (e.g. FIZ→CIZ) without recording it, mistaking a convention change for a strategy change; ffilling **returns** across closed days; computing split-day returns on raw prices.
 9. Treating the raw close as an executable price; treating a FRED series’ public-domain label as permission for the FRED service, caching or model training; calling yfinance official data.
 10. Assuming you get the dividend if you buy on the ex-date; booking the dividend on both the ex-date and the payment date; upgrading yfinance without writing `auto_adjust` explicitly, so `Close` silently changes meaning.
+11. Using the quarter-end date as the date a 10-Q or 13F was known; ignoring that EDGAR dates a filing started after 5:30 p.m. ET to the next business day.
+12. Multiplying CIZ MthRet by the delisting return again, or silently setting a flag-G/M month to 0; merging histories on ticker instead of PERMNO/CIK.
 
 
 ## Practice (1:1 with the checklist)
@@ -355,6 +400,8 @@ assertions passed: 11/11
 <Quiz id="dc-raw" question="Raw (unadjusted) close prices are mainly for?" options={["Automatically executable prices", "The historical nominal price scale and share/cash ledger", "Direct use as total return", "Replacing the NBBO"]} answer={1} explanation="R21: executability depends on quotes, status, liquidity and the fill model." />
 <Quiz id="dc-exdiv" question="Under US T+1, you buy a stock on its ex-dividend date. Do you get that dividend?" options={["Yes, any purchase before payment counts", "No, buying on the ex-date or later does not get it", "Only if you hold until the payment date", "Only in a margin account"]} answer={1} explanation="investor.gov: if you purchase on the ex-dividend date or after, you will not receive the next dividend payment." />
 <Quiz id="dc-yfadj" question="With yfinance 0.2.51 or later, yf.download() without auto_adjust returns a Close that is…" options={["Fully unadjusted", "Adjusted for splits and dividends, with no Adj Close column", "Split-adjusted only, plus Adj Close", "Delayed by one day"]} answer={1} explanation="0.2.51 changed the download() default to auto_adjust=True; the docs say there is no separate Adj Close column in that mode." />
+<Quiz id="dc-filing-lag" question="A company transmits its 10-K on EDGAR at 18:05 ET on Thursday 2026-02-26. Under Reg S-T Rule 13, its official filing date is…" options={["Friday 2026-02-27", "Thursday 2026-02-26", "The fiscal year-end, 2025-12-31", "Monday 2026-03-02"]} answer={0} explanation="Transmission started after 5:30 p.m. Eastern, so the filing is deemed filed on the next business day." />
+<Quiz id="dc-delist-ret" question="Backtesting with CRSP CIZ MthRet, how should you handle a delisting month?" options={["Multiply by the delisting return again to be safe", "MthRet already includes delisting returns where appropriate, so don't double count; handle the excluded missing and over-10-days cases yourself and document them", "Drop every delisted stock for a cleaner sample", "Set the delisting month's return to 0"]} answer={1} explanation="Per the CIZ guide, MthRet includes delisting returns if appropriate; flags G and M mark exclusions you must treat explicitly. Dropping or zeroing them biases results upward (Shumway 1997)." />
 
 ## Done when
 

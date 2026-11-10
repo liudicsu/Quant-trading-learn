@@ -1,0 +1,18 @@
+=== A. premium / discount (Rule 6c-11 definition) ===
+market 50.10 vs NAV 50.00 -> +0.20% (premium)
+market 49.75 vs NAV 50.00 -> -0.50% (discount)
+|prem/disc| 2.1% for 8 days -> statement needed: True
+|prem/disc| 2.1% for 7 days -> statement needed: False
+median bid-ask spread of 5 synthetic quotes: 0.08%
+=== B. SEC two-day example: daily target hit, two-day result is not 2x ===
+index: 1000 -> 900 -> 990  (-1%)
+2x   : 1000 -> 800 -> 960  (-4%)
+-2x  : 1000 -> 1200 -> 960  (-4%)
+=== C. choppy market: +5% / -5% repeated for 20 days ===
++1x final 975.2794
++2x final 904.3821
++3x final 796.4668
+-2x final 904.3821
+assertions passed: 7/7
+ASSERT_etf_nav_letf_ok
+disclaimer: synthetic prices; no fees, financing or tracking error; learning only

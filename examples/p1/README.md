@@ -14,3 +14,5 @@ Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
 - US-first pack (2026-11-08): `05_us_market_mechanics.py — US T+1, NYSE sessions in Shanghai time, toy NBBO (offline).`
 
 - enrich7 (2026-11-10): `06_close_auction_roundlot.py` — official close vs last trade, NYSE MOC 15:50 ET cutoff in Shanghai time, tiered round lots, BOLO vs NBBO (17 assertions).
+
+- enrich8 (2026-11-10): `07_etf_nav_letf_toy.py` — Rule 6c-11 premium/discount and the >2%-for-more-than-7-days statement trigger, median spread, SEC 1000→900→990 / 2x 800→960 daily-reset example, choppy-path decay for 1x/2x/3x/−2x (7 assertions; used by `markets-language` and `returns-vol-corr`).

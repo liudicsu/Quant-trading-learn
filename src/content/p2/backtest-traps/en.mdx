@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**28 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**28.5 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up + 0.5h index membership as of date) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
 **Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
@@ -28,6 +28,21 @@ Cross-link: [data-cleaning](/en/phase/data-honest-backtests/data-cleaning).
 
 - **Survivorship:** today’s listed names ≠ the historical investable universe — replaying only survivors inflates means (numeric demo lives in data-cleaning).
 - **Data snooping:** choosing a rule after many unlabeled full-sample peeks / rank picks. Walk-forward + trial logs + DSR exist to make that cost visible.
+
+## Index membership as of each date (checked 2026-11-10)
+
+**Today's index members are survivors too.** If your universe is "members of index X", each historical date must use the membership list as it stood then. Today's members were selected by past price moves, so replaying history with them is survivorship bias. An index change has three key dates: the rank day (whose data decides who enters and leaves), the announcement day, and the effective day. Using the new list before it is announced is look-ahead. A current example: the Russell US indexes, previously reconstituted once a year in June, moved to twice a year, June and December, starting in 2026 ([FTSE Russell](https://www.lseg.com/en/media-centre/press-releases/ftse-russell/2026/russell-reconstitution-2026-schedule)). For December 2026, rank day was October 30. Preliminary additions and deletions come out after the US close on November 13, the changes take effect after the close on December 11, and markets open on December 14 with the new membership ([FTSE Russell](https://www.lseg.com/en/media-centre/press-releases/ftse-russell/2026/ftse-russell-announces-december-2026-russell-us-indexes-reconstitution-schedule)). A backtest decision dated November 1, 2026 cannot use that list. If your backtest spans 2026, update the universe on the new schedule; do not hard-code "every June".
+
+**Lab:** `examples/p2/10_delist_index_pit_toy.py` section D (synthetic members; the schedule dates are FTSE Russell's):
+
+```text
+=== D. index membership as of a date (Russell December 2026 schedule) ===
+decision 2026-11-01: December preliminary list known? False
+decision 2026-11-16: December preliminary list known? True
+members used on 2026-12-11: ['A', 'B', 'C']
+members used on 2026-12-14: ['A', 'B', 'E']
+assertions passed: 7/7
+```
 
 ## Walk-forward lab
 
@@ -368,6 +383,7 @@ after excess @ t=4: hit≈98.3% FDR≈0
 11. Forgetting to log every agent-scored candidate when applying DSR(N).
 12. Running admission gates on absolute returns (silent reject of true signals).
 13. Treating gates / Minerva Seal as proof of higher expected returns.
+14. Building a historical universe from today's index members, or using a reconstitution list before its announcement date; hard-coding "Russell rebalances every June" for 2026 onward.
 
 ## Practice (1:1 with the checklist)
 
@@ -397,6 +413,7 @@ after excess @ t=4: hit≈98.3% FDR≈0
 <Quiz id="q-admit-bound" question="Admission gates (injected-truth) help most when?" options={["Train t≫3 always", "Weak train t≲2.5 vs random-admission; adoption often ~1–7%", "They raise expected returns", "Absolute SR is enough"]} answer={1} explanation="Precision device; beyond ~2.5 mostly overhead — arXiv:2610.07701." />
 <Quiz id="q-admit-excess" question="Why must gate criteria use excess returns?" options={["Fees only", "Absolute criteria can silently reject even true t=4 when market vol dominates", "DSR forbids excess", "PIT unused"]} answer={1} explanation="Paper Table 7 / lab compression foil absolute_SR≈1.594 vs excess_IR≈5.276." />
 <Quiz id="q10-execopen" question="EXEC_OPEN is illegal because?" options={["It uses next-open fills after close decisions", "It pairs same-day post-open bar fields with a same-day open fill", "It deletes costs", "It bans RankIC"]} answer={1} explanation="Finance-native execution-alignment leak." />
+<Quiz id="bt-index-recon" question="Can a backtest decision dated 2026-11-01 use the preliminary list for Russell's December 2026 reconstitution?" options={["Yes, the list will take effect anyway", "Yes, rank day (10-30) has passed", "No, the list comes out after the close on 2026-11-13, so using it earlier is look-ahead", "No, Russell only reconstitutes in June"]} answer={2} explanation="Rank day is not the announcement day. The last option describes the pre-2026 annual schedule." />
 
 ## Done when
 

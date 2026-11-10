@@ -1,0 +1,17 @@
+=== A. EDGAR filing date vs transmission time (Reg S-T Rule 13) ===
+transmission starts 2026-02-26 Thu 17:30 ET -> filing date 2026-02-26 Thu
+transmission starts 2026-02-26 Thu 18:05 ET -> filing date 2026-02-27 Fri
+=== B. statutory deadlines (weekend roll only) ===
+10-K period end 2025-12-31 (large filer): due 2026-03-02 Mon
+10-K period end 2025-12-31 (other filer): due 2026-03-31 Tue
+10-Q period end 2026-09-30 (large filer): due 2026-11-09 Mon
+10-Q period end 2026-09-30 (other filer): due 2026-11-16 Mon
+=== C. 13F: holdings as of quarter-end, public up to 45 days later ===
+3Q 2026 Form 13F due 2026-11-16 (SEC FAQ table: November 16, 2026)
+=== D. the period-end trap ===
+decision on period end 2026-09-30: value = None
+decision 2026-11-17, no filing timestamp (assume latest legal date): value = 123.0
+decision 2026-11-03, filed 2026-10-29: value = 123.0
+assertions passed: 9/9
+ASSERT_filing_dates_ok
+disclaimer: deadlines are upper bounds, many firms file earlier; holidays not handled; learning only

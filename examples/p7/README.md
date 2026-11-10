@@ -19,3 +19,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 - N1 (2026-11-08): `05_overnight_session_fixture.py` + `fixtures/overnight_sessions_fixture.json` — overnight session classification, next-day trade date, Shanghai time, `overnight_tradable` / limit-only / day-gtc checks, weekly closure Fri 20:00–Sun 20:00 ET as a toy rule (real brokers may queue; R44/R46), DST-switch-week Sunday 20:00 boundary tests, assertion count computed by the script (R48) (Alpaca 24/5 doc as example, not a recommendation).
 
 - enrich7 (2026-11-10): `06_wash_sale_basis_toy.py` — IRS Pub 550 three examples incl. more/less shares matched in purchase order, window before and after the sale (5 assertions; taxable account only).
+
+- enrich8 (2026-11-10): `07_holding_period_toy.py` — IRS Topic 409 more-than-one-year test, Pub 550 qualified-dividend 121-day window from the rule text (not the worked-example day counts), Pub 519 183-day note as text only (6 assertions; not tax advice).

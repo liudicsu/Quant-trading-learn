@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**5 hours**: 2h concepts + 2.5h exercises + 0.5h quiz) builds trading-research vocabulary: hypothesis→signal→risk→attribution, **Alpha / Beta**, market frictions, and CSV closes → returns → NAV. Prereq: `basic-finance-markets`.
+This lesson (~**5.5 hours**: 2h concepts + 2.5h exercises + 0.5h quiz + 0.5h ETF NAV and premium/discount) builds trading-research vocabulary: hypothesis→signal→risk→attribution, **Alpha / Beta**, market frictions, and CSV closes → returns → NAV. Prereq: `basic-finance-markets`.
 
 **Goals:** three-sentence research goal; distinguish Alpha/Beta; list frictions.
 
@@ -38,6 +38,22 @@ At least five (the script prints six): bid-ask spread, commissions, slippage/imp
 <Callout type="info" title="US default scope (cross-reference)">
 The default market is **US-listed stocks / non-leveraged ETFs in USD**. The US mechanics behind the friction list above — T+1 settlement, cash vs margin accounts, NBBO/SIP/IEX, sessions — are in [P1 Microstructure & orders](../microstructure-orders/); FINRA intraday-margin migration and cross-border tax/FX boundaries are in [P7 Compliance](../../paper-ethics/compliance-ethics/).
 </Callout>
+
+## ETF NAV vs market price (checked 2026-11-10)
+
+**An ETF's NAV and its market price are different numbers.** An exchange-traded fund (ETF) computes its net asset value (NAV) per share once each business day: holdings minus liabilities, divided by shares outstanding. When you trade an ETF through a broker, you get the exchange market price, which can sit above NAV (a premium) or below it (a discount). Only authorized participants (APs, typically large broker-dealers) create or redeem shares directly with the fund, in large blocks (for example 50,000 shares), usually by exchanging a basket of securities. When the price drifts far from NAV, APs can arbitrage the gap, which tends to pull the price back toward NAV ([SEC investor bulletin](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-24)). US [Rule 6c-11](https://www.ecfr.gov/current/title-17/section-270.6c-11) requires each ETF to post, free on its website every business day, the prior day's NAV, market price and premium or discount, plus its median bid-ask spread over the last 30 days. The rule defines the premium or discount as the gap between the market price and the current NAV per share, as a percentage of NAV; "market price" means the official closing price or, if it better reflects value at the NAV time, the midpoint of the national best bid and offer (NBBO). If the premium or discount stays above 2% for more than seven consecutive trading days, the fund must also post a statement explaining it. In a backtest, say whether you use market-price returns or NAV returns. If you assume fills at market prices, use market prices and charge the spread. Retail investors cannot create or redeem at NAV, so "buy at a discount, sell at a premium" is not a free trade for you.
+
+**Lab:** `examples/p1/07_etf_nav_letf_toy.py` (synthetic prices, standard library only; section A belongs to this lesson, sections B–C to `returns-vol-corr`):
+
+```text
+=== A. premium / discount (Rule 6c-11 definition) ===
+market 50.10 vs NAV 50.00 -> +0.20% (premium)
+market 49.75 vs NAV 50.00 -> -0.50% (discount)
+|prem/disc| 2.1% for 8 days -> statement needed: True
+|prem/disc| 2.1% for 7 days -> statement needed: False
+median bid-ask spread of 5 synthetic quotes: 0.08%
+...
+```
 
 ## Three-sentence research goal (template)
 
@@ -114,6 +130,7 @@ ASSERTS_OK
 3. Claiming live-ready without a friction list.  
 4. Non-reproducible research (no seed/CSV/version).  
 5. Defining today’s signal with future returns (lookahead).
+6. Treating an ETF's market price as its NAV, or assuming you can trade at NAV; a backtest that fills at market prices must use market prices plus the spread.
 
 ## Practice (1:1 with the checklist)
 
@@ -130,6 +147,7 @@ ASSERTS_OK
 <Quiz id="q3-goal" question="A good research goal should primarily be?" options={["Complex-sounding", "Testable, with constraints and success criteria", "Guaranteed profit", "Daily-frequency only"]} answer={1} explanation="Falsifiability/testability is research discipline." />
 <Quiz id="q4-fric" question="Which is usually a market friction?" options={["Benchmark name", "Bid-ask spread and slippage", "DatetimeIndex", "√252 in Sharpe"]} answer={1} explanation="Spread/slippage are execution frictions." />
 <Quiz id="q5-repro" question="Reproducibility first requires?" options={["NAV screenshots only", "Fixed data version/seed and code", "Hidden parameters", "Gross returns only"]} answer={1} explanation="Others must rebuild the same outputs from the same inputs." />
+<Quiz id="ml-etf-nav" question="Under Rule 6c-11, an ETF's premium or discount is…" options={["The ETF's daily return minus the index's daily return", "The day's high minus its low", "The gap between the market price and current NAV per share, as a percentage of NAV", "The management fee rate"]} answer={2} explanation="Rule 6c-11(a)(1): market price minus current NAV per share, expressed as a percentage of NAV; market price is the official close or the NBBO midpoint at the NAV time." />
 
 ## Done when
 

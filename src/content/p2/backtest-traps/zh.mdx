@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **28 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **28.5 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -28,6 +28,21 @@
 
 - **幸存者：** 今日成分 ≠ 历史可投资宇宙——只回放幸存者会抬高均值（数值演示在 data-cleaning）。
 - **数据挖掘：** 在大量未登记试验 / 全样本窥视后再挑规则。Walk-forward、试验日志与 DSR 用来暴露代价。
+
+## 指数成分也要按时点取（2026-11-10 核实）
+
+**今天的指数成分也是幸存者。** 用“某个指数的成分股”做股票池时，每个历史时点都必须用当时的成分名单。今天的成分股是被过去的涨跌筛选出来的，拿它回测过去，就是幸存者偏差。指数调整有三个关键日期：排名日（用这一天的数据决定谁进谁出）、名单公布日、生效日。在公布日之前使用新名单，就是偷看未来。举个现行的例子：Russell 美国指数过去每年 6 月重构一次，从 2026 年起改为每年 6 月和 12 月各一次（[FTSE Russell](https://www.lseg.com/en/media-centre/press-releases/ftse-russell/2026/russell-reconstitution-2026-schedule)）。2026 年 12 月这次的排名日是 10 月 30 日，初步增删名单在 11 月 13 日美股收盘后公布，12 月 11 日收盘后生效，12 月 14 日开盘起使用新成分（[FTSE Russell](https://www.lseg.com/en/media-centre/press-releases/ftse-russell/2026/ftse-russell-announces-december-2026-russell-us-indexes-reconstitution-schedule)）。所以，一个 2026 年 11 月 1 日的回测决策不能用这份名单。回测横跨 2026 年时，股票池的更新频率也要跟着改，不要在代码里写死“每年 6 月”。
+
+**实验：** `examples/p2/10_delist_index_pit_toy.py` 的 D 节（成分是合成的，日期来自 FTSE Russell）：
+
+```text
+=== D. index membership as of a date (Russell December 2026 schedule) ===
+decision 2026-11-01: December preliminary list known? False
+decision 2026-11-16: December preliminary list known? True
+members used on 2026-12-11: ['A', 'B', 'C']
+members used on 2026-12-14: ['A', 'B', 'E']
+assertions passed: 7/7
+```
 
 ## Walk-forward 实验
 
@@ -364,6 +379,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 7. 把教学用 CPCV 素描当成生产级 AFML 实现。
 
 8. 日历切分看似干净，但 TEMP_CENTER / EXEC_OPEN 仍在偷看。
+9. 用今天的指数成分构造历史股票池，或在公布日之前使用重构名单；2026 年以后仍写死“Russell 每年 6 月调整”。
 
 ## 练习（与任务清单 1:1）
 
@@ -393,6 +409,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="q-admit-bound" question="注入真值准入门槛何时最有用？" options={["训练 t≫3 总有用", "弱训练 t≲2.5 相对随机准入；采纳常仅约1–7%", "门槛会提高期望收益", "绝对夏普足够"]} answer={1} explanation="精度装置；t≳2.5 多为开销 — arXiv:2610.07701。" />
 <Quiz id="q-admit-excess" question="为何门槛准则必须用超额收益？" options={["只为手续费", "绝对准则可在市场波动主导时静默拒绝真 t=4", "DSR 禁止超额", "不用 PIT"]} answer={1} explanation="论文表7 / 实验 compression foil。" />
 <Quiz id="q10-execopen" question="EXEC_OPEN 不合法是因为？" options={["收盘决策后次日开盘成交", "用当日开盘后字段却假设当日开盘成交", "删除成本", "禁止 RankIC"]} answer={1} explanation="执行对齐类金融原生泄漏。" />
+<Quiz id="bt-index-recon" question="回测里一个 2026-11-01 的决策，能否使用 Russell 2026 年 12 月重构的初步增删名单？" options={["能，名单最终会生效", "能，排名日 10-30 已经过了", "不能，名单 2026-11-13 收盘后才公布，之前使用就是偷看未来", "不能，Russell 只在 6 月调整"]} answer={2} explanation="排名日不是公布日。最后一个选项是 2026 年以前的旧制度。" />
 
 ## 完成标准
 

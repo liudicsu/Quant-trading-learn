@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **19.5 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **20 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -98,6 +98,23 @@ C. IRS 'more bought than sold' example: match in purchase order
    lot 2025-02-06 50 sh: basis adjustment +0
 assertions passed: 5/5
 ASSERT_wash_sale_basis_ok
+```
+
+**美国资本利得：持有超过一年才算长期（2026-11-10 核实；这里只是知识普及，不是税务建议）。** 对美国纳税人来说，卖出股票时，持有超过一年的盈亏算长期资本利得或亏损，一年及以内算短期。持有天数从买入的第二天开始数，算到卖出当天为止（[IRS Topic 409](https://www.irs.gov/taxtopics/tc409)）。例如 2025-03-10 买入，2026-03-10 卖出，正好一年，不算“超过一年”，仍是短期；2026-03-11 卖出才算长期。净短期利得按普通收入的税率计税，长期利得多数情况下税率更低，具体税率和门槛每年调整，以 IRS 为准。股息也有类似要求：在除息日前 60 天开始的 121 天里持有超过 60 天（算卖出日、不算买入日），才可能算“合格股息”（[IRS Pub 550](https://www.irs.gov/publications/p550)）。如果你不是美国税收居民，规则不一样：IRS Pub 519 写道，一年在美国停留少于 183 天的非居民外国人，资本利得一般免美国税（与美国贸易或业务实际关联的除外），股息一般按 30% 或协定税率预扣（[IRS Pub 519](https://www.irs.gov/publications/p519)），这部分和上面的 W-8BEN 说明一起看。本课不判断你属于哪种身份，中国税收居民还要看中国个税（见下文）。回测默认只报税前收益；如果要报税后，必须写清用的是谁的税、什么假设。
+
+实验 `examples/p7/07_holding_period_toy.py`（天数只按规则原文计算）：
+
+```text
+=== A. short- vs long-term ===
+bought 2025-03-10, sold 2026-03-10: short-term
+bought 2025-03-10, sold 2026-03-11: long-term
+=== B. qualified-dividend holding test (ex-date 2026-03-16) ===
+121-day window: 2026-01-15 to 2026-05-15
+bought 2026-03-01, sold 2026-04-30: 60 days in window -> not more than 60
+bought 2026-03-10, sold 2026-05-10: 61 days in window -> more than 60
+nonresident, 120 days in the US: Pub 519: capital gains generally exempt unless effectively connected; dividends generally 30% or treaty rate
+assertions passed: 6/6
+ASSERT_holding_period_ok
 ```
 
 **中国个人所得税（按审阅报告 R28）：** 居民个人的境内外所得依中国[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)规定纳税（在中国境内有住所，或无住所而一个纳税年度内居住累计满 183 天的个人为居民个人）；涉及无住所个人等情形另依适用规定核对，不仅凭国籍判断。财产转让所得适用 20% 比例税率，应纳税所得额一般为转让收入减财产原值及合理费用后的余额；利息、股息、红利所得亦有 20% 法定比例税率，具体减免/协定与所得性质另核。境外已依法实际缴纳的所得税可在规定限额内抵免，非无条件全额抵免；符合规定的超限部分可向后五个纳税年度结转（[公告 2020 年第 3 号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)）。居民个人取得境外所得原则上于次年 3 月 1 日至 6 月 30 日申报。不能由美国预扣完毕推出中国无需申报或无需补税。
@@ -246,6 +263,7 @@ n_sources=33 us_first_block=19 fields_complete=True
 7. 把现行交易规则套到全部历史回测上；把仍暂缓实施的条文当作已生效。
 8. 只凭交易日期断言券商/账户已迁移到新日内保证金（2026-06-04 至 2027-10-20 有迁移期）；把 5 万美元购汇额度当成境外证券投资许可；以为美国预扣完毕就不用在中国申报。
 9. 说洗售亏损「永久消失」：在普通应税账户里，它会加到新股票的成本里，等新股票卖出时再体现（在 IRA/Roth 里买回是例外）；只检查卖出之后的买入。
+10. 把买入后正好一年卖出当成“长期”（必须超过一年，从买入次日数起）；报税后回测收益却不写清是谁的税、什么假设。
 
 
 ## 练习（1:1）
@@ -284,6 +302,7 @@ n_sources=33 us_first_block=19 fields_complete=True
 <Quiz id="ce-pdt-phase" question="2026-08-01 的一笔交易，券商迁移状态未知，按本课规则函数应输出？" options={["old_pdt", "intraday_margin", "needs_broker_verification", "illegal"]} answer={2} explanation="规则 2026-06-04 生效，但迁移期到 2027-10-20；状态未知时必须核实券商（R04）。" />
 <Quiz id="ce-wash61" question="洗售规则的时间窗口是？" options={["卖出后 30 个营业日", "卖出前后各 30 个日历日，含当日共 61 个日历日", "只看同一天", "T+1 交收日"]} answer={1} explanation="IRC §1091：前 30 日至后 30 日；按日历日计算。" />
 <Quiz id="ce-washbasis" question="按 IRS Pub 550：用 1,000 美元买 100 股，750 美元卖出，30 天内用 800 美元买回 100 股。新股票的成本基础是？" options={["800 美元", "1,050 美元", "750 美元", "1,000 美元"]} answer={1} explanation="被禁止扣除的 250 美元亏损加到新股票 800 美元的成本上。" />
+<Quiz id="ce-holding-period" question="按 IRS Topic 409，2025-03-10 买入的股票，最早哪天卖出才算长期资本利得？" options={["2026-03-11", "2026-03-10", "2025-09-10（半年）", "持有期只看交收日，不看交易日"]} answer={0} explanation="从买入次日数起，必须“超过一年”。2026-03-10 正好一年，不够。" />
 <Quiz id="ce-fx50k" question="个人每年等值 5 万美元购汇便利化额度意味着？" options={["可以自由买美股", "是年度便利额度；额度购汇汇出需真实经常项目用途，不包括投资境外证券", "自动免税", "可替别人购汇"]} answer={1} explanation="外汇局上海/陕西分局 FAQ；不提供任何绕道方案。" />
 
 ## 完成标准

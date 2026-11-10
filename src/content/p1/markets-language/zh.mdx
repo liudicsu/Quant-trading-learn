@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **5 学时**：概念 2h + 练习 2.5h + 测验 0.5h）建立交易研究语言：假设→信号→风险→归因，区分 **Alpha / Beta**，列出市场摩擦，并把 CSV 收盘变成收益与净值。前置：`basic-finance-markets`。
+本课（约 **5.5 学时**：概念 2h + 练习 2.5h + 测验 0.5h + ETF 净值与溢价/折价 0.5h）建立交易研究语言：假设→信号→风险→归因，区分 **Alpha / Beta**，列出市场摩擦，并把 CSV 收盘变成收益与净值。前置：`basic-finance-markets`。
 
 **课内目标：** 三句话研究目标；区分 Alpha/Beta；列出市场摩擦。
 
@@ -38,6 +38,22 @@ beta = cov(r, r_m) / var(r_m);  alpha_d = mean(r) − beta * mean(r_m)
 <Callout type="info" title="美股默认场景（交叉引用）">
 默认市场是**美国上市股票 / 非杠杆 ETF、美元**。上面摩擦清单在美股的具体机制——T+1 交收、现金账户与保证金账户、NBBO/SIP/IEX、交易时段——见 [P1 微观结构与订单](../microstructure-orders/)；FINRA 日内保证金迁移与跨境税务/外汇边界见 [P7 合规](../../paper-ethics/compliance-ethics/)。
 </Callout>
+
+## ETF 的净值与市价（2026-11-10 核实）
+
+**ETF 的净值和市价不是同一个数。** 交易所交易基金（ETF）每个营业日算一次每股净资产（NAV），也就是持仓总值减去负债，再除以份额数。你在券商下单买卖 ETF，成交价是交易所里的市价，市价可以高于 NAV（溢价），也可以低于 NAV（折价）。只有“授权参与者”（AP，一般是大券商）能直接跟基金申购或赎回，而且必须整批做（例如 50,000 份），通常是用一篮子股票换 ETF 份额。市价偏离 NAV 太多时，AP 有套利空间，这种套利会把市价拉回到 NAV 附近（[SEC 投资者公告](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-24)）。美国的 [Rule 6c-11](https://www.ecfr.gov/current/title-17/section-270.6c-11) 要求 ETF 每个营业日在官网免费公布前一营业日的 NAV、市价、溢价/折价，以及最近 30 天的买卖价差中位数。规则把溢价/折价定义为：市价减去当期每股 NAV，再除以 NAV，用百分比表示；这里的“市价”是官方收盘价，或者（如果更能反映 NAV 计算时点的价值）当时全国最优买卖报价（NBBO）的中间价。溢价或折价连续超过 7 个交易日大于 2% 时，基金还要公开说明原因。做回测时要写清你用的是市价收益还是 NAV 收益：按市价成交就用市价，并计入价差。散户不能按 NAV 申购赎回，所以“折价时买、溢价时卖”对你来说不是白赚的套利。
+
+**实验：** `examples/p1/07_etf_nav_letf_toy.py`（合成价格，只用标准库；A 节属于本课，B–C 节属于 `returns-vol-corr`）：
+
+```text
+=== A. premium / discount (Rule 6c-11 definition) ===
+market 50.10 vs NAV 50.00 -> +0.20% (premium)
+market 49.75 vs NAV 50.00 -> -0.50% (discount)
+|prem/disc| 2.1% for 8 days -> statement needed: True
+|prem/disc| 2.1% for 7 days -> statement needed: False
+median bid-ask spread of 5 synthetic quotes: 0.08%
+...
+```
 
 ## 三句话研究目标（模板）
 
@@ -114,6 +130,7 @@ ASSERTS_OK
 3. 不写摩擦清单就宣称可实盘。  
 4. 研究不可复现（无种子、无 CSV、无版本）。  
 5. 用未来收益定义今日信号（lookahead）。
+6. 把 ETF 的市价当成 NAV，或以为自己能按 NAV 成交；按市价成交的回测要用市价并计入价差。
 
 ## 练习（与任务清单 1:1）
 
@@ -130,6 +147,7 @@ ASSERTS_OK
 <Quiz id="q3-goal" question="好的研究目标应优先满足？" options={["听起来复杂", "可检验、含约束与成功标准", "保证盈利", "必须日频"]} answer={1} explanation="可证伪/可检验是研究纪律。" />
 <Quiz id="q4-fric" question="下列哪项通常算市场摩擦？" options={["Benchmark 名称", "买卖价差与滑点", "DatetimeIndex", "夏普公式里的 √252"]} answer={1} explanation="价差/滑点等是执行摩擦。" />
 <Quiz id="q5-repro" question="策略可复现首先需要？" options={["只截图净值", "固定数据版本/种子与代码", "隐藏参数", "只报毛收益"]} answer={1} explanation="他人能从同样输入得到同样输出。" />
+<Quiz id="ml-etf-nav" question="按 Rule 6c-11，ETF 的溢价/折价是怎么定义的？" options={["ETF 当天涨跌幅减去指数涨跌幅", "当天最高价减最低价", "市价相对当期每股 NAV 的差，用 NAV 的百分比表示", "管理费率"]} answer={2} explanation="Rule 6c-11(a)(1)：市价减当期每股 NAV，再用 NAV 的百分比表示；市价指官方收盘价或 NAV 计算时点的 NBBO 中间价。" />
 
 ## 完成标准
 

@@ -20,3 +20,5 @@ Charts land in `public/p2/` (`cost_ladder.png`, `dsr_vs_N.png`, `cost_breakdown.
 - N2 (2026-11-08): `07_rule605_effective_spread.py` — amended Rule 605 (SEC staff FAQ): Example 27-1 effective spread (0.24), Example 38-1 price improvement (0.005699%), toy covered-order filters on a synthetic fixture; signed ES + ratio-of-averages % (R42); NMLO pre-open/halt exceptions incl. first-executable halt test (R43/R47). No 605 field names.
 
 - enrich7 (2026-11-10): `08_dividend_dates_yf_shapes.py` — ex-date = record date under T+1, total vs price-only return, yfinance `auto_adjust` return shapes (11 assertions).
+
+- enrich8 (2026-11-10): `09_filing_dates_toy.py` — 10-K/10-Q statutory deadlines by filer type, EDGAR 5:30 p.m. ET deemed-filing rule, 13F 45 days, period-end trap; weekends only, no holidays (9 assertions). `10_delist_index_pit_toy.py` — delisting return vs last three months, CIZ flags G/M must be handled explicitly, survivor-mean bias, ticker reuse vs PERMNO, Russell December 2026 announcement/effective dates (7 assertions; section D used by `backtest-traps`).

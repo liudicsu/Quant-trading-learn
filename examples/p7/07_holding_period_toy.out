@@ -1,0 +1,11 @@
+=== A. short- vs long-term ===
+bought 2025-03-10, sold 2026-03-10: short-term
+bought 2025-03-10, sold 2026-03-11: long-term
+=== B. qualified-dividend holding test (ex-date 2026-03-16) ===
+121-day window: 2026-01-15 to 2026-05-15
+bought 2026-03-01, sold 2026-04-30: 60 days in window -> not more than 60
+bought 2026-03-10, sold 2026-05-10: 61 days in window -> more than 60
+nonresident, 120 days in the US: Pub 519: capital gains generally exempt unless effectively connected; dividends generally 30% or treaty rate
+assertions passed: 6/6
+ASSERT_holding_period_ok
+disclaimer: general information, not tax advice; does not decide residency or treaty status
