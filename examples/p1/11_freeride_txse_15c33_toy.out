@@ -21,3 +21,16 @@ SIP participant / market-center identifier for TXSE is F; pre-launch tape data w
 customer credits 100000 - debits 40000 -> reserve at least 60000
 the carrying broker must also keep possession or control of fully paid and excess-margin securities; this is separate from SIPC
 assertions passed: 14/14
+=== F. Rule 15c6-1 default and FINRA 11320 delivery-date types ===
+regular way: trade 2026-07-06 delivers on, but not before, 2026-07-07
+cash: delivery on the day of the transaction 2026-07-06
+delayed-delivery: date agreed at the time of the transaction 2026-07-10
+11320(e): contract due 2026-07-11 (not a business day) matures 2026-07-13
+15c6-1(c) firm-commitment offering priced after 4:30 p.m. ET: not forced into (a)'s first-business-day default; up to 2026-07-08 unless otherwise agreed
+T+1 is the 15c6-1(a) default unless the parties expressly agree otherwise at the time of the transaction
+do not write that every trade must settle T+1, that a cash contract settles T+1, or that every IPO or follow-on settles T+2
+current FINRA 11320 has no separate next-day category (amended by SR-FINRA-2023-017 eff. May 28, 2024)
+11320 also lists seller's option and buyer's option; 11320(g)-(h) delivery time-and-place rules exist; this toy is not that engine
+a not-regular-way contract can be a listed Rule 611(b)(2) trade-through exception; that does not make every such print a data error
+assertions passed: 19/19
+disclaimer: learning only; not a UPC or close-out engine; no product or venue recommendation

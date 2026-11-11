@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **17.5 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h + LULD 计划第 VII 节复牌时钟 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **17.75 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h + LULD 计划第 VII 节复牌时钟 0.25h + Cboe Rule 5.1(e)(3) 提前收盘日 Curb 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -263,6 +263,37 @@ OIC 还写明：因为 OCC 会先处理当日的平仓买入，再处理行权�
 
 **版本陷阱：** Cboe 已批准一项规则修改（SR-CBOE-2025-011）：对在全球交易时段（Global Trading Hours）交易的品种，SPX 上午结算期权将在**到期日（通常是周五）上午 9:25 ET**停止交易，VIX 上午结算期权在**上午 9:00 ET**（通常是周三）。24/5 常见问题仍把这项修改标为“**Effective TBD**”（生效日待定）。交易通知写明：“**一旦确定生效日期，将另行发布通知**。”不要写成最后交易日已经改到周五上午 9:25。本课不推荐任何期权或 VIX 产品。
 
+
+**在缩短的常规交易时段日，Cboe 现行 Rule 5.1(e)(3) 为符合 Curb 条件的期权提供 Curb 时段：它从缩短后的常规时段结束时开始，持续 15 分钟（核实于 2026-11-12）。** 紧挨在上面的“Effective TBD”最后交易日那一句保持不变。不要改写它，也不要把这个 Curb 时钟和仍待定的最后交易日变更混在一起。
+
+[SR-CBOE-2026-078 / SEC 34-106620](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-cboe-2026-078)，刊于 [91 FR 64960](https://www.federalregister.gov/documents/2026/10/13/2026-20795/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-and-immediate-effectiveness-of-a)（2026-10-13；SEC 签发日 2026-10-07；提交于 2026-09-25），修订 Rule 5.1(e)，新增 (e)(3)。在缩短常规交易时段的交易日，“**符合 Curb 条件的期权**的 Curb 交易时段，将在缩短后的常规交易时段结束时开始，并持续 **15 分钟（例如，下午 1:00 至下午 1:15）**。” 委员会指定该规则变更**在提交时即开始实施**，并豁免了 30 天实施延迟。这是依据 Rule 19b-4(f)(6) 立即生效的自律组织备案，不是委员会“批准拟议规则变更”的命令；委员会仍可在提交后 60 天内暂时中止该变更（提交于 2026-09-25）。征求意见截止于 2026-11-03。交易所“将根据 Rule 1.5，以通函公布其依据本备案确定的全部时间。”
+
+Cboe 24/5 常见问题和 FIX Holiday Sessions 页面仍然印着操作上的括注“**(effective 11/16/26)**” / “**(Effective 11/16/26)**”。那是交易所公布的操作日期，不能代替规则文本；不要发明另一个交易所生效日。在该公布日期之后、本课已经讲过的*股票*提前收盘日，首先是 **2026-11-27** 和 **2026-12-24**。一句交叉引用：这些日期的股票提前收盘 MOC 截止（纽交所 **12:50 美东**）仍按 `microstructure-orders` 已讲的内容；不要把这个期权 Curb 时钟抄到那些股票 MOC/LOC 截止上，也不要改写那一段。
+
+不要写成每一个期权品种都有 1:00–1:15 的 Curb。官方规则文本针对的是**符合 Curb 条件的期权**；常规交易时段由交易所指定，备案本身还给出了某些 ETF/ETN 类产品常规时段到下午 1:15 的例子。本项不教该备案的其他分支（新的 “GTH Only” / “GTH and RTH Only” 指令、排队开始时点或 DPM 开盘报价文本）。本课不推荐任何期权或时段交易策略。
+
+**实验：** `examples/p6/15_soq_occ_adj_toy.py` 的 D 节（A–C 节，包括 Effective TBD 最后交易日的打印，仍与此前相同，含 8/8；脚本合计 9 条断言）：
+
+```text
+=== D. Early-close Curb under Cboe Rule 5.1(e)(3) ===
+on a shortened-RTH day, Curb for Curb-eligible options starts at the end of shortened RTH and lasts 15 minutes
+official Rule 5.1(e)(3) example: 1:00 p.m. to 1:15 p.m.
+this is not the stock early-close MOC cutoff (NYSE 12:50 p.m. ET on 2026-11-27 and 2026-12-24 remains as taught)
+official text is for Curb-eligible options; do not write that every options class has a 1:00-1:15 Curb
+the filing itself gives a 1:15 p.m. RTH example for certain ETF/ETN-style products
+SR-CBOE-2026-078 / 34-106620 is an immediately effective SRO filing, designated operative upon filing under Rule 19b-4(f)(6); not a Commission approval-of-a-proposed-rule-change order
+the Commission may still temporarily suspend the change within 60 days of filing (filed 2026-09-25); comments were due 2026-11-03
+the Exchange will announce all times it determines pursuant to this filing via a circular, pursuant to Rule 1.5
+Cboe 24/5 FAQ / FIX still print the operational parenthetical (effective 11/16/26) / (Effective 11/16/26); that is the Exchange's published operational date, not a substitute for the rule text
+first already-taught stock early-close days after that published Exchange date: 2026-11-27 and 2026-12-24
+the AM-settled last-trading-day change remains Effective TBD (same FAQ; notice 56357)
+do not invent a different Exchange effective date
+do not copy this Curb clock onto cash-equity early-close MOC/LOC cutoffs
+assertions passed: 9/9
+disclaimer: learning only; not a session-trading engine; no product or strategy recommendation
+```
+
+
 ## OCC 现金股息调整：普通股息无论金额大小一般都不调整合约（核实于 2026-11-12）
 
 ODD 已经写过：一般规则是，普通现金股息不作调整；合约通常是 100 股。OCC 信息备忘录 [＃54262](https://infomemo.theocc.com/infomemos?number=54262)（作为解释性指引提交，SR-OCC-2024-003）是何时才会调整的官方入门读本。
@@ -515,6 +546,7 @@ assertions passed: 5/5
 16. 把上午结算的指数期权按周四收盘价、周五官方指数开盘价或之后的即期点位到期，而不是按 SOQ（SET）；写成最后交易日已经改到周五上午 9:25（该项变更仍是 Effective TBD）。
 17. 把每笔现金股息都当成自动调整期权合约，或把 12.50 美元的测试当成按股计算；以为 150 股合约上的 0.10 美元特别股息，即使标准 100 股合约不调整也一定调整；把发行人写的“特别”，或 FINRA 11140(b) 对 25% 以上股息推迟除息日的规则，当成 OCC 的调整标准。
 18. 以为暂停结束时股票会按最近一笔成交重新打开；把第 VII 节的常规时段时钟抄到隔夜第一阶段；把某一个 Nasdaq Halt Cross 或 NYSE 竞价截止时间写成计划法；把盘中复牌成交当成普通连续竞价成交或穿越数据错误。
+19. 把期权提前收盘日的 Curb 时钟抄到股票提前收盘的 MOC/LOC 截止上；写成每一个期权品种都有 1:00–1:15 的 Curb；把仍是 Effective TBD 的最后交易日变更当成已经生效；发明另一个交易所生效日，或把该备案称为委员会的批准命令。
 
 
 ## 练习（1:1）
@@ -535,6 +567,7 @@ assertions passed: 5/5
 14. **ex-soq** — 运行 `15_soq_occ_adj_toy.py`；写出上午结算指数期权（计划中的 VIX 变更除外）现行的最后交易日，并在周四收盘价、周五官方指数开盘价、之后的即期点位和 SOQ 里指出哪个是结算价；**完成标准**：通常是周四收盘，结算价是 SOQ / SET，与输出一致，并写一句 周五上午 9:25 的变更仍是 Effective TBD。
 15. **ex-occadj** — 用同一段输出，说明 0.10 美元特别股息是否调整 100 股和 150 股合约，以及 0.15 美元特别股息是否调整 100 股和 50 股合约；**完成标准**：否和否；是和否，与 OCC 的计算例子一致。
 16. **ex-reopen** — 运行 `06_luld_halt_toy.py` 的第 4 节；写出宣布暂停五分钟后主上市交易所应做什么、暂停何时结束、十分钟仍无复牌价时如何处理，以及最后十分钟内宣布的暂停是否盘中复牌；**完成标准**：按其既定程序尝试复牌，暂停在报告复牌价时结束，十分钟后且无监管停牌时所有交易中心可以开始交易，最后十分钟不得盘中复牌而应尝试收盘交易，与输出一致。
+17. **ex-earlycurb** — 运行 `15_soq_occ_adj_toy.py` 的 D 节；写出缩短常规时段日里，符合 Curb 条件的期权的 Curb 何时开始、持续多久，以及上午结算最后交易日的变更是否已经生效；**完成标准**：从缩短后的常规时段结束时开始，持续 15 分钟（官方例子 1:00–1:15），且仍是 Effective TBD，与输出一致，并写一句这不是股票 12:50 的 MOC 截止。
 
 
 ## 测验
@@ -558,6 +591,8 @@ assertions passed: 5/5
 <Quiz id="rc-soq" question="标准上午结算 SPX 期权的行权结算价是什么，这类期权目前何时停止交易？" options={["指数在周四的官方收盘价", "周五的官方指数开盘价，或之后任何盘中即期点位", "到期日（通常是第三个周五）成分股官方开盘价算出的特别开盘报价（SOQ，发布为 SET）；目前这类期权通常在到期日前一个营业日（通常是周四）收盘时停止交易。周五上午 9:25 的变更仍是 Effective TBD", "它们已经在周五上午 9:25 ET 停止交易"]} answer={2} explanation="Cboe 的 SOQ 说明：结算价是成分股官方开盘价的特别开盘报价，不是前一日收盘、周五官方指数开盘或之后的即期点位。24/5 常见问题：目前在前一营业日收盘时停止交易；GTH 变更仍是 Effective TBD。" />
 <Quiz id="rc-occadj" question="OCC 通常在什么情况下为上市股票期权的现金股息做调整？" options={["每笔现金股息都下调行权价，下调幅度等于每股股息", "按定期政策支付的普通现金股息无论金额大小都不调整；非普通股息通常只有达到每份合约至少 12.50 美元才调整，发行人写的“特别”没有约束力", "只要 FINRA 11140(b) 因股息达到 25% 或以上而推迟除息日，期权就调整", "150 股合约上的 0.10 美元特别股息一定调整，因为 15 美元超过 12.50 美元，即使标准 100 股合约不调整"]} answer={1} explanation="OCC 信息备忘录 54262：普通股息不引起调整，无论金额大小。12.50 美元测试按合约计算。在 0.10 美元 / 150 股的例子里，因为标准合约未达到门槛，150 股合约也不调整。决定一事一议，发行人的标签没有约束力。" />
 <Quiz id="rc-reopen" question="按 LULD 计划第 VII 节，常规交易时段内宣布交易暂停之后，复牌时钟是怎样的？" options={["暂停结束时，股票会按最近一笔成交重新打开，隔夜第一阶段也一样", "宣布交易暂停五分钟后，主上市交易所应按其既定复牌程序尝试复牌；暂停在其报告复牌价时结束。若十分钟内没有复牌价且未宣布监管停牌，所有交易中心可以开始交易。若暂停是在常规交易时段最后十分钟内宣布的，主上市交易所不得盘中复牌，而应尝试达成收盘交易", "计划把某一个 Nasdaq Halt Cross 截止时间规定为对所有上市地都有效的计划法", "十五分钟后，最近一笔成交成为官方收盘价"]} answer={1} explanation="第 VII 节写明：五分钟后按其既定复牌程序尝试复牌；暂停在报告 Reopening Price 时结束；十分钟内没有复牌价且无监管停牌时，所有交易中心可以开始交易；最后十分钟不得盘中复牌，而应尝试收盘交易。不要把这些时钟抄到隔夜第一阶段，也不要把某一个竞价产品写成计划法。" />
+<Quiz id="rc-earlycurb" question="在缩短的常规交易时段日，Cboe Rule 5.1(e)(3) 对 Curb 时段是怎么规定的？" options={["每一个期权品种都有下午 1:00 至 1:15 的 Curb，而且这也是股票提前收盘日的 MOC 截止", "对符合 Curb 条件的期权，Curb 从缩短后的常规交易时段结束时开始，持续 15 分钟（例如下午 1:00 至 1:15）。这不是股票 12:50 美东的 MOC 截止。上午结算最后交易日的变更仍是 Effective TBD", "上午结算最后交易日的变更已经生效，所以上午结算指数期权已经在周五上午 9:25 停止交易", "委员会发布了批准拟议规则变更的命令，而且交易所常见问题里的日期可以代替规则文本"]} answer={1} explanation="官方 Rule 5.1(e)(3)：在缩短常规时段的交易日，符合 Curb 条件的期权的 Curb 从缩短后的常规时段结束时开始，持续 15 分钟（例子是下午 1:00 至 1:15）。不要把这个时钟抄到股票提前收盘的 MOC 截止上，不要写成每一个期权品种都有这段 Curb，也不要把仍是 Effective TBD 的最后交易日变更当成已经生效。该备案是立即生效并在提交时即开始实施，不是委员会的批准命令。" />
+
 
 ## 完成标准
 
@@ -565,6 +600,7 @@ assertions passed: 5/5
 
 **来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；[Investor.gov：Trading Halts and Delays](https://www.investor.gov/introduction-investing/investing-basics/glossary/trading-halts-and-delays)；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实；第 29 号修正案日期 2026-11-12 再核）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)、[91 FR 65016](https://www.federalregister.gov/documents/2026/10/13/2026-20799/joint-industry-plan-notice-of-filing-and-order-of-summary-effectiveness-on-a-temporary-basis-not-to)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)、[OCC ODD 2024-06 版 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)、[SEC 34-106582（Cboe BZX）](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf) SEC 暂停交易（2026-11-11 核实）：[15 U.S.C. 78l(k)](https://www.law.cornell.edu/uscode/text/15/78l)、[SEC 暂停交易列表](https://www.sec.gov/enforcement-litigation/trading-suspensions)、[SEC 34-106668](https://www.sec.gov/files/litigation/suspensions/2026/34-106668-ts.pdf)。enrich15（2026-11-11 核实）：[OIC 期权行权常见问题](https://www.optionseducation.org/referencelibrary/faq/options-exercise)（引用 OCC Rule 805 及解释 .02）。 enrich16（2026-11-12 核实）：[FINRA Rule 11892](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11892)、[SEC 34-106407](https://www.sec.gov/files/rules/sro/nyse/2026/34-106407.pdf)、[SEC 34-106631](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106631.pdf)、[SEC 34-106604](https://www.sec.gov/files/rules/sro/cboeedgx/2026/34-106604.pdf)、[SEC 34-106727](https://www.sec.gov/files/rules/sro/memx/2026/34-106727.pdf)、[SEC 34-106649](https://www.sec.gov/files/rules/sro/ltse/2026/34-106649.pdf)、[OIC 期权指派常见问题](https://www.optionseducation.org/referencelibrary/faq/options-assignment)。enrich17（2026-11-12 核实）：[Cboe，标准上午结算标普 500 指数期权的结算](https://cdn.cboe.com/resources/spx/Settlement_of_Standard_AM_Settled_SP_500_Index_Options.pdf)、[Cboe SOQ 概述](https://cdn.cboe.com/api/global/us_indices/governance/SOQ-Settlement-of-Standard-AM-Settled-Index-Futures-and-Options.pdf)、[Cboe 期权交易所 24/5 常见问题](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-options-exchange-245-faq/)、[Cboe 通知：更新上午结算指数期权收盘时间](https://www.cboe.com/notices/content/?id=56357)、[OCC 信息备忘录 #54262](https://infomemo.theocc.com/infomemos?number=54262)。
  enrich20（核实于 2026-11-12）：LULD 计划第 VII 节（只用第 VII 节；不教 2016 年汇编里的第一阶段时段）；[luldplan.com](https://www.luldplan.com/)（2019-04-11 起为永久性规则；适用于 9:30–16:00 ET 常规交易时段）。
+ enrich21（核实于 2026-11-12）：[91 FR 64960](https://www.federalregister.gov/documents/2026/10/13/2026-20795/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-and-immediate-effectiveness-of-a) / [govinfo PDF](https://www.govinfo.gov/content/pkg/FR-2026-10-13/pdf/2026-20795.pdf)（SR-CBOE-2026-078 / 34-106620；Rule 5.1(e)(3) 符合 Curb 条件的期权在提前收盘日的 Curb，持续 15 分钟，例如下午 1:00 至 1:15；指定在提交时即开始实施）；[SEC SR-CBOE-2026-078](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-cboe-2026-078)（评论截止 2026-11-03）；Cboe 24/5 常见问题和 FIX 假期时段页仍印有“(effective 11/16/26)” / “(Effective 11/16/26)”；最后交易日变更仍是 Effective TBD。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

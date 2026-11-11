@@ -106,3 +106,53 @@ print(f"customer credits {credits:.0f} - debits {debits:.0f} -> reserve at least
 check(reserve == 60_000.0, "reserve")
 print("the carrying broker must also keep possession or control of fully paid and excess-margin securities; this is separate from SIPC")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== F. Rule 15c6-1 default and FINRA 11320 delivery-date types ===")
+# 17 CFR 240.15c6-1(a): except as provided in (b), (c), and (d), a broker or
+# dealer shall not effect or enter into a contract for the purchase or sale of
+# a security ... that provides for payment of funds and delivery of securities
+# later than the first business day after the date of the contract unless
+# otherwise expressly agreed to by the parties at the time of the transaction.
+# 15c6-1(c): contracts for the sale for cash of securities that are priced
+# after 4:30 p.m. Eastern Time (ET) on the date such securities are priced and
+# that are sold by an issuer to an underwriter pursuant to a firm commitment
+# underwritten offering ... are not under (a); the dealer shall not enter a
+# contract for those securities later than the second business day after the
+# date of the contract unless otherwise expressly agreed ... at the time of
+# the transaction.
+# FINRA Rule 11320 (Dates of Delivery), amended by SR-FINRA-2023-017 eff.
+# May 28, 2024: (a) cash — delivery on the day of the transaction; (b) regular
+# way — on, but not before, the first business day following the date of the
+# transaction; (c) seller's option; (d) buyer's option; (f) delayed-delivery —
+# on the date agreed upon at the time for the transaction; (e) contracts due
+# on a day other than a business day shall mature on the next business day.
+# Current 11320 has no separate "next day" category; do not invent one.
+# 11320(g)–(h) delivery time-and-place rules exist; this toy is not a UPC or
+# close-out engine. Learning only; no product or venue recommendation.
+
+trade = date(2026, 7, 6)  # Monday
+regular_way = add_weekdays(trade, 1)
+cash_day = trade
+agreed = date(2026, 7, 10)  # Friday, agreed at the time of the transaction
+print(f"regular way: trade {trade} delivers on, but not before, {regular_way}")
+check(regular_way == date(2026, 7, 7), "regular way is first business day after the trade date")
+print(f"cash: delivery on the day of the transaction {cash_day}")
+check(cash_day == trade, "cash delivers the same day, not T+1")
+print(f"delayed-delivery: date agreed at the time of the transaction {agreed}")
+check(agreed == date(2026, 7, 10), "delayed-delivery uses the agreed date")
+due_sat = date(2026, 7, 11)  # Saturday
+mature = due_sat
+while mature.weekday() >= 5:
+    mature += timedelta(days=1)
+print(f"11320(e): contract due {due_sat} (not a business day) matures {mature}")
+check(mature == date(2026, 7, 13), "non-business-day due date rolls to the next business day")
+after_430_cap = add_weekdays(trade, 2)
+print(f"15c6-1(c) firm-commitment offering priced after 4:30 p.m. ET: not forced into (a)'s first-business-day default; up to {after_430_cap} unless otherwise agreed")
+check(after_430_cap == date(2026, 7, 8), "paragraph (c) allows up to the second business day")
+print("T+1 is the 15c6-1(a) default unless the parties expressly agree otherwise at the time of the transaction")
+print("do not write that every trade must settle T+1, that a cash contract settles T+1, or that every IPO or follow-on settles T+2")
+print("current FINRA 11320 has no separate next-day category (amended by SR-FINRA-2023-017 eff. May 28, 2024)")
+print("11320 also lists seller's option and buyer's option; 11320(g)-(h) delivery time-and-place rules exist; this toy is not that engine")
+print("a not-regular-way contract can be a listed Rule 611(b)(2) trade-through exception; that does not make every such print a data error")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: learning only; not a UPC or close-out engine; no product or venue recommendation")

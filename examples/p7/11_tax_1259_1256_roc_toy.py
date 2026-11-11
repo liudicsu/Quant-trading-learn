@@ -232,3 +232,87 @@ print("affiliated-corporation exceptions exist in 165(g)(3); this toy is not tha
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
 
+
+print("=== G. Pub 550 investment interest (including margin-account interest) ===")
+# IRS Publication 550 (2025), Chapter 3, "Investment Interest": "If you borrow
+# money to buy property you hold for investment, the interest you pay is
+# investment interest. You can deduct investment interest subject to the limit
+# discussed later. However, you cannot deduct interest you incurred to produce
+# tax-exempt income." "Investment interest does not include any qualified home
+# mortgage interest or any interest taken into account in computing income or
+# loss from a passive activity." "Interest on margin accounts. If you are a
+# cash method taxpayer, you can deduct interest on margin accounts to buy
+# taxable securities as investment interest in the year you paid it. You are
+# considered to have paid interest on these accounts only when you actually
+# pay the broker or when payment becomes available to the broker through your
+# account." "Generally, your deduction for investment interest expense is
+# limited to your net investment income." "You can carry over the amount of
+# investment interest you could not deduct because of this limit to the next
+# tax year. The interest carried over is treated as investment interest paid
+# or accrued in that next year." Official allocation Example 1: borrow $10,000,
+# use $8,000 to buy stock and $2,000 for home items → 80% is investment
+# interest. Name that allocation rules exist; this toy is not an allocation
+# engine. Do not write that all margin interest is always fully deductible in
+# the year the broker posts it. Do not confuse this with qualified home-
+# mortgage interest, or with the already-taught $3,000 / $1,500 capital-loss
+# cap. Do not compute a named person's deduction or recommend leverage.
+# General information, not tax advice. Backtests stay pre-tax unless labelled
+# otherwise.
+
+print("interest paid on money borrowed to buy property held for investment is investment interest")
+print("margin-account interest to buy taxable securities is investment interest")
+print("cash-method: deductible in the year you paid it, or when payment becomes available to the broker")
+print("generally limited to net investment income; disallowed amount carries over to the next year")
+interest, nii = 5000, 3000  # unlabeled teaching arithmetic, not a named person
+deduct = min(interest, nii)
+carry = interest - deduct
+print(f"teaching arithmetic, not a named person: investment interest {interest}, net investment income {nii} -> deduct {deduct}, carry over {carry}")
+check((deduct, carry) == (3000, 2000), "limit is net investment income; remainder carries over")
+print("official allocation Example 1: borrow $10,000, use $8,000 to buy stock and $2,000 for home items -> 80% is investment interest")
+check(8000 / 10000 == 0.8, "official $8,000 / $2,000 allocation example")
+print("allocation rules exist when a loan is mixed-use; this toy is not an allocation engine")
+print("do not write that all margin interest is always fully deductible in the year the broker posts it")
+print("this is not qualified home-mortgage interest, and it is not the already-taught $3,000 / $1,500 capital-loss cap")
+
+print("=== H. Pub 550 stock dividends and stock rights ===")
+# IRS Publication 550 (2025), "Distributions of Stock and Stock Rights":
+# "Distributions by a corporation of its own stock are commonly known as stock
+# dividends. Stock rights (known as 'stock options') are distributions by a
+# corporation of rights to acquire the corporation's stock. Generally, stock
+# dividends and stock rights are not taxable to you, and you do not report
+# them on your return." Official exceptions exist (choice of cash or other
+# property; disproportionate distributions; certain preferred-stock
+# distributions; constructive distributions); name them, do not build a
+# taxability engine. Basis, when the new stock received as a nontaxable
+# dividend is identical to the old stock: "divide the adjusted basis of the
+# old stock by the number of shares of old and new stock." Official Example 1:
+# "You owned one share of common stock that you bought for $45. The
+# corporation distributed two new shares of common stock for each share held.
+# You then had three shares of common stock. Your basis in each share is $15
+# ($45 ÷ 3)." "The holding period for new stock you received as a nontaxable
+# stock dividend begins on the same day as the holding period of the old
+# stock. This rule also applies to stock acquired in a spin-off." "Any cash
+# you receive for fractional shares under such a plan is treated as an amount
+# realized on the sale of the fractional shares." Do not leave the old
+# per-share basis unchanged. Do not start a new holding period on the
+# distribution date. Do not treat fractional-share cash as a cash dividend,
+# QDI, or 1099-DIV box 3 return of capital. Pub 550's parenthetical that
+# stock rights are "known as 'stock options'" is official language; do not
+# confuse those rights with listed call or put options, or with intermarket
+# sweep orders (ISO). General information, not tax advice.
+
+old_basis, old_shares, new_per_old = 45, 1, 2
+total_shares = old_shares * (1 + new_per_old)
+basis_each = old_basis / total_shares
+print("Pub 550 Example 1: one share bought for $45; corporation distributed two new shares for each share held")
+print(f"three shares after the distribution; basis in each share is ${basis_each:.0f} ($45 / 3)")
+check(total_shares == 3 and basis_each == 15, "Example 1: three shares at $15 each")
+print("holding period of the nontaxable new stock begins on the same day as the old stock (also applies to stock acquired in a spin-off)")
+print("fractional-share cash under a sell-the-fraction plan is an amount realized on the sale of the fractional shares, not a cash dividend, not QDI, and not 1099-DIV box 3 return of capital")
+print("generally, stock dividends and stock rights are not taxable, and you do not report them on your return")
+print("official exceptions exist (choice of cash or other property; disproportionate distributions; certain preferred-stock distributions; constructive distributions); this toy is not a taxability engine")
+print("Pub 550 also writes that stock rights are known as 'stock options'; do not confuse those rights with listed call or put options, or with ISO")
+print("do not leave the old per-share basis unchanged after a nontaxable identical-stock dividend")
+print("do not start a new holding period on the distribution date for nontaxable new shares")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")

@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**9 hours**: 3h formulas + 4h coding + 1h quiz + 0.5h leveraged/inverse ETF daily reset + 0.5h risk-free rate from T-bill quotes) implements annualized vol, Sharpe, max drawdown (MDD), and plots rolling vol plus stress-period correlation. Prereqs: pandas time series, stats basics, markets language.
+This lesson (~**9.25 hours**: 3h formulas + 4h coding + 1h quiz + 0.5h leveraged/inverse ETF daily reset + 0.5h risk-free rate from T-bill quotes + 0.25h NY Fed SOFR publication timestamp) implements annualized vol, Sharpe, max drawdown (MDD), and plots rolling vol plus stress-period correlation. Prereqs: pandas time series, stats basics, markets language.
 
 **Goals:** annualize vol correctly; implement Sharpe and MDD; show rolling corr rising in stress.
 
@@ -52,6 +52,33 @@ assertions passed: 7/7
 ASSERT_tbill_rf_ok
 disclaimer: synthetic rates; T-bill is a teaching proxy; no Treasury data downloaded; learning only
 ```
+
+
+**SOFR is published at approximately 8:00 a.m. ET, one business day after its value date (checked 2026-11-12).** The T-bill point-in-time rule above stays as already taught: a ~15:30 ET quote on day t applies from day t+1. Do not rewrite that paragraph, and do not copy that sentence onto SOFR.
+
+The New York Fed [SOFR](https://www.newyorkfed.org/markets/reference-rates/sofr) page: “Each business day, the New York Fed publishes the SOFR on the New York Fed website at **approximately 8:00 a.m. ET**.” Official [Additional Information about Reference Rates](https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates): “the **SOFR is published one business day following its value date** (the day when overnight trades were negotiated).” Official example on the same page: “The first SOFR was published on 4/3/2018 for the value date of 4/2/2018.” Same-day revisions “may be revised at **approximately 2:30 p.m. ET**” and “will only occur if the change in the rate exceeds one basis point and only on the same day as initial publication.” Contrast, do not conflate: the **EFFR and OBFR** “will be published at approximately **9:00 a.m. ET** each business day” that is not on the NY Fed holiday schedule.
+
+**Look-ahead:** regular US equity trading opens at 09:30 ET, so the SOFR published at about 8:00 a.m. today — which is the **prior business day’s** value date — is already out and can be used at that day’s regular open. The SOFR whose value date is *today* is published at about 8:00 a.m. on the *next* business day and cannot be used this morning. Do not treat 8:00 a.m. as after the 9:30 open. Do not write that every NY Fed reference rate is published at 8:00 a.m. Do not invent a G.19 clock, a first-Friday rule, or a SOFR trading strategy. SOFR is a teaching rate timestamp, not “the” correct risk-free rate; whatever proxy you use, write it down.
+
+**Lab:** section D of `examples/p1/08_tbill_rf_toy.py` (sections A–C, including the 15:30 T-bill prints, still print as before, including 7/7; script total 9 assertions):
+
+```text
+=== D. NY Fed SOFR: published ~8:00 a.m. ET one business day after the value date ===
+Each business day, the New York Fed publishes the SOFR at approximately 8:00 a.m. ET
+the SOFR is published one business day following its value date (the day when overnight trades were negotiated)
+official example: first SOFR published 2018-04-03 for value date 2018-04-02
+Monday 2026-11-09 value-date SOFR is published 2026-11-10 at about 8:00 a.m. ET
+that Tuesday 8:00 a.m. print can fill at Tuesday's 09:30 ET open: yes
+Tuesday 2026-11-10 value-date SOFR is published the next business day and cannot be used Tuesday morning
+same-day revisions may occur at approximately 2:30 p.m. ET only if the change exceeds one basis point, only on the same day as initial publication
+contrast: EFFR and OBFR are published at approximately 9:00 a.m. ET; do not write that every NY Fed reference rate is published at 8:00 a.m.
+do not copy the T-bill '~15:30 ET quote on day t applies from day t+1' sentence onto SOFR
+do not treat 8:00 a.m. as after the 9:30 open
+SOFR is a teaching rate timestamp, not the only correct risk-free proxy; whatever proxy you use, write it down
+assertions passed: 9/9
+disclaimer: synthetic dates; SOFR is a teaching timestamp; no NY Fed data downloaded; learning only
+```
+
 
 ## Max drawdown (path-dependent)
 
@@ -141,6 +168,7 @@ ASSERT_etf_nav_letf_ok
 5. Treating tiny rolling windows as precise truth.
 6. Backtesting a 2x or inverse ETF held for weeks as "index return × 2" instead of compounding daily.
 7. Using a T-bill's quoted discount rate as its yield; subtracting day t's rate (quoted about 15:30 ET) from day t's return.
+8. Copying the T-bill “~15:30 ET quote on day t applies from day t+1” sentence onto SOFR; treating 8:00 a.m. as after the 9:30 open; writing that every NY Fed reference rate is published at 8:00 a.m.
 
 ## Practice (1:1 with the checklist)
 
@@ -150,6 +178,7 @@ ASSERT_etf_nav_letf_ok
 4. **ex4** — Sharpe at Rf=0 and Rf_daily=0.0001; **done when** both numbers and params are written.
 5. **ex5** — Three sentences on path dependence; **done when** order/peaks are mentioned.
 6. **ex-rf** (optional) — run `08_tbill_rf_toy.py`, then change the discount rate to 5.00%; **done when**: you print the new price and simple 365-day yield and say why the yield is above 5.00%.
+7. **ex-sofr** — Run section D of the same script; state when Monday’s value-date SOFR is published, whether it can fill at Tuesday’s 09:30 open, and whether Tuesday’s value-date SOFR can be used Tuesday morning; **done when**: published Tuesday about 8:00 a.m., yes at Tuesday’s open, and no Tuesday morning, matching the output.
 
 ## Quiz
 
@@ -160,12 +189,15 @@ ASSERT_etf_nav_letf_ok
 <Quiz id="q5-rf" question="This lesson’s teaching Sharpe default Rf?" options={["Must be 5%", "0, and must be declared", "Equal to σ", "Equal to Alpha"]} answer={1} explanation="Rf=0 is a teaching convention." />
 <Quiz id="rv-letf-reset" question="An index moves −10% then +10% (1000→900→990). A 2x ETF that hits its daily target exactly starts at 1000. Where is it after two days?" options={["960", "980", "990", "1000"]} answer={0} explanation="Day 1: 1000 × 0.8 = 800. Day 2: 800 × 1.2 = 960 (the SEC bulletin's own example)." />
 <Quiz id="rv-tbill-rf" question="A T-bill shows 4.00% in Treasury's 'BANK DISCOUNT' column. Which statement is right?" options={["It is the annualized yield to maturity", "It uses a 360-day year and divides by face value, so the yield based on price is slightly above 4.00%", "It is already net of inflation", "It is the opening rate, usable for the same day's return"]} answer={1} explanation="91 days at 4.00% gives a price of 989.8889 and a simple 365-day yield of 4.0970%; the quote is taken around 15:30 ET, so use it from the next day." />
+<Quiz id="rv-sofr" question="When is the SOFR published, and can you use “today’s SOFR” at this morning’s 09:30 ET open?" options={["SOFR uses the same clock as T-bills: a ~15:30 ET quote on day t applies from day t+1, so it cannot fill at the next morning’s open", "Every NY Fed reference rate, including EFFR and OBFR, is published at approximately 8:00 a.m. ET", "The 8:00 a.m. print is after the 9:30 open, so yesterday’s SOFR cannot be used at today’s open", "Each business day the New York Fed publishes the SOFR at approximately 8:00 a.m. ET, one business day after its value date. Yesterday’s SOFR, published at about 8:00 a.m. today, can fill at today’s 09:30 open; today’s value-date SOFR is published the next business day and cannot be used this morning. EFFR and OBFR are published at approximately 9:00 a.m. ET"]} answer={3} explanation="Official NY Fed text: SOFR is published at approximately 8:00 a.m. ET, one business day after its value date. That 8:00 a.m. print is already out before the 9:30 open, so yesterday’s SOFR can fill at today’s open; today’s value-date SOFR cannot. Do not copy the T-bill 15:30 clock onto SOFR, and do not write that every NY Fed rate is published at 8:00 a.m." />
+
 
 ## Done when
 
 - Reusable metric helpers + both plots + quizzes
 
 **Sources:** classic — Canvas m3; QuantStart performance; Chinese supplement: JoinQuant returns/risk tutorial. Risk-free rate (checked 2026-11-10): [TreasuryDirect pricing](https://www.treasurydirect.gov/marketable-securities/understanding-pricing/), [Treasury interest rate statistics](https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics).
+ enrich21 (checked 2026-11-12): [NY Fed SOFR](https://www.newyorkfed.org/markets/reference-rates/sofr) (published at approximately 8:00 a.m. ET each business day); [Additional Information about Reference Rates](https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates) (published one business day following the value date; official first SOFR 4/3/2018 for 4/2/2018; same-day revisions at approximately 2:30 p.m. ET only if the change exceeds one basis point; EFFR and OBFR at approximately 9:00 a.m. ET).
 
 <Summary>
 **Takeaways**: √252 annualization, Sharpe with declared Rf, path-dependent MDD, stress rolling corr.  

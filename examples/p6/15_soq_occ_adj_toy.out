@@ -33,3 +33,19 @@
   do not treat FINRA 11140(b) 25%+ ex-date deferral as an options-adjustment test
 assertions passed: 8/8
 disclaimer: learning only; not a settlement or adjustment engine; no product recommendation
+=== D. Early-close Curb under Cboe Rule 5.1(e)(3) ===
+on a shortened-RTH day, Curb for Curb-eligible options starts at the end of shortened RTH and lasts 15 minutes
+official Rule 5.1(e)(3) example: 1:00 p.m. to 1:15 p.m.
+this is not the stock early-close MOC cutoff (NYSE 12:50 p.m. ET on 2026-11-27 and 2026-12-24 remains as taught)
+official text is for Curb-eligible options; do not write that every options class has a 1:00-1:15 Curb
+the filing itself gives a 1:15 p.m. RTH example for certain ETF/ETN-style products
+SR-CBOE-2026-078 / 34-106620 is an immediately effective SRO filing, designated operative upon filing under Rule 19b-4(f)(6); not a Commission approval-of-a-proposed-rule-change order
+the Commission may still temporarily suspend the change within 60 days of filing (filed 2026-09-25); comments were due 2026-11-03
+the Exchange will announce all times it determines pursuant to this filing via a circular, pursuant to Rule 1.5
+Cboe 24/5 FAQ / FIX still print the operational parenthetical (effective 11/16/26) / (Effective 11/16/26); that is the Exchange's published operational date, not a substitute for the rule text
+first already-taught stock early-close days after that published Exchange date: 2026-11-27 and 2026-12-24
+the AM-settled last-trading-day change remains Effective TBD (same FAQ; notice 56357)
+do not invent a different Exchange effective date
+do not copy this Curb clock onto cash-equity early-close MOC/LOC cutoffs
+assertions passed: 9/9
+disclaimer: learning only; not a session-trading engine; no product or strategy recommendation

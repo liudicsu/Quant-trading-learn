@@ -60,3 +60,25 @@ this is a tax-character clock, not the already-taught delisting return
 affiliated-corporation exceptions exist in 165(g)(3); this toy is not that engine
 assertions passed: 9/9
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== G. Pub 550 investment interest (including margin-account interest) ===
+interest paid on money borrowed to buy property held for investment is investment interest
+margin-account interest to buy taxable securities is investment interest
+cash-method: deductible in the year you paid it, or when payment becomes available to the broker
+generally limited to net investment income; disallowed amount carries over to the next year
+teaching arithmetic, not a named person: investment interest 5000, net investment income 3000 -> deduct 3000, carry over 2000
+official allocation Example 1: borrow $10,000, use $8,000 to buy stock and $2,000 for home items -> 80% is investment interest
+allocation rules exist when a loan is mixed-use; this toy is not an allocation engine
+do not write that all margin interest is always fully deductible in the year the broker posts it
+this is not qualified home-mortgage interest, and it is not the already-taught $3,000 / $1,500 capital-loss cap
+=== H. Pub 550 stock dividends and stock rights ===
+Pub 550 Example 1: one share bought for $45; corporation distributed two new shares for each share held
+three shares after the distribution; basis in each share is $15 ($45 / 3)
+holding period of the nontaxable new stock begins on the same day as the old stock (also applies to stock acquired in a spin-off)
+fractional-share cash under a sell-the-fraction plan is an amount realized on the sale of the fractional shares, not a cash dividend, not QDI, and not 1099-DIV box 3 return of capital
+generally, stock dividends and stock rights are not taxable, and you do not report them on your return
+official exceptions exist (choice of cash or other property; disproportionate distributions; certain preferred-stock distributions; constructive distributions); this toy is not a taxability engine
+Pub 550 also writes that stock rights are known as 'stock options'; do not confuse those rights with listed call or put options, or with ISO
+do not leave the old per-share basis unchanged after a nontaxable identical-stock dividend
+do not start a new holding period on the distribution date for nontaxable new shares
+assertions passed: 12/12
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise

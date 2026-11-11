@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **23.5 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **24 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -277,6 +277,47 @@ disclaimer: general information, not tax advice; backtests stay pre-tax unless l
 ```
 
 
+**为购买并持有投资财产而借入资金所支付的利息 — 包括为购买应税证券而支付的保证金账户利息 — 是投资利息，一般以净投资所得为限，超出部分可以结转（核实于 2026-11-12；一般信息，不是税务建议）。** 已经讲过的 Regulation T / FINRA 4210 保证金，以及 3,000 / 1,500 美元的资本亏损上限，保持不变。这是下一项官方 Publication 550 事实。不要把这两个上限混为一谈。
+
+[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) 第 3 章 “Investment Interest”：“如果你借钱购买并持有投资财产，你支付的利息就是投资利息。” “投资利息不包括任何合格住房抵押贷款利息，也不包括在计算消极活动损益时已经计入的利息。” “如果你是现金收付制纳税人，为购买应税证券而支付的保证金账户利息，可以作为投资利息在你支付的那一年扣除。只有在你实际向经纪商付款，或款项通过你的账户可供经纪商使用时，才视为已经支付。” “一般而言，投资利息费用的扣除以净投资所得为限。” “因为这项限制而未能扣除的投资利息，可以结转到下一纳税年度。” 如果一笔贷款部分用于投资、部分用于个人或经营，需要按规则分摊（官方例子 1：借入 10,000 美元，用 8,000 美元买股票、2,000 美元买家用物品，因此 80% 是投资利息）；点名这些规则存在，不搭建分摊引擎。
+
+不要写成所有保证金利息都在经纪商入账的那一年全部可扣。不要把投资利息当成合格住房抵押贷款利息，或当成资本亏损扣除。不要计算某个具名个人的扣除额，也不要推荐加杠杆。回测除非另行标明，否则保持税前。
+
+**公司按比例分配自己的股票，一般不纳税；要把原来的成本基础分摊到新旧股份上，而且新股的持有期与旧股从同一天起算（核实于 2026-11-12；一般信息，不是税务建议）。** 股票股利的*除息日*和价格调整路径，已经在 `data-cleaning` 讲过。资本返还 / 1099-DIV 第 3 栏也已在上文讲过。这里补的是官方税务性质和成本基础事实。
+
+[Pub 550（2025）](https://www.irs.gov/publications/p550)，“Distributions of Stock and Stock Rights”：“公司分配自己的股票，通常称为股票股利。股票认股权（官方文本称为 ‘stock options’）是公司分配的、用以取得本公司股票的权利。**一般而言，股票股利和股票认股权对你不纳税，你也不必在申报表上报告。**” 官方例外是存在的，应当点名它们存在，而不是做成判定引擎（股东可以选择现金或其他财产；不成比例的分配；某些优先股分配；推定分配）。如果作为非应税股利收到的新股与旧股相同：“用旧股调整后的成本基础，除以新旧股份的总股数。” 官方例子 1：“你持有一股普通股，买进成本 45 美元。公司按每持有一股分配两股新的普通股。你随后持有三股普通股。每股的成本基础是 15 美元（45 ÷ 3）。” “你作为非应税股票股利收到的新股，其持有期与旧股从同一天开始。这一规则也适用于在分拆中取得的股票……。” “在这类卖出零股的安排下，你因零股而收到的任何现金，视为出售这些零股的实现金额。”
+
+不要把按比例的股票股利当成现金所得，或当成 1099-DIV 第 3 栏的资本返还。不要在非应税、且新旧股相同的股票股利之后，仍沿用原来的每股成本基础。不要把非应税新股的持有期从分配日起重新起算。不要把零股现金当成合格股息。Pub 550 把股票认股权称为 “stock options”，这是官方用语；不要把它和上市的看涨/看跌期权，或跨市场扫单（ISO）混为一谈。本课不搭建可税性引擎。不是税务建议，也不计算某个具名个人的税额。
+
+**实验：** `examples/p7/11_tax_1259_1256_roc_toy.py` 的 G–H 节（A–F 节仍与此前相同，包括资本亏损上限、Ace 卖空和无价值证券年末出售的打印及 9/9；脚本合计 12 条断言；一般信息，不是税务建议）：
+
+```text
+=== G. Pub 550 investment interest (including margin-account interest) ===
+interest paid on money borrowed to buy property held for investment is investment interest
+margin-account interest to buy taxable securities is investment interest
+cash-method: deductible in the year you paid it, or when payment becomes available to the broker
+generally limited to net investment income; disallowed amount carries over to the next year
+teaching arithmetic, not a named person: investment interest 5000, net investment income 3000 -> deduct 3000, carry over 2000
+official allocation Example 1: borrow $10,000, use $8,000 to buy stock and $2,000 for home items -> 80% is investment interest
+allocation rules exist when a loan is mixed-use; this toy is not an allocation engine
+do not write that all margin interest is always fully deductible in the year the broker posts it
+this is not qualified home-mortgage interest, and it is not the already-taught $3,000 / $1,500 capital-loss cap
+=== H. Pub 550 stock dividends and stock rights ===
+Pub 550 Example 1: one share bought for $45; corporation distributed two new shares for each share held
+three shares after the distribution; basis in each share is $15 ($45 / 3)
+holding period of the nontaxable new stock begins on the same day as the old stock (also applies to stock acquired in a spin-off)
+fractional-share cash under a sell-the-fraction plan is an amount realized on the sale of the fractional shares, not a cash dividend, not QDI, and not 1099-DIV box 3 return of capital
+generally, stock dividends and stock rights are not taxable, and you do not report them on your return
+official exceptions exist (choice of cash or other property; disproportionate distributions; certain preferred-stock distributions; constructive distributions); this toy is not a taxability engine
+Pub 550 also writes that stock rights are known as 'stock options'; do not confuse those rights with listed call or put options, or with ISO
+do not leave the old per-share basis unchanged after a nontaxable identical-stock dividend
+do not start a new holding period on the distribution date for nontaxable new shares
+assertions passed: 12/12
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+```
+
+
+
 
 **中国个人所得税（按审阅报告 R28）：** 居民个人的境内外所得依中国[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)规定纳税（在中国境内有住所，或无住所而一个纳税年度内居住累计满 183 天的个人为居民个人）；涉及无住所个人等情形另依适用规定核对，不仅凭国籍判断。财产转让所得适用 20% 比例税率，应纳税所得额一般为转让收入减财产原值及合理费用后的余额；利息、股息、红利所得亦有 20% 法定比例税率，具体减免/协定与所得性质另核。境外已依法实际缴纳的所得税可在规定限额内抵免，非无条件全额抵免；符合规定的超限部分可向后五个纳税年度结转（[公告 2020 年第 3 号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)）。居民个人取得境外所得原则上于次年 3 月 1 日至 6 月 30 日申报。不能由美国预扣完毕推出中国无需申报或无需补税。
 
@@ -507,6 +548,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 20. 写成 7,000 美元的净资本亏损全部进入同一年的应税所得；为短期和长期发明不同的年度上限；漏掉已婚分开报税的 1,500 美元。
 21. 写成空头开了超过一年就自动是长期；把开仓日当成所交付财产持有期的起算日；把卖空的一般规则与 §1259 混为一谈。
 22. 把破产申请日、停牌日或退市日当成无价值证券的税务出售日；把已经讲过的退市收益和这个税务性质时钟混为一谈。
+23. 写成所有保证金利息都在经纪商入账的那一年全部可扣；把投资利息和合格住房抵押贷款利息混为一谈，或和已经讲过的 3,000 / 1,500 美元资本亏损上限混为一谈。
+24. 把按比例的股票股利当成现金所得或当成 1099-DIV 第 3 栏的资本返还；在非应税且新旧股相同的股票股利之后仍沿用原来的每股成本基础；把非应税新股的持有期从分配日起重新起算；把零股现金当成合格股息。
 
 ## 练习（1:1）
 
@@ -530,6 +573,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 16. **ex-caploss** — 运行 `11_tax_1259_1256_roc_toy.py` 的 D 节；写出 Bob 和 Shelly 在合并申报下 7,000 美元亏损的可扣除额和结转额，以及 2,000 美元净亏损的处理；**完成标准**：可扣除 3,000 美元、结转 4,000 美元，2,000 美元亏损可全部扣除且没有结转，与输出一致。
 17. **ex-shorttax** — 运行同一脚本的 E 节；说明 Ace 例子里，空头开了 13 个月后买入并立即交付，损益何时实现、税务性质是什么；**完成标准**：交付时才实现，因所交付财产持有期不到 1 天而为短期，与输出一致。
 18. **ex-worthless** — 运行同一脚本的 F 节；写出 2026 年日历年度纳税人的无价值证券视为出售日；**完成标准**：2026-12-31，与输出一致。
+19. **ex-invint** — 运行同一脚本的 G 节；说明为购买应税证券支付的保证金利息是不是投资利息、扣除受什么限制，以及未能扣除的部分如何处理；**完成标准**：是投资利息，一般以净投资所得为限，其余结转，与输出一致。
+20. **ex-stodiv** — 运行同一脚本的 H 节；写出 Pub 550 例子 1 里的每股成本基础、新股持有期从哪一天开始，以及零股现金是不是股息；**完成标准**：15 美元，与旧股同一天开始，是出售而不是股息，与输出一致。
 
 ## 测验
 
@@ -569,6 +614,9 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-caploss" question="按 IRS Publication 550（2025），若资本亏损超过资本利得，可抵扣所得的金额是多少？剩下的怎么办？" options={["7,000 美元的净资本亏损全部进入同一年的应税所得，未用完的亏损结转时会改变性质", "短期亏损的上限是 3,000 美元，长期亏损是另一个数字", "可允许的扣除是 3,000 美元（已婚分开报税则为 1,500 美元）与全部净亏损二者中较小的一个。未用完的亏损向后结转，并保持长期或短期性质。官方 Bob 和 Shelly 的例子里，合并申报的 7,000 美元亏损扣除 3,000 美元、结转 4,000 美元；2,000 美元净亏损可全部扣除，没有结转。这是一般信息，不是税务建议", "不论报税身份，年度上限都是 3,000 美元，包括已婚分开报税"]} answer={2} explanation="Pub 550（2025）的 “Limit on deduction” 和 “Capital loss carryover”：上限是 3,000 美元（已婚分开报税为 1,500 美元）与全部净亏损中较小的一个；结转保持其长期或短期性质。官方例子是 7,000 美元 → 扣除 3,000、结转 4,000；2,000 美元可全部扣除。没有单独的短期 / 长期上限。" />
 <Quiz id="ce-shorttax" question="按 IRS Publication 550（2025），卖空的损益何时实现？长期或短期性质一般如何确定？" options={["你在交付财产以平掉该空头之前，不实现损益。一般规则是，性质按你实际持有最终用来平仓而交付的财产的时间确定。官方 Ace Corporation 例子里，空头开了 13 个月后买入并立即交付，亏损是短期，因为所交付财产的持有期不到 1 天", "空头开了超过一年就自动是长期，并且在开仓时就实现损益", "这和 §1259 推定出售是同一条规则，所以开仓总是让空头本身开始一段新的持有期", "损益在开仓日实现，性质按空头开了多久确定"]} answer={0} explanation="Pub 550：“You do not realize gain or loss until delivery of property to close the short sale.” 一般规则按所交付财产的持有期确定。官方 Ace 例子是短期，因为交付财产的持有期不到 1 天。不要写成空头开了超过一年就自动是长期。这不是 §1259。一般信息，不是税务建议。" />
 <Quiz id="ce-worthless" question="按 IRC §165(g) 和 IRS Publication 550，一项作为资本资产的证券在纳税年度内变得毫无价值时，税务上的出售日是哪一天？" options={["破产申请日，或者停牌日或退市日", "视为在该纳税年度最后一日出售。2026 年的日历年度纳税人视为在 2026-12-31 出售。这是税务性质时钟，不是已经讲过的退市收益", "在该证券最后一次成交的那一天年中出售", "8-K 宣布破产的那一天，并且一定是长期"]} answer={1} explanation="§165(g)(1) 和 Pub 550 把该项亏损视为在该纳税年度最后一日出售或交换一项资本资产。不要用破产、停牌或退市日当作这个税务出售日。165(g)(3) 对关联公司有例外，本课不搭建那套引擎。一般信息，不是税务建议。" />
+<Quiz id="ce-invint" question="按 IRS Publication 550（2025），为购买应税证券而支付的保证金账户利息如何处理？" options={["所有保证金利息都在经纪商入账的那一年全部可扣，而且和 3,000 美元的资本亏损上限是同一条规则", "它是合格住房抵押贷款利息", "为购买并持有投资财产而借入资金所支付的利息是投资利息。为购买应税证券支付的保证金利息是投资利息；现金收付制纳税人可以在支付的那一年，或款项可供经纪商使用时扣除。扣除一般以净投资所得为限，未能扣除的部分结转到下一年。这是一般信息，不是税务建议", "保证金利息一律不能扣除"]} answer={2} explanation="Pub 550：为购买应税证券支付的保证金利息是投资利息，现金收付制下在支付的那一年或款项可供经纪商使用时扣除，一般以净投资所得为限，其余结转。不要写成经纪商入账当年一定全部可扣，也不要和已经讲过的 3,000 / 1,500 美元资本亏损上限混为一谈。一般信息，不是税务建议。" />
+<Quiz id="ce-stodiv" question="按 IRS Publication 550（2025），按比例分配相同的新普通股、且一般不纳税时，应当如何处理？" options={["一般而言，股票股利和股票认股权不纳税，也不必在申报表上报告。官方例子 1：一股买进成本 45 美元，每持有一股分配两股新股 → 三股，每股成本基础 15 美元。非应税新股的持有期与旧股从同一天开始。在卖出零股的安排下，零股现金是出售这些零股的实现金额，不是现金股息", "股票股利是现金所得，而且新的持有期从分配日重新起算", "原来的每股成本基础保持不变，并把零股现金当成合格股息", "把零股现金当成 1099-DIV 第 3 栏的资本返还"]} answer={0} explanation="Pub 550 例子 1 把 45 美元的成本基础分摊到三股相同的股票上，每股 15 美元。非应税新股的持有期与旧股从同一天开始。零股现金是出售，不是现金股息、不是合格股息，也不是第 3 栏资本返还。官方例外存在；本课不搭建可税性引擎。一般信息，不是税务建议。" />
+
 
 ## 完成标准
 
@@ -577,6 +625,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 **来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)；代币化 NMS 股票与来源更新（2026-11-10 核实）：[SEC Release 34-106402（创新豁免令）](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)、[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)、[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726)、[SEC 创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)、[File 4-927 意见](https://www.sec.gov/rules-regulations/public-comments/4-927)；CAT 概念文件 [Federal Register 2026-07651](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)；[15 U.S.C. 78i 现行文本（截至 Pub. L. 119-138）](https://uscode.house.gov/us/usc/119-138/t15/s78i/)；短期交易利润（2026-11-11 核实）：[15 U.S.C. 78p(b)](https://www.law.cornell.edu/uscode/text/15/78p)；推定出售、第 1256 条与资本返还（2026-11-12 核实）：[26 U.S.C. §1259](https://www.law.cornell.edu/uscode/text/26/1259)、[26 U.S.C. §1256](https://www.law.cornell.edu/uscode/text/26/1256)、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550)；除息日上空头 / 替代付款 / 优先股合格股息（2026-11-12 核实）：[investor.gov，An Introduction to Short Sales](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-51)（2026-09-09 更新）、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550) enrich18（核实于 2026-11-12）：[17 CFR 240.13h-1](https://www.ecfr.gov/current/title-17/section-240.13h-1)；[SEC 大额交易者常见问题](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/responses-frequently-0)（最近审阅于 2016-02-22）；[Form 13H](https://www.sec.gov/files/form13h.pdf)。
  enrich19（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Capital Losses” / “Limit on deduction”。一般信息，不是税务建议。
  enrich20（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Short Sales” / “Worthless Securities”；[26 U.S.C. §165(g)](https://www.law.cornell.edu/uscode/text/26/165)。一般信息，不是税务建议。
+ enrich21（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Investment Interest”（第 3 章）和 “Distributions of Stock and Stock Rights”（第 1 章），含成本基础例子 1 以及非应税新股的持有期。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

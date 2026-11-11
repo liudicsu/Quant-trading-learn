@@ -9,3 +9,17 @@ rf for the 2026-11-05 return (no earlier quote): None
 assertions passed: 7/7
 ASSERT_tbill_rf_ok
 disclaimer: synthetic rates; T-bill is a teaching proxy; no Treasury data downloaded; learning only
+=== D. NY Fed SOFR: published ~8:00 a.m. ET one business day after the value date ===
+Each business day, the New York Fed publishes the SOFR at approximately 8:00 a.m. ET
+the SOFR is published one business day following its value date (the day when overnight trades were negotiated)
+official example: first SOFR published 2018-04-03 for value date 2018-04-02
+Monday 2026-11-09 value-date SOFR is published 2026-11-10 at about 8:00 a.m. ET
+that Tuesday 8:00 a.m. print can fill at Tuesday's 09:30 ET open: yes
+Tuesday 2026-11-10 value-date SOFR is published the next business day and cannot be used Tuesday morning
+same-day revisions may occur at approximately 2:30 p.m. ET only if the change exceeds one basis point, only on the same day as initial publication
+contrast: EFFR and OBFR are published at approximately 9:00 a.m. ET; do not write that every NY Fed reference rate is published at 8:00 a.m.
+do not copy the T-bill '~15:30 ET quote on day t applies from day t+1' sentence onto SOFR
+do not treat 8:00 a.m. as after the 9:30 open
+SOFR is a teaching rate timestamp, not the only correct risk-free proxy; whatever proxy you use, write it down
+assertions passed: 9/9
+disclaimer: synthetic dates; SOFR is a teaching timestamp; no NY Fed data downloaded; learning only

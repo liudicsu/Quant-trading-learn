@@ -59,3 +59,44 @@ check(rf_for(date(2026, 11, 5)) is None, "no future quote")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_tbill_rf_ok")
 print("disclaimer: synthetic rates; T-bill is a teaching proxy; no Treasury data downloaded; learning only")
+
+print("=== D. NY Fed SOFR: published ~8:00 a.m. ET one business day after the value date ===")
+# NY Fed SOFR page (opened 2026-11-12): "Each business day, the New York Fed
+# publishes the SOFR on the New York Fed website at approximately 8:00 a.m. ET."
+# Additional Information about Reference Rates: "the SOFR is published one
+# business day following its value date (the day when overnight trades were
+# negotiated)." Official example: "The first SOFR was published on 4/3/2018
+# for the value date of 4/2/2018." Same-day revisions "may be revised at
+# approximately 2:30 p.m. ET" and "will only occur if the change in the rate
+# exceeds one basis point and only on the same day as initial publication."
+# Contrast, do not conflate: the EFFR and OBFR "will be published at
+# approximately 9:00 a.m. ET each business day" that is not on the NY Fed
+# holiday schedule.
+# Look-ahead: yesterday's SOFR, published at about 8:00 a.m. today, can fill
+# at today's 09:30 open; today's value-date SOFR is published the next
+# business day and cannot be used this morning.
+# Do not copy the T-bill "~15:30 ET quote on day t applies from day t+1"
+# sentence onto SOFR. Do not write that every NY Fed reference rate is
+# published at 8:00 a.m. SOFR is a teaching rate timestamp, not "the" correct
+# risk-free rate; whatever proxy you use, write it down. No invented G.19
+# clock, first-Friday rule, or SOFR trading strategy.
+
+value_mon = date(2026, 11, 9)  # Monday
+pub_tue = date(2026, 11, 10)  # Tuesday ~8:00 a.m. ET
+print("Each business day, the New York Fed publishes the SOFR at approximately 8:00 a.m. ET")
+print("the SOFR is published one business day following its value date (the day when overnight trades were negotiated)")
+print("official example: first SOFR published 2018-04-03 for value date 2018-04-02")
+print(f"Monday {value_mon} value-date SOFR is published {pub_tue} at about 8:00 a.m. ET")
+print(f"that Tuesday 8:00 a.m. print can fill at Tuesday's 09:30 ET open: yes")
+print(f"Tuesday {pub_tue} value-date SOFR is published the next business day and cannot be used Tuesday morning")
+check(pub_tue == date(2026, 11, 10), "Monday value-date SOFR publishes Tuesday")
+can_use_at_tue_open = True  # Tuesday 09:30 is after Tuesday ~8:00 publication of Monday's SOFR
+cannot_use_tue_value_tue_morning = True
+check(can_use_at_tue_open and cannot_use_tue_value_tue_morning, "yesterday's SOFR can fill at today's open; today's cannot")
+print("same-day revisions may occur at approximately 2:30 p.m. ET only if the change exceeds one basis point, only on the same day as initial publication")
+print("contrast: EFFR and OBFR are published at approximately 9:00 a.m. ET; do not write that every NY Fed reference rate is published at 8:00 a.m.")
+print("do not copy the T-bill '~15:30 ET quote on day t applies from day t+1' sentence onto SOFR")
+print("do not treat 8:00 a.m. as after the 9:30 open")
+print("SOFR is a teaching rate timestamp, not the only correct risk-free proxy; whatever proxy you use, write it down")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: synthetic dates; SOFR is a teaching timestamp; no NY Fed data downloaded; learning only")

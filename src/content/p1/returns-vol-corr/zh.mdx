@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **9 学时**：公式 3h + 编码 4h + 测验 1h + 杠杆/反向 ETF 每日重置 0.5h + 从 T-bill 报价取无风险利率 0.5h）实现年化波动、夏普、最大回撤（MDD），并画滚动波动与压力期相关。前置：pandas 时间序列、统计基础、市场语言。
+本课（约 **9.25 学时**：公式 3h + 编码 4h + 测验 1h + 杠杆/反向 ETF 每日重置 0.5h + 从 T-bill 报价取无风险利率 0.5h + NY Fed SOFR 发布时间戳 0.25h）实现年化波动、夏普、最大回撤（MDD），并画滚动波动与压力期相关。前置：pandas 时间序列、统计基础、市场语言。
 
 **课内目标：** 正确年化波动；实现夏普与 MDD；展示滚动相关在压力期升高。
 
@@ -52,6 +52,33 @@ assertions passed: 7/7
 ASSERT_tbill_rf_ok
 disclaimer: synthetic rates; T-bill is a teaching proxy; no Treasury data downloaded; learning only
 ```
+
+
+**SOFR 在约 8:00 美东公布，而且是在其价值日之后的一个营业日（核实于 2026-11-12）。** 上面 T-bill 的时点规则保持不变：第 t 天约 15:30 美东的报价，从第 t+1 天起才用。不要改写那一段，也不要把那句话抄到 SOFR 上。
+
+纽约联储 [SOFR](https://www.newyorkfed.org/markets/reference-rates/sofr) 页面写明：“每个营业日，纽约联储在纽约联储网站上于大约 **8:00 美东** 公布 SOFR。”官方 [关于参考利率的补充说明](https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates)：“**SOFR 在其价值日之后的一个营业日公布**（价值日是隔夜交易谈妥的那一天）。”同一页的官方例子：“第一次 SOFR 于 2018-04-03 公布，对应的价值日是 2018-04-02。”同一天修订“可能在大约 **14:30 美东** 修订”，并且“只有当利率变动超过一个基点、而且只在首次公布的同一天才会发生。”对照、不要混在一起：**EFFR 和 OBFR**“在每个不在纽约联储假期表上的营业日大约 **9:00 美东** 公布”。
+
+**前瞻：** 美国股票常规交易 09:30 美东开盘，所以今天大约 8:00 公布的 SOFR — 对应的是**前一个营业日**的价值日 — 已经发布，可以用于当天的常规开盘。价值日是*今天*的那期 SOFR，要到*下一个*营业日大约 8:00 才公布，今天早上不能用。不要把 8:00 当成已经晚于 9:30 开盘。不要写成纽约联储的每一种参考利率都在 8:00 公布。不要发明 G.19 时钟、第一个周五规则，或 SOFR 交易策略。SOFR 是教学用的利率时间戳，不是“那个”唯一正确的无风险利率；你用哪种代理，都要写下来。
+
+**实验：** `examples/p1/08_tbill_rf_toy.py` 的 D 节（A–C 节，包括 15:30 的 T-bill 打印，仍与此前相同，含 7/7；脚本合计 9 条断言）：
+
+```text
+=== D. NY Fed SOFR: published ~8:00 a.m. ET one business day after the value date ===
+Each business day, the New York Fed publishes the SOFR at approximately 8:00 a.m. ET
+the SOFR is published one business day following its value date (the day when overnight trades were negotiated)
+official example: first SOFR published 2018-04-03 for value date 2018-04-02
+Monday 2026-11-09 value-date SOFR is published 2026-11-10 at about 8:00 a.m. ET
+that Tuesday 8:00 a.m. print can fill at Tuesday's 09:30 ET open: yes
+Tuesday 2026-11-10 value-date SOFR is published the next business day and cannot be used Tuesday morning
+same-day revisions may occur at approximately 2:30 p.m. ET only if the change exceeds one basis point, only on the same day as initial publication
+contrast: EFFR and OBFR are published at approximately 9:00 a.m. ET; do not write that every NY Fed reference rate is published at 8:00 a.m.
+do not copy the T-bill '~15:30 ET quote on day t applies from day t+1' sentence onto SOFR
+do not treat 8:00 a.m. as after the 9:30 open
+SOFR is a teaching rate timestamp, not the only correct risk-free proxy; whatever proxy you use, write it down
+assertions passed: 9/9
+disclaimer: synthetic dates; SOFR is a teaching timestamp; no NY Fed data downloaded; learning only
+```
+
 
 ## 最大回撤（路径依赖）
 
@@ -141,6 +168,7 @@ ASSERT_etf_nav_letf_ok
 5. 滚动窗过短却当精确真理。
 6. 把持有几周的 2 倍或反向 ETF 按“指数收益 × 2”回测，而不是按日复利。
 7. 把 T-bill 报价里的贴现率当成收益率；用第 t 天（约 15:30 美东才报出）的利率去减第 t 天的收益。
+8. 把 T-bill“第 t 天约 15:30 美东的报价从第 t+1 天起才用”这句话抄到 SOFR 上；把 8:00 当成已经晚于 9:30 开盘；写成纽约联储的每一种参考利率都在 8:00 公布。
 
 ## 练习（与任务清单 1:1）
 
@@ -150,6 +178,7 @@ ASSERT_etf_nav_letf_ok
 4. **ex4**：在 Rf=0 与 Rf_daily=0.0001 下各算一次夏普；**完成标准**：两数并写明参数。
 5. **ex5**：用三句话解释路径依赖；**完成标准**：提到顺序/峰值。
 6. **ex-rf**（可选）：运行 `08_tbill_rf_toy.py`，再把贴现率改成 5.00%；**完成标准**：打印新的价格和 365 天简单年化收益，并说明为什么它高于 5.00%。
+7. **ex-sofr** — 运行同一脚本的 D 节；写出周一价值日的 SOFR 何时公布、能否用于周二 09:30 开盘，以及周二价值日的 SOFR 能否在周二早上使用；**完成标准**：周二约 8:00 公布，可以用于周二开盘，周二早上不能用周二价值日的 SOFR，与输出一致。
 
 ## 测验
 
@@ -160,12 +189,15 @@ ASSERT_etf_nav_letf_ok
 <Quiz id="q5-rf" question="本课教学夏普默认 Rf？" options={["必须 5%", "0，且须声明", "等于 σ", "等于 Alpha"]} answer={1} explanation="Rf=0 是教学约定，不是市场真理。" />
 <Quiz id="rv-letf-reset" question="指数两天走势为 −10%、+10%（1000→900→990）。一只每天都准确做到 2 倍的 ETF，从 1000 开始，两天后是多少？" options={["960", "980", "990", "1000"]} answer={0} explanation="第一天 1000 × 0.8 = 800，第二天 800 × 1.2 = 960（SEC 公告原例）。" />
 <Quiz id="rv-tbill-rf" question="Treasury 每日表里一只 T-bill 的 ‘BANK DISCOUNT’ 是 4.00%。下面哪种说法对？" options={["这就是持有到期的年化收益率", "它按 360 天、以面值为分母计算，按价格算的年化收益会略高于 4.00%", "它已经扣除了通胀", "它是当天开盘时的利率，可以用于当天的收益"]} answer={1} explanation="91 天、4.00% → 价格 989.8889，365 天简单年化 4.0970%；报价时点约 15:30 ET，只能用于下一天。" />
+<Quiz id="rv-sofr" question="SOFR 何时公布？今天早上 09:30 美东开盘时，能不能使用“今天的 SOFR”？" options={["SOFR 和 T-bill 用同一套时钟：第 t 天约 15:30 美东的报价从第 t+1 天起才用，所以不能用于次日早上开盘", "纽约联储的每一种参考利率，包括 EFFR 和 OBFR，都在大约 8:00 美东公布", "8:00 的公布已经晚于 9:30 开盘，所以昨天的 SOFR 不能用于今天开盘", "每个营业日，纽约联储在大约 8:00 美东公布 SOFR，而且是在其价值日之后的一个营业日。昨天的 SOFR 大约在今天 8:00 公布，可以用于今天 09:30 开盘；今天价值日的 SOFR 要到下一个营业日才公布，今天早上不能用。EFFR 和 OBFR 大约在 9:00 美东公布"]} answer={3} explanation="纽约联储官方文本：SOFR 大约在 8:00 美东公布，且是在价值日之后的一个营业日。这次 8:00 的公布早于 9:30 开盘，所以昨天的 SOFR 可以用于今天开盘；今天价值日的 SOFR 不能用。不要把 T-bill 的 15:30 时钟抄到 SOFR 上，也不要写成纽约联储的每一种利率都在 8:00 公布。" />
+
 
 ## 完成标准
 
 - 可复用指标函数 + 两张图 + 测验
 
 **来源：** classic — Canvas m3；QuantStart performance；中文补充：聚宽收益/风险教程。无风险利率（2026-11-10 核实）：[TreasuryDirect 定价说明](https://www.treasurydirect.gov/marketable-securities/understanding-pricing/)、[Treasury 利率统计](https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics)。
+ enrich21（核实于 2026-11-12）：[纽约联储 SOFR](https://www.newyorkfed.org/markets/reference-rates/sofr)（每个营业日大约 8:00 美东公布）；[参考利率补充说明](https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates)（在价值日之后的一个营业日公布；官方首次 SOFR 于 2018-04-03 公布 2018-04-02 的价值日；同日修订大约在 14:30 美东，且仅当变动超过一个基点；EFFR 和 OBFR 大约在 9:00 美东公布）。
 
 <Summary>
 **要点**：√252 年化、声明 Rf 的夏普、路径依赖 MDD、滚动压力相关。  
