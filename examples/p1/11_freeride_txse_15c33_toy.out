@@ -1,0 +1,23 @@
+=== A. Regulation T payment period is settlement cycle plus two business days ===
+standard settlement cycle T+1; payment period = 3 business days
+cash-account purchase on 2026-07-06 has payment period ending 2026-07-09
+=== B. Freeriding and the 90-calendar-day freeze ===
+sold on 2026-07-07 before paying in full: 90-calendar-day freeze ends 2026-10-05
+during the freeze, new purchases must be paid for on the trade date (the delay-beyond-trade-date privilege is withdrawn)
+=== C. Same sale, but paid with other funds inside the payment period; proceeds not withdrawn ===
+full payment 2026-07-08 (on or before 2026-07-09); proceeds withdrawn? False -> freeze? False
+selling before T+1 settlement is not automatically freeriding if you pay with other funds on time and do not take the sale proceeds first
+=== D. TXSE official sessions (Eastern Time) ===
+  08:00 ET -> pre-market
+  09:29 ET -> pre-market
+  09:30 ET -> regular
+  15:59 ET -> regular
+  16:00 ET -> post-market
+  16:59 ET -> post-market
+  17:00 ET -> closed
+  07:59 ET -> closed
+SIP participant / market-center identifier for TXSE is F; pre-launch tape data will not contain F prints
+=== E. Rule 15c3-3 reserve toy (credits minus debits, not the full Exhibit A formula) ===
+customer credits 100000 - debits 40000 -> reserve at least 60000
+the carrying broker must also keep possession or control of fully paid and excess-margin securities; this is separate from SIPC
+assertions passed: 14/14

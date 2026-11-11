@@ -22,3 +22,5 @@ Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
 - enrich11 (2026-11-11): `09_open_auction_toy.py` — NYSE open may print after 09:30 (DMM), Nasdaq MOO 09:28 ET cutoff in Shanghai time, signal-from-open look-ahead (5 assertions).
 
 - enrich14 (2026-11-11): `10_early_close_nasdaq_moc_toy.py` — NYSE early-close MOC freeze at 12:50 ET (2026-11-27 and 2026-12-24; Beijing 01:50 next day) and Nasdaq regular-day close cutoffs (MOC 15:55 / LOC 15:58) (9 assertions).
+
+- enrich15 (2026-11-11): `11_freeride_txse_15c33_toy.py` — Regulation T cash-account payment period (T+1 plus two business days = 3 BD) and 90-calendar-day freeride freeze, TXSE official session clock, Rule 15c3-3 credits−debits reserve toy (14 assertions).

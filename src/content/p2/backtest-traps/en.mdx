@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**30.25 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up + 0.5h index membership as of date + 0.25h FOMC release times as event timestamps + 0.5h IPO data traps + 0.25h Nasdaq-100 rule versions and reconstitution dates + 0.5h S&P 500 addition rules and announcement timing + 0.25h earnings release times as event timestamps) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**31.25 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up + 0.5h index membership as of date + 0.25h FOMC release times as event timestamps + 0.5h IPO data traps + 0.25h Nasdaq-100 rule versions and reconstitution dates + 0.5h S&P 500 addition rules and announcement timing + 0.25h earnings release times as event timestamps + 0.5h Rule 144 resales of restricted and control stock + 0.5h follow-on offerings and Regulation M Rule 105) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
 **Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
@@ -112,6 +112,50 @@ lock-up 180 calendar days after 2026-03-10: 2026-09-06 (Sun); take the real date
 assertions passed: 14/14
 ASSERT_event_time_ipo_ok
 disclaimer: synthetic prices; no FOMC or IPO strategy; learning only
+```
+
+## Rule 144 and follow-on offerings: lock-ups are not the whole story (checked 2026-11-11)
+
+A lock-up agreement (previous section) is a **contract** in the prospectus. [Rule 144](https://www.ecfr.gov/current/title-17/section-230.144) is a different thing: a **safe harbor** for selling restricted securities (generally bought in a private deal, not on the exchange) and control securities (held by an affiliate — typically an officer, director or large shareholder). Meeting Rule 144 is one way to resell those shares in the public market without a new registration; it is not the only way, and it is not investment advice.
+
+For restricted stock of a reporting company that has been a reporting company for at least 90 days, the holding period is **six months** from the later of buying the shares from the issuer or from an affiliate, and only after they are fully paid for. If the issuer is not such a reporting company, the holding period is **one year**. An affiliate who buys shares in the open market has no holding period on those shares, but the other Rule 144 conditions still apply to the affiliate's resales ([SEC Rule 144 publication](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm), checked against the current eCFR). After a lock-up expires, restricted shares may still need the holding period and legend removal; affiliates still have a volume cap.
+
+That cap, for an affiliate, is measured over any three-month period: sales under Rule 144 may not exceed the **greatest of** 1% of the class outstanding, the average weekly reported volume on exchanges or a registered association's quotation system over the prior four calendar weeks, or the average weekly volume reported under an effective transaction-reporting or NMS plan over the same four weeks (144(e)(1)). For a listed stock this is, in practice, the greater of 1% and the four-week average weekly volume. The SEC publication states that over-the-counter stocks use only the 1% measure.
+
+If the amount to be sold under the rule in three months **exceeds** 5,000 shares or has an aggregate sale price **in excess of** $50,000, the affiliate must file [Form 144](https://www.ecfr.gov/current/title-17/section-239.144) electronically, **concurrently** with placing the broker order or executing with a market maker (144(h)). The form is a notice of proposed sale, not proof the sale happened, and it is usable in a backtest only after it is filed. It is not a lagged after-the-trade filing like Form 4.
+
+After a company is already public, it (or existing holders) can sell shares in another registered offering, often called a follow-on or additional offering. If the **company** issues new shares (a primary offering), the share count rises and existing holders' percentage is diluted. If **existing holders** sell shares they already own (a secondary offering), the share count does not, by itself, increase. Data feeds use "secondary" and "follow-on" inconsistently — read the prospectus or 424B supplement to see who is selling and how many new shares there are. Pricing is often after the close; do not fill at the previous close. Change the share count only on the issuance or closing date given in the prospectus or a current report, not on the announcement day.
+
+**[Rule 105 of Regulation M](https://www.ecfr.gov/current/title-17/section-242.105)** then adds a trading restriction. In a **firm-commitment** offering of equity for cash, it is unlawful to sell short the offered security during the Rule 105 restricted period and then buy the offered shares from an underwriter or a broker-dealer participating in the offering. The restricted period is the **shorter** of: the period beginning **five business days before pricing** and ending with pricing; or the period from the initial registration statement (or Form 1-A / 1-E) through pricing. The rule applies regardless of intent. It does not apply to offerings that are not conducted on a firm-commitment basis. Exceptions (a bona-fide purchase, genuinely separate accounts, certain investment companies) exist in the rule text; this lesson teaches the main prohibition, not a compliance engine.
+
+**Lab:** `examples/p2/19_rule144_followon_tender_toy.py` sections A–C (weekdays only, no holidays; section D is used in `data-cleaning`):
+
+```text
+=== A. Rule 144 affiliate three-month volume cap ===
+1% of 100000000 outstanding = 1000000
+four-week average weekly volume = 1000000
+listed-stock cap (greater of 1% and four-week average) = 1000000
+if four-week average is 1500000, listed-stock cap = 1500000
+OTC / non-listed: the SEC Rule 144 investor publication says only the 1% measure applies
+OTC cap in this toy = 1000000 (1% only)
+=== B. Form 144 notice threshold ===
+  4000 shares at $10.00 (gross $40000): Form 144 required? False
+  4000 shares at $20.00 (gross $80000): Form 144 required? True
+  6000 shares at $5.00 (gross $30000): Form 144 required? True
+  5000 shares at $10.00 (gross $50000): Form 144 required? False
+Form 144 is a notice of proposed sale, filed with the order; it is not executed volume
+=== C. Rule 105 restricted period (five business days before pricing) ===
+pricing 2026-06-12; five business days before = 2026-06-05 (toy weekdays only)
+  short on 2026-06-04: inside restricted period? False
+  short on 2026-06-05: inside restricted period? True
+  short on 2026-06-12: inside restricted period? True
+a short inside this window plus a purchase of the offered shares from an underwriter is the Rule 105 prohibition (firm-commitment equity offerings); exceptions exist but are not modelled here
+=== D. Rule 14e-1 minimum tender window (toy weekday count) ===
+official 'business day' is defined in Rules 14d-1(g)(3) and 13e-4(a)(3); this toy counts Mon-Fri and ignores holidays
+offer first published 2026-03-02; 20th weekday (counting that date as day 1) = 2026-03-27
+if consideration is increased on 2026-03-20, 10 weekdays from that notice (counting that date as day 1) = 2026-04-02
+the April 16, 2026 exemptive order can shorten some equity offers to 10 business days only when every stated condition is met; this toy does not apply that order
+assertions passed: 15/15
 ```
 
 ## Walk-forward lab
@@ -499,6 +543,8 @@ after excess @ t=4: hit≈98.3% FDR≈0
 15. Filling a signal on an FOMC statement (released 14:00 ET) at that day's open; dating a minutes-based feature to the meeting instead of the release.
 16. Assuming fills at the IPO offering price; computing a 60-day signal on a stock listed fewer than 60 trading days ago; assuming every lock-up ends exactly 180 days after the IPO.
 17. Screening past S&P 500 candidates with today's $22.7 billion threshold, or treating "eligible" as "will be added"; trading an S&P change before its 05:15 PM ET announcement; filling an after-close earnings release at that day's close or an intraday release at that day's open; dating earnings to the quarter end.
+18. Treating a lock-up expiry as if Rule 144 no longer applies; using Form 144 as executed volume, or filling a sale before the form is filed; applying the listed-stock volume cap (greater of 1% and four-week average weekly volume) to an OTC name, for which the SEC publication uses only the 1% measure.
+19. Filling a follow-on offering at the previous close; increasing the share count on the announcement day rather than the issuance or closing date in the prospectus; or shorting during the Rule 105 restricted period and then buying the offered shares from an underwriter in a firm-commitment equity offering.
 
 ## Practice (1:1 with the checklist)
 
@@ -536,12 +582,14 @@ after excess @ t=4: hit≈98.3% FDR≈0
 <Quiz id="bt-fomc-time" question="In a daily backtest, a signal based on the 2026-10-28 FOMC statement (released 14:00 EDT) can be filled no earlier than…" options={["The 2026-10-28 open", "The 2026-10-27 close", "A price after 14:00 on 2026-10-28, which on daily bars usually means that day's close or the next open", "Only after the minutes are released"]} answer={2} explanation="The open is at 09:30, before the 14:00 release; “Only after the minutes are released” confuses the statement with the minutes." />
 <Quiz id="bt-earnings-time" question="A company releases earnings at 16:05 ET on Thursday and furnishes the Item 2.02 Form 8-K at 16:20 ET. In a daily backtest, what is day 0 for this news?" options={["Thursday, filling at Thursday's close", "Friday, the next regular session", "The last day of the fiscal quarter", "Up to four business days later, when the 8-K deadline ends"]} answer={1} explanation="Regular trading ends at 16:00 ET, so the first session that can react starts Friday at 09:30. Thursday's close came before the release. The quarter end is not when the numbers became public, and the four-business-day deadline is an upper bound for the 8-K, not the release time." />
 <Quiz id="bt-ipo-history" question="Offering price 20, first open 26, close 24. An ordinary account that buys at the open earns about what on day one?" options={["+20%, measured from the offering price", "About −7.69%", "+30%", "Returns cannot be computed for new listings"]} answer={1} explanation="24 ÷ 26 − 1 ≈ −7.69%; +20% assumes a fill at the offering price, while the SEC bulletin notes most IPO shares go to institutional and high-net-worth clients." />
+<Quiz id="bt-rule144" question="An affiliate wants to sell listed stock under Rule 144. Which statement is correct?" options={["The three-month volume cap is always 1% of the shares outstanding, even if the four-week average weekly volume is larger", "The cap is the greatest of 1% of the class outstanding and the four-week average weekly reported volume; Form 144 must be filed concurrently with the order if the amount to be sold in three months exceeds 5,000 shares or $50,000, and the form is a notice of proposed sale, not executed volume", "Restricted stock of a reporting company may be sold as soon as the contractual lock-up expires, with no further Rule 144 holding period", "Form 144 is filed after the sale, like Form 4"]} answer={1} explanation="Rule 144(e)(1) takes the greatest of 1% and the four-week average weekly volume measures. 144(h) requires Form 144 when the amount exceeds 5,000 shares or $50,000, filed with the order. A reporting-company holding period of six months can still apply after a lock-up, and Form 144 is not an after-the-trade filing like Form 4." />
+<Quiz id="bt-rule105" question="What does Rule 105 of Regulation M generally prohibit?" options={["In a firm-commitment equity offering, shorting the security during the restricted period (the shorter of five business days before pricing through pricing, or from the initial filing through pricing) and then buying the offered shares from an underwriter or a participating broker-dealer", "Any short sale of a stock in the five days before its earnings release", "Buying a follow-on offering if you already own the stock", "Secondary offerings in which existing holders, not the company, are the sellers"]} answer={0} explanation="The prohibition is in 17 CFR 242.105 and applies to firm-commitment equity offerings for cash. It does not apply to offerings that are not firm-commitment, and it is not a ban on owning the stock or on secondary sales by existing holders." />
 
 ## Done when
 
 - Walk-forward summary + PSR/DSR vs N + false-hit context + quizzes
 
-**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); admission gates [arXiv:2610.07701](https://arxiv.org/abs/2610.07701); MinervaScore NAME-ONLY [arXiv:2608.23808](https://arxiv.org/abs/2608.23808). Event times and IPOs (checked 2026-11-10): [Fed FOMC calendar](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [FOMC statement 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm), [SEC investor bulletin: investing in an IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17), [investor.gov lock-up agreements](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements). enrich13 (checked 2026-11-11): [S&P U.S. Indices Methodology, November 2026](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf); [Form 8-K, General Instruction B.1 and Item 2.02](https://www.sec.gov/files/form8-k.pdf); [Regulation FD, 17 CFR 243](https://www.ecfr.gov/current/title-17/part-243).
+**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); admission gates [arXiv:2610.07701](https://arxiv.org/abs/2610.07701); MinervaScore NAME-ONLY [arXiv:2608.23808](https://arxiv.org/abs/2608.23808). Event times and IPOs (checked 2026-11-10): [Fed FOMC calendar](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [FOMC statement 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm), [SEC investor bulletin: investing in an IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17), [investor.gov lock-up agreements](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements). enrich13 (checked 2026-11-11): [S&P U.S. Indices Methodology, November 2026](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf); [Form 8-K, General Instruction B.1 and Item 2.02](https://www.sec.gov/files/form8-k.pdf); [Regulation FD, 17 CFR 243](https://www.ecfr.gov/current/title-17/part-243). enrich15 (checked 2026-11-11): [17 CFR 230.144](https://www.ecfr.gov/current/title-17/section-230.144), [17 CFR 239.144 (Form 144)](https://www.ecfr.gov/current/title-17/section-239.144), [SEC Rule 144 investor publication](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm), [17 CFR 242.105](https://www.ecfr.gov/current/title-17/section-242.105).
 
 <Summary>
 **Takeaways**: walk-forward tables, trial counts, PSR/DSR vs N, null false-hit math, survivorship/snooping recap.  

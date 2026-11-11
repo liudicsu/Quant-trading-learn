@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **15.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -172,6 +172,13 @@ ASSERT_rule606_ok
 reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only
 ```
 
+## Form ATS-N 和场外流动性（核实于 2026-11-11）
+
+上一节的 Rule 606 告诉你，券商把非定向订单送到了哪些去向。其中有些去向并不是交易所。**另类交易系统**（ATS）可以在符合 [Regulation ATS](https://www.ecfr.gov/current/title-17/part-242/subject-group-ECFRd043a8fc6fa68e1)（[17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)）的前提下，按免于交易所注册的豁免来撮合买卖。交易 NMS 股票的 ATS 必须提交公开的 [Form ATS-N](https://www.ecfr.gov/current/title-17/section-242.304)（Rule 304）。SEC 维护这些文件的列表（[Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information)；页面最近审阅日期 2026-03-30，表里有更晚的 2026 年生效日，2026-11-11 打开）。
+
+很多交易 NMS 股票的 ATS 并不对外展示自己的最佳买卖价，所以常被叫做“暗池”。它们的成交仍然会打印到行情带上，通常记成场外成交或通过成交报告设施（TRF）上报。回测里这一点有两层含义。第一，你在公开的全国最佳买卖价上看到的数量，并不是全部流动性；有一部分藏在不展示报价的 ATS 里。第二，很大一部分成交量可能被标成场外，这不等于“没有场所”或“数据坏了”。不要根据公开报价，去假设一笔暗池里的成交。本课不推荐任何 ATS 或券商。
+
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -183,6 +190,7 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 7. 标定 α / 冲击核当成课程 edge。
 8. 用 IEX 报价当 NBBO 计算滑点，却不在报告中写明 feed。
 9. 把 Rule 606 路由表当成执行质量的结论，或把 Rule 605 报告当成路由和 PFOF 披露；把已撤回的 2022 年订单竞争规则当成现行规则。
+10. 把公开的全国最佳买卖价上的数量当成全部流动性，或根据公开报价去编造一笔暗池成交；把场外 / TRF 成交当成缺失或坏数据；或以为所有 ATS 都会对外展示最佳买卖价。
 
 ## 练习（1:1）
 
@@ -208,12 +216,13 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 <Quiz id="es-feed" question="同一成交在 IEX 与 SIP 基准下滑点不同，说明？" options={["发现了路由 alpha", "到达价基准取决于 feed，报告须写明", "IEX 是错的", "无需记录时间戳"]} answer={1} explanation="基准选择问题。" />
 <Quiz id="es-605" question="Rule 605 报告与 FINRA 21-23 的关系？" options={["605 就是最佳执行义务本身", "605 是公开执行质量统计，21-23 讲券商的最佳执行义务与审查", "两者都只看价格", "605 可替代自己的 TCA"]} answer={1} explanation="605 是统计；21-23 是义务，且不只看价格。" />
 <Quiz id="es-606" question="Rule 606 季度报告主要告诉你什么？" options={["每笔订单的价格改善和有效价差", "券商是否尽到最佳执行义务的结论", "非定向订单主要送往哪些去向，以及各类订单在每个去向上的净 PFOF", "交易所的熔断阈值"]} answer={2} explanation="价格改善和有效价差属于 Rule 605；最佳执行是 FINRA 的义务（5310 / 21-23），不是 606 报告给出的结论。" />
+<Quiz id="es-atsn" question="Form ATS-N 是什么？回测时对交易 NMS 股票的 ATS 不该做什么假设？" options={["它是券商的季度 PFOF 报告，而且每家 ATS 都必须展示最佳买卖价", "它是交易所注册表格，场外成交应当当成坏数据删掉", "它是交易 NMS 股票的 ATS 按 Rule 304 必须提交的公开文件；很多这类 ATS 并不展示自己的最佳买卖价，但成交仍会打印到行情带上，所以公开的全国最佳买卖价数量不是全部流动性", "它取代了 Rule 605 的执行质量统计"]} answer={2} explanation="Rule 304 要求提交公开的 Form ATS-N。很多交易 NMS 股票的 ATS 不展示最佳买卖价（“暗池”），但成交仍会打印，通常记成场外或 TRF。公开的全国最佳买卖价数量不是全部流动性。" />
 
 ## 完成标准
 
 执行假设（日程、参与率上限、AC λ 或启发式、IS 基准）写入共用主配置——研究与纸面交易使用同一模型。
 
-**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)
+**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)。enrich15（2026-11-11 核实）：[17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)、[17 CFR 242.304](https://www.ecfr.gov/current/title-17/section-242.304)、[SEC Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information)。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

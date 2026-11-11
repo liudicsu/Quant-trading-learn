@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**14.75 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA + 0.25h Rule 605 vs FINRA 21-23 + 0.5h Rule 606 routing & PFOF) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
+This lesson (~**15.25 hours**: 5h concepts (incl √/Gatheral + public-data metaorder impact) + 6.5h experiments + 1.5h quiz + 1h feed-aware TCA + 0.25h Rule 605 vs FINRA 21-23 + 0.5h Rule 606 routing & PFOF + 0.5h NMS Stock ATS and Form ATS-N) treats **execution as part of the strategy**: TWAP/VWAP schedules, Almgren–Chriss optimal liquidation, implementation shortfall, limit vs market, and arrival-price TCA. Prereqs: `costs-in-backtest`, `portfolio-risk-sizing`.
 
 **Goals:** add participation / schedule discipline; write a one-page execution sheet tied to the shared cost model.
 
@@ -172,6 +172,13 @@ ASSERT_rule606_ok
 reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only
 ```
 
+## Form ATS-N and off-exchange liquidity (checked 2026-11-11)
+
+Rule 606 (previous section) tells you where a broker sent non-directed orders. Some of those destinations are not exchanges. An **alternative trading system** (ATS) can match buyers and sellers under an exemption from exchange registration, if it complies with [Regulation ATS](https://www.ecfr.gov/current/title-17/part-242/subject-group-ECFRd043a8fc6fa68e1) ([17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)). An ATS that trades NMS stocks must file a public [Form ATS-N](https://www.ecfr.gov/current/title-17/section-242.304) (Rule 304). The SEC keeps a list of these filings ([Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information); page last reviewed 2026-03-30, with later 2026 effective dates in the table, opened 2026-11-11).
+
+Many NMS Stock ATSs do not publicly display their best bids and offers, which is why people call them "dark pools." Their trades still print to the tape, usually as off-exchange or Trade Reporting Facility (TRF) prints. In a backtest this matters in two ways. First, the size you see at the displayed national best bid or offer is not all of the liquidity; some of it sits in ATSs that do not display. Second, a large share of volume may be marked off-exchange, which is not the same as "no venue" or "bad data." Do not invent a fill inside a dark pool from the displayed quote. This lesson does not recommend any ATS or broker.
+
+
 ## Common mistakes / pitfalls
 
 1. Backtesting fills at mid with zero schedule / impact.
@@ -183,6 +190,7 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 7. Calibrating α / impact kernels as course edge.
 8. Computing slippage against IEX quotes as if they were the NBBO, without stating the feed.
 9. Reading a Rule 606 table as an execution-quality verdict, or a Rule 605 report as a routing and PFOF disclosure; quoting the withdrawn 2022 Order Competition Rule as if it were in force.
+10. Treating the displayed NBBO size as all available liquidity, or inventing a dark-pool fill from the displayed quote; reading an off-exchange / TRF print as missing or bad data; or assuming every ATS publicly displays its best bid and offer.
 
 ## Practice (1:1)
 
@@ -208,12 +216,13 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 <Quiz id="es-feed" question="The same fill shows different slippage vs IEX and SIP. This means?" options={["Routing alpha found", "The arrival benchmark depends on the feed, which must be reported", "IEX is wrong", "No timestamps needed"]} answer={1} explanation="A benchmark-choice issue." />
 <Quiz id="es-605" question="How does a Rule 605 report relate to FINRA 21-23?" options={["605 is the best-execution duty itself", "605 is public execution-quality statistics; 21-23 covers the broker's best-execution duty and reviews", "Both look only at price", "605 replaces your own TCA"]} answer={1} explanation="605 is statistics; 21-23 is a duty and is not only about price." />
 <Quiz id="es-606" question="What does a quarterly Rule 606 report mainly tell you?" options={["Price improvement and effective spread per order", "A verdict on whether the broker met best execution", "The top venues for non-directed orders and net PFOF per order type at each venue", "Exchange circuit-breaker thresholds"]} answer={2} explanation="Price improvement and effective spread are Rule 605 territory; best execution is a FINRA duty (5310 / Notice 21-23), not a conclusion a 606 report gives." />
+<Quiz id="es-atsn" question="What is a Form ATS-N, and what should a backtest not assume about NMS Stock ATSs?" options={["It is a broker's quarterly PFOF report, and every ATS must display its best bid and offer", "It is an exchange registration form, and off-exchange prints should be dropped as bad data", "It is the public filing an NMS Stock ATS must make under Rule 304; many such ATSs do not display their BBO, but their trades still print to the tape, so displayed NBBO size is not all liquidity", "It replaces Rule 605 execution-quality statistics"]} answer={2} explanation="Rule 304 requires a public Form ATS-N. Many NMS Stock ATSs do not display a BBO (“dark pools”), but trades still print, usually as off-exchange or TRF prints. Displayed NBBO size is not the whole book." />
 
 ## Done when
 
 Execution assumptions (schedule, participation caps, AC λ or heuristic, IS benchmark) live in the shared main config — same model research and paper trading use.
 
-**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche); no-trade pointer [arXiv:2502.04284](https://arxiv.org/abs/2502.04284); double-√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965); Gatheral 2010 “No-dynamic-arbitrage and market impact”, DOI 10.1080/14697680903373692 (Crossref-verified; journal record [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)); public-data metaorder impact challenge [arXiv:2501.17096](https://arxiv.org/abs/2501.17096).; Rule 605 (checked 2026-11-08): [SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)
+**Sources (read and used above):** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39; Perold 1988 *JPM* 14(3) pp. 4–9; industry TWAP/VWAP TCA practice; NYU impact/TCA notes; QuantStart execution; Canvas m12; @sera00111 venue notes (niche); no-trade pointer [arXiv:2502.04284](https://arxiv.org/abs/2502.04284); double-√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965); Gatheral 2010 “No-dynamic-arbitrage and market impact”, DOI 10.1080/14697680903373692 (Crossref-verified; journal record [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)); public-data metaorder impact challenge [arXiv:2501.17096](https://arxiv.org/abs/2501.17096).; Rule 605 (checked 2026-11-08): [SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms). enrich15 (checked 2026-11-11): [17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300), [17 CFR 242.304](https://www.ecfr.gov/current/title-17/section-242.304), [SEC Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information).
 
 <Summary>
 **Takeaways**: schedule consciously; AC gives a cost–risk frontier; measure IS vs arrival; limits are not free.  

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **30.25 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **31.25 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -112,6 +112,50 @@ lock-up 180 calendar days after 2026-03-10: 2026-09-06 (Sun); take the real date
 assertions passed: 14/14
 ASSERT_event_time_ipo_ok
 disclaimer: synthetic prices; no FOMC or IPO strategy; learning only
+```
+
+## Rule 144 和增发：锁定期不是全部故事（核实于 2026-11-11）
+
+上一节说的锁定协议，是招股书里的**合同**。[Rule 144](https://www.ecfr.gov/current/title-17/section-230.144) 是另一回事：它是转售**受限证券**（一般是私下买来的，不是在交易所买的）和**控制证券**（关联人持有的，通常是高管、董事或大股东）的**安全港**。满足 Rule 144，是把这些股票在公开市场转售、且不必再做一次注册的一种办法，但不是唯一办法，也不是投资建议。
+
+对已经连续报告至少 90 天的报告公司，受限股的持有期是从“向发行人买入”或“向关联人买入”二者较晚的那天起算 **6 个月**，而且必须已经付清价款。如果发行人不是这样的报告公司，持有期是 **1 年**。关联人在公开市场买来的股票，本身没有这条持有期，但关联人转售时仍要满足 Rule 144 的其他条件（[SEC Rule 144 投资者说明](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm)，已对照现行 eCFR）。锁定期到期之后，受限股可能仍要满持有期、去掉股票上的限制图例；关联人仍有数量上限。
+
+这个上限按任意三个月计算：关联人按 Rule 144 卖出的数量，不得超过下面三项中的**最大者**：该类已发行股份的 **1%**、过去四个日历周在交易所或已注册协会报价系统上的平均每周成交量，或同一四周内按有效成交报告计划或 NMS 计划报告的平均每周成交量（144(e)(1)）。对上市股票，实际操作上就是 1% 和四周平均周成交量里较大的那个。SEC 投资者说明写明：场外股票只用 1% 这一条。
+
+如果按该规则在三个月内拟出售的数量**超过** 5,000 股，或合计售价**超过** 50,000 美元，关联人必须在向经纪商下单或与做市商成交的**同时**，电子提交 [Form 144](https://www.ecfr.gov/current/title-17/section-239.144)（144(h)）。这份表格是“打算卖”的通知，不是已经卖出的证明；回测里只能在它提交之后使用。它也不是像 Form 4 那样事后申报。
+
+公司已经上市之后，公司自己或现有股东还可以再做一次已注册的发行，常叫做增发（follow-on）或后续发行。如果是**公司**新发行股票（一级发行），股本会增加，原股东持股比例会被摊薄。如果是**现有股东**卖掉已经持有的股票（二级发行），股本本身不会因此增加。数据源对“secondary”和“follow-on”用词并不统一——要看招股书或 424B 补充说明书，弄清谁在卖、有多少新股。定价常常在收盘之后；不要按前收盘价成交。股本只在招股书或临时报告给出的发行或交割日改，不要在公告当天改。
+
+**[Regulation M 的 Rule 105](https://www.ecfr.gov/current/title-17/section-242.105)** 又加了一条交易限制。在以现金认购、由承销商包销（firm-commitment）的股票发行里，在 Rule 105 的限制期内卖空标的股票，再向承销商或参与发行的经纪交易商买入这次发行的股份，是违法的。限制期取下面两者中**较短**的一段：定价日前 **5 个营业日**起到定价时；或从最初注册文件（或 Form 1-A / 1-E）提交起到定价时。这条规则不论主观意图。它不适用于不是包销的发行。规则正文里有例外（善意买入、真正分开的账户、某些投资公司）；本课只讲主要禁止，不做合规引擎。
+
+**实验：** `examples/p2/19_rule144_followon_tender_toy.py` 的 A–C 节（只计工作日，不考虑假期；D 节在 `data-cleaning` 使用）：
+
+```text
+=== A. Rule 144 affiliate three-month volume cap ===
+1% of 100000000 outstanding = 1000000
+four-week average weekly volume = 1000000
+listed-stock cap (greater of 1% and four-week average) = 1000000
+if four-week average is 1500000, listed-stock cap = 1500000
+OTC / non-listed: the SEC Rule 144 investor publication says only the 1% measure applies
+OTC cap in this toy = 1000000 (1% only)
+=== B. Form 144 notice threshold ===
+  4000 shares at $10.00 (gross $40000): Form 144 required? False
+  4000 shares at $20.00 (gross $80000): Form 144 required? True
+  6000 shares at $5.00 (gross $30000): Form 144 required? True
+  5000 shares at $10.00 (gross $50000): Form 144 required? False
+Form 144 is a notice of proposed sale, filed with the order; it is not executed volume
+=== C. Rule 105 restricted period (five business days before pricing) ===
+pricing 2026-06-12; five business days before = 2026-06-05 (toy weekdays only)
+  short on 2026-06-04: inside restricted period? False
+  short on 2026-06-05: inside restricted period? True
+  short on 2026-06-12: inside restricted period? True
+a short inside this window plus a purchase of the offered shares from an underwriter is the Rule 105 prohibition (firm-commitment equity offerings); exceptions exist but are not modelled here
+=== D. Rule 14e-1 minimum tender window (toy weekday count) ===
+official 'business day' is defined in Rules 14d-1(g)(3) and 13e-4(a)(3); this toy counts Mon-Fri and ignores holidays
+offer first published 2026-03-02; 20th weekday (counting that date as day 1) = 2026-03-27
+if consideration is increased on 2026-03-20, 10 weekdays from that notice (counting that date as day 1) = 2026-04-02
+the April 16, 2026 exemptive order can shorten some equity offers to 10 business days only when every stated condition is met; this toy does not apply that order
+assertions passed: 15/15
 ```
 
 ## Walk-forward 实验
@@ -491,10 +535,17 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 7. 把教学用 CPCV 素描当成生产级 AFML 实现。
 
 8. 日历切分看似干净，但 TEMP_CENTER / EXEC_OPEN 仍在偷看。
-9. 用今天的指数成分构造历史股票池，或在公布日之前使用重构名单；2026 年以后仍写死“Russell 每年 6 月调整”；对 2026-05-01 前后的日期套用同一套 Nasdaq-100 规则（例如 10% 最低流通比例）。
-10. 用当天开盘价去成交基于 FOMC 声明（14:00 ET 发布）的信号；把基于纪要的特征记在开会日而不是纪要发布日。
-11. 假设能按 IPO 发行价成交；对上市不足 60 个交易日的股票硬算 60 天信号；以为所有锁定期都正好在上市后 180 天结束。
-12. 用今天的 227 亿美元门槛筛选过去的标普 500 候选，或把“符合条件”当成“会被纳入”；在美东 17:15 公告之前就交易标普调整；收盘后发布的财报按当天收盘价成交，盘中发布的按当天开盘价成交；把财报日期记成季度末。
+9. 把 DSR/PBO 当成信息集已经干净的证明（oracle 对照）。
+10. 把教学用 CSCV 素描当成生产级 AFML/Bailey 实现。
+11. 用 DSR(N) 时漏记每一个被代理评分过的候选。
+12. 用绝对收益跑准入门槛（会把真信号悄悄拒掉）。
+13. 把门槛 / Minerva Seal 当成预期收益更高的证明。
+14. 用今天的指数成分构造历史股票池，或在公布日之前使用重构名单；2026 年以后仍写死“Russell 每年 6 月调整”；对 2026-05-01 前后的日期套用同一套 Nasdaq-100 规则（例如 10% 最低流通比例）。
+15. 用当天开盘价去成交基于 FOMC 声明（14:00 ET 发布）的信号；把基于纪要的特征记在开会日而不是纪要发布日。
+16. 假设能按 IPO 发行价成交；对上市不足 60 个交易日的股票硬算 60 天信号；以为所有锁定期都正好在上市后 180 天结束。
+17. 用今天的 227 亿美元门槛筛选过去的标普 500 候选，或把“符合条件”当成“会被纳入”；在美东 17:15 公告之前就交易标普调整；收盘后发布的财报按当天收盘价成交，盘中发布的按当天开盘价成交；把财报日期记成季度末。
+18. 以为锁定协议一到期，Rule 144 就不再适用；把 Form 144 当成已经成交的数量，或在表格提交之前就按卖出成交；把上市股票的数量上限（1% 和四周平均周成交量的较大者）套到场外股票上——SEC 说明对场外股票只用 1%。
+19. 按前收盘价成交增发；在公告当天而不是招股书里的发行或交割日增加股本；或在 Rule 105 限制期内卖空，再向承销商买入这次包销发行的股份。
 
 ## 练习（与任务清单 1:1）
 
@@ -532,12 +583,14 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-fomc-time" question="日线回测里，一个根据 2026-10-28 FOMC 声明（14:00 EDT 发布）下单的信号，最早能按哪个价格成交？" options={["2026-10-28 开盘价", "2026-10-27 收盘价", "2026-10-28 14:00 之后的价格，日线上一般是当天收盘或下一天开盘", "会议纪要发布后才能交易"]} answer={2} explanation="开盘在 09:30，早于 14:00 的发布；“会议纪要发布后才能交易”混淆了声明和纪要。" />
 <Quiz id="bt-earnings-time" question="一家公司在星期四美东 16:05 发布财报，16:20 提交 Item 2.02 的 Form 8-K。在日线回测里，这条消息的第 0 天是哪天？" options={["星期四，按星期四收盘价成交", "星期五，下一个常规交易时段", "该财季的最后一天", "最多四个营业日之后，8-K 期限截止那天"]} answer={1} explanation="常规交易在美东 16:00 结束，所以第一个能反应的时段是星期五 09:30 开始的那个。星期四的收盘在发布之前。季度末不是数字公开的时间；四个营业日是 8-K 的最晚期限，不是发布时刻。" />
 <Quiz id="bt-ipo-history" question="发行价 20，首日开盘 26，收盘 24。一个普通账户在开盘时买入，首日收益约是多少？" options={["+20%，按发行价算", "约 −7.69%", "+30%", "新股不能算收益"]} answer={1} explanation="24 ÷ 26 − 1 ≈ −7.69%；+20% 假设了按发行价成交，SEC 公告说大部分发行份额分给机构和高净值客户。" />
+<Quiz id="bt-rule144" question="关联人按 Rule 144 转售上市股票时，下面哪一项是对的？" options={["三个月数量上限永远是已发行股份的 1%，即使四周平均周成交量更大也不例外", "上限取该类已发行股份的 1% 和四周平均每周报告成交量中的最大者；如果三个月内拟出售数量超过 5,000 股或 50,000 美元，必须在下单同时提交 Form 144，而且这是打算出售的通知，不是已经成交的数量", "报告公司的受限股只要合同锁定期一到就可以卖，不必再满足 Rule 144 的持有期", "Form 144 像 Form 4 一样，是卖出之后再报"]} answer={1} explanation="144(e)(1) 取 1% 和四周平均周成交量中的最大者。144(h) 规定，数量超过 5,000 股或 50,000 美元时，要在下单同时提交 Form 144。锁定协议到期后，报告公司仍可能有 6 个月持有期；Form 144 也不是像 Form 4 那样的事后申报。" />
+<Quiz id="bt-rule105" question="Regulation M 的 Rule 105 一般禁止什么？" options={["在包销的股票发行里，在限制期（定价日前 5 个营业日到定价时，或从最初注册文件提交到定价时，取较短者）卖空，再向承销商或参与发行的经纪交易商买入这次发行的股份", "财报发布前 5 天内对该股票的任何卖空", "已经持有该股票的人，就不能再买这次增发", "由现有股东而不是公司出售的二级发行"]} answer={0} explanation="禁止规定在 17 CFR 242.105，适用于以现金认购、由承销商包销的股票发行。它不适用于不是包销的发行，也不禁止本来就持有该股票，或现有股东的二级出售本身。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。enrich13（2026-11-11 核实）：[S&P U.S. Indices Methodology，2026 年 11 月版](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)；[Form 8-K 一般说明 B.1 与 Item 2.02](https://www.sec.gov/files/form8-k.pdf)；[Regulation FD，17 CFR 243](https://www.ecfr.gov/current/title-17/part-243)。
+**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。enrich13（2026-11-11 核实）：[S&P U.S. Indices Methodology，2026 年 11 月版](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)；[Form 8-K 一般说明 B.1 与 Item 2.02](https://www.sec.gov/files/form8-k.pdf)；[Regulation FD，17 CFR 243](https://www.ecfr.gov/current/title-17/part-243)。enrich15（2026-11-11 核实）：[17 CFR 230.144](https://www.ecfr.gov/current/title-17/section-230.144)、[17 CFR 239.144（Form 144）](https://www.ecfr.gov/current/title-17/section-239.144)、[SEC Rule 144 投资者说明](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm)、[17 CFR 242.105](https://www.ecfr.gov/current/title-17/section-242.105)。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

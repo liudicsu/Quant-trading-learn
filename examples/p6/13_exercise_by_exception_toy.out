@@ -1,0 +1,14 @@
+=== OCC exercise-by-exception ($0.01 in-the-money, unless contrary instructions) ===
+  call K=100 close=100.01 ITM=0.01 -> exception exercise? True
+  call K=100 close=100.0 ITM=0.0 -> exception exercise? False
+  call K=100 close=99.99 ITM=-0.01 -> exception exercise? False
+  put K=100 close=99.99 ITM=0.01 -> exception exercise? True
+  put K=100 close=100.0 ITM=0.0 -> exception exercise? False
+  put K=100 close=100.01 ITM=-0.01 -> exception exercise? False
+a clearing member may still instruct OCC not to exercise an ITM option, or to exercise one that is below the threshold
+this procedure is between OCC and clearing members; a broker may use a different customer threshold
+=== Assignment creates a stock position (standard 100-share equity contract) ===
+writer assigned on 1 call: stock position -100 shares
+writer assigned on 1 put: stock position 100 shares
+those stock trades settle T+1 after exercise; a backtest that 'expires worthless' every option will miss this inventory
+assertions passed: 7/7

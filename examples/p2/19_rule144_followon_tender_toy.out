@@ -1,0 +1,25 @@
+=== A. Rule 144 affiliate three-month volume cap ===
+1% of 100000000 outstanding = 1000000
+four-week average weekly volume = 1000000
+listed-stock cap (greater of 1% and four-week average) = 1000000
+if four-week average is 1500000, listed-stock cap = 1500000
+OTC / non-listed: the SEC Rule 144 investor publication says only the 1% measure applies
+OTC cap in this toy = 1000000 (1% only)
+=== B. Form 144 notice threshold ===
+  4000 shares at $10.00 (gross $40000): Form 144 required? False
+  4000 shares at $20.00 (gross $80000): Form 144 required? True
+  6000 shares at $5.00 (gross $30000): Form 144 required? True
+  5000 shares at $10.00 (gross $50000): Form 144 required? False
+Form 144 is a notice of proposed sale, filed with the order; it is not executed volume
+=== C. Rule 105 restricted period (five business days before pricing) ===
+pricing 2026-06-12; five business days before = 2026-06-05 (toy weekdays only)
+  short on 2026-06-04: inside restricted period? False
+  short on 2026-06-05: inside restricted period? True
+  short on 2026-06-12: inside restricted period? True
+a short inside this window plus a purchase of the offered shares from an underwriter is the Rule 105 prohibition (firm-commitment equity offerings); exceptions exist but are not modelled here
+=== D. Rule 14e-1 minimum tender window (toy weekday count) ===
+official 'business day' is defined in Rules 14d-1(g)(3) and 13e-4(a)(3); this toy counts Mon-Fri and ignores holidays
+offer first published 2026-03-02; 20th weekday (counting that date as day 1) = 2026-03-27
+if consideration is increased on 2026-03-20, 10 weekdays from that notice (counting that date as day 1) = 2026-04-02
+the April 16, 2026 exemptive order can shorten some equity offers to 10 business days only when every stated condition is met; this toy does not apply that order
+assertions passed: 15/15

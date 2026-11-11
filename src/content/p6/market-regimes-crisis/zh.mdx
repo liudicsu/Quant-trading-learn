@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **15.5 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **15.75 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -210,6 +210,33 @@ assertions passed: 9/9
 
 **边界：** 不推荐任何期权产品或策略；不写「卖期权收租」；不写 0DTE；不给隐含波动率交易信号。
 
+## 到期：OCC 的“例外行权”不是无条件的“自动行权”（核实于 2026-11-11）
+
+前面几条已经讲了合约单位、行权方式、指派风险、股息，以及股票期权 T+1 交收。到期时还有一个机制上的事实。期权清算公司（OCC）有一套叫做**例外行权**（exercise-by-exception）的行政程序。[OIC 期权行权常见问题](https://www.optionseducation.org/referencelibrary/faq/options-exercise) 引用 OCC Rule 805 及解释 .02 写明：到期时期权如果至少价内 **0.01 美元**（官方收盘价相对行权价），OCC 就会行权，除非清算会员给出相反指示。
+
+这是 OCC 和清算会员之间的程序，**不是**要求每个客户账户都必须行权。券商可以对客户使用不同的门槛；清算会员也可以指示 OCC 不要行权一份价内期权，或去行权一份低于门槛的期权。不要把它不加限定地叫做“自动行权”。
+
+如果一张标准的 100 股股票期权被行权或被指派，账户里会出现 **100 股**股票（多头或空头），并在下一个营业日交收（T+1），这一点 ODD 已经写过。回测如果把所有到期期权都当成“作废”，就会漏掉这部分股票头寸。本课不建议行权、持有或卖出期权。
+
+**实验：** `examples/p6/13_exercise_by_exception_toy.py`（合成收盘价和行权价；不联网）：
+
+```text
+=== OCC exercise-by-exception ($0.01 in-the-money, unless contrary instructions) ===
+  call K=100 close=100.01 ITM=0.01 -> exception exercise? True
+  call K=100 close=100.0 ITM=0.0 -> exception exercise? False
+  call K=100 close=99.99 ITM=-0.01 -> exception exercise? False
+  put K=100 close=99.99 ITM=0.01 -> exception exercise? True
+  put K=100 close=100.0 ITM=0.0 -> exception exercise? False
+  put K=100 close=100.01 ITM=-0.01 -> exception exercise? False
+a clearing member may still instruct OCC not to exercise an ITM option, or to exercise one that is below the threshold
+this procedure is between OCC and clearing members; a broker may use a different customer threshold
+=== Assignment creates a stock position (standard 100-share equity contract) ===
+writer assigned on 1 call: stock position -100 shares
+writer assigned on 1 put: stock position 100 shares
+those stock trades settle T+1 after exercise; a backtest that 'expires worthless' every option will miss this inventory
+assertions passed: 7/7
+```
+
 ## Labs（离线合成）
 
 运行：`examples/p6/04_market_regimes_crisis.py`（图写入 `public/p6/`）。
@@ -337,6 +364,7 @@ assertions passed: 5/5
 10. 把隔夜价格带当成涨跌停或成交保证；以为隔夜触带会像常规时段一样自动暂停 5 分钟；把 19:30 参考价时间当成永久规则（第 29 号修正案是临时生效）。
 11. 把 4 美元的期权报价当成一张合约 4 美元（实际是 400 美元）；把 BSM 模型价和市场价的差当成 alpha；忘了普通股息不调整期权条款；以为 Level 3 熔断后当晚隔夜时段就恢复交易。
 12. 把 SEC 暂停交易当成当天就结束的普通交易所停牌；在暂停窗口里前向填充价格；把被 SEC 认为可能涉及操纵的价格暴涨当成正常动量拿去训练模型。
+13. 把 OCC 的例外行权不加限定地叫做“自动行权”，或以为每家券商都用 0.01 美元的门槛；把所有到期期权都当成作废，从而漏掉被指派后出现的 100 股股票头寸。
 
 
 ## 练习（1:1）
@@ -369,12 +397,13 @@ assertions passed: 5/5
 <Quiz id="rc-bsm" question="看涨期权的 BSM 模型价低于市场价，在本课中意味着？" options={["期权错价，是 alpha 信号", "模型假设（恒定波动率、无摩擦）和市场不符；它是参照，不是信号", "看跌看涨平价被打破", "交易所出错了"]} answer={1} explanation="BSM 只是参照模型；模型价和市场价的差不是 alpha。" />
 <Quiz id="rc-mwcb3" question="按 NYSE SR-NYSE-2026-43，13:00 ET 触发 Level 3 熔断后，最早何时可以恢复交易？" options={["当晚 21:00 ET", "下一交易日 04:00 ET 或更晚", "15 分钟后", "必须等 SEC 下令"]} answer={1} explanation="条文现为「直到下一交易日 04:00 ET 或更晚」；Nasdaq、Cboe 等也做了同样修改，但截至 2026-11-10 并非所有交易场所都已提交。" />
 <Quiz id="rc-suspend" question="SEC 暂停交易和交易所的 LULD 暂停有什么不同？" options={["是同一件事的两个名字", "SEC 暂停交易最多 15 分钟", "标普 500 跌 7% 时会自动触发 SEC 暂停交易", "SEC 为保护投资者以命令决定，最长可达 10 个营业日；LULD 暂停是自动的价格带机制"]} answer={3} explanation="《证券交易法》第 12(k)(1)(A) 条允许 SEC 即时暂停某只证券的交易，期限不超过 10 个营业日。LULD 暂停是 NMS 计划的价格带机制；标普 500 跌 7% 是 MWCB 第一级的触发条件。" />
+<Quiz id="rc-exbyex" question="到期时，OCC 的例外行权会做什么？" options={["它会自动行权客户所有价内期权，任何人不能反对", "它让每张股票期权都到期作废，所以回测可以忽略股票头寸", "它是 Cboe 的规则，把合约单位从 100 股改成 1 股", "对至少价内 0.01 美元的到期期权，OCC 会行权，除非清算会员给出相反指示；这是 OCC 和清算会员之间的程序，不是对客户的强制要求；一张标准股票期权被指派后，会产生 100 股股票头寸，按 T+1 交收"]} answer={3} explanation="OIC 常见问题引用 OCC Rule 805 及解释 .02，门槛是 0.01 美元。券商可以对客户使用不同门槛；回测如果把所有到期期权都当成作废，就会漏掉由此产生的股票头寸。" />
 
 ## 完成标准
 
 四场景卡片 + 实验 A–D 数字与课内一致 + 「新闻≠regime」短文（含已核验链接）+ 硬规则清单。平滑概率不得出现在「实盘可用」列。
 
-**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；[Investor.gov：Trading Halts and Delays](https://www.investor.gov/introduction-investing/investing-basics/glossary/trading-halts-and-delays)；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)、[OCC ODD 2024-06 版 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)、[SEC 34-106582（Cboe BZX）](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf) SEC 暂停交易（2026-11-11 核实）：[15 U.S.C. 78l(k)](https://www.law.cornell.edu/uscode/text/15/78l)、[SEC 暂停交易列表](https://www.sec.gov/enforcement-litigation/trading-suspensions)、[SEC 34-106668](https://www.sec.gov/files/litigation/suspensions/2026/34-106668-ts.pdf)。
+**来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；[Investor.gov：Trading Halts and Delays](https://www.investor.gov/introduction-investing/investing-basics/glossary/trading-halts-and-delays)；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)、[OCC ODD 2024-06 版 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)、[SEC 34-106582（Cboe BZX）](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf) SEC 暂停交易（2026-11-11 核实）：[15 U.S.C. 78l(k)](https://www.law.cornell.edu/uscode/text/15/78l)、[SEC 暂停交易列表](https://www.sec.gov/enforcement-litigation/trading-suspensions)、[SEC 34-106668](https://www.sec.gov/files/litigation/suspensions/2026/34-106668-ts.pdf)。enrich15（2026-11-11 核实）：[OIC 期权行权常见问题](https://www.optionseducation.org/referencelibrary/faq/options-exercise)（引用 OCC Rule 805 及解释 .02）。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  
