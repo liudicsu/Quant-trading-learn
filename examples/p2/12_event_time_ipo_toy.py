@@ -244,3 +244,57 @@ print("no product, broker, or allocation recommendation")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_event_time_ipo_ok")
 print("disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only")
+
+
+print("=== G. FINRA 5131: spinning is a different allocation prohibition; no pre-open market order ===")
+# FINRA Rule 5131 (opened 2026-11-12). Keep section F, including the line that
+# 5131 "is not taught here," identical. This section teaches 5131 after that line.
+# 5131(b)(1) spinning: a member may not allocate shares of a new issue to any
+# account in which an executive officer or director of a public company or a
+# covered non-public company, or a person materially supported by such
+# executive officer or director, has a beneficial interest, if the official
+# investment-banking conditions in (b)(1)(A)-(C) are met.
+# 5131(b)(2): the prohibitions shall not apply to accounts described in Rule
+# 5130(c)(1) through (3) and (5) through (12), or to any other account in
+# which those beneficial interests in the aggregate do not exceed 25%.
+# Supplementary Material .01: issuer-directed allocations are outside (b) if
+# the member has no involvement or influence in the allocation decisions.
+# 5131(d)(4): no member may accept a market order for the purchase of shares
+# of a new issue in the secondary market prior to the commencement of trading
+# of such shares in the secondary market.
+# 5131(e)(7): "New issue" has the same meaning as Rule 5130(i)(9).
+# 5131(a) quid pro quo allocations are a different official paragraph; name
+# only. Do not build an IB-relationship, covered-non-public-company, flipping,
+# or lock-up-waiver engine. No product, broker, or allocation recommendation.
+
+print("spinning under 5131(b) is a different prohibition from already-taught 5130 restricted persons")
+print("a member may not allocate a new issue to an account in which an executive officer or director")
+print("  of a public company or a covered non-public company, or a person materially supported by them,")
+print("  has a beneficial interest, if the official investment-banking conditions in (A)/(B)/(C) are met")
+public_company_executive_automatically_eligible = False
+print(f"  a public-company executive's account is automatically eligible when those IB conditions are met? {public_company_executive_automatically_eligible}")
+check(public_company_executive_automatically_eligible is False, "executive not automatically eligible under 5131(b)")
+
+print("5131(d)(4): no member may accept a market order for the purchase of shares of a new issue")
+print("  in the secondary market prior to the commencement of trading of such shares in the secondary market")
+market_order_before_secondary_trading = False
+print(f"  member may accept a market order for the new issue in the secondary market before secondary trading commences? {market_order_before_secondary_trading}")
+check(market_order_before_secondary_trading is False, "5131(d)(4) market-order ban")
+
+print("new issue has the same meaning as Rule 5130(i)(9)")
+same_meaning = True
+print(f"  5131(e)(7) uses the 5130(i)(9) meaning of new issue? {same_meaning}")
+check(same_meaning is True, "same meaning as 5130(i)(9)")
+
+print("5131(b)(2) carve-outs exist (accounts in Rule 5130(c)(1)-(3) and (5)-(12),")
+print("  and any other account in which those beneficial interests in the aggregate do not exceed 25%);")
+print("  Supplementary Material .01 issuer-directed allocations exist if the member has no involvement or influence;")
+print("  this toy is not that engine")
+print("5131(a) quid pro quo allocations are a different official paragraph; this toy only names that paragraph")
+prints_quid_pro_quo_engine = False
+print(f"  this toy builds a quid pro quo / IB-client / flipping engine? {prints_quid_pro_quo_engine}")
+check(prints_quid_pro_quo_engine is False, "name only; do not build that engine")
+print("no product, broker, or allocation recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_event_time_ipo_ok")
+print("disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only")

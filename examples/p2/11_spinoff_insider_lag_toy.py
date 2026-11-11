@@ -456,3 +456,59 @@ print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 rem
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
 print("disclaimer: official Nasdaq CQS / CMS suffix table; not a corporate-actions catalog; learning only; no product recommendation")
+
+
+print("=== I. Rule 13d-2: 1% is deemed material on a 13D; a 13G is not on that clock ===")
+# 17 CFR 240.13d-2 (official eCFR, current as of 2026-11-09, opened 2026-11-12,
+# not an interstitial). Keep sections A-H identical, including Form 5 due date
+# 2026-02-17 and 13d-1(g) fifth business day 2026-10-13, and 54/54 after H.
+# 13d-2(a): a Schedule 13D amendment disclosing a material change is due
+# within two business days after the date of such change. An acquisition or
+# disposition of beneficial ownership equal to one percent or more of the
+# class shall be deemed "material"; less than those amounts may be material,
+# depending upon the facts and circumstances.
+# 13d-2(b): a Schedule 13G filer under 13d-1(b), (c), or (d) generally amends
+# within 45 days after the end of each calendar quarter if, as of quarter-end,
+# there are any material changes. An amendment need not be filed with respect
+# to a change in the percent of the class outstanding previously reported if
+# the change results solely from a change in the aggregate number of
+# securities outstanding.
+# 13d-2(c) / (d) official intra-period clocks exist (10% / more-than-5%);
+# this toy names them and is not that engine.
+# Do not apply the 13D 1% / two-business-day clock to every 13G.
+# Do not reopen Form 5 / 13d-1(g) date rows. No filer or disclosure advice.
+
+print("13d-2(a): a Schedule 13D amendment disclosing a material change is due within two business days after the date of such change")
+print("an acquisition or disposition of beneficial ownership of one percent or more of the class is deemed material")
+print("acquisitions or dispositions of less than one percent may be material, depending upon the facts and circumstances")
+one_pct_deemed_material = True
+sub_one_pct_may_be_material = True
+print(f"  1% acquisition or disposition deemed material? {one_pct_deemed_material}")
+print(f"  a smaller change may still be material? {sub_one_pct_may_be_material}")
+check(one_pct_deemed_material is True, "1% is deemed material")
+check(sub_one_pct_may_be_material is True, "sub-1% may still be material")
+
+print("a 13G is not on that same 1% / two-business-day clock")
+print("13d-2(b): a 13G filer under 13d-1(b), (c), or (d) generally amends within 45 days after calendar quarter-end")
+print("  if, as of the end of the calendar quarter, there are any material changes")
+g_uses_13d_clock = False
+print(f"  every 13G amends on the 13D 1% / two-business-day clock? {g_uses_13d_clock}")
+check(g_uses_13d_clock is False, "13G is not on the 13D 1%/two-business-day clock")
+solely_from_shares_outstanding_needs_13g_amendment = False
+print("a percent change solely from a change in the aggregate number of securities outstanding need not be a 13G amendment")
+print(f"  13G amendment required when the percent change is solely from shares outstanding? {solely_from_shares_outstanding_needs_13g_amendment}")
+check(solely_from_shares_outstanding_needs_13g_amendment is False, "solely shares-outstanding change need not be a 13G amendment")
+
+print("official 13d-2(c) and 13d-2(d) intra-period clocks also exist:")
+print("  13d-2(c) (13d-1(b) / QII filers): within five business days after month-end when beneficial ownership,")
+print("    computed as of the last day of the month, exceeds 10%, and thereafter after a more-than-5% increase or decrease")
+print("  13d-2(d) (13d-1(c) / passive filers): within two business days after acquiring greater than 10%,")
+print("    and thereafter within two business days after a more-than-5% increase or decrease")
+print("  this toy is not that engine")
+builds_cd_engine = False
+print(f"  this toy builds the 13d-2(c)/(d) engine? {builds_cd_engine}")
+check(builds_cd_engine is False, "name (c)/(d); do not build that engine")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_spinoff_insider_lag_ok")
+print("disclaimer: official 13d-2 amendment clocks; no filer or disclosure advice; learning only")

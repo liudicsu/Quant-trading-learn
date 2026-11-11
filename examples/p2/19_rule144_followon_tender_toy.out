@@ -71,3 +71,34 @@ a prior-notice requirement exists in the rule; this toy is not a notice engine
 do not teach the 104(f) stabilizing-level catalog
 no offering or dealer recommendation
 assertions passed: 29/29
+=== H. Rule 14e-2: the subject company must state its position within 10 business days ===
+14e-2(a): the subject company, no later than 10 business days from the date the tender offer
+  is first published or sent or given, shall publish, send or give to security holders a statement
+  disclosing that it recommends acceptance or rejection, remains neutral, or is unable to take a position,
+  including the reason(s)
+offer first published 2026-03-02; 10th weekday (counting that date as day 1) = 2026-03-13
+  this is the 14e-1 20-business-day duration? False
+  this is a 10-calendar-day clock? False
+a material change under 14e-2(b) shall be published, sent, or given promptly; this toy does not invent a fixed number of days for promptly
+Schedule 14D-9 is the recommendation-statement form, filed as soon as practicable on the date the recommendation is first published
+  this toy invents a second 10-business-day Schedule 14D-9 filing clock? False
+no bidder, target, or strategy recommendation
+assertions passed: 33/33
+=== I. Rule 14d-11: a subsequent offering period is an election, not automatic ===
+a subsequent offering period under Rule 14d-11 is optional: a bidder may elect at least three business days
+  only if the official conditions are met
+  every tender offer has a subsequent offering period? False
+official conditions include: the initial offering period of at least 20 business days has expired;
+  the offer is for all outstanding securities of the class; immediate accept and prompt pay;
+  results announced no later than 9:00 a.m. Eastern time on the next business day after initial expiration,
+  and the subsequent period begins immediately; same form and amount of consideration
+initial offering period expires 2026-03-27; results due no later than 9:00 a.m. Eastern on 2026-03-30
+  this 9:00 a.m. results clock is the already-taught 14e-1(d) extension-notice clock? False
+official note: no withdrawal rights during the subsequent offering period (14d-7(a)(2))
+withdrawal rights do apply during the initial open period (14d-7(a)(1))
+  withdrawal rights during the subsequent period? False
+  withdrawal rights during the initial open period? True
+  this toy prints a 15-business-day cap or any official maximum the rule text does not state? False
+the already-taught 14e-5 same-consideration subsequent-period carve-out stays as already printed in section F
+no bidder or strategy recommendation
+assertions passed: 39/39

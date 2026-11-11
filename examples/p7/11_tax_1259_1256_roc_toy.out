@@ -133,3 +133,20 @@ the official text's "such as the Chicago Board Options Exchange" is an example o
 do not treat the writer's expired premium as ordinary income
 assertions passed: 26/26
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== L. Pub 550 Put option as short sale (official holding-period rule) ===
+Buying a put option is generally treated as a short sale, and the exercise, sale, or expiration of the put is a closing of the short sale
+If you have held the underlying stock for 1 year or less at the time you buy the put,
+  any gain on the exercise, sale, or expiration of the put is a short-term capital gain
+The same is true if you buy the underlying stock after you buy the put but before its exercise, sale, or expiration
+Your holding period for the underlying stock begins on the earliest of:
+  the date you dispose of the stock, the date you exercise the put, the date you sell the put, or the date the put expires
+  stock held 1 year or less when the put is bought: gain on the put is short-term? True
+  stock bought after the put and before the put is exercised, sold, or expires: gain on the put is short-term? True
+  if the put expires, the stock's holding period may begin on the date the put expires? True
+  this is the already-taught character rule for an actual short sale of stock? False
+  apply section 1256 60/40 to this put? False
+  this toy prints a married-put exception? False
+the official paragraph does not state a married-put exception in this heading
+do not invent a rule for stock already held more than one year beyond the official 1 year or less / bought-after-the-put sentences
+assertions passed: 32/32
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise

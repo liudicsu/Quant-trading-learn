@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **24.75 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h + 赠与与继承的成本基础（Pub 550）0.25h + 1099-DIV 第 2a 栏资本利得分配 0.25h + Pub 550 看跌与看涨期权 0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **25.25 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h + 赠与与继承的成本基础（Pub 550）0.25h + 1099-DIV 第 2a 栏资本利得分配 0.25h + Pub 550 看跌与看涨期权 0.25h + Pub 550「看跌期权视同卖空」持有期规则 0.25h + 1099-B 第 5 / 12 / 1g 栏 0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -177,6 +177,35 @@ without the written confirmation this identification does not count -> FIFO basi
 toy average of remaining lots 10.2857/share -> 130 x avg = 1,337.14 (not allowed for this stock)
 backtest/ledger rule: store lots (date, shares, cost); record the lot method next to every sale.
 assertions passed: 3/3
+```
+
+
+**Form 1099-B 第 5 栏标明非被覆盖证券：经纪商可以不填取得日期、成本基础、洗售不准扣除额和损益类型，也不必勾选第 12 栏；空白的成本基础不是零成本。第 12 栏若勾选，表示第 1e 栏的成本基础已向 IRS 报告。第 1g 栏必须在同一账户、被覆盖证券、同一 CUSIP 的出售和买进都发生时，报告第 1091 条洗售亏损；经纪商可以但不必报告全部第 1091 条亏损（核实于 2026-11-12；一般信息，不是税务建议）。** 不要改写已经教过的先进先出 / 充分指定段落，包括 Treas. Reg. 被覆盖证券 2011-01-01 / 2012-01-01 的定义、61 天洗售框，或 1099-DIV 第 2a 栏 / 第 3 栏框。这一节补上官方的表格栏位事实，避免把每一批股票的 1099-B 成本基础都当成完整，把空白的第 1e 栏当成零，或把空白的第 1g 栏当成没有发生洗售的证明。本课不判断这是否适用于你。回测除非另行标注，否则按税前处理。
+
+[2026 年 Form 1099-B 说明](https://www.irs.gov/instructions/i1099b)：对被覆盖证券的每一笔出售，经纪商报告取得日期（第 1b 栏）、损益为短期还是长期（第 2 栏）、成本或其他基础（第 1e 栏），以及因洗售不准扣除的亏损（第 1g 栏）。“出售非被覆盖证券并在单独的 Form 1099-B 上报告时，可以勾选第 5 栏，并把第 1b、1e、1f、1g 和 2 栏留空。” 第 5 栏标题：“Check if a Noncovered Security。”“如果勾选此栏，不必填写第 1b、1e、1f、1g 和 2 栏，也不必勾选第 12 栏。” 官方例子：客户 Arlo 在 2024 年 4 月（非被覆盖）、2025 年 4 月（被覆盖，2026 年 6 月出售时为长期）和 2025 年 8 月（被覆盖，2026 年 6 月出售时为短期）买入 ABC 股票；即使是一次出售，被覆盖批次要在两份单独的 2026 年 Form 1099-B 上报告，非被覆盖批次在第三份表格上报告，或并在 2025 年 4 月那份长期表格上；如果非被覆盖证券在第三份表格上报告，可以勾选第 5 栏。第 1g 栏：“如果出售和买进交易发生在同一账户，且针对具有相同 CUSIP 编号的被覆盖证券，则必须报告第 1091 条不准扣除的任何亏损。可以但不必在第 1g 栏报告第 1091 条不准扣除的全部亏损。” 第 12 栏标题：“Check if Basis Reported to IRS。”
+
+不要把空白的第 1e 栏当成零成本基础，或把空白的第 1g 栏当成已经教过的 61 天洗售规则不适用的证明（例如非被覆盖批次、不同账户，或并非同一 CUSIP 的实质相同证券）。不要把 1099-B 第 5 栏和已经教过的 1099-DIV 第 5 栏 / §199A 混为一谈。不要搭建完整的 1091 / 实质相同 / 转移说明书引擎。没有经纪商、批次方法或税务筹划建议。
+
+**实验：** `examples/p7/09_tax_lot_toy.py` 的 D 节（A–C 节，包括官方 Pub 550 先进先出 1,380 美元例子，仍与此前相同，C 节之后仍为 3/3；全脚本 10 项断言；一般信息，不是税务建议）：
+
+```text
+=== D. Form 1099-B box 5 / 12 / 1g: noncovered, basis reported to IRS, and wash-sale reporting ===
+official Arlo example: shares bought in April 2024, April 2025, and August 2025;
+  a single June 2026 sale is reported on separate 2026 Forms 1099-B
+  April 2025 lot: long-term covered form
+  August 2025 lot: short-term covered form
+  April 2024 lot: noncovered form; box 5 may be checked
+box 5 marks a noncovered security; the broker may leave boxes 1b, 1e, 1f, 1g, and 2 blank and need not check box 12
+  a blank box 1e basis is a zero cost? False
+box 12, if checked, means basis in box 1e was reported to the IRS
+box 1g must report a section 1091 wash-sale loss when both the sale and the purchase occur
+  in the same account in covered securities with the same CUSIP
+the broker is permitted but not required to report all section 1091 losses
+  a blank box 1g is proof that no wash sale occurred? False
+  1099-B box 5 is the same box as 1099-DIV box 5 / section 199A? False
+this toy is not a complete section 1091 engine
+disclaimer: general information, not tax advice
+assertions passed: 10/10
 ```
 
 ## 推定出售、第 1256 条 60/40，以及资本返还（核实于 2026-11-12）
@@ -398,8 +427,33 @@ disclaimer: general information, not tax advice; backtests stay pre-tax unless l
 ```
 
 
+**Pub 550 一般把买入看跌期权当成卖空：看跌期权的行权、出售或到期，是对该卖空的平仓。如果买入看跌时，标的股票已持有一年或更短，或股票是在买入看跌之后、在看跌行权、出售或到期之前买入的，则该看跌上的任何利得都是短期的，并且标的股票的持有期从以下日期中最早的一天开始：处置股票之日、行权之日、出售看跌之日，或看跌到期之日（核实于 2026-11-12；一般信息，不是税务建议）。** 不要改写已经教过的看跌与看涨段落、官方 4,000 / 6,000 美元例子、卖空税务性质框，或 §1256 60/40 框。实验的 K 段，包括“Pub 550 里有一条 Put option as short sale 持有期规则；本玩具不是该引擎”那一行，仍与此前相同。这一节在那一行之后教这条官方持有期规则，避免以为在短期持仓上买入保护性看跌之后，股票的长期时钟仍继续走，或覆盖已经教过的卖空税务性质。没有合约、经纪商或税务筹划建议。
 
+[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Put option as short sale”：“Buying a put option is generally treated as a short sale, and the exercise, sale, or expiration of the put is a closing of the short sale. See Short Sales, earlier. If you have held the underlying stock for 1 year or less at the time you buy the put, any gain on the exercise, sale, or expiration of the put is a short-term capital gain. The same is true if you buy the underlying stock after you buy the put but before its exercise, sale, or expiration. Your holding period for the underlying stock begins on the earliest of: the date you dispose of the stock, the date you exercise the put, the date you sell the put, or the date the put expires.” 以这份官方 HTML 措辞为准。
 
+不要覆盖已经教过的卖空税务性质（实际卖空的损益在平仓交付时实现，性质一般跟随用于平仓的财产的持有期）。不要套用 §1256 60/40，也不要改写官方 4,000 / 6,000 美元股票期权例子。官方段落在这一标题下没有写已婚看跌（married-put）例外；不要发明一条。除了停留在官方“1 year or less” / “在买入看跌之后买入标的股票”的句子里，不要为已经持有超过一年的股票另编规则。不要重开 §1092 / 跨式。
+
+**实验：** `examples/p7/11_tax_1259_1256_roc_toy.py` 的 L 节（A–K 节仍与此前相同，包括官方 4,000 / 6,000 美元例子和 K 节“本玩具不是该引擎”那一行，以及 K 节后的 26/26；全脚本 32 项断言；一般信息，不是税务建议）：
+
+```text
+=== L. Pub 550 Put option as short sale (official holding-period rule) ===
+Buying a put option is generally treated as a short sale, and the exercise, sale, or expiration of the put is a closing of the short sale
+If you have held the underlying stock for 1 year or less at the time you buy the put,
+  any gain on the exercise, sale, or expiration of the put is a short-term capital gain
+The same is true if you buy the underlying stock after you buy the put but before its exercise, sale, or expiration
+Your holding period for the underlying stock begins on the earliest of:
+  the date you dispose of the stock, the date you exercise the put, the date you sell the put, or the date the put expires
+  stock held 1 year or less when the put is bought: gain on the put is short-term? True
+  stock bought after the put and before the put is exercised, sold, or expires: gain on the put is short-term? True
+  if the put expires, the stock's holding period may begin on the date the put expires? True
+  this is the already-taught character rule for an actual short sale of stock? False
+  apply section 1256 60/40 to this put? False
+  this toy prints a married-put exception? False
+the official paragraph does not state a married-put exception in this heading
+do not invent a rule for stock already held more than one year beyond the official 1 year or less / bought-after-the-put sentences
+assertions passed: 32/32
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+```
 
 **中国个人所得税（按审阅报告 R28）：** 居民个人的境内外所得依中国[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)规定纳税（在中国境内有住所，或无住所而一个纳税年度内居住累计满 183 天的个人为居民个人）；涉及无住所个人等情形另依适用规定核对，不仅凭国籍判断。财产转让所得适用 20% 比例税率，应纳税所得额一般为转让收入减财产原值及合理费用后的余额；利息、股息、红利所得亦有 20% 法定比例税率，具体减免/协定与所得性质另核。境外已依法实际缴纳的所得税可在规定限额内抵免，非无条件全额抵免；符合规定的超限部分可向后五个纳税年度结转（[公告 2020 年第 3 号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)）。居民个人取得境外所得原则上于次年 3 月 1 日至 6 月 30 日申报。不能由美国预扣完毕推出中国无需申报或无需补税。
 
@@ -635,6 +689,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 25. 在通常的公允市值情形下，把被继承人原来的买入价当成继承人的成本基础，或对继承的资本资产股份重新起算短期时钟；当赠与时公允市值更低时跳过双重基础规则；把配偶转让和父母的赠与当成同一条规则。
 26. 把 Form 1099-DIV 第 2a 栏资本利得分配当成普通所得、合格股息或第 3 栏资本返还；因为没有卖出份额就跳过第 2a 栏，或按股东自己的持有期把短期持有当成短期分配。
 27. 把 §1256 60/40 套到普通上市股票期权上；把卖方到期的权利金当成普通所得；搭建 §1092 / 跨式 / “Put option as short sale” 引擎；把官方文本里的 “such as the Chicago Board Options Exchange” 读成场所推荐。
+28. 发明官方 “Put option as short sale” 段落并未写明的已婚看跌例外；把这条持有期规则当成对已经教过的卖空税务性质的改写；把 §1256 60/40 套到该看跌上；在官方句子之外，为已经持有超过一年的股票另编规则。
+29. 把空白的 1099-B 第 1e 栏当成零成本，或把空白的第 1g 栏当成没有发生洗售的证明；把 1099-B 第 5 栏和已经教过的 1099-DIV 第 5 栏 / §199A 混为一谈；把第 5 栏当成每一批都是已向 IRS 报告成本基础的被覆盖证券。
 
 ## 练习（1:1）
 
@@ -663,6 +719,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 21. **ex-giftbasis** — 运行同一脚本的 I 节；写出继承股份在通常公允市值情形下的成本基础和税务性质，以及官方赠与例子（基础 10,000 美元、公允市值 9,000 美元、售价 9,500 美元）的结果；**完成标准**：成本基础是死亡日公允市值而非被继承人买入价，出售按长期处理；该赠与例子既无增益也无亏损，与输出一致。一般信息，不是税务建议。
 22. **ex-cgdist** — 运行同一脚本的 J 节；写出股份只持有三个月、且没有卖出时，第 2a 栏资本利得分配的性质；**完成标准**：它是长期资本利得，并且不是第 1a 栏、第 1b 栏或第 3 栏，与输出一致。一般信息，不是税务建议。
 23. **ex-optstax** — 运行同一脚本的 K 节；写出官方 4,000 美元到期和 6,000 美元平仓例子对这十份 JJJ 看涨的结果，并说明如果它们改成适用第 1256 条的非股权合约会怎样；**完成标准**：到期时持有人短期资本亏损 4,000 美元 / 卖方短期资本利得 4,000 美元，平仓时持有人短期资本利得 2,000 美元 / 卖方短期资本亏损 2,000 美元，只有在已经教过的 60/40 规则下这 4,000 美元才会拆成 1,600 美元短期和 2,400 美元长期，与输出一致。一般信息，不是税务建议。
+24. **ex-putss** — 运行同一脚本的 L 节；写出买入看跌一般如何被对待，如果股票已持有一年或更短，看跌上的利得如何，以及看跌到期时股票持有期从哪一天开始；**完成标准**：买入看跌一般视为卖空，看跌上的利得是短期的，持有期可以从看跌到期之日开始，与输出一致，并且没有打印已婚看跌例外。一般信息，不是税务建议。
+25. **ex-1099b** — 运行 `09_tax_lot_toy.py` 的 D 节；说明 Arlo 在 2026 年 6 月的一次出售如何报告，空白的第 1e 栏是不是零成本，以及空白的第 1g 栏能不能证明没有发生洗售；**完成标准**：2025 年 4 月长期被覆盖批次、2025 年 8 月短期被覆盖批次和 2024 年 4 月非被覆盖批次（可以勾选第 5 栏）分别用单独表格报告，空白成本基础不是零，空白的第 1g 栏不是没有洗售的证明，与输出一致。一般信息，不是税务建议。
 
 ## 测验
 
@@ -709,6 +767,9 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-cgdist" question="Form 1099-DIV 第 2a 栏资本利得分配应如何处理？（一般信息，不是税务建议。）" options={["如果股东持有基金或 REIT 份额不足一年，第 2a 栏就是普通所得，或第 1b 栏的合格股息", "如果没有卖出份额就跳过第 2a 栏，因为没有出售就没有资本利得，或把它当成第 3 栏资本返还", "共同基金（或其他 RIC）或 REIT 的资本利得分配列在 Form 1099-DIV 第 2a 栏，并作为长期资本利得申报，不论股东持有这些份额多久，即使没有卖出份额。它们不是普通股息（第 1a 栏），不是合格股息（第 1b 栏），也不是资本返还（第 3 栏）。第 2b、2c、2d 和 2f 栏是 2a 的官方子集；未分配资本利得可能出现在 Form 2439 上。本课不搭建这些引擎", "第 2a 栏使用股东自己的持有期，所以持有三个月就会让该分配变成短期"]} answer={2} explanation="Pub 550：“Report capital gain distributions as long-term capital gains, regardless of how long you owned your shares in the mutual fund or REIT.” 1099-DIV 说明把第 2a 栏标为总资本利得分配（长期）。不要把它当成第 1a、1b 或 3 栏。一般信息，不是税务建议。" />
 <Quiz id="ce-optstax" question="根据 IRS Publication 550（2025），官方非交易商例子如何处理普通上市股票看跌和看涨期权？（一般信息，不是税务建议。）" options={["2025 年 4 月 8 日发行的十份 JJJ 看涨期权，权利金 4,000 美元，2025 年 12 月到期：持有人短期资本亏损 4,000 美元，卖方短期资本利得 4,000 美元。如果改在 2025 年 5 月 6 日以 6,000 美元卖掉，持有人短期资本利得 2,000 美元，买回的卖方短期资本亏损 2,000 美元。不要把 §1256 60/40 套到普通上市股票期权上，也不要把卖方到期的权利金当成普通所得。如果它们改成适用第 1256 条的非股权合约，这 4,000 美元将拆成 1,600 美元短期和 2,400 美元长期，这是已经教过的 60/40 规则。Pub 550 后面还有 “Straddles” 标题和 “Put option as short sale” 持有期规则；本课不搭建这些引擎", "把 §1256 60/40 套到普通上市股票期权上，所以 4,000 美元到期总是 1,600 美元短期加 2,400 美元长期", "卖方所写的股票看涨到期时，权利金是普通所得", "官方文本里的 “such as the Chicago Board Options Exchange” 是场所推荐"]} answer={0} explanation="Pub 550 的官方非交易商例子使用这些 4,000 美元到期和 6,000 美元平仓数字。60/40 分拆是已经教过的非股权第 1256 条合约规则，不是普通股票期权规则。卖方到期的权利金是短期资本利得，不是普通所得。官方交易所措辞是全国性证券交易所的例子，不是场所推荐。一般信息，不是税务建议。" />
 
+<Quiz id="ce-putss" question="根据 IRS Publication 550（2025）“Put option as short sale”，买入看跌一般如何被对待？在官方条件适用时，持有期如何处理？（一般信息，不是税务建议。）" options={["这是对已经教过的、实际卖空股票税务性质的改写，并且适用 §1256 60/40", "官方段落在这一标题下写了已婚看跌例外，所以已经持有超过一年的股票，持有期始终不变", "买入看跌期权一般视为卖空，看跌的行权、出售或到期是对该卖空的平仓。如果买入看跌时标的股票已持有 1 年或更短，或股票是在买入看跌之后、在看跌行权、出售或到期之前买入的，则该看跌上的任何利得都是短期资本利得，并且标的股票的持有期从以下日期中最早的一天开始：处置股票之日、行权之日、出售看跌之日，或看跌到期之日。官方段落在这一标题下没有写已婚看跌例外；不要发明一条。不要套用 §1256 60/40，也不要在这些官方句子之外为已经持有超过一年的股票另编规则", "即使股票已持有一年或更短，买入保护性看跌之后，股票的长期时钟也始终继续走"]} answer={2} explanation="Pub 550 “Put option as short sale” 的官方 HTML 措辞。看跌的行权、出售或到期是对该卖空的平仓。官方段落在这一标题下没有写已婚看跌例外。这不是已经教过的实际卖空股票的性质规则，也不适用 §1256 60/40。一般信息，不是税务建议。" />
+<Quiz id="ce-1099b" question="根据 2026 年说明，Form 1099-B 第 5 栏、第 12 栏和第 1g 栏分别表示什么？（一般信息，不是税务建议。）" options={["空白的第 1e 栏就是零成本，空白的第 1g 栏证明没有发生洗售。1099-B 第 5 栏和 1099-DIV 第 5 栏 / §199A 是同一栏", "第 5 栏标明非被覆盖证券：经纪商可以把第 1b、1e、1f、1g 和 2 栏留空，也不必勾选第 12 栏；空白的成本基础不是零成本。在官方 Arlo 例子里，2026 年 6 月一次出售 2024 年 4 月非被覆盖、2025 年 4 月长期被覆盖和 2025 年 8 月短期被覆盖批次，要在单独的 2026 年 Form 1099-B 上报告，非被覆盖表格可以勾选第 5 栏。第 12 栏若勾选，表示第 1e 栏的成本基础已向 IRS 报告。第 1g 栏必须在同一账户、被覆盖证券、同一 CUSIP 的出售和买进都发生时，报告第 1091 条洗售亏损；经纪商可以但不必报告全部第 1091 条亏损。空白的第 1g 栏不是没有发生洗售的证明。本课不改写已经教过的被覆盖证券 2011 / 2012 定义，也不搭建完整的 1091 引擎", "每一份 1099-B 都为每一批报告完整的成本基础，因为每一种证券都是被覆盖证券", "第 12 栏若勾选，表示经纪商没有向 IRS 报告成本基础"]} answer={1} explanation="2026 年 Form 1099-B 说明：第 5 栏是 “Check if a Noncovered Security”；第 1b / 1e / 1f / 1g / 2 栏可以留空，也不必勾选第 12 栏。第 12 栏是 “Check if Basis Reported to IRS。” 第 1g 栏在同一账户、被覆盖、同一 CUSIP 的第 1091 条亏损时必须报告，对全部第 1091 条亏损则可以但不必报告。不要把空白的第 1e 栏当成零，或把空白的第 1g 栏当成没有洗售的证明，也不要把 1099-B 第 5 栏和 1099-DIV 第 5 栏混为一谈。一般信息，不是税务建议。" />
+
 
 ## 完成标准
 
@@ -720,6 +781,7 @@ n_sources=39 us_first_block=25 fields_complete=True
  enrich21（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Investment Interest”（第 3 章）和 “Distributions of Stock and Stock Rights”（第 1 章），含成本基础例子 1 以及非应税新股的持有期。
  enrich22（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) 第 4 章 “Property Received as Inheritance” / “Property Received as a Gift”（继承一般为死亡日公允市值，出售按长期；赠与的双重基础与官方既无增益也无亏损例子；持有期分拆）。一般信息，不是税务建议。
 enrich23（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) “Capital Gain Distributions” 和第 4 章 “Options” / “Puts and Calls” / Table 4-3（第 2a 栏不论持有期均为长期；官方 4,000 美元到期和 6,000 美元平仓例子）；[Form 1099-DIV 说明（2024 年 1 月修订）](https://www.irs.gov/instructions/i1099div) 第 2a 栏。一般信息，不是税务建议。
+enrich24（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) “Put option as short sale”；[2026 年 Form 1099-B 说明](https://www.irs.gov/instructions/i1099b)（第 5 / 12 / 1g 栏；官方 Arlo 例子）。一般信息，不是税务建议。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

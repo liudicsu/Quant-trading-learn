@@ -58,3 +58,24 @@ no product, broker, or allocation recommendation
 assertions passed: 28/28
 ASSERT_event_time_ipo_ok
 disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
+=== G. FINRA 5131: spinning is a different allocation prohibition; no pre-open market order ===
+spinning under 5131(b) is a different prohibition from already-taught 5130 restricted persons
+a member may not allocate a new issue to an account in which an executive officer or director
+  of a public company or a covered non-public company, or a person materially supported by them,
+  has a beneficial interest, if the official investment-banking conditions in (A)/(B)/(C) are met
+  a public-company executive's account is automatically eligible when those IB conditions are met? False
+5131(d)(4): no member may accept a market order for the purchase of shares of a new issue
+  in the secondary market prior to the commencement of trading of such shares in the secondary market
+  member may accept a market order for the new issue in the secondary market before secondary trading commences? False
+new issue has the same meaning as Rule 5130(i)(9)
+  5131(e)(7) uses the 5130(i)(9) meaning of new issue? True
+5131(b)(2) carve-outs exist (accounts in Rule 5130(c)(1)-(3) and (5)-(12),
+  and any other account in which those beneficial interests in the aggregate do not exceed 25%);
+  Supplementary Material .01 issuer-directed allocations exist if the member has no involvement or influence;
+  this toy is not that engine
+5131(a) quid pro quo allocations are a different official paragraph; this toy only names that paragraph
+  this toy builds a quid pro quo / IB-client / flipping engine? False
+no product, broker, or allocation recommendation
+assertions passed: 32/32
+ASSERT_event_time_ipo_ok
+disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only

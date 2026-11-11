@@ -480,3 +480,56 @@ print('the official text\'s "such as the Chicago Board Options Exchange" is an e
 print("do not treat the writer's expired premium as ordinary income")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+
+
+print("=== L. Pub 550 Put option as short sale (official holding-period rule) ===")
+# IRS Publication 550 (2025), Chapter 4, "Put option as short sale." Prefer
+# the official HTML wording (opened 2026-11-12). Keep sections A-K identical,
+# including the official $4,000 / $6,000 examples and the section K line
+# "a Put option as short sale holding-period rule exists in Pub 550; this
+# toy is not that engine," and 26/26 after K. This section teaches the rule
+# after that line.
+# "Buying a put option is generally treated as a short sale, and the
+# exercise, sale, or expiration of the put is a closing of the short sale."
+# If the underlying stock has been held for 1 year or less at the time the
+# put is bought, or if the underlying stock is bought after the put but
+# before its exercise, sale, or expiration, any gain on the exercise, sale,
+# or expiration of the put is a short-term capital gain, and the holding
+# period for the underlying stock begins on the earliest of: the date you
+# dispose of the stock, the date you exercise the put, the date you sell
+# the put, or the date the put expires.
+# The official paragraph does not state a married-put exception in this
+# heading; do not invent one. Do not invent a rule for stock already held
+# more than one year beyond staying inside the official sentences.
+# This is not the already-taught character rule for an actual short sale of
+# stock. Do not apply section 1256 60/40. General information, not tax advice.
+
+print("Buying a put option is generally treated as a short sale, and the exercise, sale, or expiration of the put is a closing of the short sale")
+print("If you have held the underlying stock for 1 year or less at the time you buy the put,")
+print("  any gain on the exercise, sale, or expiration of the put is a short-term capital gain")
+print("The same is true if you buy the underlying stock after you buy the put but before its exercise, sale, or expiration")
+print("Your holding period for the underlying stock begins on the earliest of:")
+print("  the date you dispose of the stock, the date you exercise the put, the date you sell the put, or the date the put expires")
+held_one_year_or_less = True
+gain_on_put_is_short_term = True
+print(f"  stock held 1 year or less when the put is bought: gain on the put is short-term? {gain_on_put_is_short_term}")
+check(held_one_year_or_less and gain_on_put_is_short_term, "gain on the put is short-term when stock held 1 year or less")
+bought_after_put = True
+print(f"  stock bought after the put and before the put is exercised, sold, or expires: gain on the put is short-term? {gain_on_put_is_short_term}")
+check(bought_after_put and gain_on_put_is_short_term, "gain on the put is short-term when stock is bought after the put")
+holding_period_starts_on_expiration = True
+print(f"  if the put expires, the stock's holding period may begin on the date the put expires? {holding_period_starts_on_expiration}")
+check(holding_period_starts_on_expiration is True, "holding period begins on the earliest official date, including expiration")
+is_actual_short_sale_character_rule = False
+print(f"  this is the already-taught character rule for an actual short sale of stock? {is_actual_short_sale_character_rule}")
+check(is_actual_short_sale_character_rule is False, "not the already-taught actual short-sale character rule")
+applies_1256 = False
+print(f"  apply section 1256 60/40 to this put? {applies_1256}")
+check(applies_1256 is False, "do not apply 1256 60/40")
+prints_married_put = False
+print(f"  this toy prints a married-put exception? {prints_married_put}")
+check(prints_married_put is False, "do not invent a married-put exception")
+print("the official paragraph does not state a married-put exception in this heading")
+print("do not invent a rule for stock already held more than one year beyond the official 1 year or less / bought-after-the-put sentences")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")

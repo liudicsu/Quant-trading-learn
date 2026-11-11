@@ -286,3 +286,97 @@ print("a prior-notice requirement exists in the rule; this toy is not a notice e
 print("do not teach the 104(f) stabilizing-level catalog")
 print("no offering or dealer recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+
+print("=== H. Rule 14e-2: the subject company must state its position within 10 business days ===")
+# 17 CFR 240.14e-2 (official eCFR, current as of 2026-11-09, opened 2026-11-12,
+# not an interstitial). Keep sections A-G, including Rule 105, 14e-1, 101/102,
+# 14e-5, and Rule 104, identical, including 29/29 after G.
+# 14e-2(a): the subject company, no later than 10 business days from the date
+# the tender offer is first published or sent or given, shall publish, send or
+# give to security holders a statement disclosing that it recommends
+# acceptance or rejection, expresses no opinion and is remaining neutral, or
+# is unable to take a position, including the reason(s).
+# 14e-2(b): a material change shall be published, sent, or given promptly
+# (do not invent a fixed number of days for "promptly").
+# This is not the 14e-1 20-business-day duration and not a 10-calendar-day
+# clock. Schedule 14D-9 / Rule 14d-9 is the recommendation-statement form,
+# filed as soon as practicable on the date the recommendation is first
+# published; do not invent a second 10-business-day 14D-9 filing clock.
+# Quote the operative 10-business-day sentence; do not silently correct the
+# official prefatory typo "withing the meaning of section 14(e)".
+# No bidder, target, or strategy recommendation.
+
+print("14e-2(a): the subject company, no later than 10 business days from the date the tender offer")
+print("  is first published or sent or given, shall publish, send or give to security holders a statement")
+print("  disclosing that it recommends acceptance or rejection, remains neutral, or is unable to take a position,")
+print("  including the reason(s)")
+first_published = date(2026, 3, 2)
+due_10bd = add_weekdays(first_published, 10)
+print(f"offer first published {first_published}; 10th weekday (counting that date as day 1) = {due_10bd}")
+check(due_10bd == date(2026, 3, 13), "14e-2 10-business-day clock from 2026-03-02 is 2026-03-13")
+is_20bd_duration = False
+is_10_calendar_days = False
+print(f"  this is the 14e-1 20-business-day duration? {is_20bd_duration}")
+print(f"  this is a 10-calendar-day clock? {is_10_calendar_days}")
+check(is_20bd_duration is False, "not the 14e-1 20-business-day duration")
+check(is_10_calendar_days is False, "not a 10-calendar-day clock")
+print("a material change under 14e-2(b) shall be published, sent, or given promptly; this toy does not invent a fixed number of days for promptly")
+print("Schedule 14D-9 is the recommendation-statement form, filed as soon as practicable on the date the recommendation is first published")
+second_14d9_10bd_clock = False
+print(f"  this toy invents a second 10-business-day Schedule 14D-9 filing clock? {second_14d9_10bd_clock}")
+check(second_14d9_10bd_clock is False, "no second 10-business-day 14D-9 filing clock")
+print("no bidder, target, or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== I. Rule 14d-11: a subsequent offering period is an election, not automatic ===")
+# 17 CFR 240.14d-11 and 240.14d-7 (official eCFR, current as of 2026-11-09,
+# opened 2026-11-12). Keep sections A-H identical once H is added.
+# A bidder may elect a subsequent offering period of at least three business
+# days only if the official (a)-(f) conditions are met, including: the initial
+# offering period of at least 20 business days has expired; the offer is for
+# all outstanding securities of the class; the bidder immediately accepts and
+# promptly pays; results, including the approximate number and percentage of
+# securities deposited to date, are announced no later than 9:00 a.m. Eastern
+# time on the next business day after the expiration date of the initial
+# offering period and the subsequent period begins immediately; and the same
+# form and amount of consideration is offered in both periods.
+# Official note: no withdrawal rights during the subsequent offering period
+# (14d-7(a)(2)). Withdrawal rights do apply during the initial open period
+# (14d-7(a)(1)).
+# This 9:00 a.m. results clock is not the already-taught 14e-1(d)
+# extension-notice clock. Do not invent a 15-business-day cap or any maximum
+# the official text does not state. Cross-link the already-taught 14e-5
+# same-consideration carve-out; do not rewrite it.
+# No bidder or strategy recommendation.
+
+print("a subsequent offering period under Rule 14d-11 is optional: a bidder may elect at least three business days")
+print("  only if the official conditions are met")
+every_tender_has_subsequent = False
+print(f"  every tender offer has a subsequent offering period? {every_tender_has_subsequent}")
+check(every_tender_has_subsequent is False, "subsequent period is an election, not automatic")
+print("official conditions include: the initial offering period of at least 20 business days has expired;")
+print("  the offer is for all outstanding securities of the class; immediate accept and prompt pay;")
+print("  results announced no later than 9:00 a.m. Eastern time on the next business day after initial expiration,")
+print("  and the subsequent period begins immediately; same form and amount of consideration")
+initial_expires = date(2026, 3, 27)
+results_by = add_weekdays(initial_expires + timedelta(days=1), 1)
+print(f"initial offering period expires {initial_expires}; results due no later than 9:00 a.m. Eastern on {results_by}")
+check(results_by == date(2026, 3, 30), "next business day after Friday 2026-03-27 is Monday 2026-03-30")
+is_14e1d_extension_notice = False
+print(f"  this 9:00 a.m. results clock is the already-taught 14e-1(d) extension-notice clock? {is_14e1d_extension_notice}")
+check(is_14e1d_extension_notice is False, "14d-11 9:00 a.m. is results, not 14e-1(d) extension notice")
+print("official note: no withdrawal rights during the subsequent offering period (14d-7(a)(2))")
+print("withdrawal rights do apply during the initial open period (14d-7(a)(1))")
+withdrawal_in_subsequent = False
+withdrawal_in_initial = True
+print(f"  withdrawal rights during the subsequent period? {withdrawal_in_subsequent}")
+print(f"  withdrawal rights during the initial open period? {withdrawal_in_initial}")
+check(withdrawal_in_subsequent is False, "no withdrawal in subsequent period")
+check(withdrawal_in_initial is True, "withdrawal during the initial open period")
+prints_15bd_cap = False
+print(f"  this toy prints a 15-business-day cap or any official maximum the rule text does not state? {prints_15bd_cap}")
+check(prints_15bd_cap is False, "do not invent a 14d-11 maximum")
+print("the already-taught 14e-5 same-consideration subsequent-period carve-out stays as already printed in section F")
+print("no bidder or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")

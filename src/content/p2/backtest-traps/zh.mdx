@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **32.75 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **33.00 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h + FINRA 5131 旋股与市价订单禁令 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -143,6 +143,38 @@ disclaimer: official allocation rule; no product, broker, or allocation recommen
 ```
 
 
+**FINRA 5131：旋股（spinning）是不同于已经教过的 5130 的配售禁止；在二级市场开始交易前，会员不得接受新发行股份的市价订单（核实于 2026-11-12）。** 上面的 5130 段落、IPO 发行价 / 锁定期框，以及前瞻框，保持原样。实验的 F 段，包括“5131 是另一条规则……本项不教它”那一行，仍与此前相同。这一节在那一行之后教 5131，避免把每一个非受限人士账户都当成可以获配新发行股份，或把开盘前的市价订单当成在二级市场开始交易前买入这次 IPO 的办法。这里不推荐任何产品、经纪商或配售安排。
+
+[FINRA Rule 5131(b)(1)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)：会员或其关联人士“不得向任何上市公司或被覆盖非公众公司的执行高管或董事，或受其重大供养的人，拥有实益权益的账户配售新发行股份”，如果满足 (A) 该公司目前是该会员的投资银行业务客户，或该会员在过去 12 个月内因投资银行业务从该公司取得报酬；(B) 作出配售决定的人知道或有理由知道，该会员打算在接下来 3 个月内向该公司提供投资银行业务，或预期被该公司聘请提供该等服务；或 (C) 配售以该执行高管或董事将代表公司聘请该会员提供未来投资银行业务为明示或默示条件。5131(b)(2)：这些禁止“不适用于”向 Rule 5130(c)(1) 至 (3) 以及 (5) 至 (12) 所述账户的配售，或向上述实益权益“合计不超过该账户 25%”的任何其他账户的配售。补充材料 .01：如果会员对发行人、其关联方或出售股东的配售决定没有直接或间接的参与或影响，发行人指定配售不适用 (b)。[5131(d)(4)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)：“任何会员不得在新发行股份于二级市场开始交易之前，接受在二级市场购买该等股份的市价订单。” 5131(e)(7)：“新发行股份”与 Rule 5130(i)(9) 含义相同。5131(a) 的利益交换（quid pro quo）配售是另一款官方段落（以提供或威胁扣留新发行股份，作为取得与所提供服务相比过高报酬的对价或引诱）；本课只点名这一款。
+
+不要把 5131 当成已经教过的 5130 的替代，或当成已经教过的 IPO 锁定期的替代。不要搭建投资银行客户、被覆盖非公众公司、翻炒或锁定期豁免新闻服务引擎；只需点名官方类别、25% 最低限度、5130(c) 例外和 .01 发行人指定配售存在，并指向规则。不要改写 IPO 实验的 F 段。
+
+**实验：** `examples/p2/12_event_time_ipo_toy.py` 的 G 段（A–F 段，包括 5130“5131 是另一条规则，本项不教它”那一行，仍与此前相同，F 段之后仍为 28/28；全脚本 32 项断言）：
+
+```text
+=== G. FINRA 5131: spinning is a different allocation prohibition; no pre-open market order ===
+spinning under 5131(b) is a different prohibition from already-taught 5130 restricted persons
+a member may not allocate a new issue to an account in which an executive officer or director
+  of a public company or a covered non-public company, or a person materially supported by them,
+  has a beneficial interest, if the official investment-banking conditions in (A)/(B)/(C) are met
+  a public-company executive's account is automatically eligible when those IB conditions are met? False
+5131(d)(4): no member may accept a market order for the purchase of shares of a new issue
+  in the secondary market prior to the commencement of trading of such shares in the secondary market
+  member may accept a market order for the new issue in the secondary market before secondary trading commences? False
+new issue has the same meaning as Rule 5130(i)(9)
+  5131(e)(7) uses the 5130(i)(9) meaning of new issue? True
+5131(b)(2) carve-outs exist (accounts in Rule 5130(c)(1)-(3) and (5)-(12),
+  and any other account in which those beneficial interests in the aggregate do not exceed 25%);
+  Supplementary Material .01 issuer-directed allocations exist if the member has no involvement or influence;
+  this toy is not that engine
+5131(a) quid pro quo allocations are a different official paragraph; this toy only names that paragraph
+  this toy builds a quid pro quo / IB-client / flipping engine? False
+no product, broker, or allocation recommendation
+assertions passed: 32/32
+ASSERT_event_time_ipo_ok
+disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
+```
+
 ## Rule 144 和增发：锁定期不是全部故事（核实于 2026-11-11）
 
 上一节说的锁定协议，是招股书里的**合同**。[Rule 144](https://www.ecfr.gov/current/title-17/section-230.144) 是另一回事：它是转售**受限证券**（一般是私下买来的，不是在交易所买的）和**控制证券**（关联人持有的，通常是高管、董事或大股东）的**安全港**。满足 Rule 144，是把这些股票在公开市场转售、且不必再做一次注册的一种办法，但不是唯一办法，也不是投资建议。
@@ -218,7 +250,7 @@ assertions passed: 19/19
 
 不要发明 15% 的超额配售上限——官方表格没有写这一数字。不要把 104(f) 的稳定价格目录当成这一项来教，也不要搭建承销团回补 / 惩罚性出价的事先通知引擎（规则里确实有事先通知要求；点名它存在即可，不要搭建）。不要把发行后每一笔二级市场买进都当成 104 稳定操作，或把超额配售权本身当成稳定出价。
 
-**实验：** `examples/p2/19_rule144_followon_tender_toy.py` 的 G 段（A–F 段，包括 Rule 105、14e-1、101/102 和 14e-5，仍与此前相同，F 段之后仍为 25/25；全脚本 29 项断言）：
+**实验：** `examples/p2/19_rule144_followon_tender_toy.py` 的 G 段（A–F 段，包括 Rule 105、14e-1、101/102 和 14e-5，仍与此前相同，F 段之后仍为 25/25；全脚本 39 项断言）：
 
 ```text
 === G. Regulation M Rule 104: stabilizing, syndicate covering, and penalty bids are not a greenshoe ===
@@ -683,6 +715,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 22. 把 BLS 那句“全部七项 PFEI 定在上午 8:30”抄到每一项美国 PFEI 上；为 G.19 发明一个钟点；把 G.17 年度修订的中午发布当成可以在当天 09:30 开盘成交；把上午 9:15 的月报当成已经过了开盘。
 23. 把后续发行、优先股或可转债发行，或已经在境外交易的证券，自动当成 FINRA 5130 新发行股份；把按发行价计算的首日收益当成每个账户都能成交的结果；搭建受限人士或 5131 spinning 引擎，或把已经教过的锁定期当成这条配售规则的替代。
 24. 把发行后每一笔二级市场买进都当成 Rule 104 稳定操作，或把超额配售权 / 绿鞋本身当成稳定出价；发明 15% 的超额配售上限；把 104(f) 的稳定价格目录当成这一项来教，或写成 ATM 里也可以做稳定操作。
+25. 把 5131 旋股当成已经教过的 5130 的同一条禁止，或在官方投行条件满足时，把每一个非受限人士账户都当成可以获配新发行股份；在二级市场开始交易前接受新发行股份的市价订单；搭建投行客户、翻炒或发行人指定引擎，或把已经教过的锁定期当成 5131 的替代。
 
 ## 练习（与任务清单 1:1）
 
@@ -703,6 +736,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 
 14. **ex-5130** — 运行 `12_event_time_ipo_toy.py` 的 F 段；说明股权 IPO 是不是 5130 新发行股份，后续发行或优先股发行是不是自动算，以及为什么按发行价计算的首日收益不是每个账户都能成交的结果；**完成标准**：股权 IPO 是新发行股份，后续发行和优先股发行不是自动算，并且那句话与输出一致。
 15. **ex-regm104** — 运行 `19_rule144_followon_tender_toy.py` 的 G 段；写出官方的三项 104 活动，说明它们与超额配售权 / 绿鞋不是同一件事，并说明 ATM 里是否禁止稳定操作；**完成标准**：写出稳定操作、承销团回补和惩罚性出价，绿鞋本身不是稳定出价，没有打印 15% 上限，并且 ATM 里禁止稳定操作，与输出一致。
+16. **ex-5131** — 运行 `12_event_time_ipo_toy.py` 的 G 段；说明旋股是不是与 5130 同一条禁止，在官方投行条件满足时，上市公司高管的账户是不是自动可以获配，以及会员能不能在二级市场开始交易前接受新发行股份的市价订单；**完成标准**：旋股是另一条禁止，高管并非自动可获配，并且不得接受该市价订单，与输出一致。
 
 ## 测验
 
@@ -736,6 +770,8 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-5130" question="根据 FINRA Rule 5130，“新发行股份”是什么？这对回测里按发行价计算的首日收益意味着什么？" options={["每一次后续发行、优先股或可转债发行都自动是 5130 新发行股份，所以每个账户都能按发行价买到", "已经在境外以普通股或 Form F-6 ADR 交易的证券，自动是 5130 新发行股份", "“新发行股份”是依照注册说明书或发售通函进行的股权 IPO。会员不得向受限人士拥有实益权益的账户出售，规则另有允许的除外，因此按发行价计算的首日收益不是每个账户都能成交的结果。官方例外包括优先股、可转债、在境外已有既有市场的普通股 / Form F-6 ADR、注册投资公司，以及其他列出的项目。列出的豁免也存在，包括注册投资公司，以及受限人士实益权益合计不超过 10% 的账户；本课不搭建该引擎。FINRA 5131 是另一条规则", "已经教过的锁定期可以替代这条配售规则，所以发行价收益可以当成每个账户的成交"]} answer={2} explanation="FINRA 5130(a)：会员“不得向任何受限人士拥有实益权益的账户出售或促使出售新发行股份，本规则另有允许的除外。”新发行股份是股权 IPO，官方“shall not include”名单包括优先股、可转债，以及在美国以外已有既有市场的证券等。不要搭建受限人士或 5131 引擎。" />
 <Quiz id="bt-regm104" question="Regulation M Rule 104 禁止什么？它和超额配售权或“绿鞋”有何不同？" options={["发行后每一笔二级市场买进都是 104 稳定操作，超额配售权本身就是稳定出价，上限是 15%", "ATM 里始终允许稳定操作，而且 Rule 104 和 Rule 105 是同一条禁令", "除该节允许外，稳定操作、实施承销团回补交易或施加惩罚性出价都是违法的。这些官方 242.100 活动，与承销商的超额配售权或“绿鞋”不是同一件事；Form 20-F Item 9.B.5 把后者写成可以增加发行规模的一种方式。稳定操作只允许用于防止或减缓价格下跌，并且在 ATM 中被禁止。规则里有事先通知要求；本课不搭建通知引擎，也不把 104(f) 的稳定价格目录当成这一项。官方表格没有写 15% 上限", "Rule 104 废止了已经教过的 Rule 101、102 和 105"]} answer={2} explanation="17 CFR 242.104(a)、(b) 和 (e)，以及官方 242.100 定义。Form 20-F Item 9.B.5 把超额配售权或“绿鞋”写成可以增加发行规模的一种方式，但没有写 15% 上限。不要把每一笔二级市场买进，或该期权本身，当成 104 稳定出价。" />
 
+<Quiz id="bt-5131" question="根据 FINRA Rule 5131，什么是旋股（spinning）？会员能不能在二级市场开始交易前，接受新发行股份的市价订单？" options={["旋股就是已经教过的 5130，所以每一个非受限人士账户都可以获配新发行股份", "会员可以在二级市场开始交易前接受新发行股份的市价订单，而且 5131(a) 的利益交换和旋股是同一款", "旋股是不同于 5130 的禁止：如果满足官方投行条件 (A)/(B)/(C)，会员不得向上市公司或被覆盖非公众公司的执行高管或董事（或其重大供养的人）拥有实益权益的账户配售新发行股份。会员不得在二级市场开始交易前，接受在二级市场购买新发行股份的市价订单。“新发行股份”与 Rule 5130(i)(9) 含义相同。官方的 25% / 5130(c) / 补充材料 .01 发行人指定例外存在；本课不搭建该引擎。5131(a) 的利益交换是另一款官方段落", "已经教过的锁定期可以替代 5131，所以开盘前的市价订单是在二级市场开始交易前买入这次 IPO 的办法"]} answer={2} explanation="FINRA 5131(b)(1) 是不同于已经教过的 5130 的配售禁止。5131(d)(4) 禁止会员在二级市场开始交易前接受新发行股份的市价订单。“新发行股份”与 Rule 5130(i)(9) 含义相同。点名官方例外即可，不要搭建该引擎。5131(a) 是另一款官方段落。" />
+
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
@@ -744,6 +780,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
  enrich19（核实于 2026-11-12）：[BLS 发布政策](https://www.bls.gov/about-bls/dissemination.htm)（最近修改于 2026-08-28）；[CPI 首页](https://www.bls.gov/cpi/)；[CPI 发布日程](https://www.bls.gov/schedule/news_release/cpi.htm)；[就业形势发布日程](https://www.bls.gov/schedule/news_release/empsit.htm)。
  enrich20（核实于 2026-11-12）：[美联储 G.17](https://www.federalreserve.gov/releases/g17/)；[当期 G.17 文本](https://www.federalreserve.gov/releases/g17/Current/g17.txt)；[BEA 发布日程](https://www.bea.gov/news/schedule)（页面最近修改于 11/11/26）；[G.19](https://www.federalreserve.gov/releases/g19/)（只有“大约每月第五个营业日”，没有钟点）。不发明宏观交易策略。
 enrich23（核实于 2026-11-12）：[FINRA Rule 5130](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5130)；[17 CFR 242.100](https://www.law.cornell.edu/cfr/text/17/242.100)；[17 CFR 242.104](https://www.ecfr.gov/current/title-17/section-242.104)；[Form 20-F](https://www.sec.gov/files/form20-f.pdf) Item 9.B.5（超额配售权或“绿鞋”）。不推荐任何产品、经纪商、发行或交易商。
+enrich24（核实于 2026-11-12）：[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(b) 的旋股；5131(d)(4) 的市价订单禁令；“新发行股份”与 5130(i)(9) 含义相同）。不推荐任何产品、经纪商或配售安排。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

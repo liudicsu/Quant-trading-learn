@@ -92,3 +92,26 @@ Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as 
 assertions passed: 54/54
 ASSERT_spinoff_insider_lag_ok
 disclaimer: official Nasdaq CQS / CMS suffix table; not a corporate-actions catalog; learning only; no product recommendation
+=== I. Rule 13d-2: 1% is deemed material on a 13D; a 13G is not on that clock ===
+13d-2(a): a Schedule 13D amendment disclosing a material change is due within two business days after the date of such change
+an acquisition or disposition of beneficial ownership of one percent or more of the class is deemed material
+acquisitions or dispositions of less than one percent may be material, depending upon the facts and circumstances
+  1% acquisition or disposition deemed material? True
+  a smaller change may still be material? True
+a 13G is not on that same 1% / two-business-day clock
+13d-2(b): a 13G filer under 13d-1(b), (c), or (d) generally amends within 45 days after calendar quarter-end
+  if, as of the end of the calendar quarter, there are any material changes
+  every 13G amends on the 13D 1% / two-business-day clock? False
+a percent change solely from a change in the aggregate number of securities outstanding need not be a 13G amendment
+  13G amendment required when the percent change is solely from shares outstanding? False
+official 13d-2(c) and 13d-2(d) intra-period clocks also exist:
+  13d-2(c) (13d-1(b) / QII filers): within five business days after month-end when beneficial ownership,
+    computed as of the last day of the month, exceeds 10%, and thereafter after a more-than-5% increase or decrease
+  13d-2(d) (13d-1(c) / passive filers): within two business days after acquiring greater than 10%,
+    and thereafter within two business days after a more-than-5% increase or decrease
+  this toy is not that engine
+  this toy builds the 13d-2(c)/(d) engine? False
+Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed
+assertions passed: 59/59
+ASSERT_spinoff_insider_lag_ok
+disclaimer: official 13d-2 amendment clocks; no filer or disclosure advice; learning only
