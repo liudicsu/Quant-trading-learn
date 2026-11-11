@@ -137,3 +137,60 @@ print("do not invent a single Nasdaq Halt Cross or NYSE auction cutoff as Plan l
 print("assertions passed: 4/4")
 print("disclaimer: official Plan Section VII clocks; not a venue auction catalog; learning only")
 
+print("=== 5. Nasdaq halt reason codes (official table map, not a new LULD rule) ===")
+# Official Nasdaq Trade Halt Codes (opened 2026-11-12):
+#   T1  Halt - News Pending — "Trading is halted pending the release of material news."
+#   H10 Halt - SEC Trading Suspension — "The Securities and Exchange Commission has suspended trading in this stock."
+#   LUDP Volatility Trading Pause
+#   LUDS Volatility Trading Pause - Straddle Condition
+#   MWC1 / MWC2 / MWC3 Market Wide Circuit Breaker Halt - Level 1 / 2 / 3
+#   MWC0 Market Wide Circuit Breaker Halt - Carry over from previous day
+# The same official table still describes T5 as "Single Stock Trading Pause
+# in Effect" and "Trading has been paused by NASDAQ due to a 10% or more
+# price move in the security in a five-minute period." That T5 sentence is
+# not a current-law statement of the already-taught LULD Plan (Plan price
+# bands, 15-second Limit State, five-minute pause, Section VII reopen
+# clocks). Name T5 only as a stale official-table pitfall; do not print
+# that sentence as current LULD. Do not treat every "Space / Reason Not
+# Available" row as "no halt." Do not build a Nasdaq Halt Cross or NOII
+# catalog. Learning only; no venue recommendation.
+
+HALT_MAP = {
+    "T1": "Halt - News Pending",
+    "H10": "Halt - SEC Trading Suspension",
+    "LUDP": "Volatility Trading Pause",
+    "LUDS": "Volatility Trading Pause - Straddle Condition",
+    "MWC1": "Market Wide Circuit Breaker Halt - Level 1",
+    "MWC2": "Market Wide Circuit Breaker Halt - Level 2",
+    "MWC3": "Market Wide Circuit Breaker Halt - Level 3",
+    "MWC0": "Market Wide Circuit Breaker Halt - Carry over from previous day",
+}
+h_checks = 0
+
+
+def h_check(cond, label):
+    global h_checks
+    assert cond, label
+    h_checks += 1
+
+
+print("official Nasdaq Trade Halt Codes mapped onto already-taught halt types:")
+for code, desc in HALT_MAP.items():
+    print(f"  {code}: {desc}")
+h_check(HALT_MAP["T1"] == "Halt - News Pending", "T1")
+h_check(HALT_MAP["H10"] == "Halt - SEC Trading Suspension", "H10")
+h_check(HALT_MAP["LUDP"] == "Volatility Trading Pause", "LUDP")
+h_check(HALT_MAP["LUDS"] == "Volatility Trading Pause - Straddle Condition", "LUDS")
+h_check(HALT_MAP["MWC1"].endswith("Level 1") and HALT_MAP["MWC3"].endswith("Level 3"), "MWC1-3")
+h_check(HALT_MAP["MWC0"].startswith("Market Wide Circuit Breaker Halt - Carry over"), "MWC0")
+print("T1 maps to an exchange news-pending halt; H10 maps to an SEC trading suspension")
+print("LUDP / LUDS map to an LULD-style volatility trading pause (including a straddle condition)")
+print("MWC1 / MWC2 / MWC3 map to MWCB Level 1 / 2 / 3; MWC0 is a carry-over from the previous day")
+print("the same official table still describes T5 as a 10% or more price move in a five-minute period")
+print("that T5 sentence is not a current-law statement of the already-taught LULD Plan")
+print("  (Plan price bands, 15-second Limit State, five-minute pause, Section VII reopen clocks)")
+print("do not teach the table's T5 wording as the current LULD rule, and do not let it overwrite Plan text")
+print("do not treat every Space / Reason Not Available row as no halt")
+print("do not build a Nasdaq Halt Cross or NOII product catalog")
+print(f"assertions passed: {h_checks}/{h_checks}")
+print("disclaimer: official Nasdaq halt-code map; not a Halt Cross engine; learning only; no venue recommendation")

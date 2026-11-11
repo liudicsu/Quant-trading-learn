@@ -130,3 +130,91 @@ check(st["consol_last"] == 100.02 and st["volume"] == 1_010_000, "6 applied")
 print("  do not treat every close-related flag as M")
 
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== E. FINRA 6380A current 10-second off-exchange TRF reporting ===")
+# FINRA Rule 6380A (selected rulebook version "Mar 30, 2026 - Dec 05, 2026";
+# amendments through SR-FINRA-2026-005 and SR-FINRA-2025-011 eff. Mar. 30, 2026).
+# 6380A(a)(1): last-sale reports of transactions in designated securities
+# executed during normal market hours are due "as soon as practicable but no
+# later than 10 seconds after execution." "Transactions not reported within
+# 10 seconds after execution shall be designated as late."
+# 6380A(a)(2): 4:00 a.m.-9:30 a.m. and 4:00 p.m.-8:00 p.m. ET are also
+# 10 seconds, with the outside-hours modifier. Transactions "executed between
+# midnight and 4:00 a.m. Eastern Time shall be reported by 4:15 a.m. Eastern
+# Time on trade date." Transactions "between 8:00 p.m. and midnight" or
+# "on any non-business day (i.e., weekend or holiday)" shall be reported
+# "the following business day by 4:15 a.m. Eastern Time" and designated
+# "as/of." 6380A(a)(3): execution time "shall be reported ... in hours,
+# minutes and seconds based on Eastern Time."
+# 6380A(e)(1)(C): transactions "reported on or through an exchange" shall
+# not be reported to the FINRA/Nasdaq Trade Reporting Facility.
+# Supplementary Material .02: commence the trade reporting process without
+# delay upon execution; "In no event may a member purposely withhold trade
+# reports, e.g., by programming its systems to delay reporting until the
+# last permissible second."
+# Supplementary Material .05 is a narrow temporary exception for specified
+# qualifying overnight transactions, in effect until the earlier of a further
+# TRF-hours amendment's effective date or December 31, 2027. This toy names
+# that the exception exists; it is not an exception engine.
+# SR-FINRA-2026-015 / SEC Release 34-105922 / 91 FR 45299: filed for
+# immediate effectiveness, but "The implementation date of the proposed rule
+# change will be the implementation date of the SIP Amendment." SIP Operating
+# Committees anticipate December 6, 2026; FINRA intends to align, including
+# if that date moves later. After implementation, trades during the new
+# system hours (9:00 p.m. Sunday-8:00 p.m. Friday, pause 8:00-9:00 p.m.
+# Monday-Thursday) would be due in 10 seconds, and trades executed while the
+# TRF is closed would be due no later than 15 minutes after the TRF opens.
+# Those future clocks are not current law. The rulebook also lists a
+# "Dec 06, 2026 onwards" version; that is not the selected current version.
+# Official May 22 and July 10, 2026 notices: ADF hours are not changing at
+# this time. 6380B is the parallel FINRA/NYSE TRF rule; this toy is not a
+# 6380B / ADF / ORF catalog. Learning only; no venue recommendation.
+
+
+def current_6380a_due(label):
+    """Current-law 6380A clock for a short teaching fixture. Not a TRF engine."""
+    rows = {
+        "10:00 a.m. ET weekday, off-exchange": "as soon as practicable but no later than 10 seconds after execution",
+        "8:00 a.m. ET weekday, off-exchange": "as soon as practicable but no later than 10 seconds after execution (outside-hours modifier)",
+        "5:00 p.m. ET weekday, off-exchange": "as soon as practicable but no later than 10 seconds after execution (outside-hours modifier)",
+        "2:00 a.m. ET weekday, off-exchange": "by 4:15 a.m. ET on trade date (not the 10-second clock)",
+        "10:00 p.m. ET weekday, off-exchange": 'the following business day by 4:15 a.m. ET, designated "as/of"',
+        "Saturday 11:00 a.m. ET, off-exchange": 'the following business day by 4:15 a.m. ET, designated "as/of"',
+        "10:00 a.m. ET weekday, reported on or through an exchange": "not reported to the FINRA/Nasdaq TRF",
+    }
+    return rows[label]
+
+
+TEN_SEC = "as soon as practicable but no later than 10 seconds after execution"
+for label, expected in (
+    ("10:00 a.m. ET weekday, off-exchange", TEN_SEC),
+    ("8:00 a.m. ET weekday, off-exchange", TEN_SEC + " (outside-hours modifier)"),
+    ("5:00 p.m. ET weekday, off-exchange", TEN_SEC + " (outside-hours modifier)"),
+    ("2:00 a.m. ET weekday, off-exchange", "by 4:15 a.m. ET on trade date (not the 10-second clock)"),
+    ("10:00 p.m. ET weekday, off-exchange", 'the following business day by 4:15 a.m. ET, designated "as/of"'),
+    ("Saturday 11:00 a.m. ET, off-exchange", 'the following business day by 4:15 a.m. ET, designated "as/of"'),
+    ("10:00 a.m. ET weekday, reported on or through an exchange", "not reported to the FINRA/Nasdaq TRF"),
+):
+    got = current_6380a_due(label)
+    print(f"  {label}: {got}")
+    check(got == expected, label)
+
+print("execution time is reported in hours, minutes and seconds based on Eastern Time")
+print("Supplementary Material .02: commence the trade reporting process without delay upon execution;")
+print("  in no event may a member purposely withhold trade reports, e.g. by programming systems to delay until the last permissible second")
+print("Supplementary Material .05 is a narrow temporary exception for specified qualifying overnight transactions")
+print("  (until the earlier of a further TRF-hours amendment's effective date or December 31, 2027); this toy is not that engine")
+print("SR-FINRA-2026-015 / 34-105922 / 91 FR 45299 was filed for immediate effectiveness,")
+print('  but "The implementation date of the proposed rule change will be the implementation date of the SIP Amendment."')
+print("SIP Operating Committees anticipate December 6, 2026; FINRA intends to align, including if that date moves later")
+print("after implementation, trades during the new system hours (9:00 p.m. Sunday-8:00 p.m. Friday,")
+print("  pause 8:00-9:00 p.m. Monday-Thursday) would be due in 10 seconds, and trades executed while the TRF is closed")
+print("  would be due no later than 15 minutes after the TRF opens — those future clocks are not current law")
+print('current rulebook selected version is "Mar 30, 2026 - Dec 05, 2026"; "Dec 06, 2026 onwards" is not current law')
+print("official May 22 and July 10, 2026 notices: ADF hours are not changing at this time")
+print("6380B is the parallel FINRA/NYSE TRF rule; this toy is not a 6380B / ADF / ORF catalog")
+print("do not apply 6380A to exchange prints, write that every tape print is delayed by 10 seconds,")
+print("  wait until the tenth second on purpose, treat midnight-4:00 a.m. or 8:00 p.m.-midnight prints as already on the 10-second clock,")
+print("  or treat December 6, 2026 as an unconditional hard switch")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official FINRA 6380A current-law clocks; learning only; no venue recommendation")

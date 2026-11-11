@@ -67,3 +67,28 @@ do not splice a WI series into the regular outstanding symbol
 assertions passed: 45/45
 ASSERT_spinoff_insider_lag_ok
 disclaimer: official FINRA 11130 / Nasdaq CQS facts; not a UPC engine; learning only
+=== H. Nasdaq CQS suffixes beyond WI/WD ===
+official table excerpt (CQS suffix column and CMS suffix column):
+  Preferred: CQS p | CMS PR
+  Preferred Class A: CQS pA | CMS PRA
+  Class A: CQS .A | CMS A
+  Class B: CQS .B | CMS B
+  Warrants: CQS .WS | CMS WS
+  Rights: CQS r | CMS RT
+  Units: CQS .U | CMS U
+  When issued: CQS w | CMS WI
+  When distributed: CQS .WD | CMS WD
+ABC PR / ABC A / ABC WS / ABC RT / ABC U are not the regular common share ABC
+WI / WD remain as already printed in section G; this section does not re-teach 11130 settlement
+the official page lists more than one encoding column (CQS, CMS, NASDAQ Integrated Platform, NASDAQ ACT/CTCI)
+the CMS convention has a space between the root and the suffix
+the CQS convention is shown for reference purposes only;
+  NASDAQ protocols do not support using the CQS ticker symbol convention for sending orders into NASDAQ's integrated platform
+the NASDAQ integrated platform suffix will be used for order-entry via RASH, OUCH, INET FIX, and for data dissemination via ITCH
+NASDAQ ACT/CTCI suffix are used in ACT and CTCI protocol
+Class 'B' though Class 'Z' securities are denoted using the same format as Class 'A' securities on this matrix
+do not invent one universal suffix that works on every tape, order port, and vendor file
+Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed
+assertions passed: 54/54
+ASSERT_spinoff_insider_lag_ok
+disclaimer: official Nasdaq CQS / CMS suffix table; not a corporate-actions catalog; learning only; no product recommendation

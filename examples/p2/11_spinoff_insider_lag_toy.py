@@ -385,3 +385,74 @@ print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
 print("disclaimer: official FINRA 11130 / Nasdaq CQS facts; not a UPC engine; learning only")
 
+print("=== H. Nasdaq CQS suffixes beyond WI/WD ===")
+# Official Nasdaq CQS symbol convention table (opened 2026-11-12). Columns
+# include CQS Suffix, CMS Suffix, NASDAQ Integrated Platform Suffix, and
+# NASDAQ ACT/CTCI Suffixes. Quote the official table; say which column a
+# dataset uses. Do not invent one universal suffix.
+# Rows taught here (CQS suffix / CMS suffix):
+#   Preferred: p / PR
+#   Preferred Class "A": pA / PRA
+#   Class "A": .A / A
+#   Class "B": .B / B
+#   Warrants: .WS / WS
+#   Rights: r / RT
+#   Units: .U / U
+#   When issued: w / WI   (already taught in section G)
+#   When distributed: .WD / WD  (already taught in section G)
+# Official notes:
+#   "The CMS convention has a space between the root and the suffix."
+#   "The CQS convention is shown for reference purposes only. NASDAQ
+#   protocols do not support using the CQS ticker symbol convention for
+#   sending orders into NASDAQ's integrated platform."
+#   "The NASDAQ integrated platform suffix will be used for order-entry
+#   via RASH, OUCH, INET FIX, and for data dissemination via ITCH."
+#   "NASDAQ ACT/CTCI suffix are used in ACT and CTCI protocol."
+#   "Class 'B' though Class 'Z' securities are denoted using the same
+#   format as Class 'A' securities on this matrix."
+# WI / WD remain as already printed in section G. FINRA 11130 settlement
+# facts are already taught there; this section does not re-teach them.
+# Form 5 2026-02-17 and 13d-1(g) 2026-10-13 stay as printed in E/F.
+# Learning only; no product recommendation.
+
+# Official excerpt: (categorization, CQS suffix, CMS suffix)
+CQS_TABLE = (
+    ("Preferred", "p", "PR"),
+    ("Preferred Class A", "pA", "PRA"),
+    ("Class A", ".A", "A"),
+    ("Class B", ".B", "B"),
+    ("Warrants", ".WS", "WS"),
+    ("Rights", "r", "RT"),
+    ("Units", ".U", "U"),
+    ("When issued", "w", "WI"),
+    ("When distributed", ".WD", "WD"),
+)
+print("official table excerpt (CQS suffix column and CMS suffix column):")
+for name, cqs, cms in CQS_TABLE:
+    print(f"  {name}: CQS {cqs} | CMS {cms}")
+
+cms = {name: cms for name, cqs, cms in CQS_TABLE}
+cqs = {name: cqs for name, cqs, cms in CQS_TABLE}
+check(cms["Preferred"] == "PR" and cqs["Preferred"] == "p", "preferred PR vs CQS p")
+check(cms["Preferred Class A"] == "PRA" and cqs["Preferred Class A"] == "pA", "PRA")
+check(cms["Class A"] == "A" and cms["Class B"] == "B", "class A/B CMS")
+check(cqs["Class A"] == ".A" and cqs["Class B"] == ".B", "class A/B CQS")
+check(cms["Warrants"] == "WS" and cqs["Warrants"] == ".WS", "warrants")
+check(cms["Rights"] == "RT" and cqs["Rights"] == "r", "rights")
+check(cms["Units"] == "U" and cqs["Units"] == ".U", "units")
+check(cms["When issued"] == "WI" and cqs["When issued"] == "w", "WI already taught; CQS is w")
+check(cms["When distributed"] == "WD" and cqs["When distributed"] == ".WD", "WD already taught")
+print("ABC PR / ABC A / ABC WS / ABC RT / ABC U are not the regular common share ABC")
+print("WI / WD remain as already printed in section G; this section does not re-teach 11130 settlement")
+print("the official page lists more than one encoding column (CQS, CMS, NASDAQ Integrated Platform, NASDAQ ACT/CTCI)")
+print("the CMS convention has a space between the root and the suffix")
+print("the CQS convention is shown for reference purposes only;")
+print("  NASDAQ protocols do not support using the CQS ticker symbol convention for sending orders into NASDAQ's integrated platform")
+print("the NASDAQ integrated platform suffix will be used for order-entry via RASH, OUCH, INET FIX, and for data dissemination via ITCH")
+print("NASDAQ ACT/CTCI suffix are used in ACT and CTCI protocol")
+print("Class 'B' though Class 'Z' securities are denoted using the same format as Class 'A' securities on this matrix")
+print("do not invent one universal suffix that works on every tape, order port, and vendor file")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_spinoff_insider_lag_ok")
+print("disclaimer: official Nasdaq CQS / CMS suffix table; not a corporate-actions catalog; learning only; no product recommendation")

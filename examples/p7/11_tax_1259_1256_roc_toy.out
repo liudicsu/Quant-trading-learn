@@ -82,3 +82,26 @@ do not leave the old per-share basis unchanged after a nontaxable identical-stoc
 do not start a new holding period on the distribution date for nontaxable new shares
 assertions passed: 12/12
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== I. Pub 550 gift and inherited basis ===
+inherited capital-asset shares: decedent's purchase price 10000, FMV at death 50000
+heir's basis is generally FMV on the date of death 50000 (or the later alternate valuation date if elected)
+a later sale of that inherited capital asset is long-term, regardless of how long the heir held the property
+official gift example: donor adjusted basis 10000, FMV at gift 9000, later sale 9500
+basis for gain 10000 -> 9500 minus 10000 is a 500 loss
+basis for loss 9000 -> 9500 minus 9000 is a 500 gain
+You have neither gain nor loss
+if FMV at the gift is equal to or more than the donor's adjusted basis, basis for gain or loss is the donor's adjusted basis
+  plus or minus later required adjustments (gift tax paid after 1976 may increase basis by a listed fraction;
+  this toy names that the addition exists and is not a gift-tax engine)
+holding period: if basis is determined by the donor's adjusted basis, it is considered to have started
+  on the same day the donor's holding period started
+if basis is determined by the fair market value of the property, the holding period starts on the day after the date of the gift
+more detail lives in Pub 551 / Pub 559 (2010 Form 8939, community-property / joint-tenancy,
+  the one-year appreciated-property-you-gave-the-decedent exception); this toy is not those engines
+spouse transfers under the separate Property Received From Your Spouse heading are a different official rule;
+  do not conflate them with a gift from a parent
+do not use the decedent's original purchase price as the heir's basis in the usual FMV case,
+  and do not start a new short-term clock on inherited capital-asset shares
+do not skip the dual-basis rule when FMV at the gift is lower than the donor's adjusted basis
+assertions passed: 16/16
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise

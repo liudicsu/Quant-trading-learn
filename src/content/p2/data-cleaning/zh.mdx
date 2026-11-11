@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **32.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **33.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -273,6 +273,11 @@ SYN_MACRO_2 没有发布时间 → 排除
 
 不要用财年末的市值作为 12b-2 的计量日。不要忽略滞后（大型加速申报公司不会在公众持股市值第一次低于 7 亿美元时立刻降为加速申报公司）。不要仅仅因为公众持股市值超过 7 亿美元，就把一家刚上市的公司立刻当成大型加速申报公司（十二个月和一份年报是官方条件）。SRC 是另一种身份，会通过列出的收入测试影响加速 / 大型加速的资格；本课只点名它存在，不搭建完整的 SRC 引擎。这里没有申报身份规划建议。
 
+**错过 10-K 或 10-Q 的法定期限，并不自动等于“没有申报”：Rule 12b-25 要求在下一营业日前提交 Form 12b-25；只有满足官方条件，包括在 15 个日历日（年报）或 5 个日历日（季报）内实际提交，该报告才视为按期提交（核实于 2026-11-12）。** 上面的 60 / 75 / 90 和 40 / 45 期限数字、12b-2 门槛，以及 Form 10-S 提案那一句，都不要改写。不要改 `examples/p2/09_filing_dates_toy.py` 或 `examples/p2/17_xbrl_pit_10b51_toy.py`。这一节只补上迟交通知规则，避免把错过法定日期当成硬性的“没有这份文件”，或把 Form 12b-25 本身当成 10-K 或 10-Q。
+
+[17 CFR 240.12b-25(a)](https://www.ecfr.gov/current/title-17/section-240.12b-25)：如果列出的报告（包括 Form 10-K 或 Form 10-Q）“未在该报告规定的期限内提交，注册人最迟应在该报告到期日后的一个营业日，提交 Form 12b-25”，并合理详细地披露未能按时提交的原因。12b-25(b)：该报告“应被视为在规定到期日提交”，仅当官方条件都满足，包括：该原因无法在不付出不合理努力或费用的情况下消除；年报将在规定到期日后的**第十五个日历日**或之前提交，季报将在**第五个日历日**或之前提交；**并且**该报告确实在该期限内实际提交。12b-25(d)：即便如此，在该标的报告实际提交之前，注册人不得使用以按时提交报告为前提的 1933 年证券法登记表格。EDGAR 常把该通知标为 NT 10-K 或 NT 10-Q；正式表格是 Form 12b-25。
+
+不要写成每一份迟交的 10-K 都自动再得到 15 天，或法定时钟已经改动。15 天和 5 天是**日历日**，不是营业日；通知本身应在下一**营业日**前提交。不要把 Form 12b-25 或一份 NT 申报当成定期报告。这里没有申报身份规划建议。本节为测验即可，没有新的实验脚本。
 
 **实验：** `examples/p2/09_filing_dates_toy.py`（玩具日历：周末顺延，不处理美国联邦假日）：
 
@@ -612,6 +617,44 @@ ASSERT_spinoff_insider_lag_ok
 disclaimer: official FINRA 11130 / Nasdaq CQS facts; not a UPC engine; learning only
 ```
 
+## Nasdaq CQS 后缀不只是 WI / WD：优先股、类别股、权证、认股权和单位不是普通股（核实于 2026-11-12）
+
+上面的当发行 / 当分配段落和 FINRA 11130 交收事实不要改写，这里只交叉引用，不再重讲交收。已经讲过的官方表，除 WI / WD 外，还编码了优先股、类别股、权证、认股权和单位。补上这些代码，避免把它们和普通股合并成同一条价格序列。
+
+官方 Nasdaq [CQS 代码惯例](https://nasdaqtrader.com/trader.aspx?id=CQSsymbolconvention) 表有不止一列。就本课要用的几行而言，**CQS 后缀 / CMS 后缀**分别是：优先股 **p / PR**；优先股 A 类 **pA / PRA**；A 类股份 **.A / A**、B 类股份 **.B / B**；权证 **.WS / WS**；认股权 **r / RT**；单位 **.U / U**；当发行 **w / WI**；当分配 **.WD / WD**（WI / WD 已在上一节打印）。同一页的官方注释写道：“The CMS convention has a space between the root and the suffix.”（CMS 惯例在根代码和后缀之间有一个空格。）“The CQS convention is shown for reference purposes only. NASDAQ protocols do not support using the CQS ticker symbol convention for sending orders into NASDAQ’s integrated platform.”（CQS 惯例仅供参考。NASDAQ 协议不支持用 CQS 代码惯例向 NASDAQ 一体化平台发送订单。）“The NASDAQ integrated platform suffix will be used for order-entry via RASH, OUCH, INET FIX, and for data dissemination via ITCH.”（一体化平台后缀用于通过 RASH、OUCH、INET FIX 下单，以及通过 ITCH 分发数据。）“NASDAQ ACT/CTCI suffix are used in ACT and CTCI protocol.”（ACT/CTCI 后缀用于 ACT 和 CTCI 协议。）“Class ‘B’ though Class ‘Z’ securities are denoted using the same format as Class ‘A’ securities on this matrix.”（B 类至 Z 类证券在本表中采用与 A 类相同的格式。）
+
+不要发明一套通用于所有行情、下单端口和数据商文件的后缀。引用官方表，并说明所用数据集对应哪一列（CMS、Integrated、ACT/CTCI）。不要搭建完整的公司行为或优先股产品目录。本课不推荐任何产品。
+
+**实验：** `examples/p2/11_spinoff_insider_lag_toy.py` 的 H 节（A–G 节的打印与此前相同，包括 Form 5 到期日 2026-02-17 和 13d-1(g) 的第五个营业日 2026-10-13，以及 G 节后的 45/45；脚本合计 54 条断言）：
+
+```text
+=== H. Nasdaq CQS suffixes beyond WI/WD ===
+official table excerpt (CQS suffix column and CMS suffix column):
+  Preferred: CQS p | CMS PR
+  Preferred Class A: CQS pA | CMS PRA
+  Class A: CQS .A | CMS A
+  Class B: CQS .B | CMS B
+  Warrants: CQS .WS | CMS WS
+  Rights: CQS r | CMS RT
+  Units: CQS .U | CMS U
+  When issued: CQS w | CMS WI
+  When distributed: CQS .WD | CMS WD
+ABC PR / ABC A / ABC WS / ABC RT / ABC U are not the regular common share ABC
+WI / WD remain as already printed in section G; this section does not re-teach 11130 settlement
+the official page lists more than one encoding column (CQS, CMS, NASDAQ Integrated Platform, NASDAQ ACT/CTCI)
+the CMS convention has a space between the root and the suffix
+the CQS convention is shown for reference purposes only;
+  NASDAQ protocols do not support using the CQS ticker symbol convention for sending orders into NASDAQ's integrated platform
+the NASDAQ integrated platform suffix will be used for order-entry via RASH, OUCH, INET FIX, and for data dissemination via ITCH
+NASDAQ ACT/CTCI suffix are used in ACT and CTCI protocol
+Class 'B' though Class 'Z' securities are denoted using the same format as Class 'A' securities on this matrix
+do not invent one universal suffix that works on every tape, order port, and vendor file
+Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed
+assertions passed: 54/54
+ASSERT_spinoff_insider_lag_ok
+disclaimer: official Nasdaq CQS / CMS suffix table; not a corporate-actions catalog; learning only; no product recommendation
+```
+
 ## 要约收购：公告日不是完成日（核实于 2026-11-11）
 
 要约收购（tender offer）是公开邀请股东在规定期间、通常按指定价格卖出股票（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/tender-offer)）。回测里，公告日并不是所有股份都已经换完的那一天。要约到期或完成之前，目标公司股票仍在交易，而且不是每个股东都会接受要约。
@@ -745,6 +788,8 @@ disclaimer: synthetic fixtures; learning only
 25. 把 Rule 14e-5 的时钟只从正式开始起算；把 14e-1 的最短期限理解成允许被涵盖的人在市场上买进标的或相关证券；把禁止套到对价相同的后续要约期买进上。
 26. 把 WI 序列拼进已发行在外的普通代码；假定从 WI 成交日起自动按 T+1 交收；证券不予发行时仍把 WI 合约当成有效。
 27. 用财年末的市值作为 12b-2 的计量日；忽略滞后，在公众持股市值第一次低于 7 亿美元时就把大型加速申报公司降为加速申报公司；仅仅因为公众持股市值超过 7 亿美元，就把刚上市的公司立刻当成大型加速申报公司；把 S7-2026-18 的 20 亿美元门槛或改过的期限当成现行规则。
+28. 写成每一份迟交的 10-K 都自动再得到 15 天，或 60 / 75 / 90 和 40 / 45 的法定时钟已经改动；把 15 天和 5 天当成营业日，或把通知本身当成按日历日计算；把 Form 12b-25 或 NT 申报当成定期报告本身。
+29. 发明一套通用于所有行情、下单端口和数据商文件的后缀；把优先股、类别股、权证、认股权或单位代码当成普通股；用 CQS 惯例向 Nasdaq 一体化平台下单。
 
 ## 练习（与任务清单 1:1）
 
@@ -772,6 +817,8 @@ disclaimer: synthetic fixtures; learning only
 20. **ex-14e5** — 运行 `19_rule144_followon_tender_toy.py` 的 F 节；说明被涵盖的人在宣布当天做市场买进是否被禁止，以及对价相同的后续要约期买进是否被禁止；**完成标准**：宣布当天的市场买进被禁止，对价相同的后续要约期买进不被禁止，与输出一致。
 21. **ex-whenissued** — 运行 `11_spinoff_insider_lag_toy.py` 的 G 节；说明 WI 是不是普通代码、交收是不是从 WI 成交日起自动 T+1，以及证券不予发行时合约如何处理；**完成标准**：WI 不是普通代码，交收日稍后确定，不予发行则取消，与输出一致。
 22. **ex-12b2** — 用自己的话写出现行 12b-2 的进入门槛、计量日、退出门槛，以及 S7-2026-18 是不是现行规则；**完成标准**：写出 7,500 万美元 / 7 亿美元、最近结束的第二个财季的最后一个营业日、6,000 万美元 / 5.60 亿美元，并写明 S7-2026-18 仍是提案。
+23. **ex-12b25** — 用自己的话写出 Form 12b-25 应在何时提交，年报和季报在什么条件下才视为按期提交，以及 15 天 / 5 天和通知本身分别按什么日子计算；**完成标准**：通知不晚于到期日后一个营业日；视为按期提交须满足官方条件，包括年报 15 个日历日、季报 5 个日历日内实际提交；通知按营业日，宽限期按日历日；Form 12b-25 不是定期报告本身。
+24. **ex-cqssuffix** — 运行 `11_spinoff_insider_lag_toy.py` 的 H 节；写出优先股、A 类股份、权证、认股权和单位在 CQS 与 CMS 列上的后缀，并说明 CQS 惯例能否用于向 Nasdaq 一体化平台下单；**完成标准**：CQS p / CMS PR，CQS .A / CMS A，CQS .WS / CMS WS，CQS r / CMS RT，CQS .U / CMS U，CQS 惯例仅供参考、不能用于该平台下单，与输出一致，并写一句这些代码不是普通股。
 
 ## 测验
 
@@ -808,6 +855,8 @@ disclaimer: synthetic fixtures; learning only
 <Quiz id="dc-14e5" question="按 Rule 14e-5，被涵盖的人在什么期间一般不得在要约之外买进标的证券或相关证券？" options={["只有正式开始之后，因为公开宣布并不启动时钟，而且 14e-1 的最短期限允许竞购人在市场上买", "从要约公开宣布时起，直到要约到期。对价相同的后续要约期买进不在禁止范围内。相关证券是可立即转换成、交换成或行权取得标的证券的证券。(b) 款例外是存在的；本课不搭建合规引擎。14e-1 的最短期限不是允许被涵盖的人在市场上买", "这项禁止贯穿每一个后续要约期，即使对价在形式和金额上相同", "相关证券是指同一发行人的任何证券，包括不能立即转换、交换或行权取得标的证券的证券"]} answer={1} explanation="17 CFR 240.14e-5(a) 和 (c)：时钟从公开宣布开始，不是只从正式开始，一直到要约到期。对价相同的后续要约期被排除在禁止之外。相关证券是可立即转换成、交换成或行权取得标的证券的证券。(b) 款例外存在；14e-1 并不授权被涵盖的人做市场买进。" />
 <Quiz id="dc-whenissued" question="当发行（when-issued）合约和已发行在外的普通股份是什么关系？它何时交收？" options={["它和已发行在外的普通股份是同一份合约，并从 WI 成交日起自动按 T+1 交收", "应把 WI 序列拼进普通代码，因为价格是同一份合约", "交收一律是 T+2，当分配则是另一套非官方产品机制", "当发行（或当分配）合约不是已发行在外的普通股份。官方 Nasdaq CQS 后缀是 WI。按 FINRA 11130，交收日稍后在已有足够比例的证券发行在外时确定，不是从 WI 成交日起自动 T+1。若证券将不予发行或分配，合约应取消"]} answer={3} explanation="FINRA 11130：交收日由委员会在已有足够比例发行在外时确定；若证券将不予发行或分配，合约应取消。Nasdaq CQS 的 When issued 后缀是 WI。不要把 WI 拼进普通代码，也不要假定自动 T+1。当分配是相关的官方标签（WD / 11130 两者都点名）。" />
 <Quiz id="dc-12b2" question="按现行 17 CFR 240.12b-2，加速申报公司和大型加速申报公司的身份如何计量？" options={["用财年末的市值。一家公众持股市值超过 7 亿美元的刚上市公司，立即就是大型加速申报公司。S7-2026-18 的 20 亿美元门槛已是现行规则", "加速申报公司的公众持股市值是 7,500 万美元以上但不足 7 亿美元，大型加速是 7 亿美元或以上，计量日是发行人最近结束的第二个财季的最后一个营业日，再加上十二个日历月和至少一份年报，且不能按列出的收入测试适用 SRC。加速申报公司将继续保持该身份，除非市值不足 6,000 万美元（或适用 SRC 收入测试）；大型加速申报公司将继续保持该身份，除非市值不足 5.60 亿美元。S7-2026-18 仍是提案", "60/75/90 和 40/45 天的时钟已经按 S7-2026-18 缩短", "公众持股市值一低于 7 亿美元，大型加速申报公司就立即变成加速申报公司"]} answer={1} explanation="现行 12b-2 按最近结束的第二个财季的最后一个营业日计量公众持股市值，不是财年末市值。进入门槛是 7,500 万美元 / 7 亿美元，还要十二个月和一份年报。退出用 6,000 万美元 / 5.60 亿美元的滞后。S7-2026-18 仍是提案；不要把 20 亿美元当成现行规则。" />
+<Quiz id="dc-12b25" question="按 17 CFR 240.12b-25，错过 10-K 或 10-Q 的法定期限之后会发生什么？" options={["每一份迟交的 10-K 都自动再得到 15 天，60 / 75 / 90 和 40 / 45 的法定时钟已经改动", "Form 12b-25 或 EDGAR 上的 NT 10-K 本身就是那份年报", "注册人最迟须在规定到期日后的一个营业日提交 Form 12b-25。只有满足官方条件——包括年报在规定到期日后 15 个日历日内、季报在 5 个日历日内实际提交——该报告才视为在规定到期日提交。15 天和 5 天是日历日；通知本身按营业日计算。EDGAR 常把该通知标为 NT 10-K 或 NT 10-Q，正式表格是 Form 12b-25。法定时钟没有改", "12b-25 的 15 天和 5 天期间按营业日计算，通知本身按日历日计算"]} answer={2} explanation="12b-25(a) 要求在到期日后一个营业日前提交 Form 12b-25。12b-25(b) 的视为按期提交是有条件的，必须在 15 个或 5 个日历日内实际提交。不要把每一份迟交的 10-K 都写成自动再得到 15 天，也不要把 NT 申报当成定期报告。60 / 75 / 90 和 40 / 45 的时钟没有改。" />
+<Quiz id="dc-cqssuffix" question="官方 Nasdaq CQS 代码惯例表在已经讲过的 WI / WD 之外，还编码了什么？清洗数据时不该怎样做？" options={["同一张官方表还有优先股（CQS 为 p，CMS 为 PR）、优先股 A 类（PRA）、A / B 类股份、权证（WS）、认股权（RT）和单位（U）。这些代码不是普通股。官方页面有不止一列编码（CQS、CMS、Integrated、ACT/CTCI）；CQS 惯例仅供参考，不能用来向 Nasdaq 一体化平台下单。不要发明一套通用于所有行情、下单端口和数据商文件的后缀", "只要统一写成 PR 或 WI，就可以在每一份行情、下单端口和数据商文件里通用", "这些后缀就是已发行在外的普通股份，交收仍从 WI 成交日起自动按 T+1", "向 Nasdaq 一体化平台下单必须使用 CQS 惯例"]} answer={0} explanation="官方表有多列。优先股在 CQS 列是 p、在 CMS 列是 PR；权证、认股权和单位同样因列而异。CQS 惯例仅供参考，Nasdaq 协议不支持用它向一体化平台下单。不要把这些代码和普通股合并，也不要重写已经讲过的 11130 交收事实。" />
 
 
 ## 完成标准
@@ -818,6 +867,7 @@ disclaimer: synthetic fixtures; learning only
  enrich19（核实于 2026-11-12）：[17 CFR 240.10b-17](https://www.law.cornell.edu/cfr/text/17/240.10b-17)；[Form 4](https://www.sec.gov/files/form4.pdf) 说明第 8 条；[15 U.S.C. 78p(a)(2)](https://www.law.cornell.edu/uscode/text/15/78p)；[17 CFR 240.16a-3](https://www.law.cornell.edu/cfr/text/17/240.16a-3)；[17 CFR 240.13d-1](https://www.law.cornell.edu/cfr/text/17/240.13d-1)；[17 CFR 240.13d-3](https://www.law.cornell.edu/cfr/text/17/240.13d-3)；[17 CFR 240.14e-5](https://www.law.cornell.edu/cfr/text/17/240.14e-5)。
  enrich20（核实于 2026-11-12）：[FINRA Rule 11130](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11130)；[Nasdaq CQS 代码惯例](https://nasdaqtrader.com/trader.aspx?id=CQSsymbolconvention)（When issued 后缀 WI）；[Nasdaq 代码目录定义](https://www.nasdaqtrader.com/trader.aspx?id=symboldirdefs)。
  enrich21（核实于 2026-11-12）：[17 CFR 240.12b-2](https://www.ecfr.gov/current/title-17/section-240.12b-2)（加速 / 大型加速申报公司定义、进入与退出门槛、第二个财季计量日）；[S7-2026-18](https://www.sec.gov/rules-regulations/2026/05/s7-2026-18) 仍是提案（2026-05-19 发布；评论截止 2026-07-20；最近审阅或更新 2026-07-31）。
+ enrich22（核实于 2026-11-12）：[17 CFR 240.12b-25](https://www.ecfr.gov/current/title-17/section-240.12b-25)（Form 12b-25 通知；有条件的 15 个 / 5 个日历日视为按期提交）；[Nasdaq CQS 代码惯例](https://nasdaqtrader.com/trader.aspx?id=CQSsymbolconvention)（CQS / CMS / Integrated / ACT-CTCI 列；优先股、类别股、权证、认股权、单位；CQS 惯例仅供参考）。
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  

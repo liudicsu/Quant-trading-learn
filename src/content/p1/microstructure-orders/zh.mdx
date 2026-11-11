@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14.75 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **15.25 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -158,6 +158,35 @@ NBBO 99.99 x100 / 100.02 x100；单一交易所价差 0.07 vs NBBO 0.03；买 50
 
 公式用代码写：`spread = ask - bid`，`mid = (bid + ask) / 2`。
 
+## Rule 602：已公布的报价一般是确定报价，不是暗示（核实于 2026-11-12）
+
+上面的 **NBBO / SIP / IEX** 段落不要改写。Rule 604（客户限价展示）在 `execution-slippage` 已经讲过，这里也不改写。这一节补上报价规则里的确定报价义务，避免把已公布数量当成无限流动性，或当成没有约束力的广告。
+
+[17 CFR 242.602(b)(2)](https://www.ecfr.gov/current/title-17/section-242.602)：在 (b)(3) 的前提下，每个责任经纪商或自营商“有义务执行向其提交的、买入或卖出标的证券的任何订单（**碎股订单除外**）”，提交人可以是另一经纪商或自营商，也可以是该责任经纪商或自营商惯常与之交易的那一类人；执行价格“对买方或卖方来说，至少应与该责任经纪商或自营商已公布的买价或卖价同样有利……数量不超过其已公布的报价数量。”602(b)(1)：必须及时传达其最优买价、最优卖价和报价数量。602(b)(3) 在下列（以及规则列出的其他）情形下，解除数量或价格义务：在订单提交前，已经传达了修订后的报价数量，或修订后的买价或卖价；或者正在完成一笔交易，并在结束后立即传达修订。602(a)(3) 在异常市场条件下，交易所可按委员会批准的规则通知指定人员，从而在这些条件持续期间免除自身及其会员的部分采集和确定报价义务。
+
+不要写成每一笔 SIP 报价在所有情形下都是某一具名交易商的 602 确定报价，或客户总能“吃掉”全部 NBBO 数量。不要把确定报价义务套到碎股订单上。不要忽略 (b)(3) 的修订例外或 (a)(3) 的异常市场救济。不要在 602(c) 下搭建期权 30 秒应答引擎。不要把 602 和已经讲过的 Rule 604（展示）、Rule 611（禁止交易穿越）或 Rule 605/606 混为一谈。本课不推荐任何交易场所或券商。
+
+**实验：** `examples/p1/05_us_market_mechanics.py` 的 D 节（A–C 节的打印与此前相同）：
+
+```text
+=== D. Rule 602 firm quote (published size, not a hint) ===
+published offer 100.02 x 100
+602(b)(2): a responsible broker or dealer is generally obligated to execute an order to buy or sell
+  a subject security, other than an odd-lot order, at a price at least as favorable as its published
+  bid or published offer, in any amount up to its published quotation size
+100-share buy presented at the published offer: within the published size? True
+1-share odd-lot order: excluded from the 602(b)(2) obligation? True
+revised quotation size 50 communicated before the order is presented -> obligation size 50
+602(b)(1): promptly communicate best bids, best offers, and quotation sizes
+602(a)(3) unusual-market relief may apply under Commission-approved exchange rules
+do not write that every SIP quote is a named dealer's 602 firm quote in all cases,
+  or that the customer can always hit the full NBBO size
+do not apply the firm-quote obligation to odd-lot orders
+do not ignore the (b)(3) revision exceptions or the (a)(3) unusual-market relief
+do not conflate 602 with already-taught Rule 604 (display), Rule 611 (trade-through), or Rule 605/606
+assertions passed: 3/3
+disclaimer: official 17 CFR 242.602 facts; learning only; no venue or broker recommendation
+```
 
 ## T+1 是 Rule 15c6-1 的缺省规则，不是每一笔成交的定律（核实于 2026-11-12）
 
@@ -349,6 +378,48 @@ assertions passed: 5/5
 assertions passed: 18/18
 ```
 
+## FINRA 6380A：现行场外最近成交申报是 10 秒，不是每一笔行情都已经走这只时钟（核实于 2026-11-12）
+
+上面的 SIP 成交条件 M / Q / T 段落，以及“Effective TBD”的 23/5 SIP 注释，不要改写。这一节补上官方的场外成交申报时钟，避免清洗数据时把每一笔行情时间戳都当成成交时间，或以为每一笔隔夜成交都已经适用 10 秒时钟。
+
+[FINRA Rule 6380A(a)(1)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/6380A)：交易申报设施参与人应当“尽快、且不得晚于成交后 10 秒”，向 FINRA/Nasdaq 交易申报设施传送“在正常市场时段成交的指定证券”的最近成交报告。“未在成交后 10 秒内申报的交易应标为迟报。”现行规则书选中的版本是 “Mar 30, 2026 - Dec 05, 2026”（经 SR-FINRA-2026-005 和 SR-FINRA-2025-011 修订，2026-03-30 生效）。6380A(a)(2)：美东时间上午 4:00 至 9:30，以及下午 4:00 至晚上 8:00 的成交，同样是“尽快、且不得晚于 10 秒”，并加上场外时段修饰符。美东时间“午夜至上午 4:00 之间成交”的交易，“应在成交日上午 4:15 前申报”——**不是** 10 秒时钟。晚上 8:00 至午夜，或在非营业日（周末或假日）成交的交易，应在“下一营业日上午 4:15 前”申报，并标为 “as/of”。6380A(a)(3)：成交时间“应按美东时间以时、分、秒申报”。6380A(e)(1)(C)：“在交易所申报或通过交易所申报”的交易，不得向 FINRA/Nasdaq TRF 申报。补充材料 .02：会员必须在成交后毫不迟延地启动申报流程；“在任何情况下，会员都不得故意扣留成交报告，例如把系统编成等到最后允许的那一秒再报。”补充材料 .05 是一项狭窄的临时例外，适用于列出的合格隔夜交易，有效期至进一步延长 TRF 时段的修订生效日与 2027-12-31 中较早者；本课只点名这项例外存在，不搭建例外引擎。
+
+**尚未生效：** SR-FINRA-2026-015 / SEC 公告 34-105922 / 91 FR 45299（2026-07-20）已提交并申请立即生效，但“拟议规则变更的实施日，将是 SIP 修订的实施日。”SIP 运营委员会预计为 2026-12-06；FINRA 打算与该日期对齐，包括该日期再往后延的情形。实施之后，在新的系统时段内（周日晚上 9:00 至周五晚上 8:00，周一至周四晚上 8:00–9:00 暂停）成交的交易将适用 10 秒，TRF 关闭期间成交的交易应在 TRF 开市后不超过 15 分钟申报——**不要把这些未来时钟当成现行法。** 规则书里还有一个标为 “Dec 06, 2026 onwards” 的版本，那不是现行文本。2026-05-22 和 2026-07-10 的官方技术通知还写明：ADF 的时段目前不会调整。6380B 是平行的 FINRA/NYSE TRF 规则；本课不建 6380B / ADF / ORF 目录。
+
+不要把 6380A 套到交易所成交上。不要写成每一笔行情带成交都被推迟 10 秒，或“尽快”意味着可以故意等到第 10 秒。不要把午夜至上午 4:00，或晚上 8:00 至午夜的成交，当成已经适用 10 秒时钟。不要把 2026-12-06 当成无条件的硬切换。不要发明 10b-18 的 23/5 映射。本课不推荐任何交易场所。
+
+**实验：** `examples/p1/13_sale_condition_toy.py` 的 E 节（A–D 节的打印与此前相同，包括 18/18）：
+
+```text
+=== E. FINRA 6380A current 10-second off-exchange TRF reporting ===
+  10:00 a.m. ET weekday, off-exchange: as soon as practicable but no later than 10 seconds after execution
+  8:00 a.m. ET weekday, off-exchange: as soon as practicable but no later than 10 seconds after execution (outside-hours modifier)
+  5:00 p.m. ET weekday, off-exchange: as soon as practicable but no later than 10 seconds after execution (outside-hours modifier)
+  2:00 a.m. ET weekday, off-exchange: by 4:15 a.m. ET on trade date (not the 10-second clock)
+  10:00 p.m. ET weekday, off-exchange: the following business day by 4:15 a.m. ET, designated "as/of"
+  Saturday 11:00 a.m. ET, off-exchange: the following business day by 4:15 a.m. ET, designated "as/of"
+  10:00 a.m. ET weekday, reported on or through an exchange: not reported to the FINRA/Nasdaq TRF
+execution time is reported in hours, minutes and seconds based on Eastern Time
+Supplementary Material .02: commence the trade reporting process without delay upon execution;
+  in no event may a member purposely withhold trade reports, e.g. by programming systems to delay until the last permissible second
+Supplementary Material .05 is a narrow temporary exception for specified qualifying overnight transactions
+  (until the earlier of a further TRF-hours amendment's effective date or December 31, 2027); this toy is not that engine
+SR-FINRA-2026-015 / 34-105922 / 91 FR 45299 was filed for immediate effectiveness,
+  but "The implementation date of the proposed rule change will be the implementation date of the SIP Amendment."
+SIP Operating Committees anticipate December 6, 2026; FINRA intends to align, including if that date moves later
+after implementation, trades during the new system hours (9:00 p.m. Sunday-8:00 p.m. Friday,
+  pause 8:00-9:00 p.m. Monday-Thursday) would be due in 10 seconds, and trades executed while the TRF is closed
+  would be due no later than 15 minutes after the TRF opens — those future clocks are not current law
+current rulebook selected version is "Mar 30, 2026 - Dec 05, 2026"; "Dec 06, 2026 onwards" is not current law
+official May 22 and July 10, 2026 notices: ADF hours are not changing at this time
+6380B is the parallel FINRA/NYSE TRF rule; this toy is not a 6380B / ADF / ORF catalog
+do not apply 6380A to exchange prints, write that every tape print is delayed by 10 seconds,
+  wait until the tenth second on purpose, treat midnight-4:00 a.m. or 8:00 p.m.-midnight prints as already on the 10-second clock,
+  or treat December 6, 2026 as an unconditional hard switch
+assertions passed: 25/25
+disclaimer: official FINRA 6380A current-law clocks; learning only; no venue recommendation
+```
+
 ## 提前收盘日的 MOC 截止，以及 Nasdaq 与 NYSE 收盘截止的差别（2026-11-11 核实）
 
 **1. 提前收盘日，NYSE 的 15:50 截止会往前移。** 上面教的 15:50 ET，是常规交易日（16:00 收盘）的时间。NYSE Rule 7.35(a)(8) 把“收盘竞价不平衡冻结时点”（Closing Auction Imbalance Freeze Time）定义为**预定核心交易时段结束前 10 分钟**。NYSE 2026 年第一季度到期备忘录写明：备忘录里出现的 15:50 等钟点，只适用于预定 16:00 收盘的日子；“在预定收盘不是 16:00 的日子，这些截止时间——因为它绑在预定的核心交易时段结束点上——会相应移动”（[NYSE RM 2026-03-20 注 2](https://www.nyse.com/publicdocs/nyse/markets/nyse/rule-interpretations/2026/Q1_2026_Quarterly_Expiration_RM_3.20.2026.pdf)）。所以提前收盘到 13:00 ET 时，MOC/LOC 的自由申报截止是 **12:50 ET**。2026 年 NYSE 现金股票市场提前在 13:00 ET 收盘的日子是 **2026-11-27**（感恩节次日）和 **2026-12-24**（[ICE / NYSE 假期公告](https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx)；[NYSE 交易时间](https://www.nyse.com/trade/hours-calendars)）。这两天都在美国冬令时，12:50 ET 换成北京时间是次日 **01:50**。诚实的“按收盘价成交”，在提前收盘日必须用 12:50 之前就能算出来的信号，不能照搬平时的 15:50。
@@ -400,6 +471,8 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 17. 把 T 或 M 折进常规时段的最近成交，或把一笔 M 当成*合并*官方收盘价；把所有和收盘有关的标记都当成 M；用已经过时的 UTP 注 1 里的 Form T 窗口去否认隔夜延长时段成交也是 T。
 18. 把官方开盘、官方收盘或停牌复牌成交当成穿越数据错误；发明 611(b) 里没有的例外；把一笔穿越写成 Rule 611 已被废除的证据。
 19. 写成每一笔成交都必须 T+1 交收，或现金合同也按 T+1 交收；发明现行法里并不存在的“次日（next day）”交收类别；写成每一次 IPO 或增发都按 T+2 交收。
+20. 写成每一笔 SIP 报价在所有情形下都是某一具名交易商的 602 确定报价，或客户总能按全部 NBBO 数量成交；把确定报价义务套到碎股订单上；忽略 (b)(3) 的修订例外或 (a)(3) 的异常市场救济；把 602 和 Rule 604、611 或 605/606 混为一谈。
+21. 把 6380A 套到交易所成交上；写成每一笔行情带成交都被推迟 10 秒，或“尽快”意味着可以故意等到第 10 秒；把午夜至上午 4:00 或晚上 8:00 至午夜的成交当成已经适用 10 秒时钟；把 2026-12-06 当成无条件的硬切换，或发明 10b-18 的 23/5 映射。
 
 ## 练习（与任务清单 1:1）
 
@@ -419,6 +492,8 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 14. **ex-salecond** — 运行 `13_sale_condition_toy.py`；说明 M 是否更新合并最近成交或成交量，21:30 ET 的 T 成交有没有最近成交资格、是否计入成交量，以及 6 和 M 有什么不同；**完成标准**：M 既不更新合并最近成交也不更新成交量，该笔 T 没有最近成交资格但计入成交量，6 会更新合并最近成交和成交量，与输出一致。
 15. **ex-611b** — 用自己的话写出 611(b)(2)、611(b)(3) 和 611(b)(7) 的官方条件，并说明为什么官方开盘、收盘或停牌复牌成交不是穿越数据错误；**完成标准**：点名不是常规方式合约、单一价格开盘/复牌/收盘，以及“成交价并非基于报价且承诺时重要条款尚不能合理确定”；并写明这些成交属于 (b)(3) 类，S7-2026-20 仍是提案。
 16. **ex-15c61** — 运行 `11_freeride_txse_15c33_toy.py` 的 F 节；写出 2026-07-06（周一）这笔成交的常规交收、现金和延迟交付日期，以及 15c6-1(c) 的第二个营业日上限；**完成标准**：2026-07-07、当日 2026-07-06、约定 2026-07-10，以及上限 2026-07-08，与输出一致，并写一句现行 11320 没有“次日”类别。
+17. **ex-602** — 运行 `05_us_market_mechanics.py` 的 D 节；说明已公布卖价 100.02、数量 100 时，100 股买单是否落在确定报价数量之内、1 股碎股是否属于 602(b)(2) 义务，以及提交前把数量修订为 50 会怎样；**完成标准**：100 股在已公布数量之内，碎股不适用该义务，修订后义务数量为 50，与输出一致。
+18. **ex-6380a** — 运行 `13_sale_condition_toy.py` 的 E 节；写出上午 10:00、凌晨 2:00 和晚上 10:00 的场外申报时限，以及通过交易所申报的成交是否向 FINRA/Nasdaq TRF 申报；**完成标准**：10 秒、成交日上午 4:15、下一营业日上午 4:15 并标 as/of，交易所成交不向该 TRF 申报，与输出一致，并写一句 SR-FINRA-2026-015 尚未实施。
 
 ## 测验
 
@@ -447,6 +522,8 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 <Quiz id="mo-salecond" question="按 CTA CTS 成交条件矩阵，关于 M、Q、T 和 6，哪一句是对的？" options={["T 和 M 都会更新合并最近成交，所以回测可以把它们折进常规时段的最近成交", "一笔 M 就是合并官方收盘价，因为 M 的名称是市场中心官方收盘", "M 不更新合并的最近成交、最高/最低或开盘，也不更新成交量；Q 会更新合并开盘，但不更新合并最近成交或成交量；T 没有最近成交资格，但会更新成交量，包括延长早盘 21:00–09:30 以及 16:00 收盘之后的成交；6（市场中心收盘成交）会更新合并的最近成交、最高/最低和成交量", "UTP 注 1 里的 Form T 窗口（凌晨 12:00 至上午 9:30，以及下午 4:00:01 至晚上 8:00）意味着隔夜延长时段成交不是 T"]} answer={2} explanation="CTS 矩阵：M 只更新参与者的最近成交和最高/最低。Q 更新合并开盘和参与者最高/最低，不更新参与者最近成交或成交量。T 只更新成交量，没有最近成交资格；CTA ETH 常见问题（v1.2，2026-09-29 最后更新）把 T 用在延长早盘 21:00–09:30 以及 16:00 收盘之后。UTP 注 1 尚未按 23/5 改写。6 和 M 不是同一个标记。" />
 <Quiz id="mo-611b" question="在现行 Rule 611 下，除 ISO 以外，还有哪些列明的例外可以使穿过受保护报价的成交合法？清洗数据时不该怎样做？" options={["官方开盘、官方收盘和停牌复牌成交都是穿越数据错误，因为 Rule 611 已被废除", "ISO 是唯一剩下的例外，其他穿越都是数据错误", "列明的例外包括不是常规方式合约的交易（(b)(2)），以及交易中心的单一价格开盘、复牌或收盘交易（(b)(3)）。官方开盘、收盘和停牌复牌成交属于 (b)(3) 类，不是穿越数据错误。(b)(7) 是成交价并非直接或间接基于当时报价、且在作出执行承诺时重要条款尚不能合理确定。S7-2026-20 仍是提案，Rule 611 并未被废除", "任何所谓基准或 VWAP 成交都自动合法，因为可以为此发明非 ISO 的例外"]} answer={2} explanation="611(b) 是一份列明的例外目录，ISO 只是 (b)(5) 和 (b)(6)。官方开盘、收盘和复牌成交是 (b)(3) 的单一价格开盘、复牌或收盘交易，不是数据错误。要教 (b)(7) 的规则原文，不要用产品名称代替。S7-2026-20 仍是提案。" />
 <Quiz id="mo-15c61" question="按 Rule 15c6-1 和 FINRA 11320，美国常规交收的缺省规则是什么？官方交收类型有哪些？" options={["每一笔成交都必须 T+1 交收；现金合同也按 T+1 交收；现行 11320 仍有单独的“次日（next day）”类别", "每一次 IPO 或包销承诺增发都必须 T+2 交收", "T+1 是 15c6-1 的缺省规则，除非双方在交易当时另有明确约定。11320 的官方类型包括现金（交易当日交付）、常规交收（在交易日后第一个营业日交付，但不得早于该日）、卖方期权、买方期权，以及延迟交付（交易当时约定的日期）。16:30 美东之后定价的包销承诺发行，除非另有约定，可以到第二个营业日。现行 11320 没有“次日”类别", "现金合同和常规交收合同都在下一个营业日交付"]} answer={2} explanation="15c6-1(a) 是缺省规则，除非双方在交易当时另有明确约定。11320 的现金是交易当日交付；常规交收是在交易日后第一个营业日，但不得早于该日。(c) 款只是列出的“16:30 之后定价的包销承诺”分支，不是普遍的 IPO 时钟。不要发明现行法里的“次日”类别。" />
+<Quiz id="mo-602" question="按 17 CFR 242.602(b)(2)，责任经纪商或自营商已公布的报价一般意味着什么？" options={["客户总能按全部 NBBO 数量成交；每一笔 SIP 报价在所有情形下都是某一具名交易商的 602 确定报价", "除碎股订单外，责任经纪商或自营商一般有义务按对买方或卖方至少与已公布买价或卖价同样有利的价格，就其已公布报价数量以内的任何数量，执行向其提交的订单。(b)(3) 在订单提交前已传达的修订，以及 (a)(3) 在异常市场条件下的救济，可以改变该义务", "确定报价义务也适用于碎股订单", "Rule 602 就是已经讲过的 Rule 604（展示）、Rule 611（禁止交易穿越）或 Rule 605/606"]} answer={1} explanation="17 CFR 242.602(b)(2) 把义务限于已公布数量，并排除碎股订单。(b)(3) 和 (a)(3) 是列出的例外。不要把展示的 NBBO 数量当成保证成交，或把每一笔 SIP 报价都当成某一具名交易商的确定报价。不要把 602 和 Rule 604、611 或 605/606 混为一谈。" />
+<Quiz id="mo-6380a" question="按现行 FINRA 6380A，向 FINRA/Nasdaq TRF 申报场外最近成交的时限是什么？SR-FINRA-2026-015 目前是什么状态？" options={["每一笔行情带成交，包括交易所成交和目前午夜至上午 4:00 的成交，都已经适用 10 秒时钟；2026-12-06 已经生效", "“尽快”意味着可以故意等到第 10 秒再报", "在现行 TRF 时段内，指定证券的最近成交报告应尽快、且不得晚于成交后 10 秒提交；午夜至上午 4:00 美东的成交目前应在成交日上午 4:15 前申报，而不是 10 秒。SR-FINRA-2026-015 已提交并申请立即生效，但实施日是 SIP 修订的实施日，预计 2026-12-06，也可能随 SIP 延后；不要把未来的时钟当成现行法", "6380A 同样适用于在交易所申报或通过交易所申报的成交"]} answer={2} explanation="6380A(a)(1)–(2) 在现行 TRF 时段内要求尽快、且不得晚于 10 秒；午夜至上午 4:00 目前是成交日上午 4:15，晚上 8:00 至午夜或非营业日是下一营业日上午 4:15 并标 “as/of”。(e)(1)(C) 把交易所成交排除在该 TRF 之外。补充材料 .02 禁止故意扣留报告。SR-FINRA-2026-015 的实施日是 SIP 修订实施日，不是无条件的硬切换。" />
 
 
 ## 完成标准
@@ -457,6 +534,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 **来源：** classic — Canvas m2；NYU MATH-GA 2708（课程指向）。；美股主线（2026-11-08 核实）：[SEC T+1](https://www.sec.gov/newsroom/press-releases/2024-62)、[NYSE 交易时间](https://www.nyse.com/markets/hours-calendars)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；隔夜与版本陷阱（2026-11-08 核实）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)、[91 FR 65016](https://www.federalregister.gov/documents/2026/10/13/2026-20799/joint-industry-plan-notice-of-filing-and-order-of-summary-effectiveness-on-a-temporary-basis-not-to)、[CTA ETH FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)、[Alpaca 24/5](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)、[SEC 34-105656](https://www.sec.gov/files/rules/exorders/2026/34-105656.pdf)、[eCFR §242.612](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFRac68bdd026a46db/section-242.612)；收盘竞价与整手（2026-11-10 核实）：[NYSE Auctions](https://www.nyse.com/trade/auctions)、[Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf)、[eCFR §242.600](https://www.ecfr.gov/current/title-17/section-242.600)、[SEC 90 FR 51420](https://www.federalregister.gov/d/2025-19926)、[SEC 34-104612](https://www.sec.gov/files/rules/exorders/2026/34-104612.pdf)、[UTP SIP 碎股 FAQ](https://www.utpplan.com/DOC/Nasdaq%20UTP%20SIP%20Odd%20Lot%20Quotes%20FAQ%20Finalized%20Version%201.2.pdf)、[SIPC：What SIPC Protects](https://www.sipc.org/for-investors/what-sipc-protects)（2026-11-10 核实）；代币化股票场所（2026-11-10 核实）：[SEC Release 34-106402](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)；开盘竞价（2026-11-11 核实）：[NYSE Auctions](https://www.nyse.com/trade/auctions)、[Nasdaq 开收盘撮合 FAQ](https://nasdaqtrader.com/content/ProductsServices/Trading/Crosses/openclose_faqs.pdf)；提前收盘与 Nasdaq 收盘截止（2026-11-11 核实）：[NYSE RM 2026-03-20](https://www.nyse.com/publicdocs/nyse/markets/nyse/rule-interpretations/2026/Q1_2026_Quarterly_Expiration_RM_3.20.2026.pdf)、[ICE / NYSE 假期公告](https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx)、[NYSE 交易时间](https://www.nyse.com/trade/hours-calendars)、[Nasdaq Closing Cross FAQ](https://nasdaqtrader.com/content/productsservices/Trading/ClosingCrossfaq.pdf)；现金账户免费乘车、Rule 15c3-3 与 TXSE（2026-11-11 核实）：[12 CFR 220.2](https://www.ecfr.gov/current/title-12/section-220.2)、[12 CFR 220.8](https://www.ecfr.gov/current/title-12/section-220.8)、[investor.gov 免费乘车](https://www.investor.gov/introduction-investing/investing-basics/glossary/freeriding)、[17 CFR 240.15c3-3](https://www.ecfr.gov/current/title-17/section-240.15c3-3)、[17 CFR 240.15c3-3a](https://www.ecfr.gov/current/title-17/section-240.15c3-3a)、[SEC 34-104146 / 90 FR 47880](https://www.govinfo.gov/content/pkg/FR-2025-10-02/pdf/2025-19314.pdf)、[TXSE 开业提示](https://www.txse.com/alerts/txse-production-launch-and-market-activation)、[TXSE 新闻稿 2026-07-31](https://www.txse.com/press/texas-stock-exchange-celebrates-successful-launch-of-trading)；跨市场扫单 ISO（2026-11-12 核实）：[17 CFR 242.611](https://www.ecfr.gov/current/title-17/section-242.611)、[17 CFR 242.600(b)(47)](https://www.ecfr.gov/current/title-17/section-242.600)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)；止损 / 止损限价 / 跟踪止损（2026-11-12 核实）：[investor.gov，Stop, Stop-Limit, and Trailing Stop Orders](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-15)（2026-08-18 更新）；Rule 610(e)（2026-11-12 核实）：[17 CFR 242.610(e)](https://www.ecfr.gov/current/title-17/section-242.610)、[SEC S7-2026-20](https://www.sec.gov/rules-regulations/2026/06/s7-2026-20)
  enrich20（核实于 2026-11-12）：[17 CFR 242.611(b)](https://www.ecfr.gov/current/title-17/section-242.611) 例外目录（在 ISO 之外）。S7-2026-20 仍是提案。
  enrich21（核实于 2026-11-12）：[17 CFR 240.15c6-1](https://www.ecfr.gov/current/title-17/section-240.15c6-1)；[FINRA Rule 11320](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11320)（交收日期类型：现金、常规交收、卖方期权、买方期权、延迟交付；经 SR-FINRA-2023-017 修订，2024-05-28 生效；现行文本没有“次日”类别）。
+ enrich22（核实于 2026-11-12）：[17 CFR 242.602](https://www.ecfr.gov/current/title-17/section-242.602)（确定报价义务，碎股除外；(b)(3) 修订例外；(a)(3) 异常市场救济）；[FINRA Rule 6380A](https://www.finra.org/rules-guidance/rulebooks/finra-rules/6380A)（现行选中版本 “Mar 30, 2026 - Dec 05, 2026”）；[SR-FINRA-2026-015](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-015) / [SEC 34-105922](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-finra-2026-015) / [91 FR 45299](https://www.govinfo.gov/content/pkg/FR-2026-07-20/pdf/2026-14528.pdf)（实施日为 SIP 修订实施日，预计 2026-12-06，可能延后）；FINRA 2026-05-22 与 2026-07-10 技术通知（ADF 时段目前不调整）。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

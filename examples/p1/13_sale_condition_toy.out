@@ -21,3 +21,30 @@
   M updates consolidated last? False; updates volume? False
   do not treat every close-related flag as M
 assertions passed: 18/18
+=== E. FINRA 6380A current 10-second off-exchange TRF reporting ===
+  10:00 a.m. ET weekday, off-exchange: as soon as practicable but no later than 10 seconds after execution
+  8:00 a.m. ET weekday, off-exchange: as soon as practicable but no later than 10 seconds after execution (outside-hours modifier)
+  5:00 p.m. ET weekday, off-exchange: as soon as practicable but no later than 10 seconds after execution (outside-hours modifier)
+  2:00 a.m. ET weekday, off-exchange: by 4:15 a.m. ET on trade date (not the 10-second clock)
+  10:00 p.m. ET weekday, off-exchange: the following business day by 4:15 a.m. ET, designated "as/of"
+  Saturday 11:00 a.m. ET, off-exchange: the following business day by 4:15 a.m. ET, designated "as/of"
+  10:00 a.m. ET weekday, reported on or through an exchange: not reported to the FINRA/Nasdaq TRF
+execution time is reported in hours, minutes and seconds based on Eastern Time
+Supplementary Material .02: commence the trade reporting process without delay upon execution;
+  in no event may a member purposely withhold trade reports, e.g. by programming systems to delay until the last permissible second
+Supplementary Material .05 is a narrow temporary exception for specified qualifying overnight transactions
+  (until the earlier of a further TRF-hours amendment's effective date or December 31, 2027); this toy is not that engine
+SR-FINRA-2026-015 / 34-105922 / 91 FR 45299 was filed for immediate effectiveness,
+  but "The implementation date of the proposed rule change will be the implementation date of the SIP Amendment."
+SIP Operating Committees anticipate December 6, 2026; FINRA intends to align, including if that date moves later
+after implementation, trades during the new system hours (9:00 p.m. Sunday-8:00 p.m. Friday,
+  pause 8:00-9:00 p.m. Monday-Thursday) would be due in 10 seconds, and trades executed while the TRF is closed
+  would be due no later than 15 minutes after the TRF opens — those future clocks are not current law
+current rulebook selected version is "Mar 30, 2026 - Dec 05, 2026"; "Dec 06, 2026 onwards" is not current law
+official May 22 and July 10, 2026 notices: ADF hours are not changing at this time
+6380B is the parallel FINRA/NYSE TRF rule; this toy is not a 6380B / ADF / ORF catalog
+do not apply 6380A to exchange prints, write that every tape print is delayed by 10 seconds,
+  wait until the tenth second on purpose, treat midnight-4:00 a.m. or 8:00 p.m.-midnight prints as already on the 10-second clock,
+  or treat December 6, 2026 as an unconditional hard switch
+assertions passed: 25/25
+disclaimer: official FINRA 6380A current-law clocks; learning only; no venue recommendation

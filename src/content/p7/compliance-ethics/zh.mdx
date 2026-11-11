@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **24 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **24.25 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h + 赠与与继承的成本基础（Pub 550）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -316,6 +316,40 @@ assertions passed: 12/12
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
 ```
 
+**继承的股票一般以死亡日（或替代估价日）的公允市值为成本基础，日后出售该继承的资本资产，不论持有多久都按长期处理。受赠股票一般沿用赠与人的调整后成本基础；若赠与时公允市值更低，则适用官方的双重基础规则，持有期也有官方分拆（核实于 2026-11-12；一般信息，不是税务建议）。** 已经讲过的投资利息、股票股利、3,000 / 1,500 美元资本亏损上限，以及买入股份“超过一年”的持有期，都不要改写。这一节补上官方的赠与 / 继承事实，避免把被继承人原来的买入价当成继承人的成本基础，或对继承股份重新起算短期时钟。
+
+[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) 第 4 章，“Property Received as Inheritance”：“If you sell or dispose of inherited property that is a capital asset, the gain or loss is considered long-term, regardless of how long you held the property.”（出售或处置继承的、属于资本资产的财产时，不论你持有多久，增益或亏损都视为长期。）成本基础一般是被继承人死亡日的公允市值，或者在遗产合格并选择时，采用较晚的替代估价日。“Property Received as a Gift”：要计算受赠财产的成本基础，必须知道赠与即将发生前赠与人的调整后成本基础、赠与时的公允市值、已缴的任何赠与税，以及赠与日期。若赠与时公允市值“等于或高于赠与人的调整后成本基础”，增益和亏损的基础都是赠与人的调整后成本基础，再加上或减去你持有期间规定的调整（1976 年以后缴纳的赠与税，可能按列出的分数增加基础——本课只点名这项加计存在，不搭建赠与税引擎）。若公允市值“低于赠与即将发生前赠与人的调整后成本基础”，增益基础是赠与人的调整后成本基础，亏损基础是赠与时的公允市值，并各自加上或减去之后的调整。官方例子：赠与基础 10,000 美元，公允市值 9,000 美元，日后售价 9,500 美元——“You have neither gain nor loss.”（既无增益也无亏损。）持有期：若基础按赠与人的调整后成本基础确定，持有期“视为从赠与人持有期开始的同一天起算”；若基础按公允市值确定，则“从赠与日后一天起算”。
+
+不要在通常的公允市值情形下，把被继承人原来的买入价当成继承人的成本基础，也不要对继承的资本资产股份重新起算短期时钟。当赠与时公允市值更低时，不要跳过双重基础规则。更细的规则见 Pub 551 / Pub 559（2010 年 Form 8939、夫妻共同财产 / 联合共有，以及“你在一年内把已升值财产赠给被继承人”的例外）；本课只点名这些内容存在，不搭建那些引擎。单独标题 “Property Received From Your Spouse” 下的配偶转让是另一条官方规则，不要把它和父母的赠与混为一谈。一般信息，不是税务建议。本课不提供税务、遗产或赠与建议。回测除非另行标明，否则保持税前。
+
+**实验：** `examples/p7/11_tax_1259_1256_roc_toy.py` 的 I 节（A–H 节的打印与此前相同，包括资本亏损上限、Ace 卖空、无价值证券年末出售、投资利息和股票股利的打印及 12/12；脚本合计 16 条断言；一般信息，不是税务建议）：
+
+```text
+=== I. Pub 550 gift and inherited basis ===
+inherited capital-asset shares: decedent's purchase price 10000, FMV at death 50000
+heir's basis is generally FMV on the date of death 50000 (or the later alternate valuation date if elected)
+a later sale of that inherited capital asset is long-term, regardless of how long the heir held the property
+official gift example: donor adjusted basis 10000, FMV at gift 9000, later sale 9500
+basis for gain 10000 -> 9500 minus 10000 is a 500 loss
+basis for loss 9000 -> 9500 minus 9000 is a 500 gain
+You have neither gain nor loss
+if FMV at the gift is equal to or more than the donor's adjusted basis, basis for gain or loss is the donor's adjusted basis
+  plus or minus later required adjustments (gift tax paid after 1976 may increase basis by a listed fraction;
+  this toy names that the addition exists and is not a gift-tax engine)
+holding period: if basis is determined by the donor's adjusted basis, it is considered to have started
+  on the same day the donor's holding period started
+if basis is determined by the fair market value of the property, the holding period starts on the day after the date of the gift
+more detail lives in Pub 551 / Pub 559 (2010 Form 8939, community-property / joint-tenancy,
+  the one-year appreciated-property-you-gave-the-decedent exception); this toy is not those engines
+spouse transfers under the separate Property Received From Your Spouse heading are a different official rule;
+  do not conflate them with a gift from a parent
+do not use the decedent's original purchase price as the heir's basis in the usual FMV case,
+  and do not start a new short-term clock on inherited capital-asset shares
+do not skip the dual-basis rule when FMV at the gift is lower than the donor's adjusted basis
+assertions passed: 16/16
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+```
+
 
 
 
@@ -550,6 +584,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 22. 把破产申请日、停牌日或退市日当成无价值证券的税务出售日；把已经讲过的退市收益和这个税务性质时钟混为一谈。
 23. 写成所有保证金利息都在经纪商入账的那一年全部可扣；把投资利息和合格住房抵押贷款利息混为一谈，或和已经讲过的 3,000 / 1,500 美元资本亏损上限混为一谈。
 24. 把按比例的股票股利当成现金所得或当成 1099-DIV 第 3 栏的资本返还；在非应税且新旧股相同的股票股利之后仍沿用原来的每股成本基础；把非应税新股的持有期从分配日起重新起算；把零股现金当成合格股息。
+25. 在通常的公允市值情形下，把被继承人原来的买入价当成继承人的成本基础，或对继承的资本资产股份重新起算短期时钟；当赠与时公允市值更低时跳过双重基础规则；把配偶转让和父母的赠与当成同一条规则。
 
 ## 练习（1:1）
 
@@ -575,6 +610,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 18. **ex-worthless** — 运行同一脚本的 F 节；写出 2026 年日历年度纳税人的无价值证券视为出售日；**完成标准**：2026-12-31，与输出一致。
 19. **ex-invint** — 运行同一脚本的 G 节；说明为购买应税证券支付的保证金利息是不是投资利息、扣除受什么限制，以及未能扣除的部分如何处理；**完成标准**：是投资利息，一般以净投资所得为限，其余结转，与输出一致。
 20. **ex-stodiv** — 运行同一脚本的 H 节；写出 Pub 550 例子 1 里的每股成本基础、新股持有期从哪一天开始，以及零股现金是不是股息；**完成标准**：15 美元，与旧股同一天开始，是出售而不是股息，与输出一致。
+21. **ex-giftbasis** — 运行同一脚本的 I 节；写出继承股份在通常公允市值情形下的成本基础和税务性质，以及官方赠与例子（基础 10,000 美元、公允市值 9,000 美元、售价 9,500 美元）的结果；**完成标准**：成本基础是死亡日公允市值而非被继承人买入价，出售按长期处理；该赠与例子既无增益也无亏损，与输出一致。一般信息，不是税务建议。
 
 ## 测验
 
@@ -616,6 +652,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-worthless" question="按 IRC §165(g) 和 IRS Publication 550，一项作为资本资产的证券在纳税年度内变得毫无价值时，税务上的出售日是哪一天？" options={["破产申请日，或者停牌日或退市日", "视为在该纳税年度最后一日出售。2026 年的日历年度纳税人视为在 2026-12-31 出售。这是税务性质时钟，不是已经讲过的退市收益", "在该证券最后一次成交的那一天年中出售", "8-K 宣布破产的那一天，并且一定是长期"]} answer={1} explanation="§165(g)(1) 和 Pub 550 把该项亏损视为在该纳税年度最后一日出售或交换一项资本资产。不要用破产、停牌或退市日当作这个税务出售日。165(g)(3) 对关联公司有例外，本课不搭建那套引擎。一般信息，不是税务建议。" />
 <Quiz id="ce-invint" question="按 IRS Publication 550（2025），为购买应税证券而支付的保证金账户利息如何处理？" options={["所有保证金利息都在经纪商入账的那一年全部可扣，而且和 3,000 美元的资本亏损上限是同一条规则", "它是合格住房抵押贷款利息", "为购买并持有投资财产而借入资金所支付的利息是投资利息。为购买应税证券支付的保证金利息是投资利息；现金收付制纳税人可以在支付的那一年，或款项可供经纪商使用时扣除。扣除一般以净投资所得为限，未能扣除的部分结转到下一年。这是一般信息，不是税务建议", "保证金利息一律不能扣除"]} answer={2} explanation="Pub 550：为购买应税证券支付的保证金利息是投资利息，现金收付制下在支付的那一年或款项可供经纪商使用时扣除，一般以净投资所得为限，其余结转。不要写成经纪商入账当年一定全部可扣，也不要和已经讲过的 3,000 / 1,500 美元资本亏损上限混为一谈。一般信息，不是税务建议。" />
 <Quiz id="ce-stodiv" question="按 IRS Publication 550（2025），按比例分配相同的新普通股、且一般不纳税时，应当如何处理？" options={["一般而言，股票股利和股票认股权不纳税，也不必在申报表上报告。官方例子 1：一股买进成本 45 美元，每持有一股分配两股新股 → 三股，每股成本基础 15 美元。非应税新股的持有期与旧股从同一天开始。在卖出零股的安排下，零股现金是出售这些零股的实现金额，不是现金股息", "股票股利是现金所得，而且新的持有期从分配日重新起算", "原来的每股成本基础保持不变，并把零股现金当成合格股息", "把零股现金当成 1099-DIV 第 3 栏的资本返还"]} answer={0} explanation="Pub 550 例子 1 把 45 美元的成本基础分摊到三股相同的股票上，每股 15 美元。非应税新股的持有期与旧股从同一天开始。零股现金是出售，不是现金股息、不是合格股息，也不是第 3 栏资本返还。官方例外存在；本课不搭建可税性引擎。一般信息，不是税务建议。" />
+<Quiz id="ce-giftbasis" question="按 IRS Publication 550（2025），继承的股票和受赠的股票，成本基础和持有期一般如何处理？（一般信息，不是税务建议）" options={["继承人通常沿用被继承人原来的买入价作为成本基础，并且从继承日起重新起算短期持有期", "赠与时若公允市值低于赠与人调整后成本基础，受赠人一律只用公允市值，不存在双重基础规则", "继承的资本资产股份，成本基础一般是死亡日（或合格并选择的替代估价日）的公允市值；日后出售不论持有多久都按长期处理。受赠财产须知道赠与人调整后成本基础、赠与时公允市值、已缴赠与税和赠与日。若赠与时公允市值不低于赠与人调整后成本基础，增益和亏损的基础都是赠与人的调整后成本基础（另有列出的调整；1976 年以后缴纳的赠与税可能按列出的分数增加基础）。若公允市值更低，增益基础是赠与人的调整后成本基础，亏损基础是赠与时公允市值。官方例子：基础 10,000 美元、公允市值 9,000 美元、日后售价 9,500 美元——既无增益也无亏损。若基础按赠与人的调整后成本基础确定，持有期视为从赠与人持有期开始的同一天起算；若按公允市值确定，则从赠与日后一天起算", "从配偶处取得财产，适用与父母赠与完全相同的双重基础规则"]} answer={2} explanation="Pub 550：“If you sell or dispose of inherited property that is a capital asset, the gain or loss is considered long-term, regardless of how long you held the property.” 通常用死亡日（或替代估价日）公允市值，而不是被继承人原来的买入价。赠与在公允市值更低时适用双重基础；官方 10,000 / 9,000 / 9,500 美元的例子既无增益也无亏损。配偶转让是另一条官方规则。一般信息，不是税务建议。" />
 
 
 ## 完成标准
@@ -626,6 +663,7 @@ n_sources=39 us_first_block=25 fields_complete=True
  enrich19（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Capital Losses” / “Limit on deduction”。一般信息，不是税务建议。
  enrich20（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Short Sales” / “Worthless Securities”；[26 U.S.C. §165(g)](https://www.law.cornell.edu/uscode/text/26/165)。一般信息，不是税务建议。
  enrich21（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Investment Interest”（第 3 章）和 “Distributions of Stock and Stock Rights”（第 1 章），含成本基础例子 1 以及非应税新股的持有期。
+ enrich22（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) 第 4 章 “Property Received as Inheritance” / “Property Received as a Gift”（继承一般为死亡日公允市值，出售按长期；赠与的双重基础与官方既无增益也无亏损例子；持有期分拆）。一般信息，不是税务建议。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

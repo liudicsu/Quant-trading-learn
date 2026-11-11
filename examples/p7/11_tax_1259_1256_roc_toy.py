@@ -316,3 +316,76 @@ print("do not leave the old per-share basis unchanged after a nontaxable identic
 print("do not start a new holding period on the distribution date for nontaxable new shares")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+
+print("=== I. Pub 550 gift and inherited basis ===")
+# IRS Publication 550 (2025), Chapter 4.
+# "Property Received as Inheritance": "If you sell or dispose of inherited
+# property that is a capital asset, the gain or loss is considered long-term,
+# regardless of how long you held the property." Basis is generally fair
+# market value on the date of the decedent's death, or the later alternate
+# valuation date if the estate qualifies for and elects it.
+# "Property Received as a Gift": you must know the donor's adjusted basis
+# just before the gift, FMV at the time of the gift, any gift tax paid, and
+# the date of the gift. If FMV was equal to or more than the donor's
+# adjusted basis, basis for gain or loss is the donor's adjusted basis plus
+# or minus later required adjustments (gift tax paid after 1976 may increase
+# basis by a listed fraction — this toy names that the addition exists; it
+# is not a gift-tax engine). If FMV was less than the donor's adjusted
+# basis, basis for gain is the donor's adjusted basis and basis for loss is
+# FMV at the time of the gift, each plus or minus later adjustments.
+# Official example: gift basis $10,000, FMV $9,000, later sale $9,500 —
+# "You have neither gain nor loss."
+# Holding period: if basis is determined by the donor's adjusted basis, the
+# holding period "is considered to have started on the same day the donor's
+# holding period started"; if basis is determined by FMV, it "starts on the
+# day after the date of the gift."
+# More detail lives in Pub 551 / Pub 559 (2010 Form 8939, community-property
+# / joint-tenancy, the one-year appreciated-property-you-gave-the-decedent
+# exception); this toy is not those engines. Spouse transfers under the
+# separate "Property Received From Your Spouse" heading are a different
+# official rule; do not conflate them with a gift from a parent.
+# General information, not tax advice. No tax, estate, or gifting advice.
+# Backtests stay pre-tax unless labelled otherwise.
+
+# Inherited capital-asset shares: usual FMV basis, always long-term.
+decedent_purchase = 10_000
+fmv_at_death = 50_000
+heir_basis = fmv_at_death  # usual FMV case; not the decedent's purchase price
+print(f"inherited capital-asset shares: decedent's purchase price {decedent_purchase}, FMV at death {fmv_at_death}")
+print(f"heir's basis is generally FMV on the date of death {heir_basis} (or the later alternate valuation date if elected)")
+print("a later sale of that inherited capital asset is long-term, regardless of how long the heir held the property")
+check(heir_basis == 50_000, "usual inherited basis is FMV, not the decedent's purchase price")
+inherited_character = "long-term"  # official: regardless of how long the heir held the property
+check(inherited_character == "long-term", "inherited capital-asset character is long-term regardless of holding period")
+
+# Official gift dual-basis example.
+donor_basis = 10_000
+gift_fmv = 9_000
+sale = 9_500
+gain_basis = donor_basis  # FMV < donor's adjusted basis
+loss_basis = gift_fmv
+gain_result = sale - gain_basis  # -500, a loss under the gain basis
+loss_result = sale - loss_basis  # +500, a gain under the loss basis
+print(f"official gift example: donor adjusted basis {donor_basis}, FMV at gift {gift_fmv}, later sale {sale}")
+print(f"basis for gain {gain_basis} -> {sale} minus {gain_basis} is a {abs(gain_result)} loss")
+print(f"basis for loss {loss_basis} -> {sale} minus {loss_basis} is a {loss_result} gain")
+print("You have neither gain nor loss")
+check(gain_result == -500 and loss_result == 500, "official 10000/9000/9500 dual-basis arithmetic")
+neither = (gain_result < 0) and (loss_result > 0)
+check(neither, "neither gain nor loss")
+
+print("if FMV at the gift is equal to or more than the donor's adjusted basis, basis for gain or loss is the donor's adjusted basis")
+print("  plus or minus later required adjustments (gift tax paid after 1976 may increase basis by a listed fraction;")
+print("  this toy names that the addition exists and is not a gift-tax engine)")
+print("holding period: if basis is determined by the donor's adjusted basis, it is considered to have started")
+print("  on the same day the donor's holding period started")
+print("if basis is determined by the fair market value of the property, the holding period starts on the day after the date of the gift")
+print("more detail lives in Pub 551 / Pub 559 (2010 Form 8939, community-property / joint-tenancy,")
+print("  the one-year appreciated-property-you-gave-the-decedent exception); this toy is not those engines")
+print("spouse transfers under the separate Property Received From Your Spouse heading are a different official rule;")
+print("  do not conflate them with a gift from a parent")
+print("do not use the decedent's original purchase price as the heir's basis in the usual FMV case,")
+print("  and do not start a new short-term clock on inherited capital-asset shares")
+print("do not skip the dual-basis rule when FMV at the gift is lower than the donor's adjusted basis")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")

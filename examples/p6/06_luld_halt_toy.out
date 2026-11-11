@@ -33,3 +33,24 @@ do not copy these Regular Trading Hours clocks onto overnight Phase 1 (no automa
 do not invent a single Nasdaq Halt Cross or NYSE auction cutoff as Plan law
 assertions passed: 4/4
 disclaimer: official Plan Section VII clocks; not a venue auction catalog; learning only
+=== 5. Nasdaq halt reason codes (official table map, not a new LULD rule) ===
+official Nasdaq Trade Halt Codes mapped onto already-taught halt types:
+  T1: Halt - News Pending
+  H10: Halt - SEC Trading Suspension
+  LUDP: Volatility Trading Pause
+  LUDS: Volatility Trading Pause - Straddle Condition
+  MWC1: Market Wide Circuit Breaker Halt - Level 1
+  MWC2: Market Wide Circuit Breaker Halt - Level 2
+  MWC3: Market Wide Circuit Breaker Halt - Level 3
+  MWC0: Market Wide Circuit Breaker Halt - Carry over from previous day
+T1 maps to an exchange news-pending halt; H10 maps to an SEC trading suspension
+LUDP / LUDS map to an LULD-style volatility trading pause (including a straddle condition)
+MWC1 / MWC2 / MWC3 map to MWCB Level 1 / 2 / 3; MWC0 is a carry-over from the previous day
+the same official table still describes T5 as a 10% or more price move in a five-minute period
+that T5 sentence is not a current-law statement of the already-taught LULD Plan
+  (Plan price bands, 15-second Limit State, five-minute pause, Section VII reopen clocks)
+do not teach the table's T5 wording as the current LULD rule, and do not let it overwrite Plan text
+do not treat every Space / Reason Not Available row as no halt
+do not build a Nasdaq Halt Cross or NOII product catalog
+assertions passed: 6/6
+disclaimer: official Nasdaq halt-code map; not a Halt Cross engine; learning only; no venue recommendation

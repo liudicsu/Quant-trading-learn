@@ -13,3 +13,20 @@ single-venue view: bid 99.97 ask 100.04; spread 0.07 vs NBBO spread 0.03
 buy 500 sh walking displayed asks: avg 100.0320 vs NBBO ask 100.02 (NBBO size only 100)
 -> NBBO is a best price at a size, not unlimited liquidity; a single venue is not the whole market
 disclaimer: synthetic fixtures; learning only
+=== D. Rule 602 firm quote (published size, not a hint) ===
+published offer 100.02 x 100
+602(b)(2): a responsible broker or dealer is generally obligated to execute an order to buy or sell
+  a subject security, other than an odd-lot order, at a price at least as favorable as its published
+  bid or published offer, in any amount up to its published quotation size
+100-share buy presented at the published offer: within the published size? True
+1-share odd-lot order: excluded from the 602(b)(2) obligation? True
+revised quotation size 50 communicated before the order is presented -> obligation size 50
+602(b)(1): promptly communicate best bids, best offers, and quotation sizes
+602(a)(3) unusual-market relief may apply under Commission-approved exchange rules
+do not write that every SIP quote is a named dealer's 602 firm quote in all cases,
+  or that the customer can always hit the full NBBO size
+do not apply the firm-quote obligation to odd-lot orders
+do not ignore the (b)(3) revision exceptions or the (a)(3) unusual-market relief
+do not conflate 602 with already-taught Rule 604 (display), Rule 611 (trade-through), or Rule 605/606
+assertions passed: 3/3
+disclaimer: official 17 CFR 242.602 facts; learning only; no venue or broker recommendation
