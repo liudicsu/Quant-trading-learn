@@ -150,3 +150,21 @@ the official paragraph does not state a married-put exception in this heading
 do not invent a rule for stock already held more than one year beyond the official 1 year or less / bought-after-the-put sentences
 assertions passed: 32/32
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== M. Pub 550 liquidating distributions (1099-DIV box 9 or 10) ===
+Liquidating distributions, sometimes called liquidating dividends, are distributions you receive during a partial or complete liquidation of a corporation
+These distributions are, at least in part, one form of a return of capital. They may be paid in one or more installments
+Form 1099-DIV shows the amount of the liquidating distribution in box 9 or 10
+Boxes 9 and 10 apply only to corporations in partial or complete liquidation. Do not include these amounts in box 1a or 1b
+Box 9: Cash Liquidation Distributions. Box 10: Noncash Liquidation Distributions — show the fair market value as of the date of distribution
+  this is already-taught box 3 return of capital? False
+synthetic fixture (not an official Pub 550 numbered example): stock basis $10,000
+  first installment $6000: not taxable until basis is recovered; basis reduced to $4000
+  later installment $5000 after basis is recovered: basis reduced to zero, remaining $1000 is capital gain
+You can report a capital loss only after you have received the final distribution in liquidation that results in the redemption or cancellation of the stock
+  if total liquidating distributions are less than basis, a capital loss may be reported before that final redeeming or cancelling distribution? False
+official complete-liquidation allocation among blocks (number of shares in that block over the total number of shares owned) exists; this toy does not build that engine
+  this toy builds the official multi-block allocation engine? False
+do not treat box 9 or 10 as ordinary dividends, as QDI, or as already-taught box 3
+general information, not tax advice
+assertions passed: 37/37
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise

@@ -380,3 +380,100 @@ check(prints_15bd_cap is False, "do not invent a 14d-11 maximum")
 print("the already-taught 14e-5 same-consideration subsequent-period carve-out stays as already printed in section F")
 print("no bidder or strategy recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+
+print("=== J. Rule 14d-10: all-holders / best-price ===")
+# 17 CFR 240.14d-10 (official eCFR API, title 17 up to date as of 2026-11-09,
+# opened 2026-11-12; not an interstitial). Keep sections A-I identical,
+# including Rule 105, 14e-1, 101/102, 14e-5, Rule 104, 14e-2, 14d-11, and
+# 39/39 after I.
+# 14d-10(a): no bidder shall make a tender offer unless (1) the tender offer
+# is open to all security holders of the class of securities subject to the
+# tender offer; and (2) the consideration paid to any security holder for
+# securities tendered in the tender offer is the highest consideration paid
+# to any other security holder for securities tendered in the tender offer.
+# This is not the already-taught 14d-11 same-consideration condition or the
+# 14e-5 same-consideration subsequent-period carve-out.
+# Official (b)-(f) exceptions exist; this toy is not that engine.
+# Do not rewrite the already-taught 14e-1(b) 10-business-day
+# change-of-consideration window or the 14e-1(d) extension-notice sentence.
+# No bidder, target, or strategy recommendation.
+
+print("14d-10(a): no bidder shall make a tender offer unless:")
+print("  (1) the tender offer is open to all security holders of the class of securities subject to the tender offer; and")
+print("  (2) the consideration paid to any security holder for securities tendered in the tender offer")
+print("      is the highest consideration paid to any other security holder for securities tendered in the tender offer")
+favored_group_ok = False
+unequal_price_ok = False
+print(f"  offer open only to a favored group? {favored_group_ok}")
+print(f"  some holders paid more than others for securities tendered? {unequal_price_ok}")
+check(favored_group_ok is False, "all-holders: not open only to a favored group")
+check(unequal_price_ok is False, "best-price: not a higher price to some tendering holders")
+is_14d11_or_14e5_same_consideration = False
+print(f"  this is the already-taught 14d-11 / 14e-5 same-consideration sentence? {is_14d11_or_14e5_same_consideration}")
+check(is_14d11_or_14e5_same_consideration is False, "14d-10 is not the already-taught 14d-11 / 14e-5 same-consideration sentence")
+print("official (b)-(f) exceptions exist (state-law exclusion after a good-faith effort;")
+print("  more than one type of consideration with an equal right to elect;")
+print("  employment-compensation safe harbor; alternative consideration when a state prohibits the offered securities;")
+print("  Commission exemptive authority); this toy is not that engine")
+builds_exceptions = False
+print(f"  this toy builds the official (b)-(f) exception engines? {builds_exceptions}")
+check(builds_exceptions is False, "do not build 14d-10(b)-(f) engines")
+print("do not rewrite the already-taught 14e-1(b) 10-business-day change-of-consideration window or the 14e-1(d) extension-notice sentence")
+print("no bidder, target, or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== K. Rule 14e-4: short tendering / net long in a partial tender ===")
+# 17 CFR 240.14e-4 and supporting 240.14d-8 (official eCFR API, title 17
+# up to date as of 2026-11-09, opened 2026-11-12). Keep sections A-J
+# identical once J is added.
+# 14e-4(b): it is unlawful to tender a subject security in a partial
+# tender offer for one's own account unless at the time of tender, and at
+# the end of the proration period or period during which securities are
+# accepted by lot (including any extensions thereof), the person has a
+# net long position equal to or greater than the amount tendered.
+# 14e-4(a)(5): a "partial tender offer" is an offer for less than all of
+# the outstanding securities subject to the offer in which tenders are
+# accepted either by lot or on a pro rata basis for a specified period, or
+# a tender offer for all of the outstanding shares that offers a choice of
+# consideration in which tenders for different forms of consideration may
+# be accepted either by lot or on a pro rata basis for a specified period.
+# Do not apply the net-long limit to every tender offer.
+# Supporting 14d-8: if more securities are deposited than the person is
+# bound or willing to take up and pay for, they are taken up as nearly as
+# may be pro rata, disregarding fractions.
+# Do not invent a 14d-11 maximum, or flatten proration into already-taught
+# 14d-11 election language.
+# Equivalent securities and options enter the official net-long definition;
+# this toy is not that engine. Do not pack 14d-8 as its own MUST.
+# No bidder or strategy recommendation.
+
+print("14e-4(b): in a partial tender offer, a person may not tender more than a net long position")
+print("  at the time of tender, and at the end of the proration period or period during which")
+print("  securities are accepted by lot (including any extensions thereof)")
+print("  net long must be equal to or greater than the amount tendered")
+applies_to_every_tender = False
+print(f"  this net-long limit applies to every tender offer? {applies_to_every_tender}")
+check(applies_to_every_tender is False, "14e-4 applies to a partial tender offer as defined, not every tender")
+print("14e-4(a)(5): a partial tender offer is an offer for less than all of the outstanding securities")
+print("  subject to the offer in which tenders are accepted either by lot or on a pro rata basis for a specified period,")
+print("  or a tender offer for all of the outstanding shares that offers a choice of consideration")
+print("  in which tenders for different forms of consideration may be accepted either by lot or on a pro rata basis for a specified period")
+choice_branch_is_partial = True
+print(f"  an all-outstanding offer with a choice of consideration accepted by lot or pro rata is a partial tender offer? {choice_branch_is_partial}")
+check(choice_branch_is_partial is True, "official choice-of-consideration branch is a partial tender offer")
+print("supporting 14d-8: if a greater number of securities are deposited than the person is bound or willing to take up and pay for,")
+print("  the securities taken up shall be taken up and paid for as nearly as may be pro rata, disregarding fractions,")
+print("  according to the number of securities deposited by each depositor during the period the offer remains open")
+is_14d11_election = False
+invents_14d11_max = False
+print(f"  this is the already-taught 14d-11 election language? {is_14d11_election}")
+print(f"  this toy invents a 14d-11 maximum length? {invents_14d11_max}")
+check(is_14d11_election is False, "14d-8 proration is not 14d-11 election language")
+check(invents_14d11_max is False, "do not invent a 14d-11 maximum")
+print("equivalent securities and options enter the official net-long definition; this toy is not that engine")
+builds_net_long_engine = False
+print(f"  this toy builds the official net-long options / equivalent-securities engine? {builds_net_long_engine}")
+check(builds_net_long_engine is False, "do not build the net-long engine")
+print("no bidder or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")

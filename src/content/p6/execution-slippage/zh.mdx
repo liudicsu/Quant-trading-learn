@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **15.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **16.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -172,6 +172,34 @@ ASSERT_rule606_ok
 reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only
 ```
 
+
+**FINRA 5250：会员不得接受来自发行人、或其关联方或推销人的付款或其他对价，用于公布报价、担任做市商，或为此提交申请（核实于 2026-11-12）。** 已经教过的 Rule 606 / PFOF、Rule 605 统计，以及后面的 FINRA 5320，都不要改写。那些是与*路由客户订单*或客户股票订单有关的规则，不是发行人付给做市的钱。这一节补上官方的 5250 禁止，避免把展示报价当成发行人向会员付了钱做市的证明，或把每一项由发行人支付的服务都写成被禁止。没有产品、券商或交易场所建议。
+
+[FINRA Rule 5250(a)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5250)：“No member or person associated with a member shall accept any payment or other consideration, directly or indirectly, from an issuer of a security, or any affiliate or promoter thereof, for publishing a quotation, acting as market maker in a security, or submitting an application in connection therewith.”（会员或与会员相关联的人，不得直接或间接接受来自某证券发行人、或其任何关联方或推销人的任何付款或其他对价，用于公布报价、在某证券上担任做市商，或为此提交申请。）5250(b)： (a) 款“shall not preclude a member from accepting”（并不妨碍会员接受）：(1) 真诚服务的付款，包括但不限于投资银行服务（含承销报酬和费用）；(2) 报销 SEC 或州监管机构收取的注册费，以及自律组织收取的证券上市费；以及 (3) 全国性证券交易所规则在向 SEC 提交后生效、或提交并获 SEC 批准后明文规定的任何付款。5250(c) 定义了关联方（与 Rule 5121 相同）、推销人和报价。点名官方 (b) 款例外和 (c) 款定义存在即可，不要搭建推销人 / 5121 关联方 / 交易所费用表引擎。
+
+不要把 5250 写成对已经教过的 PFOF / Rule 606 的改写，或写成对承销费、注册费或上市费报销的全面禁止。
+
+**实验：** `examples/p6/12_rule606_toy.py` 在现有打印之后的 B 节（当前的 606 表、**4/4**、`ASSERT_rule606_ok`，以及 “606 = where orders went and the money; 605 = execution quality” 那句提示，仍与此前相同；B 节之后为 8/8）：
+
+```text
+=== B. FINRA 5250: payments for market making ===
+5250 is a different prohibition from already-taught PFOF / Rule 606
+5250(a): no member or person associated with a member shall accept any payment or other consideration,
+  directly or indirectly, from an issuer of a security, or any affiliate or promoter thereof,
+  for publishing a quotation, acting as market maker in a security, or submitting an application in connection therewith
+  issuer / affiliate / promoter payment for acting as market maker: prohibited? True
+  already-taught PFOF for routing customer orders is the same prohibition? False
+5250(b) official exceptions exist: payment for bona fide services, including investment banking services
+  (including underwriting compensation and fees); reimbursement of SEC or state registration fees and SRO listing fees;
+  and any payment expressly provided for under the rules of a national securities exchange
+  that are effective after being filed with, or filed with and approved by, the SEC
+  this toy builds a promoter / 5121-affiliate / exchange-fee-schedule engine? False
+  every issuer-paid service is banned? False
+no product, broker, or venue recommendation
+assertions passed: 8/8
+```
+
+
 ## Form ATS-N 和场外流动性（核实于 2026-11-11）
 
 上一节的 Rule 606 告诉你，券商把非定向订单送到了哪些去向。其中有些去向并不是交易所。**另类交易系统**（ATS）可以在符合 [Regulation ATS](https://www.ecfr.gov/current/title-17/part-242/subject-group-ECFRd043a8fc6fa68e1)（[17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)）的前提下，按免于交易所注册的豁免来撮合买卖。交易 NMS 股票的 ATS 必须提交公开的 [Form ATS-N](https://www.ecfr.gov/current/title-17/section-242.304)（Rule 304）。SEC 维护这些文件的列表（[Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information)；页面最近审阅日期 2026-03-30，表里有更晚的 2026 年生效日，2026-11-11 打开）。
@@ -195,6 +223,39 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 
 补充材料 .08：会员“一般可以把客户订单的有效期限定在美东时间上午 9:30 至下午 4:00。但是，如果客户和会员同意在**正常交易时段之外**处理该客户订单，本规则的保护……在该客户订单可由该会员执行的全部时间里都适用。”除非双方同意该订单在那时可执行，延长时段的保护不会自动生效。把“券商穿过我挂着的限价单先给自己成交”写进回测，并不是 5320 对待持有中的客户股票订单的方式。它和 Rule 606 的 “held” 以及 5310 是互补的；这里不推荐任何券商。
 
+
+**FINRA 5270：对即将进行的大宗交易抢先，是与已经教过的 FINRA 5320 不同的禁止：会员掌握关于即将进行的大宗交易的重大、非公开市场信息时，不得在该信息已公开可得或已过时、失效之前，促成该证券或相关金融工具的订单成交（核实于 2026-11-12）。** 已经教过的 5320（持有尚未成交的客户股票订单时，一般不得在同一方向上为自己成交，除非随即以相同或更好的价格、在相应数量内执行客户订单）保持原样。这一节补上官方的 5270，避免把 5320 当成唯一的“抢先”规则，或把 10,000 股当成硬性下限。没有产品、券商或交易场所建议。
+
+[FINRA Rule 5270(a)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5270)：“No member or person associated with a member shall cause to be executed an order to buy or sell a security or a related financial instrument when such member or person associated with a member causing such order to be executed has material, non-public market information concerning an imminent block transaction in that security, a related financial instrument or a security underlying the related financial instrument prior to the time information concerning the block transaction has been made publicly available or has otherwise become stale or obsolete.”（会员或与会员相关联的人，若掌握关于该证券、相关金融工具、或相关金融工具标的证券即将进行的大宗交易的重大、非公开市场信息，则在该大宗交易的信息已公开可得或已过时、失效之前，不得促成买入或卖出该证券或相关金融工具的订单成交。）补充材料 .03：在股票里，“a transaction involving 10,000 shares or more … is generally deemed to be a block transaction, although a transaction of fewer than 10,000 shares could be considered a block transaction”（涉及 10,000 股或以上的交易一般视为大宗，但少于 10,000 股的交易也可能构成大宗）。“A block transaction that has been agreed upon does not lose its identity as such by arranging for partial executions of the full transaction in portions which themselves are not of block size if the execution of the full transaction may have a material impact on the market.”（已达成的大宗交易，不会因为被安排成本身不够大宗规模的分笔成交，就不再是大宗，只要整笔交易的执行可能对市场有重大影响。）补充材料 .02：信息在经最后成交报告系统等官方渠道传播后视为公开可得；“The requirement that information concerning the block transaction be made publicly available will not be satisfied until the entire block transaction has been completed and publicly reported.”（在整笔大宗交易已经完成并公开报告之前，公开可得这一要求并未满足。）补充材料 .04 点名了允许的交易（包括不相关的交易、在取得同意的情况下协助客户大宗，以及市场规则 / 一侧在交易所成交的分支）。补充材料 .05：尽管 5270 限于即将进行的大宗，对其他订单的抢先仍可能违反其他 FINRA 规则，包括 Rule 2010 和已经教过的 Rule 5320。点名官方 .04 例外存在即可，不要搭建信息隔离 / 同意 / 交易所一侧引擎。
+
+不要改写已经教过的 5320，或把 10,000 股当成硬性下限。不要把大宗的一部分成交打印，当成整笔大宗已经“公开可得”。
+
+**实验：** 同一脚本在新的 5250 节之后的 C 节（现有的 606 打印和新的 5250 节，一旦加入，仍与此前相同，包括 B 节后的 8/8；全脚本 12 项断言）：
+
+```text
+=== C. FINRA 5270: front running of block transactions ===
+5270 is a different prohibition from already-taught FINRA 5320
+5270(a): a member with material, non-public market information concerning an imminent block transaction
+  may not cause an order in that security or a related financial instrument to be executed
+  prior to the time information concerning the block transaction has been made publicly available
+  or has otherwise become stale or obsolete
+  this is the already-taught 5320 trading-ahead-of-a-held-customer-equity-order rule? False
+SM .03: in equity securities, a transaction involving 10,000 shares or more is generally deemed to be a block transaction,
+  although a transaction of fewer than 10,000 shares could be considered a block transaction
+  10,000 shares is a rigid floor? False
+A block transaction that has been agreed upon does not lose its identity as such by arranging for
+  partial executions of the full transaction in portions which themselves are not of block size
+  if the execution of the full transaction may have a material impact on the market
+SM .02: public availability will not be satisfied until the entire block transaction has been completed and publicly reported
+  a print of part of the block makes the entire block publicly available? False
+official SM .04 exceptions exist; this toy is not an information-barrier / consent / exchange-leg engine
+  this toy builds an information-barrier / consent / exchange-leg engine? False
+SM .05: front running of non-block orders may still violate other FINRA rules, including Rule 2010 and already-taught Rule 5320
+no product, broker, or venue recommendation
+assertions passed: 12/12
+```
+
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -208,6 +269,9 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 9. 把 Rule 606 路由表当成执行质量的结论，或把 Rule 605 报告当成路由和 PFOF 披露；把已撤回的 2022 年订单竞争规则当成现行规则。
 10. 把公开的全国最佳买卖价上的数量当成全部流动性，或根据公开报价去编造一笔暗池成交；把场外 / TRF 成交当成缺失或坏数据；或以为所有 ATS 都会对外展示最佳买卖价。
 11. 假定每一笔未成交的客户限价都已经出现在展示报价里，或把 Rule 604 下的隐藏当成默认；把 604 和 Rule 606 的 “held” 或 Rule 611 的禁止交易穿越混为一谈。把券商穿过挂着的客户股票限价单先给自己成交，写成好像 5320 并不适用；编造一条现行 5320 文本里没有的 “not-held” 例外；以为延长时段的 5320 保护会自动生效。
+12. 把 5250 当成已经教过的 PFOF / Rule 606 的改写，或把展示报价当成发行人向会员付了钱做市的证明；把每一项由发行人支付的服务都写成被禁止，包括承销费或上市费报销。
+13. 把 5270 当成已经教过的 5320；把 10,000 股当成硬性下限；把大宗拆成非大宗部分就当成不再是大宗；或把大宗的一部分成交打印，当成整笔大宗已经“公开可得”。
+
 
 ## 练习（1:1）
 
@@ -220,6 +284,9 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 
 7. **ex-604** — 用自己的话写出：专家或场外做市商在什么情况下必须展示会改善报价的客户限价单，并举出两项例外；**完成标准**：写出必须立即公布价格和全部数量，并点名客户明确要求不展示，以及大宗（至少 10,000 股或 20 万美元，除非客户要求展示）。
 8. **ex-5320** — 用自己的话写出 FINRA 5320 对同一方向自营成交的禁止，以及其保护在 9:30–16:00 ET 之外何时适用；**完成标准**：写出随后按相同或更好的价格、在相应数量内执行客户订单，并说明只有在客户和会员同意该订单当时可执行时，延长时段保护才适用。
+9. **ex-5250** — 运行 `12_rule606_toy.py` 的 B 节；说明发行人付给做市商的钱是否被禁止，以及这是不是已经教过的 PFOF / 606；**完成标准**：发行人 / 关联方 / 推销人就报价或做市付款被禁止，这与已经教过的 PFOF 不是同一条禁止，与输出一致。
+10. **ex-5270** — 运行同一脚本的 C 节；说明 5270 是不是已经教过的 5320，10,000 股是不是硬性下限，以及打印出大宗的一部分是否使整笔大宗公开可得；**完成标准**：这是不同的禁止，10,000 股不是硬性下限，部分打印并不使整笔大宗公开可得，与输出一致。
+
 ## 测验
 
 <Quiz id="p6ex-q1" question="Almgren–Chriss 有效前沿权衡的是？" options={["Alpha vs beta", "期望执行成本 vs 库存风险", "仅 VaR vs CVaR", "TWAP vs VWAP 费用"]} answer={1} explanation="在给定地平线上最小化 E[cost] + λ·Var。" />
@@ -239,11 +306,15 @@ reminder: 606 = where orders went and the money; 605 = execution quality; read b
 <Quiz id="es-604" question="按 Rule 604，专家或场外做市商什么时候必须展示客户限价单？" options={["隐藏是默认；客户限价单只有在客户要求时才展示", "Rule 604 和 Rule 606 的 “held” 报告类别是同一项义务，也和 Rule 611 的禁止交易穿越是一回事", "他们必须立即公布一个买卖报价，以反映会改善其报价的客户限价单的价格和全部数量，以及价格等于其报价且等于 NBBO、并且代表超过微不足道数量变化的客户限价单的全部数量。隐藏是例外：除碎股、大宗（至少 10,000 股或 20 万美元，除非客户要求展示）、收到后立即成交、转给另一家合规场所或会员，以及全部或全不等列明例外外，客户必须明确要求不展示", "大宗订单永远不展示，即使客户要求展示也不行"]} answer={2} explanation="17 CFR 242.604(a) 是立即展示义务；604(b) 列出例外，包括客户明确要求不展示。大宗在 17 CFR 242.600 里定义为至少 10,000 股或市值 20 万美元，大宗被除外，除非客户要求展示。604 不是 Rule 606 的 “held”，也不是 Rule 611。" />
 <Quiz id="es-5320" question="FINRA 5320 一般禁止什么？它的保护在常规时段之外何时适用？" options={["现行 5320 文本里有一条例外，允许券商抢先任何 “not-held” 客户股票订单", "延长时段的保护对每一笔客户订单自动生效，即使券商把订单限在美东 9:30–16:00", "会员持有尚未成交的客户（或另一经纪交易商之客户）股票订单时，不得在同一市场方向上为自己的账户、以能满足该客户订单的价格交易该证券，除非随即按相同或更好的价格、在相应数量内执行该客户订单。书面方法须与本规则和 Rule 5310 一致。补充材料里有例外。会员一般可以把订单有效期限定在美东 9:30–16:00；如果客户和会员同意在正常时段之外处理该订单，则在该订单可由该会员执行的全部时间里都适用本规则的保护", "券商可以先给自己成交，稍后再以更差的价格给客户成交，这样也符合 5320"]} answer={2} explanation="FINRA 5320(a) 禁止同一方向的自营抢先，除非随即以相同或更好的价格执行客户订单。补充材料 .08：会员一般可以把订单限在美东 9:30–16:00；只有在双方同意该订单当时可执行时，这些保护才适用于正常时段之外。现行规则文本没有加上 “not-held” 例外。例外是存在的；本课不做合规引擎。" />
 
+<Quiz id="es-5250" question="FINRA 5250 一般禁止什么？它和已经教过的 PFOF / Rule 606 是同一条规则吗？" options={["5250 就是已经教过的 PFOF / Rule 606：发行人付给做市商的钱，和路由客户订单的付费是同一条禁止", "会员不得直接或间接接受来自发行人、或其关联方或推销人的任何付款或其他对价，用于公布报价、担任做市商，或为此提交申请。这与已经教过的、因路由客户订单而产生的 PFOF / Rule 606 是不同的禁止。官方 (b) 款例外包括：真诚服务的付款（含承销报酬和费用等投资银行服务）；报销 SEC 或州注册费以及自律组织上市费；以及全国性证券交易所规则在向 SEC 提交后生效、或提交并获 SEC 批准后明文规定的付款。本课不搭建推销人 / 5121 关联方 / 交易所费用表引擎", "每一项由发行人支付的服务都被禁止，包括承销费和上市费报销", "展示出来的报价就证明发行人向会员付了钱做市"]} answer={1} explanation="FINRA 5250(a) 禁止就报价或做市接受发行人 / 关联方 / 推销人的付款。这不是已经教过的 PFOF / Rule 606。(b) 款例外包括真诚服务、注册费和上市费报销，以及经提交或批准的交易所规则明文规定的付款；本课不搭建该引擎。" />
+<Quiz id="es-5270" question="FINRA 5270 一般禁止什么？它和已经教过的 5320 是什么关系？10,000 股应当如何理解？" options={["5270 就是已经教过的 5320：持有尚未成交的客户股票订单时不得同一方向抢先", "在股票里，10,000 股是硬性下限；少于 10,000 股就不可能是大宗，把一笔大宗拆成非大宗部分就不再是大宗", "只要打印出大宗的一部分，整笔大宗就已经“公开可得”", "5270 与已经教过的 5320 是不同的禁止：会员掌握关于即将进行的大宗交易的重大、非公开市场信息时，不得在该信息已公开可得或已过时、失效之前，促成该证券或相关金融工具的订单成交。补充材料 .03：在股票里，10,000 股或以上一般视为大宗，但少于 10,000 股也可能构成大宗；若整笔交易可能对市场有重大影响，拆成非大宗部分并不改变其性质。补充材料 .02：在整笔大宗完成并公开报告之前，公开可得这一要求并未满足。官方补充材料 .04 例外是存在的；本课不搭建信息隔离 / 同意 / 交易所一侧引擎"]} answer={3} explanation="FINRA 5270(a) 针对即将进行的大宗交易的重大、非公开市场信息，与已经教过的 5320 不是同一条规则。10,000 股一般视为大宗，但不是硬性下限。补充材料 .02：在整笔大宗完成并公开报告之前，公开可得并不满足。" />
+
+
 ## 完成标准
 
 执行假设（日程、参与率上限、AC λ 或启发式、IS 基准）写入共用主配置——研究与纸面交易使用同一模型。
 
-**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)。enrich15（2026-11-11 核实）：[17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)、[17 CFR 242.304](https://www.ecfr.gov/current/title-17/section-242.304)、[SEC Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information)。 enrich18（核实于 2026-11-12）：[17 CFR 242.604](https://www.ecfr.gov/current/title-17/section-242.604)；大宗定义见 [17 CFR 242.600](https://www.ecfr.gov/current/title-17/section-242.600)；[FINRA Rule 5320](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5320)。
+**来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)。enrich15（2026-11-11 核实）：[17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)、[17 CFR 242.304](https://www.ecfr.gov/current/title-17/section-242.304)、[SEC Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information)。 enrich18（核实于 2026-11-12）：[17 CFR 242.604](https://www.ecfr.gov/current/title-17/section-242.604)；大宗定义见 [17 CFR 242.600](https://www.ecfr.gov/current/title-17/section-242.600)；[FINRA Rule 5320](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5320)。 enrich25（核实于 2026-11-12）：[FINRA Rule 5250](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5250)；[FINRA Rule 5270](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5270)。没有产品、券商或交易场所建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

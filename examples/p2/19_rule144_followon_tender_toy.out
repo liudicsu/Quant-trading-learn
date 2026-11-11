@@ -102,3 +102,39 @@ withdrawal rights do apply during the initial open period (14d-7(a)(1))
 the already-taught 14e-5 same-consideration subsequent-period carve-out stays as already printed in section F
 no bidder or strategy recommendation
 assertions passed: 39/39
+=== J. Rule 14d-10: all-holders / best-price ===
+14d-10(a): no bidder shall make a tender offer unless:
+  (1) the tender offer is open to all security holders of the class of securities subject to the tender offer; and
+  (2) the consideration paid to any security holder for securities tendered in the tender offer
+      is the highest consideration paid to any other security holder for securities tendered in the tender offer
+  offer open only to a favored group? False
+  some holders paid more than others for securities tendered? False
+  this is the already-taught 14d-11 / 14e-5 same-consideration sentence? False
+official (b)-(f) exceptions exist (state-law exclusion after a good-faith effort;
+  more than one type of consideration with an equal right to elect;
+  employment-compensation safe harbor; alternative consideration when a state prohibits the offered securities;
+  Commission exemptive authority); this toy is not that engine
+  this toy builds the official (b)-(f) exception engines? False
+do not rewrite the already-taught 14e-1(b) 10-business-day change-of-consideration window or the 14e-1(d) extension-notice sentence
+no bidder, target, or strategy recommendation
+assertions passed: 43/43
+=== K. Rule 14e-4: short tendering / net long in a partial tender ===
+14e-4(b): in a partial tender offer, a person may not tender more than a net long position
+  at the time of tender, and at the end of the proration period or period during which
+  securities are accepted by lot (including any extensions thereof)
+  net long must be equal to or greater than the amount tendered
+  this net-long limit applies to every tender offer? False
+14e-4(a)(5): a partial tender offer is an offer for less than all of the outstanding securities
+  subject to the offer in which tenders are accepted either by lot or on a pro rata basis for a specified period,
+  or a tender offer for all of the outstanding shares that offers a choice of consideration
+  in which tenders for different forms of consideration may be accepted either by lot or on a pro rata basis for a specified period
+  an all-outstanding offer with a choice of consideration accepted by lot or pro rata is a partial tender offer? True
+supporting 14d-8: if a greater number of securities are deposited than the person is bound or willing to take up and pay for,
+  the securities taken up shall be taken up and paid for as nearly as may be pro rata, disregarding fractions,
+  according to the number of securities deposited by each depositor during the period the offer remains open
+  this is the already-taught 14d-11 election language? False
+  this toy invents a 14d-11 maximum length? False
+equivalent securities and options enter the official net-long definition; this toy is not that engine
+  this toy builds the official net-long options / equivalent-securities engine? False
+no bidder or strategy recommendation
+assertions passed: 48/48

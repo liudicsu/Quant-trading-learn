@@ -533,3 +533,65 @@ print("the official paragraph does not state a married-put exception in this hea
 print("do not invent a rule for stock already held more than one year beyond the official 1 year or less / bought-after-the-put sentences")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+
+
+print("=== M. Pub 550 liquidating distributions (1099-DIV box 9 or 10) ===")
+# IRS Publication 550 (2025), "Liquidating Distributions" (official HTML,
+# opened 2026-11-12). Instructions for Form 1099-DIV (Rev. January 2024).
+# Keep sections A-L identical, including the official $4,000 / $6,000
+# examples, the section K line "a Put option as short sale holding-period
+# rule exists in Pub 550; this toy is not that engine," section L, and
+# 32/32 after L.
+# Liquidating distributions, sometimes called liquidating dividends, are
+# distributions received during a partial or complete liquidation of a
+# corporation. They are, at least in part, one form of a return of capital.
+# They may be paid in one or more installments. Form 1099-DIV shows the
+# amount in box 9 or 10. Boxes 9 and 10 apply only to corporations in
+# partial or complete liquidation. Do not include these amounts in box 1a
+# or 1b. Box 9: Cash Liquidation Distributions. Box 10: Noncash Liquidation
+# Distributions — show fair market value as of the date of distribution.
+# Any liquidating distribution is not taxable until the basis of the stock
+# has been recovered. After basis is reduced to zero, later amounts are
+# capital gain. A capital loss may be reported only after the final
+# distribution in liquidation that results in the redemption or
+# cancellation of the stock.
+# Official complete-liquidation allocation among blocks (number of shares
+# in that block over the total number of shares owned) exists; this toy
+# does not build that engine.
+# Do not rewrite already-taught box 3 ROC, box 2a, the capital-loss cap,
+# FIFO, or 1099-B box 5 paragraphs.
+# Dollar figures below are a synthetic fixture, not an official Pub 550
+# numbered example. General information, not tax advice.
+
+print("Liquidating distributions, sometimes called liquidating dividends, are distributions you receive during a partial or complete liquidation of a corporation")
+print("These distributions are, at least in part, one form of a return of capital. They may be paid in one or more installments")
+print("Form 1099-DIV shows the amount of the liquidating distribution in box 9 or 10")
+print("Boxes 9 and 10 apply only to corporations in partial or complete liquidation. Do not include these amounts in box 1a or 1b")
+print("Box 9: Cash Liquidation Distributions. Box 10: Noncash Liquidation Distributions — show the fair market value as of the date of distribution")
+is_box3 = False
+print(f"  this is already-taught box 3 return of capital? {is_box3}")
+check(is_box3 is False, "not already-taught box 3 ROC")
+# Synthetic fixture (not an official Pub 550 numbered example).
+basis = 10000
+first = 6000
+later = 5000
+print("synthetic fixture (not an official Pub 550 numbered example): stock basis $10,000")
+after_first = basis - first
+print(f"  first installment ${first}: not taxable until basis is recovered; basis reduced to ${after_first}")
+check(after_first == 4000, "first installment reduces basis to 4000 and is not taxable")
+gain = later - after_first
+basis_after_later = 0
+print(f"  later installment ${later} after basis is recovered: basis reduced to zero, remaining ${gain} is capital gain")
+check(basis_after_later == 0 and gain == 1000, "after basis is zero, remaining 1000 is capital gain")
+loss_only_after_final = True
+print("You can report a capital loss only after you have received the final distribution in liquidation that results in the redemption or cancellation of the stock")
+print(f"  if total liquidating distributions are less than basis, a capital loss may be reported before that final redeeming or cancelling distribution? {not loss_only_after_final}")
+check(loss_only_after_final is True, "capital loss only after the final redeeming or cancelling distribution")
+print("official complete-liquidation allocation among blocks (number of shares in that block over the total number of shares owned) exists; this toy does not build that engine")
+builds_block_engine = False
+print(f"  this toy builds the official multi-block allocation engine? {builds_block_engine}")
+check(builds_block_engine is False, "do not build the multi-block allocation engine")
+print("do not treat box 9 or 10 as ordinary dividends, as QDI, or as already-taught box 3")
+print("general information, not tax advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")

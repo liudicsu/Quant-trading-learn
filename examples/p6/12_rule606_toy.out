@@ -5,3 +5,38 @@ EXCH_C          20.0%          42.9%              -1.0000
 assertions passed: 4/4
 ASSERT_rule606_ok
 reminder: 606 = where orders went and the money; 605 = execution quality; read both. Synthetic; learning only
+=== B. FINRA 5250: payments for market making ===
+5250 is a different prohibition from already-taught PFOF / Rule 606
+5250(a): no member or person associated with a member shall accept any payment or other consideration,
+  directly or indirectly, from an issuer of a security, or any affiliate or promoter thereof,
+  for publishing a quotation, acting as market maker in a security, or submitting an application in connection therewith
+  issuer / affiliate / promoter payment for acting as market maker: prohibited? True
+  already-taught PFOF for routing customer orders is the same prohibition? False
+5250(b) official exceptions exist: payment for bona fide services, including investment banking services
+  (including underwriting compensation and fees); reimbursement of SEC or state registration fees and SRO listing fees;
+  and any payment expressly provided for under the rules of a national securities exchange
+  that are effective after being filed with, or filed with and approved by, the SEC
+  this toy builds a promoter / 5121-affiliate / exchange-fee-schedule engine? False
+  every issuer-paid service is banned? False
+no product, broker, or venue recommendation
+assertions passed: 8/8
+=== C. FINRA 5270: front running of block transactions ===
+5270 is a different prohibition from already-taught FINRA 5320
+5270(a): a member with material, non-public market information concerning an imminent block transaction
+  may not cause an order in that security or a related financial instrument to be executed
+  prior to the time information concerning the block transaction has been made publicly available
+  or has otherwise become stale or obsolete
+  this is the already-taught 5320 trading-ahead-of-a-held-customer-equity-order rule? False
+SM .03: in equity securities, a transaction involving 10,000 shares or more is generally deemed to be a block transaction,
+  although a transaction of fewer than 10,000 shares could be considered a block transaction
+  10,000 shares is a rigid floor? False
+A block transaction that has been agreed upon does not lose its identity as such by arranging for
+  partial executions of the full transaction in portions which themselves are not of block size
+  if the execution of the full transaction may have a material impact on the market
+SM .02: public availability will not be satisfied until the entire block transaction has been completed and publicly reported
+  a print of part of the block makes the entire block publicly available? False
+official SM .04 exceptions exist; this toy is not an information-barrier / consent / exchange-leg engine
+  this toy builds an information-barrier / consent / exchange-leg engine? False
+SM .05: front running of non-block orders may still violate other FINRA rules, including Rule 2010 and already-taught Rule 5320
+no product, broker, or venue recommendation
+assertions passed: 12/12

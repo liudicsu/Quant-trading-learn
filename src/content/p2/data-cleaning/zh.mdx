@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **34.50 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **35.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h + Rule 14d-10 全体持有人 / 最高对价 0.25h + Rule 14e-4 局部要约中的短交 / 净多头 0.25h + 第 12(g) 条 / Rule 12g-1 注册门槛 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -278,6 +278,15 @@ SYN_MACRO_2 没有发布时间 → 排除
 [17 CFR 240.12b-25(a)](https://www.ecfr.gov/current/title-17/section-240.12b-25)：如果列出的报告（包括 Form 10-K 或 Form 10-Q）“未在该报告规定的期限内提交，注册人最迟应在该报告到期日后的一个营业日，提交 Form 12b-25”，并合理详细地披露未能按时提交的原因。12b-25(b)：该报告“应被视为在规定到期日提交”，仅当官方条件都满足，包括：该原因无法在不付出不合理努力或费用的情况下消除；年报将在规定到期日后的**第十五个日历日**或之前提交，季报将在**第五个日历日**或之前提交；**并且**该报告确实在该期限内实际提交。12b-25(d)：即便如此，在该标的报告实际提交之前，注册人不得使用以按时提交报告为前提的 1933 年证券法登记表格。EDGAR 常把该通知标为 NT 10-K 或 NT 10-Q；正式表格是 Form 12b-25。
 
 不要写成每一份迟交的 10-K 都自动再得到 15 天，或法定时钟已经改动。15 天和 5 天是**日历日**，不是营业日；通知本身应在下一**营业日**前提交。不要把 Form 12b-25 或一份 NT 申报当成定期报告。这里没有申报身份规划建议。本节为测验即可，没有新的实验脚本。
+
+**发行人在最近结束的财年最后一日，若总资产不超过 1,000 万美元，或者该类别由不足 2,000 名登记持有人持有、且其中非合格投资者不足 500 人，则不必按《交易法》第 12(g) 条注册该类别股权证券；银行、储蓄贷款控股公司和银行控股公司适用不足 2,000 人的测试，没有 500 人这一支。法定触发条件是另一面：总资产超过 1,000 万美元，且登记持有人达到 2,000 人，或非合格投资者达到 500 人，并有财年结束后 120 天的时钟（核实于 2026-11-12）。** 已经教过的 12b-2 申报人类别、10-K / 10-Q 时钟、Form 13F 的 45 天句，以及 Form 10-S 提案那一句（“截至 2026-11-11 尚未通过”），都不要改写。不要改 `examples/p2/09_filing_dates_toy.py` 或 `examples/p2/17_xbrl_pit_10b51_toy.py`。这一节补上官方的 12(g) / 12g-1 地图，避免假定每一家有公众股东的美国公司都是 12(g) 注册人，或发明官方现行文本并未写出的通胀调整后资产数字。这里没有发行人或上市建议。本节为测验即可，没有新的实验脚本。
+
+[17 CFR 240.12g-1](https://www.ecfr.gov/current/title-17/section-240.12g-1)：发行人不必按 section 12(g)(1) 注册一类股权证券，如果在“最近结束的财年最后一日”：(a) 其总资产“not exceeding $10 million”（不超过 1,000 万美元）；或者 (b)(1) 该类别“held of record by fewer than 2,000 persons and fewer than 500 of those persons were not accredited investors (as such term is defined in § 230.501(a) of this chapter, determined as of such day rather than at the time of the sale of the securities)”（由不足 2,000 人登记持有，**并且**其中非合格投资者不足 500 人；“accredited investor” 按 § 230.501(a) 在**该日**确定，而不是按证券出售时确定）；或者 (b)(2) 在银行、储蓄贷款控股公司或银行控股公司的情形下，由不足 2,000 人登记持有。
+
+[15 U.S.C. 78l(g)(1)](https://www.law.cornell.edu/uscode/text/15/78l)：发行人应在“within 120 days after the last day of its first fiscal year ended on which the issuer has total assets exceeding $10,000,000 and a class of equity security (other than an exempted security) held of record by either— (i) 2,000 persons, or (ii) 500 persons who are not accredited investors (as such term is defined by the Commission)”（在其总资产超过 **1,000 万美元**、且一类股权证券由 2,000 人**或者** 500 名非合格投资者登记持有的第一个财年结束后 **120 天**内）注册该证券。该注册说明书“shall become effective sixty days after filing with the Commission or within such shorter period as the Commission may direct”（在提交后**六十天**生效，或在委员会指定的更短期间内生效）。银行、储蓄贷款控股公司和银行控股公司走 2,000 名登记持有人测试，没有 500 人这一支，同样有 120 天时钟和 1,000 万美元资产测试。SEC 的《交易法》申报页面还把在美国交易所上市列为另一条注册路径（第 12(b) 条）。现行官方 12g-1 文本（eCFR 第 17 编截至 2026-11-09 为最新；12g-1 最近一次修订于 2016-12-28）、法条和该 SEC 页面，仍使用 **1,000 万美元** / **$10,000,000**。不要发明通胀调整后的资产数字。
+
+不要把官方 12g-1(b)(1) 的豁免写成“不足 2,000 人**或** 500 名非合格投资者”——豁免用的是不足 2,000 人**并且**其中非合格投资者不足 500 人；法定*触发*才是资产超过 1,000 万美元，并且登记持有人达到 2,000 人**或** 500 名非合格投资者。“Accredited investor” 按 § 230.501(a) 在该日确定；本课不搭建 501(a) 通胀引擎。“Held of record” 的定义在 Rule 12g5-1；存在员工薪酬计划的排除；本课不搭建该引擎。12(g)(4) 终止是另一条官方段落；点名它存在即可，不要搭建终止引擎。不要把 120 天或 60 天时钟压进已经教过的 10-K / 10-Q 或 12b-2 时钟，或压进已经教过的 Form 10-S 提案用语。
+
 
 **不是每一份 Form 8-K 都是 Item 2.02 的业绩发布：官方项目还包括重大确定协议（1.01）、重大网络安全事件（1.05）、不再依赖此前发布的财务报表（4.02），以及某些高管或董事的离任或任命（5.02）；通常仍是四个营业日，但 Item 1.05 从注册人认定事件具有重要性时起算（核实于 2026-11-12）。** 不要改写已经教过的 10-K / 10-Q 时钟、12b-2、12b-25，或 Form 10-S 提案那一句（“截至 2026-11-11 尚未通过”）。`backtest-traps` 里 Item 2.02 的业绩发布时间框保持原样——这里只做交叉引用。这一节补上短的官方项目对照，避免把每一份 8-K 都当成业绩，或把 1.05 的时钟从发现时起算，而不是从官方认定时起算。这里没有申报人或披露建议。
 
@@ -823,6 +832,64 @@ no bidder or strategy recommendation
 assertions passed: 39/39
 ```
 
+**Rule 14d-10：要约必须对该类别的全体证券持有人开放，并且向任何持有人支付的、就其提交证券的对价，必须是向任何其他持有人支付的最高对价（核实于 2026-11-12）。** 已经教过的 Rule 14e-1 最短开放期和条款变更窗口、14e-1(d) 的展期通知那一句、Rule 14e-5、Rule 14e-2，以及 Rule 14d-11（包括同等对价条件和已经教过的 14e-5 同等对价后续期例外），都不要改写。这一节补上官方的全体持有人 / 最高对价规则，避免把要约当成只对受优待的一组人开放，或假定就同一批提交证券，可以向部分持有人支付更高对价。不推荐任何要约人、目标或策略。
+
+[17 CFR 240.14d-10(a)](https://www.ecfr.gov/current/title-17/section-240.14d-10)：“No bidder shall make a tender offer unless: (1) The tender offer is open to all security holders of the class of securities subject to the tender offer; and (2) The consideration paid to any security holder for securities tendered in the tender offer is the highest consideration paid to any other security holder for securities tendered in the tender offer.”（任何要约人不得发出要约收购，除非：(1) 该要约对该类别的全体证券持有人开放；并且 (2) 向任何证券持有人支付的、就其在该要约中提交之证券的对价，是向任何其他证券持有人支付的最高对价。）官方 (b)–(f) 例外是存在的（善意努力之后的州法排除；提供不止一种对价且持有人有平等选择权；雇佣报酬安全港；某州禁止所提供证券时的替代对价；委员会豁免权）。点名它们存在即可，不要搭建州法、选择权或薪酬委员会引擎。
+
+不要把 14d-10 压进已经教过的 14d-11 同等对价用语，或压进 14e-5 同等对价的后续期例外——那是不同的句子。不要改写已经教过的 14e-1(b) 10 个营业日对价变更窗口，或 14e-1(d) 的展期通知那一句。
+
+**实验：** 同一脚本的 J 节（A–I 节的打印与此前相同，包括 Rule 105、14e-1、101/102、14e-5、Rule 104、14e-2、14d-11，以及 I 节后的 39/39；J 节之后为 43/43）：
+
+```text
+=== J. Rule 14d-10: all-holders / best-price ===
+14d-10(a): no bidder shall make a tender offer unless:
+  (1) the tender offer is open to all security holders of the class of securities subject to the tender offer; and
+  (2) the consideration paid to any security holder for securities tendered in the tender offer
+      is the highest consideration paid to any other security holder for securities tendered in the tender offer
+  offer open only to a favored group? False
+  some holders paid more than others for securities tendered? False
+  this is the already-taught 14d-11 / 14e-5 same-consideration sentence? False
+official (b)-(f) exceptions exist (state-law exclusion after a good-faith effort;
+  more than one type of consideration with an equal right to elect;
+  employment-compensation safe harbor; alternative consideration when a state prohibits the offered securities;
+  Commission exemptive authority); this toy is not that engine
+  this toy builds the official (b)-(f) exception engines? False
+do not rewrite the already-taught 14e-1(b) 10-business-day change-of-consideration window or the 14e-1(d) extension-notice sentence
+no bidder, target, or strategy recommendation
+assertions passed: 43/43
+```
+
+**Rule 14e-4：在局部要约中，任何人不得提交超过其净多头的数量；净多头测试同时适用于提交时，以及按比例分配期或抽签接受期结束时（含展期）（核实于 2026-11-12）。** 已经教过的 14e-1、14d-11（可选后续期；不要发明最长期限）和 14d-7 撤回权，以及上面的 14d-10，都不要改写。这一节补上官方的短交规则，避免假定每一位持有人都可以提交超过净多头的股份，或把这一上限套到并非官方所定义的“局部要约”上。不推荐任何要约人或策略。
+
+[17 CFR 240.14e-4(b)](https://www.ecfr.gov/current/title-17/section-240.14e-4)：任何人单独或协同、直接或间接，为自己的账户在局部要约中提交标的证券，均为违法，除非“at the time of tender, and at the end of the proration period or period during which securities are accepted by lot (including any extensions thereof), he has a net long position equal to or greater than the amount tendered”（在提交时，以及按比例分配期或抽签接受期结束时——包括任何展期——其净多头不少于所提交的数量），并将在要约规定的期限内交付。14e-4(a)(5) 把 “partial tender offer” 定义为：针对“少于全部已发行、构成本次要约标的的证券”、且在指定期间内以抽签或按比例方式接受提交的要约，**或者**“针对全部已发行股份、提供对价选择，且不同形式对价的提交可在指定期间内以抽签或按比例方式接受”的要约。不要把净多头上限套到每一项要约上。等价证券和期权进入官方净多头定义；本课不搭建该引擎。支持性的 [17 CFR 240.14d-8](https://www.ecfr.gov/current/title-17/section-240.14d-8)：如果存放的证券多于该人有义务或愿意接受并支付的数量，获接受的证券“shall be taken up and paid for as nearly as may be pro rata, disregarding fractions, according to the number of securities deposited by each depositor”（应尽可能按比例接受并支付，不计零股，按每位存放人在要约保持开放期间存放的数量计算）。不要把 14d-8 单独打成一项 MUST。
+
+不要发明 14d-11 最长期限，或把按比例分配压进已经教过的 14d-11 选择用语。
+
+**实验：** 同一脚本的 K 节（A–J 节的打印与此前相同，包括 J 节后的 43/43；全脚本 48 项断言）：
+
+```text
+=== K. Rule 14e-4: short tendering / net long in a partial tender ===
+14e-4(b): in a partial tender offer, a person may not tender more than a net long position
+  at the time of tender, and at the end of the proration period or period during which
+  securities are accepted by lot (including any extensions thereof)
+  net long must be equal to or greater than the amount tendered
+  this net-long limit applies to every tender offer? False
+14e-4(a)(5): a partial tender offer is an offer for less than all of the outstanding securities
+  subject to the offer in which tenders are accepted either by lot or on a pro rata basis for a specified period,
+  or a tender offer for all of the outstanding shares that offers a choice of consideration
+  in which tenders for different forms of consideration may be accepted either by lot or on a pro rata basis for a specified period
+  an all-outstanding offer with a choice of consideration accepted by lot or pro rata is a partial tender offer? True
+supporting 14d-8: if a greater number of securities are deposited than the person is bound or willing to take up and pay for,
+  the securities taken up shall be taken up and paid for as nearly as may be pro rata, disregarding fractions,
+  according to the number of securities deposited by each depositor during the period the offer remains open
+  this is the already-taught 14d-11 election language? False
+  this toy invents a 14d-11 maximum length? False
+equivalent securities and options enter the official net-long definition; this toy is not that engine
+  this toy builds the official net-long options / equivalent-securities engine? False
+no bidder or strategy recommendation
+assertions passed: 48/48
+```
+
 ## 分红日期与 yfinance 的 auto_adjust 陷阱（2026-11-10 核实）
 
 **1. 现金分红的四个日期。** 公司先宣布分红（宣布日），再确定股东名单（登记日），之后股票开始不带这次分红交易（除息日），最后发放现金（派息日）。决定你能不能拿到分红的是**除息日**：在除息日当天或之后买入，就拿不到这一次分红。美国交收改为 T+1 之后，investor.gov 写明除息日**一般就是登记日**；登记日不是营业日时，除息日是它之前的一个营业日（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)）。页面的例子：宣布日 2026-03-02，登记日 2026-03-16，除息日 2026-03-16，派息日 2026-03-17。
@@ -919,6 +986,10 @@ disclaimer: synthetic fixtures; learning only
 32. 把 13D 的 1% / 两个营业日修订时钟套到每一份 13G 上；把仅仅因为已发行股数变化而导致的百分比变化当成必须做的 13G 修订；把每一次不到 1% 的 13D 变化都自动当成不重大。
 33. 把 14e-2 的立场声明当成 14e-1 的 20 个营业日存续期，或当成 10 个日历日的时钟；为重大变化的 “promptly” 发明固定天数，或为 Schedule 14D-9 再发明第二个 10 个营业日的提交时钟。
 34. 假设每一次要约收购都有后续要约期，或局部要约也可以有后续期；发明 15 个营业日上限或官方 14d-11 文本并未写明的任何最长期限；把 14d-11 上午 9:00 的结果公布压进已经教过的 14e-1(d) 展期通知用语；把撤回权套到后续期上，或否定初始开放期内的撤回权。
+35. 把要约当成只对受优待的一组人开放，或假定就同一批提交证券可以向部分持有人支付更高对价；把 14d-10 压进已经教过的 14d-11 / 14e-5 同等对价用语；改写已经教过的 14e-1(b) 10 个营业日对价变更窗口或 14e-1(d) 展期通知那一句。
+36. 把 14e-4 的净多头上限套到每一项要约收购上，而不是官方定义的局部要约（包括提供对价选择、按抽签或按比例接受的全部已发行要约那一支）；发明 14d-11 最长期限，或把 14d-8 的按比例分配压进已经教过的 14d-11 选择用语。
+37. 发明官方现行文本并未写出的、经通胀调整的 12(g) 资产门槛；把 12g-1 的豁免写成“不足 2,000 人**或** 500 名非合格投资者”；把 120 天或 60 天时钟压进已经教过的 12b-2、10-K / 10-Q 或 Form 13F 的 45 天句；仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句。
+
 
 ## 练习（与任务清单 1:1）
 
@@ -953,6 +1024,10 @@ disclaimer: synthetic fixtures; learning only
 27. **ex-13d2** — 运行 `11_spinoff_insider_lag_toy.py` 的 I 节；说明 1% 的 13D 取得是否视为重大，更小的变化是否仍可能重大，以及 13G 是否走 13D 的 1% / 两个营业日时钟；**完成标准**：1% 视为重大，更小的变化仍可能重大，13G 一般在季度结束后 45 天内修订，并不走那条 13D 时钟，与输出一致。
 28. **ex-14e2** — 运行 `19_rule144_followon_tender_toy.py` 的 H 节；写出要约于 2026-03-02 首次公布时的 14e-2 到期日，并说明这是不是 14e-1 的 20 个营业日存续期，或 10 个日历日的时钟；**完成标准**：2026-03-13，并且两者都不是，与输出一致。
 29. **ex-14d11** — 运行同一脚本的 I 节；说明是不是每一次要约都有后续要约期，初始期于 2026-03-27 届满后结果应在何时公布，以及后续期内有没有撤回权；**完成标准**：这是一项选择，结果应不晚于 2026-03-30 美东时间上午 9:00 公布，并且后续期内没有撤回权，与输出一致。
+30. **ex-14d10** — 运行同一脚本的 J 节；说明要约是否必须对该类别的全体持有人开放，向任一持有人支付的对价是否必须是向任何其他持有人支付的最高对价，以及这是不是已经教过的 14d-11 / 14e-5 同等对价句；**完成标准**：必须对全体持有人开放，必须是最高对价，并且这不是那句已经教过的同等对价用语，与输出一致。
+31. **ex-14e4** — 运行同一脚本的 K 节；说明净多头上限是否适用于每一项要约，提供对价选择并以抽签或按比例接受的全部已发行要约是不是局部要约，以及存放多于将获接受的数量时 14d-8 如何处理；**完成标准**：上限并不适用于每一项要约；该对价选择分支是局部要约；应尽可能按比例接受、不计零股，与输出一致。
+32. **ex-12g1** — 用自己的话写出官方现行 12(g) / 12g-1 地图：12g-1 豁免、法定触发、120 天和 60 天时钟，以及银行分支；**完成标准**：写出不超过 1,000 万美元，或不足 2,000 人**并且**其中非合格投资者不足 500 人；触发是资产超过 1,000 万美元且登记持有人达到 2,000 人**或** 500 名非合格投资者；120 天在财年结束后，注册说明书在提交后六十天（或更短指定期间）生效；银行没有 500 人这一支；并写明不要发明通胀调整后的资产数字。
+
 
 ## 测验
 
@@ -999,6 +1074,11 @@ disclaimer: synthetic fixtures; learning only
 <Quiz id="dc-14e2" question="根据 Rule 14e-2，目标公司应在何时对要约收购表明立场？" options={["这就是已经教过的 14e-1 的 20 个营业日存续期，所以建议在开始日就已经已知", "时钟是 10 个日历日，而且 Schedule 14D-9 另有一个官方的 10 个营业日提交期限", "不晚于要约首次公布、送交或给予之日起 10 个营业日，目标公司应向证券持有人公布、送交或给予声明：建议接受或拒绝、保持中立，或无法表明立场，并说明理由。重大变化应及时（promptly）公布；本课不为 “promptly” 发明固定天数。这不是 14e-1 的 20 个营业日存续期，也不是 10 个日历日的时钟。Schedule 14D-9 是表格，应在建议首次公布之日尽快提交——不是第二个 10 个营业日的提交时钟", "重大变化的 “promptly” 等于四个营业日，和 8-K 一样"]} answer={2} explanation="17 CFR 240.14e-2(a) 是从要约首次公布、送交或给予之日起 10 个营业日，不是 10 个日历日，也不是 14e-1 的存续期。14e-2(b) 写的是 “promptly”，这里不发明固定天数。Rule 14d-9 / Schedule 14D-9 应在建议公布之日尽快提交。" />
 <Quiz id="dc-14d11" question="根据 Rule 14d-11，什么是后续要约期？美东时间上午 9:00 的时钟用在哪里？" options={["每一次要约收购都自动有后续要约期，最长 15 个营业日", "上午 9:00 的美东时钟就是已经教过的 14e-1(d) 展期通知时钟，而且后续期内仍有撤回权", "初始开放期内没有撤回权", "后续要约期是可选的：只有满足官方条件时，要约人才能选择至少三个营业日，包括已经届满的至少 20 个营业日的初始期，以及针对该类全部已发行证券的要约；要约人立即接受并及时支付；结果（包括迄今已存放证券的大约数量和百分比）应在初始期届满后的下一个营业日不晚于美东时间上午 9:00 公布，并立即开始后续期；两个期间的对价形式和金额相同。官方注释：后续期内没有撤回权（14d-7(a)(2)）；初始开放期内有撤回权（14d-7(a)(1)）。这条上午 9:00 的结果时钟，不是已经教过的 14e-1(d) 展期通知。官方文本没有写 15 个营业日上限或任何最长期限。交叉引用已经教过的 14e-5 同等对价例外"]} answer={3} explanation="17 CFR 240.14d-11 是在符合条件的、至少 20 个营业日且针对全部已发行证券的初始期之后，选择至少三个营业日，并在下一个营业日美东时间上午 9:00 前公布结果。这条时钟不是 14e-1(d)。后续期内没有撤回权；初始要约保持开放期间有撤回权。不要发明官方文本并未写明的最长期限。" />
 
+<Quiz id="dc-14d10" question="根据 Rule 14d-10，要约收购必须满足什么条件？这和已经教过的 14d-11 / 14e-5 同等对价句是一回事吗？" options={["这就是已经教过的 14d-11 / 14e-5 同等对价用语，所以部分持有人可以按更高对价提交", "要约必须对该类别的全体证券持有人开放，并且向任何持有人支付的、就其提交证券的对价，必须是向任何其他持有人支付的最高对价。这不是已经教过的 14d-11 同等对价条件，也不是 14e-5 同等对价的后续期例外。官方 (b)–(f) 例外是存在的；本课不搭建这些引擎。不要改写已经教过的 14e-1(b) 10 个营业日对价变更窗口，或 14e-1(d) 的展期通知那一句", "要约可以对受优待的一组持有人开放，只要事后补上通知", "14d-10 废除了已经教过的 14e-1(b) 10 个营业日对价变更窗口"]} answer={1} explanation="17 CFR 240.14d-10(a) 要求对该类别的全体证券持有人开放，并且支付最高对价。这不是已经教过的 14d-11 / 14e-5 同等对价句。官方 (b)–(f) 例外存在；本课不搭建这些引擎。" />
+<Quiz id="dc-14e4" question="根据 Rule 14e-4，局部要约中的净多头上限何时适用？什么是官方定义的局部要约？" options={["每一项要约收购都适用净多头上限，包括全部已发行证券且不提供对价选择的要约", "14e-4 就是已经教过的 14d-11 选择用语，而且官方文本规定了 14d-11 的最长期限", "净多头定义里没有等价证券或期权，本课已经搭建了完整的净多头引擎", "在局部要约中，任何人不得提交超过其净多头的数量：净多头测试同时适用于提交时，以及按比例分配期或抽签接受期结束时（含展期）。官方 14e-4(a)(5) 定义既包括接受方式为抽签或按比例的、针对少于全部已发行证券的要约，也包括提供对价选择、且不同形式对价可按抽签或按比例接受的、针对全部已发行股份的要约——不要把净多头上限套到每一项要约上。等价证券和期权进入官方净多头定义；本课不搭建该引擎。支持性的 14d-8：如果存放的证券多于将获接受的数量，则尽可能按比例接受，不计零股。不要发明 14d-11 最长期限，或把按比例分配压进已经教过的 14d-11 选择用语"]} answer={3} explanation="17 CFR 240.14e-4(b) 把净多头测试同时用在提交时和按比例或抽签期结束时（含展期）。14e-4(a)(5) 的局部要约包括对价选择那一支，所以不要套到每一项要约上。14d-8 是尽可能按比例、不计零股。不要发明 14d-11 最长期限。" />
+<Quiz id="dc-12g1" question="按现行 Rule 12g-1 和《交易法》第 12(g) 条，发行人何时不必注册一类股权证券？法定时钟是什么？" options={["官方现行文本已经把 12(g) 的资产门槛按通胀上调，本课应使用那个更高的数字；12g-1 的豁免是不足 2,000 人或者 500 名非合格投资者", "12(g) 就是已经教过的 12b-2 申报人类别，120 天和 60 天时钟就是 10-K / 10-Q 时钟；并且应把 Form 10-S “截至 2026-11-11 尚未通过”改成更新的日期", "按现行 Rule 12g-1，若在最近结束的财年最后一日，发行人总资产不超过 1,000 万美元，或者该类别由不足 2,000 名登记持有人持有、且其中非合格投资者不足 500 人，则不必按第 12(g) 条注册该类别股权（银行、储蓄贷款控股公司和银行控股公司适用不足 2,000 人的测试，没有 500 人这一支）。法定触发是另一面：总资产超过 1,000 万美元，且登记持有人达到 2,000 人或者 500 名非合格投资者，并须在该财年结束后 120 天内注册；注册说明书在提交后六十天（或委员会指定的更短期间）生效。不要把 12g-1 豁免里的 “and” 换成含糊的 “or”。现行官方文本仍用 1,000 万美元 / $10,000,000，不要发明通胀调整后的资产数字。“Accredited investor” 按 § 230.501(a) 在该日确定；“held of record” 的定义在 Rule 12g5-1（存在员工薪酬计划排除）；12(g)(4) 终止是另一条官方段落——点名即可，不要搭建这些引擎。不要把这些时钟压进已经教过的 12b-2、10-K / 10-Q，或 Form 13F 的 45 天句", "每一家有公众股东的美国公司都是 12(g) 注册人，与资产和登记持有人数无关"]} answer={2} explanation="17 CFR 240.12g-1 的豁免是资产不超过 1,000 万美元，或者不足 2,000 人并且其中非合格投资者不足 500 人。15 U.S.C. 78l(g)(1) 的触发用 2,000 人或者 500 名非合格投资者，加上超过 1,000 万美元的资产和 120 天时钟；注册说明书在提交后六十天（或更短指定期间）生效。不要发明通胀调整数字，也不要把豁免里的 “and” 换成 “or”。" />
+
+
 
 ## 完成标准
 
@@ -1011,6 +1091,8 @@ disclaimer: synthetic fixtures; learning only
  enrich22（核实于 2026-11-12）：[17 CFR 240.12b-25](https://www.ecfr.gov/current/title-17/section-240.12b-25)（Form 12b-25 通知；有条件的 15 个 / 5 个日历日视为按期提交）；[Nasdaq CQS 代码惯例](https://nasdaqtrader.com/trader.aspx?id=CQSsymbolconvention)（CQS / CMS / Integrated / ACT-CTCI 列；优先股、类别股、权证、认股权、单位；CQS 惯例仅供参考）。
 enrich23（核实于 2026-11-12）：[Form 8-K](https://www.sec.gov/files/form8-k.pdf)（Item 1.01 / 1.05 / 4.02 / 5.02；一般指示 B.1 / B.2）；[Form 20-F](https://www.sec.gov/files/form20-f.pdf) 一般指示 A.(b)；[Form 6-K](https://www.sec.gov/files/form6-k.pdf) 一般指示 B；[17 CFR 240.13a-16](https://www.law.cornell.edu/cfr/text/17/240.13a-16)。没有申报人或披露建议。
 enrich24（核实于 2026-11-12）：[17 CFR 240.13d-2](https://www.ecfr.gov/current/title-17/section-240.13d-2)；[17 CFR 240.14e-2](https://www.ecfr.gov/current/title-17/section-240.14e-2)；[17 CFR 240.14d-11](https://www.ecfr.gov/current/title-17/section-240.14d-11)；[17 CFR 240.14d-7](https://www.ecfr.gov/current/title-17/section-240.14d-7)；[17 CFR 240.14d-9](https://www.ecfr.gov/current/title-17/section-240.14d-9) 作为支持。没有申报人、要约人、目标或策略建议。
+enrich25（核实于 2026-11-12）：[17 CFR 240.14d-10](https://www.ecfr.gov/current/title-17/section-240.14d-10)；[17 CFR 240.14e-4](https://www.ecfr.gov/current/title-17/section-240.14e-4)；[17 CFR 240.14d-8](https://www.ecfr.gov/current/title-17/section-240.14d-8) 作为支持；[17 CFR 240.12g-1](https://www.ecfr.gov/current/title-17/section-240.12g-1)；[15 U.S.C. 78l(g)](https://www.law.cornell.edu/uscode/text/15/78l)；[17 CFR 240.12g5-1](https://www.ecfr.gov/current/title-17/section-240.12g5-1) 作为支持。没有要约人、目标、发行人或策略建议。
+
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  
