@@ -57,3 +57,13 @@ business day (13d-1(i)(2)) = any day other than Saturday, Sunday, or a Federal h
 assertions passed: 41/41
 ASSERT_spinoff_insider_lag_ok
 disclaimer: synthetic data; federal holidays from the OPM 2026 schedule; no Form 4 / 13G-13D signal; learning only
+=== G. when-issued / when-distributed contracts (FINRA 11130; Nasdaq CQS WI) ===
+regular outstanding symbol ABC is not the same contract as ABC WI
+Nasdaq CQS suffix for When issued is WI
+settlement date is determined later (when a sufficient percentage of the issue is outstanding); not automatic T+1 from the WI trade date
+contracts canceled if the securities are not to be issued or distributed
+when-distributed is a related official label (Nasdaq WD flag; 11130 names both)
+do not splice a WI series into the regular outstanding symbol
+assertions passed: 45/45
+ASSERT_spinoff_insider_lag_ok
+disclaimer: official FINRA 11130 / Nasdaq CQS facts; not a UPC engine; learning only

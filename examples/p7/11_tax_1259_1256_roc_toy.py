@@ -173,3 +173,62 @@ print("do not write that a $7,000 net loss all hits the same year's taxable inco
 
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+
+print("=== E. Pub 550 short-sale tax character (Ace Corporation) ===")
+# IRS Publication 550 (2025), "Short Sales": "You do not realize gain or loss
+# until delivery of property to close the short sale." "As a general rule, you
+# determine whether you have short-term or long-term capital gain or loss on
+# a short sale by the amount of time you actually hold the property that's
+# eventually delivered to the lender to close the short sale."
+# Official example: "Even though you do not own any stock of Ace Corporation,
+# you contract to sell 100 shares of it, which you borrow from your broker.
+# After 13 months, when the price of the stock has risen, you buy 100 shares
+# of Ace Corporation stock and immediately deliver them to your broker to
+# close out the short sale. Your loss is a short-term capital loss because
+# your holding period for the delivered property is less than 1 day."
+# Report the short sale on Form 8949 in the year it closes. Special rules may
+# apply if substantially identical property was held or acquired; this toy
+# names that they exist and is not that engine. This is not IRC §1259.
+# General information, not tax advice. Backtests stay pre-tax unless labelled
+# otherwise.
+
+from datetime import date
+
+delivered_holding_days = 0  # bought and immediately delivered
+character = "short-term" if delivered_holding_days < 365 else "long-term"
+# The official test is the holding period of the delivered property, which
+# here is less than 1 day, so short-term — even though the short was open
+# 13 months. Do not treat "open more than a year" as automatically long-term.
+print("Ace Corporation: short opened with no shares owned; after 13 months, buy 100 shares and immediately deliver")
+print("gain or loss is not realized until delivery of property to close the short sale")
+print(f"holding period of the delivered property: less than 1 day -> {character} capital loss")
+check(delivered_holding_days < 1 and character == "short-term", "Ace example is short-term; delivered holding period < 1 day")
+print("do not write that a short open more than a year is automatically long-term")
+print("special rules may apply if substantially identical property was held; this toy is not that engine")
+print("report the short sale on Form 8949 in the year it closes")
+print("this is not IRC 1259")
+
+print("=== F. Worthless securities treated as sold on the last day of the tax year ===")
+# IRC §165(g)(1): if a capital-asset security "becomes worthless during the
+# taxable year, the loss ... shall ... be treated as a loss from the sale or
+# exchange, on the last day of the taxable year, of a capital asset."
+# Pub 550 (2025), "Worthless Securities": "treated as though they were sold
+# on the last day of the tax year. This affects whether your capital loss is
+# long-term or short-term." Worthless securities also include securities
+# abandoned after March 12, 2008, with a facts-and-circumstances test; this
+# toy is not an abandonment engine. Affiliated-corporation exceptions exist
+# in 165(g)(3); name them, do not teach a corporate-affiliation engine.
+# Do not use the bankruptcy, halt, or delisting date as the tax sale date
+# under this rule. This is a tax-character clock, not the already-taught
+# delisting return. General information, not tax advice.
+
+tax_sale = date(2026, 12, 31)
+print(f"calendar-year taxpayer, security becomes worthless during 2026: treated as sold {tax_sale}")
+check(tax_sale == date(2026, 12, 31), "last day of tax year 2026")
+print("do not use the bankruptcy, halt, or delisting date as the tax sale date under this rule")
+print("this is a tax-character clock, not the already-taught delisting return")
+print("affiliated-corporation exceptions exist in 165(g)(3); this toy is not that engine")
+
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+

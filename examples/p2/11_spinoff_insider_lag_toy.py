@@ -337,3 +337,51 @@ check(deemed_owner_now(90, True) is True, "control-purpose right counted immedia
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
 print("disclaimer: synthetic data; federal holidays from the OPM 2026 schedule; no Form 4 / 13G-13D signal; learning only")
+
+print("=== G. when-issued / when-distributed contracts (FINRA 11130; Nasdaq CQS WI) ===")
+# FINRA Rule 11130 governs "when, as and if issued" and "when, as and if
+# distributed" contracts. 11130(g)(1): "A date for the settlement of 'when,
+# as and if issued' and 'when, as and if distributed' contracts shall be
+# determined by the Committee when a sufficient percentage of the issue is
+# outstanding." It is not automatic T+1 from the WI trade date.
+# 11130(h)(2): "Contracts will be canceled if the securities are not to be
+# issued or distributed."
+# Official Nasdaq CQS symbol convention: the CQS suffix for "When issued"
+# is WI (the same table also lists venue-specific encodings; quote the
+# table, do not invent a single tape symbol). Official Nasdaq Symbol
+# Directory Definitions include a When Issued Flag and a When Distributed
+# Flag. When-distributed is a related official label (Nasdaq WD flag;
+# 11130 names both); do not invent separate product mechanics.
+# Do not splice a WI series into the regular outstanding symbol. This toy
+# is not a Uniform Practice Code engine (marks to market, confirmations,
+# Committee procedures). 11130 is firm-facing UPC; no product, offering,
+# or venue recommendation.
+
+regular = "ABC"
+wi = "ABC WI"
+cqs_suffix = "WI"
+print(f"regular outstanding symbol {regular} is not the same contract as {wi}")
+check(regular != wi, "WI is not the regular outstanding symbol")
+print(f"Nasdaq CQS suffix for When issued is {cqs_suffix}")
+check(cqs_suffix == "WI", "official CQS suffix WI")
+def wi_settles_automatic_t1(_wi_trade_date):
+    # 11130(g)(1): settlement date is determined later by the Committee.
+    return False
+
+
+def canceled_if_not_issued():
+    # 11130(h)(2)
+    return True
+
+
+print("settlement date is determined later (when a sufficient percentage of the issue is outstanding); not automatic T+1 from the WI trade date")
+check(wi_settles_automatic_t1("2026-11-17") is False, "settlement is not automatic T+1 from the WI trade date")
+print("contracts canceled if the securities are not to be issued or distributed")
+check(canceled_if_not_issued() is True, "contracts canceled if not issued")
+print("when-distributed is a related official label (Nasdaq WD flag; 11130 names both)")
+print("do not splice a WI series into the regular outstanding symbol")
+
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_spinoff_insider_lag_ok")
+print("disclaimer: official FINRA 11130 / Nasdaq CQS facts; not a UPC engine; learning only")
+

@@ -94,3 +94,46 @@ print("LULD: single stock, dynamic band around 5-min reference price, regular ho
 last = 35.8
 print(f"Reg SHO Rule 201: single stock fell {1-last/prev_close:.1%} >= 10% vs prior close -> short-sale PRICE TEST (not a halt) rest of day + next day")
 print("disclaimer: synthetic; learning only")
+
+print("=== 4. Plan Section VII reopen clocks (Regular Trading Hours) ===")
+# LULD Plan Section VII, "Trading Pauses" (use Section VII only; do not teach
+# Phase I hours from the 2016 compilation). Official Plan-participants site
+# (opened 2026-11-12): the Plan "was approved as a permanent rule on April 11,
+# 2019" and "applies during regular trading hours of 9:30 am ET - 4:00 pm ET."
+# VII(B)(1): "Five minutes after declaring a Trading Pause for an NMS Stock,
+# and if the Primary Listing Exchange has not declared a Regulatory Halt, the
+# Primary Listing Exchange shall attempt to reopen trading using its
+# established reopening procedures. The Trading Pause shall end when the
+# Primary Listing Exchange reports a Reopening Price."
+# VII(B)(3): "If the Primary Listing Exchange does not report a Reopening
+# Price within ten minutes after the declaration of a Trading Pause in an
+# NMS Stock, and has not declared a Regulatory Halt, all trading centers may
+# begin trading the NMS Stock."
+# VII(C)(1): "If a Trading Pause for an NMS Stock is declared in the last ten
+# minutes of trading before the end of Regular Trading Hours, the Primary
+# Listing Exchange shall not reopen trading and shall attempt to execute a
+# closing transaction using its established closing procedures."
+# VII(C)(2): if no closing transaction within five minutes after the end of
+# Regular Trading Hours, all trading centers may begin trading the NMS Stock.
+# Overnight Phase 1 (already taught) has no automatic Limit State -> pause —
+# do not copy these Regular Trading Hours clocks onto 21:00-04:00.
+# Do not invent a single Nasdaq Halt Cross or NYSE auction cutoff as Plan law.
+# A mid-day reopening print is not a regular continuous-market trade, and is
+# not a trade-through data error (Rule 611(b)(3)). No pause-trading strategy.
+
+ATTEMPT_MINUTES = 5
+ALL_CENTERS_MINUTES = 10
+LAST_TEN_MINUTES = 10
+CLOSE_FALLBACK_MINUTES = 5
+print("five minutes after declaring a Trading Pause: Primary attempts to reopen using its established reopening procedures")
+print("the Trading Pause ends when the Primary reports a Reopening Price")
+print("if no Reopening Price within ten minutes and no Regulatory Halt: all trading centers may begin trading")
+print("pause declared in the last ten minutes of Regular Trading Hours: no mid-session reopen; attempt a closing transaction")
+print("if no closing transaction within five minutes after the end of Regular Trading Hours: all trading centers may begin trading")
+assert ATTEMPT_MINUTES == 5 and ALL_CENTERS_MINUTES == 10
+assert LAST_TEN_MINUTES == 10 and CLOSE_FALLBACK_MINUTES == 5
+print("do not copy these Regular Trading Hours clocks onto overnight Phase 1 (no automatic Limit State -> pause)")
+print("do not invent a single Nasdaq Halt Cross or NYSE auction cutoff as Plan law")
+print("assertions passed: 4/4")
+print("disclaimer: official Plan Section VII clocks; not a venue auction catalog; learning only")
+

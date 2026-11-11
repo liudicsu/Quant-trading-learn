@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **32 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **32.25 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -509,6 +509,29 @@ ASSERT_event_time_ipo_ok
 disclaimer: official BLS times; no CPI or payroll strategy; learning only
 ```
 
+
+**不是每一份官方美国宏观数据都是美东时间上午 8:30 的 BLS PFEI。美联储 G.17 工业生产月报在上午 9:15 发布；G.17 年度修订在中午发布（核实于 2026-11-12）。** 上面已经讲过 BLS 的 PFEI 8:30 与非 PFEI 10:00，以及 FOMC 14:00。那些段落不改写。这里补上官方的**美联储**时钟，作为下一项事件时间戳。2026-11-12 打开的美联储 [G.17](https://www.federalreserve.gov/releases/g17/) 页面写明：“The G.17 release will be issued on the following dates. **The monthly releases are issued at 9:15 a.m. The annual revision is issued at noon.**”（G.17 将在下列日期发布。**月报在上午 9:15 发布。年度修订在中午发布。**）2026 年名单包括 **11 月 17 日**（月报）和 **11 月 24 日（年度修订）**，以及 12 月 16 日。同一天打开的当期月报文本标题为 “**For release at 9:15 a.m. (EDT)** / October 16, 2026.”（定于 **上午 9:15（夏令时）** 发布 / 2026 年 10 月 16 日。）OMB 的 2026 年官方 PFEI 日程把工业生产与产能利用率列在联邦储备理事会项下（数据“月中发布上月数字”）。那份日程**并不**印出 9:15 / 中午这两个时钟；这两个时钟来自美联储 G.17 页面，而不是 OMB 脚注（OMB PDF 上的 noon / 3 p.m. 脚注属于所列的**农业**发布，不属于 G.17）。官方 [BEA 发布日程](https://www.bea.gov/news/schedule)（页面最近修改于 11/11/26）把 **GDP（第二次估计）与公司利润，2026 年第三季度**以及 **个人收入与支出，2026 年 10 月**列在 **2026 年 11 月 25 日上午 8:30**；同一页上还有一些项目是 **上午 10:00**。
+
+**前瞻（与已经讲过的 BLS / FOMC 规则同一思路）：** 美国股票常规交易 09:30 ET 开盘，所以上午 9:15 的 G.17 月报在开盘前已经发布，当天的常规开盘已经可以反映它。G.17 **年度修订在中午发布**，不能在当天 09:30 开盘成交。BEA 上午 8:30 的 GDP 可以；同一日历上上午 10:00 的 BEA 项目不能。
+
+**不要**把 BLS 那句 “All seven PFEIs are scheduled for 8:30 a.m.” 抄到每一项美国 PFEI 上——那句话只针对 **BLS 的**七项 PFEI，上面已经讲过。不要为美联储 **G.19 消费者信贷**发明一个钟点（官方 G.19 页面只写 “These data are released around the fifth business day of each month”，没有具体时刻；OMB 写的是 “about the fifth working day”）。不要另编“第一个星期五”规则。不要把上午 9:15 当成已经过了 9:30 开盘。年度修订的时刻按美联储页面写作 “noon”（中午），不要改写成 8:30 或 14:00。日期以官方机构日历为准。这里只讲事件时间戳，不发明宏观交易策略。
+
+**实验：** `examples/p2/12_event_time_ipo_toy.py` 的 E 节（A–D 节的打印与此前相同，包括 BLS 的 D 节打印和 19/19；脚本合计 23 条断言）：
+
+```text
+=== E. Fed G.17 9:15 a.m. vs annual revision at noon; BEA 8:30 vs 10:00 ===
+The monthly releases are issued at 9:15 a.m. The annual revision is issued at noon.
+monthly G.17 9:15 a.m. on 2026-11-17: fill at that day's 09:30 open? True
+annual revision at noon on 2026-11-24: fill at that day's 09:30 open? False
+BEA GDP second estimate 2026-11-25 8:30 AM: fill at that day's 09:30 open? True
+a 10:00 AM BEA item on the same calendar: fill at that day's 09:30 open? False (look-ahead)
+do not copy the BLS sentence 'All seven PFEIs are scheduled for 8:30 a.m.' onto every US PFEI
+this toy does not invent a G.19 clock or a first-Friday rule
+assertions passed: 23/23
+ASSERT_event_time_ipo_ok
+disclaimer: official Fed / BEA times; no macro strategy; learning only
+```
+
 ## 财报发布：事件时间是发布那一刻，不是季度末，也不是 8-K 的日期（2026-11-11 核实）
 
 **三个不同的日期。** 季度结束；几周后公司发布财报新闻稿；然后按 **Item 2.02** 提交（furnish）一份 Form 8-K，里面要写明发布日期，并把新闻稿作为附件（[Form 8-K](https://www.sec.gov/files/form8-k.pdf)）。没有其他期限规定时，8-K 要在事件发生后 **四个营业日**内提交（一般说明 B.1）。所以 8-K 的日期可能晚于新闻稿。
@@ -599,6 +622,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 19. 按前收盘价成交增发；在公告当天而不是招股书里的发行或交割日增加股本；或在 Rule 105 限制期内卖空，再向承销商买入这次包销发行的股份。
 20. 假设发行人或承销商在分销期间可以自由求购这只股票；让货架上的股东从注册之日起一直到最后一股卖完都停在 Rule 102 里；把 Rule 101 的交投活跃例外抄到发行人身上；另编一套 Rule 100 里没有的 ATM 限制期时钟。
 21. 写成每一份 BLS 新闻稿都是美东时间上午 8:30；另编一套可以代替官方日历的“第一个星期五”规则；把 10:00 ET 的非 PFEI 信号在当天常规开盘成交。
+22. 把 BLS 那句“全部七项 PFEI 定在上午 8:30”抄到每一项美国 PFEI 上；为 G.19 发明一个钟点；把 G.17 年度修订的中午发布当成可以在当天 09:30 开盘成交；把上午 9:15 的月报当成已经过了开盘。
 
 ## 练习（与任务清单 1:1）
 
@@ -615,6 +639,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 
 11. **ex-regm101** — 运行 `19_rule144_followon_tender_toy.py` 的 E 段；写出 1 天与 5 天限制期的 ADTV/公众持股门槛，说明货架上的每一次发行要单独分析，并且不要把 Rule 101 的交投活跃例外抄到发行人身上；**完成标准**：这三点与输出一致。
 12. **ex-bls-time** — 运行 `12_event_time_ipo_toy.py` 的 D 节；写出 2026 年 11 月 CPI 的预定发布时间，并说明美东 8:30 的 PFEI 和美东 10:00 的非 PFEI 能不能在当天 09:30 开盘成交；**完成标准**：2026-12-10 美东 8:30，8:30 的 PFEI 可以在该开盘成交，10:00 的非 PFEI 不可以，与输出一致。
+13. **ex-g17-time** — 运行 `12_event_time_ipo_toy.py` 的 E 节；写出 2026-11-17 的 G.17 月报、2026-11-24 的年度修订，以及 2026-11-25 的 BEA GDP 第二次估计，能不能在当天 09:30 开盘成交；**完成标准**：月报可以、年度修订不可以、BEA 8:30 的 GDP 可以，与输出一致。
 
 ## 测验
 
@@ -643,6 +668,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-rule105" question="Regulation M 的 Rule 105 一般禁止什么？" options={["在包销的股票发行里，在限制期（定价日前 5 个营业日到定价时，或从最初注册文件提交到定价时，取较短者）卖空，再向承销商或参与发行的经纪交易商买入这次发行的股份", "财报发布前 5 天内对该股票的任何卖空", "已经持有该股票的人，就不能再买这次增发", "由现有股东而不是公司出售的二级发行"]} answer={0} explanation="禁止规定在 17 CFR 242.105，适用于以现金认购、由承销商包销的股票发行。它不适用于不是包销的发行，也不禁止本来就持有该股票，或现有股东的二级出售本身。" />
 <Quiz id="bt-regm101" question="在一次分销期间，Regulation M 的 Rule 101 和 102 限制什么？货架上的一次发行要怎么分析？" options={["股东把股份放在货架上之后，从注册之日起一直到最后一股卖完都停在 Rule 102 里", "发行人可以使用 Rule 101 的交投活跃例外（ADTV 不少于 100 万美元、公众持股市值不少于 1.50 亿美元），而且 ATM 另有一套 Rule 100 里没有的限制期时钟", "Rule 101 禁止分销参与人（及其关联购买人）在限制期内买入、求购或试图诱使他人买入或求购被覆盖证券；如果这个人是发行人或出售证券的持有人，则改适用 Rule 102。ADTV 不少于 10 万美元且公众持股市值不少于 2,500 万美元时，限制期是 1 个营业日（若在收盘前定价，需要一个完整交易日），否则是 5 个营业日。货架上的每一次发行要单独分析是否构成分销。ATM 是指以非固定价格发行。发行人的关联方作为分销参与人时不能使用 101 的交投活跃例外，这条例外也不能抄到 Rule 102 下的发行人身上", "Rule 101/102 和 Rule 105（先卖空再买这次发行）是同一条禁止"]} answer={2} explanation="17 CFR 242.100–102 和 SLB 9：1 天 / 5 天限制期，收盘前定价需要一个完整交易日，货架上的每一次发行单独分析，ATM 定义为以非固定价格发行。SLB 9 还写：发行人的关联方作为分销参与人时不能使用 101 的交投活跃例外；不要把它抄到 Rule 102 上。Rule 105 仍是已经讲过的“先卖空再买这次发行”。" />
 <Quiz id="bt-bls-time" question="BLS 的主要联邦经济指标定在什么时间发布？日线回测应如何对待这个时钟？" options={["每一份 BLS 新闻稿都是美东时间上午 8:30，而且使用 8:30 发布的信号不能在当天常规开盘成交", "PFEI 都在每月第一个星期五发布，所以不必看官方日历", "全部七项 PFEI（就业形势、CPI、PPI、进出口价格指数、实际收入、就业成本指数、生产率和成本）定在公共日历所列日期的美东时间上午 8:30 发布；非 PFEI 新闻稿定在美东时间上午 10:00。2026 年 11 月的 CPI 定于 2026 年 12 月 10 日美东时间上午 8:30 发布。美东 8:30 的发布在 09:30 常规开盘之前已经出来，当天开盘可以反映它。美东 10:00 的非 PFEI 在开盘之后，在当天开盘成交该信号就是前瞻，和 FOMC 14:00 一样。日期以官方日历为准，不要另编“第一个星期五”规则", "非 PFEI 新闻稿也是美东 8:30，所以 10:00 的信号可以在当天开盘成交"]} answer={2} explanation="BLS 发布政策（最近修改于 2026-08-28）把七项 PFEI 定在美东 8:30，把非 PFEI 定在美东 10:00，日期以公共日历为准。CPI 首页写明 2026 年 11 月 CPI 于 2026-12-10 美东时间上午 8:30 发布。常规交易 09:30 开盘，所以 8:30 已经发布，10:00 在开盘成交就是前瞻。本课不发明第一个星期五规则，也不给 CPI 或非农策略。" />
+<Quiz id="bt-g17-time" question="美联储 G.17 在什么时间发布？日线回测应如何对待这些时钟？" options={["每一项美国 PFEI 都是 BLS 上午 8:30 的发布，所以 G.17 也是 8:30，并且总是可以在当天 09:30 开盘成交", "月报在上午 9:15 发布，年度修订在中午发布。上午 9:15 的月报可以在当天 09:30 开盘成交；中午发布的年度修订不能。BEA 上午 8:30 的 GDP 可以；同一日历上上午 10:00 的 BEA 项目不能", "G.17 的月报和年度修订都像 FOMC 一样在 14:00 发布", "G.19 消费者信贷在上午 9:15 发布，这个时钟也覆盖 G.17"]} answer={1} explanation="美联储 G.17 页面写明：“The monthly releases are issued at 9:15 a.m. The annual revision is issued at noon.” 常规开盘是 09:30 ET，所以 9:15 的月报在开盘前已经发布，中午的年度修订不能在该开盘成交。BLS“全部七项 PFEI 定在 8:30”只针对 BLS；官方 G.19 页面没有钟点。" />
 
 ## 完成标准
 
@@ -650,6 +676,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 
 **来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。enrich13（2026-11-11 核实）：[S&P U.S. Indices Methodology，2026 年 11 月版](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)；[Form 8-K 一般说明 B.1 与 Item 2.02](https://www.sec.gov/files/form8-k.pdf)；[Regulation FD，17 CFR 243](https://www.ecfr.gov/current/title-17/part-243)。enrich15（2026-11-11 核实）：[17 CFR 230.144](https://www.ecfr.gov/current/title-17/section-230.144)、[17 CFR 239.144（Form 144）](https://www.ecfr.gov/current/title-17/section-239.144)、[SEC Rule 144 投资者说明](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm)、[17 CFR 242.105](https://www.ecfr.gov/current/title-17/section-242.105)。 enrich18（核实于 2026-11-12）：[17 CFR 242.100](https://www.ecfr.gov/current/title-17/section-242.100)、[242.101](https://www.ecfr.gov/current/title-17/section-242.101)、[242.102](https://www.ecfr.gov/current/title-17/section-242.102)；[SEC 工作人员法律公告第 9 号](https://www.sec.gov/rules-regulations/staff-guidance/staff-legal-bulletins/staff-legal-bulletin-9-faq-regulation-m)（最近审阅于 1999-11-22）。
  enrich19（核实于 2026-11-12）：[BLS 发布政策](https://www.bls.gov/about-bls/dissemination.htm)（最近修改于 2026-08-28）；[CPI 首页](https://www.bls.gov/cpi/)；[CPI 发布日程](https://www.bls.gov/schedule/news_release/cpi.htm)；[就业形势发布日程](https://www.bls.gov/schedule/news_release/empsit.htm)。
+ enrich20（核实于 2026-11-12）：[美联储 G.17](https://www.federalreserve.gov/releases/g17/)；[当期 G.17 文本](https://www.federalreserve.gov/releases/g17/Current/g17.txt)；[BEA 发布日程](https://www.bea.gov/news/schedule)（页面最近修改于 11/11/26）；[G.19](https://www.federalreserve.gov/releases/g19/)（只有“大约每月第五个营业日”，没有钟点）。不发明宏观交易策略。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

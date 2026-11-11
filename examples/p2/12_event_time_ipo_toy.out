@@ -30,3 +30,14 @@ use the official BLS calendar for the date; this toy does not invent a first-Fri
 assertions passed: 19/19
 ASSERT_event_time_ipo_ok
 disclaimer: official BLS times; no CPI or payroll strategy; learning only
+=== E. Fed G.17 9:15 a.m. vs annual revision at noon; BEA 8:30 vs 10:00 ===
+The monthly releases are issued at 9:15 a.m. The annual revision is issued at noon.
+monthly G.17 9:15 a.m. on 2026-11-17: fill at that day's 09:30 open? True
+annual revision at noon on 2026-11-24: fill at that day's 09:30 open? False
+BEA GDP second estimate 2026-11-25 8:30 AM: fill at that day's 09:30 open? True
+a 10:00 AM BEA item on the same calendar: fill at that day's 09:30 open? False (look-ahead)
+do not copy the BLS sentence 'All seven PFEIs are scheduled for 8:30 a.m.' onto every US PFEI
+this toy does not invent a G.19 clock or a first-Friday rule
+assertions passed: 23/23
+ASSERT_event_time_ipo_ok
+disclaimer: official Fed / BEA times; no macro strategy; learning only

@@ -129,3 +129,48 @@ print("use the official BLS calendar for the date; this toy does not invent a fi
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_event_time_ipo_ok")
 print("disclaimer: official BLS times; no CPI or payroll strategy; learning only")
+
+print("=== E. Fed G.17 9:15 a.m. vs annual revision at noon; BEA 8:30 vs 10:00 ===")
+# Federal Reserve G.17 page (opened 2026-11-12): "The G.17 release will be
+# issued on the following dates. The monthly releases are issued at 9:15 a.m.
+# The annual revision is issued at noon." 2026 dates include November 17 and
+# November 24 (annual revision).
+# BEA Release Schedule (page last modified 11/11/26): GDP (Second Estimate)
+# and Corporate Profits, 3rd Quarter 2026, and Personal Income and Outlays,
+# October 2026, on November 25, 2026 at 8:30 AM. Other items on the same page
+# include 10:00 AM rows.
+# Regular US equity trading opens at 09:30 ET. A monthly G.17 at 9:15 a.m. is
+# already out before that open. A G.17 annual revision issued at noon cannot
+# be filled at that day's 09:30 open. A BEA 8:30 AM GDP release can; a
+# 10:00 AM BEA item cannot. Same look-ahead idea as the already-taught BLS /
+# FOMC clocks. Do not copy the BLS sentence "All seven PFEIs are scheduled
+# for 8:30 a.m." onto every US PFEI — that sentence is about BLS's seven
+# PFEIs. Do not invent a clock for Fed G.19 (official page: "around the fifth
+# business day of each month," with no time of day). No first-Friday rule.
+# No macro-trading strategy.
+# November 2026 is US standard time; times below are Eastern Time.
+
+EST = timezone(timedelta(hours=-5))
+g17_monthly = datetime(2026, 11, 17, 9, 15, tzinfo=EST)
+g17_annual = datetime(2026, 11, 24, 12, 0, tzinfo=EST)
+bea_gdp = datetime(2026, 11, 25, 8, 30, tzinfo=EST)
+bea_1000 = datetime(2026, 11, 25, 10, 0, tzinfo=EST)
+open_1117 = datetime(2026, 11, 17, 9, 30, tzinfo=EST)
+open_1124 = datetime(2026, 11, 24, 9, 30, tzinfo=EST)
+open_1125 = datetime(2026, 11, 25, 9, 30, tzinfo=EST)
+
+print("The monthly releases are issued at 9:15 a.m. The annual revision is issued at noon.")
+print(f"monthly G.17 9:15 a.m. on 2026-11-17: fill at that day's 09:30 open? {can_fill_at_that_days_open(g17_monthly, open_1117)}")
+check(can_fill_at_that_days_open(g17_monthly, open_1117) is True, "monthly 9:15 is before the 09:30 open")
+print(f"annual revision at noon on 2026-11-24: fill at that day's 09:30 open? {can_fill_at_that_days_open(g17_annual, open_1124)}")
+check(can_fill_at_that_days_open(g17_annual, open_1124) is False, "noon annual revision cannot fill at 09:30")
+print(f"BEA GDP second estimate 2026-11-25 8:30 AM: fill at that day's 09:30 open? {can_fill_at_that_days_open(bea_gdp, open_1125)}")
+check(can_fill_at_that_days_open(bea_gdp, open_1125) is True, "BEA 8:30 can fill at that open")
+print(f"a 10:00 AM BEA item on the same calendar: fill at that day's 09:30 open? {can_fill_at_that_days_open(bea_1000, open_1125)} (look-ahead)")
+check(can_fill_at_that_days_open(bea_1000, open_1125) is False, "BEA 10:00 cannot fill at that open")
+print("do not copy the BLS sentence 'All seven PFEIs are scheduled for 8:30 a.m.' onto every US PFEI")
+print("this toy does not invent a G.19 clock or a first-Friday rule")
+
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_event_time_ipo_ok")
+print("disclaimer: official Fed / BEA times; no macro strategy; learning only")

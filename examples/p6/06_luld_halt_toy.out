@@ -23,3 +23,13 @@ MWCB: market-wide, S&P 500 decline vs prior close, Level 1/2/3 = 7%/13%/20%
 LULD: single stock, dynamic band around 5-min reference price, regular hours only
 Reg SHO Rule 201: single stock fell 10.5% >= 10% vs prior close -> short-sale PRICE TEST (not a halt) rest of day + next day
 disclaimer: synthetic; learning only
+=== 4. Plan Section VII reopen clocks (Regular Trading Hours) ===
+five minutes after declaring a Trading Pause: Primary attempts to reopen using its established reopening procedures
+the Trading Pause ends when the Primary reports a Reopening Price
+if no Reopening Price within ten minutes and no Regulatory Halt: all trading centers may begin trading
+pause declared in the last ten minutes of Regular Trading Hours: no mid-session reopen; attempt a closing transaction
+if no closing transaction within five minutes after the end of Regular Trading Hours: all trading centers may begin trading
+do not copy these Regular Trading Hours clocks onto overnight Phase 1 (no automatic Limit State -> pause)
+do not invent a single Nasdaq Halt Cross or NYSE auction cutoff as Plan law
+assertions passed: 4/4
+disclaimer: official Plan Section VII clocks; not a venue auction catalog; learning only

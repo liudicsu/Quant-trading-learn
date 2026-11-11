@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **17.25 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **17.5 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h + LULD 计划第 VII 节复牌时钟 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -364,6 +364,29 @@ t=13 Limit State 持续 20s > 15s → 暂停；t=73 以 37.20 复牌（价格带
 38.50 的止损单成交于 37.20（缺口）；下跌 10.5% 触发 SHO 201 价格测试
 ```
 
+**LULD 交易暂停之后，股票不会只是按最近一笔成交“重新打开”。计划规定了官方复牌时钟；暂停在主上市交易所报告 Reopening Price（复牌价）时结束（核实于 2026-11-12）。** 上面的表已经讲过 15 秒 Limit State，以及“通常宣布 5 分钟暂停（可延长）”。这里补上官方计划用语。LULD 计划第 VII 节“Trading Pauses”：若在常规交易时段内 15 秒仍未退出 Limit State，“the Primary Listing Exchange shall declare a Trading Pause … and shall notify the Processor.”（主上市交易所应宣布交易暂停……并通知处理器。）“**No trades** in an NMS Stock shall occur during a Trading Pause, but all bids and offers may be displayed.”（交易暂停期间**不得成交**该 NMS 股票，但可以展示全部买卖报价。）
+
+**常规交易时段内的复牌。** “**Five minutes after declaring** a Trading Pause … and if the Primary Listing Exchange has not declared a Regulatory Halt, the Primary Listing Exchange shall attempt to reopen trading **using its established reopening procedures**. The Trading Pause shall end when the Primary Listing Exchange reports a **Reopening Price**.”（宣布交易暂停**五分钟后**……且主上市交易所尚未宣布监管停牌的，主上市交易所应**按其既定复牌程序**尝试恢复交易。交易暂停在主上市交易所报告**复牌价**时结束。）若主上市交易所“因重大订单失衡以外的任何原因无法恢复交易”，且尚未宣布监管停牌，则通知处理器，并且“**all trading centers may begin trading** the NMS Stock at this time.”（**所有交易中心此时可以开始交易**该股票。）“If the Primary Listing Exchange does not report a Reopening Price **within ten minutes** after the declaration of a Trading Pause … and has not declared a Regulatory Halt, **all trading centers may begin trading** the NMS Stock.”（若主上市交易所在宣布交易暂停后**十分钟内**没有报告复牌价，且尚未宣布监管停牌，则**所有交易中心可以开始交易**该股票。）
+
+**常规交易时段的最后十分钟。** “If a Trading Pause … is declared in the **last ten minutes** of trading before the end of Regular Trading Hours, the Primary Listing Exchange **shall not reopen trading** and shall attempt to execute a **closing transaction** using its established closing procedures. All trading centers may begin trading the NMS Stock when the Primary Listing Exchange executes a closing transaction.”（若交易暂停是在常规交易时段结束前的**最后十分钟**内宣布的，主上市交易所**不得在盘中复牌**，而应按其既定收盘程序尝试达成一笔**收盘交易**。主上市交易所达成收盘交易后，所有交易中心可以开始交易该股票。）若主上市交易所“在常规交易时段结束后五分钟内未能达成收盘交易”，则所有交易中心可以开始交易该股票。2026-11-12 打开的官方计划参与方网站写明，该计划“was approved as a **permanent** rule on **April 11, 2019**”（于 **2019 年 4 月 11 日**获批成为**永久性**规则），并且“applies during regular trading hours of **9:30 am ET – 4:00 pm ET**”（适用于 **9:30–16:00 ET** 的常规交易时段）。
+
+**不要**用 2016 年计划汇编里的第一阶段时段来教；本课已经用后来的 Amendment 18 和 20 讲价格带和收盘前最后 25 分钟翻倍。要教的是第 VII 节的五分钟 / 十分钟 / 最后十分钟结构。隔夜第一阶段（下面已经讲过）**没有**自动的 Limit State → 暂停——不要把这些常规时段时钟抄到 21:00–04:00。不要把某一个 Nasdaq Halt Cross 或 NYSE 竞价截止时间写成计划法（计划说的是“既定复牌程序”）。盘中复牌成交不是普通的连续竞价成交，也不是穿越数据错误（它属于 Rule 611(b)(3) 类，在 `microstructure-orders` 讲授）。本课不发明暂停交易策略。
+
+**实验：** `examples/p6/06_luld_halt_toy.py` 的第 4 节（此前的打印与此前相同，包括 7/7 边界测试；本节 4/4）：
+
+```text
+=== 4. Plan Section VII reopen clocks (Regular Trading Hours) ===
+five minutes after declaring a Trading Pause: Primary attempts to reopen using its established reopening procedures
+the Trading Pause ends when the Primary reports a Reopening Price
+if no Reopening Price within ten minutes and no Regulatory Halt: all trading centers may begin trading
+pause declared in the last ten minutes of Regular Trading Hours: no mid-session reopen; attempt a closing transaction
+if no closing transaction within five minutes after the end of Regular Trading Hours: all trading centers may begin trading
+do not copy these Regular Trading Hours clocks onto overnight Phase 1 (no automatic Limit State -> pause)
+do not invent a single Nasdaq Halt Cross or NYSE auction cutoff as Plan law
+assertions passed: 4/4
+disclaimer: official Plan Section VII clocks; not a venue auction catalog; learning only
+```
+
 ## 隔夜 LULD 价格带（第一阶段，2026-11-08 核实）
 
 **状态：** LULD 计划第 27 号修正案（SEC 34-106042，2026-08-05 批准）新增隔夜保护；预计 2026-12-06 开始，取决于 SIP 处理器的系统改造（[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)）。这是两阶段中的第一阶段。
@@ -491,6 +514,7 @@ assertions passed: 5/5
 15. 以为 OCC 会把行权通知直接随机指派给每一位零售客户，或以为券商端的分配方法必须是随机的；发明一条对所有零售客户一律适用的 OCC 截止时间（例如下午 5:30）。
 16. 把上午结算的指数期权按周四收盘价、周五官方指数开盘价或之后的即期点位到期，而不是按 SOQ（SET）；写成最后交易日已经改到周五上午 9:25（该项变更仍是 Effective TBD）。
 17. 把每笔现金股息都当成自动调整期权合约，或把 12.50 美元的测试当成按股计算；以为 150 股合约上的 0.10 美元特别股息，即使标准 100 股合约不调整也一定调整；把发行人写的“特别”，或 FINRA 11140(b) 对 25% 以上股息推迟除息日的规则，当成 OCC 的调整标准。
+18. 以为暂停结束时股票会按最近一笔成交重新打开；把第 VII 节的常规时段时钟抄到隔夜第一阶段；把某一个 Nasdaq Halt Cross 或 NYSE 竞价截止时间写成计划法；把盘中复牌成交当成普通连续竞价成交或穿越数据错误。
 
 
 ## 练习（1:1）
@@ -510,6 +534,7 @@ assertions passed: 5/5
 13. **ex-assign** — 看 `13_exercise_by_exception_toy.py` 新增的指派一节；写出 OCC 把行权通知指派给谁，以及当天交易时段内已经平掉的空头当晚会不会被指派；**完成标准**：清算会员账户，不会，与输出一致。
 14. **ex-soq** — 运行 `15_soq_occ_adj_toy.py`；写出上午结算指数期权（计划中的 VIX 变更除外）现行的最后交易日，并在周四收盘价、周五官方指数开盘价、之后的即期点位和 SOQ 里指出哪个是结算价；**完成标准**：通常是周四收盘，结算价是 SOQ / SET，与输出一致，并写一句 周五上午 9:25 的变更仍是 Effective TBD。
 15. **ex-occadj** — 用同一段输出，说明 0.10 美元特别股息是否调整 100 股和 150 股合约，以及 0.15 美元特别股息是否调整 100 股和 50 股合约；**完成标准**：否和否；是和否，与 OCC 的计算例子一致。
+16. **ex-reopen** — 运行 `06_luld_halt_toy.py` 的第 4 节；写出宣布暂停五分钟后主上市交易所应做什么、暂停何时结束、十分钟仍无复牌价时如何处理，以及最后十分钟内宣布的暂停是否盘中复牌；**完成标准**：按其既定程序尝试复牌，暂停在报告复牌价时结束，十分钟后且无监管停牌时所有交易中心可以开始交易，最后十分钟不得盘中复牌而应尝试收盘交易，与输出一致。
 
 
 ## 测验
@@ -532,12 +557,14 @@ assertions passed: 5/5
 <Quiz id="rc-assign" question="按 OIC 的说明，OCC 怎样分配行权通知？券商再怎样分给客户？" options={["OCC 直接随机指派给每一位零售客户，方法必须是随机的", "OCC 用随机程序指派给清算会员账户；被指派的券商再用交易所批准的方法（通常是随机或先进先出）分配，该方法必须公平，但不一定是随机", "和你开仓时对面的那一个买方绑定，只有他行权你才会被指派", "OCC 规定零售客户的行权截止一律是下午 5:30"]} answer={1} explanation="OIC 指派常见问题：OCC 随机指派给清算会员；券商使用交易所批准的公平方法，通常是随机或 FIFO，但不一定是随机。客户截止时间因券商而异，不要发明统一的下午 5:30 规则。" />
 <Quiz id="rc-soq" question="标准上午结算 SPX 期权的行权结算价是什么，这类期权目前何时停止交易？" options={["指数在周四的官方收盘价", "周五的官方指数开盘价，或之后任何盘中即期点位", "到期日（通常是第三个周五）成分股官方开盘价算出的特别开盘报价（SOQ，发布为 SET）；目前这类期权通常在到期日前一个营业日（通常是周四）收盘时停止交易。周五上午 9:25 的变更仍是 Effective TBD", "它们已经在周五上午 9:25 ET 停止交易"]} answer={2} explanation="Cboe 的 SOQ 说明：结算价是成分股官方开盘价的特别开盘报价，不是前一日收盘、周五官方指数开盘或之后的即期点位。24/5 常见问题：目前在前一营业日收盘时停止交易；GTH 变更仍是 Effective TBD。" />
 <Quiz id="rc-occadj" question="OCC 通常在什么情况下为上市股票期权的现金股息做调整？" options={["每笔现金股息都下调行权价，下调幅度等于每股股息", "按定期政策支付的普通现金股息无论金额大小都不调整；非普通股息通常只有达到每份合约至少 12.50 美元才调整，发行人写的“特别”没有约束力", "只要 FINRA 11140(b) 因股息达到 25% 或以上而推迟除息日，期权就调整", "150 股合约上的 0.10 美元特别股息一定调整，因为 15 美元超过 12.50 美元，即使标准 100 股合约不调整"]} answer={1} explanation="OCC 信息备忘录 54262：普通股息不引起调整，无论金额大小。12.50 美元测试按合约计算。在 0.10 美元 / 150 股的例子里，因为标准合约未达到门槛，150 股合约也不调整。决定一事一议，发行人的标签没有约束力。" />
+<Quiz id="rc-reopen" question="按 LULD 计划第 VII 节，常规交易时段内宣布交易暂停之后，复牌时钟是怎样的？" options={["暂停结束时，股票会按最近一笔成交重新打开，隔夜第一阶段也一样", "宣布交易暂停五分钟后，主上市交易所应按其既定复牌程序尝试复牌；暂停在其报告复牌价时结束。若十分钟内没有复牌价且未宣布监管停牌，所有交易中心可以开始交易。若暂停是在常规交易时段最后十分钟内宣布的，主上市交易所不得盘中复牌，而应尝试达成收盘交易", "计划把某一个 Nasdaq Halt Cross 截止时间规定为对所有上市地都有效的计划法", "十五分钟后，最近一笔成交成为官方收盘价"]} answer={1} explanation="第 VII 节写明：五分钟后按其既定复牌程序尝试复牌；暂停在报告 Reopening Price 时结束；十分钟内没有复牌价且无监管停牌时，所有交易中心可以开始交易；最后十分钟不得盘中复牌，而应尝试收盘交易。不要把这些时钟抄到隔夜第一阶段，也不要把某一个竞价产品写成计划法。" />
 
 ## 完成标准
 
 四场景卡片 + 实验 A–D 数字与课内一致 + 「新闻≠regime」短文（含已核验链接）+ 硬规则清单。平滑概率不得出现在「实盘可用」列。
 
 **来源（已阅读并写入正文）：** Hamilton 1989 *Econometrica* 57(2)；Moreira & Muir 2017 *JF* (doi:10.1111/jofi.12513)；Cederburg et al. 2020 *JFE* 138(1) (doi:10.1016/j.jfineco.2020.04.015)；NYSE Rule 7.12 / SEC MWCB 投资者简报（7/13/20%）；[Investor.gov：Trading Halts and Delays](https://www.investor.gov/introduction-investing/investing-basics/glossary/trading-halts-and-delays)；上交所 / 证监会关于 2016-01 熔断机制暂停的公开说明；CNBC 2026-11-05 直播更新；AP 2026-11-05 市场稿；CPPI 经典缺口/现金锁死素养（教材级）；本站 `risk-systems-lab` / `portfolio-risk-sizing` 衔接。；OIC [Leverage & Risk](https://www.optionseducation.org/optionsoverview/leverage-risk) 与 [Benefits & Risks](https://www.optionseducation.org/optionsoverview/what-are-the-benefits-risks)；Cboe [VIX 产品页](https://www.cboe.com/tradable_products/vix/) 与 [VIX FAQ](https://www.cboe.com/tradable_products/vix/faqs/)（均 2026-11-07 核实）。；[LULD Plan](https://www.luldplan.com/)、[Amendment 20](https://cdn.luldplan.com/plans/LULD-Plan-Amendment-20.pdf)、[Cboe Amendment 18](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-limit-updown-faq/luld-amendment-18-update/)、[Reg SHO 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；隔夜价格带（2026-11-08 核实；第 29 号修正案日期 2026-11-12 再核）：[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[SEC 34-106624](https://www.sec.gov/files/rules/sro/nms/2026/34-106624.pdf)、[91 FR 65016](https://www.federalregister.gov/documents/2026/10/13/2026-20799/joint-industry-plan-notice-of-filing-and-order-of-summary-effectiveness-on-a-temporary-basis-not-to)；期权入门与 23/5 下的 MWCB（2026-11-10 核实）：[OCC ODD](https://www.theocc.com/company-information/documents-and-archives/options-disclosure-document)、Black & Scholes 1973 *JPE* 81(3) (doi:10.1086/260062)、Merton 1973 *Bell J. Econ.* 4(1) (doi:10.2307/3003143)、Stoll 1969 *JF* 24(5) (doi:10.1111/j.1540-6261.1969.tb01694.x)、[SEC 34-106380](https://www.sec.gov/files/rules/sro/nyse/2026/34-106380.pdf)、[SEC 34-106586](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106586.pdf)、[OCC ODD 2024-06 版 PDF](https://www.theocc.com/getcontentasset/dd6200a7-5982-4226-90e4-1f2d32a89911/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/june_2024_riskstoc.pdf)、[SEC 34-106582（Cboe BZX）](https://www.sec.gov/files/rules/sro/cboebzx/2026/34-106582.pdf) SEC 暂停交易（2026-11-11 核实）：[15 U.S.C. 78l(k)](https://www.law.cornell.edu/uscode/text/15/78l)、[SEC 暂停交易列表](https://www.sec.gov/enforcement-litigation/trading-suspensions)、[SEC 34-106668](https://www.sec.gov/files/litigation/suspensions/2026/34-106668-ts.pdf)。enrich15（2026-11-11 核实）：[OIC 期权行权常见问题](https://www.optionseducation.org/referencelibrary/faq/options-exercise)（引用 OCC Rule 805 及解释 .02）。 enrich16（2026-11-12 核实）：[FINRA Rule 11892](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11892)、[SEC 34-106407](https://www.sec.gov/files/rules/sro/nyse/2026/34-106407.pdf)、[SEC 34-106631](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106631.pdf)、[SEC 34-106604](https://www.sec.gov/files/rules/sro/cboeedgx/2026/34-106604.pdf)、[SEC 34-106727](https://www.sec.gov/files/rules/sro/memx/2026/34-106727.pdf)、[SEC 34-106649](https://www.sec.gov/files/rules/sro/ltse/2026/34-106649.pdf)、[OIC 期权指派常见问题](https://www.optionseducation.org/referencelibrary/faq/options-assignment)。enrich17（2026-11-12 核实）：[Cboe，标准上午结算标普 500 指数期权的结算](https://cdn.cboe.com/resources/spx/Settlement_of_Standard_AM_Settled_SP_500_Index_Options.pdf)、[Cboe SOQ 概述](https://cdn.cboe.com/api/global/us_indices/governance/SOQ-Settlement-of-Standard-AM-Settled-Index-Futures-and-Options.pdf)、[Cboe 期权交易所 24/5 常见问题](https://www.cboe.com/document/tech-spec/content/technical-specifications/cboe-options-exchange-245-faq/)、[Cboe 通知：更新上午结算指数期权收盘时间](https://www.cboe.com/notices/content/?id=56357)、[OCC 信息备忘录 #54262](https://infomemo.theocc.com/infomemos?number=54262)。
+ enrich20（核实于 2026-11-12）：LULD 计划第 VII 节（只用第 VII 节；不教 2016 年汇编里的第一阶段时段）；[luldplan.com](https://www.luldplan.com/)（2019-04-11 起为永久性规则；适用于 9:30–16:00 ET 常规交易时段）。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

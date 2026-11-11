@@ -45,3 +45,18 @@ there is not a different annual cap for short-term vs long-term; the cap is on t
 do not write that a $7,000 net loss all hits the same year's taxable income
 assertions passed: 7/7
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== E. Pub 550 short-sale tax character (Ace Corporation) ===
+Ace Corporation: short opened with no shares owned; after 13 months, buy 100 shares and immediately deliver
+gain or loss is not realized until delivery of property to close the short sale
+holding period of the delivered property: less than 1 day -> short-term capital loss
+do not write that a short open more than a year is automatically long-term
+special rules may apply if substantially identical property was held; this toy is not that engine
+report the short sale on Form 8949 in the year it closes
+this is not IRC 1259
+=== F. Worthless securities treated as sold on the last day of the tax year ===
+calendar-year taxpayer, security becomes worthless during 2026: treated as sold 2026-12-31
+do not use the bankruptcy, halt, or delisting date as the tax sale date under this rule
+this is a tax-character clock, not the already-taught delisting return
+affiliated-corporation exceptions exist in 165(g)(3); this toy is not that engine
+assertions passed: 9/9
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
