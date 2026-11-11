@@ -27,16 +27,16 @@
 | `stats-probability-basics` | P0 | 8 | 2 | 是 | python-pandas-timeseries |
 | `basic-finance-markets` | P0 | 5 | 1 | 是 | — |
 | `markets-language` | P1 | 5.5 | 2 | 否 | basic-finance-markets |
-| `microstructure-orders` | P1 | 11.75 | 2 | 否 | markets-language |
+| `microstructure-orders` | P1 | 12.25 | 2 | 否 | markets-language |
 | `returns-vol-corr` | P1 | 9 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
-| `data-cleaning` | P2 | 29.5 | 3 | 否 | eval-lab |
+| `data-cleaning` | P2 | 30.25 | 3 | 否 | eval-lab |
 | `backtest-traps` | P2 | 30.25 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 7.5 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
 | `mean-reversion` | P3 | 7 | 3 | 否 | momentum-trend |
-| `pairs-stat-arb` | P3 | 14.25 | 3 | 否 | mean-reversion |
+| `pairs-stat-arb` | P3 | 14.75 | 3 | 否 | mean-reversion |
 | `strategy-compare-lab` | P3 | 5 | 3 | 否 | momentum-trend, mean-reversion, pairs-stat-arb |
 | `factor-workflow` | P4 | 25 | 4 | 否 | strategy-compare-lab, backtest-traps |
 | `factor-portfolio-lab` | P4 | 8 | 4 | 否 | factor-workflow |
@@ -47,7 +47,7 @@
 | `risk-systems-lab` | P6 | 8 | 3 | 否 | portfolio-risk-sizing, execution-slippage |
 | `market-regimes-crisis` | P6 | 15.5 | 4 | 否 | risk-systems-lab |
 | `paper-trading-infra` | P7 | 17.5 | 3 | 否 | market-regimes-crisis |
-| `compliance-ethics` | P7 | 21 | 2 | 否 | paper-trading-infra |
+| `compliance-ethics` | P7 | 21.25 | 2 | 否 | paper-trading-infra |
 | `frontier-llm-agents` | P8 | 29 | 5 | 否 | factor-workflow, ml-leakage-control, modern-ml-pipelines, compliance-ethics |
 | `frontier-tsfm-altdata-crypto` | P8 | 19 | 4 | 否 | modern-ml-pipelines, data-cleaning, execution-slippage |
 | `capstone` | P9 | 26 | 5 | 否 | paper-trading-infra, compliance-ethics, factor-workflow, portfolio-risk-sizing |
@@ -59,20 +59,20 @@
 | 阶段 | 名称 | 课数 | 总课时 | 6h/周 | 12h/周 | 依赖簇 |
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
-| P1 | 市场语言与度量 / Market language & measurement | 4 | 33.25h | ~5.5 周 | ~2.8 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 75.25h | ~12.5 周 | ~6.3 周 | Research infrastructure / scientific method for backtests |
-| P3 | 经典策略族 / Classic strategy families | 4 | 34.25h | ~5.7 周 | ~2.9 周 | Classic alpha templates before factors/ML |
+| P1 | 市场语言与度量 / Market language & measurement | 4 | 33.75h | ~5.6 周 | ~2.8 周 | Market concepts + evaluation language |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 76h | ~12.7 周 | ~6.3 周 | Research infrastructure / scientific method for backtests |
+| P3 | 经典策略族 / Classic strategy families | 4 | 34.75h | ~5.8 周 | ~2.9 周 | Classic alpha templates before factors/ML |
 | P4 | 因子研究 / Factor research | 2 | 33h | ~5.5 周 | ~2.8 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
 | P6 | 风险、仓位与执行 / Risk, sizing & execution | 4 | 62h | ~10.3 周 | ~5.2 周 | Portfolio construction / execution / controls / regimes |
-| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 38.5h | ~6.4 周 | ~3.2 周 | Operationalization and professional norms |
+| P7 | 纸面与伦理 / Paper trading & ethics | 2 | 38.75h | ~6.5 周 | ~3.2 周 | Operationalization and professional norms |
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 26h | ~4.3 周 | ~2.2 周 | Synthesis |
 
-**全量（含 P0）：精确 402.25 学时（跳过 P0 为 382.25）。** 6h/周 ≈ 67.0 周；12h/周 ≈ 33.5 周。
-**跳过 P0 后：精确 382.25 学时。** 6h/周 ≈ 63.7 周；12h/周 ≈ 31.9 周。
+**全量（含 P0）：精确 404.25 学时（跳过 P0 为 384.25）。** 6h/周 ≈ 67.4 周；12h/周 ≈ 33.7 周。
+**跳过 P0 后：精确 384.25 学时。** 6h/周 ≈ 64.0 周；12h/周 ≈ 32.0 周。
 
-精确合计：**402.25h 全量 / 382.25h 跳过 P0**。对外可表述为约 **350–402.25h 全量 / 330–382.25h 跳过基础**（含个人复盘缓冲）。
+精确合计：**404.25h 全量 / 384.25h 跳过 P0**。对外可表述为约 **350–404.25h 全量 / 330–384.25h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -214,7 +214,7 @@
   - 市场/基准一页纸。
 - **Method tags:** classic: QuantStart beginner books; Default: US-listed stocks/ETFs in USD; Chinese supplement: JoinQuant 初识量化
 
-### P1 · 市场语言与度量（Market language & measurement）— 33.25h / 4 课
+### P1 · 市场语言与度量（Market language & measurement）— 33.75h / 4 课
 
 **阶段目标：** 用交易语言说话，并用收益/风险指标诚实评价玩具信号。
 
@@ -244,7 +244,7 @@
 - **Method tags:** classic: Canvas m1; QuantStart SAT process | niche: Awesome Systematic Trading (paperswithbacktest GitHub)
 
 #### `microstructure-orders` — 微观结构与订单 / Microstructure & orders
-- **Hours:** 11.75h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution) + 0.5h overnight trading & overnight LULD bands (planned 2026-12-06) + 0.25h Rule 612/610(c) version trap + 0.25h HK T+1 plan comparison (target H2 2028, not in effect) + 0.5h official close/closing auction/NYSE MOC cutoff + 0.5h tiered round lots & odd-lot quotes (2025-11-03 / 2026-04-27) + 0.25h SIPC account protection (SIPC limits; not FDIC) + 0.25h tokenized-stock venue (TSV) data separation (SEC 34-106402; TSV prints are not exchange prints) + 0.25h official open, opening auction & MOO cutoff (NYSE DMM open may print after 9:30; Nasdaq NOOP, MOO cutoff 9:28 ET)
+- **Hours:** 12.25h · **Difficulty:** 2/5 · **Basis:** 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1/cash vs margin/NBBO·SIP·IEX/sessions/Rule 611 proposal status/best execution) + 0.5h overnight trading & overnight LULD bands (planned 2026-12-06) + 0.25h Rule 612/610(c) version trap + 0.25h HK T+1 plan comparison (target H2 2028, not in effect) + 0.5h official close/closing auction/NYSE MOC cutoff + 0.5h tiered round lots & odd-lot quotes (2025-11-03 / 2026-04-27) + 0.25h SIPC account protection (SIPC limits; not FDIC) + 0.25h tokenized-stock venue (TSV) data separation (SEC 34-106402; TSV prints are not exchange prints) + 0.25h official open, opening auction & MOO cutoff (NYSE DMM open may print after 9:30; Nasdaq NOOP, MOO cutoff 9:28 ET) + 0.25h NYSE early-close MOC cutoff (12:50 ET when close is 13:00) + 0.25h Nasdaq vs NYSE close cutoffs (Nasdaq MOC 15:55 / LOC 15:58)
 - **Prereqs:** `markets-language`
 - **Summary:** 价差、mid、市价/限价、滑点；同bar零成本过乐观。
 - **Goals:**
@@ -309,14 +309,14 @@
   - 对照表+三句结论。
 - **Method tags:** classic: Canvas eval; pyfolio tear-sheet docs; Chinese supplement: JoinQuant 策略评价 | niche: @FG731314/2115609441748001008 risk-adjusted traits
 
-### P2 · 数据与诚实回测（Data & honest backtests）— 75.25h / 4 课
+### P2 · 数据与诚实回测（Data & honest backtests）— 76h / 4 课
 
 **阶段目标：** 可版本化数据+陷阱审讯+成本+引擎假设。
 
 **6h/周 ≈ 12.5 周；12h/周 ≈ 6.3 周。**
 
 #### `data-cleaning` — 数据与清洗 / Data & cleaning
-- **Hours:** 29.5h · **Difficulty:** 3/5 · **Basis:** 5h concepts + 6h pipeline lab incl mask-first + 2h info-bars + 1h crypto-PIT + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources/licensing/PIT lab (EDGAR/FRED terms R16/Ken French/CRSP/yfinance/Massive/Alpaca) + 2h corporate actions & delisting (R21) + 1h ALFRED revision as-of + 0.5h dividend dates under T+1 (investor.gov) + 0.25h yfinance auto_adjust version trap + 0.5h filing deadlines & EDGAR 5:30pm rule (10-K/10-Q/8-K/13F) + 0.5h delisting returns & permanent IDs (CRSP CIZ) + 0.5h spin-offs & mergers in price series (CRSP split events, DisPERMNO, Form 8937 timing) + 0.5h insider & large-holder filing lags (Form 4 / 13D / 13G, FPI insiders from 2026-03-18) + 0.5h reverse splits & Nasdaq bid-price rule status (30 business days below $1, prior-year reverse split, $0.10 rule, stayed $5M MVLS rule) + 0.5h SEC XBRL API as-of (filed date; frames = last filed; fy describes the filing) + 0.25h Rule 10b5-1 plan check box (Forms 4/5 from 2023-04-01) & cooling-off + 0.5h NYSE price criteria (30-day average, 200:1 reverse-split limit, $0.25 floor from 2027-07-01)
+- **Hours:** 30.25h · **Difficulty:** 3/5 · **Basis:** 5h concepts + 6h pipeline lab incl mask-first + 2h info-bars + 1h crypto-PIT + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources/licensing/PIT lab (EDGAR/FRED terms R16/Ken French/CRSP/yfinance/Massive/Alpaca) + 2h corporate actions & delisting (R21) + 1h ALFRED revision as-of + 0.5h dividend dates under T+1 (investor.gov) + 0.25h yfinance auto_adjust version trap + 0.5h filing deadlines & EDGAR 5:30pm rule (10-K/10-Q/8-K/13F) + 0.5h delisting returns & permanent IDs (CRSP CIZ) + 0.5h spin-offs & mergers in price series (CRSP split events, DisPERMNO, Form 8937 timing) + 0.5h insider & large-holder filing lags (Form 4 / 13D / 13G, FPI insiders from 2026-03-18) + 0.5h reverse splits & Nasdaq bid-price rule status (30 business days below $1, prior-year reverse split, $0.10 rule, stayed $5M MVLS rule) + 0.5h SEC XBRL API as-of (filed date; frames = last filed; fy describes the filing) + 0.25h Rule 10b5-1 plan check box (Forms 4/5 from 2023-04-01) & cooling-off + 0.5h NYSE price criteria (30-day average, 200:1 reverse-split limit, $0.25 floor from 2027-07-01) + 0.5h Rule 10b-18 buyback safe harbor + 0.25h Item 703 repurchase disclosure lag (Form SR vacated)
 - **Prereqs:** `eval-lab`
 - **Summary:** 复权、停牌、缺失、幸存者、PIT；数据说明书。
 - **Goals:**
@@ -406,7 +406,7 @@
   - 假设段+双成交对照。
 - **Method tags:** classic: VectorBT; Zipline Reloaded; Backtrader; Canvas engines | niche: @RoundtableSpace/2111272232249143360 engine list | frontier: NautilusTrader shared-kernel architecture docs
 
-### P3 · 经典策略族（Classic strategy families）— 34.25h / 4 课
+### P3 · 经典策略族（Classic strategy families）— 34.75h / 4 课
 
 **阶段目标：** 复现动量/回归/配对并做对照。
 
@@ -456,7 +456,7 @@
 - **Method tags:** classic: Canvas m7; Stern counter-trend; OU/AR(1) half-life | niche: quants.md reversal samples as foils | further reading: Chan Algorithmic Trading (Wiley 2013, ISBN 978-1-118-46014-6)
 
 #### `pairs-stat-arb` — 配对与统计套利入门 / Pairs & intro statistical arb
-- **Hours:** 14.25h · **Difficulty:** 3/5 · **Basis:** 4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio (filter vs smoother) + 1h US short-sale constraints (Reg SHO layers, borrow, dividends) + 1h short-side public data (FINRA 4560 short interest by publish date, short volume ≠ short interest, FTD balance; SR-FINRA-2026-012 withdrawn) + 0.25h Form SHO & Rule 10c-1a status (exempted to 2028-01-02 / 2029-03-29)
+- **Hours:** 14.75h · **Difficulty:** 3/5 · **Basis:** 4h concepts + 5h lab + 1h write-up + 2h optional Kalman hedge ratio (filter vs smoother) + 1h US short-sale constraints (Reg SHO layers, borrow, dividends) + 1h short-side public data (FINRA 4560 short interest by publish date, short volume ≠ short interest, FTD balance; SR-FINRA-2026-012 withdrawn) + 0.25h Form SHO & Rule 10c-1a status (exempted to 2028-01-02 / 2029-03-29) + 0.25h Reg SHO locate ≠ borrow & Rule 204 close-out under T+1 + 0.25h Rule 201 NBB test & threshold-security definition
 - **Prereqs:** `mean-reversion`
 - **Summary:** 价差、滚动对冲比、相关≠可交易。
 - **Goals:**
@@ -707,7 +707,7 @@
   - 四场景卡片 + 实验数字一致 + 新闻≠regime 短文。
 - **Method tags:** classic: Hamilton 1989; NYSE Rule 7.12; CPPI literacy | niche: CSRC/SSE 2016 suspension | frontier: Moreira–Muir 2017 JF; Cederburg et al. 2020 JFE
 
-### P7 · 纸面与伦理（Paper trading & ethics）— 38.5h / 2 课
+### P7 · 纸面与伦理（Paper trading & ethics）— 38.75h / 2 课
 
 **阶段目标：** 纸面闭环与合规/研究伦理。
 
@@ -736,7 +736,7 @@
 - **Method tags:** classic: Canvas m13; QuantStart paper-before-live; Alpaca / IBKR paper docs (document-level only); Chinese supplement: JoinQuant 模拟交易 | niche: Qbot/Atlas reference architecture; Nautilus isomorphic paper/sim concept
 
 #### `compliance-ethics` — 合规、风险心态与研究伦理 / Compliance, risk mindset & research ethics
-- **Hours:** 21h · **Difficulty:** 2/5 · **Basis:** 8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 examples, purchase-order matching) + 0.5h holding period & qualified dividends (IRS Topic 409 / Pub 550 / Pub 519) + 0.5h manipulation red lines & self-trade lab (15 U.S.C. 78i / FINRA 5210 / CAT review) + 0.25h tokenized NMS stock Innovation Exemption status (SEC 34-106402, until 2031-09-17) + 0.25h tax lots: FIFO vs adequate identification (IRS Pub 550; Form 1099-B basis for covered securities)
+- **Hours:** 21.25h · **Difficulty:** 2/5 · **Basis:** 8h reading (Northbound + PDA withdrawal + FY2026/FINRA GenAI + SFC 24EC55 + ESMA74 algo briefing) + 4.5h writing + 2.5h quiz + 1h rule versions (FINRA main example + SSE 2026 comparison) + 0.5h US four-date table & phase-in status (R04) + 2.5h cross-border tax/FX/CRS literacy box (R25/R28/R29) + 0.5h wash-sale basis lab (IRS Pub 550 examples, purchase-order matching) + 0.5h holding period & qualified dividends (IRS Topic 409 / Pub 550 / Pub 519) + 0.5h manipulation red lines & self-trade lab (15 U.S.C. 78i / FINRA 5210 / CAT review) + 0.25h tokenized NMS stock Innovation Exemption status (SEC 34-106402, until 2031-09-17) + 0.25h tax lots: FIFO vs adequate identification (IRS Pub 550; Form 1099-B basis for covered securities) + 0.25h Section 16(b) short-swing profit (15 U.S.C. 78p(b))
 - **Prereqs:** `paper-trading-infra`
 - **Summary:** 先生存；学习≠投顾；拒绝选择性汇报。
 - **Goals:**
@@ -980,3 +980,4 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - enrich12 (2026-11-11, US-first): N6 Nasdaq-100 methodology effective 2026-05-01 (Fast Entry top 40 with IPO 7th/10th/15th trading days, top-125 quarterly removal replacing the 10 bp rule, ranking on listed+unlisted shares, Modified Market Cap with TSO capped at 3x free float, 10% minimum float removed) and December 2026 annual reconstitution dates derived from the methodology (reference 2026-11-30, announcement after the close 2026-12-11, effective open 2026-12-21; Nasdaq announcement authoritative) (`backtest-traps` +0.25h, quiz `bt-ndx-recon`); R80 settlement-holiday set in `examples/p2/13_regulatory_fees_toy.py` (Good Friday 2026-04-03, NSCC notice a9732); R79 $0.10-rule prior version + Hearings Panel 180-day exception (`data-cleaning`), Rule 15c2-11 quotes after an SEC suspension incl. 60-day piggyback bar (`market-regimes-crisis`), Treas. Reg. 1.1012-1(c)(8) standing orders and settlement-date deadline (`compliance-ethics`); no hour change for R79/R80. Hours: **399.75 full / 379.75 skip-P0**; 28 lessons; 281 quiz pairs.
 - enrich13 (2026-11-11, US-first): SEC XBRL `data.sec.gov` APIs as point-in-time data (pick by `filed`; `frames` returns the last filed value; `fy`/`fp` describe the filing; Apple FY2009 NetIncomeLoss 5,704m in the 10-K of 2009-10-27 vs 8,235m in the 10-K/A of 2010-01-25), Rule 10b5-1 cooling-off (later of 90 days or 2 business days after the 10-Q/10-K, max 120; others 30) and the Form 4 plan check box for filings from 2023-04-01, NYSE 802.01C price criteria (30-trading-day average below $1, month-end cure test, 200:1 reverse-split limit from 34-102201) and the $0.25 Minimum Trading Price effective 2027-07-01 (34-106133) (`data-cleaning` +1.25h, `examples/p2/15_nyse_price_criteria_toy.py`, `examples/p2/17_xbrl_pit_10b51_toy.py`, quizzes `dc-nyse-price`, `dc-xbrl-filed`, `dc-10b51`); S&P 500 addition rules per the November 2026 S&P U.S. Indices Methodology (committee discretion, dated cap thresholds 18.0/20.5/22.7 bn, evaluation date two business days before announcement, 05:15 PM ET announcements with at least three business days' notice) and earnings release times as event timestamps (8-K Item 2.02, four-business-day 8-K deadline, Regulation FD) (`backtest-traps` +0.75h, `examples/p2/16_index_add_earnings_time_toy.py`, quizzes `bt-sp500-add`, `bt-earnings-time`); CAT fees billed to both executing brokers per executed share (CAT Fee 2025-1 $0.000022, 2025-2 $0.000009, none invoiced 2025-12..2026-04, 2026-1 $0.000001) and the 2027 SEC fee row marked as an FY2026-rate placeholder (no FY2027 Section 31 advisory as of 2026-11-11) (`costs-in-backtest` +0.25h, `examples/p2/13_regulatory_fees_toy.py` section D, quiz `cb-catfee`); Form SHO / Rule 10c-1a exemptions to 2028-01-02 / 2028-09-28 / 2029-03-29 after the Fifth Circuit remand (SEC 34-104303) (`pairs-stat-arb` +0.25h, quiz `ps-formsho`). Hours: **402.25 full / 382.25 skip-P0**; P2 75.25h, P3 34.25h; 28 lessons; 288 quiz pairs.
 - R84–R86 + R88 (2026-11-11, after enrich13): Historical CAT Assessment 1A ($0.000002 from May 2026 transactions until about $38.96 million is collected) and Assessment 1 ceased after November 2025 transactions (CAT Fee Alert 2025-4, SR-FINRA-2026-011); 2025-2 last invoice December 2025 for November transactions; CAT Fee 2026-1 described as budget-priced for 2026-05-01 through 2026-12-31 and continuing in 2027 until a new fee or a CAT LLC stop notice; `data-cleaning` en common-mistakes list brought to 18 items to match zh. Quiz answers and hours unchanged.
+- enrich14 (2026-11-11, US-first): Rule 10b-18 buyback safe harbor + Item 703 monthly disclosure lag (Form SR vacated 2023-12-19) (`data-cleaning` +0.75h, `examples/p2/18_buyback_10b18_disclosure_toy.py`, quizzes `dc-10b18` / `dc-item703`); NYSE early-close MOC cutoff 12:50 ET on 2026-11-27 and 2026-12-24 + Nasdaq vs NYSE close cutoffs (Nasdaq MOC 15:55 / LOC 15:58) (`microstructure-orders` +0.5h, `examples/p1/10_early_close_nasdaq_moc_toy.py`, quizzes `mo-earlyclose` / `mo-nasdaq-moc`); Reg SHO locate ≠ borrow, Rule 204 close-out under T+1, Rule 201 NBB test and threshold-security definition (`pairs-stat-arb` +0.5h, `examples/p3/08_regsho_locate_closeout_toy.py`, quiz `ps-locate204`); Section 16(b) short-swing profit (`compliance-ethics` +0.25h, `examples/p7/10_section16b_toy.py`, quiz `ce-16b`). Also leftover wording/source fixes R87 (cite SEC 34-105003 / 91 FR 13410 for the CAT pass-through quote), R89 (Reg FD “promptly” means as soon as reasonably practicable, and no later than the 24h / next-open cap), R90 (2026 agenda RIN 3235-AN72; no proposal published as of 2026-11-11), R91 (XBRL companyconcept URL on one line), R92 (lab counts only CAT Fee 2026-1, not Assessment 1A). Hours: **404.25 full / 384.25 skip-P0**; 28 lessons; 294 quiz pairs.

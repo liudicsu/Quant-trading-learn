@@ -1,0 +1,9 @@
+=== Section 16(b): purchase and sale (or sale and purchase) in less than six months ===
+  buy 2026-01-15 / sell 2026-06-10: less than six months? True
+  buy 2026-01-15 / sell 2026-07-20: less than six months? False
+the statute says 'less than six months'; this toy uses calendar months and only tests dates that are clearly inside or outside. It does not decide the exact-day edge.
+the same window applies to a sale first and a repurchase later
+  sale 2026-02-02 / repurchase 2026-07-01: less than six months? True
+if the window is open, any profit inures to the issuer irrespective of the insider's intention
+this is not a Form 4 trading signal
+OK 4 assertions

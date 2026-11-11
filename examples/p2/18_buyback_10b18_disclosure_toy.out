@@ -1,0 +1,19 @@
+=== A. volume: 25% of four-week ADTV ===
+four-week volumes (800000, 1000000, 1200000, 1000000) -> ADTV 1,000,000 -> 25% cap 250,000 shares
+purchases 250,000 shares: inside the volume condition; 250,001: outside (and then the whole day is outside the harbor)
+=== B. once-a-week block in lieu of the 25% cap ===
+one block of 400,000 shares and no other Rule 10b-18 purchases that day: volume condition met via the weekly block exception
+same block plus any other Rule 10b-18 purchase that day: volume condition fails
+=== C. timing: last 10 vs last 30 minutes, measured from the scheduled close ===
+ADTV value $2,000,000 and public float $200,000,000 -> last 10 minutes (regular close 16:00 starts at 15:50; early close 13:00 starts at 12:50)
+ADTV value $400,000 and public float $80,000,000 -> last 30 minutes (regular close starts at 15:30)
+also: a Rule 10b-18 purchase must not be the opening (regular way) purchase reported in the consolidated system
+the issuer must not pay more than the higher of the highest independent bid and the last independent transaction price
+=== D. Item 703 is monthly, and you see it when the 10-Q/10-K is filed ===
+decision 2026-02-02: January Item 703 monthly total known? False
+decision 2026-05-05: January Item 703 monthly total known? False
+decision 2026-05-06: January Item 703 monthly total known? True
+when known, Item 703 reports the January total 1,200,000 shares (a monthly aggregate, not a daily tape)
+the 2023 daily Form SR / repurchase-modernization rule was vacated 2023-12-19; disclosure reverted to Item 703
+a board authorization press release is not the same as executed daily volume
+OK 9 assertions

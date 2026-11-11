@@ -20,3 +20,5 @@ Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
 - enrich9 (2026-11-10): `08_tbill_rf_toy.py` — TreasuryDirect bill price formula (999.27 example), 4.00%/91-day price and simple 365-day yield, Sharpe at Rf=0 vs 4%/252, prior-day rate as of each return (7 assertions; synthetic rates, no Treasury download).
 
 - enrich11 (2026-11-11): `09_open_auction_toy.py` — NYSE open may print after 09:30 (DMM), Nasdaq MOO 09:28 ET cutoff in Shanghai time, signal-from-open look-ahead (5 assertions).
+
+- enrich14 (2026-11-11): `10_early_close_nasdaq_moc_toy.py` — NYSE early-close MOC freeze at 12:50 ET (2026-11-27 and 2026-12-24; Beijing 01:50 next day) and Nasdaq regular-day close cutoffs (MOC 15:55 / LOC 15:58) (9 assertions).

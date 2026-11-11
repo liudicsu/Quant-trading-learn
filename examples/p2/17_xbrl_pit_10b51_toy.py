@@ -6,8 +6,7 @@ Sources:
   companyconcept / companyfacts APIs aggregate XBRL facts across filings; the frames API returns ONE fact
   per company and period, "last filed". Fair access: no more than 10 requests per second (SEC Developer
   Resources) and a declared User-Agent.
-- The four FACTS below are copied from https://data.sec.gov/api/xbrl/companyconcept/CIK0000320193/us-gaap/
-  NetIncomeLoss.json (Apple Inc., fiscal year 2008-09-28..2009-09-26), read on 2026-11-11. The original
+- The four FACTS below are copied from https://data.sec.gov/api/xbrl/companyconcept/CIK0000320193/us-gaap/NetIncomeLoss.json (Apple Inc., fiscal year 2008-09-28..2009-09-26), read on 2026-11-11. The original
   10-K (filed 2009-10-27) reported 5,704 million; the 10-K/A filed 2010-01-25 reported 8,235 million for the
   same fiscal year. This script does not fetch anything.
 - 17 CFR 240.10b5-1(c)(1)(ii)(B) (eCFR, current; amended 2022-12-29 / 2023-02-27): directors and officers may

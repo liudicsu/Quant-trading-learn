@@ -20,3 +20,5 @@ Charts land in `public/p3/`.
 - US-first pack (2026-11-08): `06_us_short_constraints.py — Reg SHO layers, locate/borrow fee/dividend owed on a synthetic pair.`
 
 - enrich7 (2026-11-10): `07_short_data_pit.py` — FINRA short interest by publish date (real 2026 calendar), short volume vs short interest (FINRA 10.7% example), FTD as a balance, SR-FINRA-2026-012 withdrawn (8 assertions).
+
+- enrich14 (2026-11-11): `08_regsho_locate_closeout_toy.py` — locate ≠ completed borrow, Rule 204 close-out under T+1 (short fail morning of T+2; Thanksgiving-week settlement), Rule 201 NBB test, threshold-security size test (15 assertions).
