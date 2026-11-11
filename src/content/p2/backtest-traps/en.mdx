@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**29.5 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up + 0.5h index membership as of date + 0.25h FOMC release times as event timestamps + 0.5h IPO data traps + 0.25h Nasdaq-100 rule versions and reconstitution dates) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
+This lesson (~**30.25 hours**: 5h concepts + 19h multi-labs incl. CPCV + one-switch + PBO/CSCV + admission gates + 4h write-up + 0.5h index membership as of date + 0.25h FOMC release times as event timestamps + 0.5h IPO data traps + 0.25h Nasdaq-100 rule versions and reconstitution dates + 0.5h S&P 500 addition rules and announcement timing + 0.25h earnings release times as event timestamps) is the **core interrogation** module: look-ahead, survivorship/snooping, walk-forward, trial counts, and **PSR / Deflated Sharpe** (Bailey & López de Prado). Prereqs: `data-cleaning`, `stats-probability-basics`.
 
 **Goals:** cheat vs honest controls; rolling walk-forward with a results table; PSR/DSR vs N; log failures and trial counts.
 
@@ -57,6 +57,43 @@ assertions passed: 7/7
 **The 2026 dates, derived from those rules (not announced dates).** November 30, 2026 is a Monday and a trading day (the market is closed on Thanksgiving, November 26), so the reference date is **2026-11-30**. The third Friday of December is December 18, so the effective date is the open on **Monday 2026-12-21**. There is no market holiday between December 11 and December 21, so counting six trading days back gives an announcement after the close on **2026-12-11**. These are derived here, not announced; the announcement on Nasdaq's Global Index Watch site is authoritative, so check it before using any date.
 
 **Backtest rule:** for an NDX universe, store point-in-time membership with announcement and effective dates, and store which methodology version was in force on each date (before 2026-05-01: 10% minimum float and the 10 basis point rule; after it: Fast Entry, the 3x float cap and the top-125 review; the top-125 review, total-share ranking and the 3x cap for existing members first applied on 2026-06-22, while Fast Entry additions from 2026-05-01 get the 3x cap at once). Do not assume a new listing needs months before it can join: under Fast Entry, a large IPO can join after about 15 trading days. A decision made before the announcement cannot use the new list. This section makes no prediction about which companies will be added or removed, recommends no fund that tracks the index, and makes no claim about price moves around inclusion.
+
+## S&P 500: chosen by a committee, announced at 17:15 ET (checked 2026-11-11)
+
+**The rules say who may be added, not who will be.** Unlike Russell or the Nasdaq-100, the S&P 500 has no mechanical ranking. Per the [S&P U.S. Indices Methodology](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf) (November 2026 edition), an Index Committee selects members from eligible companies, keeps the count fixed at 500 and also considers sector balance. So you cannot rebuild the index from its rules; use a historical membership list with dates. The rules are still useful to see who could be a candidate, and they contain several date traps.
+
+- **Addition criteria (current edition):** US domicile and US periodic reports (10-K, 10-Q, 8-K); a listing on an eligible US exchange (the list includes NYSE, the Nasdaq tiers, Cboe exchanges and the Texas Stock Exchange; OTC is excluded); total company market cap of at least **$22.7 billion**; float-adjusted market cap of at least half of that; investable weight factor (the float share, IWF) of at least 0.10; float-adjusted liquidity ratio of at least 0.75 and at least 250,000 shares traded in each of the six months before the evaluation date; **positive GAAP net income for the most recent quarter and for the sum of the last four quarters**; and, for IPOs and former SPACs, 12 months of trading. ADRs, ETFs, BDCs, LPs and similar structures are ineligible.
+- **The thresholds move.** Appendix A lists the minimum market cap by date: $18.0 billion after the close of 2024-04-01, $20.5 billion after the close of 2025-01-02, $22.7 billion after the close of 2025-07-01. A screen for 2025-06 that uses $22.7 billion is applying a later rule.
+- **Evaluation date:** the open of trading two business days before the announcement. The earnings test must use only results already filed by then (see the XBRL `filed` date in `data-cleaning`).
+- **Addition, not continued membership:** a member that later breaks a criterion is not removed automatically. A removed company must wait at least one year before it is screened again.
+- **Timing:** no scheduled reconstitution; changes happen as needed, are announced with at least three business days' notice (less at the Committee's discretion), and announcements come at **05:15 PM Eastern**, after the close.
+
+**Backtest rule:** store each change with its announcement timestamp and effective date. A daily backtest can react no earlier than the next session's open. This section makes no claim about price moves around additions, predicts no additions, and recommends no index fund.
+
+**Lab:** `examples/p2/16_index_add_earnings_time_toy.py` sections A–B (synthetic candidates and dates; the thresholds are the methodology's; section C is in the earnings section below):
+
+```text
+=== A. S&P 500 addition screen as of an evaluation date (eligible != added) ===
+evaluation 2025-06-02: minimum total cap 20.5 bn, minimum FMC 10.25 bn
+  P (passes all)           -> eligible
+  Q (cap 21.0 bn)          -> eligible
+  R (latest quarter loss)  -> fails: latest quarter GAAP NI <= 0
+  S (IPO 10 months ago)    -> fails: traded < 12 months
+  T (IWF 0.08)             -> fails: FMC 2.0 < 10.25; IWF < 0.10
+evaluation 2025-07-15: minimum total cap 22.7 bn, minimum FMC 11.35 bn
+  P (passes all)           -> eligible
+  Q (cap 21.0 bn)          -> fails: total cap 21.0 < 22.7
+  R (latest quarter loss)  -> fails: latest quarter GAAP NI <= 0
+  S (IPO 10 months ago)    -> fails: traded < 12 months
+  T (IWF 0.08)             -> fails: FMC 2.0 < 11.35; IWF < 0.10
+  the Index Committee still chooses among eligible names (fixed count 500, sector balance);
+  a member that later fails a criterion is not removed automatically.
+=== B. announcement timeline (synthetic dates) ===
+announcement 2026-03-02 Mon 17:15 ET; evaluation date = open of 2026-02-26 Thu
+business days between announcement and effective date: 4 (methodology: at least 3)
+daily backtest: earliest fill on the news = 2026-03-03 09:30 ET open (the 03-02 close came before the news)
+decision at the 2026-03-02 16:00 close: is the change known? False (using it = look-ahead)
+```
 
 ## IPOs: the offering price is not your fill (checked 2026-11-10)
 
@@ -377,6 +414,30 @@ trade on the statement at 14:01 EDT? True
 Oct 27-28 minutes projected by the 3-week rule: 2026-11-18 (projection; check the Fed calendar)
 ```
 
+## Earnings releases: the event time is the release, not the quarter end or the 8-K date (checked 2026-11-11)
+
+**Three different dates.** A quarter ends; weeks later the company publishes an earnings release; it then furnishes a Form 8-K under **Item 2.02**, which must give the date of the announcement and attach the release as an exhibit ([Form 8-K](https://www.sec.gov/files/form8-k.pdf)). Unless another deadline applies, an 8-K is due within **four business days** of the event (General Instruction B.1). So the 8-K date can be later than the release.
+
+**Regulation FD.** If a company intentionally discloses material nonpublic information to market professionals or to holders who may trade on it, it must make the information public **at the same time**; for an unintentional disclosure, "promptly": no later than 24 hours or the start of the next day's NYSE trading, whichever is later, after a senior official learns of it ([17 CFR 243.100–101](https://www.ecfr.gov/current/title-17/part-243)). For a backtest, the public release is when the news becomes available to everyone.
+
+**Time of day decides day 0.** Regular trading runs 09:30–16:00 ET. A release at 07:00 lands before the open, so that day's open already reflects it. A release at 12:30 lands mid-session: day 0 is that day, but its open came before the news, so filling at that open is look-ahead (like EXEC_OPEN above). A release at 16:05 lands after the close, so day 0 is the next session; a Friday evening release maps to Monday.
+
+**Backtest rule:** store the release timestamp with its time zone. If you only have a date, assume it came after the close and start at the next session. If you only have the 8-K, its EDGAR acceptance time never looks ahead, because the filing is public once accepted, but it may be later than the release. Never date an earnings feature to the quarter end. This lesson teaches timing only, not an earnings strategy.
+
+**Lab:** `examples/p2/16_index_add_earnings_time_toy.py` section C (synthetic dates; the assertion count covers sections A–C):
+
+```text
+=== C. earnings release time -> first session that can react ===
+release 2026-02-03 Tue 07:00 ET (before the open): day 0 = 2026-02-03 Tue; that day's open usable? True
+release 2026-02-04 Wed 12:30 ET (during the session): day 0 = 2026-02-04 Wed; that day's open usable? False
+release 2026-02-05 Thu 16:05 ET (after the close (Thu)): day 0 = 2026-02-06 Fri; that day's open usable? True
+release 2026-02-06 Fri 16:05 ET (after the close (Fri)): day 0 = 2026-02-09 Mon; that day's open usable? True
+only the 8-K is stored: accepted 2026-02-05 16:20 ET -> day 0 2026-02-06 (same as the release here;
+  an 8-K is due within four business days, so its time can be later than the release; using it never looks ahead)
+assertions passed: 13/13
+disclaimer: synthetic candidates and dates; no index-inclusion or earnings strategy; learning only
+```
+
 ## PBO / CSCV + evaporation curve — DSR ≠ leakage
 
 **Intuition:** Deflated Sharpe and PBO ask: *among many honest backtests, how often is the in-sample winner a fluke?* They do **not** ask: *was the information set contaminated?* [What survives honest evaluation?](https://arxiv.org/abs/2608.27734) (Gençay) makes both corrections **structural**: a registry that cannot express look-ahead, plus a **complete trial ledger** that indexes DSR/PBO to the agent’s own search. Classic PBO/CSCV: [Bailey et al. PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf).
@@ -437,6 +498,7 @@ after excess @ t=4: hit≈98.3% FDR≈0
 14. Building a historical universe from today's index members, or using a reconstitution list before its announcement date; hard-coding "Russell rebalances every June" for 2026 onward; applying one Nasdaq-100 rule set (for example the 10% minimum float) to dates on both sides of 2026-05-01.
 15. Filling a signal on an FOMC statement (released 14:00 ET) at that day's open; dating a minutes-based feature to the meeting instead of the release.
 16. Assuming fills at the IPO offering price; computing a 60-day signal on a stock listed fewer than 60 trading days ago; assuming every lock-up ends exactly 180 days after the IPO.
+17. Screening past S&P 500 candidates with today's $22.7 billion threshold, or treating "eligible" as "will be added"; trading an S&P change before its 05:15 PM ET announcement; filling an after-close earnings release at that day's close or an intraday release at that day's open; dating earnings to the quarter end.
 
 ## Practice (1:1 with the checklist)
 
@@ -449,6 +511,7 @@ after excess @ t=4: hit≈98.3% FDR≈0
 7. **ex7** — CPCV toy: print \(C(6,2)\), path count, combo SR mean/std vs single hold-out; **done when** numbers match and `cpcv_sr_dist.png` exists.
 8. **ex8** — PBO/oracle: print oracle vs honest SRs, evaporation rows, CSCV PBO_hat, save `pbo_evaporation.png`; **done when** .out matches and disclaimer says teaching sketch.
 9. **ex9** (optional) — run `12_event_time_ipo_toy.py`; change the first open to 22; **done when**: you print the new day-one return from the open and explain why it still differs from the +20% measured from the offering price.
+10. **ex-sp500-earn** — Run `16_index_add_earnings_time_toy.py`; then, by hand, give the evaluation date for an S&P announcement at 05:15 PM ET on Wednesday 2026-04-15, and day 0 for an earnings release at 16:30 ET on Thursday 2026-04-16; **done when**: 2026-04-13 (Monday) and 2026-04-17 (Friday), with one sentence each on why.
 
 ## Quiz
 
@@ -469,14 +532,16 @@ after excess @ t=4: hit≈98.3% FDR≈0
 <Quiz id="q10-execopen" question="EXEC_OPEN is illegal because?" options={["It uses next-open fills after close decisions", "It pairs same-day post-open bar fields with a same-day open fill", "It deletes costs", "It bans RankIC"]} answer={1} explanation="Finance-native execution-alignment leak." />
 <Quiz id="bt-index-recon" question="Can a backtest decision dated 2026-11-01 use the preliminary list for Russell's December 2026 reconstitution?" options={["Yes, the list will take effect anyway", "Yes, rank day (10-30) has passed", "No, the list comes out after the close on 2026-11-13, so using it earlier is look-ahead", "No, Russell only reconstitutes in June"]} answer={2} explanation="Rank day is not the announcement day. “No, Russell only reconstitutes in June” describes the pre-2026 annual schedule." />
 <Quiz id="bt-ndx-recon" question="A backtest decision dated 2026-12-08 uses a Nasdaq-100 universe. Which membership list may it use?" options={["The list from the December 2026 annual reconstitution, because its reference date (2026-11-30) has passed", "Every company ranked in the top 100 by Full Market Capitalization on 2026-11-30", "The membership in force on 2026-12-08; the December list is announced after the close about 2026-12-11 (a derived date; Nasdaq's announcement governs) and takes effect at the open about 2026-12-21", "Today's membership, applied to every date in the backtest"]} answer={2} explanation="The reference date is when the data are measured, not when the list is published. Under the methodology, the announcement comes after the close on the sixth trading day before the effective date, which is the open on the first trading day after the third Friday of December. Using the list earlier is look-ahead, and applying today's members to past dates is survivorship bias." />
+<Quiz id="bt-sp500-add" question="Under the S&P U.S. Indices Methodology, which statement about S&P 500 additions is right?" options={["Any US company that passes the published criteria is added automatically at the next quarterly rebalance", "The Index Committee chooses among eligible companies; changes are announced at 05:15 PM ET with at least three business days' notice", "Additions are announced at the open and take effect the same day", "A member is removed as soon as one quarter's GAAP net income is negative"]} answer={1} explanation="Selection is at the Index Committee's discretion (fixed count of 500, sector balance considered); there is no scheduled reconstitution; additions and deletions are announced at 05:15 PM ET with at least three business days' notice. The criteria apply to additions, not to continued membership." />
 <Quiz id="bt-fomc-time" question="In a daily backtest, a signal based on the 2026-10-28 FOMC statement (released 14:00 EDT) can be filled no earlier than…" options={["The 2026-10-28 open", "The 2026-10-27 close", "A price after 14:00 on 2026-10-28, which on daily bars usually means that day's close or the next open", "Only after the minutes are released"]} answer={2} explanation="The open is at 09:30, before the 14:00 release; “Only after the minutes are released” confuses the statement with the minutes." />
+<Quiz id="bt-earnings-time" question="A company releases earnings at 16:05 ET on Thursday and furnishes the Item 2.02 Form 8-K at 16:20 ET. In a daily backtest, what is day 0 for this news?" options={["Thursday, filling at Thursday's close", "Friday, the next regular session", "The last day of the fiscal quarter", "Up to four business days later, when the 8-K deadline ends"]} answer={1} explanation="Regular trading ends at 16:00 ET, so the first session that can react starts Friday at 09:30. Thursday's close came before the release. The quarter end is not when the numbers became public, and the four-business-day deadline is an upper bound for the 8-K, not the release time." />
 <Quiz id="bt-ipo-history" question="Offering price 20, first open 26, close 24. An ordinary account that buys at the open earns about what on day one?" options={["+20%, measured from the offering price", "About −7.69%", "+30%", "Returns cannot be computed for new listings"]} answer={1} explanation="24 ÷ 26 − 1 ≈ −7.69%; +20% assumes a fill at the offering price, while the SEC bulletin notes most IPO shares go to institutional and high-net-worth clients." />
 
 ## Done when
 
 - Walk-forward summary + PSR/DSR vs N + false-hit context + quizzes
 
-**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); admission gates [arXiv:2610.07701](https://arxiv.org/abs/2610.07701); MinervaScore NAME-ONLY [arXiv:2608.23808](https://arxiv.org/abs/2608.23808). Event times and IPOs (checked 2026-11-10): [Fed FOMC calendar](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [FOMC statement 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm), [SEC investor bulletin: investing in an IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17), [investor.gov lock-up agreements](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements).
+**Sources:** classic — Canvas m5; AFML ch.7/12/14 (purge/embargo + CPCV). Papers — Bailey & López de Prado 2012 SRE Frontier; 2014 Deflated Sharpe ([PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)). Frontier — Quant-Arena arXiv:2610.30113; When Alpha Disappears arXiv:2605.23959 (TEMP_CENTER/EXEC_OPEN); PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf); leakage-safe search-aware assessment [arXiv:2608.27734](https://arxiv.org/abs/2608.27734); admission gates [arXiv:2610.07701](https://arxiv.org/abs/2610.07701); MinervaScore NAME-ONLY [arXiv:2608.23808](https://arxiv.org/abs/2608.23808). Event times and IPOs (checked 2026-11-10): [Fed FOMC calendar](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [FOMC statement 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm), [SEC investor bulletin: investing in an IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17), [investor.gov lock-up agreements](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements). enrich13 (checked 2026-11-11): [S&P U.S. Indices Methodology, November 2026](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf); [Form 8-K, General Instruction B.1 and Item 2.02](https://www.sec.gov/files/form8-k.pdf); [Regulation FD, 17 CFR 243](https://www.ecfr.gov/current/title-17/part-243).
 
 <Summary>
 **Takeaways**: walk-forward tables, trial counts, PSR/DSR vs N, null false-hit math, survivorship/snooping recap.  

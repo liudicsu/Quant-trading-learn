@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **7.25 学时**：概念 2h + 编码 3.5h + 测验 0.5h + Rule 605 有效价差 0.75h + 卖出监管费（SEC 第 31 条费用与 FINRA TAF，按日期取费率）0.5h）把摩擦拆成**四段**，加上**平方根冲击**的容量演示，并保留合并 bps 阶梯。前置：`backtest-traps`。
+本课（约 **7.5 学时**：概念 2h + 编码 3.5h + 测验 0.5h + Rule 605 有效价差 0.75h + 卖出监管费（SEC 第 31 条费用与 FINRA TAF，按日期取费率）0.5h + 买卖双方都收的 CAT 费用（按日期、按成交股数）0.25h）把摩擦拆成**四段**，加上**平方根冲击**的容量演示，并保留合并 bps 阶梯。前置：`backtest-traps`。
 
 **课内目标：** 每段成本有数值例子；堆叠分解图；资金容量图。
 
@@ -190,7 +190,11 @@ ASSERT_rule605_toy_ok
 
 **算一遍（2026-06-15 卖出 1,000 股、每股 50 美元，共 50,000 美元）：** SEC 费用 = 50,000 × 20.60 ÷ 1,000,000 = 1.03 美元；TAF = 1,000 × 0.000195 = 0.195 美元。同样一笔在 2026-11-11 卖出，要交 1.03 美元的 SEC 费用，但没有 TAF。换成基点，每百万美元 20.60 美元约等于卖出金额的 **0.2 bps**，比本课玩具佣金 2 bps 小得多。更大的风险是**日期弄错**：SEC 费率按 charge date 切换、TAF 按成交日切换，而且最近两年里既出现过 0.00 的时段，也出现过暂停。
 
-**回测规则：** 建一张带生效日期的费率表：SEC 费用按 charge date（经清算机构申报的卖出就是交收日；推算交收日要跳过周末和结算假日，例如 2026-04-03 耶稣受难日 NSCC 不营业，见 [NSCC 通知 a9732](https://files.dtcc.com/download/assets/a9732/84f27534957911f1b6bb4ec37e043074)，以 DTCC 的假日通知为准）去查，TAF 按成交日去查；券商向客户转嫁时用的日期口径以券商为准；只对卖出收；不要把今天的费率写死用在整段回测上。各家券商的取整和减免方式不同（有的把每项费用取整到美分，有的对小额卖出免收 TAF），要精确到美分，先看你自己券商的收费页面。本课不讲部分券商也会转嫁的综合审计追踪（CAT）费用。
+**回测规则：** 建一张带生效日期的费率表：SEC 费用按 charge date（经清算机构申报的卖出就是交收日；推算交收日要跳过周末和结算假日，例如 2026-04-03 耶稣受难日 NSCC 不营业，见 [NSCC 通知 a9732](https://files.dtcc.com/download/assets/a9732/84f27534957911f1b6bb4ec37e043074)，以 DTCC 的假日通知为准）去查，TAF 按成交日去查；券商向客户转嫁时用的日期口径以券商为准；只对卖出收；不要把今天的费率写死用在整段回测上。各家券商的取整和减免方式不同（有的把每项费用取整到美分，有的对小额卖出免收 TAF），要精确到美分，先看你自己券商的收费页面。第三项、金额更小的转嫁费用是 CAT 费用，见下一段。
+
+**第三项、金额小得多的费用：CAT 费用（2026-11-11 核实）。** 综合审计追踪（Consolidated Audit Trail，CAT，见 `compliance-ethics`）的运行成本有一部分由券商承担。按 [FINRA Rule 6897](https://www.finra.org/rules-guidance/rulebooks/finra-rules/6897-0)，CAT LLC 向**买方**的执行券商和**卖方**的执行券商分别收费，按“执行等效股数”（executed equivalent share，NMS 股票 1 股算 1 股）计。所以和第 31 条费用、TAF 不同，**买入也要收**。各时段费率：CAT Fee 2025-1，从 2025 年 1 月的交易起每股 **0.000022 美元**；CAT Fee 2025-2，从 2025 年 7 月的交易起 **0.000009 美元**；CAT Fee 2026-1，2026-05-01 至 2026-12-31 的交易 **0.000001 美元**（[CAT Fee Alert 2026-1](https://www.catnmsplan.com/sites/default/files/2026-04/04.01.26-CAT-Fee-Alert-2026-1.pdf)；[SR-FINRA-2026-010](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-010)）。同一份通知说，2025-12-01 至 2026-04-30 的 CAT 成本由盈余储备支付，这段时间没有开出 CAT 费用账单。另有一项 **Historical CAT Assessment 1**（每股 0.000013 美元，从 2024 年 10 月的交易起收，收满规定总额为止，FINRA Rule 6897 估计约两年），是另一笔费用；本课不建模，也没有核实它现在是否还在收。按 CAT Fee 2026-1，一笔 1,000 股的交易，买卖双方的券商各付 0.001 美元。SEC 批准 CAT 收费模式时“承认券商可以把客户成交量对应的 CAT 费用转嫁出去”（原文 "recognize[d] that Industry Members may pass-through CAT fees for customer executed volume"，引自 TXSE 的收费文件，[91 FR，2026-09-29](https://www.federalregister.gov/documents/full_text/html/2026/09/29/2026-19872.html)），所以成交确认单上有没有、怎么列，由你的券商决定。**回测规则：** 金额和价差、佣金比可以忽略；如果要建模，就按成交日查带日期的费率表，买卖两边都收；2027 年的费率还没有公布。
+
+**实验里 2027 年那一行是占位。** SEC 2026 财年费率一直用到国会通过 2027 财年拨款之后第 60 个日历日；截至 2026-11-11，SEC 页面上还没有 2027 财年的第 31 条费用公告，所以实验里 2027 年仍按每百万美元 20.60 美元算，并打印一个提示。新公告出来后，按它的起始 charge date 加一行。
 
 **实验：** `examples/p2/13_regulatory_fees_toy.py`（本地运行，不联网）：
 
@@ -200,7 +204,7 @@ trade 2026-06-15 (settle 2026-06-16) buy  1000 sh @ 50.00 (USD 50,000): SEC fee 
 trade 2025-08-01 (settle 2025-08-04) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 0.0000  TAF 0.1660
 trade 2026-06-15 (settle 2026-06-16) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.1950
 trade 2026-11-11 (settle 2026-11-12) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.0000
-trade 2027-01-04 (settle 2027-01-05) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [check for a newer SEC advisory]
+trade 2027-01-04 (settle 2027-01-05) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [FY2026 rate assumed: no FY2027 advisory as of 2026-11-11]
 === A2. boundary: trade date vs charge date ===
 trade 2025-05-13 (Tue) settles 2025-05-14 -> SEC rate 0.00/M, SEC fee 0.0000 (by trade date it would be 27.80/M = 1.3900)
 trade 2026-04-02 (Thu) -> 04-03 Good Friday, no settlement -> settles 2026-04-06 (Mon) -> SEC rate 20.60/M; by trade date it would wrongly be 0.00/M
@@ -209,8 +213,14 @@ trade 2026-04-02 (Thu) -> 04-03 Good Friday, no settlement -> settles 2026-04-06
 === C. size versus this lesson's toy commission ===
 SEC fee at $20.60 per million = 0.206 bps of sale proceeds (sells only); toy commission = 2 bps each way
 round trip at 2026-06-15 on USD 50,000: buy 0 + sell SEC 1.03 + TAF 0.195 = 1.225 USD
+=== D. CAT fee: both sides pay, per executed share (prospective CAT Fees only) ===
+2025-03-03 1000 sh: buyer's broker 0.0220 + seller's broker 0.0220 USD (CAT Fee 2025-1)
+2026-02-02 1000 sh: buyer's broker 0.0000 + seller's broker 0.0000 USD (none invoiced (surplus reserve))
+2026-06-15 1000 sh: buyer's broker 0.0010 + seller's broker 0.0010 USD (CAT Fee 2026-1)
+2027-01-04 1000 sh: not in this toy's table: read FINRA Rule 6897 / CAT fee filings
+vs the 2026-06-15 sale above: SEC fee 1.03 + TAF 0.195 (sell side only) vs CAT 0.001 per side
 rule: store fee schedules with effective dates; never hard-code one rate for the whole backtest.
-assertions passed: 10/10
+assertions passed: 14/14
 ```
 
 ## 常见错误 / 陷阱
@@ -221,7 +231,7 @@ assertions passed: 10/10
 4. 放大资金却不重算 Q/ADV 冲击项。
 5. 看完成本阶梯再改信号（泄漏）。
 6. 把 Rule 605 报告里的有效价差当成你自己的真实成本；把带符号的有效价差写成绝对值，或用逐笔 bps 的平均冒充官方百分比；忘了它只含覆盖订单（有 NMLO 例外）、排除特殊处理订单；在没读字段定义原文时猜字段名。
-7. 对买入也收第 31 条费用或 TAF；整段回测只用一个费率（SEC 费率按 charge date 在 2025-05-14 至 2026-04-03 为 0.00，TAF 在 2026-10-01 至 2026-12-31 暂停）。
+7. 对买入也收第 31 条费用或 TAF；整段回测只用一个费率（SEC 费率按 charge date 在 2025-05-14 至 2026-04-03 为 0.00，TAF 在 2026-10-01 至 2026-12-31 暂停）；CAT 费用只对卖出收（实际上买卖双方的执行券商都要付）。
 
 ## 练习（与任务清单 1:1）
 
@@ -232,6 +242,7 @@ assertions passed: 10/10
 5. **ex5**：引用 Almgren 等 2005 的 √ vs 3/5 说明；**完成标准**：一句准确表述。
 6. **ex-605** — 运行 `07_rule605_effective_spread.py`，手算例 27-1 的加权平均；**完成标准**：得到 0.24 美元，说明 C 部分为何得到负值、为何官方百分比是 −2.8555 bps 而不是 −1.9992 bps，并列出至少三类被排除的订单和两类被纳入的 NMLO 例外。
 7. **ex-regfee** — 运行 `13_regulatory_fees_toy.py`，再手算 2026-05-01 和 2026-10-15 各卖出 2,000 股、每股 25 美元时的 SEC 费用和 TAF；**完成标准**：2026-05-01 为 1.03 美元和 0.39 美元，2026-10-15 为 1.03 美元和 0 美元，并能说出买入为什么两项都不收。
+8. **ex-catfee** — 在 `13_regulatory_fees_toy.py` 的 D 部分，算 2026-07-01 和 2025-04-01 各买入 5,000 股时每一方的 CAT 费用；**完成标准**：每方 0.005 美元和 0.11 美元，并说出为什么买入也收。
 
 ## 测验
 
@@ -242,12 +253,13 @@ assertions passed: 10/10
 <Quiz id="q5-zero" question="零成本回测曲线是？" options={["实盘证明", "不能当实盘论据", "PSR 必需", "ADV 估计"]} answer={1} explanation="缺摩擦。" />
 <Quiz id="cb-605" question="Rule 605 报告的覆盖订单范围包含？" options={["盘前、盘后和隔夜成交", "覆盖订单（含盘前 NMLO 和停牌后可执行 NMLO 等例外），排除特殊处理订单", "你自己账户的所有订单", "所有 fill-or-kill 订单"]} answer={1} explanation="FAQ 第 9、11、20、28 题：覆盖订单一般是常规时段收单，但盘前收到的 NMLO 和停牌期间收到、恢复后可执行的 NMLO 也会纳入；特殊处理订单排除。纳入报告不等于计算 ES：普通 NMLO 不计 ES（第 30 题）。" />
 <Quiz id="cb-regfee" question="你的回测在 2026-11-11 卖出 1,000 股、每股 50 美元。这笔卖出应计哪些监管费？" options={["都不计，因为监管费只对买入收", "按每百万美元 20.60 美元计 SEC 第 31 条费用（1.03 美元），不计 FINRA TAF，因为 TAF 在 2026-10-01 至 2026-12-31 暂停", "计 0.195 美元的 FINRA TAF，不计 SEC 费用，因为 SEC 费率是 0.00", "每笔买卖都按固定 2 bps 收"]} answer={1} explanation="两项都只对卖出收。SEC 2026 财年公告：charge date 2026-04-04 起每百万美元 20.60 美元（这笔卖出 2026-11-12 交收；50,000 × 20.60 ÷ 1,000,000 = 1.03 美元）。SR-FINRA-2026-021 暂停 2026-10-01 至 2026-12-31 的交易的 TAF。按 charge date，SEC 费率为 0.00 的时段是 2025-05-14 至 2026-04-03。" />
+<Quiz id="cb-catfee" question="你的回测在 2026-06-15 买入 1,000 股。这笔交易的 CAT Fee 2026-1 是怎样的？" options={["没有，因为监管费只对卖出收", "按买入金额每百万美元 20.60 美元收，和 SEC 费用一样", "按每股 0.000001 美元向两边的执行券商分别收，每方约 0.001 美元；你能不能看到取决于你的券商", "每笔固定 9.79 美元"]} answer={2} explanation="FINRA Rule 6897 和 CAT Fee Alert 2026-1：CAT 费用按执行等效股数，向买方执行券商和卖方执行券商分别收；CAT Fee 2026-1 适用于 2026-05-01 至 2026-12-31，每股 0.000001 美元。券商可以转嫁。每百万美元 20.60 美元是第 31 条费用的费率，9.79 美元是 2026 年 TAF 的上限，这两项都只对卖出收。" />
 
 ## 完成标准
 
 - 四段净路径 + 分解图 + 容量图 + 测验
 
-**来源：** classic — Canvas costs；QuantStart/NYU TCA 主题。冲击 — Almgren 等 2005（[PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)）。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)；监管费（2026-11-11 核实）：[SEC 费率公告](https://www.sec.gov/rules-regulations/fee-rate-advisories)、[2026 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2026-2)、[2025 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2025-2)、[2024 财年第 2 号公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2024-2)、[17 CFR 240.31](https://www.ecfr.gov/current/title-17/section-240.31)、[FINRA 费用调整表](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2024-019/fee-adjustment-schedule)、[SR-FINRA-2026-021](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-021)
+**来源：** classic — Canvas costs；QuantStart/NYU TCA 主题。冲击 — Almgren 等 2005（[PDF](https://www.cis.upenn.edu/~mkearns/finread/costestim.pdf)）。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)；监管费（2026-11-11 核实）：[SEC 费率公告](https://www.sec.gov/rules-regulations/fee-rate-advisories)、[2026 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2026-2)、[2025 财年公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2025-2)、[2024 财年第 2 号公告](https://www.sec.gov/rules-regulations/fee-rate-advisories/2024-2)、[17 CFR 240.31](https://www.ecfr.gov/current/title-17/section-240.31)、[FINRA 费用调整表](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2024-019/fee-adjustment-schedule)、[SR-FINRA-2026-021](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-021)；CAT 费用（2026-11-11 核实）：[FINRA Rule 6897](https://www.finra.org/rules-guidance/rulebooks/finra-rules/6897-0)、[CAT Fee Alert 2026-1](https://www.catnmsplan.com/sites/default/files/2026-04/04.01.26-CAT-Fee-Alert-2026-1.pdf)、[SR-FINRA-2026-010](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-010)、[TXSE CAT Fee 2026-1 文件，91 FR](https://www.federalregister.gov/documents/full_text/html/2026/09/29/2026-19872.html)
 
 <Summary>
 **要点**：佣金、半价差、滑点、√ 冲击、容量。  

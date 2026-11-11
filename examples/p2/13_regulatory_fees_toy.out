@@ -3,7 +3,7 @@ trade 2026-06-15 (settle 2026-06-16) buy  1000 sh @ 50.00 (USD 50,000): SEC fee 
 trade 2025-08-01 (settle 2025-08-04) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 0.0000  TAF 0.1660
 trade 2026-06-15 (settle 2026-06-16) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.1950
 trade 2026-11-11 (settle 2026-11-12) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.0000
-trade 2027-01-04 (settle 2027-01-05) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [check for a newer SEC advisory]
+trade 2027-01-04 (settle 2027-01-05) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [FY2026 rate assumed: no FY2027 advisory as of 2026-11-11]
 === A2. boundary: trade date vs charge date ===
 trade 2025-05-13 (Tue) settles 2025-05-14 -> SEC rate 0.00/M, SEC fee 0.0000 (by trade date it would be 27.80/M = 1.3900)
 trade 2026-04-02 (Thu) -> 04-03 Good Friday, no settlement -> settles 2026-04-06 (Mon) -> SEC rate 20.60/M; by trade date it would wrongly be 0.00/M
@@ -12,5 +12,11 @@ trade 2026-04-02 (Thu) -> 04-03 Good Friday, no settlement -> settles 2026-04-06
 === C. size versus this lesson's toy commission ===
 SEC fee at $20.60 per million = 0.206 bps of sale proceeds (sells only); toy commission = 2 bps each way
 round trip at 2026-06-15 on USD 50,000: buy 0 + sell SEC 1.03 + TAF 0.195 = 1.225 USD
+=== D. CAT fee: both sides pay, per executed share (prospective CAT Fees only) ===
+2025-03-03 1000 sh: buyer's broker 0.0220 + seller's broker 0.0220 USD (CAT Fee 2025-1)
+2026-02-02 1000 sh: buyer's broker 0.0000 + seller's broker 0.0000 USD (none invoiced (surplus reserve))
+2026-06-15 1000 sh: buyer's broker 0.0010 + seller's broker 0.0010 USD (CAT Fee 2026-1)
+2027-01-04 1000 sh: not in this toy's table: read FINRA Rule 6897 / CAT fee filings
+vs the 2026-06-15 sale above: SEC fee 1.03 + TAF 0.195 (sell side only) vs CAT 0.001 per side
 rule: store fee schedules with effective dates; never hard-code one rate for the whole backtest.
-assertions passed: 10/10
+assertions passed: 14/14

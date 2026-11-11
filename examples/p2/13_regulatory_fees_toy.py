@@ -17,6 +17,13 @@ Sources:
   settlement-holiday set. DTCC/NSCC holiday notices are authoritative; e.g. NSCC Important Notice
   a9732 (2026-03-06): markets and NSCC closed Fri 2026-04-03 (Good Friday), CNS settlement next on Mon
   2026-04-06. https://files.dtcc.com/download/assets/a9732/84f27534957911f1b6bb4ec37e043074
+- CAT fees (FINRA Rule 6897; CAT Fee Alert 2026-1, 2026-04-01; SR-FINRA-2026-010): charged to the CAT
+  Executing Broker for the Buyer AND for the Seller, per executed equivalent share (1 NMS stock share = 1).
+  CAT Fee 2025-1 $0.000022 (from January 2025 transactions), CAT Fee 2025-2 $0.000009 (from July 2025
+  transactions), CAT Fee 2026-1 $0.000001 for 2026-05-01..2026-12-31. Per the alert, CAT costs from
+  2025-12-01 through 2026-04-30 were funded from a surplus reserve and no CAT fees were invoiced for that
+  period. Historical CAT Assessment 1 ($0.000013 from October 2024 transactions) is a separate charge and
+  is not modelled here. The SEC recognized that brokers may pass CAT fees through for customer volume.
 The SEC rate is looked up by charge date (= settlement date here); the TAF by trade date.
 Both fees are assessed on SALES only. Brokers pass them through in their own way (rounding, small-order
 waivers), so this toy prints unrounded amounts. Learning only; not a broker fee schedule.
@@ -85,7 +92,7 @@ def reg_fees(side, shares, price, d):
     sec = shares * price * rate / 1_000_000
     per_share, cap = taf_rule(d)  # TAF: trade date
     taf = min(shares * per_share, cap)
-    flag = " [check for a newer SEC advisory]" if d > CHECKED_ON else ""
+    flag = " [FY2026 rate assumed: no FY2027 advisory as of 2026-11-11]" if d > CHECKED_ON else ""
     return sec, taf, flag
 
 
@@ -130,5 +137,34 @@ bps = 20.60 / 1_000_000 * 10_000
 print(f"SEC fee at $20.60 per million = {bps:.3f} bps of sale proceeds (sells only); toy commission = 2 bps each way")
 check(abs(bps - 0.206) < 1e-12, "0.206 bps")
 print("round trip at 2026-06-15 on USD 50,000: buy 0 + sell SEC 1.03 + TAF 0.195 = 1.225 USD")
+
+print("=== D. CAT fee: both sides pay, per executed share (prospective CAT Fees only) ===")
+# (first trade date, last trade date, USD per executed equivalent share, label)
+CAT = [
+    (date(2025, 1, 1), date(2025, 6, 30), 0.000022, "CAT Fee 2025-1"),
+    (date(2025, 7, 1), date(2025, 11, 30), 0.000009, "CAT Fee 2025-2"),
+    (date(2025, 12, 1), date(2026, 4, 30), 0.0, "none invoiced (surplus reserve)"),
+    (date(2026, 5, 1), date(2026, 12, 31), 0.000001, "CAT Fee 2026-1"),
+]
+
+
+def cat_fee(shares, d):
+    for a, b, r, lab in CAT:
+        if a <= d <= b:
+            return shares * r, lab
+    return None, "not in this toy's table: read FINRA Rule 6897 / CAT fee filings"
+
+
+for d in (date(2025, 3, 3), date(2026, 2, 2), date(2026, 6, 15), date(2027, 1, 4)):
+    fee, lab = cat_fee(1000, d)
+    if fee is None:
+        print(f"{d} 1000 sh: {lab}")
+    else:
+        print(f"{d} 1000 sh: buyer's broker {fee:.4f} + seller's broker {fee:.4f} USD ({lab})")
+check(abs(cat_fee(1000, date(2025, 3, 3))[0] - 0.022) < 1e-12, "2025-1: 1000 x 0.000022")
+check(cat_fee(1000, date(2026, 2, 2))[0] == 0.0, "no prospective CAT fee 2025-12..2026-04")
+check(abs(cat_fee(1000, date(2026, 6, 15))[0] - 0.001) < 1e-12, "2026-1: 1000 x 0.000001")
+check(cat_fee(1000, date(2027, 1, 4))[0] is None, "2027 rate not yet filed")
+print("vs the 2026-06-15 sale above: SEC fee 1.03 + TAF 0.195 (sell side only) vs CAT 0.001 per side")
 print("rule: store fee schedules with effective dates; never hard-code one rate for the whole backtest.")
 print(f"assertions passed: {checks}/{checks}")

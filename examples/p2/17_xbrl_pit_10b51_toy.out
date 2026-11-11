@@ -1,0 +1,21 @@
+=== A. one period, four filings: pick by 'filed', not by 'fy' or 'frame' ===
+  10-K   filed 2009-10-27 fy=2009 fp=FY val=5,704m frame=-
+  10-K/A filed 2010-01-25 fy=2009 fp=FY val=8,235m frame=-
+  10-K   filed 2010-10-27 fy=2010 fp=FY val=8,235m frame=-
+  10-K   filed 2011-10-26 fy=2011 fp=FY val=8,235m frame=CY2009
+decision 2009-10-20: not yet filed
+decision 2009-11-02: 5704m from 10-K filed 2009-10-27
+decision 2010-02-01: 8235m from 10-K/A filed 2010-01-25
+frames API value for CY2009 = 8,235m (the last filed); using it on 2009-11-02 = look-ahead of the amendment
+'fy' describes the FILING (the 2011 10-K repeats FY2009 as a comparative); identify periods by start/end.
+=== B. Rule 10b5-1 cooling-off (directors/officers: later of 90 days or 2 business days after the 10-Q/10-K, max 120) ===
+  officer, adopted 2026-02-10, Q1 10-Q filed 2026-05-06: cooling-off ends 2026-05-11
+  officer, adopted 2026-03-25, Q1 10-Q filed 2026-05-06: cooling-off ends 2026-06-23
+  officer, adopted 2026-01-05, Q1 10-Q filed 2026-05-08: cooling-off ends 2026-05-05
+  other insider (not D&O), adopted 2026-02-10: cooling-off ends 2026-03-12
+=== C. the Form 4 plan check box exists only for filings from 2023-04-01 ===
+  Form 4 filed 2022-11-15: unknown (field did not exist; not the same as 'not a plan')
+  Form 4 filed 2023-05-02: plan trade
+  Form 4 filed 2024-08-20: not marked as a plan trade
+assertions passed: 10/10
+disclaimer: real public numbers in A (Apple FY2009 NetIncomeLoss) are for PIT mechanics only; no insider-trading signal; learning only

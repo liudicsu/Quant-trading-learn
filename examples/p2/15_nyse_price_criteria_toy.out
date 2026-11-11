@@ -1,0 +1,20 @@
+=== A. NYSE averages 30 trading days; Nasdaq counts consecutive days ===
+zigzag 0.97/1.01 x15: NYSE 30-day average 0.9900 -> below $1 average; six-month cure period from NYSE's notice
+  same rows, consecutive closes below $1.00 at the end: 0 (a 30-in-a-row count never fires)
+20 x 1.40 then 10 x 0.40: average 1.0667 -> no price-criteria flag
+=== B. regaining compliance: checked at a month end, needs BOTH tests ===
+month-end close 1.20 but 30-day average 0.7167 -> cured? False
+month-end close 1.05, 30-day average 1.0500 -> cured? True
+=== C. 2025 amendment: recent reverse splits remove the cure period ===
+average 0.80, no recent split -> below $1 average; six-month cure period from NYSE's notice
+average 0.80, 1-for-5 split 7 months ago -> below $1 average; recent reverse split(s) -> no compliance period, suspension/delisting starts
+average 0.80, 1-for-10 then 1-for-20 (200:1) over two years, none in prior year -> below $1 average; recent reverse split(s) -> no compliance period, suspension/delisting starts
+average 0.80, 1-for-10 then 1-for-15 (150:1) over two years, none in prior year -> below $1 average; six-month cure period from NYSE's notice
+=== D. $0.25 Minimum Trading Price: a dated rule (effective 2027-07-01) ===
+close 0.24 on 2027-06-30: immediate suspension under the $0.25 rule? False
+close 0.24 on 2027-07-01: immediate suspension under the $0.25 rule? True
+close 0.26 on 2027-07-01: immediate suspension under the $0.25 rule? False
+nyse_avg30_1usd  in force                    802.01C; reverse-split limits from 34-102201 (2025-01-15)
+nyse_min_0.25    approved, not yet effective 34-106133 (2026-08-14), effective 2027-07-01
+rule: store the exchange, the rule version and the notice/suspension dates; this is listing status, not a signal.
+assertions passed: 11/11

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **29.5 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **30.25 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -57,6 +57,43 @@ assertions passed: 7/7
 **2026 年的日期（按上述规则推算，不是官方公布的日期）。** 2026 年 11 月 30 日是星期一，是交易日（感恩节 11 月 26 日休市），所以参考日是 **2026-11-30**。12 月第三个星期五是 12 月 18 日，所以生效是 **2026-12-21（星期一）**开盘。12 月 11 日到 12 月 21 日之间没有休市日，往前数 6 个交易日，公告在 **2026-12-11** 收盘后。这些是推算值；以 Nasdaq Global Index Watch 网站上的正式公告为准，用之前先去核对。
 
 **回测规则：** 用 NDX 做股票池时，要按时点存成分名单，并记下公告日和生效日；还要记下每个日期适用的是哪一版编制方法（2026-05-01 以前：10% 最低流通比例和 10 basis point rule；之后：快速纳入、3 倍流通上限和前 125 名审查；其中前 125 名审查、全部股份排名和现有成分的 3 倍上限从 2026-06-22 才实施，2026-05-01 起快速纳入的股票则立即适用 3 倍上限）。不要假设新股要等好几个月才能进指数：按快速纳入，大型新股大约 15 个交易日后就可能纳入。公告之前的决策不能使用新名单。本节不预测哪些公司会被纳入或剔除，不推荐任何跟踪该指数的基金，也不对纳入前后的股价变化作任何判断。
+
+## 标普 500：由委员会挑选，美东 17:15 公告（2026-11-11 核实）
+
+**规则只说明谁“可以”被纳入，不说明谁“会”被纳入。** 和 Russell、Nasdaq-100 不同，标普 500 没有机械排名。按 [S&P U.S. Indices Methodology](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)（2026 年 11 月版），由指数委员会（Index Committee）从符合条件的公司里挑选成分股，成分数固定为 500，还会考虑行业平衡。所以不能靠规则重建这个指数，要用带日期的历史成分名单。规则仍然有用：能看出谁可能是候选，而且里面有几个日期陷阱。
+
+- **纳入条件（现行版）：** 美国注册，并按美国规则提交定期报告（10-K、10-Q、8-K）；在合格的美国交易所上市（名单包括 NYSE、Nasdaq 各层级、Cboe 各交易所和德州证券交易所 Texas Stock Exchange；场外市场 OTC 不算）；公司总市值不低于 **227 亿美元**；流通调整后市值不低于这个门槛的一半；可投资权重因子（流通比例，IWF）不低于 0.10；流通调整流动性比率不低于 0.75，且评估日前六个月每个月成交不少于 25 万股；**最近一个季度、以及最近四个季度合计的 GAAP 净利润都为正**；新股和 SPAC 合并后的公司要交易满 12 个月。ADR、ETF、BDC、合伙企业等结构不符合条件。
+- **门槛会变。** 附录 A 按日期列出最低市值：2024-04-01 收盘后 180 亿美元，2025-01-02 收盘后 205 亿美元，2025-07-01 收盘后 227 亿美元。给 2025 年 6 月做筛选却用 227 亿，就是在用后来的规则。
+- **评估日：** 公告日前两个营业日的开盘。盈利条件只能用当时已经提交的财报（见 `data-cleaning` 里 XBRL 的 `filed` 日期）。
+- **只管纳入，不管留任：** 成分股后来不满足某条条件，不会自动被剔除。被剔除的公司至少等一年才会重新筛选。
+- **时点：** 没有定期重构；需要时随时调整，至少提前三个营业日公告（委员会可酌情缩短），公告时间是**美东下午 05:15**，在收盘之后。
+
+**回测规则：** 每次调整都存下公告时刻和生效日。日线回测最早只能在下一个交易时段开盘时反应。本节不对纳入前后的股价变化作任何判断，不预测谁会被纳入，也不推荐任何指数基金。
+
+**实验：** `examples/p2/16_index_add_earnings_time_toy.py` 的 A–B 节（候选公司和日期是合成的；门槛取自编制方法；C 节见下面的财报一节）：
+
+```text
+=== A. S&P 500 addition screen as of an evaluation date (eligible != added) ===
+evaluation 2025-06-02: minimum total cap 20.5 bn, minimum FMC 10.25 bn
+  P (passes all)           -> eligible
+  Q (cap 21.0 bn)          -> eligible
+  R (latest quarter loss)  -> fails: latest quarter GAAP NI <= 0
+  S (IPO 10 months ago)    -> fails: traded < 12 months
+  T (IWF 0.08)             -> fails: FMC 2.0 < 10.25; IWF < 0.10
+evaluation 2025-07-15: minimum total cap 22.7 bn, minimum FMC 11.35 bn
+  P (passes all)           -> eligible
+  Q (cap 21.0 bn)          -> fails: total cap 21.0 < 22.7
+  R (latest quarter loss)  -> fails: latest quarter GAAP NI <= 0
+  S (IPO 10 months ago)    -> fails: traded < 12 months
+  T (IWF 0.08)             -> fails: FMC 2.0 < 11.35; IWF < 0.10
+  the Index Committee still chooses among eligible names (fixed count 500, sector balance);
+  a member that later fails a criterion is not removed automatically.
+=== B. announcement timeline (synthetic dates) ===
+announcement 2026-03-02 Mon 17:15 ET; evaluation date = open of 2026-02-26 Thu
+business days between announcement and effective date: 4 (methodology: at least 3)
+daily backtest: earliest fill on the news = 2026-03-03 09:30 ET open (the 03-02 close came before the news)
+decision at the 2026-03-02 16:00 close: is the change known? False (using it = look-ahead)
+```
 
 ## 新股（IPO）：发行价不是你的成交价（核实于 2026-11-10）
 
@@ -377,6 +414,30 @@ trade on the statement at 14:01 EDT? True
 Oct 27-28 minutes projected by the 3-week rule: 2026-11-18 (projection; check the Fed calendar)
 ```
 
+## 财报发布：事件时间是发布那一刻，不是季度末，也不是 8-K 的日期（2026-11-11 核实）
+
+**三个不同的日期。** 季度结束；几周后公司发布财报新闻稿；然后按 **Item 2.02** 提交（furnish）一份 Form 8-K，里面要写明发布日期，并把新闻稿作为附件（[Form 8-K](https://www.sec.gov/files/form8-k.pdf)）。没有其他期限规定时，8-K 要在事件发生后 **四个营业日**内提交（一般说明 B.1）。所以 8-K 的日期可能晚于新闻稿。
+
+**Regulation FD（公平披露规则）。** 公司如果有意向市场专业人士、或可能据此交易的股东披露重大未公开信息，必须**同时**向公众公开；无意中披露的，要“及时”（promptly）公开：从公司高级管理人员得知之时起，不晚于 24 小时后与次日 NYSE 开盘两者中较晚的那个（[17 CFR 243.100–101](https://www.ecfr.gov/current/title-17/part-243)）。对回测来说，公开发布的那一刻，才是所有人都能拿到这条消息的时间。
+
+**一天中的时刻决定第 0 天。** 常规交易时间是美东 09:30–16:00。07:00 发布在开盘前，当天开盘价已经反映了它。12:30 发布在盘中：第 0 天是当天，但当天开盘在消息之前，按开盘价成交就是前视（同上文的 EXEC_OPEN）。16:05 发布在收盘后，第 0 天是下一个交易时段；周五晚上发布对应下周一。
+
+**回测规则：** 存下带时区的发布时刻。只有日期时，按收盘后发布处理，从下一个交易时段开始。只有 8-K 时，用它的 EDGAR 接收时间不会前视（被接收即公开），但可能晚于新闻稿。永远不要把财报特征的日期记成季度末。本课只讲时点，不讲财报交易策略。
+
+**实验：** `examples/p2/16_index_add_earnings_time_toy.py` 的 C 节（日期是合成的；断言数包括 A–C 三节）：
+
+```text
+=== C. earnings release time -> first session that can react ===
+release 2026-02-03 Tue 07:00 ET (before the open): day 0 = 2026-02-03 Tue; that day's open usable? True
+release 2026-02-04 Wed 12:30 ET (during the session): day 0 = 2026-02-04 Wed; that day's open usable? False
+release 2026-02-05 Thu 16:05 ET (after the close (Thu)): day 0 = 2026-02-06 Fri; that day's open usable? True
+release 2026-02-06 Fri 16:05 ET (after the close (Fri)): day 0 = 2026-02-09 Mon; that day's open usable? True
+only the 8-K is stored: accepted 2026-02-05 16:20 ET -> day 0 2026-02-06 (same as the release here;
+  an 8-K is due within four business days, so its time can be later than the release; using it never looks ahead)
+assertions passed: 13/13
+disclaimer: synthetic candidates and dates; no index-inclusion or earnings strategy; learning only
+```
+
 ## PBO / CSCV + 蒸发曲线 — DSR ≠ 泄漏
 
 **直觉：** Deflated Sharpe 与 PBO 问的是：*在许多诚实回测里，样本内冠军有多大概率是运气？* 它们**不**问：*信息集是否被污染？* [What survives honest evaluation?](https://arxiv.org/abs/2608.27734)（Gençay）把两道修正做成**结构**：无法表达前瞻的工具注册表 + 用智能体自身搜索索引 DSR/PBO 的**完整试错账本**。经典 PBO/CSCV：[Bailey 等 PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)。
@@ -433,6 +494,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 9. 用今天的指数成分构造历史股票池，或在公布日之前使用重构名单；2026 年以后仍写死“Russell 每年 6 月调整”；对 2026-05-01 前后的日期套用同一套 Nasdaq-100 规则（例如 10% 最低流通比例）。
 10. 用当天开盘价去成交基于 FOMC 声明（14:00 ET 发布）的信号；把基于纪要的特征记在开会日而不是纪要发布日。
 11. 假设能按 IPO 发行价成交；对上市不足 60 个交易日的股票硬算 60 天信号；以为所有锁定期都正好在上市后 180 天结束。
+12. 用今天的 227 亿美元门槛筛选过去的标普 500 候选，或把“符合条件”当成“会被纳入”；在美东 17:15 公告之前就交易标普调整；收盘后发布的财报按当天收盘价成交，盘中发布的按当天开盘价成交；把财报日期记成季度末。
 
 ## 练习（与任务清单 1:1）
 
@@ -445,6 +507,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 7. **ex7**：CPCV 玩具——打印 \(C(6,2)\)、路径数、组合 SR 均值/标准差并对比单次留出；**完成标准**：数字与课内一致且存在 `cpcv_sr_dist.png`。
 8. **ex8**：PBO/预言机——打印 oracle vs 诚实 SR、蒸发曲线行、CSCV PBO_hat，保存 `pbo_evaporation.png`；**完成标准**：.out 一致且注明教学草图。
 9. **ex9**（可选）：运行 `12_event_time_ipo_toy.py`，把首日开盘价改成 22；**完成标准**：打印按开盘价算的新首日收益，并说明它为什么仍和按发行价算的 +20% 不同。
+10. **ex-sp500-earn** — 运行 `16_index_add_earnings_time_toy.py`；再手算：标普在 2026-04-15（星期三）美东 17:15 公告时的评估日，以及 2026-04-16（星期四）美东 16:30 发布财报时的第 0 天；**完成标准**：2026-04-13（星期一）和 2026-04-17（星期五），各用一句话说明原因。
 
 ## 测验
 
@@ -465,14 +528,16 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="q10-execopen" question="EXEC_OPEN 不合法是因为？" options={["收盘决策后次日开盘成交", "用当日开盘后字段却假设当日开盘成交", "删除成本", "禁止 RankIC"]} answer={1} explanation="执行对齐类金融原生泄漏。" />
 <Quiz id="bt-index-recon" question="回测里一个 2026-11-01 的决策，能否使用 Russell 2026 年 12 月重构的初步增删名单？" options={["能，名单最终会生效", "能，排名日 10-30 已经过了", "不能，名单 2026-11-13 收盘后才公布，之前使用就是偷看未来", "不能，Russell 只在 6 月调整"]} answer={2} explanation="排名日不是公布日。“不能，Russell 只在 6 月调整”是 2026 年以前的旧制度。" />
 <Quiz id="bt-ndx-recon" question="回测里一个 2026-12-08 的决策，用 Nasdaq-100 成分做股票池。它可以使用哪份成分名单？" options={["2026 年 12 月年度重构的新名单，因为参考日（2026-11-30）已经过了", "2026-11-30 按全部市值排在前 100 名的所有公司", "2026-12-08 当天有效的成分名单；12 月新名单约在 2026-12-11 收盘后公告（推算日期，以 Nasdaq 公告为准），约 2026-12-21 开盘生效", "今天的成分名单，用在回测的每一天"]} answer={2} explanation="参考日是取数据的日子，不是公布名单的日子。按编制方法，公告在生效日之前第 6 个交易日收盘后，生效日是 12 月第三个星期五之后第一个交易日开盘。提前使用新名单是偷看未来；把今天的成分用在过去的日期是幸存者偏差。" />
+<Quiz id="bt-sp500-add" question="按 S&P U.S. Indices Methodology，下面关于标普 500 纳入的说法哪一个正确？" options={["任何满足公开条件的美国公司都会在下一次季度调整时自动纳入", "由指数委员会从符合条件的公司中挑选；调整在美东 17:15 公告，至少提前三个营业日", "纳入在开盘时公告，当天生效", "只要有一个季度 GAAP 净利润为负，成分股就会立刻被剔除"]} answer={1} explanation="成分股由指数委员会酌情挑选（固定 500 家，并考虑行业平衡）；没有定期重构；纳入和剔除在美东 17:15 公告，至少提前三个营业日。这些条件用于纳入，不用于留任。" />
 <Quiz id="bt-fomc-time" question="日线回测里，一个根据 2026-10-28 FOMC 声明（14:00 EDT 发布）下单的信号，最早能按哪个价格成交？" options={["2026-10-28 开盘价", "2026-10-27 收盘价", "2026-10-28 14:00 之后的价格，日线上一般是当天收盘或下一天开盘", "会议纪要发布后才能交易"]} answer={2} explanation="开盘在 09:30，早于 14:00 的发布；“会议纪要发布后才能交易”混淆了声明和纪要。" />
+<Quiz id="bt-earnings-time" question="一家公司在星期四美东 16:05 发布财报，16:20 提交 Item 2.02 的 Form 8-K。在日线回测里，这条消息的第 0 天是哪天？" options={["星期四，按星期四收盘价成交", "星期五，下一个常规交易时段", "该财季的最后一天", "最多四个营业日之后，8-K 期限截止那天"]} answer={1} explanation="常规交易在美东 16:00 结束，所以第一个能反应的时段是星期五 09:30 开始的那个。星期四的收盘在发布之前。季度末不是数字公开的时间；四个营业日是 8-K 的最晚期限，不是发布时刻。" />
 <Quiz id="bt-ipo-history" question="发行价 20，首日开盘 26，收盘 24。一个普通账户在开盘时买入，首日收益约是多少？" options={["+20%，按发行价算", "约 −7.69%", "+30%", "新股不能算收益"]} answer={1} explanation="24 ÷ 26 − 1 ≈ −7.69%；+20% 假设了按发行价成交，SEC 公告说大部分发行份额分给机构和高净值客户。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。
+**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。enrich13（2026-11-11 核实）：[S&P U.S. Indices Methodology，2026 年 11 月版](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)；[Form 8-K 一般说明 B.1 与 Item 2.02](https://www.sec.gov/files/form8-k.pdf)；[Regulation FD，17 CFR 243](https://www.ecfr.gov/current/title-17/part-243)。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

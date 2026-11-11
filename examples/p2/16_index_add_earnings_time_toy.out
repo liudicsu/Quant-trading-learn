@@ -1,0 +1,29 @@
+=== A. S&P 500 addition screen as of an evaluation date (eligible != added) ===
+evaluation 2025-06-02: minimum total cap 20.5 bn, minimum FMC 10.25 bn
+  P (passes all)           -> eligible
+  Q (cap 21.0 bn)          -> eligible
+  R (latest quarter loss)  -> fails: latest quarter GAAP NI <= 0
+  S (IPO 10 months ago)    -> fails: traded < 12 months
+  T (IWF 0.08)             -> fails: FMC 2.0 < 10.25; IWF < 0.10
+evaluation 2025-07-15: minimum total cap 22.7 bn, minimum FMC 11.35 bn
+  P (passes all)           -> eligible
+  Q (cap 21.0 bn)          -> fails: total cap 21.0 < 22.7
+  R (latest quarter loss)  -> fails: latest quarter GAAP NI <= 0
+  S (IPO 10 months ago)    -> fails: traded < 12 months
+  T (IWF 0.08)             -> fails: FMC 2.0 < 11.35; IWF < 0.10
+  the Index Committee still chooses among eligible names (fixed count 500, sector balance);
+  a member that later fails a criterion is not removed automatically.
+=== B. announcement timeline (synthetic dates) ===
+announcement 2026-03-02 Mon 17:15 ET; evaluation date = open of 2026-02-26 Thu
+business days between announcement and effective date: 4 (methodology: at least 3)
+daily backtest: earliest fill on the news = 2026-03-03 09:30 ET open (the 03-02 close came before the news)
+decision at the 2026-03-02 16:00 close: is the change known? False (using it = look-ahead)
+=== C. earnings release time -> first session that can react ===
+release 2026-02-03 Tue 07:00 ET (before the open): day 0 = 2026-02-03 Tue; that day's open usable? True
+release 2026-02-04 Wed 12:30 ET (during the session): day 0 = 2026-02-04 Wed; that day's open usable? False
+release 2026-02-05 Thu 16:05 ET (after the close (Thu)): day 0 = 2026-02-06 Fri; that day's open usable? True
+release 2026-02-06 Fri 16:05 ET (after the close (Fri)): day 0 = 2026-02-09 Mon; that day's open usable? True
+only the 8-K is stored: accepted 2026-02-05 16:20 ET -> day 0 2026-02-06 (same as the release here;
+  an 8-K is due within four business days, so its time can be later than the release; using it never looks ahead)
+assertions passed: 13/13
+disclaimer: synthetic candidates and dates; no index-inclusion or earnings strategy; learning only

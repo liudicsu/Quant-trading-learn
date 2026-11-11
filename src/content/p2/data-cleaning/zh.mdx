@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **28.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **29.5 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -283,6 +283,44 @@ assertions passed: 9/9
 ASSERT_filing_dates_ok
 ```
 
+## SEC 的 XBRL 数据：`filed` 日期才是“已知”日期（2026-11-11 核实）
+
+**免费、官方的基本面来源。** 公司在 10-Q、10-K、8-K 等申报里用 XBRL（一种机器可读格式）标注的财务数字，SEC 在 `data.sec.gov` 上以 JSON 提供，不需要 API key（[SEC：EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)）。`companyconcept` 返回一家公司的一个标签（例如 `us-gaap/NetIncomeLoss`）；`companyfacts` 返回一家公司的全部标签；`frames` 对一个日历期间每家公司只返回一个值。公平访问：合计每秒不超过 **10 次请求**，脚本要表明身份；请求过多或身份不明的自动访问可能被 SEC 封禁（[SEC 开发者资源](https://www.sec.gov/about/developer-resources)）。
+
+**每条数据都带着报出它的那份申报。** 每条记录有 `start`、`end`、`val`、`accn`（申报编号）、`fy`、`fp`、`form` 和 `filed`。同一个期间会在后来的申报里再次出现：下一年 10-K 里的对比数，以及修订版。一个真实例子（[Apple，NetIncomeLoss](https://data.sec.gov/api/xbrl/companyconcept/CIK0000320193/us-gaap/NetIncomeLoss.json)，2026-11-11 读取）：2008-09-28 至 2009-09-26 这个财年，2009-10-27 提交的 10-K 报 **57.04 亿美元**；2010-01-25 提交的 10-K/A 对同一年报 **82.35 亿美元**，2010 年和 2011 年的 10-K 都重复 82.35 亿。三个陷阱：
+
+1. **按 `filed` 取。** 2009-11-02 的决策只能用 57.04 亿。取最新值就是前视。
+2. **`frames` 返回最后一次提交的值。** SEC 说明 frames 接口对每家公司、每个期间取“最后提交”（last filed）的那条，所以它的 CY2009 值是 82.35 亿。看今天的快照没问题，做历史面板就错了。
+3. **`fy` 和 `fp` 描述的是申报，不是期间。** 同一个 2009 财年的数字会带着 `fy=2010`、`fy=2011` 出现。期间要用 `start`/`end` 来认。
+
+**回测规则：** 所有记录都保留；对每个决策日，取同一期间里 `filed` 早于该日的最新一条（存下 `accn` 以便追溯）；最早在 EDGAR 接收之后的下一个交易时段才能用（见上文 EDGAR 时间规则；`filed` 只有日期，接收时刻要从申报索引里取）。
+
+**实验：** `examples/p2/17_xbrl_pit_10b51_toy.py`（四条记录抄自 SEC 的 JSON，不联网；B–C 节属于下面的内部人一节）：
+
+```text
+=== A. one period, four filings: pick by 'filed', not by 'fy' or 'frame' ===
+  10-K   filed 2009-10-27 fy=2009 fp=FY val=5,704m frame=-
+  10-K/A filed 2010-01-25 fy=2009 fp=FY val=8,235m frame=-
+  10-K   filed 2010-10-27 fy=2010 fp=FY val=8,235m frame=-
+  10-K   filed 2011-10-26 fy=2011 fp=FY val=8,235m frame=CY2009
+decision 2009-10-20: not yet filed
+decision 2009-11-02: 5704m from 10-K filed 2009-10-27
+decision 2010-02-01: 8235m from 10-K/A filed 2010-01-25
+frames API value for CY2009 = 8,235m (the last filed); using it on 2009-11-02 = look-ahead of the amendment
+'fy' describes the FILING (the 2011 10-K repeats FY2009 as a comparative); identify periods by start/end.
+=== B. Rule 10b5-1 cooling-off (directors/officers: later of 90 days or 2 business days after the 10-Q/10-K, max 120) ===
+  officer, adopted 2026-02-10, Q1 10-Q filed 2026-05-06: cooling-off ends 2026-05-11
+  officer, adopted 2026-03-25, Q1 10-Q filed 2026-05-06: cooling-off ends 2026-06-23
+  officer, adopted 2026-01-05, Q1 10-Q filed 2026-05-08: cooling-off ends 2026-05-05
+  other insider (not D&O), adopted 2026-02-10: cooling-off ends 2026-03-12
+=== C. the Form 4 plan check box exists only for filings from 2023-04-01 ===
+  Form 4 filed 2022-11-15: unknown (field did not exist; not the same as 'not a plan')
+  Form 4 filed 2023-05-02: plan trade
+  Form 4 filed 2024-08-20: not marked as a plan trade
+assertions passed: 10/10
+disclaimer: real public numbers in A (Apple FY2009 NetIncomeLoss) are for PIT mechanics only; no insider-trading signal; learning only
+```
+
 ## 内部人和大股东的申报，什么时候才算“已知”（核实于 2026-11-10）
 
 公司的董事、高管和持股超过 10% 的股东（统称“内部人”）买卖本公司股票，要报 Form 4（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)），期限是执行日后第二个营业日结束前；某些计划交易按 16a-3(g)(4) 的视同执行日起算（[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)）。例如周五成交，最晚下周二报。持股超过 5% 的投资者一般要在五个营业日内报 13D，之后有重大变化要在两个营业日内修订；符合条件的机构投资者可以改报 13G，例如在季末后 45 天内报，13G 的期限因申报人类型而不同（[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)，[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)）。
@@ -290,6 +328,8 @@ ASSERT_filing_dates_ok
 回测时，信号能用的时间是申报被 EDGAR 接收以后，不是表格里的交易日期，否则就提前偷看了通常最多两个营业日；视同执行日（16a-3(g)(4)）或迟报时更长。21:40（美东）被接收的申报算当天按时提交，但当天的常规交易 16:00 已经结束，所以日线回测最早只能在下一个交易时段使用。
 
 还有一个 2026 年的变化：从 2026-03-18 起，在 Section 12 注册了股权证券的外国私人发行人的董事和高管也要报 Form 4，但 SEC 已对加拿大、欧洲经济区、英国、澳大利亚等若干法域发了豁免令（[SEC](https://www.sec.gov/about/divisions-offices/division-corporation-finance/holding-foreign-insiders-accountable-act-section-16a-reporting-requirements)）；名单可能变化，请以 SEC 页面为准，不要照抄。所以对这类公司，2026-03-18 之前“没有 Form 4”不代表内部人没有交易，只是当时不用报；之后也要先查它是否在豁免名单里。
+
+**Rule 10b5-1 计划：2023-04-01 起 Form 4 上有一个勾选框。** 内部人常按事先制定的交易计划卖股，这类计划依据 Rule 10b5-1 设立，满足条件时可以作为内幕交易责任的抗辩。2022 年修订后，董事和高管按新计划交易之前要等**冷静期**结束：取“采用后 **90 天**”和“采用当季的 10-Q/10-K 披露后 **两个营业日**”中较晚的一个，但最长不超过 **120 天**；其他人（公司本身除外）是 **30 天**（[17 CFR 240.10b5-1(c)(1)(ii)(B)](https://www.ecfr.gov/current/title-17/section-240.10b5-1)）。Form 4 有一个勾选框，标明这笔交易是按意在满足 Rule 10b5-1(c) 的计划做的，并在说明栏写计划采用日（[Form 4 说明第 10 条](https://www.sec.gov/files/form4.pdf)）；2023-04-01 及以后提交的 Form 4 和 Form 5 必须填（[SEC 新闻稿 2022-222](https://www.sec.gov/newsroom/press-releases/2022-222)）。做数据时：(1) 这个框能把计划交易和其他交易分开；(2) 2023-04-01 之前没有这个字段，所以旧申报“没勾”表示**未知**，不表示“非计划交易”；(3) 计划内的卖出，至少在冷静期之前就定下来了。这里讲的是怎么正确标注数据；本课不给任何内部人交易信号。实验：`17_xbrl_pit_10b51_toy.py` 的 B–C 节（输出见上面的 XBRL 一节）。
 
 **实验：** `examples/p2/11_spinoff_insider_lag_toy.py` 的 C–D 节（玩具日历：周末顺延，不处理美国联邦假日，例子日期都避开了假日；A–B 节见下面的分拆一节）：
 
@@ -355,7 +395,7 @@ merge on PERMNO: [10001, 20002] -> two separate histories
 3. **0.10 美元规则：** 收盘买价连续十个营业日不高于 0.10 美元，就作出退市决定并在 Nasdaq **暂停交易**，没有整改期。SEC 于 2025-12-05 批准，批准 45 天后生效（[SEC 34-104318，90 FR 57225](https://www.federalregister.gov/documents/2025/12/10/2025-22398/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-amendment-no-1-and)）。按这份命令的描述，旧版本里 0.10 美元的规定只在公司已经因 1 美元规则不达标、处在整改期内时才起作用（用来缩短剩余整改期）；新版本不再以整改期为前提，一触发就立即作出退市决定并暂停交易。公司仍可向听证小组申诉，听证小组可酌情给出自退市决定之日起最长 180 天的例外期来恢复达标，但申诉期间股票不在 Nasdaq 交易。
 4. **已批准、但没生效的规则：** 新的“上市证券市值不低于 500 万美元”要求在 2026-07-22 获批（[SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)），2026-07-29 有人提交了申请复审的意向通知，按 SEC 程序规则 Rule 431(e) 批准命令自动暂缓（stay）；2026-09-11 SEC 同意复审，并让暂缓继续有效，直到“委员会另有命令”（[SEC 34-106338](https://www.sec.gov/files/rules/other/2026/34-106338.pdf)）。Nasdaq 于 2026-09-25 提交修改，SEC 在 2026-10-05 以 34-106594 公告，把生效时间改到暂缓解除之后（[SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)）。SEC 解除暂缓之前，回测里不要套用它。
 
-**回测规则：** 拆股当天用拆股比例复权（见上文公司行为一节）；加一列 `listing_status`，记下不达标通知、退市决定和暂停交易的日期；股票被暂停并转到场外市场（OTC）时，要记退市收益（见 CIZ 一节），不要直接删掉。这些是上市规则，不是交易信号；本课不主张反向拆股能预测收益。NYSE 有另一套不同的价格规则，本课不讲。
+**回测规则：** 拆股当天用拆股比例复权（见上文公司行为一节）；加一列 `listing_status`，记下不达标通知、退市决定和暂停交易的日期；股票被暂停并转到场外市场（OTC）时，要记退市收益（见 CIZ 一节），不要直接删掉。这些是上市规则，不是交易信号；本课不主张反向拆股能预测收益。NYSE 有另一套不同的价格规则，见下一节。
 
 **实验：** `examples/p2/14_bid_price_rule_toy.py`（合成价格，每行是一个营业日）：
 
@@ -377,6 +417,42 @@ low_price_0.10  in force  34-104318 approved 2025-12-05, operative 45 days later
 mvls_5m         stayed    34-105971 approved 2026-07-22, then stayed; check sec.gov before use
 rule: a reverse split near $1 is a listing-status event; keep the delisting flag and the split ratio.
 assertions passed: 10/10
+```
+
+## NYSE 的价格规则不一样：30 日平均、200:1，以及 2027-07-01 起的 0.25 美元底线（2026-11-11 核实）
+
+**思路相同，算法不同。** NYSE《上市公司手册》第 802.01C 条，按 [SEC 34-102201](https://www.sec.gov/files/rules/sro/nyse/2025/34-102201.pdf)（2025-01-15）的转述：
+
+1. **不达标：** 连续 **30 个交易日**的**平均**收盘价低于 1.00 美元。Nasdaq 数的是收盘买价连续 30 天低于 1 美元，NYSE 算的是平均数。一只在 0.97 / 1.01 美元之间来回的股票，NYSE 的测试不达标，但永远凑不出连续 30 天。
+2. **整改：** 从 NYSE 通知起六个月。整改期内任何一个**月份的最后一个交易日**，收盘价和 30 个交易日平均收盘价都不低于 1.00 美元，才算恢复达标。只有一天收得好不够。
+3. **近期反向拆股（2025-01-15 批准）：** 如果公司在之前一年内做过反向拆股，或者在之前两年内反向拆股累计比例达到 **200 比 1 或以上**，就**没有**整改期，NYSE 立即启动暂停交易和退市程序（Nasdaq 的累计门槛是 250 比 1）。
+4. **0.25 美元最低交易价格（已批准、尚未生效）：** **任何一个交易日**收盘价低于 **0.25 美元**，就立即暂停交易并启动退市程序，没有整改期。SEC 于 2026-08-14 批准（Release 34-106133），**2027-07-01** 起生效（第 2 号修订把生效日从 2026-10-01 推迟）（[91 FR，2026-08-18](https://www.federalregister.gov/documents/2026/08/18/2026-16831/self-regulatory-organizations-new-york-stock-exchange-llc-notice-of-filing-of-amendment-no-2-and)）。股价崩到“异常低”的水平时，即使高于 0.25 美元，NYSE 也可以暂停交易（第 802.01D 条）。
+
+**回测规则：** 记下上市交易所，以及每个日期适用的规则版本；2027-07-01 之前不要套用 0.25 美元规则；股票被暂停交易时要记退市收益（见 CIZ 一节）。这些是上市规则，不是交易信号。
+
+**实验：** `examples/p2/15_nyse_price_criteria_toy.py`（合成价格；每行是一个交易日）：
+
+```text
+=== A. NYSE averages 30 trading days; Nasdaq counts consecutive days ===
+zigzag 0.97/1.01 x15: NYSE 30-day average 0.9900 -> below $1 average; six-month cure period from NYSE's notice
+  same rows, consecutive closes below $1.00 at the end: 0 (a 30-in-a-row count never fires)
+20 x 1.40 then 10 x 0.40: average 1.0667 -> no price-criteria flag
+=== B. regaining compliance: checked at a month end, needs BOTH tests ===
+month-end close 1.20 but 30-day average 0.7167 -> cured? False
+month-end close 1.05, 30-day average 1.0500 -> cured? True
+=== C. 2025 amendment: recent reverse splits remove the cure period ===
+average 0.80, no recent split -> below $1 average; six-month cure period from NYSE's notice
+average 0.80, 1-for-5 split 7 months ago -> below $1 average; recent reverse split(s) -> no compliance period, suspension/delisting starts
+average 0.80, 1-for-10 then 1-for-20 (200:1) over two years, none in prior year -> below $1 average; recent reverse split(s) -> no compliance period, suspension/delisting starts
+average 0.80, 1-for-10 then 1-for-15 (150:1) over two years, none in prior year -> below $1 average; six-month cure period from NYSE's notice
+=== D. $0.25 Minimum Trading Price: a dated rule (effective 2027-07-01) ===
+close 0.24 on 2027-06-30: immediate suspension under the $0.25 rule? False
+close 0.24 on 2027-07-01: immediate suspension under the $0.25 rule? True
+close 0.26 on 2027-07-01: immediate suspension under the $0.25 rule? False
+nyse_avg30_1usd  in force                    802.01C; reverse-split limits from 34-102201 (2025-01-15)
+nyse_min_0.25    approved, not yet effective 34-106133 (2026-08-14), effective 2027-07-01
+rule: store the exchange, the rule version and the notice/suspension dates; this is listing status, not a signal.
+assertions passed: 11/11
 ```
 
 ## 分拆和并购：价格序列里的“假暴跌”和“突然消失”（核实于 2026-11-10）
@@ -457,6 +533,7 @@ assertions passed: 11/11
 16. 按 Form 4 的交易日期而不是 EDGAR 接收时间对齐信号；把外国私人发行人 2026-03-18 之前“没有 Form 4”理解成“内部人没交易”。
 17. 用未复权价跨反向拆股算收益（得到 +900% 的假上涨）；股票因 1 美元或 0.10 美元规则被暂停交易后直接删掉，而不记退市收益；把被暂缓的 500 万美元规则当成已生效。
 
+18. 按期末日、按 `fy` 或从 `frames` 接口取历史日期的 XBRL 基本面（应按 `filed`）；把 2023-04-01 之前没有计划勾选框的 Form 4 当成非计划交易；对 NYSE 股票套用 Nasdaq 的连续天数算法或 250:1 门槛，或在 2027-07-01 之前套用 NYSE 的 0.25 美元规则。
 
 ## 练习（与任务清单 1:1）
 
@@ -473,6 +550,8 @@ assertions passed: 11/11
 11. **ex-div** — 运行 `08_dividend_dates_yf_shapes.py`；写出登记日为 2026-03-15（周日）时的除息日，以及 30% 特别分红、派息日 2026-03-17 时的除息日，再说明哪种 yfinance 调用会返回 `Adj Close` 列；**完成标准**：2026-03-13、2026-03-18、`auto_adjust=False`，与输出一致。
 12. **ex-spin-insider**（可选）— 运行 `11_spinoff_insider_lag_toy.py`，把子公司收盘价改成 30，把 Form 4 接收时间改成 2026-11-06 22:30 ET；**完成标准**：说出新的持有人收益，并说明为什么 22:00 以后接收的申报算下一个营业日提交。
 13. **ex-bidprice** — 运行 `14_bid_price_rule_toy.py`；把 A 节改成反向拆股发生在 14 个月前，写出新结果；**完成标准**：说出 180 天整改期重新适用，因为拆股已在之前一年之外，而且这次 10 并 1 的拆股让两年累计比例低于 250 比 1；再说出如果 14 个月前那次是 300 并 1，仍然没有整改期（用 `status(b, False, 300)` 验证）；并说明为什么 9 个 1.05 美元的收盘价还不够恢复达标。
+14. **ex-xbrl** — 运行 `17_xbrl_pit_10b51_toy.py`，再分别用 d = "2010-01-25" 和 d = "2010-01-26" 调用 `as_of(FACTS, *P, d)`；**完成标准**：报告 5,704m 和 8,235m，并解释“filed 严格早于决策日”的判断。
+15. **ex-nyse** — 运行 `15_nyse_price_criteria_toy.py`，再用其中的 `avg30` 计算 29 个 1.10 美元收盘之后接 1 个 0.20 美元收盘的平均；**完成标准**：报告 30 日平均（1.07 美元，不触发），并说出 2027-07-01 起 0.20 美元的收盘会触发 NYSE 哪条规则。
 
 
 ## 测验
@@ -497,12 +576,15 @@ assertions passed: 11/11
 <Quiz id="dc-spinoff" question="母公司前一日收盘 100，分拆除权日收盘 81，每股母公司分到 0.5 股子公司，子公司收盘 40。持有人当天的收益是多少？" options={["−19%", "+1%", "+20%", "0%，分拆不影响收益"]} answer={1} explanation="(81 + 0.5 × 40) ÷ 100 − 1 = +1%；−19% 是只看原始价格得到的假暴跌。" />
 <Quiz id="dc-insider-lag" question="某董事在 2026-11-04（周三）卖出股票，Form 4 于 2026-11-06（周五）21:40 ET 被 EDGAR 接收。日线回测里，这条信号最早能在什么时候使用？" options={["2026-11-04 收盘，按交易日期", "2026-11-09（周一）开盘，即接收之后的下一个交易时段", "季度结束后", "2026-11-06（周五）收盘"]} answer={1} explanation="交易日期早于可用时点；22:00 前接收算当天按时提交，但 21:40 时当天的常规交易（到 16:00）已经结束，所以最早是下一个交易日开盘。日期和实验一致，避开了联邦假日。" />
 <Quiz id="dc-bidprice" question="一只 Nasdaq 股票八个月前做了 10 并 1 的反向拆股，现在收盘买价已连续 30 个营业日低于 1.00 美元。按 SEC Release 34-102245 批准的规则，接下来会怎样？" options={["和第一次不达标一样，自动获得 180 天整改期", "什么都不会发生，因为反向拆股会把计数清零三年", "立即退市，不能申诉", "没有整改期：Nasdaq 作出退市决定，公司可以向听证小组申诉"]} answer={3} explanation="修订后的 Rule 5810(c)(3)(A)(iv)：公司在之前一年内做过反向拆股，就不能获得任何整改期，Nasdaq 作出退市决定；公司可以及时向听证小组（Hearings Panel）申请听证。" />
+<Quiz id="dc-nyse-price" question="一只 NYSE 上市股票连续 30 个交易日在 0.97 美元和 1.01 美元之间交替收盘。它是否低于 NYSE 的 1.00 美元价格标准？" options={["不低于，因为它从来没有连续 30 天收在 1.00 美元以下", "低于，因为它 30 个交易日的平均收盘价是 0.99 美元", "只有过去一年做过反向拆股才算", "不低于，因为 NYSE 没有价格规则"]} answer={1} explanation="第 802.01C 条（SEC 34-102201 转述）看的是连续 30 个交易日的平均收盘价。数连续低于 1 美元的天数是 Nasdaq 最低买价规则的算法。近期反向拆股只影响是否给整改期。" />
+<Quiz id="dc-xbrl-filed" question="2009-11-02 的回测需要 Apple 截至 2009-09-26 财年的净利润。SEC 的 XBRL 数据里现在有 57.04 亿美元（2009-10-27 提交的 10-K）和 82.35 亿美元（2010-01-25 提交的 10-K/A，也是 frames 接口返回的值）。回测可以用哪个？" options={["82.35 亿美元，因为它最新，frames 接口也返回它", "57.04 亿美元，它来自决策日之前唯一一份申报", "两个值的平均", "都不能用，XBRL 数据不能用于回测"]} answer={1} explanation="按 filed 日期取：2009-11-02 只有 2009-10-27 的 10-K。frames 接口返回最后提交的值，拿它当历史值就是前视。" />
+<Quiz id="dc-10b51" question="一位高管在 2026-02-10 采用新的 Rule 10b5-1 计划，公司在 2026-05-06 提交该财季的 10-Q。冷静期什么时候结束？" options={["2026-03-12，采用后 30 天", "2026-05-08，10-Q 后两个营业日", "2026-05-11，采用后 90 天，因为取较晚的日期", "高管没有冷静期"]} answer={2} explanation="17 CFR 240.10b5-1(c)(1)(ii)(B)(1)：董事和高管取采用后 90 天与 10-Q/10-K 披露后两个营业日中较晚者，最长 120 天。2026-02-10 加 90 天是 2026-05-11，晚于 2026-05-08。30 天适用于其他人。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
-**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；分红日期与 yfinance（2026-11-10 核实）：[investor.gov 除息日](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)、[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)、[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)；分拆与内部人申报（2026-11-10 核实）：[investor.gov 分拆](https://www.investor.gov/introduction-investing/investing-basics/glossary/spin-offs)、[FINRA 分拆](https://www.finra.org/investors/insights/corporate-spinoffs)、[IRS Form 8937 说明](https://www.irs.gov/instructions/i8937)、[investor.gov Forms 3, 4 and 5](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)、[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)、[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)、[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)、[SEC HFIA 第 16(a) 条页面](https://www.sec.gov/about/divisions-offices/division-corporation-finance/holding-foreign-insiders-accountable-act-section-16a-reporting-requirements)；反向拆股与 Nasdaq 最低买价规则（2026-11-11 核实）：[SEC 34-102245](https://www.sec.gov/files/rules/sro/nasdaq/2025/34-102245.pdf)、[SEC 34-104318（90 FR 57225）](https://www.federalregister.gov/documents/2025/12/10/2025-22398/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-amendment-no-1-and)、[SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)、[SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)
+**来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；分红日期与 yfinance（2026-11-10 核实）：[investor.gov 除息日](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)、[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)、[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)；分拆与内部人申报（2026-11-10 核实）：[investor.gov 分拆](https://www.investor.gov/introduction-investing/investing-basics/glossary/spin-offs)、[FINRA 分拆](https://www.finra.org/investors/insights/corporate-spinoffs)、[IRS Form 8937 说明](https://www.irs.gov/instructions/i8937)、[investor.gov Forms 3, 4 and 5](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)、[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)、[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)、[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)、[SEC HFIA 第 16(a) 条页面](https://www.sec.gov/about/divisions-offices/division-corporation-finance/holding-foreign-insiders-accountable-act-section-16a-reporting-requirements)；反向拆股与 Nasdaq 最低买价规则（2026-11-11 核实）：[SEC 34-102245](https://www.sec.gov/files/rules/sro/nasdaq/2025/34-102245.pdf)、[SEC 34-104318（90 FR 57225）](https://www.federalregister.gov/documents/2025/12/10/2025-22398/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-amendment-no-1-and)、[SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)、[SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)；enrich13（2026-11-11 核实）：[SEC EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[SEC 开发者资源](https://www.sec.gov/about/developer-resources)、[Apple NetIncomeLoss JSON](https://data.sec.gov/api/xbrl/companyconcept/CIK0000320193/us-gaap/NetIncomeLoss.json)、[17 CFR 240.10b5-1](https://www.ecfr.gov/current/title-17/section-240.10b5-1)、[Form 4](https://www.sec.gov/files/form4.pdf)、[SEC 2022-222](https://www.sec.gov/newsroom/press-releases/2022-222)、[SEC 34-102201](https://www.sec.gov/files/rules/sro/nyse/2025/34-102201.pdf)、[SEC 34-106133（91 FR）](https://www.federalregister.gov/documents/2026/08/18/2026-16831/self-regulatory-organizations-new-york-stock-exchange-llc-notice-of-filing-of-amendment-no-2-and)
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  
