@@ -138,3 +138,22 @@ equivalent securities and options enter the official net-long definition; this t
   this toy builds the official net-long options / equivalent-securities engine? False
 no bidder or strategy recommendation
 assertions passed: 48/48
+=== L. Rule 14e-3: disclose-or-abstain once a substantial step or commencement has occurred ===
+14e-3(a): if any person has taken a substantial step or steps to commence, or has commenced, a tender offer,
+  it is a fraudulent, deceptive or manipulative act or practice for any other person who is in possession of
+  material information relating to such tender offer which he knows or has reason to know is nonpublic
+  and which he knows or has reason to know has been acquired directly or indirectly from
+  the offering person, the issuer, or any officer, director, partner or employee
+  or any other person acting on behalf of the offering person or such issuer,
+  to purchase or sell or cause to be purchased or sold those securities (or convertibles, options, or rights)
+  unless within a reasonable time prior to any purchase or sale such information and its source
+  are publicly disclosed by press release or otherwise
+  this is already-taught 14e-2 or 10b5-1? False
+official (b) entity procedures / information-barrier defense, (c) offering-person purchase
+  and sale-to-offering-person exceptions, and (d) anti-tipping exist; this toy is not that engine
+  this toy builds the official (b)-(d) engines? False
+  this toy invents a fixed number of days for "a reasonable time"? False
+official typographical artifact in 14e-3(c): "Notwithstanding anything in paragraph (a) of this section to contrary"
+  this toy silently corrects "to contrary"? False
+no bidder, target, or strategy recommendation
+assertions passed: 52/52

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **35.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h + Rule 14d-10 全体持有人 / 最高对价 0.25h + Rule 14e-4 局部要约中的短交 / 净多头 0.25h + 第 12(g) 条 / Rule 12g-1 注册门槛 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **35.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h + Rule 14d-10 全体持有人 / 最高对价 0.25h + Rule 14e-4 局部要约中的短交 / 净多头 0.25h + 第 12(g) 条 / Rule 12g-1 注册门槛 0.25h + Rule 14e-3 披露或回避 0.25h + Rule 12g-4 / 第 12(g)(4) 条终止 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -286,6 +286,16 @@ SYN_MACRO_2 没有发布时间 → 排除
 [15 U.S.C. 78l(g)(1)](https://www.law.cornell.edu/uscode/text/15/78l)：发行人应在“within 120 days after the last day of its first fiscal year ended on which the issuer has total assets exceeding $10,000,000 and a class of equity security (other than an exempted security) held of record by either— (i) 2,000 persons, or (ii) 500 persons who are not accredited investors (as such term is defined by the Commission)”（在其总资产超过 **1,000 万美元**、且一类股权证券由 2,000 人**或者** 500 名非合格投资者登记持有的第一个财年结束后 **120 天**内）注册该证券。该注册说明书“shall become effective sixty days after filing with the Commission or within such shorter period as the Commission may direct”（在提交后**六十天**生效，或在委员会指定的更短期间内生效）。银行、储蓄贷款控股公司和银行控股公司走 2,000 名登记持有人测试，没有 500 人这一支，同样有 120 天时钟和 1,000 万美元资产测试。SEC 的《交易法》申报页面还把在美国交易所上市列为另一条注册路径（第 12(b) 条）。现行官方 12g-1 文本（eCFR 第 17 编截至 2026-11-09 为最新；12g-1 最近一次修订于 2016-12-28）、法条和该 SEC 页面，仍使用 **1,000 万美元** / **$10,000,000**。不要发明通胀调整后的资产数字。
 
 不要把官方 12g-1(b)(1) 的豁免写成“不足 2,000 人**或** 500 名非合格投资者”——豁免用的是不足 2,000 人**并且**其中非合格投资者不足 500 人；法定*触发*才是资产超过 1,000 万美元，并且登记持有人达到 2,000 人**或** 500 名非合格投资者。“Accredited investor” 按 § 230.501(a) 在该日确定；本课不搭建 501(a) 通胀引擎。“Held of record” 的定义在 Rule 12g5-1；存在员工薪酬计划的排除；本课不搭建该引擎。12(g)(4) 终止是另一条官方段落；点名它存在即可，不要搭建终止引擎。不要把 120 天或 60 天时钟压进已经教过的 10-K / 10-Q 或 12b-2 时钟，或压进已经教过的 Form 10-S 提案用语。
+
+
+**《交易法》第 12(g)(4) 条 / Rule 12g-4：一类证券按 12(g) 的注册，在发行人提交 Form 15 证明后九十天（或委员会确定的更短期间）终止；Rule 12g-4 还有第二支官方条件，并且在提交 Form 15 时立即中止第 13(a) 条报告义务（核实于 2026-11-12）。** 已经教过的 12g-1 / 12(g) 注册门槛、12b-2 申报人类别、10-K / 10-Q 时钟、Form 13F 的 45 天句，以及 Form 10-S 提案那一句（“截至 2026-11-11 尚未通过”），都不要改写。不要改 `examples/p2/09_filing_dates_toy.py` 或 `examples/p2/17_xbrl_pit_10b51_toy.py`。enrich25 已点名 12(g)(4) 终止存在，但没有搭建它。这一节补上官方终止地图，避免把 Form 15 的提交日当成 12(g) 注册的终止日，发明通胀调整后的资产数字，或漏掉规则里的 500 人 / 1,000 万美元、最近三个财年这一支。这里没有发行人或上市建议。本节为测验即可，没有新的实验脚本。
+
+[15 U.S.C. 78l(g)(4)](https://www.law.cornell.edu/uscode/text/15/78l)：“Registration of any class of security pursuant to this subsection shall be terminated ninety days, or such shorter period as the Commission may determine, after the issuer files a certification with the Commission that the number of holders of record of such class of security is reduced to less than 300 persons, or, in the case of a bank, a savings and loan holding company (as defined in section 1467a of title 12), or a bank holding company, as such term is defined in section 1841 of title 12, 1,200 persons persons. [1]” LII 官方法条副本印着印刷瑕疵 “1,200 persons persons. [1]”——如果引用这一句，不要悄悄改掉。委员会应在通知并给予听证机会后，如认定证明不实则拒绝终止；在拒绝问题作出最终决定之前，终止推迟。
+
+[17 CFR 240.12g-4](https://www.ecfr.gov/current/title-17/section-240.12g-4)（eCFR 第 17 编截至 2026-11-09 为最新；最近一次修订于 2016-05-10）：终止在发行人用 Form 15 证明该类别由下列人士登记持有之后 90 天（或委员会确定的更短期间）生效：(1) 不足 300 人，或者银行、储蓄贷款控股公司或银行控股公司为 1,200 人；**或者 (2) 不足 500 人，且发行人总资产在最近三个财年的每一财年最后一日均未超过 1,000 万美元。** 12g-4(b)：发行人按第 13(a) 条提交任何报告的义务，“shall be suspended immediately upon filing a certification on Form 15”；如果该证明随后被撤回或拒绝，发行人应在 60 天内提交若未提交该证明本应提交的全部报告。现行官方 12g-4 仍使用 **1,000 万美元**（最近一次修订于 2016-05-10）。不要发明通胀调整后的 1,000 万美元数字。
+
+不要把法条和规则压成同一张地图——官方的 500 人 / 1,000 万美元、三个财年这一支、Form 15、立即中止 13(a) 义务，以及撤回或拒绝后的 60 天补交时钟，都出现在 Rule 12g-4 里，不是对已经教过的 12g-1 的改写。不要把 Form 15 的提交日当成终止日（终止在 90 天后生效，或在委员会确定的更短期间内生效；立即中止的是 13(a) 义务）。不要搭建 12g5-1 的 “held of record” 或 501(a) 引擎。不要改写已经教过的 12g-1、12b-2、10-K / 10-Q 或 Form 13F 句子，也不要仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句。
+
 
 
 **不是每一份 Form 8-K 都是 Item 2.02 的业绩发布：官方项目还包括重大确定协议（1.01）、重大网络安全事件（1.05）、不再依赖此前发布的财务报表（4.02），以及某些高管或董事的离任或任命（5.02）；通常仍是四个营业日，但 Item 1.05 从注册人认定事件具有重要性时起算（核实于 2026-11-12）。** 不要改写已经教过的 10-K / 10-Q 时钟、12b-2、12b-25，或 Form 10-S 提案那一句（“截至 2026-11-11 尚未通过”）。`backtest-traps` 里 Item 2.02 的业绩发布时间框保持原样——这里只做交叉引用。这一节补上短的官方项目对照，避免把每一份 8-K 都当成业绩，或把 1.05 的时钟从发现时起算，而不是从官方认定时起算。这里没有申报人或披露建议。
@@ -890,6 +900,34 @@ no bidder or strategy recommendation
 assertions passed: 48/48
 ```
 
+**Rule 14e-3：一旦任何人已采取开始要约收购的重大步骤，或已经开始要约收购，任何其他持有与该要约有关的重大信息、且知道或有理由知道该信息尚未公开、并知道或有理由知道该信息直接或间接来自要约人、发行人，或其高级职员、董事、合伙人或雇员，或任何代表前述人士行事的人，一般不得买入或卖出（或促使买入或卖出）这些证券（或可转换证券、期权或权利），除非在任何买入或卖出之前的合理时间内，该信息及其来源已通过新闻稿或其他方式公开披露（核实于 2026-11-12）。** 已经教过的 14e-1 最短开放期和条款变更窗口、14e-2 立场声明、14d-10 全体持有人 / 最高对价、14e-4 短交 / 净多头、14e-5 和 14d-11，都不要改写。这一节补上官方的披露或回避规则，避免仅仅因为要约尚未正式开始，就把要约相关的重大非公开信息当成可以使用，或把这一规则压进已经教过的 14e-2 或 10b5-1。不推荐任何要约人、目标公司或策略。
+
+[17 CFR 240.14e-3(a)](https://www.ecfr.gov/current/title-17/section-240.14e-3)：“If any person has taken a substantial step or steps to commence, or has commenced, a tender offer (the “offering person”), it shall constitute a fraudulent, deceptive or manipulative act or practice within the meaning of section 14(e) of the Act for any other person who is in possession of material information relating to such tender offer which information he knows or has reason to know is nonpublic and which he knows or has reason to know has been acquired directly or indirectly from: (1) The offering person, (2) The issuer of the securities sought or to be sought by such tender offer, or (3) Any officer, director, partner or employee or any other person acting on behalf of the offering person or such issuer, to purchase or sell or cause to be purchased or sold any of such securities or any securities convertible into or exchangeable for any such securities or any option or right to obtain or to dispose of any of the foregoing securities, unless within a reasonable time prior to any purchase or sale such information and its source are publicly disclosed by press release or otherwise.” 官方 14e-3(b)（实体程序 / 信息隔离抗辩）、14e-3(c)（经纪商或代理人代表要约人买进，以及向要约人卖出）和 14e-3(d)（反传播，含官方善意沟通例外）是存在的；点名即可，不要搭建这些引擎。14e-3(c) 的官方印刷瑕疵是 “Notwithstanding anything in paragraph (a) of this section to contrary”——如果引用这一句，不要悄悄改掉 “to contrary”。不要为 “a reasonable time” 发明固定天数，也不要编一份 “substantial step” 目录。不要把 14e-3 压进已经教过的 14e-2、14e-1、14d-10、14e-4、14e-5 或 10b5-1。
+
+**实验：** 同一脚本的 L 节（A–K 节的打印与此前相同，包括 Rule 105、14e-1、101/102、14e-5、Rule 104、14e-2、14d-11、14d-10、14e-4，以及 K 节后的 48/48；全脚本 52 项断言）：
+
+```text
+=== L. Rule 14e-3: disclose-or-abstain once a substantial step or commencement has occurred ===
+14e-3(a): if any person has taken a substantial step or steps to commence, or has commenced, a tender offer,
+  it is a fraudulent, deceptive or manipulative act or practice for any other person who is in possession of
+  material information relating to such tender offer which he knows or has reason to know is nonpublic
+  and which he knows or has reason to know has been acquired directly or indirectly from
+  the offering person, the issuer, or any officer, director, partner or employee
+  or any other person acting on behalf of the offering person or such issuer,
+  to purchase or sell or cause to be purchased or sold those securities (or convertibles, options, or rights)
+  unless within a reasonable time prior to any purchase or sale such information and its source
+  are publicly disclosed by press release or otherwise
+  this is already-taught 14e-2 or 10b5-1? False
+official (b) entity procedures / information-barrier defense, (c) offering-person purchase
+  and sale-to-offering-person exceptions, and (d) anti-tipping exist; this toy is not that engine
+  this toy builds the official (b)-(d) engines? False
+  this toy invents a fixed number of days for "a reasonable time"? False
+official typographical artifact in 14e-3(c): "Notwithstanding anything in paragraph (a) of this section to contrary"
+  this toy silently corrects "to contrary"? False
+no bidder, target, or strategy recommendation
+assertions passed: 52/52
+```
+
 ## 分红日期与 yfinance 的 auto_adjust 陷阱（2026-11-10 核实）
 
 **1. 现金分红的四个日期。** 公司先宣布分红（宣布日），再确定股东名单（登记日），之后股票开始不带这次分红交易（除息日），最后发放现金（派息日）。决定你能不能拿到分红的是**除息日**：在除息日当天或之后买入，就拿不到这一次分红。美国交收改为 T+1 之后，investor.gov 写明除息日**一般就是登记日**；登记日不是营业日时，除息日是它之前的一个营业日（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)）。页面的例子：宣布日 2026-03-02，登记日 2026-03-16，除息日 2026-03-16，派息日 2026-03-17。
@@ -989,6 +1027,8 @@ disclaimer: synthetic fixtures; learning only
 35. 把要约当成只对受优待的一组人开放，或假定就同一批提交证券可以向部分持有人支付更高对价；把 14d-10 压进已经教过的 14d-11 / 14e-5 同等对价用语；改写已经教过的 14e-1(b) 10 个营业日对价变更窗口或 14e-1(d) 展期通知那一句。
 36. 把 14e-4 的净多头上限套到每一项要约收购上，而不是官方定义的局部要约（包括提供对价选择、按抽签或按比例接受的全部已发行要约那一支）；发明 14d-11 最长期限，或把 14d-8 的按比例分配压进已经教过的 14d-11 选择用语。
 37. 发明官方现行文本并未写出的、经通胀调整的 12(g) 资产门槛；把 12g-1 的豁免写成“不足 2,000 人**或** 500 名非合格投资者”；把 120 天或 60 天时钟压进已经教过的 12b-2、10-K / 10-Q 或 Form 13F 的 45 天句；仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句。
+38. 把 14e-3 压进已经教过的 14e-2、14e-1、14d-10、14e-4、14e-5 或 10b5-1；为 “a reasonable time” 发明固定天数，或编一份 “substantial step” 目录；悄悄改掉 14e-3(c) 的官方印刷瑕疵 “to contrary”。
+39. 把 Form 15 的提交日当成 12(g) 注册的终止日；发明通胀调整后的 12g-4 资产数字；把法条和规则压成同一张地图，漏掉规则里的 500 人 / 1,000 万美元、三个财年这一支、立即中止的 13(a) 义务，或撤回 / 拒绝后的 60 天补交时钟；如果引用法条那一句，悄悄改掉 LII 的印刷瑕疵 “1,200 persons persons. [1]”。
 
 
 ## 练习（与任务清单 1:1）
@@ -1027,6 +1067,8 @@ disclaimer: synthetic fixtures; learning only
 30. **ex-14d10** — 运行同一脚本的 J 节；说明要约是否必须对该类别的全体持有人开放，向任一持有人支付的对价是否必须是向任何其他持有人支付的最高对价，以及这是不是已经教过的 14d-11 / 14e-5 同等对价句；**完成标准**：必须对全体持有人开放，必须是最高对价，并且这不是那句已经教过的同等对价用语，与输出一致。
 31. **ex-14e4** — 运行同一脚本的 K 节；说明净多头上限是否适用于每一项要约，提供对价选择并以抽签或按比例接受的全部已发行要约是不是局部要约，以及存放多于将获接受的数量时 14d-8 如何处理；**完成标准**：上限并不适用于每一项要约；该对价选择分支是局部要约；应尽可能按比例接受、不计零股，与输出一致。
 32. **ex-12g1** — 用自己的话写出官方现行 12(g) / 12g-1 地图：12g-1 豁免、法定触发、120 天和 60 天时钟，以及银行分支；**完成标准**：写出不超过 1,000 万美元，或不足 2,000 人**并且**其中非合格投资者不足 500 人；触发是资产超过 1,000 万美元且登记持有人达到 2,000 人**或** 500 名非合格投资者；120 天在财年结束后，注册说明书在提交后六十天（或更短指定期间）生效；银行没有 500 人这一支；并写明不要发明通胀调整后的资产数字。
+33. **ex-14e3** — 运行同一脚本的 L 节；说明一旦已采取开始要约的重大步骤或已经开始，持有来自官方来源的重大非公开要约信息的人能否买入或卖出，这是不是已经教过的 14e-2 或 10b5-1，以及本课有没有为 “a reasonable time” 发明固定天数；**完成标准**：不得买入或卖出，除非在合理时间之前已公开披露该信息及其来源；这不是已经教过的 14e-2 或 10b5-1；没有发明固定天数，与输出一致。
+34. **ex-12g4** — 用自己的话写出官方 12(g)(4) / 12g-4 终止地图：90 天时钟、300 / 1,200 人测试、规则里的 500 人 / 1,000 万美元三个财年这一支，以及提交 Form 15 时立即中止 13(a) 义务（含撤回或拒绝后的 60 天补交时钟）；**完成标准**：终止不是在 Form 15 提交日，立即中止的是 13(a) 义务；不要发明通胀调整后的资产数字，也不要把法条和规则压成同一张地图。
 
 
 ## 测验
@@ -1077,6 +1119,8 @@ disclaimer: synthetic fixtures; learning only
 <Quiz id="dc-14d10" question="根据 Rule 14d-10，要约收购必须满足什么条件？这和已经教过的 14d-11 / 14e-5 同等对价句是一回事吗？" options={["这就是已经教过的 14d-11 / 14e-5 同等对价用语，所以部分持有人可以按更高对价提交", "要约必须对该类别的全体证券持有人开放，并且向任何持有人支付的、就其提交证券的对价，必须是向任何其他持有人支付的最高对价。这不是已经教过的 14d-11 同等对价条件，也不是 14e-5 同等对价的后续期例外。官方 (b)–(f) 例外是存在的；本课不搭建这些引擎。不要改写已经教过的 14e-1(b) 10 个营业日对价变更窗口，或 14e-1(d) 的展期通知那一句", "要约可以对受优待的一组持有人开放，只要事后补上通知", "14d-10 废除了已经教过的 14e-1(b) 10 个营业日对价变更窗口"]} answer={1} explanation="17 CFR 240.14d-10(a) 要求对该类别的全体证券持有人开放，并且支付最高对价。这不是已经教过的 14d-11 / 14e-5 同等对价句。官方 (b)–(f) 例外存在；本课不搭建这些引擎。" />
 <Quiz id="dc-14e4" question="根据 Rule 14e-4，局部要约中的净多头上限何时适用？什么是官方定义的局部要约？" options={["每一项要约收购都适用净多头上限，包括全部已发行证券且不提供对价选择的要约", "14e-4 就是已经教过的 14d-11 选择用语，而且官方文本规定了 14d-11 的最长期限", "净多头定义里没有等价证券或期权，本课已经搭建了完整的净多头引擎", "在局部要约中，任何人不得提交超过其净多头的数量：净多头测试同时适用于提交时，以及按比例分配期或抽签接受期结束时（含展期）。官方 14e-4(a)(5) 定义既包括接受方式为抽签或按比例的、针对少于全部已发行证券的要约，也包括提供对价选择、且不同形式对价可按抽签或按比例接受的、针对全部已发行股份的要约——不要把净多头上限套到每一项要约上。等价证券和期权进入官方净多头定义；本课不搭建该引擎。支持性的 14d-8：如果存放的证券多于将获接受的数量，则尽可能按比例接受，不计零股。不要发明 14d-11 最长期限，或把按比例分配压进已经教过的 14d-11 选择用语"]} answer={3} explanation="17 CFR 240.14e-4(b) 把净多头测试同时用在提交时和按比例或抽签期结束时（含展期）。14e-4(a)(5) 的局部要约包括对价选择那一支，所以不要套到每一项要约上。14d-8 是尽可能按比例、不计零股。不要发明 14d-11 最长期限。" />
 <Quiz id="dc-12g1" question="按现行 Rule 12g-1 和《交易法》第 12(g) 条，发行人何时不必注册一类股权证券？法定时钟是什么？" options={["官方现行文本已经把 12(g) 的资产门槛按通胀上调，本课应使用那个更高的数字；12g-1 的豁免是不足 2,000 人或者 500 名非合格投资者", "12(g) 就是已经教过的 12b-2 申报人类别，120 天和 60 天时钟就是 10-K / 10-Q 时钟；并且应把 Form 10-S “截至 2026-11-11 尚未通过”改成更新的日期", "按现行 Rule 12g-1，若在最近结束的财年最后一日，发行人总资产不超过 1,000 万美元，或者该类别由不足 2,000 名登记持有人持有、且其中非合格投资者不足 500 人，则不必按第 12(g) 条注册该类别股权（银行、储蓄贷款控股公司和银行控股公司适用不足 2,000 人的测试，没有 500 人这一支）。法定触发是另一面：总资产超过 1,000 万美元，且登记持有人达到 2,000 人或者 500 名非合格投资者，并须在该财年结束后 120 天内注册；注册说明书在提交后六十天（或委员会指定的更短期间）生效。不要把 12g-1 豁免里的 “and” 换成含糊的 “or”。现行官方文本仍用 1,000 万美元 / $10,000,000，不要发明通胀调整后的资产数字。“Accredited investor” 按 § 230.501(a) 在该日确定；“held of record” 的定义在 Rule 12g5-1（存在员工薪酬计划排除）；12(g)(4) 终止是另一条官方段落——点名即可，不要搭建这些引擎。不要把这些时钟压进已经教过的 12b-2、10-K / 10-Q，或 Form 13F 的 45 天句", "每一家有公众股东的美国公司都是 12(g) 注册人，与资产和登记持有人数无关"]} answer={2} explanation="17 CFR 240.12g-1 的豁免是资产不超过 1,000 万美元，或者不足 2,000 人并且其中非合格投资者不足 500 人。15 U.S.C. 78l(g)(1) 的触发用 2,000 人或者 500 名非合格投资者，加上超过 1,000 万美元的资产和 120 天时钟；注册说明书在提交后六十天（或更短指定期间）生效。不要发明通胀调整数字，也不要把豁免里的 “and” 换成 “or”。" />
+<Quiz id="dc-14e3" question="根据 Rule 14e-3，一旦已采取开始要约收购的重大步骤或已经开始，持有来自官方来源的重大非公开要约信息的人一般不得做什么？" options={["这就是已经教过的 14e-2 或 10b5-1，所以只要要约尚未正式开始，该信息就可以使用", "“a reasonable time” 是本课发明的固定天数，而且 14e-3(c) 的官方措辞 “to contrary” 应当被悄悄改正", "该人不得买入或卖出（或促使买入或卖出）这些证券——或可转换证券、期权或权利——除非在任何买入或卖出之前的合理时间内，该信息及其来源已通过新闻稿或其他方式公开披露。官方 (b) 实体程序 / 信息隔离抗辩、(c) 代表要约人买进以及向要约人卖出，和 (d) 反传播是存在的；本课不搭建这些引擎。不要为 “a reasonable time” 发明固定天数。不要把 14e-3 压进已经教过的 14e-2、14e-1、14d-10、14e-4、14e-5 或 10b5-1", "这项禁止只在正式开始之后才适用，而且可转换证券、期权或权利不在规则范围内"]} answer={2} explanation="17 CFR 240.14e-3(a) 是披露或回避规则：一旦已采取重大步骤或已经开始，持有来自官方来源的重大非公开要约信息的人，一般不得买入或卖出，除非在合理时间之前公开披露该信息及其来源。这不是已经教过的 14e-2 或 10b5-1。不要为 “a reasonable time” 发明固定天数，也不要悄悄改掉 “to contrary”。" />
+<Quiz id="dc-12g4" question="根据《交易法》第 12(g)(4) 条和 Rule 12g-4，12(g) 注册何时终止？提交 Form 15 时会发生什么？" options={["Form 15 在提交日就结束 12(g) 注册，而且官方现行 12g-4 已经按通胀把 1,000 万美元上调", "注册在 Form 15 证明登记持有人已减至不足 300 人（银行、储蓄贷款控股公司或银行控股公司为 1,200 人）之后 90 天（或委员会确定的更短期间）终止。Rule 12g-4 还有第二支：不足 500 人，且发行人总资产在最近三个财年的每一财年最后一日均未超过 1,000 万美元。发行人按第 13(a) 条提交报告的义务 “shall be suspended immediately upon filing a certification on Form 15”；如果该证明随后被撤回或拒绝，发行人应在 60 天内提交若未提交该证明本应提交的全部报告。现行官方 12g-4 仍使用 1,000 万美元（最近一次修订于 2016-05-10）。不要把法条和规则压成同一张地图，不要发明通胀调整后的资产数字；如果引用法条那一句，不要悄悄改掉 LII 的印刷瑕疵 “1,200 persons persons. [1]”", "这是对已经教过的 12g-1 的改写，而且 120 天时钟就是终止时钟", "应当仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句，并且本项会改 09 / 17 实验"]} answer={1} explanation="15 U.S.C. 78l(g)(4) 和 17 CFR 240.12g-4：终止在 Form 15 证明之后 90 天（或更短指定期间）生效，不是在提交日。立即中止的是 13(a) 义务；撤回或拒绝后有 60 天补交时钟。规则还有 500 人 / 1,000 万美元、三个财年这一支。不要发明通胀调整数字，也不要把法条和规则压扁。" />
 
 
 
@@ -1092,6 +1136,7 @@ disclaimer: synthetic fixtures; learning only
 enrich23（核实于 2026-11-12）：[Form 8-K](https://www.sec.gov/files/form8-k.pdf)（Item 1.01 / 1.05 / 4.02 / 5.02；一般指示 B.1 / B.2）；[Form 20-F](https://www.sec.gov/files/form20-f.pdf) 一般指示 A.(b)；[Form 6-K](https://www.sec.gov/files/form6-k.pdf) 一般指示 B；[17 CFR 240.13a-16](https://www.law.cornell.edu/cfr/text/17/240.13a-16)。没有申报人或披露建议。
 enrich24（核实于 2026-11-12）：[17 CFR 240.13d-2](https://www.ecfr.gov/current/title-17/section-240.13d-2)；[17 CFR 240.14e-2](https://www.ecfr.gov/current/title-17/section-240.14e-2)；[17 CFR 240.14d-11](https://www.ecfr.gov/current/title-17/section-240.14d-11)；[17 CFR 240.14d-7](https://www.ecfr.gov/current/title-17/section-240.14d-7)；[17 CFR 240.14d-9](https://www.ecfr.gov/current/title-17/section-240.14d-9) 作为支持。没有申报人、要约人、目标或策略建议。
 enrich25（核实于 2026-11-12）：[17 CFR 240.14d-10](https://www.ecfr.gov/current/title-17/section-240.14d-10)；[17 CFR 240.14e-4](https://www.ecfr.gov/current/title-17/section-240.14e-4)；[17 CFR 240.14d-8](https://www.ecfr.gov/current/title-17/section-240.14d-8) 作为支持；[17 CFR 240.12g-1](https://www.ecfr.gov/current/title-17/section-240.12g-1)；[15 U.S.C. 78l(g)](https://www.law.cornell.edu/uscode/text/15/78l)；[17 CFR 240.12g5-1](https://www.ecfr.gov/current/title-17/section-240.12g5-1) 作为支持。没有要约人、目标、发行人或策略建议。
+enrich26（核实于 2026-11-12）：[17 CFR 240.14e-3](https://www.ecfr.gov/current/title-17/section-240.14e-3)；[17 CFR 240.12g-4](https://www.ecfr.gov/current/title-17/section-240.12g-4)；[15 U.S.C. 78l(g)(4)](https://www.law.cornell.edu/uscode/text/15/78l)。eCFR 第 17 编截至 2026-11-09 为最新；12g-4 最近一次修订于 2016-05-10。不推荐任何要约人、目标公司、发行人或策略。
 
 
 <Summary>

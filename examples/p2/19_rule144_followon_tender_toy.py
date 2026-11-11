@@ -477,3 +477,57 @@ print(f"  this toy builds the official net-long options / equivalent-securities 
 check(builds_net_long_engine is False, "do not build the net-long engine")
 print("no bidder or strategy recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+
+print("=== L. Rule 14e-3: disclose-or-abstain once a substantial step or commencement has occurred ===")
+# 17 CFR 240.14e-3 (official eCFR API, title 17 up to date as of 2026-11-09,
+# opened 2026-11-12; not an interstitial). Keep sections A-K identical,
+# including Rule 105, 14e-1, 101/102, 14e-5, Rule 104, 14e-2, 14d-11,
+# 14d-10, 14e-4, and 48/48 after K.
+# 14e-3(a): if any person has taken a substantial step or steps to commence,
+# or has commenced, a tender offer, it is a fraudulent, deceptive or
+# manipulative act or practice for any other person who is in possession of
+# material information relating to such tender offer which he knows or has
+# reason to know is nonpublic and which he knows or has reason to know has
+# been acquired directly or indirectly from the offering person, the issuer,
+# or any officer, director, partner or employee or any other person acting
+# on behalf of the offering person or such issuer, to purchase or sell or
+# cause to be purchased or sold those securities (or convertibles, options,
+# or rights) unless within a reasonable time prior to any purchase or sale
+# such information and its source are publicly disclosed by press release
+# or otherwise.
+# This is not already-taught 14e-2 or 10b5-1. Official (b) entity procedures
+# / information-barrier defense, (c) offering-person purchase and
+# sale-to-offering-person exceptions, and (d) anti-tipping exist; this toy
+# is not that engine. Do not invent a fixed number of days for "a reasonable
+# time." Official typographical artifact in 14e-3(c): "Notwithstanding
+# anything in paragraph (a) of this section to contrary" — quote it; do not
+# silently correct "to contrary." No bidder, target, or strategy
+# recommendation.
+
+print("14e-3(a): if any person has taken a substantial step or steps to commence, or has commenced, a tender offer,")
+print("  it is a fraudulent, deceptive or manipulative act or practice for any other person who is in possession of")
+print("  material information relating to such tender offer which he knows or has reason to know is nonpublic")
+print("  and which he knows or has reason to know has been acquired directly or indirectly from")
+print("  the offering person, the issuer, or any officer, director, partner or employee")
+print("  or any other person acting on behalf of the offering person or such issuer,")
+print("  to purchase or sell or cause to be purchased or sold those securities (or convertibles, options, or rights)")
+print("  unless within a reasonable time prior to any purchase or sale such information and its source")
+print("  are publicly disclosed by press release or otherwise")
+is_14e2_or_10b51 = False
+print(f"  this is already-taught 14e-2 or 10b5-1? {is_14e2_or_10b51}")
+check(is_14e2_or_10b51 is False, "14e-3 is not already-taught 14e-2 or 10b5-1")
+print("official (b) entity procedures / information-barrier defense, (c) offering-person purchase")
+print("  and sale-to-offering-person exceptions, and (d) anti-tipping exist; this toy is not that engine")
+builds_14e3_engines = False
+print(f"  this toy builds the official (b)-(d) engines? {builds_14e3_engines}")
+check(builds_14e3_engines is False, "do not build 14e-3(b)-(d) engines")
+invents_reasonable_time_days = False
+print(f'  this toy invents a fixed number of days for "a reasonable time"? {invents_reasonable_time_days}')
+check(invents_reasonable_time_days is False, "do not invent a fixed number of days for a reasonable time")
+print('official typographical artifact in 14e-3(c): "Notwithstanding anything in paragraph (a) of this section to contrary"')
+silently_corrects_to_contrary = False
+print(f'  this toy silently corrects "to contrary"? {silently_corrects_to_contrary}')
+check(silently_corrects_to_contrary is False, "do not silently correct 14e-3(c) to contrary")
+print("no bidder, target, or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **33.00 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h + FINRA 5131 旋股与市价订单禁令 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **33.50 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h + FINRA 5131 旋股与市价订单禁令 0.25h + 褐皮书 2:00 p.m.（按官方理事会日历所印）0.25h + FINRA 5131 翻炒 / 锁定期豁免新闻服务机制 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -171,6 +171,44 @@ new issue has the same meaning as Rule 5130(i)(9)
   this toy builds a quid pro quo / IB-client / flipping engine? False
 no product, broker, or allocation recommendation
 assertions passed: 32/32
+ASSERT_event_time_ipo_ok
+disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
+```
+
+**FINRA 5131 的翻炒和锁定期豁免新闻服务机制，是已经教过的 5131 的后续官方切片，不是对旋股或市价订单禁令的改写：“Flipped” 指在发行日后 30 天内，把本次发行中买入的新发行股份初次卖出；除非主承销商已对整个承销团施加惩罚性出价，会员不得在翻炒后收回销售佣金；在锁定期解除或豁免前至少两个营业日，账簿管理人必须通知发行人，并通过主要新闻服务宣布即将解除或豁免（核实于 2026-11-12）。** 已经教过的 5131 旋股、5131(d)(4) 市价订单禁令、已点名的 25% / 5130(c) / 补充材料 .01 例外，以及已点名的 5131(a) 利益交换，都不要改写。上面的旋股段落写明不要搭建翻炒 / 锁定期豁免新闻服务引擎——那一句保持原样；官方时钟在这一节另教。这一节补上官方切片，避免把锁定期到期当成解除当日才出现的意外，或发明一项不取决于全团惩罚性出价的 30 天收回权。不推荐任何产品、经纪商或配售安排。
+
+[FINRA Rule 5131(c)(1)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)：会员或关联人士不得“directly or indirectly recoup, or attempt to recoup, any portion of a commission or credit paid or awarded to an associated person for selling shares of a new issue that are subsequently flipped by a customer, unless the managing underwriter has assessed a penalty bid on the entire syndicate。” 5131(e)(4)：“Flipped” 指 “the initial sale of new issue shares purchased in an offering within 30 days following the offering date of such offering。” 5131(d)(2)(B)：“At least two business days before the release or waiver of any lock-up or other restriction on the transfer of the issuer’s shares, the book-running lead manager will notify the issuer of the impending release or waiver and announce the impending release or waiver through a major news service，” 但若解除或豁免仅为允许无偿转让，或转让给 Rule 5130(i)(5) 所定义的直系家庭成员，且受让人已书面同意受让与转让人相同的锁定期条款，则除外。补充材料 .03：只要在其他方面符合 (d)(2)，由账簿管理人、另一会员或发行人作出的宣布，视为满足宣布要求；在二次发行相关、已公开提交的注册说明书中披露解除或豁免，满足通过主要新闻服务宣布的要求。点名这些官方例外即可；不要搭建惩罚性出价、直系家庭或注册说明书引擎。不要在本项打包被覆盖非公众公司的财务测试。不要改写已经教过的 5130，或已经教过的旋股 / 市价订单禁令。
+
+**实验：** 同一脚本的 I 节（A–H 节一旦加入 H 节后，包括已经教过的 5131 旋股 / 市价订单禁令、G 节后的 32/32，以及 H 节后的 39/39，仍与此前相同；全脚本 44 项断言）：
+
+```text
+=== I. FINRA 5131: flipping and lock-up-waiver news-service mechanics ===
+this is a later official slice, not a rewrite of already-taught spinning or the 5131(d)(4) market-order ban
+5131(e)(4): "Flipped" means the initial sale of new issue shares purchased in an offering
+  within 30 days following the offering date of such offering
+  flipped is the initial sale of new-issue shares within 30 days following the offering date? True
+5131(c)(1): no member or associated person may directly or indirectly recoup, or attempt to recoup,
+  any portion of a commission or credit paid or awarded to an associated person for selling shares
+  of a new issue that are subsequently flipped by a customer, unless the managing underwriter
+  has assessed a penalty bid on the entire syndicate
+  member may recoup a selling commission after a flip without a syndicate-wide penalty bid? False
+5131(d)(2)(B): at least two business days before the release or waiver of any lock-up
+  or other restriction on the transfer of the issuer's shares, the book-running lead manager
+  will notify the issuer of the impending release or waiver and announce the impending
+  release or waiver through a major news service
+official exceptions exist: a transfer not for consideration, or to an immediate family member
+  as defined in Rule 5130(i)(5) where the transferee has agreed in writing to be bound
+  by the same lock-up agreement terms in place for the transferor;
+  SM .03: the announcement may be made by the book-running lead manager, another member,
+  or the issuer if it otherwise complies with (d)(2);
+  disclosure of a release or waiver in a publicly filed registration statement in connection
+  with a secondary offering satisfies the news-service announcement requirement;
+  this toy is not that engine
+  this toy builds a penalty-bid, immediate-family, or registration-statement engine? False
+  this is a rewrite of already-taught spinning or the market-order ban? False
+  this toy packs covered-non-public-company financial tests? False
+no product, broker, or allocation recommendation
+assertions passed: 44/44
 ASSERT_event_time_ipo_ok
 disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
 ```
@@ -622,6 +660,29 @@ ASSERT_event_time_ipo_ok
 disclaimer: official Fed / BEA times; no macro strategy; learning only
 ```
 
+**官方理事会月度日历为已打开页面的 2026 年褐皮书发布印着 2:00 p.m.；官方褐皮书发布页本身仍没有钟点，也没有时区，这些日历上的褐皮书事件卡片同样没有印时区（核实于 2026-11-12）。** 已经教过的 G.17 上午 9:15 / 中午、FOMC 14:00，以及“不要为 G.19 发明一个钟点”的说明，都不要改写。这一节补上官方日历时间，避免把褐皮书当成上午 8:30 的 PFEI，或因为同一份理事会日历上的其他项目印了时区，就发明 “Eastern”。官方发布页写该报告 “is published eight times per year”，并列有 2026 年日期 1 月 14 日、3 月 4 日、4 月 15 日、6 月 3 日、7 月 15 日、9 月 2 日、10 月 14 日和 11 月 25 日，没有钟点。官方理事会月度日历为 1 月 14 日、3 月 4 日、6 月 3 日、7 月 15 日、9 月 2 日、10 月 14 日和 11 月 25 日印着 **2:00 p.m.**。这些褐皮书事件卡片没有印时区。应教 “2:00 p.m. as printed on the official Board calendar”。不要发明 “Eastern”、“ET”、“EST” 或 “EDT”。同一份官方 2026 年 1 月日历为 *FOMC 声明* 通知印着 “2 p.m. EST”；不要把那个时区抄到只印着 “2:00 p.m.” 的褐皮书卡片上。2026 年 4 月的月度日历页面当时无法打开；不要根据发布页的日期列表或其他月份，为 4 月 15 日发明 2:00 p.m.。按已经教过的前瞻逻辑，2:00 p.m. 的发布仍不能在当天 09:30 开盘成交。日期以官方机构日历为准。本课只讲事件时间戳识字，不发明宏观交易策略。不要为 G.19 发明一个钟点。
+
+**实验：** `examples/p2/12_event_time_ipo_toy.py` 的 H 节（A–G 节，包括 G.17、“this toy does not invent a G.19 clock or a first-Friday rule” 那一行、已经教过的 5131 旋股 / 市价订单禁令，以及 G 节后的 32/32，仍与此前相同；H 节之后为 39/39）：
+
+```text
+=== H. Beige Book: 2:00 p.m. as printed on the official Board calendar ===
+official publication page: published eight times per year; 2026 dates January 14, March 4,
+  April 15, June 3, July 15, September 2, October 14, and November 25
+  that publication page prints a clock or a time zone? False
+official Board monthly calendars print 2:00 p.m. for January 14, March 4, June 3,
+  July 15, September 2, October 14, and November 25
+  those Beige Book event cards print a time zone? False
+  this toy invents Eastern / ET / EST / EDT for Beige Book? False
+  this toy copies the January calendar's FOMC "2 p.m. EST" notice onto Beige Book? False
+2:00 p.m. Beige Book on 2026-01-14: fill at that day's 09:30 open? False (look-ahead)
+  this toy invents 2:00 p.m. for April 15, whose monthly calendar page was not available? False
+  this toy invents a G.19 clock or a first-Friday rule? False
+no macro-trading strategy
+assertions passed: 39/39
+ASSERT_event_time_ipo_ok
+disclaimer: official Board calendar times; no invented zone; no macro strategy; learning only
+```
+
 ## 财报发布：事件时间是发布那一刻，不是季度末，也不是 8-K 的日期（2026-11-11 核实）
 
 **三个不同的日期。** 季度结束；几周后公司发布财报新闻稿；然后按 **Item 2.02** 提交（furnish）一份 Form 8-K，里面要写明发布日期，并把新闻稿作为附件（[Form 8-K](https://www.sec.gov/files/form8-k.pdf)）。没有其他期限规定时，8-K 要在事件发生后 **四个营业日**内提交（一般说明 B.1）。所以 8-K 的日期可能晚于新闻稿。
@@ -716,6 +777,8 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 23. 把后续发行、优先股或可转债发行，或已经在境外交易的证券，自动当成 FINRA 5130 新发行股份；把按发行价计算的首日收益当成每个账户都能成交的结果；搭建受限人士或 5131 spinning 引擎，或把已经教过的锁定期当成这条配售规则的替代。
 24. 把发行后每一笔二级市场买进都当成 Rule 104 稳定操作，或把超额配售权 / 绿鞋本身当成稳定出价；发明 15% 的超额配售上限；把 104(f) 的稳定价格目录当成这一项来教，或写成 ATM 里也可以做稳定操作。
 25. 把 5131 旋股当成已经教过的 5130 的同一条禁止，或在官方投行条件满足时，把每一个非受限人士账户都当成可以获配新发行股份；在二级市场开始交易前接受新发行股份的市价订单；搭建投行客户、翻炒或发行人指定引擎，或把已经教过的锁定期当成 5131 的替代。
+26. 为褐皮书发明时区，或把 2026 年 1 月日历上 FOMC 声明的 “2 p.m. EST” 抄到只印着 “2:00 p.m.” 的褐皮书卡片上；为 4 月 15 日发明 2:00 p.m.；把褐皮书当成上午 8:30 的 PFEI，或当成可以在当天 09:30 开盘成交；为 G.19 发明一个钟点。
+27. 把翻炒 / 锁定期豁免新闻服务机制当成对已经教过的旋股或市价订单禁令的改写；在没有全团惩罚性出价时仍收回翻炒后的销售佣金；把锁定期解除当成解除当日才出现的意外，而不看至少两个营业日前的主要新闻服务宣布。
 
 ## 练习（与任务清单 1:1）
 
@@ -737,6 +800,8 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 14. **ex-5130** — 运行 `12_event_time_ipo_toy.py` 的 F 段；说明股权 IPO 是不是 5130 新发行股份，后续发行或优先股发行是不是自动算，以及为什么按发行价计算的首日收益不是每个账户都能成交的结果；**完成标准**：股权 IPO 是新发行股份，后续发行和优先股发行不是自动算，并且那句话与输出一致。
 15. **ex-regm104** — 运行 `19_rule144_followon_tender_toy.py` 的 G 段；写出官方的三项 104 活动，说明它们与超额配售权 / 绿鞋不是同一件事，并说明 ATM 里是否禁止稳定操作；**完成标准**：写出稳定操作、承销团回补和惩罚性出价，绿鞋本身不是稳定出价，没有打印 15% 上限，并且 ATM 里禁止稳定操作，与输出一致。
 16. **ex-5131** — 运行 `12_event_time_ipo_toy.py` 的 G 段；说明旋股是不是与 5130 同一条禁止，在官方投行条件满足时，上市公司高管的账户是不是自动可以获配，以及会员能不能在二级市场开始交易前接受新发行股份的市价订单；**完成标准**：旋股是另一条禁止，高管并非自动可获配，并且不得接受该市价订单，与输出一致。
+17. **ex-beigebook** — 运行 `12_event_time_ipo_toy.py` 的 H 节；写出官方理事会日历为已核对的 2026 年褐皮书日期印着什么时间，这个发布能不能在当天 09:30 开盘成交，以及本玩具有没有为褐皮书发明时区或为 4 月 15 日发明时间；**完成标准**：印着 2:00 p.m.，不能在当天开盘成交，没有发明时区，也没有为 4 月 15 日发明时间，与输出一致。
+18. **ex-5131flip** — 运行同一脚本的 I 节；写出 “Flipped” 的定义，说明没有全团惩罚性出价时可否收回销售佣金，以及锁定期解除或豁免前必须提前多久通过主要新闻服务宣布；**完成标准**：发行日后 30 天内的初次卖出；没有全团惩罚性出价不得收回；至少提前两个营业日宣布，与输出一致。
 
 ## 测验
 
@@ -771,6 +836,8 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-regm104" question="Regulation M Rule 104 禁止什么？它和超额配售权或“绿鞋”有何不同？" options={["发行后每一笔二级市场买进都是 104 稳定操作，超额配售权本身就是稳定出价，上限是 15%", "ATM 里始终允许稳定操作，而且 Rule 104 和 Rule 105 是同一条禁令", "除该节允许外，稳定操作、实施承销团回补交易或施加惩罚性出价都是违法的。这些官方 242.100 活动，与承销商的超额配售权或“绿鞋”不是同一件事；Form 20-F Item 9.B.5 把后者写成可以增加发行规模的一种方式。稳定操作只允许用于防止或减缓价格下跌，并且在 ATM 中被禁止。规则里有事先通知要求；本课不搭建通知引擎，也不把 104(f) 的稳定价格目录当成这一项。官方表格没有写 15% 上限", "Rule 104 废止了已经教过的 Rule 101、102 和 105"]} answer={2} explanation="17 CFR 242.104(a)、(b) 和 (e)，以及官方 242.100 定义。Form 20-F Item 9.B.5 把超额配售权或“绿鞋”写成可以增加发行规模的一种方式，但没有写 15% 上限。不要把每一笔二级市场买进，或该期权本身，当成 104 稳定出价。" />
 
 <Quiz id="bt-5131" question="根据 FINRA Rule 5131，什么是旋股（spinning）？会员能不能在二级市场开始交易前，接受新发行股份的市价订单？" options={["旋股就是已经教过的 5130，所以每一个非受限人士账户都可以获配新发行股份", "会员可以在二级市场开始交易前接受新发行股份的市价订单，而且 5131(a) 的利益交换和旋股是同一款", "旋股是不同于 5130 的禁止：如果满足官方投行条件 (A)/(B)/(C)，会员不得向上市公司或被覆盖非公众公司的执行高管或董事（或其重大供养的人）拥有实益权益的账户配售新发行股份。会员不得在二级市场开始交易前，接受在二级市场购买新发行股份的市价订单。“新发行股份”与 Rule 5130(i)(9) 含义相同。官方的 25% / 5130(c) / 补充材料 .01 发行人指定例外存在；本课不搭建该引擎。5131(a) 的利益交换是另一款官方段落", "已经教过的锁定期可以替代 5131，所以开盘前的市价订单是在二级市场开始交易前买入这次 IPO 的办法"]} answer={2} explanation="FINRA 5131(b)(1) 是不同于已经教过的 5130 的配售禁止。5131(d)(4) 禁止会员在二级市场开始交易前接受新发行股份的市价订单。“新发行股份”与 Rule 5130(i)(9) 含义相同。点名官方例外即可，不要搭建该引擎。5131(a) 是另一款官方段落。" />
+<Quiz id="bt-beigebook" question="官方理事会月度日历，为已打开页面的 2026 年褐皮书发布印着什么时间？2:00 p.m. 的发布能不能在当天 09:30 开盘成交？" options={["官方发布页印着美东时间上午 8:30，所以褐皮书可以像 PFEI 一样在当天 09:30 开盘成交", "官方日历为褐皮书印着 “2:00 p.m. EST”，因为 2026 年 1 月日历为 FOMC 声明印着 “2 p.m. EST”，而且 4 月 15 日也是 2:00 p.m.", "官方理事会月度日历为 2026 年 1 月 14 日、3 月 4 日、6 月 3 日、7 月 15 日、9 月 2 日、10 月 14 日和 11 月 25 日印着 2:00 p.m.，这些褐皮书事件卡片没有时区。应教 “2:00 p.m. as printed on the official Board calendar”。不要发明 “Eastern”、“ET”、“EST” 或 “EDT”，也不要把 1 月日历上 FOMC 的 “2 p.m. EST” 通知抄到褐皮书上。2026 年 4 月的月度日历页面当时无法打开；不要为 4 月 15 日发明 2:00 p.m.。2:00 p.m. 的发布不能在当天 09:30 开盘成交。不要为 G.19 发明一个钟点", "本课为 G.19 发明 2:00 p.m. 的钟点，并为褐皮书发明第一个星期五规则"]} answer={2} explanation="官方理事会月度日历为已核对的 2026 年褐皮书日期印着 2:00 p.m.，卡片上没有时区。不要发明时区，不要把 FOMC 的 “2 p.m. EST” 抄到褐皮书上，也不要为 4 月 15 日发明时间。2:00 p.m. 的发布不能在当天 09:30 开盘成交。不要为 G.19 发明钟点。" />
+<Quiz id="bt-5131flip" question="根据 FINRA 5131，“Flipped” 是什么？会员在翻炒后何时可以收回销售佣金？锁定期解除或豁免前必须发生什么？" options={["这是对已经教过的旋股或 5131(d)(4) 市价订单禁令的改写，而且每一个锁定期都正好在上市后 180 天结束", "会员在任何翻炒后都可以收回销售佣金，而且锁定期可以在没有新闻服务宣布的情况下解除", "“Flipped” 指发行日 30 天之后的任何卖出，而且本课搭建了惩罚性出价、直系家庭或注册说明书引擎", "“Flipped” 指在发行日后 30 天内，把本次发行中买入的新发行股份初次卖出。除非主承销商已对整个承销团施加惩罚性出价，会员不得收回（或试图收回）因销售随后被翻炒的新发行股份而支付的佣金或信用。在锁定期或其他转让限制解除或豁免前至少两个营业日，账簿管理人通知发行人，并通过主要新闻服务宣布即将解除或豁免。官方 (d)(2) 例外和补充材料 .03 是存在的（包括由另一会员或发行人宣布，以及在二次发行相关、已公开提交的注册说明书中披露）；本课不搭建惩罚性出价、直系家庭或注册说明书引擎。这不是对已经教过的旋股或市价订单禁令的改写"]} answer={3} explanation="FINRA 5131(e)(4) 把 “Flipped” 定义为发行日后 30 天内的初次卖出。5131(c)(1) 禁止在没有全团惩罚性出价时收回佣金。5131(d)(2)(B) 要求至少提前两个营业日通过主要新闻服务宣布。点名官方例外即可，不要搭建这些引擎。这不是对旋股或市价订单禁令的改写。" />
 
 ## 完成标准
 
@@ -781,6 +848,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
  enrich20（核实于 2026-11-12）：[美联储 G.17](https://www.federalreserve.gov/releases/g17/)；[当期 G.17 文本](https://www.federalreserve.gov/releases/g17/Current/g17.txt)；[BEA 发布日程](https://www.bea.gov/news/schedule)（页面最近修改于 11/11/26）；[G.19](https://www.federalreserve.gov/releases/g19/)（只有“大约每月第五个营业日”，没有钟点）。不发明宏观交易策略。
 enrich23（核实于 2026-11-12）：[FINRA Rule 5130](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5130)；[17 CFR 242.100](https://www.law.cornell.edu/cfr/text/17/242.100)；[17 CFR 242.104](https://www.ecfr.gov/current/title-17/section-242.104)；[Form 20-F](https://www.sec.gov/files/form20-f.pdf) Item 9.B.5（超额配售权或“绿鞋”）。不推荐任何产品、经纪商、发行或交易商。
 enrich24（核实于 2026-11-12）：[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(b) 的旋股；5131(d)(4) 的市价订单禁令；“新发行股份”与 5130(i)(9) 含义相同）。不推荐任何产品、经纪商或配售安排。
+enrich26（核实于 2026-11-12）：美联储褐皮书发布页 [beige-book-default](https://www.federalreserve.gov/monetarypolicy/publications/beige-book-default.htm)（每年八次；2026 年日期列表，没有钟点）；官方理事会月度日历为已打开页面的 2026 年褐皮书条目印着 2:00 p.m.，卡片上没有时区；[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(c) 翻炒；5131(e)(4)；5131(d)(2)(B) 与补充材料 .03 的锁定期豁免新闻服务机制）。不发明时区，不为 4 月 15 日发明时间，也不发明宏观交易策略。不推荐任何产品、经纪商或配售安排。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

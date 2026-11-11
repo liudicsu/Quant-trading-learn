@@ -40,3 +40,38 @@ official SM .04 exceptions exist; this toy is not an information-barrier / conse
 SM .05: front running of non-block orders may still violate other FINRA rules, including Rule 2010 and already-taught Rule 5320
 no product, broker, or venue recommendation
 assertions passed: 12/12
+=== D. FINRA 5230: payments involving publications that influence the market price ===
+5230 is a different prohibition from already-taught FINRA 5250
+5230(a): except as provided in paragraph (b), no member shall, directly or indirectly,
+  give, permit to be given, or offer to give, anything of value to any person
+  for the purpose of influencing or rewarding the action of such person
+  in connection with the publication or circulation in any electronic or other public media,
+  including any investment service or similar publication, Web site, newspaper,
+  magazine or other periodical, radio, or television program,
+  of any matter that has, or is intended to have, an effect upon the market price of any security
+  this is the already-taught 5250 issuer-payment-for-market-making rule? False
+5230(b) official exceptions exist: (1) a communication clearly distinguishable as paid advertising;
+  (2) a communication that discloses the receipt of compensation and the amount thereof
+  in accordance with Section 17(b) of the Securities Act;
+  (3) a research report as defined in Rule 2241
+  this toy builds a Section 17(b) or Rule 2241 engine? False
+  every paid communication is banned? False
+no product, broker, or venue recommendation
+assertions passed: 15/15
+=== E. FINRA 5280: trading ahead of research reports ===
+5280 is a different prohibition from already-taught FINRA 5270 and 5320
+5280(a): No member shall establish, increase, decrease or liquidate an inventory position
+  in a security or a derivative of such security based on non-public advance knowledge
+  of the content or timing of a research report in that security
+  this is the already-taught 5270 front-running-of-an-imminent-block rule? False
+  this is the already-taught 5320 trading-ahead-of-a-held-customer-equity-order rule? False
+5280(b): a member must establish, maintain and enforce policies and procedures reasonably designed
+  to restrict or limit the information flow between research department personnel,
+  or other persons with knowledge of the content or timing of a research report,
+  and trading department personnel, so as to prevent trading department personnel
+  from utilizing non-public advance knowledge of the issuance or content of a research report
+  for the benefit of the member or any other person
+official 5280(b) information-flow procedures exist; this toy is not that engine
+  this toy builds an information-barrier or Rule 2241 research-report definition engine? False
+no product, broker, or venue recommendation
+assertions passed: 18/18

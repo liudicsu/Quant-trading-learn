@@ -79,3 +79,48 @@ no product, broker, or allocation recommendation
 assertions passed: 32/32
 ASSERT_event_time_ipo_ok
 disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
+=== H. Beige Book: 2:00 p.m. as printed on the official Board calendar ===
+official publication page: published eight times per year; 2026 dates January 14, March 4,
+  April 15, June 3, July 15, September 2, October 14, and November 25
+  that publication page prints a clock or a time zone? False
+official Board monthly calendars print 2:00 p.m. for January 14, March 4, June 3,
+  July 15, September 2, October 14, and November 25
+  those Beige Book event cards print a time zone? False
+  this toy invents Eastern / ET / EST / EDT for Beige Book? False
+  this toy copies the January calendar's FOMC "2 p.m. EST" notice onto Beige Book? False
+2:00 p.m. Beige Book on 2026-01-14: fill at that day's 09:30 open? False (look-ahead)
+  this toy invents 2:00 p.m. for April 15, whose monthly calendar page was not available? False
+  this toy invents a G.19 clock or a first-Friday rule? False
+no macro-trading strategy
+assertions passed: 39/39
+ASSERT_event_time_ipo_ok
+disclaimer: official Board calendar times; no invented zone; no macro strategy; learning only
+=== I. FINRA 5131: flipping and lock-up-waiver news-service mechanics ===
+this is a later official slice, not a rewrite of already-taught spinning or the 5131(d)(4) market-order ban
+5131(e)(4): "Flipped" means the initial sale of new issue shares purchased in an offering
+  within 30 days following the offering date of such offering
+  flipped is the initial sale of new-issue shares within 30 days following the offering date? True
+5131(c)(1): no member or associated person may directly or indirectly recoup, or attempt to recoup,
+  any portion of a commission or credit paid or awarded to an associated person for selling shares
+  of a new issue that are subsequently flipped by a customer, unless the managing underwriter
+  has assessed a penalty bid on the entire syndicate
+  member may recoup a selling commission after a flip without a syndicate-wide penalty bid? False
+5131(d)(2)(B): at least two business days before the release or waiver of any lock-up
+  or other restriction on the transfer of the issuer's shares, the book-running lead manager
+  will notify the issuer of the impending release or waiver and announce the impending
+  release or waiver through a major news service
+official exceptions exist: a transfer not for consideration, or to an immediate family member
+  as defined in Rule 5130(i)(5) where the transferee has agreed in writing to be bound
+  by the same lock-up agreement terms in place for the transferor;
+  SM .03: the announcement may be made by the book-running lead manager, another member,
+  or the issuer if it otherwise complies with (d)(2);
+  disclosure of a release or waiver in a publicly filed registration statement in connection
+  with a secondary offering satisfies the news-service announcement requirement;
+  this toy is not that engine
+  this toy builds a penalty-bid, immediate-family, or registration-statement engine? False
+  this is a rewrite of already-taught spinning or the market-order ban? False
+  this toy packs covered-non-public-company financial tests? False
+no product, broker, or allocation recommendation
+assertions passed: 44/44
+ASSERT_event_time_ipo_ok
+disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only

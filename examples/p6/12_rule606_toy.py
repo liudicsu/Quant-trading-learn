@@ -142,3 +142,91 @@ check(builds_5270_exceptions is False, "do not build SM .04 engines")
 print("SM .05: front running of non-block orders may still violate other FINRA rules, including Rule 2010 and already-taught Rule 5320")
 print("no product, broker, or venue recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== D. FINRA 5230: payments involving publications that influence the market price ===")
+# FINRA Rule 5230 Payments Involving Publications that Influence the Market
+# Price of a Security (official rule page opened 2026-11-12). Keep the
+# current 606 table, 4/4, ASSERT_rule606_ok, the reminder line, the 5250
+# section, the 5270 section, and 12/12 after 5270 identical.
+# 5230 is a different prohibition from already-taught FINRA 5250.
+# 5230(a): except as provided in paragraph (b), no member shall, directly or
+# indirectly, give, permit to be given, or offer to give, anything of value
+# to any person for the purpose of influencing or rewarding the action of
+# such person in connection with the publication or circulation in any
+# electronic or other public media, including any investment service or
+# similar publication, Web site, newspaper, magazine or other periodical,
+# radio, or television program, of any matter that has, or is intended to
+# have, an effect upon the market price of any security.
+# 5230(b) official exceptions: (1) a communication clearly distinguishable
+# as paid advertising; (2) a communication that discloses the receipt of
+# compensation and the amount thereof in accordance with Section 17(b) of
+# the Securities Act; (3) a research report as defined in Rule 2241.
+# Do not build a 17(b) or 2241 engine. Do not rewrite already-taught 5250
+# or PFOF / Rule 606. No product, broker, or venue recommendation.
+
+print("5230 is a different prohibition from already-taught FINRA 5250")
+print("5230(a): except as provided in paragraph (b), no member shall, directly or indirectly,")
+print("  give, permit to be given, or offer to give, anything of value to any person")
+print("  for the purpose of influencing or rewarding the action of such person")
+print("  in connection with the publication or circulation in any electronic or other public media,")
+print("  including any investment service or similar publication, Web site, newspaper,")
+print("  magazine or other periodical, radio, or television program,")
+print("  of any matter that has, or is intended to have, an effect upon the market price of any security")
+is_5250 = False
+print(f"  this is the already-taught 5250 issuer-payment-for-market-making rule? {is_5250}")
+check(is_5250 is False, "5230 is not already-taught 5250")
+print("5230(b) official exceptions exist: (1) a communication clearly distinguishable as paid advertising;")
+print("  (2) a communication that discloses the receipt of compensation and the amount thereof")
+print("  in accordance with Section 17(b) of the Securities Act;")
+print("  (3) a research report as defined in Rule 2241")
+builds_5230_engine = False
+print(f"  this toy builds a Section 17(b) or Rule 2241 engine? {builds_5230_engine}")
+check(builds_5230_engine is False, "do not build a 17(b) or 2241 engine")
+every_paid_communication_banned = False
+print(f"  every paid communication is banned? {every_paid_communication_banned}")
+check(every_paid_communication_banned is False, "official (b) exceptions exist")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== E. FINRA 5280: trading ahead of research reports ===")
+# FINRA Rule 5280 Trading Ahead of Research Reports (official rule page
+# opened 2026-11-12). Keep the existing 606, 5250, and 5270 prints, and the
+# new 5230 section, identical once 5230 is added.
+# 5280 is a different prohibition from already-taught FINRA 5270 and 5320.
+# 5280(a): No member shall establish, increase, decrease or liquidate an
+# inventory position in a security or a derivative of such security based
+# on non-public advance knowledge of the content or timing of a research
+# report in that security.
+# 5280(b): a member must establish, maintain and enforce policies and
+# procedures reasonably designed to restrict or limit the information flow
+# between research department personnel, or other persons with knowledge of
+# the content or timing of a research report, and trading department
+# personnel, so as to prevent trading department personnel from utilizing
+# non-public advance knowledge of the issuance or content of a research
+# report for the benefit of the member or any other person.
+# Official 5280(b) information-flow procedures exist; this toy is not that
+# engine. Do not rewrite 5270 or 5320. Do not build a Rule 2241 research-
+# report definition engine. No product, broker, or venue recommendation.
+
+print("5280 is a different prohibition from already-taught FINRA 5270 and 5320")
+print("5280(a): No member shall establish, increase, decrease or liquidate an inventory position")
+print("  in a security or a derivative of such security based on non-public advance knowledge")
+print("  of the content or timing of a research report in that security")
+is_5270 = False
+is_5320_again = False
+print(f"  this is the already-taught 5270 front-running-of-an-imminent-block rule? {is_5270}")
+print(f"  this is the already-taught 5320 trading-ahead-of-a-held-customer-equity-order rule? {is_5320_again}")
+check(is_5270 is False, "5280 is not already-taught 5270")
+check(is_5320_again is False, "5280 is not already-taught 5320")
+print("5280(b): a member must establish, maintain and enforce policies and procedures reasonably designed")
+print("  to restrict or limit the information flow between research department personnel,")
+print("  or other persons with knowledge of the content or timing of a research report,")
+print("  and trading department personnel, so as to prevent trading department personnel")
+print("  from utilizing non-public advance knowledge of the issuance or content of a research report")
+print("  for the benefit of the member or any other person")
+print("official 5280(b) information-flow procedures exist; this toy is not that engine")
+builds_5280_engine = False
+print(f"  this toy builds an information-barrier or Rule 2241 research-report definition engine? {builds_5280_engine}")
+check(builds_5280_engine is False, "do not build a 5280(b) or 2241 engine")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {checks}/{checks}")
