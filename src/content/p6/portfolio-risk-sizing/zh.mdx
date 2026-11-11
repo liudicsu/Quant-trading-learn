@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **23.75 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h + 保证金账户（Reg T / FINRA 4210）0.5h + 组合保证金（FINRA 4210(g)）0.25h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **24 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h + 保证金账户（Reg T / FINRA 4210）0.5h + 组合保证金（FINRA 4210(g)）0.25h + 卖空保证金（Reg T 150% / FINRA 4210(c)(2)–(3)）0.25h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -192,6 +192,33 @@ ASSERT_portfolio_margin_ok
 disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules apply; learning only
 ```
 
+
+### 卖空保证金不是前面讲过的多头 50% / 25%（核实于 2026-11-12）
+
+上面的 50% 初始保证金和 25% 维持保证金，针对的是**多头**股票。卖空是另一套规则。
+
+按 [12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12)，对“非豁免证券的卖空（非股票证券除外）”，要求的保证金是该证券当前市值的“**150%**”；如果账户里持有可在 90 个日历日内、除付款外不受其他限制地兑换或转换成为被卖空证券的证券，则为当前市值的“**100%**”（并满足所述美式上市看涨期权条件）。请把规则记成当前市值（CMV）的 150%。不要自造“客户必须在卖空所得之外再交 150% 的现金”，也不要漏掉可转换证券这一例外。
+
+成交之后，[FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210) 对空头股票的维持保证金是：卖出价格**低于 5.00 美元**时，为“每股 **2.50 美元或当前市值的 100%**，以较高者为准”；卖出价格**不低于 5.00 美元**时，为“每股 **5.00 美元或当前市值的 30%**，以较高者为准。”多头维持保证金仍是当前市值的 25%，前面已经讲过。券商可以规定更严的内部标准。如果杠杆空头回测直接套用多头的 50/25，尤其是股价低于 5 美元时，就是错的。本课不推荐任何券商。
+
+**实验：** `examples/p6/11_margin_call_toy.py` 的 E 节（上面的 A–D 节没有改）：
+
+```text
+=== E. short-sale margin (Reg T 150% / FINRA 4210(c)(2)-(3)) ===
+  short 100 sh @ $50: CMV $5,000
+  Reg T initial 150% of CMV = $7,500 (100% if a qualifying convertible is held = $5,000)
+  do not invent 'deposit 150% cash on top of the short proceeds'
+  FINRA maintenance at $50 (>= $5): max($5 x 100 = $500, 30% x $5,000 = $1,500) = $1,500
+  short 100 sh @ $4: CMV $400
+  FINRA maintenance below $5: max($2.50 x 100 = $250, 100% x $400 = $400) = $400
+  contrast, 100 sh @ $2: max($250, 100% x $200 = $200) = $250
+  contrast, 100 sh @ $10: max($500, 30% x $1,000 = $300) = $500
+  long initial/maintenance remain 50%/25% as already taught; house rates may be stricter
+assertions passed: 4/4
+ASSERT_short_margin_ok
+disclaimer: strategy-based short-margin toy; house rates may be stricter; learning only
+```
+
 ## 常见错误 / 陷阱
 
 - 忽略 alpha 衰减，有成本仍天天满仓再平衡到目标。
@@ -207,6 +234,7 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 8. 只在目标权重上检查约束，忽略漂移后的实际权重；没先检查约束是否有解（如 n×cap &lt; 1）就开始优化。
 9. 杠杆回测（波动目标权重超过 100%）不模拟追保、被动平仓和融资利息；默认券商维持比例就是 25%，而常见的券商标准是 30%–40%。
 10. 以为所有账户都按 50%/25%，或把组合保证金当成免费杠杆；回测用了更低的保证金要求，却不写清假设的是哪种保证金制度和开户条件。
+11. 把多头的 50%/25% 套到卖空上；自造“客户必须在卖空所得之外再交 150% 现金”；漏掉可转换证券按 100% 的例外；只看 2.50 美元或 5 美元的下限，忽略 100% / 30% 的测试。
 
 
 ## 练习（1:1）
@@ -219,6 +247,7 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 6. **ex5** — 玩具面板上的 HRP 树状图 + 配置表对照 ERC/逆波动；**完成标准**：簇权重和与图与课内一致。
 7. **ex6** — 跑 `05_weight_drift.py`；**完成标准**：打印可行/不可行两行、A 漂移后 0.3462 且违反上限、单边换手 0.0476。
 8. **ex-pm**（可选）— 在 `11_margin_call_toy.py` 的 D 节把看跌期权行权价改成 90；**完成标准**：打印新的最大亏损，并说明为什么行权价越低保护越少。
+9. **ex-shortmargin** — 运行 `11_margin_call_toy.py` 的 E 节；写出 50 美元空头的 Reg T 初始保证金，以及 50 美元和 4 美元时的 FINRA 维持保证金；**完成标准**：7,500 美元（CMV 的 150%）、1,500 美元和 400 美元，与输出一致。
 
 
 ## 测验
@@ -237,12 +266,13 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 <Quiz id="pr-drift" question="4 个资产、每个上限 20%，要求权重和为 1，会怎样？" options={["一定有解", "无解：最多只能到 80%", "上限自动放宽", "只影响成本"]} answer={1} explanation="n×cap=0.8<1，约束互相矛盾，应在优化前报错。" />
 <Quiz id="prs-margin-call" question="按 SEC 公告的例子：持仓市值 $12,000，借款 $8,000，券商维持比例 40%。结果是？" options={["没问题，权益 $4,000 高于 $3,000", "要追加 $800", "要追加 $4,800", "维持比例只看初始买入价，不用重算"]} answer={1} explanation="40% × $12,000 = $4,800；权益 $4,000，差 $800。“没问题，权益 $4,000 高于 $3,000”是 25% 维持比例的情况。" />
 <Quiz id="prs-portmargin" question="按 FINRA 4210(g)，组合保证金账户里，单只股票及其期权的保证金主要怎么定？" options={["固定为市值的 50%", "在上下 15% 的价格情景下重估，取最大理论亏损（另有每张合约的最低要求）", "由客户自己选择", "只看前一天的收盘价"]} answer={1} explanation="4210(g) 是按策略保证金之外的另一种做法：个股在 ±15% 范围内取 10 个估值点，取最大理论亏损，每张上市期权至少 $.375 × 乘数。" />
+<Quiz id="prs-shortmargin" question="非豁免股票卖空的保证金要求是什么？股价 50 美元和 4 美元时，FINRA 维持保证金分别怎么算？" options={["和已经讲过的多头一样，仍是初始 50%、维持 25%", "客户必须在卖空所得之外再交 150% 的现金", "Reg T 初始保证金是当前市值的 150%（若持有符合条件的可转换证券则为 100%）；FINRA 维持保证金在不低于 5 美元时取 5 美元与 30% 的较高者，低于 5 美元时取 2.50 美元与 100% 的较高者", "低于 5 美元时，维持保证金永远是每股 2.50 美元，即使它低于当前市值的 100%"]} answer={2} explanation="12 CFR 220.12(c) 是当前市值的 150%，持有符合条件的可转换证券时为 100%。FINRA 4210(c)(2)–(3)：低于 5 美元时取 2.50 美元与 100% 的较高者；不低于 5 美元时取 5 美元与 30% 的较高者。50 美元时 30% 是 1,500 美元；4 美元时 100% 是 400 美元。" />
 
 ## 完成标准
 
 仓位对照表（Kelly / 波动目标 / RP / MV–LW–1/N）+ 一页风险偏好，写明为何把仓位压在满 Kelly 之下。
 
-**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。；权重漂移/约束一致性为本站合成小实验（`examples/p6/05_weight_drift.py`）。；组合保证金（2026-11-10 核实）：[FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。
+**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。；权重漂移/约束一致性为本站合成小实验（`examples/p6/05_weight_drift.py`）。；组合保证金（2026-11-10 核实）：[FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。卖空保证金（2026-11-12 核实）：[12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12)、[FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。
 
 <Summary>
 **要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；HRP 在树上配置且不反演 Σ；MV 需要收缩并以 1/N 作诚实对照。  

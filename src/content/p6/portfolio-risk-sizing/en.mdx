@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**23.75 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab + 0.5h margin accounts (Reg T / FINRA 4210) + 0.25h portfolio margin (FINRA 4210(g)) — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+This lesson (~**24 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab + 0.5h margin accounts (Reg T / FINRA 4210) + 0.25h portfolio margin (FINRA 4210(g)) + 0.25h short-sale margin (Reg T 150% / FINRA 4210(c)(2)–(3)) — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
 
 **Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
 
@@ -192,6 +192,33 @@ ASSERT_portfolio_margin_ok
 disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules apply; learning only
 ```
 
+
+### Short-sale margin is not the long 50% / 25% already taught (checked 2026-11-12)
+
+The 50% initial and 25% long-maintenance figures above apply to **long** stock. A short sale is different.
+
+Under [12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12), the required margin for a “short sale of a nonexempted security, except for a non-equity security,” is “**150 percent** of the current market value of the security,” or “**100 percent** of the current market value if a security exchangeable or convertible within 90 calendar days without restriction other than the payment of money into the security sold short is held in the account,” with the stated American-style listed-call conditions. Teach the rule as 150% of current market value (CMV). Do **not** invent “the customer must deposit 150% in cash on top of the short proceeds,” and do not skip the convertible exception.
+
+After the trade, [FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210) maintenance for a short stock is: selling **below $5.00**: “**$2.50 per share or 100 percent** of the current market value, whichever amount is greater”; selling **at $5.00 or above**: “**$5.00 per share or 30 percent** of the current market value, whichever amount is greater.” Long maintenance remains 25% of CMV, as already taught. Brokers may set stricter house rates. A leveraged short backtest that reuses the long 50/25 figures is wrong, especially under $5. This lesson recommends no broker.
+
+**Lab:** section E of `examples/p6/11_margin_call_toy.py` (sections A–D above are unchanged):
+
+```text
+=== E. short-sale margin (Reg T 150% / FINRA 4210(c)(2)-(3)) ===
+  short 100 sh @ $50: CMV $5,000
+  Reg T initial 150% of CMV = $7,500 (100% if a qualifying convertible is held = $5,000)
+  do not invent 'deposit 150% cash on top of the short proceeds'
+  FINRA maintenance at $50 (>= $5): max($5 x 100 = $500, 30% x $5,000 = $1,500) = $1,500
+  short 100 sh @ $4: CMV $400
+  FINRA maintenance below $5: max($2.50 x 100 = $250, 100% x $400 = $400) = $400
+  contrast, 100 sh @ $2: max($250, 100% x $200 = $200) = $250
+  contrast, 100 sh @ $10: max($500, 30% x $1,000 = $300) = $500
+  long initial/maintenance remain 50%/25% as already taught; house rates may be stricter
+assertions passed: 4/4
+ASSERT_short_margin_ok
+disclaimer: strategy-based short-margin toy; house rates may be stricter; learning only
+```
+
 ## Common mistakes / pitfalls
 
 - Ignoring alpha decay and always full-rebalancing to target under costs.
@@ -207,6 +234,7 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 8. Checking constraints only on target weights, ignoring drifted actual weights; optimising before checking the constraints are feasible (e.g. n×cap &lt; 1).
 9. Running a leveraged backtest (vol-target weight above 100%) without margin-call checks, forced selling or financing interest; assuming 25% is your broker's level when house levels are often 30%–40%.
 10. Assuming every account uses 50%/25%, or treating portfolio margin as free leverage; backtesting with a lower requirement without saying which margin regime and eligibility you assume.
+11. Reusing long 50%/25% figures for a short sale; inventing “the customer must deposit 150% cash on top of the short proceeds”; skipping the convertible 100% exception; using only the $2.50 or $5 floor and ignoring the 100% / 30% tests.
 
 
 ## Practice (1:1)
@@ -219,6 +247,7 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 6. **ex5** — HRP dendrogram + allocation table vs ERC/inv-vol on the toy panel; **done when** cluster sums and charts match the lesson.
 7. **ex6** — run `05_weight_drift.py`; **done when**: the feasible/infeasible lines, A drifted to 0.3462 breaching the cap, and one-way turnover 0.0476 print.
 8. **ex-pm** (optional) — in section D of `11_margin_call_toy.py`, change the put strike to 90; **done when**: you print the new largest loss and explain why a lower strike protects less.
+9. **ex-shortmargin** — Run section E of `11_margin_call_toy.py`; state the Reg T initial requirement for a $50 short, and the FINRA maintenance at $50 and at $4; **done when**: $7,500 (150% of CMV), $1,500, and $400, matching the output.
 
 
 ## Quiz
@@ -237,12 +266,13 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 <Quiz id="pr-drift" question="4 assets, each capped at 20%, weights must sum to 1. What happens?" options={["Always solvable", "Infeasible: at most 80%", "The cap relaxes itself", "Only costs are affected"]} answer={1} explanation="n×cap=0.8<1, the constraints contradict each other; raise an error before optimising." />
 <Quiz id="prs-margin-call" question="SEC bulletin example: position $12,000, loan $8,000, house maintenance 40%. What happens?" options={["Fine, $4,000 equity beats $3,000", "$800 margin call", "$4,800 margin call", "Maintenance is checked only against the purchase price"]} answer={1} explanation="40% × $12,000 = $4,800 required; equity is $4,000, so $800 short. “Fine, $4,000 equity beats $3,000” is the 25% case." />
 <Quiz id="prs-portmargin" question="Under FINRA 4210(g), how is margin mainly set for a single stock and its options in a portfolio margin account?" options={["A fixed 50% of market value", "Revalue under price moves of up to ±15% and take the largest theoretical loss (with a per-contract minimum)", "The customer chooses", "Only the prior close matters"]} answer={1} explanation="4210(g) is an alternative to strategy-based margin: ten valuation points across ±15% for an equity security, the largest theoretical loss, and at least $.375 × multiplier per listed option." />
+<Quiz id="prs-shortmargin" question="What is the required margin for a short sale of a nonexempted equity security, and what is FINRA maintenance for a short stock at $50 versus $4?" options={["The same 50% initial and 25% maintenance already taught for longs", "The customer must deposit 150% in cash on top of the short proceeds", "Reg T initial is 150% of current market value (100% if a qualifying convertible is held); FINRA maintenance is the greater of $5 or 30% at or above $5, and the greater of $2.50 or 100% below $5", "Below $5, maintenance is always $2.50 per share, even if that is less than 100% of current market value"]} answer={2} explanation="12 CFR 220.12(c) is 150% of CMV, or 100% with a qualifying convertible. FINRA 4210(c)(2)–(3): below $5, $2.50 or 100%, whichever greater; at or above $5, $5 or 30%, whichever greater. At $50, 30% is $1,500; at $4, 100% is $400." />
 
 ## Done when
 
 Sizing comparison table (Kelly / vol-target / RP / MV–LW–1/N) plus a risk-preference page stating why you cap below full Kelly.
 
-**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11; [arXiv:2502.04284](https://arxiv.org/abs/2502.04284) Ma & Smith alpha decay + costs; [Brandt–Santa-Clara–Valkanov RFS 2009](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695); optional [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) NAME-ONLY.; weight-drift / constraint-consistency is an in-house synthetic mini-lab (`examples/p6/05_weight_drift.py`).; portfolio margin (checked 2026-11-10): [FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210).
+**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11; [arXiv:2502.04284](https://arxiv.org/abs/2502.04284) Ma & Smith alpha decay + costs; [Brandt–Santa-Clara–Valkanov RFS 2009](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695); optional [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) NAME-ONLY.; weight-drift / constraint-consistency is an in-house synthetic mini-lab (`examples/p6/05_weight_drift.py`).; portfolio margin (checked 2026-11-10): [FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210). short-sale margin (checked 2026-11-12): [12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12), [FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210).
 
 <Summary>
 **Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; HRP allocates on a tree without inverting Σ; MV needs shrinkage and an honest 1/N foil.  

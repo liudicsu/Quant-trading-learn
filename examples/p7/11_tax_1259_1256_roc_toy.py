@@ -1,5 +1,5 @@
-"""Pub 550 return-of-capital Example 1, plus a 1259 / 1256 classification table
-(checked 2026-11-12).
+"""Pub 550 return-of-capital Example 1, a 1259 / 1256 classification table,
+and payments in lieu / preferred-stock QDI (checked 2026-11-12).
 
 Sources:
 - IRS Publication 550 (2025), "Nondividend Distributions": a nondividend
@@ -29,6 +29,33 @@ Sources:
   index, so ordinary single-stock equity options are not 1256 contracts. Under
   the 60/40 rule, 60% of the capital gain or loss is long-term and 40% is
   short-term, regardless of how long you actually held the property.
+
+- investor.gov, "An Introduction to Short Sales" (updated 2026-09-09):
+  "If the stock you borrow pays a dividend, you must pay the dividend to the
+  person or firm making the loan."
+- Pub 550 (2025), "Reporting Substitute Payments": if a broker transferred
+  your securities for use in a short sale or similar transaction and received
+  certain substitute dividend payments on your behalf, it must report them on
+  Form 1099-MISC (or a similar statement). "Do not treat these substitute
+  payments as dividends or interest." Report them as "Other income." A
+  substitute payment in lieu of a dividend is one whose ex-dividend date is
+  after the transfer of stock for use in a short sale and before the closing
+  of the short sale. Under "Dividends that are not qualified dividends," Pub
+  550 lists, among others, "Dividends on any share of stock to the extent you
+  are obligated (whether under a short sale or otherwise) to make related
+  payments for positions in substantially similar or related property," and
+  "Payments in lieu of dividends, but only if you know or have reason to know
+  the payments are not qualified dividends." Those items "are not qualified
+  dividends even if they are shown on Form 1099-DIV, box 1b."
+- Pub 550 "Exception for preferred stock": you must have held the stock more
+  than 90 days during the 181-day period that begins 90 days before the
+  ex-dividend date if the dividends are due to periods totaling more than 366
+  days. If the preferred dividends are due to periods totaling less than 367
+  days, the ordinary more-than-60-days-in-121-day-window test applies. Do not
+  apply 90/181 to common stock, and do not call every preferred dividend a
+  90-day test. "Qualified REIT dividends" (IRC §199A / 1099-DIV box 5) are a
+  different concept; a REIT can still designate a box 1b qualified-dividend
+  portion.
 
 General information, not tax or investment advice. Backtests stay pre-tax
 unless labelled otherwise. Applies only if US tax rules apply to you.
@@ -81,3 +108,22 @@ print("do not apply 60/40 to ordinary equity options; do not call every index pr
 print("do not teach that any short against a long is always 1259")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+
+print("=== C. Payments in lieu are not QDI; preferred QDI is 90/181 only when periods > 366 days ===")
+rows = (
+    ("cash the short seller owes the lender when borrowed stock pays a dividend", "a cash obligation (investor.gov short-sales bulletin); a backtest that 'pays no dividends' omits this cost"),
+    ("substitute payment in lieu of a dividend (ex-date after transfer for the short and before close-out)", "reported on Form 1099-MISC; do not treat as dividends or interest; not QDI even if shown in Form 1099-DIV box 1b"),
+    ("common-stock qualified dividend", "more than 60 days in the 121-day window beginning 60 days before the ex-date"),
+    ("preferred dividend due to periods totaling more than 366 days", "more than 90 days in the 181-day window beginning 90 days before the ex-date"),
+    ("preferred dividend due to periods totaling less than 367 days", "ordinary 60/121 test; do not call every preferred dividend a 90-day test"),
+    ("REIT ordinary dividend / 1099-DIV box 5 qualified REIT dividend (IRC 199A)", "a different concept from box 1b QDI; do not claim that REIT dividends are never QDI; a REIT can still designate a box 1b portion"),
+)
+for instrument, treatment in rows:
+    print(f"  {instrument}:")
+    print(f"    -> {treatment}")
+check(len(rows) == 6, "six tax-character rows")
+print("do not apply 90/181 to common stock")
+print("do not treat payments in lieu as qualified dividends")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+

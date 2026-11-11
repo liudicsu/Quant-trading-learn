@@ -120,7 +120,7 @@ disclaimer: synthetic data; learning only, not investment advice.
 
 ## Shorting US stocks is not just a “negative weight” (checked 2026-11-08)
 
-Reg SHO layers ([SEC](https://www.sec.gov/investor/pubs/regsho.htm)): Rule 200 marking (long/short); Rule 203(b) locate; Rule 201 price test (after a ≥10% one-day drop, for the rest of that day and the next); Rule 204 close-out of fails. Plus: borrow fees, availability, recall/buy-in risk; the short seller **pays dividends** to the lender; losses are **unlimited** in theory. (The SEC page’s T+2 passages are outdated; settlement is now T+1.)
+Reg SHO layers ([SEC](https://www.sec.gov/investor/pubs/regsho.htm)): Rule 200 marking (long/short); Rule 203(b) locate; Rule 201 price test (after a ≥10% one-day drop, for the rest of that day and the next); Rule 204 close-out of fails. Plus: borrow fees, availability, recall/buy-in risk; the short seller **pays dividends** to the lender (the official cash obligation and the tax character of payments in lieu — they are not qualified dividends — are in `compliance-ethics`); losses are **unlimited** in theory. (The SEC page’s T+2 passages are outdated; settlement is now T+1.)
 
 **Lab:** `examples/p3/06_us_short_constraints.py` (synthetic data):
 
@@ -225,7 +225,7 @@ ASSERT_short_data_pit_ok
 4. Costing one leg only (lab forces n_legs=2).
 5. Estimating β including the test window.
 6. Generating historical signals from the Kalman **smoothed** β (look-ahead leak); or using the same-period filtered β without a one-period lag.
-7. A backtest where the short leg is always borrowable, fee-free and pays no dividends.
+7. A backtest where the short leg is always borrowable, fee-free and pays no dividends. See `compliance-ethics` for the official dividend-on-loan rule and payments in lieu.
 8. Treating SEC Form SHO aggregates as data that already exist (compliance is exempted until 2028-01-02); joining short interest on its settlement date instead of its publish date; calling FINRA daily short volume "short interest"; reading an FTD balance as new daily fails or proof of naked shorting.
 9. Treating a locate as a completed borrow; using the T+3-era FAQ labels “T+4 / T+6” as the current close-out clock; or reading Rule 201 as “no short selling after a 10% drop.”
 10. Marking a sale “long” just because you are net long on paper, or because you plan to buy the shares later, without possession or control or a reasonable expectation by settlement; treating every fail-to-deliver as a Rule 10b-21 violation, or copying the 2008 guide’s T+3 prose.

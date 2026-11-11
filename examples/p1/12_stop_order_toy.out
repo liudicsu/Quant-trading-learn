@@ -1,0 +1,17 @@
+=== A. A stop becomes a market order; the stop is not a guaranteed fill ===
+  sell stop 23; tape 24, 23.50, 22, 21.80
+  triggered? True at print 22; market-order fill 22 (not the stop 23)
+  the stop price is a trigger, not a guaranteed execution price
+=== B. A stop-limit may not be executed ===
+  sell stop-limit stop 23 / limit 22.50; same tape
+  triggered? True at print 22; limit fillable at or above 22.50? False
+  a stop-limit becomes a limit order and may not be executed if the price moves away
+=== C. Trailing-stop bulletin example: $20 -> $24 -> trigger $23 ===
+  bought at 20; price peaks at 24; $1 sell trailing stop holds at 23
+  as the price rises 20, 22, 24, the stop trails to 23
+  price then drops 23.40, 22.90, 22.50
+  triggered? True at print 22.90; fill 22.90 (may deviate from 23)
+trigger convention (last-sale vs quotation) differs by firm; check with the broker
+availability of stop, stop-limit and trailing-stop orders is firm-specific
+assertions passed: 5/5
+disclaimer: staff bulletin, not a Commission rule; learning only; no order-type recommendation

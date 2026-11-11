@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **22 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **22.5 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -198,6 +198,40 @@ disclaimer: general information, not tax advice; backtests stay pre-tax unless l
 ```
 
 
+## 除息日上空头的现金义务、替代付款，以及优先股的合格股息（核实于 2026-11-12）
+
+持有期一节已经讲过普通股合格股息的测试：在除息日前 60 天起算的 121 天窗口里，持有超过 60 天。资本返还一节已经讲过，1099-DIV 第 3 栏不是股息。还剩两条官方事实，放在一起讲，因为它们是“这笔看起来像股息的现金，其实不是合格股息”里还没讲过的主要陷阱。这是**一般性说明，不是税务建议**，本课也不判断它们是否适用于你。
+
+**1. 损益：在除息日做空，要对出借人承担现金股息义务。** investor.gov 简报「[An Introduction to Short Sales](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-51)」于 **2026-09-09** 更新，写明：“如果你借来的股票**派息，你必须把股息付给**出借的人或券商。”回测里空头“不付股息”（`pairs-stat-arb` 里已经把这写成陷阱），就是漏掉了一项现金成本。
+
+**2. 替代付款的税收性质。** 《IRS 第 550 号出版物》（2025）“Reporting Substitute Payments”：如果券商“把你的证券转出去用于卖空或类似交易，并在卖空未平仓期间代你收到某些**替代股息付款**”，必须在 **Form 1099-MISC**（或类似报表）上报告。“**不要把这些替代付款当成股息或利息。** 而要把 1099-MISC 上的替代付款作为‘其他收入’申报……”替代股息付款，是除息日发生在证券被转出去用于卖空之后、卖空平仓之前的付款。在“不属于合格股息的股息”一节，Pub 550 还列有：“**就任何股份，在你有义务（不论是因卖空还是其他原因）就实质相似或相关财产的头寸支付相关款项的范围内，收到的股息**”，以及“**替代股息的付款**，但仅当你知道或应当知道它们不是合格股息时。”这些项目“**即使出现在 Form 1099-DIV 第 1b 栏，也不是合格股息**”。
+
+**3. 优先股只有在股息对应期间合计超过 366 天时，才用 90/181。** 普通的合格股息持有期，是 121 天窗口里超过 60 天。“**优先股的例外。** 对优先股，如果股息对应的期间合计**超过 366 天**，你必须在除息日前 90 天起算的 **181 天**里，持有该股票**超过 90 天**。”如果优先股股息对应的期间合计少于 367 天，仍用普通的 60/121 测试。不要把 90/181 套到普通股上，也不要把每笔优先股股息都说成 90 天测试。不要简单写成“REIT 股息永远不是合格股息”：1099-DIV 说明里的“qualified REIT dividends”是 IRC §199A / 第 5 栏的概念，定义是*既不是资本利得股息、也不是合格股息*的 REIT 股息。REIT 仍然可以指定一部分放入第 1b 栏的合格股息。
+
+**实验：** `examples/p7/11_tax_1259_1256_roc_toy.py` 的 C 节（上面的 A–B 节没有改；不是税务引擎）：
+
+```text
+=== C. Payments in lieu are not QDI; preferred QDI is 90/181 only when periods > 366 days ===
+  cash the short seller owes the lender when borrowed stock pays a dividend:
+    -> a cash obligation (investor.gov short-sales bulletin); a backtest that 'pays no dividends' omits this cost
+  substitute payment in lieu of a dividend (ex-date after transfer for the short and before close-out):
+    -> reported on Form 1099-MISC; do not treat as dividends or interest; not QDI even if shown in Form 1099-DIV box 1b
+  common-stock qualified dividend:
+    -> more than 60 days in the 121-day window beginning 60 days before the ex-date
+  preferred dividend due to periods totaling more than 366 days:
+    -> more than 90 days in the 181-day window beginning 90 days before the ex-date
+  preferred dividend due to periods totaling less than 367 days:
+    -> ordinary 60/121 test; do not call every preferred dividend a 90-day test
+  REIT ordinary dividend / 1099-DIV box 5 qualified REIT dividend (IRC 199A):
+    -> a different concept from box 1b QDI; do not claim that REIT dividends are never QDI; a REIT can still designate a box 1b portion
+do not apply 90/181 to common stock
+do not treat payments in lieu as qualified dividends
+assertions passed: 4/4
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+```
+
+
+
 **中国个人所得税（按审阅报告 R28）：** 居民个人的境内外所得依中国[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)规定纳税（在中国境内有住所，或无住所而一个纳税年度内居住累计满 183 天的个人为居民个人）；涉及无住所个人等情形另依适用规定核对，不仅凭国籍判断。财产转让所得适用 20% 比例税率，应纳税所得额一般为转让收入减财产原值及合理费用后的余额；利息、股息、红利所得亦有 20% 法定比例税率，具体减免/协定与所得性质另核。境外已依法实际缴纳的所得税可在规定限额内抵免，非无条件全额抵免；符合规定的超限部分可向后五个纳税年度结转（[公告 2020 年第 3 号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)）。居民个人取得境外所得原则上于次年 3 月 1 日至 6 月 30 日申报。不能由美国预扣完毕推出中国无需申报或无需补税。
 
 **CRS（按审阅报告 R29）：** CRS 是金融账户涉税信息尽职调查与按适用交换关系报送/交换的框架，不是新增证券税种，也不等于所有国家、所有账户自动交换。应按账户所在金融机构及税收居民身份核对适用规则，如实提供税收居民声明；CRS 与美国 FATCA 是不同机制（[税务总局 AEOI 页](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)、[问答](https://www.chinatax.gov.cn/n810341/n810760/c2620533/content.html)）。是否交换不改变依法申报境外所得的义务，不得据此承诺「美股账户隐身/免申报」。
@@ -383,6 +417,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 14. 把任何空头对冲多头都写成一定构成 IRC §1259 推定出售，或把推定出售和洗售、16(b) 混为一谈。
 15. 把第 1256 条的 60/40 套到普通单只股票（或窄基指数）期权上，或声称所有指数产品都是 1256 合同。
 16. 把 1099-DIV 第 3 栏的非股息分配（资本返还）当成合格股息，或忽略它会调减成本基础。
+17. 把除息日上空头回测成不必支付股息；因为替代付款出现在 1099-DIV 第 1b 栏，就把它当成股息或合格股息。
+18. 把优先股的 90/181 天合格股息测试套到普通股上，或套到期间合计不足 367 天的每一笔优先股股息上；声称 REIT 股息永远不是合格股息。
 
 
 ## 练习（1:1）
@@ -400,6 +436,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 11. **ex-lots** — 运行 `09_tax_lot_toy.py`；再把示例里的卖出改成 250 股，手算先进先出的成本基础；**完成标准**：1,380 和 1,230 与输出一致，250 股的先进先出成本基础为 50 × 10 + 200 × 11 = 2,700。
 12. **ex-16b** — 运行 `10_section16b_toy.py`；把卖出日改成 2026-06-10 和 2026-07-20，说明哪一笔落入 16(b) 的不满六个月窗口；**完成标准**：6 月 10 日在窗口内、7 月 20 日在窗口外，与输出一致。本练习不判断恰好满六个月那天的边界。
 13. **ex-roc** — 运行 `11_tax_1259_1256_roc_toy.py`；写出 Pub 550 例子里 2025 年调减后的成本基础和长期资本利得，并用一句话说明普通股票期权为什么不能套 60/40；**完成标准**：基础 0、利得 10 美元，与输出一致，并点名单只股票期权不是 1256 合同。
+14. **ex-pil** — 看同一脚本的 C 节；写出替代付款在哪种表格上报告、它是不是合格股息，以及优先股何时用 90/181 而不是 60/121；**完成标准**：Form 1099-MISC，即使出现在第 1b 栏也不是合格股息，而且只有股息对应期间合计超过 366 天才用 90/181，与输出一致。
 
 
 ## 测验
@@ -434,12 +471,14 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-1259" question="下列关于 IRC §1259 推定出售的说法，哪一项正确？" options={["对已升值的股票再做空同一只或实质相同的证券，可能构成推定出售：视同在当天按公允市价卖出并确认收益；这不是洗售，也不是 16(b)，也不是“凡是用空头对冲多头就一定是 1259”", "推定出售就是洗售，61 天窗口同样适用", "推定出售的利润必须交给发行人，和 16(b) 一样", "任何空头对冲多头都自动构成 1259"]} answer={0} explanation="§1259(a)、(c) 与 Pub 550：可能视同按公允市价出售并确认收益，持有期重新起算。已按盯市记账的头寸（包括 1256 合同）等被排除；条文还有已平仓交易例外。不要和洗售或 16(b) 混为一谈。" />
 <Quiz id="ce-1256" question="第 1256 条的 60/40 规则适用于什么？" options={["所有股票期权，不论持有多久", "普通单只股票（或窄基指数）期权", "第 1256 条合同，包括符合条件的非股票期权（如宽基股指期权）；资本损益的 60% 记长期、40% 记短期，与实际持有多久无关", "所有指数产品，不必看是不是宽基、是不是在合格交易所上市"]} answer={2} explanation="Pub 550 / IRC §1256：非股票期权包括宽基股指期权（例子是标普 500）。普通单只股票或窄基指数期权是股票期权，不是 1256 合同。不要把所有指数产品都叫成 1256。" />
 <Quiz id="ce-roc" question="按 IRS Publication 550 的例子：2012 年用 100 美元买入股票，2015 年收到 80 美元非股息分配，2025 年又收到 30 美元。应如何处理？" options={["两次都按合格股息申报，并做 60/121 天测试", "2015 年把成本基础降到 20 美元；2025 年先把基础降到 0，剩下 10 美元作为长期资本利得", "这些分配都不用记账，因为不是现金股息", "只在除息日把价格下跌记成亏损，不必调减成本基础"]} answer={1} explanation="非股息分配（1099-DIV 第 3 栏）会调减基础，本身不是股息；基础为零之后的超额部分按该股票持有期记资本利得。60/121 天的合格股息测试不适用于第 3 栏。" />
+<Quiz id="ce-pil" question="如果你在除息日做空，后来看到一笔替代股息付款，这笔付款的税收性质是什么（一般性说明，不是税务建议）？" options={["只要出现在 Form 1099-DIV 第 1b 栏，就是合格股息", "它是利息收入", "做空者必须把股息付给出借人；替代付款在 Form 1099-MISC 上报告，不能当成股息或利息，即使出现在 1099-DIV 第 1b 栏也不是合格股息", "空头没有任何现金义务，而且这笔付款一定是合格股息"]} answer={2} explanation="investor.gov（2026-09-09 更新）：借来的股票若派息，必须把股息付给出借人。Pub 550：不要把替代付款当成股息或利息；即使出现在第 1b 栏，也不是合格股息。" />
+<Quiz id="ce-prefqdi" question="优先股的合格股息持有期，什么时候用 90/181 天测试？" options={["每一笔优先股股息都用，普通股也用", "仅当优先股股息对应的期间合计超过 366 天时：在除息日前 90 天起算的 181 天窗口里持有超过 90 天；否则仍用普通的 60/121 测试", "REIT 股息永远不是合格股息，所以持有期测试一律不适用", "优先股永远不适用 60/121 天测试"]} answer={1} explanation="Pub 550 对优先股的例外，适用于股息对应期间合计超过 366 天的情形。若合计少于 367 天，仍用普通的 60/121 测试。不要把 90/181 套到普通股上。合格 REIT 股息（第 5 栏 / §199A）是另一个概念。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)；代币化 NMS 股票与来源更新（2026-11-10 核实）：[SEC Release 34-106402（创新豁免令）](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)、[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)、[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726)、[SEC 创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)、[File 4-927 意见](https://www.sec.gov/rules-regulations/public-comments/4-927)；CAT 概念文件 [Federal Register 2026-07651](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)；[15 U.S.C. 78i 现行文本（截至 Pub. L. 119-138）](https://uscode.house.gov/us/usc/119-138/t15/s78i/)；短期交易利润（2026-11-11 核实）：[15 U.S.C. 78p(b)](https://www.law.cornell.edu/uscode/text/15/78p)；推定出售、第 1256 条与资本返还（2026-11-12 核实）：[26 U.S.C. §1259](https://www.law.cornell.edu/uscode/text/26/1259)、[26 U.S.C. §1256](https://www.law.cornell.edu/uscode/text/26/1256)、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550)
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)；代币化 NMS 股票与来源更新（2026-11-10 核实）：[SEC Release 34-106402（创新豁免令）](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)、[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)、[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726)、[SEC 创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)、[File 4-927 意见](https://www.sec.gov/rules-regulations/public-comments/4-927)；CAT 概念文件 [Federal Register 2026-07651](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)；[15 U.S.C. 78i 现行文本（截至 Pub. L. 119-138）](https://uscode.house.gov/us/usc/119-138/t15/s78i/)；短期交易利润（2026-11-11 核实）：[15 U.S.C. 78p(b)](https://www.law.cornell.edu/uscode/text/15/78p)；推定出售、第 1256 条与资本返还（2026-11-12 核实）：[26 U.S.C. §1259](https://www.law.cornell.edu/uscode/text/26/1259)、[26 U.S.C. §1256](https://www.law.cornell.edu/uscode/text/26/1256)、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550)；除息日上空头 / 替代付款 / 优先股合格股息（2026-11-12 核实）：[investor.gov，An Introduction to Short Sales](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-51)（2026-09-09 更新）、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550)
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

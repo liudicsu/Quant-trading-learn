@@ -24,3 +24,5 @@ Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
 - enrich14 (2026-11-11): `10_early_close_nasdaq_moc_toy.py` — NYSE early-close MOC freeze at 12:50 ET (2026-11-27 and 2026-12-24; Beijing 01:50 next day) and Nasdaq regular-day close cutoffs (MOC 15:55 / LOC 15:58) (9 assertions).
 
 - enrich15 (2026-11-11): `11_freeride_txse_15c33_toy.py` — Regulation T cash-account payment period (T+1 plus two business days = 3 BD) and 90-calendar-day freeride freeze, TXSE official session clock, Rule 15c3-3 credits−debits reserve toy (14 assertions).
+
+- enrich17 (2026-11-12): `12_stop_order_toy.py` — stop becomes a market order (fill can deviate from the stop), stop-limit may not fill, trailing-stop $20→$24→trigger $23 example (5 assertions; investor.gov bulletin updated 2026-08-18).

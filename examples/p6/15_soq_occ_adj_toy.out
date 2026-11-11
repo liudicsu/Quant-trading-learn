@@ -1,0 +1,35 @@
+=== A. Last trading day: current practice vs Effective TBD ===
+  current AM-settled index options (except planned VIX change): cease at the market close
+    on the business day prior to expiration (usually a Thursday)
+  current PM-settled options: cease at 4:00 p.m. ET on their expiration day
+  Effective TBD (SR-CBOE-2025-011, GTH classes only): SPX AM would cease at 9:25 a.m. ET
+    on the expiration date (usually a Friday); VIX AM at 9:00 a.m. ET (usually a Wednesday)
+  a separate notice will be issued once an effective date is determined; do not treat TBD as operative
+=== B. SOQ (published as SET) is not the prior close, official open, or a later spot ===
+  Thursday close 5000
+  Friday official index open (spot amalgam) 5005
+  later Friday spot print 5010
+  SOQ / SET (official opens of constituents) 5002
+  AM-settled exercise settlement value is the SOQ, not the other three numbers
+  SOQ is not calculated until all constituents have opened; it is not anchored to a time of day
+  if a constituent does not open, its last trade price from the prior trading day is used in the SOQ
+=== C. OCC cash-dividend adjustments (IM 54262 worked examples) ===
+  ordinary cash dividends (regular policy or practice) do not adjust, regardless of size
+  ordinary quarterly $2.00/share on a 100-share contract = $200.00 -> no adjustment
+  example 1: $0.10 special on a 100-share option yields $10.00 -> no adjustment
+    100-share value $10.00; adjust? False
+  example 2: $0.10 special on 100-share and 150-share (prior 3-for-2 split)
+    100-share value $10.00; 150-share value $15.00
+    standard meets $12.50? False; 150-share adjusted? False
+    the 150-share option is also not adjusted, because the standard-size contract does not meet the threshold
+  example 3: $0.15 special on 100-share and 50-share (prior 1-for-2 reverse split)
+    100-share value $15.00; 50-share value $7.50
+    standard adjusted? True; 50-share adjusted? False
+    the 50-share option is not adjusted ($7.50 < $12.50), even though the standard contract is
+  the $12.50 test is per contract, not per share
+  the issuer label 'special' is not binding; OCC decides case by case
+  if adjusted: usually reduce the strike, or add cash to the deliverable; adjustments are made on the ex-date
+  after corporate actions the deliverable may no longer be 100 shares; check the OCC information memo for a live event
+  do not treat FINRA 11140(b) 25%+ ex-date deferral as an options-adjustment test
+assertions passed: 8/8
+disclaimer: learning only; not a settlement or adjustment engine; no product recommendation

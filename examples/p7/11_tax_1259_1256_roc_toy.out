@@ -19,3 +19,20 @@ do not apply 60/40 to ordinary equity options; do not call every index product 1
 do not teach that any short against a long is always 1259
 assertions passed: 3/3
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== C. Payments in lieu are not QDI; preferred QDI is 90/181 only when periods > 366 days ===
+  cash the short seller owes the lender when borrowed stock pays a dividend:
+    -> a cash obligation (investor.gov short-sales bulletin); a backtest that 'pays no dividends' omits this cost
+  substitute payment in lieu of a dividend (ex-date after transfer for the short and before close-out):
+    -> reported on Form 1099-MISC; do not treat as dividends or interest; not QDI even if shown in Form 1099-DIV box 1b
+  common-stock qualified dividend:
+    -> more than 60 days in the 121-day window beginning 60 days before the ex-date
+  preferred dividend due to periods totaling more than 366 days:
+    -> more than 90 days in the 181-day window beginning 90 days before the ex-date
+  preferred dividend due to periods totaling less than 367 days:
+    -> ordinary 60/121 test; do not call every preferred dividend a 90-day test
+  REIT ordinary dividend / 1099-DIV box 5 qualified REIT dividend (IRC 199A):
+    -> a different concept from box 1b QDI; do not claim that REIT dividends are never QDI; a REIT can still designate a box 1b portion
+do not apply 90/181 to common stock
+do not treat payments in lieu as qualified dividends
+assertions passed: 4/4
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
