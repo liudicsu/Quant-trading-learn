@@ -1,0 +1,24 @@
+=== A. FINRA 11892 numerical-guideline buckets (not a blended table) ===
+FINRA 11892: Greater than $0.00 up to and including $25.00 -> 10% / 20%;
+  Greater than $25.00 up to and including $50.00 -> 5% / 10%; Greater than $50.00 -> 3% / 6%
+NYSE Rule 7.10 Exhibit 5 labels the first two rows: Between $0.00 and $25.00 / Between $25.01 and $50.00
+  (same percentages). $25.00 is in the first bucket under both wordings; $25.01 is in the second under both.
+  FINRA bucket for $25.00: Greater than $0.00 up to and including $25.00 -> 10% / 20%
+  FINRA bucket for $25.01: Greater than $25.00 up to and including $50.00 -> 5% / 10%
+  FINRA bucket for $50.00: Greater than $25.00 up to and including $50.00 -> 5% / 10%
+  FINRA bucket for $50.01: Greater than $50.00 -> 3% / 6%
+=== B. Regular hours: an ordinary LULD-covered print is generally not reviewable ===
+  LULD-covered, 15% from last sale, no listed exception: reviewable=False
+  not subject to the LULD Plan: reviewable=True
+  LULD-covered, bands unavailable (listed exception): reviewable=True
+the old percentage table is not the regular-hours test for ordinary LULD stocks
+=== C. Outside hours, and the 2026-12-06 overnight extension ===
+until 23/5 starts (scheduled 2026-12-06), outside-hours reviews still use the outside-hours numerical guidelines
+FINRA 11892 retrieved 2026-11-12 has no Overnight Protected Hours clause;
+do not write that FINRA has already amended 11892, or that the whole market has one overnight CE rule
+  2026-11-12, FINRA 11892 as retrieved: print inside overnight bands generally expected to stand? False
+  2026-12-06, NYSE Rule 7.10 as amended (34-106407): print inside overnight bands generally expected to stand? True
+  2026-12-05, even on a venue that has filed: print inside overnight bands generally expected to stand? False
+=== D. Toy: is this away from the reference by at least the outside-hours guideline? ===
+  reference $20.00 print $24.00: 20% away; outside-hours guideline 20%; meets guideline? True
+assertions passed: 11/11

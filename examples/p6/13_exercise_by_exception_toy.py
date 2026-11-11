@@ -15,6 +15,18 @@ Sources:
   from the OCC ODD) leaves the writer short 100 shares; a put assignment leaves the
   writer long 100 shares. Stock-option exercise/assignment settles T+1 (ODD p.57).
 
+- OIC Options Assignment FAQ: OCC utilizes a random procedure to assign
+  exercise notices to clearing member accounts. The assigned firm must then use
+  an exchange-approved method (usually a random process or the first-in,
+  first-out method) to allocate notices to its accounts that are short the
+  options. A firm's method is a fair assignment method, though not necessarily
+  random. You cannot tell when a short American-style option will be assigned;
+  it can be any business day the market is open. Because OCC processes closing
+  buy transactions before exercises, a short closed during that day's trading
+  hours is not assigned that night (assignments are based on net positions
+  after the close). Customer cutoffs are broker-specific — ask the firm; this
+  toy does not invent a retail-wide 5:30 p.m. OCC customer deadline.
+
 Learning only; not a recommendation to write or exercise options.
 """
 from decimal import Decimal
@@ -70,4 +82,22 @@ print(f"writer assigned on 1 call: stock position {assigned_call_shares} shares"
 print(f"writer assigned on 1 put: stock position {assigned_put_shares} shares")
 check(assigned_call_shares == -100 and assigned_put_shares == 100, "assignment")
 print("those stock trades settle T+1 after exercise; a backtest that 'expires worthless' every option will miss this inventory")
+
+print("=== OCC assignment is random at the clearing level; the customer method is the firm's ===")
+print("OCC assigns exercise notices to clearing-member accounts at random (OIC Assignment FAQ)")
+print("the assigned firm then uses an exchange-approved method (usually random or FIFO); a fair method, not necessarily random")
+
+# Toy FIFO at the firm: two short accounts, one assignment notice.
+# Customer A opened first. This is a classroom FIFO illustration, not a broker recommendation.
+fifo_queue = ["customer A (opened 2026-11-02)", "customer B (opened 2026-11-10)"]
+allocated = fifo_queue[0]
+print(f"one assignment using FIFO at the firm -> allocated to {allocated}")
+check(allocated.startswith("customer A"), "fifo")
+
+# A short closed during today's trading hours is not assigned that night.
+net_short_after_close = 0  # bought back during the day
+assigned_tonight = net_short_after_close > 0
+print(f"short closed during today's trading hours; net short after the close={net_short_after_close} -> assigned tonight? {assigned_tonight}")
+check(assigned_tonight is False, "closed same day")
+print("do not invent a single official retail OCC customer cutoff such as 5:30 p.m.; ask the firm")
 print(f"assertions passed: {checks}/{checks}")

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **21.25 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **22 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -160,6 +160,43 @@ toy average of remaining lots 10.2857/share -> 130 x avg = 1,337.14 (not allowed
 backtest/ledger rule: store lots (date, shares, cost); record the lot method next to every sale.
 assertions passed: 3/3
 ```
+
+## 推定出售、第 1256 条 60/40，以及资本返还（核实于 2026-11-12）
+
+下面三条都是美国税法里的识字，**不是税务建议**，也不判断它们是否适用于你。回测默认仍只报税前结果，除非另行标注。
+
+**1. 推定出售（IRC §1259）不是洗售，也不是 16(b)。** 如果你持有已升值的金融头寸（股票、某些债务工具或合伙权益，卖掉会确认收益），又做了某些对冲——例如卖空同一只或**实质相同**的证券，签订对冲的名义本金合约，或订立交付同一或实质相同财产的期货 / 远期——可能构成[推定出售](https://www.law.cornell.edu/uscode/text/26/1259)（[26 U.S.C. §1259](https://www.law.cornell.edu/uscode/text/26/1259)；[IRS Publication 550](https://www.irs.gov/publications/p550) “Constructive Sales of Appreciated Financial Positions”）。此时，视同在推定出售当天按公允市价卖掉该头寸并**确认收益**；该头寸的持有期从当天重新起算；以后真正平仓时，要调整已经计入的收益（§1259(a)、(c)）。这不是禁止交易，也不是把利润交给发行人。并非每一种对冲都是推定出售：已经按盯市规则记账的头寸（包括第 1256 条合同）被排除在“已升值金融头寸”之外，条文里还有已平仓交易等例外——不要自行总结成“凡是用空头对冲多头，就一定构成 1259”。
+
+**2. 第 1256 条的 60/40，不是普通股票期权的税法。** 第 1256 条合同包括受监管期货、外汇合同、**非股票期权**、交易商股票期权或交易商证券期货（Pub 550；[IRC §1256](https://www.law.cornell.edu/uscode/text/26/1256)）。**非股票期权**是上市期权、但不是股票期权，并且“包括……**宽基股指期权**”（Pub 550 的例子是标普 500）。**股票期权**是买卖股票的期权，或按某只股票、**窄基**指数计价的期权——所以普通的单只股票期权不是 1256 合同。如果年底仍持有 1256 合同，一般视同在纳税年度最后一个营业日按公允市价卖出（盯市）。按 60/40 规则，**资本损益的 60% 记长期、40% 记短期，与实际持有多久无关。** 不要把 60/40 套到单只股票（或窄基指数）期权上；也不要说“所有指数产品都是 1256”——Pub 550 写明，现金结算的指数期权要在合格交易所上市或受其规则约束，并且 SEC 已认定该指数为宽基，才属于非股票期权。这和本站已经讲过的“指数期权可能是欧式、现金结算，要读说明书”是同一类识字，不是产品推荐。
+
+**3. 资本返还不是股息。** **非股息分配**“不是从公司或共同基金的盈利和利润中支付的分配”，出现在 **Form 1099-DIV 第 3 栏**。“非股息分配会**调减股票的成本基础**。在成本基础全部收回之前，它不纳税。这部分不纳税的金额也称为**资本返还**（return of capital）。”成本基础降到零之后，继续收到的非股息分配要按资本利得申报；长期还是短期，看这只股票的持有期（Pub 550，例子：买入 100 美元，先后分配 80 美元和 30 美元，基础从 100 降到 20 再降到 0，剩下 10 美元是长期资本利得）。如果无法辨认批次，先调减最早买入的那些。不要把每一笔现金分配都当成合格股息（前面讲的 60/121 天测试不适用于第 3 栏）；也不要忽略基础调减，否则除息日的价格下跌会被重复计算或标错。FINRA 11140(b) 对 25% 及以上派发的除息日推迟，仍然只是“价格何时下调”的规则，不是税务定性。`data-cleaning` 的分红日期一节有一句指针，指向这里。
+
+**实验：** `examples/p7/11_tax_1259_1256_roc_toy.py`（复现 Pub 550 例 1，并做一个分类表；不是税务引擎）：
+
+```text
+=== A. IRS Pub 550 Example 1: return of capital / 1099-DIV box 3 ===
+  bought in 2012 for $100
+  2015 nondividend distribution $80 -> basis $20, gain $0
+  2025 nondividend distribution $30 -> basis $0, long-term capital gain $10
+  a nondividend distribution is not a dividend; it is not taxed until basis is fully recovered
+  after basis is zero, further nondividend distributions are capital gain (holding period of the stock)
+=== B. Classification table (literacy only; not a product recommendation) ===
+  ordinary single-stock equity option:
+    -> not a section 1256 contract; 60/40 does not apply
+  narrow-based index option (an equity option):
+    -> not a section 1256 contract; 60/40 does not apply
+  listed broad-based stock index option (Pub 550 example: S&P 500):
+    -> nonequity option; section 1256 60/40 may apply if it meets the listed / qualified-board tests
+  short sale of the same stock against an appreciated long stock position:
+    -> may be a constructive sale under IRC 1259; not a wash sale and not section 16(b); not every hedge is 1259
+  section 1256 contract already marked to market:
+    -> excluded from 'appreciated financial position' under 1259(b); do not layer a homemade 1259 rule on top
+do not apply 60/40 to ordinary equity options; do not call every index product 1256
+do not teach that any short against a long is always 1259
+assertions passed: 3/3
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+```
+
 
 **中国个人所得税（按审阅报告 R28）：** 居民个人的境内外所得依中国[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)规定纳税（在中国境内有住所，或无住所而一个纳税年度内居住累计满 183 天的个人为居民个人）；涉及无住所个人等情形另依适用规定核对，不仅凭国籍判断。财产转让所得适用 20% 比例税率，应纳税所得额一般为转让收入减财产原值及合理费用后的余额；利息、股息、红利所得亦有 20% 法定比例税率，具体减免/协定与所得性质另核。境外已依法实际缴纳的所得税可在规定限额内抵免，非无条件全额抵免；符合规定的超限部分可向后五个纳税年度结转（[公告 2020 年第 3 号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)）。居民个人取得境外所得原则上于次年 3 月 1 日至 6 月 30 日申报。不能由美国预扣完毕推出中国无需申报或无需补税。
 
@@ -343,6 +380,9 @@ n_sources=39 us_first_block=25 fields_complete=True
 11. 把 SEC 创新豁免（34-106402）当成正式规则，或当成某个代币化股票场所已满足条件的证明；把只跟踪价格的合成代币当成代币化 NMS 股票；写成“2031 年前到期”（命令写的是至 2031-09-17）；把豁免当成永久的，或把 2031-09-17 当成一定会到的日子（第 V 节：Commission 可以修改期限）。
 12. 账本里每只股票只存一个平均成本；以为事后可以随便挑最便宜的批次，而不在卖出时告诉券商、拿到书面确认。
 13. 把董事、高管或持股超过 10% 的人在不满六个月内买卖同一只股票的利润，当成可以留下的短线收益，或把 16(b) 当成回测里的交易信号。
+14. 把任何空头对冲多头都写成一定构成 IRC §1259 推定出售，或把推定出售和洗售、16(b) 混为一谈。
+15. 把第 1256 条的 60/40 套到普通单只股票（或窄基指数）期权上，或声称所有指数产品都是 1256 合同。
+16. 把 1099-DIV 第 3 栏的非股息分配（资本返还）当成合格股息，或忽略它会调减成本基础。
 
 
 ## 练习（1:1）
@@ -359,6 +399,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 10. **ex-selftrade**（可选）— 运行 `08_self_trade_pattern_toy.py`，把卖方成交移到撤单之后；**完成标准**：玩具可能不再标记这条日志；请解释这是玩具的盲区，不是合规做法（FINRA 5210 补充材料 .03(c) 写明事件顺序不改变适用性；标记只是复核提示，不是违规认定）。
 11. **ex-lots** — 运行 `09_tax_lot_toy.py`；再把示例里的卖出改成 250 股，手算先进先出的成本基础；**完成标准**：1,380 和 1,230 与输出一致，250 股的先进先出成本基础为 50 × 10 + 200 × 11 = 2,700。
 12. **ex-16b** — 运行 `10_section16b_toy.py`；把卖出日改成 2026-06-10 和 2026-07-20，说明哪一笔落入 16(b) 的不满六个月窗口；**完成标准**：6 月 10 日在窗口内、7 月 20 日在窗口外，与输出一致。本练习不判断恰好满六个月那天的边界。
+13. **ex-roc** — 运行 `11_tax_1259_1256_roc_toy.py`；写出 Pub 550 例子里 2025 年调减后的成本基础和长期资本利得，并用一句话说明普通股票期权为什么不能套 60/40；**完成标准**：基础 0、利得 10 美元，与输出一致，并点名单只股票期权不是 1256 合同。
 
 
 ## 测验
@@ -390,12 +431,15 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-wash-trade" question="下面哪一项属于《证券交易法》第 9(a)(1) 条禁止的 wash trade？" options={["亏损卖出后 30 天内买回同一只股票", "为了制造交易活跃的假象，做一笔受益所有权没有变化的成交", "两个互不相关的策略意外撞单，公司有防护程序并做了审查", "在 NBBO 价格挂单等待成交"]} answer={1} explanation="“亏损卖出后 30 天内买回同一只股票”是税法的 wash sale；“两个互不相关的策略意外撞单，公司有防护程序并做了审查”按 FINRA 5210 补充材料 .02 一般算真实的自成交，但同一算法反复出现要防止。" />
 <Quiz id="ce-tsv-exemption" question="截至 2026-11-10，SEC 针对代币化 NMS 股票的「创新豁免」（Release 34-106402）是什么？" options={["一条正式规则，把所有代币化股票平台都注册为交易所", "一项永久批准，连只跟踪股价的合成代币也包括在内", "临时、有条件的豁免：满足条件的 TSV 不算交易所，至 2031-09-17 止", "禁止在美国交易代币化股票"]} answer={2} explanation="命令给出临时、有条件的豁免：TSV 不算交易所，Covered Firm 不算交易商，2026-09-17 起至 2031-09-17 止。只提供合成敞口的产品不在范围内；TSV 要满足条件才能依靠豁免（Commission 可修改期限）。" />
 <Quiz id="ce-16b" question="一位公司董事在 2026-01-15 买入本公司股票，又在 2026-06-10 卖出并获利。按《证券交易法》第 16(b) 条，这笔利润原则上属于谁？" options={["必须交给发行人，不论他当时有没有内幕消息或短线意图", "董事可以留下，因为持有已经超过 90 天", "只有被证明利用了内幕消息时，才需要交还给公司", "只要卖出发生在下一个自然半年，就不受 16(b) 约束"]} answer={0} explanation="15 U.S.C. 78p(b)：董事、高管或持股超过 10% 的受益所有人，在不满六个月内买卖（或先卖后买）同一只股权证券的利润，不论意图如何，都属于发行人。本课不把恰好满六个月那天当成已解决的边界。" />
+<Quiz id="ce-1259" question="下列关于 IRC §1259 推定出售的说法，哪一项正确？" options={["对已升值的股票再做空同一只或实质相同的证券，可能构成推定出售：视同在当天按公允市价卖出并确认收益；这不是洗售，也不是 16(b)，也不是“凡是用空头对冲多头就一定是 1259”", "推定出售就是洗售，61 天窗口同样适用", "推定出售的利润必须交给发行人，和 16(b) 一样", "任何空头对冲多头都自动构成 1259"]} answer={0} explanation="§1259(a)、(c) 与 Pub 550：可能视同按公允市价出售并确认收益，持有期重新起算。已按盯市记账的头寸（包括 1256 合同）等被排除；条文还有已平仓交易例外。不要和洗售或 16(b) 混为一谈。" />
+<Quiz id="ce-1256" question="第 1256 条的 60/40 规则适用于什么？" options={["所有股票期权，不论持有多久", "普通单只股票（或窄基指数）期权", "第 1256 条合同，包括符合条件的非股票期权（如宽基股指期权）；资本损益的 60% 记长期、40% 记短期，与实际持有多久无关", "所有指数产品，不必看是不是宽基、是不是在合格交易所上市"]} answer={2} explanation="Pub 550 / IRC §1256：非股票期权包括宽基股指期权（例子是标普 500）。普通单只股票或窄基指数期权是股票期权，不是 1256 合同。不要把所有指数产品都叫成 1256。" />
+<Quiz id="ce-roc" question="按 IRS Publication 550 的例子：2012 年用 100 美元买入股票，2015 年收到 80 美元非股息分配，2025 年又收到 30 美元。应如何处理？" options={["两次都按合格股息申报，并做 60/121 天测试", "2015 年把成本基础降到 20 美元；2025 年先把基础降到 0，剩下 10 美元作为长期资本利得", "这些分配都不用记账，因为不是现金股息", "只在除息日把价格下跌记成亏损，不必调减成本基础"]} answer={1} explanation="非股息分配（1099-DIV 第 3 栏）会调减基础，本身不是股息；基础为零之后的超额部分按该股票持有期记资本利得。60/121 天的合格股息测试不适用于第 3 栏。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
-**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)；代币化 NMS 股票与来源更新（2026-11-10 核实）：[SEC Release 34-106402（创新豁免令）](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)、[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)、[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726)、[SEC 创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)、[File 4-927 意见](https://www.sec.gov/rules-regulations/public-comments/4-927)；CAT 概念文件 [Federal Register 2026-07651](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)；[15 U.S.C. 78i 现行文本（截至 Pub. L. 119-138）](https://uscode.house.gov/us/usc/119-138/t15/s78i/)；短期交易利润（2026-11-11 核实）：[15 U.S.C. 78p(b)](https://www.law.cornell.edu/uscode/text/15/78p)
+**来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)；代币化 NMS 股票与来源更新（2026-11-10 核实）：[SEC Release 34-106402（创新豁免令）](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)、[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)、[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726)、[SEC 创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)、[File 4-927 意见](https://www.sec.gov/rules-regulations/public-comments/4-927)；CAT 概念文件 [Federal Register 2026-07651](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)；[15 U.S.C. 78i 现行文本（截至 Pub. L. 119-138）](https://uscode.house.gov/us/usc/119-138/t15/s78i/)；短期交易利润（2026-11-11 核实）：[15 U.S.C. 78p(b)](https://www.law.cornell.edu/uscode/text/15/78p)；推定出售、第 1256 条与资本返还（2026-11-12 核实）：[26 U.S.C. §1259](https://www.law.cornell.edu/uscode/text/26/1259)、[26 U.S.C. §1256](https://www.law.cornell.edu/uscode/text/26/1256)、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550)
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

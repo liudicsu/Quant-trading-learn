@@ -1,0 +1,16 @@
+=== A. Rule 200(g): 'long' is a statutory test, not a nickname ===
+  net long, shares already in the broker's possession or control: mark=long
+  net long, purchase not yet received but reasonably expected by settlement: mark=long
+  net long on paper, but neither possession/control nor reasonably expected by settlement: mark=short
+  not deemed to own (flat or net short); plans to buy the shares later: mark=short
+  short, but Rule 201(c) or (d) is met: mark=short exempt
+a same-day purchase does not automatically make a same-day sale 'long'
+a sale of shares you do not own is a short sale even if you plan to buy them later
+=== B. Rule 10b-21 checklist: deception about delivery AND a fail ===
+  deceived the broker about the locate source, and failed to deliver by the settlement date: both_prongs=True
+  honest fail: no deception, but failed to deliver by the settlement date: both_prongs=False
+  deceived about the ability to deliver, but delivered on or before the settlement date: both_prongs=False
+  no deception and delivered on time: both_prongs=False
+an honest fail, or a fail without deception, is not automatically a 10b-21 violation
+do not recast an FTD file as proof of fraud; teach the rule's 'settlement date', not historical T+3 prose
+assertions passed: 9/9

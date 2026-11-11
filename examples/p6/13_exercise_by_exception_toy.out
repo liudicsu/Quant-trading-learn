@@ -11,4 +11,10 @@ this procedure is between OCC and clearing members; a broker may use a different
 writer assigned on 1 call: stock position -100 shares
 writer assigned on 1 put: stock position 100 shares
 those stock trades settle T+1 after exercise; a backtest that 'expires worthless' every option will miss this inventory
-assertions passed: 7/7
+=== OCC assignment is random at the clearing level; the customer method is the firm's ===
+OCC assigns exercise notices to clearing-member accounts at random (OIC Assignment FAQ)
+the assigned firm then uses an exchange-approved method (usually random or FIFO); a fair method, not necessarily random
+one assignment using FIFO at the firm -> allocated to customer A (opened 2026-11-02)
+short closed during today's trading hours; net short after the close=0 -> assigned tonight? False
+do not invent a single official retail OCC customer cutoff such as 5:30 p.m.; ask the firm
+assertions passed: 9/9

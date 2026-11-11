@@ -29,3 +29,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 - enrich11 (2026-11-11): `09_tax_lot_toy.py` — IRS Pub 550 FIFO example (basis 1,380), adequate identification with written confirmation (1,230), no average price per share for stock (3 assertions; not tax advice).
 
 - enrich14 (2026-11-11): `10_section16b_toy.py` — Section 16(b) window of less than six months: 2026-01-15 buy / 2026-06-10 sell inside, 2026-07-20 sell outside; sale-then-repurchase also inside (4 assertions; exact-day edge not decided; not legal advice).
+
+- enrich16 (2026-11-12): `11_tax_1259_1256_roc_toy.py` — IRS Pub 550 return-of-capital Example 1 ($100 / $80 / $30 → basis 100→20→0, $10 long-term gain) and a 1259/1256 classification table (3 assertions; not tax advice).

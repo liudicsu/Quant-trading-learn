@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **14.75 学时**：概念 4h + 实验 5h + 写作成文 1h + Kalman 动态对冲比选修 2h + 美股卖空约束 1h + 做空相关公开数据 1h：short interest、卖空成交量、FTD + Form SHO 与 Rule 10c-1a 状态 0.25h + locate 与 Rule 204/201/门槛证券细节 0.5h）实现 **Engle–Granger** 配对，对照静态 vs 滚动对冲，并演示**样本内一次协整 vs 滚动协整**陷阱。前置：`mean-reversion`。
+本课（约 **15.25 学时**：概念 4h + 实验 5h + 写作成文 1h + Kalman 动态对冲比选修 2h + 美股卖空约束 1h + 做空相关公开数据 1h：short interest、卖空成交量、FTD + Form SHO 与 Rule 10c-1a 状态 0.25h + locate 与 Rule 204/201/门槛证券细节 0.5h + Rule 10b-21 0.25h + Rule 200 多头标记测试 0.25h）实现 **Engle–Granger** 配对，对照静态 vs 滚动对冲，并演示**样本内一次协整 vs 滚动协整**陷阱。前置：`mean-reversion`。
 
 **课内目标：** 滚动 beta 价差；讨论腿断裂；EG 两步法 + MacKinnon 说明。
 
@@ -153,6 +153,32 @@ short at 17.91 vs NBB 17.90: allowed=True
 fail 12,000 shares vs 0.5% of 2,000,000 = 10,000; fail is 0.60% of outstanding
 ```
 
+**Rule 200 的“多头”是法定测试，不是“打算补回来”的别名（核实于 2026-11-12）。** 卖空是卖方并不拥有该证券的出售，或通过交付借入证券来完成的出售（200(a)）。一个人只有在**净多头**的范围内，才被视为拥有该证券（200(c)）；已经买入但尚未收到的证券，在符合 200(b)(2) 时可以计入。经纪交易商必须把每一笔股票卖出订单标记为 **“long”（多头）、“short”（空头）或 “short exempt”**（200(g)）。订单要标成**“long”，仅当**卖方按 (a)–(f) 被视为拥有该证券，**并且**下列二者之一成立：待交付的证券已在经纪商的**实际占有或控制**之下，或可**合理预期**不晚于**交收**时处于该状态（[200(g)(1)](https://www.ecfr.gov/current/title-17/section-242.200)）。只有满足 Rule 201(c) 或 (d) 时，才能标 “short exempt”。同一天买入，并不自动让同一天的卖出变成“多头”；你并不拥有的股份，即使打算稍后买回来，卖出仍是卖空。默认按公司整体汇总净头寸，除非满足 200(f) 的独立单位条件——不要把柜台口头习惯当成规则。
+
+**Rule 10b-21 不是每一笔未交付（FTD）（核实于 2026-11-12）。** 按 [17 CFR 240.10b-21](https://www.ecfr.gov/current/title-17/section-240.10b-21)，任何人提交出售股票的订单时，如果就自己在**交收日或之前交付**的意图或能力，欺骗了经纪交易商、注册清算机构的参与人或买方，**并且**未在交收日或之前完成交付，即构成操纵或欺骗手段。两项都要具备。SEC 的小实体指南（以及 2008 年的通过公告）写明，这条规则针对的情形包括：卖空者就 Rule 203(b)(1) 下的 **locate 来源**欺骗经纪商，以及卖方**谎称自己拥有**这些股份。主观故意（scienter）是构成要件（通过公告）。它不是平仓时限，也不能和每一笔未交付画等号。诚实的失败，或没有欺骗的失败，并不自动构成 10b-21 违规。2008 年指南里“三个交收日”的表述已经过时；现在是 T+1，教学时用规则正文里的**“交收日”（settlement date）**定义，不要照抄旧的 T+3 行文。不要把 FTD 文件当成欺诈的证据（这一点前面已经讲过）。
+
+**实验：** `examples/p3/09_rule200_10b21_toy.py`（不联网；清单不等于违法认定）：
+
+```text
+=== A. Rule 200(g): 'long' is a statutory test, not a nickname ===
+  net long, shares already in the broker's possession or control: mark=long
+  net long, purchase not yet received but reasonably expected by settlement: mark=long
+  net long on paper, but neither possession/control nor reasonably expected by settlement: mark=short
+  not deemed to own (flat or net short); plans to buy the shares later: mark=short
+  short, but Rule 201(c) or (d) is met: mark=short exempt
+a same-day purchase does not automatically make a same-day sale 'long'
+a sale of shares you do not own is a short sale even if you plan to buy them later
+=== B. Rule 10b-21 checklist: deception about delivery AND a fail ===
+  deceived the broker about the locate source, and failed to deliver by the settlement date: both_prongs=True
+  honest fail: no deception, but failed to deliver by the settlement date: both_prongs=False
+  deceived about the ability to deliver, but delivered on or before the settlement date: both_prongs=False
+  no deception and delivered on time: both_prongs=False
+an honest fail, or a fail without deception, is not automatically a 10b-21 violation
+do not recast an FTD file as proof of fraud; teach the rule's 'settlement date', not historical T+3 prose
+assertions passed: 9/9
+```
+
+
 ## 做空相关的公开数据：三份数据，三种含义（2026-11-10 核实）
 
 如果要在配对或因子研究里加入做空数据，先弄清每份公开文件衡量的是什么，以及**它在哪一天才公开**。
@@ -202,6 +228,7 @@ ASSERT_short_data_pit_ok
 7. 回测中空头腿永远能借到、零借券费、不付股息。
 8. 把 SEC Form SHO 汇总数据当成已经存在的数据（合规要求豁免到 2028-01-02）；按结算日而不是发布日对齐 short interest；把 FINRA 每日卖空成交量叫作「空头持仓」；把 FTD 余额当成每天新增的未交付或裸卖空的证据。
 9. 把 locate 当成已经借到股票；用 T+3 时代 FAQ 里的“T+4 / T+6”当作现行平仓时限；或把 Rule 201 写成“跌了 10% 就不能卖空”。
+10. 把账面上的净多头或“打算稍后买回来”直接标成 long，却没有占有、控制或在交收前合理预期；把每一笔未交付（FTD）都写成 Rule 10b-21 违规，或照抄 2008 年指南里的 T+3 行文。
 
 
 ## 练习（1:1）
@@ -214,6 +241,7 @@ ASSERT_short_data_pit_ok
 6. **ex-us-short** — 把 `06_us_short_constraints.py` 的借券费翻倍；**完成标准**：报告 constrained_pair 的变化并说明方向。
 7. **ex-short-pit** — 运行 `07_short_data_pit.py`，把信号日改成 2026-10-26，报告用到的是哪期快照；**完成标准**：得到 2026-10-15 的快照，并能解释为什么 2026-10-23 仍只能用 2026-09-30。
 8. **ex-locate204** — 运行 `08_regsho_locate_closeout_toy.py`；写出 2026-11-23 这笔空头未交收要在哪一天开盘前平掉，以及 2026-11-25（感恩节当周的周三）这笔交易的交收日和平仓日；**完成标准**：11-25 和 11-30，与输出一致。
+9. **ex-mark200** — 运行 `09_rule200_10b21_toy.py`；写出“账面上净多头，但交收前既无占有或控制、也没有合理预期”应标什么，以及“诚实的未交付、没有欺骗”是否同时满足 10b-21 的两项；**完成标准**：short，both_prongs=False，与输出一致。
 
 
 ## 测验
@@ -229,12 +257,14 @@ ASSERT_short_data_pit_ok
 <Quiz id="ps-ftd" question="按 SEC 的说明，未交付（FTD）数据是？" options={["每天新增的未交付数量", "每个结算日的未交付余额，不是裸卖空的证据", "卖空成交总量", "空头持仓"]} answer={1} explanation="SEC：这个数字不是每天的未交付数量，也不是滥用卖空或裸卖空的证据。" />
 <Quiz id="ps-formsho" question="某数据商出售 2026 年的“SEC Form SHO 空头头寸汇总数据”。你应该得出什么结论？" options={["这是 SEC 官方数据，可以直接回测", "Form SHO 只是 FINRA short interest 的另一个名字", "2026 年 Form SHO 已经取代了 FINRA short interest 报告", "SEC 已把 Form SHO 报告豁免到 2028-01-02，所以不存在 2026 年的官方 Form SHO 汇总数据，要查清这个序列到底是什么"]} answer={3} explanation="SEC 34-104303（2025-12-03）在第五巡回法院发回之后，把 Rule 13f-2 / Form SHO 的豁免延长到 2028-01-02；首份报告针对 2028 年 1 月。按 FINRA Rule 4560 报告的 short interest 是另一份数据，现在仍是每月两次。" />
 <Quiz id="ps-locate204" question="在现行 T+1 交收下，一笔空头交易如果没有按期交收，按 Rule 204，经纪商一般要在什么时候平掉这笔未交收？" options={["交易日后的第四个交收日开盘前（旧 FAQ 里的 T+4）", "该笔交易交收日之后那个交收日的常规交易时段开始前", "交易日当天收盘前", "任何时候都可以，只要最终能借到股票"]} answer={1} explanation="17 CFR 242.204：空头未交收要在交收日之后那个交收日的常规交易时段开始前平掉。T+1 下，周一成交则周二交收，平仓时点是周三开盘前。旧 FAQ 的 T+4 / T+6 标签来自 T+3 交收，不要照搬。" />
+<Quiz id="ps-10b21" question="Rule 10b-21 在什么情况下构成操纵或欺骗手段？" options={["账户里出现任何未交付（FTD），即使没有欺骗", "向经纪商、注册清算机构参与人或买方，就其在交收日或之前交付的意图或能力进行欺骗，并且未在该日或之前完成交付；二者缺一不可", "只要 locate 后来被召回", "2008 年指南里的三个交收日（T+3）内没有完成交收"]} answer={1} explanation="17 CFR 240.10b-21(a) 要求欺骗交付意图或能力，并且未在交收日或之前交付。诚实的失败，或没有欺骗的失败，并不自动构成违规。教学用规则里的 settlement date，不要照抄旧的 T+3 行文。" />
+<Quiz id="ps-mark200" question="按 Rule 200(g)，卖出订单要标记为 long，必须满足什么？" options={["当天已经买过同一只股票，就可以标成 long", "卖方按 200(a)–(f) 被视为拥有该证券（净多头），并且证券已在经纪商的实际占有或控制之下，或可合理预期不晚于交收时处于该状态", "打算稍后买回来补上，就可以标成 long", "任何不受 Rule 201 限制的卖出都标成 long"]} answer={1} explanation="200(g)(1) 要求‘被视为拥有’以及占有或控制、或交收前合理预期两项一起满足。同一天买入并不自动让同一天的卖出变成 long。" />
 
 ## 完成标准
 
 两对 EG + 滚动 p 演示 + 含成本 notebook + 测验（约 10h 深度）。
 
-**来源：** Engle–Granger / MacKinnon（statsmodels）；Stern 配对；Canvas m8；quants.md W13/W14。；statsmodels 状态空间文档（filtered vs smoothed 定义，[链接](https://www.statsmodels.org/stable/statespace.html)，2026-11-07 核实）。；[SEC Reg SHO](https://www.sec.gov/investor/pubs/regsho.htm)、[Rule 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；做空相关数据（2026-11-10 核实）：[FINRA short interest](https://www.finra.org/finra-data/browse-catalog/equity-short-interest)、[FINRA 报告日历](https://www.finra.org/filing-reporting/regulatory-filing-systems/short-interest)、[FINRA Rule 4560](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4560)、[FINRA 信息通知 2019-05-10](https://www.finra.org/rules-guidance/notices/information-notice-051019)、[FINRA 每日卖空成交量](https://www.finra.org/finra-data/browse-catalog/short-sale-volume-data/daily-short-sale-volume-files)、[SEC FTD 数据](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data)、[SR-FINRA-2026-012（已撤回）](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-finra-2026-012)；Form SHO / Rule 10c-1a 状态（2026-11-11 核实）：[SEC 34-104303](https://www.sec.gov/files/rules/exorders/2025/34-104303.pdf)、[RIN 3235-AN72](https://www.reginfo.gov/public/do/eAgendaViewRule?RIN=3235-AN72&pubId=202510)；locate / Rule 204 / Rule 201（2026-11-11 核实）：[17 CFR 242.203](https://www.ecfr.gov/current/title-17/section-242.203)、[17 CFR 242.204](https://www.ecfr.gov/current/title-17/section-242.204)、[17 CFR 242.201](https://www.ecfr.gov/current/title-17/section-242.201)
+**来源：** Engle–Granger / MacKinnon（statsmodels）；Stern 配对；Canvas m8；quants.md W13/W14。；statsmodels 状态空间文档（filtered vs smoothed 定义，[链接](https://www.statsmodels.org/stable/statespace.html)，2026-11-07 核实）。；[SEC Reg SHO](https://www.sec.gov/investor/pubs/regsho.htm)、[Rule 201](https://www.ecfr.gov/current/title-17/chapter-II/part-242/subject-group-ECFR1607681c7b4f78d/section-242.201)（2026-11-08 核实）。；做空相关数据（2026-11-10 核实）：[FINRA short interest](https://www.finra.org/finra-data/browse-catalog/equity-short-interest)、[FINRA 报告日历](https://www.finra.org/filing-reporting/regulatory-filing-systems/short-interest)、[FINRA Rule 4560](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4560)、[FINRA 信息通知 2019-05-10](https://www.finra.org/rules-guidance/notices/information-notice-051019)、[FINRA 每日卖空成交量](https://www.finra.org/finra-data/browse-catalog/short-sale-volume-data/daily-short-sale-volume-files)、[SEC FTD 数据](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data)、[SR-FINRA-2026-012（已撤回）](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-finra-2026-012)；Form SHO / Rule 10c-1a 状态（2026-11-11 核实）：[SEC 34-104303](https://www.sec.gov/files/rules/exorders/2025/34-104303.pdf)、[RIN 3235-AN72](https://www.reginfo.gov/public/do/eAgendaViewRule?RIN=3235-AN72&pubId=202510)；locate / Rule 204 / Rule 201（2026-11-11 核实）：[17 CFR 242.203](https://www.ecfr.gov/current/title-17/section-242.203)、[17 CFR 242.204](https://www.ecfr.gov/current/title-17/section-242.204)、[17 CFR 242.201](https://www.ecfr.gov/current/title-17/section-242.201)；Rule 200 标记与 Rule 10b-21（2026-11-12 核实）：[17 CFR 242.200](https://www.ecfr.gov/current/title-17/section-242.200)、[17 CFR 240.10b-21](https://www.ecfr.gov/current/title-17/section-240.10b-21)、[SEC Rule 10b-21 小实体指南](https://www.sec.gov/divisions/marketreg/tmcompliance/rule10b21-secg.htm)
 
 <Summary>
 **要点**：EG+MacKinnon、滚动协整陷阱、滚动对冲、双腿成本。  

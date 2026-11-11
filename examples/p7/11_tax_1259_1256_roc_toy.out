@@ -1,0 +1,21 @@
+=== A. IRS Pub 550 Example 1: return of capital / 1099-DIV box 3 ===
+  bought in 2012 for $100
+  2015 nondividend distribution $80 -> basis $20, gain $0
+  2025 nondividend distribution $30 -> basis $0, long-term capital gain $10
+  a nondividend distribution is not a dividend; it is not taxed until basis is fully recovered
+  after basis is zero, further nondividend distributions are capital gain (holding period of the stock)
+=== B. Classification table (literacy only; not a product recommendation) ===
+  ordinary single-stock equity option:
+    -> not a section 1256 contract; 60/40 does not apply
+  narrow-based index option (an equity option):
+    -> not a section 1256 contract; 60/40 does not apply
+  listed broad-based stock index option (Pub 550 example: S&P 500):
+    -> nonequity option; section 1256 60/40 may apply if it meets the listed / qualified-board tests
+  short sale of the same stock against an appreciated long stock position:
+    -> may be a constructive sale under IRC 1259; not a wash sale and not section 16(b); not every hedge is 1259
+  section 1256 contract already marked to market:
+    -> excluded from 'appreciated financial position' under 1259(b); do not layer a homemade 1259 rule on top
+do not apply 60/40 to ordinary equity options; do not call every index product 1256
+do not teach that any short against a long is always 1259
+assertions passed: 3/3
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
