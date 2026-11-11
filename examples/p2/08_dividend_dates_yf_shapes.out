@@ -17,3 +17,15 @@ call without auto_adjust rejected: True
 assertions passed: 11/11
 ASSERT_dividend_yf_ok
 disclaimer: synthetic fixtures; learning only
+=== D. Rule 10b-17 issuer notice (calendar days as written; not business days) ===
+cash dividend, record 2026-03-16: notice generally due no later than 2026-03-06 (10 calendar days prior)
+10 business days before the same record date would be 2026-03-02; that is not the 10b-17 clock
+rights offering, 10 days not practical: notice on record date 2026-03-16 and before registration effective 2026-04-01? True
+  10b-17 notice rule applies to listed common stock? True
+  10b-17 notice rule applies to open-end redeemable? False
+  10b-17 notice rule applies to UIT redeemable? False
+a late or missing 10b-17 notice is a data-quality / timing flag, not proof the dividend did not happen
+10b-17 does not itself defer the ex-date; the 25%+ deferral is already taught under FINRA 11140(b)
+assertions passed: 18/18
+ASSERT_dividend_yf_ok
+disclaimer: synthetic fixtures; learning only

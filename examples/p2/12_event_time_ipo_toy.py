@@ -70,3 +70,62 @@ check(lock == date(2026, 9, 6), "lock-up example date")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_event_time_ipo_ok")
 print("disclaimer: synthetic prices; no FOMC or IPO strategy; learning only")
+
+print("=== D. BLS PFEI 8:30 a.m. ET vs non-PFEI 10:00 a.m. ET ===")
+# BLS Dissemination policy (last modified August 28, 2026):
+# "All seven PFEIs are scheduled for release at 8:30 a.m. Eastern Time on the
+# dates shown on our public calendar." The seven PFEIs are: the Employment
+# Situation; Consumer Price Index; Producer Price Indexes; U.S. Import and
+# Export Price Indexes; Real Earnings; Employment Cost Index; and Productivity
+# and Costs.
+# "All non-PFEI releases are scheduled for 10:00 a.m. Eastern Time on the
+# dates shown on our public calendar."
+# CPI Home (opened 2026-11-12): "The Consumer Price Index for November 2026 is
+# scheduled to be released on December 10, 2026, at 8:30 A.M. Eastern Time."
+# Use the official calendar for the date; do not invent a "first Friday" rule.
+# Regular US equity trading opens at 09:30 ET. An 8:30 a.m. ET PFEI is already
+# out before that open, so that day's regular open can already reflect it
+# (same rule already taught for a 07:00 earnings release). A 10:00 a.m. ET
+# non-PFEI is after the open, so filling that signal at that day's open is
+# look-ahead (same idea as FOMC 14:00). This is an event-timestamp literacy
+# item, not a CPI or payroll trading strategy.
+
+PFEI = (
+    "Employment Situation",
+    "Consumer Price Index",
+    "Producer Price Indexes",
+    "U.S. Import and Export Price Indexes",
+    "Real Earnings",
+    "Employment Cost Index",
+    "Productivity and Costs",
+)
+PFEI_TIME = "8:30 a.m. Eastern Time"
+NON_PFEI_TIME = "10:00 a.m. Eastern Time"
+print(f"seven PFEIs scheduled for {PFEI_TIME} on the public-calendar date:")
+for name in PFEI:
+    print(f"  {name}")
+check(len(PFEI) == 7, "seven PFEIs")
+print(f"non-PFEI releases are scheduled for {NON_PFEI_TIME} on the public-calendar date")
+check(PFEI_TIME != NON_PFEI_TIME, "do not write that every BLS release is at 8:30")
+
+cpi = datetime(2026, 12, 10, 8, 30, tzinfo=EDT)
+print(f"CPI for November 2026: scheduled {cpi:%Y-%m-%d} at {cpi:%H:%M} Eastern Time")
+check(cpi.date() == date(2026, 12, 10) and (cpi.hour, cpi.minute) == (8, 30), "CPI Home date and 8:30 a.m. ET")
+
+REGULAR_OPEN = datetime(2026, 12, 10, 9, 30, tzinfo=EDT)
+
+
+def can_fill_at_that_days_open(release_dt, open_dt):
+    return release_dt <= open_dt
+
+
+print(f"PFEI 8:30 a.m. ET on 2026-12-10: fill at that day's 09:30 open? {can_fill_at_that_days_open(cpi, REGULAR_OPEN)}")
+check(can_fill_at_that_days_open(cpi, REGULAR_OPEN) is True, "8:30 is before the 09:30 open")
+non_pfei = datetime(2026, 12, 10, 10, 0, tzinfo=EDT)
+print(f"non-PFEI 10:00 a.m. ET on 2026-12-10: fill at that day's 09:30 open? {can_fill_at_that_days_open(non_pfei, REGULAR_OPEN)} (look-ahead)")
+check(can_fill_at_that_days_open(non_pfei, REGULAR_OPEN) is False, "10:00 is after the open, like FOMC 14:00")
+print("use the official BLS calendar for the date; this toy does not invent a first-Friday rule")
+
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_event_time_ipo_ok")
+print("disclaimer: official BLS times; no CPI or payroll strategy; learning only")

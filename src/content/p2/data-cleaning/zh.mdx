@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **31 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **32.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -331,6 +331,24 @@ disclaimer: real public numbers in A (Apple FY2009 NetIncomeLoss) are for PIT me
 
 **Rule 10b5-1 计划：2023-04-01 起 Form 4 上有一个勾选框。** 内部人常按事先制定的交易计划卖股，这类计划依据 Rule 10b5-1 设立，满足条件时可以作为内幕交易责任的抗辩。2022 年修订后，董事和高管按新计划交易之前要等**冷静期**结束：取“采用后 **90 天**”和“采用当季的 10-Q/10-K 披露后 **两个营业日**”中较晚的一个，但最长不超过 **120 天**；其他人（公司本身除外）是 **30 天**（[17 CFR 240.10b5-1(c)(1)(ii)(B)](https://www.ecfr.gov/current/title-17/section-240.10b5-1)）。Form 4 有一个勾选框，标明这笔交易是按意在满足 Rule 10b5-1(c) 的计划做的，并在说明栏写计划采用日（[Form 4 说明第 10 条](https://www.sec.gov/files/form4.pdf)）；2023-04-01 及以后提交的 Form 4 和 Form 5 必须填（[SEC 新闻稿 2022-222](https://www.sec.gov/newsroom/press-releases/2022-222)）。做数据时：(1) 这个框能把计划交易和其他交易分开；(2) 2023-04-01 之前没有这个字段，所以旧申报“没勾”表示**未知**，不表示“非计划交易”；(3) 计划内的卖出，至少在冷静期之前就定下来了。这里讲的是怎么正确标注数据；本课不给任何内部人交易信号。实验：`17_xbrl_pit_10b51_toy.py` 的 B–C 节（输出见上面的 XBRL 一节）。
 
+**Form 4 的交易代码并不都是公开市场买卖；Form 3 是初次申报，Form 5 是年度补报（核实于 2026-11-12）。** Form 4 的*截止日期*（执行日后第二个营业日结束前，含视同执行日分支）已在上面讲过。要教官方代码表，回测才不会把每一笔 Form 4 取得都当成公开市场买入。[Form 4 一般说明第 8 条](https://www.sec.gov/files/form4.pdf)：“Use the code that most appropriately describes the transaction.”（使用最能恰当描述该笔交易的代码。）
+
+- **一般代码：** **P** — “Open market or private purchase of non-derivative or derivative security”（公开市场或私下买入非衍生或衍生证券）；**S** — “Open market or private sale of non-derivative or derivative security”（公开市场或私下卖出）。在相应栏填 **V**，表示该笔交易“voluntarily reported earlier than required”（自愿早于期限申报）；否则该栏留空。不要把这个可选的提前申报标记当成买卖代码。
+- **Rule 16b-3：** **A** — “Grant, award or other acquisition pursuant to Rule 16b-3(d)”（依据 Rule 16b-3(d) 的授予、奖励或其他取得）；**D** — “Disposition to the issuer of issuer equity securities pursuant to Rule 16b-3(e)”（依据 16b-3(e) 向发行人处分发行人股权证券）；**F** — “Payment of exercise price or tax liability by delivering or withholding securities incident to the receipt, exercise or vesting of a security issued in accordance with Rule 16b-3”（为支付行权价或税款而交付或扣留证券）；**I** — 依据 16b-3(f) 的酌情交易；**M** — “Exercise or conversion of derivative security exempted pursuant to Rule 16b-3”（依据 Rule 16b-3 获豁免的衍生证券行权或转换）。
+- **其他已列出的代码还包括** C / E / H / O / X（衍生证券，16b-3 豁免的行权/转换除外）、**G** — “Bona fide gift”（真诚赠与）、L、W、Z、**J** — “Other acquisition or disposition (describe transaction)”（其他取得或处分，须说明）、**K** *附加*用于股权互换或类似工具（例如 “S/K” 或 “P/K”），以及 **U** — 控制权变更交易中的要约交存。
+
+**Form 3 / Form 5 时钟。** [15 U.S.C. 78p(a)(2)(B)](https://www.law.cornell.edu/uscode/text/15/78p) 要求初次报表“within 10 days after he or she becomes such beneficial owner, director, or officer, or within such shorter time as the Commission may establish by rule”（在其成为该等实益所有人、董事或高管之后 10 天内，或在委员会以规则规定的更短期限内）。本课**不**发明更短的委员会期限；在 [17 CFR 240.16a-3](https://www.law.cornell.edu/cfr/text/17/240.16a-3) 里没有找到这样的更短时钟。16a-3(a) 把初次报表指定为 Form 3，变动报表为 Form 4，年度报表为 Form 5。[16a-3(f)](https://www.law.cornell.edu/cfr/text/17/240.16a-3)：Form 5 “shall be filed within 45 days after the issuer's fiscal year end”（须在发行人财年结束后 45 天内提交），并报告此前未报的指定持仓和交易；“no Form 5 shall be required where all transactions otherwise required to be reported on the Form 5 have been reported before the due date”（若本应在 Form 5 上报告的交易均已在到期日前报告，则无须提交 Form 5）。这里的 “10 days” 和 “45 days” 按原文，本课不改写成营业日。若该日历截止日落在周六、周日或假日，Rule 0-3（申报时滞一节已经讲过）允许在随后第一个营业日提交——与 C 节里 13G 的 45 天时钟同一套周末顺延。不要把 Form 13H 加进这个公开的 Section 16 / 13D / 13G 框（该表已作为保密申报讲过）。本课不给任何内部人交易信号。
+
+**失去 13G 资格的 Schedule 13G 申报人须在五个营业日内改报 Schedule 13D；实益所有权是投票权和/或投资权，不只是登记在册的股份（核实于 2026-11-12）。** 上面已经讲过的 13D / 13G *初次申报时滞*在这里不改写。要教**转换**和 **13d-3** 的测试，回测才不会把一份仍未失效的 13G 当成“仍是被动 5% 持有人”的证明，也不会把登记在册的 4.9% 当成整个 13(d)/13(g) 头寸。
+
+[17 CFR 240.13d-1(e)](https://www.law.cornell.edu/cfr/text/17/240.13d-1)：已按 (b) 或 (c) 款在 Schedule 13G 上报告超过 5%，或有义务报告该取得但尚未提交的人，“shall immediately become subject to paragraph (a) … and shall file a statement on Schedule 13D … **within five business days** if, and shall remain subject to those requirements for so long as, the person: (i) Has acquired or holds the securities with a purpose or effect of changing or influencing control of the issuer, … and (ii) Is at that time the beneficial owner of more than five percent ….”（若该人取得或持有证券的目的或效果是改变或影响发行人的控制权，并且当时仍是超过 5% 的实益所有人，则立即受 (a) 款约束，并须在**五个营业日**内提交 Schedule 13D）。从该目的或效果发生时起，“until the expiration of the **tenth day from the date of the filing** of the Schedule 13D,” 该人 “shall not: (i) Vote or direct the voting of the securities described therein; or (ii) Acquire an additional beneficial ownership interest in any equity securities of the issuer …, nor of any person controlling the issuer.”（直到该份 Schedule 13D **提交之日起第十日届满**之前，不得对其中所述证券表决或指示表决，也不得再取得该发行人或其控制人的额外股权实益所有权。）
+
+[13d-1(f)](https://www.law.cornell.edu/cfr/text/17/240.13d-1)：按 **(c) 款**在 13G 上报告的人，须“**within five business days after the date on which the person's beneficial ownership equals or exceeds 20 percent** of the class” 提交 13D（在实益所有权达到或超过该类别 **20%** 之日后五个营业日内），并从达到 20% 时起适用同样的不得表决 / 不得再取得的冻结，直到 13D 提交之日起第十日。**不要**把这条 20% 上限套到每一名 13G 申报人身上；它只是 (c) 款路径。[13d-1(g)](https://www.law.cornell.edu/cfr/text/17/240.13d-1)：按 (b) 款申报的 13G 申报人若“ceases to be a person specified in paragraph (b)(1)(ii)”或“determines that it no longer has acquired or holds the securities in the ordinary course of business”，在仍超过 5% 时，须“**within five business days thereafter**” 视情形提交 13D 或 13G 修订。[13d-1(i)(2)](https://www.law.cornell.edu/cfr/text/17/240.13d-1)：“business day means any day, other than Saturday, Sunday, or a Federal holiday, from 12 a.m. to 11:59 p.m., Eastern Time.”（营业日指除周六、周日或联邦假日以外的任何一日，美东时间 0:00 至 23:59。）
+
+[17 CFR 240.13d-3(a)](https://www.law.cornell.edu/cfr/text/17/240.13d-3)：实益所有人“includes any person who, directly or indirectly, through any contract, arrangement, understanding, relationship, or otherwise has or shares: (1) Voting power … and/or, (2) Investment power ….”（包括任何直接或间接通过合同、安排、谅解、关系或其他方式拥有或共享投票权和/或投资权的人。）[13d-3(c)](https://www.law.cornell.edu/cfr/text/17/240.13d-3)：同一类别下实益拥有的全部证券“shall be aggregated”（应合并计算）。[13d-3(d)(1)(i)](https://www.law.cornell.edu/cfr/text/17/240.13d-3)：若某人有权在**六十日**内取得该证券的实益所有权（包括通过期权、权证、权利或转换），则视为实益所有人；但若该权利是“with the purpose or effect of changing or influencing the control of the issuer”而取得的，则在取得该权利时**立即**视为标的的实益所有人。此类尚未发行、但受期权、权证、权利或转换权约束的证券，在计算该人持股比例时视为已发行，在计算任何其他人的比例时不视为已发行。
+
+不要复活 2023 年以前“10 个日历日”的*申报*时钟。现行转换申报时钟是五个营业日；“第十日”是 13D *提交之后*的冻结，从触发目的或达到 20% 时起，直到该次提交之日起第十日届满。不要把登记在册的股份当成整个 13(d)/13(g) 头寸。本课只教官方测试以及 60 日 / 立即计入控制目的这两支，不搭建完整的实益所有权合规引擎。不做维权或产品建议。
+
 **实验：** `examples/p2/11_spinoff_insider_lag_toy.py` 的 C–D 节（玩具日历：周末顺延，不处理美国联邦假日，例子日期都避开了假日；A–B 节见下面的分拆一节）：
 
 ```text
@@ -348,6 +366,45 @@ FPI director trade 2026-04-01 -> Form 4 expected: True (unless an exemptive orde
 assertions passed: 15/15
 ASSERT_spinoff_insider_lag_ok
 disclaimer: synthetic data; holidays not handled; no Form 4 before 2026-03-18 != no insider trades; learning only
+```
+
+同一脚本的 E–F 节（前面各节仍打印 15/15；脚本合计 41 条断言）：
+
+```text
+=== E. Form 4 transaction codes; Form 3 / Form 5 clocks ===
+  code  open-market-or-private P/S?  V-flag?  note
+  P      True  False  open market or private purchase
+  S      True  False  open market or private sale
+  A      False  False  grant, award or other acquisition under 16b-3(d)
+  M      False  False  16b-3-exempt exercise or conversion
+  F      False  False  payment of exercise price or tax by delivering or withholding
+  G      False  False  bona fide gift
+  P/K    True  False  open-market/private purchase plus equity-swap code K
+  S/K    True  False  open-market/private sale plus equity-swap code K
+  J      False  False  other acquisition or disposition (describe)
+  U      False  False  tender in a change-of-control transaction
+  V marks a transaction voluntarily reported earlier than required; it is not a purchase/sale code
+  do not treat every Form 4 acquisition as an open-market buy
+Form 3: became an officer 2026-03-02 -> initial statement due within 10 days: 2026-03-12
+Form 5 (45 days after FYE 2025-12-31, Rule 0-3 weekend roll): raw 2026-02-14 (Sat) -> 2026-02-16
+Form 5 required if every item was already reported before the due date? False
+=== F. 13G to 13D switch and 13d-3 beneficial ownership ===
+intent-change path (13d-1(e)), still above 5%: purpose on 2026-08-03 (Mon) -> 13D due 2026-08-10 (Mon)
+13D filed 2026-08-10: standstill until the expiration of the tenth day from the filing date = 2026-08-20
+pre-2023 10-calendar-day filing clock is not used for the switch
+paragraph (c) filer reaches 20% on 2026-09-08 -> 13D due 2026-09-15 (Tue)
+do not copy the 20% cap onto a paragraph (b) 13G filer
+paragraph (b) filer loses ordinary-course / (b)(1)(ii) eligibility on 2026-10-05, still above 5% -> 13D or 13G amendment due 2026-10-12
+business day (13d-1(i)(2)) = any day other than Saturday, Sunday, or a Federal holiday, 12 a.m. to 11:59 p.m. ET
+4.9% of record (490000) plus a 60-day exercisable warrant for 600000
+  deemed shares 1090000; percentage uses warrant in the denominator only for this person: 10.2830%
+  another holder of 500,000 shares of record: 5.0000% (warrant not outstanding for that person)
+60-day warrant, no control purpose: deemed now? True
+90-day warrant, no control purpose: deemed now? False
+90-day warrant, control purpose: deemed now? True (counted immediately)
+assertions passed: 41/41
+ASSERT_spinoff_insider_lag_ok
+disclaimer: synthetic data; holidays not handled; no Form 4 / 13G-13D signal; learning only
 ```
 
 ## 未复权价、复权价与总收益；退市
@@ -540,6 +597,31 @@ the April 16, 2026 exemptive order can shorten some equity offers to 10 business
 assertions passed: 15/15
 ```
 
+**Rule 14e-5：从公开宣布直到要约到期，被涵盖的人一般不得在要约之外买进标的证券（或相关证券）（核实于 2026-11-12）。** 上面已经讲过 Rule 14e-1 的最短开放期，包括 2026-04-16 有条件的 10 个营业日豁免令。[17 CFR 240.14e-5(a)](https://www.law.cornell.edu/cfr/text/17/240.14e-5)：“no **covered person** may directly or indirectly purchase or arrange to purchase any **subject securities** or any **related securities** except as part of the tender offer. This prohibition applies **from the time of public announcement of the tender offer until the tender offer expires.**”（任何**被涵盖的人**不得直接或间接买进或安排买进任何**标的证券**或任何**相关证券**，作为要约一部分的除外。这项禁止**从要约公开宣布时起，直到要约到期**。）“This prohibition does not apply to any purchases or arrangements to purchase made during the time of any subsequent offering period as provided for in § 240.14d-11 if the consideration paid or to be paid … is the same in form and amount as the consideration offered in the tender offer.”（若后续要约期按 § 240.14d-11 进行，且支付或将支付的对价在形式和金额上与要约中的对价相同，则这项禁止不适用于该期间的买进或安排买进。）
+
+[14e-5(c)](https://www.law.cornell.edu/cfr/text/17/240.14e-5) 把 **covered person** 定义为：要约人及其关联方；要约人的 dealer-manager 及其关联方；向上述人士提供顾问服务且“whose compensation is dependent on the completion of the offer”（报酬取决于要约完成）的人；以及与他们协同进行此类买进的任何人。**Public announcement** 是“any oral or written communication by the offeror or any person authorized to act on the offeror’s behalf that is reasonably designed to, or has the effect of, informing the public or security holders in general about the tender offer”（要约人或其授权人士以口头或书面作出、合理旨在或实际产生向公众或证券持有人整体告知该要约的效果的任何通信）。**Related securities** 是“securities that are immediately convertible into, exchangeable for, or exercisable for subject securities”（可立即转换成、交换成或行权取得标的证券的证券）。“Subject securities” 的含义见 17 CFR 229.1000；本课不发明更窄的定义。(b) 款列出了例外活动（包括某些宣布前合同买进、指定的补进交易，以及 20 只证券、价值占比不超过 5% 的篮子）。例外是存在的；本课**不**搭建合规引擎。
+
+不要把时钟只从正式开始起算——规则用的是**公开宣布**。不要把 14e-1 的最短*期限*理解成允许竞购人在要约期间到市场上买。不要把禁止套到对价相同的后续要约期买进上。不做竞购人、经销商或策略建议。
+
+**实验：** `examples/p2/19_rule144_followon_tender_toy.py` 的 F 节（A–E 节的打印与此前相同，包括 A–D 之后的 15/15 和 E 之后的 19/19；脚本合计 25 条断言）：
+
+```text
+=== F. Rule 14e-5: purchases outside a tender offer ===
+official clock runs from public announcement until the tender offer expires, not only from formal commencement
+announced 2026-03-02, expires 2026-03-27 (same toy window as section D)
+  covered person, day of public announcement, market purchase: prohibited? True
+  covered person, mid-offer market purchase: prohibited? True
+  covered person, purchase as part of the tender offer: prohibited? False
+  covered person, subsequent offering period, same consideration: prohibited? False
+  covered person, after expiration, no subsequent period: prohibited? False
+  person who is not a covered person, mid-offer: prohibited? False
+the subsequent-offering-period carve-out applies only if the consideration is the same in form and amount; this toy does not invent a broader post-expiration trading rule
+related securities = immediately convertible into, exchangeable for, or exercisable for subject securities
+paragraph (b) exceptions exist (including certain pre-announcement contract purchases, specified covering transactions, and a 20-security basket with a 5% value cap); this toy does not build that engine
+14e-1's minimum duration is not permission for a covered person to buy the subject or related securities in the market
+assertions passed: 25/25
+```
+
 ## 分红日期与 yfinance 的 auto_adjust 陷阱（2026-11-10 核实）
 
 **1. 现金分红的四个日期。** 公司先宣布分红（宣布日），再确定股东名单（登记日），之后股票开始不带这次分红交易（除息日），最后发放现金（派息日）。决定你能不能拿到分红的是**除息日**：在除息日当天或之后买入，就拿不到这一次分红。美国交收改为 T+1 之后，investor.gov 写明除息日**一般就是登记日**；登记日不是营业日时，除息日是它之前的一个营业日（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)）。页面的例子：宣布日 2026-03-02，登记日 2026-03-16，除息日 2026-03-16，派息日 2026-03-17。
@@ -548,6 +630,12 @@ assertions passed: 15/15
 - **回测记账：** 总收益在**除息日**计入（这天价格下调），现金在**派息日**才到账。两者分开记，分红绝不能算两次。`05_data_versions_calendar.py` D 节的重复计入实验，讲的是同一件事的下一层。
 - **税务性质（指针，不改本课学时）：** 一笔现金分配不一定是股息。Form 1099-DIV 第 3 栏的非股息分配（资本返还）会调减成本基础，本身不是股息；细节见 `compliance-ethics`。FINRA 11140(b) 的 25% 除息日推迟规则讲的是价格何时下调，不是税务定性。
 - **进阶：** 数据商的 `ex_date` 字段可能缺失，或者被误填成派息日。要检查除息日不晚于派息日（达到 25% 或以上的现金分红、股票股利或拆股除外）。
+
+**Rule 10b-17：发行人一般须在登记日前 10 天发出通知（核实于 2026-11-12）。** 上面已经讲过官方收盘、T+1 除息日机制，以及 FINRA 11140(b) 对 25% 及以上派发的除息日推迟。[17 CFR 240.10b-17](https://www.law.cornell.edu/cfr/text/17/240.10b-17) 规定，任何其类别证券通过州际商业、邮递或全国性证券交易所设施公开交易的发行人，若未按 (b) 款就下列事项发出通知，即构成“manipulative or deceptive device or contrivance”（操纵或欺骗手段）：(1) 现金或实物的股息或其他分配（债务证券的普通利息支付除外，但包括同一或另一发行人任何证券的股息或分配）；(2) 拆股或反向拆股；或 (3) 配股权或其他认购发行。
+
+通知仅在下列情况下视为已发出：向 “the National Association of Securities Dealers, Inc.”（全国证券交易商协会）发出，且“**no later than 10 days prior to the record date** involved”（不晚于相关**登记日前 10 天**）；或者，“in case of a rights subscription or other offering if such 10 days advance notice is not practical, on or before the record date and in no event later than the effective date of the registration statement to which the offering relates”（若配股或其他发行无法提前 10 天通知，则在登记日或之前，且无论如何不晚于该次发行所涉注册说明书的生效日）；**或者**“in accordance with procedures of the national securities exchange or exchanges upon which a security of such issuer is registered pursuant to section 12 of the Act which contain requirements substantially comparable to those set forth in paragraph (b)(1)”（按照该发行人已按《交易法》第 12 条注册的全国性证券交易所中、要求与 (b)(1) 款大体相当的程序发出）。委员会可以豁免发行人。该规则“shall not apply … to redeemable securities issued by open-end investment companies and unit investment trusts registered with the Commission under the Investment Company Act of 1940”（不适用于根据 1940 年《投资公司法》在委员会注册的开放式投资公司和单位投资信托所发行的可赎回证券）。
+
+这里的 “10 days” **不是** “10 个营业日”；规则文本没有写营业日。不要在 10b-17 本身之下发明自动推迟除息日的规则（25% 及以上的推迟已在 FINRA 11140(b) 里讲过）。迟发或缺失的 10b-17 通知是围绕登记日、除息日和宣布金额的**数据质量 / 时点标记**，不是“这次分红没有发生”的证据。规则文本仍写着 NASD；本课不发明一个已被 FINRA 替换的收件人。不做发行人或产品建议。
 
 **2. 版本陷阱：yfinance 改了 `Close` 的含义。** yfinance 0.2.51（2024-12-19 发布）把 `yf.download()` 的 `auto_adjust` 默认值改成 `True`，和 `Ticker.history()` 保持一致；0.2.53（2025-02-15）起，调用时不写这个参数会给出警告（[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)）。官方文档描述了两种返回形状（[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)）：
 
@@ -575,6 +663,23 @@ ex-date return: Close(True) +0.5000% vs Close(False) -0.4950%
 assertions passed: 11/11
 ```
 
+同一脚本的 D 节（前面各节仍打印 11/11；脚本合计 18 条断言）：
+
+```text
+=== D. Rule 10b-17 issuer notice (calendar days as written; not business days) ===
+cash dividend, record 2026-03-16: notice generally due no later than 2026-03-06 (10 calendar days prior)
+10 business days before the same record date would be 2026-03-02; that is not the 10b-17 clock
+rights offering, 10 days not practical: notice on record date 2026-03-16 and before registration effective 2026-04-01? True
+  10b-17 notice rule applies to listed common stock? True
+  10b-17 notice rule applies to open-end redeemable? False
+  10b-17 notice rule applies to UIT redeemable? False
+a late or missing 10b-17 notice is a data-quality / timing flag, not proof the dividend did not happen
+10b-17 does not itself defer the ex-date; the 25%+ deferral is already taught under FINRA 11140(b)
+assertions passed: 18/18
+ASSERT_dividend_yf_ok
+disclaimer: synthetic fixtures; learning only
+```
+
 ## 常见错误 / 陷阱
 
 1. 用今日成分回测十年。  
@@ -600,6 +705,10 @@ assertions passed: 11/11
 19. 把董事会“授权回购”的新闻当成当天已经执行的买回量；在 10-Q/10-K 提交之前使用 Item 703 的月度合计；或把 2023 年已被撤销的每日 Form SR 披露当成现行规则。
 20. 把要约收购公告当成当天所有股份都已经换完；根据 2026-04-16 的豁免令，在代码里写“美国要约收购现在都是 10 天”——该令只在满足全部条件时适用，并不是废除 20 个营业日的规则。
 21. 写成隔夜 23/5 回购已经落在 Rule 10b-18 安全港之内，或写成它们落在安全港之外；把盘后的 Rule 10b-18 买回当成主时段收盘后那一节的开盘成交，或付的价格高于主要市场收盘价与随后更低买价或成交价二者中较低的那个。
+22. 把 Rule 10b-17 的 “10 days” 改写成 “10 个营业日”；在 10b-17 本身之下发明自动推迟除息日；把迟发或缺失的通知当成分红没有发生的证据；对仍写着 NASD 的规则文本发明一个已被 FINRA 替换的收件人。
+23. 把每一笔 Form 4 取得都当成公开市场买入（A、M、F、G 或 J 等代码不是 P）；把 V 当成买卖代码而不是提前申报标记；发明一个比法条“within 10 days … or within such shorter time as the Commission may establish by rule”更短的 Form 3 委员会期限。
+24. 把一份仍未失效的 13G 当成“仍是被动 5% 持有人”的证明；复活 2023 年以前“10 个日历日”的申报时钟（转换申报时钟是五个营业日；“第十日”是 13D 提交之后的冻结）；把 20% 上限套到每一名 13G 申报人身上；把登记在册的股份当成整个 13(d)/13(g) 头寸。
+25. 把 Rule 14e-5 的时钟只从正式开始起算；把 14e-1 的最短期限理解成允许被涵盖的人在市场上买进标的或相关证券；把禁止套到对价相同的后续要约期买进上。
 
 ## 练习（与任务清单 1:1）
 
@@ -622,6 +731,10 @@ assertions passed: 11/11
 
 
 17. **ex-10b18ah** — 运行 `18_buyback_10b18_disclosure_toy.py` 的 E 段；写出主要市场收盘价 40.00、随后成交 39.80 时的盘后价格上限，并说明官方 10b-18 来源尚未把窗口映射到 21:00–04:00 隔夜 / 23/5；**完成标准**：上限是 39.80，与输出一致，并写出映射缺口。
+18. **ex-10b17** — 运行 `08_dividend_dates_yf_shapes.py` 的 D 节；写出登记日为 2026-03-16 时的 10b-17 通知到期日，并说明开放式可赎回证券的例外是否适用这条通知规则；**完成标准**：2026-03-06，开放式 / UIT 例外不适用这条规则，与输出一致。
+19. **ex-form4-13g** — 运行 `11_spinoff_insider_lag_toy.py` 的 E–F 节；说明代码 A 是不是公开市场买入，2026-03-02 成为高管后 Form 3 何时到期，以及 2026-08-03 发生意图变化、13D 于 2026-08-10 提交时的 13D 到期日和冻结结束日；**完成标准**：A 不是公开市场/私下的 P，Form 3 到期日是 2026-03-12，13D 到期日是 2026-08-10，冻结到 2026-08-20，与输出一致。
+20. **ex-14e5** — 运行 `19_rule144_followon_tender_toy.py` 的 F 节；说明被涵盖的人在宣布当天做市场买进是否被禁止，以及对价相同的后续要约期买进是否被禁止；**完成标准**：宣布当天的市场买进被禁止，对价相同的后续要约期买进不被禁止，与输出一致。
+
 ## 测验
 
 <Quiz id="q1-surv" question="幸存者偏差典型做法是？" options={["用历史全宇宙", "只用今天仍上市的名字回放历史", "只用期货", "忽略收益"]} answer={1} explanation="今日成分回放会丢掉退市者。" />
@@ -651,12 +764,17 @@ assertions passed: 11/11
 <Quiz id="dc-item703" question="你想在 2026-02-02 的回测里使用某公司 1 月份的官方买回股数。按现行披露规则，应该怎么处理？" options={["用董事会授权回购公告里的额度，当成 1 月每天都在买", "用 2023 年 Form SR 的每日买回数据，因为它已经生效", "在 10-Q 提交之前，先按成交量的 25% 反推每日买回量", "等到载有 Item 703 月度合计的 10-Q 或 10-K 提交并公开之后再使用；授权公告不是已执行的每日买回量"]} answer={3} explanation="现行披露是 Item 703 的月度合计，写在 10-Q/10-K 里。2023 年要求每日披露的规则（含 Form SR）已在 2023-12-19 被撤销。授权公告只是额度。" />
 <Quiz id="dc-tender" question="按 Rule 14e-1，要约收购一般必须开放多久？SEC 在 2026-04-16 的命令改了什么？" options={["公告当天就必须结束，2026 年的命令废除了这条规则", "必须开放 10 个日历日，2026 年的命令把这变成唯一允许的期限", "必须开放 20 个日历日，2026 年的命令没有任何条件", "一般必须自首次公布起至少开放 20 个营业日；2026 年的命令允许部分股票要约在满足全部所列条件时只用 10 个营业日，并不是废除 20 天规则"]} answer={3} explanation="14e-1(a) 是 20 个营业日，不是日历日，也不是公告当天完成。2026-04-16 的豁免令是有条件的，并没有废除 20 天规则。" />
 <Quiz id="dc-10b18ah" question="主交易时段收盘之后，Rule 10b-18 的盘后分支允许什么？官方来源还没有做什么？" options={["21:00–04:00 隔夜 / 23/5 的回购已经落在 Rule 10b-18 安全港之内", "21:00–04:00 隔夜 / 23/5 的回购已经落在 Rule 10b-18 安全港之外", "只要不是该节的开盘成交，价格不超过主要市场收盘价与随后更低买价或成交价二者中较低的那个，并且当天的其他条件（包括数量上限）仍然满足，就可以在主时段收盘之后、直到合并系统停止报告最近成交价之前做买回。这段时间可以使用不同于主时段的一家券商。官方 10b-18 来源尚未把这个窗口映射到 21:00–04:00 隔夜 / 23/5", "盘后的 Rule 10b-18 买回可以是该节的开盘成交，可以高于主要市场收盘价，也不计入当天的数量上限"]} answer={2} explanation="17 CFR 240.10b-18(b)(2)(iv) 和 SEC 10b-18 常见问题（时点条件，最近审阅于 2016-12-02）写的是这条有限度的盘后安全港。NYSE 延长时段常见问题没有讨论 10b-18。官方来源尚未把窗口映射到隔夜 23/5 时段；本课也不在任一方向上自行补上这个映射。" />
+<Quiz id="dc-10b17" question="按 Rule 10b-17，公开交易证券的发行人一般须在何时通知股息、拆股或配股？迟发或缺失的通知意味着什么？" options={["不晚于登记日前 10 个营业日，缺失通知就证明这次分红没有发生", "一般不晚于登记日前 10 天（不是 10 个营业日）。迟发或缺失的通知是围绕登记日、除息日和宣布金额的数据质量 / 时点标记，不是分红没有发生的证据。开放式和 UIT 可赎回证券被排除在外。该规则本身并不推迟除息日", "发行人可以等到除息日再通知，因为 10b-17 会像 FINRA 11140(b) 那样自动推迟除息日", "通知只能交给 FINRA，因为规则文本已经把 NASD 替换成 FINRA"]} answer={1} explanation="17 CFR 240.10b-17(b)(1) 写的是 “no later than 10 days prior to the record date”，不是 10 个营业日。10b-17(c) 排除开放式投资公司和单位投资信托的可赎回证券。迟发或缺失的通知是时点标记，不是没有分红的证据，10b-17 本身也不移动除息日。规则文本仍写着 NASD；本课不发明已被 FINRA 替换的收件人。" />
+<Quiz id="dc-form4codes" question="回测应如何阅读 Form 4 的交易代码？Form 3 和 Form 5 的时钟是什么？" options={["Form 4 上每一个取得代码，包括 A、M、F 和 G，都是公开市场买入，而且 Form 3 适用 16a-3 里一条更短的委员会期限", "代码 V 表示公开市场卖出，即使应报事项都已报告，Form 5 也必须在财年结束后 45 天提交", "P 和 S 是公开市场或私下的买入或卖出。A 是依据 Rule 16b-3(d) 的授予或奖励，M 是依据 16b-3 获豁免的行权或转换，F 是为支付行权价或税款而交付或扣留证券，G 是真诚赠与，所以不是每一笔取得都是公开市场买入。V 是提前申报标记，不是买卖代码；其他已列出的代码还包括 J、附加使用的 K，以及 U。Form 3 是初次报表，须“within 10 days after he or she becomes such beneficial owner, director, or officer, or within such shorter time as the Commission may establish by rule”；本课不发明更短的委员会期限。Form 5 须在发行人财年结束后 45 天内提交，若应报事项均已报告则不必提交", "把 Form 13H 加进这张公开时滞表，因为它是一份有同样时钟的公开 Section 16 申报"]} answer={2} explanation="Form 4 说明第 8 条给出这些官方代码。15 U.S.C. 78p(a)(2)(B) 是 Form 3 时钟；17 CFR 240.16a-3 指定 Form 3 / 4 / 5，并规定 Form 5 的 45 天时钟，若均已报告则无须 Form 5。本课不发明更短的 Form 3 期限。Form 13H 是保密的，不进入这个公开框。" />
+<Quiz id="dc-13g13d" question="按 (b) 或 (c) 款申报 Schedule 13G 的人，现在持有超过 5%，且目的或效果是改变或影响控制权。接下来必须怎样，实益所有权又指什么？" options={["该人有 10 个日历日提交 Schedule 13D，这就是现行申报时钟，登记在册的 4.9% 就是全部 13(d) 头寸", "每一名达到 20% 的 13G 申报人都必须转换，包括 (b) 款申报人；一份仍未失效的 13G 证明持有人仍然是被动的", "须在五个营业日内提交 Schedule 13D；从该目的或效果发生时起，直到该份 13D 提交之日起第十日届满，该人不得对那些证券表决或指示表决，也不得再取得该发行人股权证券或其控制人的额外实益所有权。13d-1(f) 的 20% 路径适用于 (c) 款申报人。实益所有权是投票权和/或投资权，不只是登记在册的股份：同一类别应合并计算；60 日内可取得的权利视为所有权，但控制目的的权利立即计入；此类尚未发行的标的只计入该人的比例分母。“Business day” 指除周六、周日或联邦假日以外的任何一日，美东时间 0:00 至 23:59", "冻结期就是申报期限，所以该人必须在第十日申报，在此之前可以继续买"]} answer={2} explanation="17 CFR 240.13d-1(e)–(g) 和 (i)(2)：转换申报时钟是五个营业日；“第十日”是 13D 提交之后的冻结，不是复活的 2023 年前 10 个日历日申报时钟。20% 上限是 (c) 款路径。13d-3 是投票权和/或投资权，含 60 日和立即计入控制目的两支，标的只对该人的比例视为已发行。" />
+<Quiz id="dc-14e5" question="按 Rule 14e-5，被涵盖的人在什么期间一般不得在要约之外买进标的证券或相关证券？" options={["只有正式开始之后，因为公开宣布并不启动时钟，而且 14e-1 的最短期限允许竞购人在市场上买", "从要约公开宣布时起，直到要约到期。对价相同的后续要约期买进不在禁止范围内。相关证券是可立即转换成、交换成或行权取得标的证券的证券。(b) 款例外是存在的；本课不搭建合规引擎。14e-1 的最短期限不是允许被涵盖的人在市场上买", "这项禁止贯穿每一个后续要约期，即使对价在形式和金额上相同", "相关证券是指同一发行人的任何证券，包括不能立即转换、交换或行权取得标的证券的证券"]} answer={1} explanation="17 CFR 240.14e-5(a) 和 (c)：时钟从公开宣布开始，不是只从正式开始，一直到要约到期。对价相同的后续要约期被排除在禁止之外。相关证券是可立即转换成、交换成或行权取得标的证券的证券。(b) 款例外存在；14e-1 并不授权被涵盖的人做市场买进。" />
 
 ## 完成标准
 
 - 管线可复跑 + 说明书 + 测验  
 
 **来源：** classic — Canvas m4；QuantStart securities master；Qlib data layer。niche — 上文已链接的 Vision/@sera00111、OpenBB docs、@pyquantnews API 帖；AFML 第2章 bars；mask-first / 上游污染 [arXiv:2507.07107](https://arxiv.org/abs/2507.07107)（仅可选保守协议 + 诊断；REJECT headline Sharpe）。；Ken French Data Library 官网 FIZ→CIZ 说明（[链接](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)，2026-11-07 核实）。；美股数据源（2026-11-08 核实）：[FRED 条款](https://fred.stlouisfed.org/legal/)、[FRED key](https://fred.stlouisfed.org/docs/api/api_key.html)、[ALFRED real-time](https://fred.stlouisfed.org/docs/api/fred/realtime_period.html)、[EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[Ken French](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)、[CRSP](https://www.crsp.org/research/crsp-us-stock-databases/)、[yfinance](https://github.com/ranaroussi/yfinance)、[Massive](https://massive.com/stocks)、[Alpaca](https://docs.alpaca.markets/docs/about-market-data-api)、[FINRA 21-23](https://www.finra.org/rules-guidance/notices/21-23)。；分红日期与 yfinance（2026-11-10 核实）：[investor.gov 除息日](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)、[yfinance 价格调整](https://ranaroussi.github.io/yfinance/advanced/price_adjustment.html)、[yfinance CHANGELOG](https://github.com/ranaroussi/yfinance/blob/main/CHANGELOG.rst)；分拆与内部人申报（2026-11-10 核实）：[investor.gov 分拆](https://www.investor.gov/introduction-investing/investing-basics/glossary/spin-offs)、[FINRA 分拆](https://www.finra.org/investors/insights/corporate-spinoffs)、[IRS Form 8937 说明](https://www.irs.gov/instructions/i8937)、[investor.gov Forms 3, 4 and 5](https://www.investor.gov/introduction-investing/investing-basics/glossary/forms-3-4-and-5)、[17 CFR 240.16a-3](https://www.ecfr.gov/current/title-17/section-240.16a-3)、[17 CFR 240.13d-1](https://www.ecfr.gov/current/title-17/section-240.13d-1)、[SEC 2023-219](https://www.sec.gov/newsroom/press-releases/2023-219)、[SEC HFIA 第 16(a) 条页面](https://www.sec.gov/about/divisions-offices/division-corporation-finance/holding-foreign-insiders-accountable-act-section-16a-reporting-requirements)；反向拆股与 Nasdaq 最低买价规则（2026-11-11 核实）：[SEC 34-102245](https://www.sec.gov/files/rules/sro/nasdaq/2025/34-102245.pdf)、[SEC 34-104318（90 FR 57225）](https://www.federalregister.gov/documents/2025/12/10/2025-22398/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-amendment-no-1-and)、[SEC 34-105971](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-105971.pdf)、[SEC 34-106594](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106594.pdf)；enrich13（2026-11-11 核实）：[SEC EDGAR API](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)、[SEC 开发者资源](https://www.sec.gov/about/developer-resources)、[Apple NetIncomeLoss JSON](https://data.sec.gov/api/xbrl/companyconcept/CIK0000320193/us-gaap/NetIncomeLoss.json)、[17 CFR 240.10b5-1](https://www.ecfr.gov/current/title-17/section-240.10b5-1)、[Form 4](https://www.sec.gov/files/form4.pdf)、[SEC 2022-222](https://www.sec.gov/newsroom/press-releases/2022-222)、[SEC 34-102201](https://www.sec.gov/files/rules/sro/nyse/2025/34-102201.pdf)、[SEC 34-106133（91 FR）](https://www.federalregister.gov/documents/2026/08/18/2026-16831/self-regulatory-organizations-new-york-stock-exchange-llc-notice-of-filing-of-amendment-no-2-and)；公司回购（2026-11-11 核实）：[17 CFR 240.10b-18](https://www.ecfr.gov/current/title-17/section-240.10b-18)、[SEC 10b-18 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/division-trading-markets-answers-frequently-asked-questions-concerning-rule-10b-18-safe-harbor)、[17 CFR 229.703](https://www.ecfr.gov/current/title-17/section-229.703)、[SEC 回购披露规则后续公告](https://www.sec.gov/newsroom/whats-new/further-announcement-regarding-share-repurchase-disclosure-modernization-rule)、[89 FR 24372](https://www.federalregister.gov/documents/2024/04/08/2024-06187/share-repurchase-disclosure-modernization)。enrich15（2026-11-11 核实）：[17 CFR 240.14e-1](https://www.ecfr.gov/current/title-17/section-240.14e-1)、[SEC 针对股票要约收购的豁免令，2026-04-16](https://www.sec.gov/files/rules/exorders/2026/exemptive-order-tender-offers-equity-securities-041626.pdf)、[investor.gov Tender Offer](https://www.investor.gov/introduction-investing/investing-basics/glossary/tender-offer)。 enrich18（核实于 2026-11-12）：[17 CFR 240.10b-18(b)(2)(iv)](https://www.ecfr.gov/current/title-17/section-240.10b-18)；[SEC 10b-18 常见问题](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/division-trading-markets-answers-frequently-asked-questions-concerning-rule-10b-18-safe-harbor)（最近审阅于 2016-12-02）。官方 10b-18 来源尚未把盘后分支映射到 21:00–04:00 隔夜 / 23/5。
+ enrich19（核实于 2026-11-12）：[17 CFR 240.10b-17](https://www.law.cornell.edu/cfr/text/17/240.10b-17)；[Form 4](https://www.sec.gov/files/form4.pdf) 说明第 8 条；[15 U.S.C. 78p(a)(2)](https://www.law.cornell.edu/uscode/text/15/78p)；[17 CFR 240.16a-3](https://www.law.cornell.edu/cfr/text/17/240.16a-3)；[17 CFR 240.13d-1](https://www.law.cornell.edu/cfr/text/17/240.13d-1)；[17 CFR 240.13d-3](https://www.law.cornell.edu/cfr/text/17/240.13d-3)；[17 CFR 240.14e-5](https://www.law.cornell.edu/cfr/text/17/240.14e-5)。
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  

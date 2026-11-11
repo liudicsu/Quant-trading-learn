@@ -22,3 +22,37 @@ FPI director trade 2026-04-01 -> Form 4 expected: True (unless an exemptive orde
 assertions passed: 15/15
 ASSERT_spinoff_insider_lag_ok
 disclaimer: synthetic data; holidays not handled; no Form 4 before 2026-03-18 != no insider trades; learning only
+=== E. Form 4 transaction codes; Form 3 / Form 5 clocks ===
+  code  open-market-or-private P/S?  V-flag?  note
+  P      True  False  open market or private purchase
+  S      True  False  open market or private sale
+  A      False  False  grant, award or other acquisition under 16b-3(d)
+  M      False  False  16b-3-exempt exercise or conversion
+  F      False  False  payment of exercise price or tax by delivering or withholding
+  G      False  False  bona fide gift
+  P/K    True  False  open-market/private purchase plus equity-swap code K
+  S/K    True  False  open-market/private sale plus equity-swap code K
+  J      False  False  other acquisition or disposition (describe)
+  U      False  False  tender in a change-of-control transaction
+  V marks a transaction voluntarily reported earlier than required; it is not a purchase/sale code
+  do not treat every Form 4 acquisition as an open-market buy
+Form 3: became an officer 2026-03-02 -> initial statement due within 10 days: 2026-03-12
+Form 5 (45 days after FYE 2025-12-31, Rule 0-3 weekend roll): raw 2026-02-14 (Sat) -> 2026-02-16
+Form 5 required if every item was already reported before the due date? False
+=== F. 13G to 13D switch and 13d-3 beneficial ownership ===
+intent-change path (13d-1(e)), still above 5%: purpose on 2026-08-03 (Mon) -> 13D due 2026-08-10 (Mon)
+13D filed 2026-08-10: standstill until the expiration of the tenth day from the filing date = 2026-08-20
+pre-2023 10-calendar-day filing clock is not used for the switch
+paragraph (c) filer reaches 20% on 2026-09-08 -> 13D due 2026-09-15 (Tue)
+do not copy the 20% cap onto a paragraph (b) 13G filer
+paragraph (b) filer loses ordinary-course / (b)(1)(ii) eligibility on 2026-10-05, still above 5% -> 13D or 13G amendment due 2026-10-12
+business day (13d-1(i)(2)) = any day other than Saturday, Sunday, or a Federal holiday, 12 a.m. to 11:59 p.m. ET
+4.9% of record (490000) plus a 60-day exercisable warrant for 600000
+  deemed shares 1090000; percentage uses warrant in the denominator only for this person: 10.2830%
+  another holder of 500,000 shares of record: 5.0000% (warrant not outstanding for that person)
+60-day warrant, no control purpose: deemed now? True
+90-day warrant, no control purpose: deemed now? False
+90-day warrant, control purpose: deemed now? True (counted immediately)
+assertions passed: 41/41
+ASSERT_spinoff_insider_lag_ok
+disclaimer: synthetic data; holidays not handled; no Form 4 / 13G-13D signal; learning only

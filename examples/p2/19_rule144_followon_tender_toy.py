@@ -184,3 +184,60 @@ print("  by a distribution participant who is an affiliate of the issuer; do not
 print("  exceptions exist; this toy is not a compliance engine. Rule 105 (short-then-buy-the-offering) stays as already taught")
 
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== F. Rule 14e-5: purchases outside a tender offer ===")
+# 17 CFR 240.14e-5(a): "no covered person may directly or indirectly purchase
+# or arrange to purchase any subject securities or any related securities
+# except as part of the tender offer. This prohibition applies from the time
+# of public announcement of the tender offer until the tender offer expires."
+# It "does not apply to any purchases or arrangements to purchase made during
+# the time of any subsequent offering period as provided for in § 240.14d-11
+# if the consideration paid or to be paid ... is the same in form and amount
+# as the consideration offered in the tender offer."
+# 14e-5(c): a covered person is the offeror and its affiliates; the offeror's
+# dealer-manager and its affiliates; any advisor to those persons "whose
+# compensation is dependent on the completion of the offer"; and any person
+# acting in concert with any of them in connection with such a purchase.
+# Public announcement is "any oral or written communication by the offeror or
+# any person authorized to act on the offeror's behalf that is reasonably
+# designed to, or has the effect of, informing the public or security holders
+# in general about the tender offer."
+# Related securities are "securities that are immediately convertible into,
+# exchangeable for, or exercisable for subject securities."
+# "Subject securities" has the meaning in 17 CFR 229.1000.
+# Paragraph (b) lists excepted activity. Exceptions exist; this toy is not a
+# compliance engine. Do not start the clock only at formal commencement.
+# Do not treat 14e-1's minimum duration as permission for the bidder to buy
+# in the market during the offer.
+
+
+def outside_purchase_prohibited(covered, when, announced, expires, as_part_of_tender=False,
+                                subsequent_offering_period=False, same_consideration=False):
+    if not covered or as_part_of_tender:
+        return False
+    if subsequent_offering_period and same_consideration:
+        return False
+    return announced <= when <= expires
+
+
+announced, expires = date(2026, 3, 2), date(2026, 3, 27)
+print("official clock runs from public announcement until the tender offer expires, not only from formal commencement")
+print(f"announced {announced}, expires {expires} (same toy window as section D)")
+rows = (
+    ("covered person, day of public announcement, market purchase", True, date(2026, 3, 2), False, False, False, True),
+    ("covered person, mid-offer market purchase", True, date(2026, 3, 10), False, False, False, True),
+    ("covered person, purchase as part of the tender offer", True, date(2026, 3, 10), True, False, False, False),
+    ("covered person, subsequent offering period, same consideration", True, date(2026, 3, 30), False, True, True, False),
+    ("covered person, after expiration, no subsequent period", True, date(2026, 3, 30), False, False, False, False),
+    ("person who is not a covered person, mid-offer", False, date(2026, 3, 10), False, False, False, False),
+)
+for label, covered, when, as_part, subsequent, same, expect in rows:
+    got = outside_purchase_prohibited(covered, when, announced, expires, as_part, subsequent, same)
+    print(f"  {label}: prohibited? {got}")
+    check(got is expect, label)
+print("the subsequent-offering-period carve-out applies only if the consideration is the same in form and amount; this toy does not invent a broader post-expiration trading rule")
+print("related securities = immediately convertible into, exchangeable for, or exercisable for subject securities")
+print("paragraph (b) exceptions exist (including certain pre-announcement contract purchases, specified covering transactions, and a 20-security basket with a 5% value cap); this toy does not build that engine")
+print("14e-1's minimum duration is not permission for a covered person to buy the subject or related securities in the market")
+
+print(f"assertions passed: {checks}/{checks}")

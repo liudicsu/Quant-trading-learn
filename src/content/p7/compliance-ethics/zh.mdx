@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **22.75 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **23 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -143,6 +143,24 @@ bought 2026-03-10, sold 2026-05-10: 61 days in window -> more than 60
 nonresident, 120 days in the US: Pub 519: capital gains generally exempt unless effectively connected; dividends generally 30% or treaty rate
 assertions passed: 6/6
 ASSERT_holding_period_ok
+```
+
+**若资本亏损超过资本利得，可抵扣所得的金额一年以 3,000 美元为限（已婚分开报税则为 1,500 美元）；未用完的亏损向后结转，并保持其长期或短期性质（核实于 2026-11-12；一般信息，不是税务建议）。** 上面已经讲过“超过一年”才是长期持有期。这是 IRS Publication 550 里下一条官方事实。[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Capital Losses”：“If your capital losses are more than your capital gains, you can claim a capital loss deduction.”（若资本亏损大于资本利得，可以申报资本亏损扣除。）“**Limit on deduction.** Your allowable capital loss deduction, figured on Schedule D (Form 1040), is the lesser of: • $3,000 ($1,500 if you are married and file a separate return), or • Your total net loss as shown on line 16 of Schedule D (Form 1040). You can use your total net loss to reduce your income dollar for dollar, up to the $3,000 limit.”（扣除上限：在 Schedule D（Form 1040）上算出的可允许资本亏损扣除，是下列两者中较小的一个：3,000 美元（若已婚且分开报税则为 1,500 美元），或 Schedule D 第 16 行的净亏损总额。你可以把全部净亏损一美元对一美元地减少所得，但不超过 3,000 美元的上限。）“**Capital loss carryover.** … you can carry over the unused part to the next year and treat it as if you had incurred it in that next year. … When you carry over a loss, it remains long-term or short-term.”（资本亏损结转：未用完的部分可以结转到下一年，并视为在那一年发生。结转时，亏损仍保持长期或短期性质。）官方例子：“Bob and Shelly sold securities in 2025. The sales resulted in a capital loss of $7,000. … On their joint 2025 return, they can deduct $3,000. The unused part of the loss, $4,000 ($7,000 − $3,000), can be carried over to 2026. If their capital loss had been $2,000, their capital loss deduction would have been $2,000. They would have no carryover.”（Bob 和 Shelly 在 2025 年出售证券，产生 7,000 美元资本亏损。他们的合并申报可以扣除 3,000 美元，未用的 4,000 美元结转到 2026 年。若亏损是 2,000 美元，则可全部扣除，没有结转。）
+
+不要写成 7,000 美元的净资本亏损全部进入同一年的应税所得。不要为短期和长期发明不同的上限（上限针对全部净亏损；结转保持其性质）。不要漏掉已婚分开报税的 1,500 美元。本课不计算某个指定人的税款，不建议实现策略，也不把这些内容当成建议。站点已经提醒：税后回测收益需要写明假设；这一条补上这些假设里常常漏掉的官方年度上限。
+
+**实验：** `examples/p7/11_tax_1259_1256_roc_toy.py` 的 D 节（A–C 节的打印与此前相同，包括 C 之后的 4/4；脚本合计 7 条断言）：
+
+```text
+=== D. Pub 550 capital-loss deduction cap and carryover ===
+Bob and Shelly, joint return, $7,000 net capital loss: deduct $3,000, carry over $4,000
+same joint return, $2,000 net capital loss: deduct $2,000, carry over $0
+married filing a separate return, $7,000 net capital loss: deduct $1,500, carry over $5,500
+when you carry over a loss, it remains long-term or short-term
+there is not a different annual cap for short-term vs long-term; the cap is on the total net loss
+do not write that a $7,000 net loss all hits the same year's taxable income
+assertions passed: 7/7
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
 ```
 
 **卖的是哪一批股票？没指定就按先进先出（2026-11-11 核实；一般信息，不是税务建议）。** 同一只股票分几次、按不同价格买入，每一次买入就是一个**批次**（lot）。卖出一部分时，成本基础取决于算作卖掉的是哪几批。[IRS Publication 550](https://www.irs.gov/publications/p550)（“Identifying stock or bonds sold”一节）：如果你能**充分指定**（adequately identify）卖出的是哪些股份，成本基础就是这些股份各自的成本。股票由券商托管时，充分指定的意思是：卖出时告诉券商卖哪些股份，**并且**在合理时间内收到券商的书面确认。按 [Treas. Reg. 1.1012-1(c)(8)](https://www.ecfr.gov/current/title-26/section-1.1012-1)，指定最晚要在交收日（或 Rule 15c6-1 规定的交收时间，取较早者）之前作出；事先给券商的**长期指令**（standing order，例如“一律先卖成本最高的批次”）也算在卖出时作了充分指定。如果无法指定，“卖出证券的成本基础就是最先买入的那些证券的成本基础”（先进先出，FIFO）；而且除共同基金等受监管投资公司（RIC）的份额，以及 2011 年起（2010-12-31 之后）通过股息再投资计划（DRIP）取得、存放在托管账户里的股份外，不能用每股平均价（[26 CFR 1.1012-1(e)(1)(i)](https://www.ecfr.gov/current/title-26/section-1.1012-1)；Pub 550 写作 after 2011，与法规不一致，以法规为准）。券商须在 Form 1099-B 上报告成本基础的证券叫“覆盖证券”（covered security）：一般股票是 2011 年起取得的；可以用平均成本的基金份额和 DRIP 股份是 2012 年起取得的（[26 CFR 1.6045-1(a)(15)(i)(A)(B)](https://www.ecfr.gov/current/title-26/section-1.6045-1)）。落到回测或纸面账本上：要存下每一批（日期、股数、成本），而不只是平均成本；每笔卖出旁边都记下用的是哪种批次方法。
@@ -458,7 +476,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 17. 把除息日上空头回测成不必支付股息；因为替代付款出现在 1099-DIV 第 1b 栏，就把它当成股息或合格股息。
 18. 把优先股的 90/181 天合格股息测试套到普通股上，或套到期间合计不足 367 天的每一笔优先股股息上；声称 REIT 股息永远不是合格股息。
 19. 忽略 Form 13H 的识别活动水平，在账户之内或之间轧差，编造一个“及时 = 10 天”的时钟，或把 Form 13H 当成和 Form 4 / 13D / 13G / 13F 一样的公开时点申报。
-
+20. 写成 7,000 美元的净资本亏损全部进入同一年的应税所得；为短期和长期发明不同的年度上限；漏掉已婚分开报税的 1,500 美元。
 
 ## 练习（1:1）
 
@@ -479,6 +497,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 
 
 15. **ex-13h** — 运行 `12_form13h_toy.py`；写出日历日和日历月的门槛，说明账户之间不得轧差，以及 “promptly” 并没有被定义成 10 天；**完成标准**：200 万股或 2,000 万美元 / 2,000 万股或 2 亿美元，不得轧差，与输出一致。
+16. **ex-caploss** — 运行 `11_tax_1259_1256_roc_toy.py` 的 D 节；写出 Bob 和 Shelly 在合并申报下 7,000 美元亏损的可扣除额和结转额，以及 2,000 美元净亏损的处理；**完成标准**：可扣除 3,000 美元、结转 4,000 美元，2,000 美元亏损可全部扣除且没有结转，与输出一致。
+
 ## 测验
 
 <Quiz id="p7ce-q1" question="证监会 2024 程序化规定（作者按 checked_on 阅读）生效日？" options={["2023-01-01", "2024-10-08", "2025-07-07", "永不"]} answer={1} explanation="公告〔2024〕8号：2024-10-08 起施行。" />
@@ -514,12 +534,14 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-pil" question="如果你在除息日做空，后来看到一笔替代股息付款，这笔付款的税收性质是什么（一般性说明，不是税务建议）？" options={["只要出现在 Form 1099-DIV 第 1b 栏，就是合格股息", "它是利息收入", "做空者必须把股息付给出借人；替代付款在 Form 1099-MISC 上报告，不能当成股息或利息，即使出现在 1099-DIV 第 1b 栏也不是合格股息", "空头没有任何现金义务，而且这笔付款一定是合格股息"]} answer={2} explanation="investor.gov（2026-09-09 更新）：借来的股票若派息，必须把股息付给出借人。Pub 550：不要把替代付款当成股息或利息；即使出现在第 1b 栏，也不是合格股息。" />
 <Quiz id="ce-prefqdi" question="优先股的合格股息持有期，什么时候用 90/181 天测试？" options={["每一笔优先股股息都用，普通股也用", "仅当优先股股息对应的期间合计超过 366 天时：在除息日前 90 天起算的 181 天窗口里持有超过 90 天；否则仍用普通的 60/121 测试", "REIT 股息永远不是合格股息，所以持有期测试一律不适用", "优先股永远不适用 60/121 天测试"]} answer={1} explanation="Pub 550 对优先股的例外，适用于股息对应期间合计超过 366 天的情形。若合计少于 367 天，仍用普通的 60/121 测试。不要把 90/181 套到普通股上。合格 REIT 股息（第 5 栏 / §199A）是另一个概念。" />
 <Quiz id="ce-13h" question="Form 13H 的识别活动水平是什么？第一次跨过之后必须做什么？" options={["在账户之内或之间把买入和卖出轧差，并按一个非官方的“及时 = 10 天”时钟申报", "它和 Form 4 / 13D / 13G / 13F 一样是公开的 EDGAR 申报，所以要加进公开时滞表，当作时点输入来用", "日历日：200 万股或 2,000 万美元；日历月：2,000 万股或 2 亿美元，不得轧差。第一次跨过后须及时提交 Form 13H（表格、规则和 SEC 常见问题都没有把 promptly 定义成 10 天）；随后在每个完整日历年结束后 45 天内做年度申报。向每一家券商披露 LTID 和账户。该表是保密的", "把期权行权或指派产生的标的买卖计入，却不把股票期权的标的数量计入"]} answer={2} explanation="17 CFR 240.13h-1(a)(7) 是识别活动水平。FAQ Q1.2 和 13h-1(c)(1)：不得轧差。股票期权计入标的数量或公允市值；因行权或指派产生的标的买卖要排除。表格、规则和常见问题都只写了 “promptly”。该表是保密的，不是公开时点来源。" />
+<Quiz id="ce-caploss" question="按 IRS Publication 550（2025），若资本亏损超过资本利得，可抵扣所得的金额是多少？剩下的怎么办？" options={["7,000 美元的净资本亏损全部进入同一年的应税所得，未用完的亏损结转时会改变性质", "短期亏损的上限是 3,000 美元，长期亏损是另一个数字", "可允许的扣除是 3,000 美元（已婚分开报税则为 1,500 美元）与全部净亏损二者中较小的一个。未用完的亏损向后结转，并保持长期或短期性质。官方 Bob 和 Shelly 的例子里，合并申报的 7,000 美元亏损扣除 3,000 美元、结转 4,000 美元；2,000 美元净亏损可全部扣除，没有结转。这是一般信息，不是税务建议", "不论报税身份，年度上限都是 3,000 美元，包括已婚分开报税"]} answer={2} explanation="Pub 550（2025）的 “Limit on deduction” 和 “Capital loss carryover”：上限是 3,000 美元（已婚分开报税为 1,500 美元）与全部净亏损中较小的一个；结转保持其长期或短期性质。官方例子是 7,000 美元 → 扣除 3,000、结转 4,000；2,000 美元可全部扣除。没有单独的短期 / 长期上限。" />
 
 ## 完成标准
 
 伦理清单勾选；官方来源表填好 URL 与 **2026-11-04** 核验日；风险偏好页完成。
 
 **来源：** `examples/p7/02_compliance_sources.py` 全部条目（作者按各行 checked_on 日期阅读；脚本本身不联网）。SEC FY2026 Exam Priorities；FINRA 2026 GenAI/Agents；香港证监会（SFC）[24EC55](https://apps.sfc.hk/edistributionWeb/gateway/EN/circular/doc?refNo=24EC55)；ESMA [ESMA74-1505669079-10311 PDF](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)；Canvas m14；AFML 科学伦理。；上交所《交易规则（2026年修订）》通知页（[链接](https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml)，2026-11-07 核实）。；FINRA [26-10](https://www.finra.org/rules-guidance/notices/26-10) / [26-11](https://www.finra.org/rules-guidance/notices/26-11)；IRS [W-8BEN](https://www.irs.gov/instructions/iw8ben)、[中美协定](https://www.irs.gov/pub/irs-trty/china.pdf)、[IRC §1091](https://uscode.house.gov/us/usc/119-124/t26/s1091/)、[Pub. 550](https://www.irs.gov/publications/p550)；[个人所得税法](https://shanghai.chinatax.gov.cn/zcfw/zcfgk/grsds/201809/t441789.html)；[公告2020年第3号](https://www.gov.cn/zhengce/zhengceku/2020-01/22/content_5471604.htm)；[CRS](https://www.chinatax.gov.cn/chinatax/aeoi_index.html)；外汇局 [上海](https://www.safe.gov.cn/shanghai/2026/0402/2412.html) / [陕西](https://www.safe.gov.cn/shaanxi/2018/1204/249.html) FAQ（均 2026-11-08 核实）。；洗售成本基础（2026-11-10 核实）：[IRS Publication 550](https://www.irs.gov/publications/p550)；操纵红线与检查重点（2026-11-10 核实）：[15 U.S.C. 78i（govinfo 2023 版）](https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap2B-sec78i.htm)、[FINRA Rule 5210](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5210)、[SEC 新闻稿 2026-37（CAT 审查）](https://www.sec.gov/newsroom/press-releases/2026-37-sec-seeks-public-comment-consolidated-audit-trail-other-audit-trails-data-sources)、[SEC 新闻稿 2026-109（FY2027 检查重点）](https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities)；代币化 NMS 股票与来源更新（2026-11-10 核实）：[SEC Release 34-106402（创新豁免令）](https://www.sec.gov/files/rules/exorders/2026/34-106402.pdf)、[91 FR 60168](https://www.federalregister.gov/documents/2026/09/22/2026-19388/order-granting-temporary-conditional-exemptive-relief-pursuant-to-section-36a1-of-the-securities)、[SEC 新闻稿 2026-90](https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment)、[Atkins 声明](https://www.sec.gov/newsroom/speeches-statements/atkins-innovation-exemption-bridge-toward-durable-rulemaking-091726)、[Uyeda 声明](https://www.sec.gov/newsroom/speeches-statements/uyeda-statement-innovation-exemption-091726)、[SEC 创新豁免页面](https://www.sec.gov/about/divisions-offices/division-trading-markets/innovation-exemption)、[File 4-927 意见](https://www.sec.gov/rules-regulations/public-comments/4-927)；CAT 概念文件 [Federal Register 2026-07651](https://www.federalregister.gov/documents/2026/04/20/2026-07651/concept-release-on-consolidated-audit-trail-and-other-audit-trails-and-data-sources)；[15 U.S.C. 78i 现行文本（截至 Pub. L. 119-138）](https://uscode.house.gov/us/usc/119-138/t15/s78i/)；短期交易利润（2026-11-11 核实）：[15 U.S.C. 78p(b)](https://www.law.cornell.edu/uscode/text/15/78p)；推定出售、第 1256 条与资本返还（2026-11-12 核实）：[26 U.S.C. §1259](https://www.law.cornell.edu/uscode/text/26/1259)、[26 U.S.C. §1256](https://www.law.cornell.edu/uscode/text/26/1256)、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550)；除息日上空头 / 替代付款 / 优先股合格股息（2026-11-12 核实）：[investor.gov，An Introduction to Short Sales](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-51)（2026-09-09 更新）、[IRS Publication 550 (2025)](https://www.irs.gov/publications/p550) enrich18（核实于 2026-11-12）：[17 CFR 240.13h-1](https://www.ecfr.gov/current/title-17/section-240.13h-1)；[SEC 大额交易者常见问题](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/responses-frequently-0)（最近审阅于 2016-02-22）；[Form 13H](https://www.sec.gov/files/form13h.pdf)。
+ enrich19（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Capital Losses” / “Limit on deduction”。一般信息，不是税务建议。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

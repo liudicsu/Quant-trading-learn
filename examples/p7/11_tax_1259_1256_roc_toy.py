@@ -127,3 +127,49 @@ print("do not treat payments in lieu as qualified dividends")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
 
+
+print("=== D. Pub 550 capital-loss deduction cap and carryover ===")
+# IRS Publication 550 (2025), "Capital Losses": "If your capital losses are
+# more than your capital gains, you can claim a capital loss deduction."
+# "Limit on deduction. Your allowable capital loss deduction, figured on
+# Schedule D (Form 1040), is the lesser of: • $3,000 ($1,500 if you are
+# married and file a separate return), or • Your total net loss as shown on
+# line 16 of Schedule D (Form 1040). You can use your total net loss to
+# reduce your income dollar for dollar, up to the $3,000 limit."
+# "Capital loss carryover. ... you can carry over the unused part to the next
+# year and treat it as if you had incurred it in that next year. ... When you
+# carry over a loss, it remains long-term or short-term."
+# Official example: "Bob and Shelly sold securities in 2025. The sales
+# resulted in a capital loss of $7,000. They had no other capital
+# transactions. Their taxable income was $26,000. On their joint 2025 return,
+# they can deduct $3,000. The unused part of the loss, $4,000 ($7,000 −
+# $3,000), can be carried over to 2026. If their capital loss had been
+# $2,000, their capital loss deduction would have been $2,000. They would
+# have no carryover."
+# The cap is on the total net loss; there is not a different cap for
+# short-term vs long-term. General information, not tax advice. Backtests
+# stay pre-tax unless labelled otherwise.
+
+
+def cap_loss_deduction(net_loss, married_filing_separately=False):
+    cap = 1500 if married_filing_separately else 3000
+    loss = int(net_loss)
+    deduct = min(cap, loss)
+    return deduct, loss - deduct
+
+
+d, c = cap_loss_deduction(7000, False)
+print(f"Bob and Shelly, joint return, $7,000 net capital loss: deduct ${d:,}, carry over ${c:,}")
+check((d, c) == (3000, 4000), "Pub 550 Bob-and-Shelly example")
+d, c = cap_loss_deduction(2000, False)
+print(f"same joint return, $2,000 net capital loss: deduct ${d:,}, carry over ${c:,}")
+check((d, c) == (2000, 0), "a $2,000 net loss is fully deductible with no carryover")
+d, c = cap_loss_deduction(7000, True)
+print(f"married filing a separate return, $7,000 net capital loss: deduct ${d:,}, carry over ${c:,}")
+check((d, c) == (1500, 5500), "MFS cap is $1,500")
+print("when you carry over a loss, it remains long-term or short-term")
+print("there is not a different annual cap for short-term vs long-term; the cap is on the total net loss")
+print("do not write that a $7,000 net loss all hits the same year's taxable income")
+
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")

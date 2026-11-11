@@ -13,3 +13,20 @@ lock-up 180 calendar days after 2026-03-10: 2026-09-06 (Sun); take the real date
 assertions passed: 14/14
 ASSERT_event_time_ipo_ok
 disclaimer: synthetic prices; no FOMC or IPO strategy; learning only
+=== D. BLS PFEI 8:30 a.m. ET vs non-PFEI 10:00 a.m. ET ===
+seven PFEIs scheduled for 8:30 a.m. Eastern Time on the public-calendar date:
+  Employment Situation
+  Consumer Price Index
+  Producer Price Indexes
+  U.S. Import and Export Price Indexes
+  Real Earnings
+  Employment Cost Index
+  Productivity and Costs
+non-PFEI releases are scheduled for 10:00 a.m. Eastern Time on the public-calendar date
+CPI for November 2026: scheduled 2026-12-10 at 08:30 Eastern Time
+PFEI 8:30 a.m. ET on 2026-12-10: fill at that day's 09:30 open? True
+non-PFEI 10:00 a.m. ET on 2026-12-10: fill at that day's 09:30 open? False (look-ahead)
+use the official BLS calendar for the date; this toy does not invent a first-Friday rule
+assertions passed: 19/19
+ASSERT_event_time_ipo_ok
+disclaimer: official BLS times; no CPI or payroll strategy; learning only

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **31.75 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **32 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -483,6 +483,32 @@ trade on the statement at 14:01 EDT? True
 Oct 27-28 minutes projected by the 3-week rule: 2026-11-18 (projection; check the Fed calendar)
 ```
 
+**BLS 的主要联邦经济指标定在美东时间上午 8:30 发布；其他 BLS 新闻稿定在美东时间上午 10:00（核实于 2026-11-12）。** 上面已经讲过 FOMC 声明时间（通常是 14:00 ET）。这里补上官方的 BLS 时钟，作为平行的宏观时间戳。BLS [发布政策](https://www.bls.gov/about-bls/dissemination.htm)（最近修改于 2026 年 8 月 28 日）写明：“All seven PFEIs are scheduled for release at **8:30 a.m. Eastern Time** on the dates shown on our public calendar.”（全部七项 PFEI 定在公共日历所列日期的**美东时间上午 8:30** 发布。）这七项是：就业形势（Employment Situation）、消费者价格指数（CPI）、生产者价格指数（PPI）、美国进出口价格指数、实际收入（Real Earnings）、就业成本指数（Employment Cost Index），以及生产率和成本（Productivity and Costs）。“All non-PFEI releases are scheduled for **10:00 a.m. Eastern Time** on the dates shown on our public calendar.”（所有非 PFEI 新闻稿定在公共日历所列日期的**美东时间上午 10:00** 发布。）2026-11-12 打开的 CPI 首页写明：“The Consumer Price Index for November 2026 is scheduled to be released on **December 10, 2026, at 8:30 A.M. Eastern Time.**”（2026 年 11 月的消费者价格指数定于 **2026 年 12 月 10 日美东时间上午 8:30** 发布。）官方 CPI 和就业形势日程表里，直到 2027 年末的每一行都是 08:30 AM。日期以官方日历为准，不要另编一套可以代替日历的“第一个星期五”规则。
+
+**不要**写成每一份 BLS 新闻稿都是 8:30。美国股票常规交易 09:30 ET 开盘，所以美东 8:30 的 PFEI 在开盘前已经发布，当天的常规开盘已经可以反映它——这和下面将要讲到的 07:00 财报是同一条规则。美东 10:00 的非 PFEI 落在开盘之后，在当天开盘成交该信号就是前瞻——这和上面的 FOMC 14:00 是同一个意思。这里只讲事件时间戳，不发明 CPI 或非农交易策略。
+
+**实验：** `examples/p2/12_event_time_ipo_toy.py` 的 D 节（A–C 节的打印与此前相同，包括 14/14；脚本合计 19 条断言）：
+
+```text
+=== D. BLS PFEI 8:30 a.m. ET vs non-PFEI 10:00 a.m. ET ===
+seven PFEIs scheduled for 8:30 a.m. Eastern Time on the public-calendar date:
+  Employment Situation
+  Consumer Price Index
+  Producer Price Indexes
+  U.S. Import and Export Price Indexes
+  Real Earnings
+  Employment Cost Index
+  Productivity and Costs
+non-PFEI releases are scheduled for 10:00 a.m. Eastern Time on the public-calendar date
+CPI for November 2026: scheduled 2026-12-10 at 08:30 Eastern Time
+PFEI 8:30 a.m. ET on 2026-12-10: fill at that day's 09:30 open? True
+non-PFEI 10:00 a.m. ET on 2026-12-10: fill at that day's 09:30 open? False (look-ahead)
+use the official BLS calendar for the date; this toy does not invent a first-Friday rule
+assertions passed: 19/19
+ASSERT_event_time_ipo_ok
+disclaimer: official BLS times; no CPI or payroll strategy; learning only
+```
+
 ## 财报发布：事件时间是发布那一刻，不是季度末，也不是 8-K 的日期（2026-11-11 核实）
 
 **三个不同的日期。** 季度结束；几周后公司发布财报新闻稿；然后按 **Item 2.02** 提交（furnish）一份 Form 8-K，里面要写明发布日期，并把新闻稿作为附件（[Form 8-K](https://www.sec.gov/files/form8-k.pdf)）。没有其他期限规定时，8-K 要在事件发生后 **四个营业日**内提交（一般说明 B.1）。所以 8-K 的日期可能晚于新闻稿。
@@ -572,6 +598,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 18. 以为锁定协议一到期，Rule 144 就不再适用；把 Form 144 当成已经成交的数量，或在表格提交之前就按卖出成交；把上市股票的数量上限（1% 和四周平均周成交量的较大者）套到场外股票上——SEC 说明对场外股票只用 1%。
 19. 按前收盘价成交增发；在公告当天而不是招股书里的发行或交割日增加股本；或在 Rule 105 限制期内卖空，再向承销商买入这次包销发行的股份。
 20. 假设发行人或承销商在分销期间可以自由求购这只股票；让货架上的股东从注册之日起一直到最后一股卖完都停在 Rule 102 里；把 Rule 101 的交投活跃例外抄到发行人身上；另编一套 Rule 100 里没有的 ATM 限制期时钟。
+21. 写成每一份 BLS 新闻稿都是美东时间上午 8:30；另编一套可以代替官方日历的“第一个星期五”规则；把 10:00 ET 的非 PFEI 信号在当天常规开盘成交。
 
 ## 练习（与任务清单 1:1）
 
@@ -587,6 +614,8 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 10. **ex-sp500-earn** — 运行 `16_index_add_earnings_time_toy.py`；再手算：标普在 2026-04-15（星期三）美东 17:15 公告时的评估日，以及 2026-04-16（星期四）美东 16:30 发布财报时的第 0 天；**完成标准**：2026-04-13（星期一）和 2026-04-17（星期五），各用一句话说明原因。
 
 11. **ex-regm101** — 运行 `19_rule144_followon_tender_toy.py` 的 E 段；写出 1 天与 5 天限制期的 ADTV/公众持股门槛，说明货架上的每一次发行要单独分析，并且不要把 Rule 101 的交投活跃例外抄到发行人身上；**完成标准**：这三点与输出一致。
+12. **ex-bls-time** — 运行 `12_event_time_ipo_toy.py` 的 D 节；写出 2026 年 11 月 CPI 的预定发布时间，并说明美东 8:30 的 PFEI 和美东 10:00 的非 PFEI 能不能在当天 09:30 开盘成交；**完成标准**：2026-12-10 美东 8:30，8:30 的 PFEI 可以在该开盘成交，10:00 的非 PFEI 不可以，与输出一致。
+
 ## 测验
 
 <Quiz id="q1-la" question="未 shift 的同日 signal×收益是？" options={["无害", "前瞻", "PSR 必需", "哈希检查"]} answer={1} explanation="当日收盘同时进信号与收益。" />
@@ -613,12 +642,14 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-rule144" question="关联人按 Rule 144 转售上市股票时，下面哪一项是对的？" options={["三个月数量上限永远是已发行股份的 1%，即使四周平均周成交量更大也不例外", "上限取该类已发行股份的 1% 和四周平均每周报告成交量中的最大者；如果三个月内拟出售数量超过 5,000 股或 50,000 美元，必须在下单同时提交 Form 144，而且这是打算出售的通知，不是已经成交的数量", "报告公司的受限股只要合同锁定期一到就可以卖，不必再满足 Rule 144 的持有期", "Form 144 像 Form 4 一样，是卖出之后再报"]} answer={1} explanation="144(e)(1) 取 1% 和四周平均周成交量中的最大者。144(h) 规定，数量超过 5,000 股或 50,000 美元时，要在下单同时提交 Form 144。锁定协议到期后，报告公司仍可能有 6 个月持有期；Form 144 也不是像 Form 4 那样的事后申报。" />
 <Quiz id="bt-rule105" question="Regulation M 的 Rule 105 一般禁止什么？" options={["在包销的股票发行里，在限制期（定价日前 5 个营业日到定价时，或从最初注册文件提交到定价时，取较短者）卖空，再向承销商或参与发行的经纪交易商买入这次发行的股份", "财报发布前 5 天内对该股票的任何卖空", "已经持有该股票的人，就不能再买这次增发", "由现有股东而不是公司出售的二级发行"]} answer={0} explanation="禁止规定在 17 CFR 242.105，适用于以现金认购、由承销商包销的股票发行。它不适用于不是包销的发行，也不禁止本来就持有该股票，或现有股东的二级出售本身。" />
 <Quiz id="bt-regm101" question="在一次分销期间，Regulation M 的 Rule 101 和 102 限制什么？货架上的一次发行要怎么分析？" options={["股东把股份放在货架上之后，从注册之日起一直到最后一股卖完都停在 Rule 102 里", "发行人可以使用 Rule 101 的交投活跃例外（ADTV 不少于 100 万美元、公众持股市值不少于 1.50 亿美元），而且 ATM 另有一套 Rule 100 里没有的限制期时钟", "Rule 101 禁止分销参与人（及其关联购买人）在限制期内买入、求购或试图诱使他人买入或求购被覆盖证券；如果这个人是发行人或出售证券的持有人，则改适用 Rule 102。ADTV 不少于 10 万美元且公众持股市值不少于 2,500 万美元时，限制期是 1 个营业日（若在收盘前定价，需要一个完整交易日），否则是 5 个营业日。货架上的每一次发行要单独分析是否构成分销。ATM 是指以非固定价格发行。发行人的关联方作为分销参与人时不能使用 101 的交投活跃例外，这条例外也不能抄到 Rule 102 下的发行人身上", "Rule 101/102 和 Rule 105（先卖空再买这次发行）是同一条禁止"]} answer={2} explanation="17 CFR 242.100–102 和 SLB 9：1 天 / 5 天限制期，收盘前定价需要一个完整交易日，货架上的每一次发行单独分析，ATM 定义为以非固定价格发行。SLB 9 还写：发行人的关联方作为分销参与人时不能使用 101 的交投活跃例外；不要把它抄到 Rule 102 上。Rule 105 仍是已经讲过的“先卖空再买这次发行”。" />
+<Quiz id="bt-bls-time" question="BLS 的主要联邦经济指标定在什么时间发布？日线回测应如何对待这个时钟？" options={["每一份 BLS 新闻稿都是美东时间上午 8:30，而且使用 8:30 发布的信号不能在当天常规开盘成交", "PFEI 都在每月第一个星期五发布，所以不必看官方日历", "全部七项 PFEI（就业形势、CPI、PPI、进出口价格指数、实际收入、就业成本指数、生产率和成本）定在公共日历所列日期的美东时间上午 8:30 发布；非 PFEI 新闻稿定在美东时间上午 10:00。2026 年 11 月的 CPI 定于 2026 年 12 月 10 日美东时间上午 8:30 发布。美东 8:30 的发布在 09:30 常规开盘之前已经出来，当天开盘可以反映它。美东 10:00 的非 PFEI 在开盘之后，在当天开盘成交该信号就是前瞻，和 FOMC 14:00 一样。日期以官方日历为准，不要另编“第一个星期五”规则", "非 PFEI 新闻稿也是美东 8:30，所以 10:00 的信号可以在当天开盘成交"]} answer={2} explanation="BLS 发布政策（最近修改于 2026-08-28）把七项 PFEI 定在美东 8:30，把非 PFEI 定在美东 10:00，日期以公共日历为准。CPI 首页写明 2026 年 11 月 CPI 于 2026-12-10 美东时间上午 8:30 发布。常规交易 09:30 开盘，所以 8:30 已经发布，10:00 在开盘成交就是前瞻。本课不发明第一个星期五规则，也不给 CPI 或非农策略。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
 **来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。enrich13（2026-11-11 核实）：[S&P U.S. Indices Methodology，2026 年 11 月版](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)；[Form 8-K 一般说明 B.1 与 Item 2.02](https://www.sec.gov/files/form8-k.pdf)；[Regulation FD，17 CFR 243](https://www.ecfr.gov/current/title-17/part-243)。enrich15（2026-11-11 核实）：[17 CFR 230.144](https://www.ecfr.gov/current/title-17/section-230.144)、[17 CFR 239.144（Form 144）](https://www.ecfr.gov/current/title-17/section-239.144)、[SEC Rule 144 投资者说明](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm)、[17 CFR 242.105](https://www.ecfr.gov/current/title-17/section-242.105)。 enrich18（核实于 2026-11-12）：[17 CFR 242.100](https://www.ecfr.gov/current/title-17/section-242.100)、[242.101](https://www.ecfr.gov/current/title-17/section-242.101)、[242.102](https://www.ecfr.gov/current/title-17/section-242.102)；[SEC 工作人员法律公告第 9 号](https://www.sec.gov/rules-regulations/staff-guidance/staff-legal-bulletins/staff-legal-bulletin-9-faq-regulation-m)（最近审阅于 1999-11-22）。
+ enrich19（核实于 2026-11-12）：[BLS 发布政策](https://www.bls.gov/about-bls/dissemination.htm)（最近修改于 2026-08-28）；[CPI 首页](https://www.bls.gov/cpi/)；[CPI 发布日程](https://www.bls.gov/schedule/news_release/cpi.htm)；[就业形势发布日程](https://www.bls.gov/schedule/news_release/empsit.htm)。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

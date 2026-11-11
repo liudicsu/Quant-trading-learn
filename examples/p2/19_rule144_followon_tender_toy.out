@@ -40,3 +40,17 @@ assertions passed: 15/15
   by a distribution participant who is an affiliate of the issuer; do not copy it onto the issuer under Rule 102
   exceptions exist; this toy is not a compliance engine. Rule 105 (short-then-buy-the-offering) stays as already taught
 assertions passed: 19/19
+=== F. Rule 14e-5: purchases outside a tender offer ===
+official clock runs from public announcement until the tender offer expires, not only from formal commencement
+announced 2026-03-02, expires 2026-03-27 (same toy window as section D)
+  covered person, day of public announcement, market purchase: prohibited? True
+  covered person, mid-offer market purchase: prohibited? True
+  covered person, purchase as part of the tender offer: prohibited? False
+  covered person, subsequent offering period, same consideration: prohibited? False
+  covered person, after expiration, no subsequent period: prohibited? False
+  person who is not a covered person, mid-offer: prohibited? False
+the subsequent-offering-period carve-out applies only if the consideration is the same in form and amount; this toy does not invent a broader post-expiration trading rule
+related securities = immediately convertible into, exchangeable for, or exercisable for subject securities
+paragraph (b) exceptions exist (including certain pre-announcement contract purchases, specified covering transactions, and a 20-security basket with a 5% value cap); this toy does not build that engine
+14e-1's minimum duration is not permission for a covered person to buy the subject or related securities in the market
+assertions passed: 25/25

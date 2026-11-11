@@ -34,3 +34,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 - enrich17 (2026-11-12): `11_tax_1259_1256_roc_toy.py` new section C — payments in lieu are not QDI (Form 1099-MISC) and preferred-stock QDI 90/181 only when periods total more than 366 days (now 4 assertions; sections A–B output unchanged; not tax advice).
 
 - enrich18 (2026-11-12): `12_form13h_toy.py` — Form 13H identifying-activity level (calendar day 2 million shares or $20 million; calendar month 20 million shares or $200 million), no netting, equity-option underlying counts and exercises do not (9 assertions; not a public PIT filing; not tax or registration advice).
+
+- enrich19 (2026-11-12): `11_tax_1259_1256_roc_toy.py` section D — IRS Pub 550 capital-loss cap (Bob and Shelly $7,000 → $3,000 deductible + $4,000 carryover; $2,000 fully deductible; $1,500 if MFS; carryover remains long-term or short-term) (sections A–C output unchanged, including 4/4 after C; script total 7 assertions; not tax advice).

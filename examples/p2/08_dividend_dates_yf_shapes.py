@@ -133,3 +133,69 @@ check(raised, "implicit default rejected")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_dividend_yf_ok")
 print("disclaimer: synthetic fixtures; learning only")
+
+print("=== D. Rule 10b-17 issuer notice (calendar days as written; not business days) ===")
+# 17 CFR 240.10b-17(b)(1): notice is deemed given only if given to the National
+# Association of Securities Dealers, Inc., "no later than 10 days prior to the
+# record date involved" or, for a rights subscription or other offering if such
+# 10 days advance notice is not practical, "on or before the record date and in
+# no event later than the effective date of the registration statement to which
+# the offering relates," or given under substantially comparable listing-exchange
+# procedures. The Commission may exempt an issuer.
+# 10b-17(c): the rule does not apply to redeemable securities issued by open-end
+# investment companies and unit investment trusts. This toy does not invent a
+# FINRA-substituted addressee. A late or missing notice is a data-quality /
+# timing flag, not proof the dividend did not happen. 10b-17 itself does not
+# move the ex-date (FINRA 11140(b) already covers 25%+ deferral).
+
+
+def notice_due(record):
+    """10 calendar days prior to the record date, as written in 10b-17(b)(1)."""
+    return record - timedelta(days=10)
+
+
+rec = date(2026, 3, 16)  # Monday, same record date as section A
+due = notice_due(rec)
+print(f"cash dividend, record {rec}: notice generally due no later than {due} (10 calendar days prior)")
+check(due == date(2026, 3, 6), "10 calendar days, not 10 business days")
+ten_bdays_before = rec
+n = 0
+while n < 10:
+    ten_bdays_before -= timedelta(days=1)
+    if ten_bdays_before.weekday() < 5:
+        n += 1
+print(f"10 business days before the same record date would be {ten_bdays_before}; that is not the 10b-17 clock")
+check(ten_bdays_before != due, "do not rewrite 10 days as 10 business days")
+
+
+def rights_notice_ok(notice, record, registration_effective, practical_10_days):
+    if practical_10_days:
+        return notice <= record - timedelta(days=10)
+    return notice <= record and notice <= registration_effective
+
+
+reg_eff = date(2026, 4, 1)
+print(f"rights offering, 10 days not practical: notice on record date {rec} and before registration effective {reg_eff}? {rights_notice_ok(rec, rec, reg_eff, False)}")
+check(rights_notice_ok(rec, rec, reg_eff, False) is True, "rights fallback: on or before record, no later than effective date")
+check(rights_notice_ok(date(2026, 4, 2), rec, reg_eff, False) is False, "rights notice after the effective date is late")
+
+def tenb17_applies(security_class):
+    # 10b-17(c): redeemable securities issued by open-end investment companies
+    # and unit investment trusts are excepted.
+    return security_class not in {"open-end redeemable", "UIT redeemable"}
+
+
+for kind, expect in (
+    ("listed common stock", True),
+    ("open-end redeemable", False),
+    ("UIT redeemable", False),
+):
+    got = tenb17_applies(kind)
+    print(f"  10b-17 notice rule applies to {kind}? {got}")
+    check(got is expect, kind)
+print("a late or missing 10b-17 notice is a data-quality / timing flag, not proof the dividend did not happen")
+print("10b-17 does not itself defer the ex-date; the 25%+ deferral is already taught under FINRA 11140(b)")
+
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_dividend_yf_ok")
+print("disclaimer: synthetic fixtures; learning only")

@@ -36,3 +36,12 @@ do not apply 90/181 to common stock
 do not treat payments in lieu as qualified dividends
 assertions passed: 4/4
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== D. Pub 550 capital-loss deduction cap and carryover ===
+Bob and Shelly, joint return, $7,000 net capital loss: deduct $3,000, carry over $4,000
+same joint return, $2,000 net capital loss: deduct $2,000, carry over $0
+married filing a separate return, $7,000 net capital loss: deduct $1,500, carry over $5,500
+when you carry over a loss, it remains long-term or short-term
+there is not a different annual cap for short-term vs long-term; the cap is on the total net loss
+do not write that a $7,000 net loss all hits the same year's taxable income
+assertions passed: 7/7
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
