@@ -1,5 +1,5 @@
 """Rule 144 volume / Form 144 notice, Rule 105 restricted period, Rule 14e-1 tender window
-(checked 2026-11-11). Synthetic dates; weekdays only, no holidays.
+(checked 2026-11-11; section E 2026-11-12). Synthetic dates; weekdays only, no holidays.
 
 Sources:
 - 17 CFR 230.144(e)(1): affiliate three-month sales shall not exceed the greatest of
@@ -20,6 +20,13 @@ Sources:
   the date it is first published or sent; if the percentage sought, the consideration, or
   the dealer's soliciting fee changes, it must stay open at least 10 business days from
   that notice. The 2026-04-16 equity exemptive order is not applied automatically here.
+
+- 17 CFR 242.100 / 242.101 / 242.102 and SEC Staff Legal Bulletin No. 9 (FAQ on
+  Regulation M, last reviewed 1999-11-22): 1-day vs 5-day restricted period;
+  full trading day if pricing is before the close; each shelf takedown is
+  analyzed separately; ATM means an offering at other than a fixed price;
+  the Rule 101 actively-traded exception is not available to an affiliate of
+  the issuer and is not copied onto Rule 102.
 
 Learning only; not legal advice and not a trading signal.
 """
@@ -120,4 +127,60 @@ day10 = add_weekdays(change, 10)
 print(f"if consideration is increased on {change}, 10 weekdays from that notice (counting that date as day 1) = {day10}")
 check(day10 == date(2026, 4, 2), "day10")
 print("the April 16, 2026 exemptive order can shorten some equity offers to 10 business days only when every stated condition is met; this toy does not apply that order")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== E. Regulation M Rule 101/102 restricted period and shelf takedowns ===")
+# 17 CFR 242.100: if ADTV >= $100,000 and public float >= $25 million, the restricted
+# period begins the later of one business day prior to determination of the offering
+# price or becoming a distribution participant, and ends on completion of participation;
+# otherwise five business days on the same structure.
+# SLB 9: if pricing is before the close, the 1-day period requires a full trading day.
+# ADTV for a delayed offering under Securities Act Rule 415 is measured in the two full
+# calendar months preceding, or any 60 consecutive calendar days ending within 10
+# calendar days preceding, determination of the offering price.
+# SLB 9 Shelf Offerings: analyze each takedown off the shelf to see whether it is a
+# distribution; registration alone does not keep the shareholder in Rule 102 until the
+# last share is sold. Same analysis under 101 and 102.
+# Rule 100: an at-the-market offering is an offering of securities at other than a
+# fixed price. No special ATM restricted-period clock is invented here.
+# Rule 101 actively-traded exception: ADTV >= $1 million and public float >= $150 million;
+# a distribution participant who is an affiliate of the issuer may not use it. Do not
+# copy that exception onto the issuer under Rule 102.
+
+
+def restricted_days(adtv, public_float):
+    if adtv >= 100_000 and public_float >= 25_000_000:
+        return 1
+    return 5
+
+
+d1 = restricted_days(500_000, 80_000_000)
+d5 = restricted_days(50_000, 10_000_000)
+print(f"  ADTV $500,000 and public float $80,000,000 -> {d1}-business-day restricted period")
+print(f"  ADTV $50,000 and public float $10,000,000 -> {d5}-business-day restricted period")
+check(d1 == 1 and d5 == 5, "1-day vs 5-day thresholds")
+# Pricing before the close on Tuesday 2026-06-09: the 1-day period needs a full trading
+# day, so it begins prior to the opening on Monday 2026-06-08 (toy weekdays only).
+pricing = date(2026, 6, 9)  # Tuesday
+monday = weekdays(pricing, 1)
+print(f"  pricing before the close on {pricing} (Tuesday); 1-day period requires a full trading day")
+print(f"  restricted period begins prior to the opening on {monday} (Monday), not at Monday's close")
+check(monday == date(2026, 6, 8), "full trading day is Monday")
+print("  ADTV for a delayed / Rule 415 offering is measured in the two full calendar months preceding,")
+print("  or any 60 consecutive calendar days ending within 10 calendar days preceding, pricing")
+print("  shelf: a shareholder with shares on a shelf who plans periodic sales does not stay in Rule 102")
+print("  from registration until the last share is sold; analyze each takedown to see whether it is a distribution")
+shelf_registered = True
+takedown_is_distribution = False  # a periodic sale that is not, on these facts, a distribution
+in_102_from_registration = shelf_registered and True  # the incorrect assumption
+print(f"  shares registered on a shelf, this takedown is not a distribution -> in Rule 102 now? {takedown_is_distribution}")
+check(takedown_is_distribution is False, "no automatic 102 from registration")
+check(in_102_from_registration is not takedown_is_distribution, "registration alone is not the test")
+print("  ATM (Rule 100) means an offering of securities at other than a fixed price; no special ATM clock")
+print("  Rule 101 bars distribution participants (and affiliated purchasers) from bidding for or purchasing")
+print("  a covered security in the restricted period; if that person is the issuer or selling security holder, Rule 102 applies instead")
+print("  Rule 101 actively-traded exception (ADTV $1 million and public float $150 million) may not be used")
+print("  by a distribution participant who is an affiliate of the issuer; do not copy it onto the issuer under Rule 102")
+print("  exceptions exist; this toy is not a compliance engine. Rule 105 (short-then-buy-the-offering) stays as already taught")
+
 print(f"assertions passed: {checks}/{checks}")

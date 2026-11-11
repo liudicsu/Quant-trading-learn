@@ -26,3 +26,5 @@ Data: `data/synthetic_ohlc_ba.csv` (seed 11 when generated).
 - enrich15 (2026-11-11): `11_freeride_txse_15c33_toy.py` — Regulation T cash-account payment period (T+1 plus two business days = 3 BD) and 90-calendar-day freeride freeze, TXSE official session clock, Rule 15c3-3 credits−debits reserve toy (14 assertions).
 
 - enrich17 (2026-11-12): `12_stop_order_toy.py` — stop becomes a market order (fill can deviate from the stop), stop-limit may not fill, trailing-stop $20→$24→trigger $23 example (5 assertions; investor.gov bulletin updated 2026-08-18).
+
+- enrich18 (2026-11-12): `13_sale_condition_toy.py` — SIP sale conditions M / Q / T (CTS matrix: M is not the consolidated last and does not update volume; Q updates the consolidated open; T is not last-sale eligible but counts in volume, including ETH 21:00–09:30 and after 16:00) and 6 vs M (18 assertions).

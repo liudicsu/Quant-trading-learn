@@ -1,0 +1,21 @@
+=== A. calendar-day identifying activity level; do not net ===
+  account 1 buy 1,200,000 shares ($12,000,000); account 2 sell 1,000,000 shares ($10,000,000)
+  aggregate (no netting) 2,200,000 shares / $22,000,000 -> crosses day threshold? True
+  if you netted within/among accounts: 200,000 shares / $2,000,000 -> would look like a miss: False
+  FAQ Q1.2 / Rule 13h-1(c)(1): do not net within or among accounts
+  1,500,000 shares at $22,500,000 FMV: shares test? False; value test? True; crosses? True
+=== B. calendar-month identifying activity level ===
+  18,000,000 shares / $180,000,000 -> crosses month threshold? False
+  21,000,000 shares / $180,000,000 -> crosses month threshold? True
+  18,000,000 shares / $210,000,000 -> crosses month threshold? True
+=== C. equity-option underlying counts; exercise of the underlying does not ===
+  stock purchases 1,300,000 shares
+  equity calls 8,000 contracts x 100 = 800,000 underlying shares (counted)
+  later exercise of 2,000 contracts = 200,000 shares of the underlying (excluded)
+  counted total 2,100,000 shares -> crosses day threshold? True
+  if exercises were added, total would be 2,300,000 (do not add them)
+  index options: aggregate the fair market value of the option transactions, not an underlying share count
+  after first crossing, file Form 13H promptly (the Form, the rule, and the FAQ do not say 'promptly = 10 days')
+  then file annually within 45 days after each full calendar year; disclose LTID and accounts to each broker
+  the Form is confidential; it is not a public PIT source like Form 4 / 13D / 13G / 13F
+assertions passed: 9/9

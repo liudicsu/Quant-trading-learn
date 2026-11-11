@@ -32,3 +32,5 @@ Each script has a matching `.out` with its expected stdout; capture **stdout onl
 
 - enrich16 (2026-11-12): `11_tax_1259_1256_roc_toy.py` — IRS Pub 550 return-of-capital Example 1 ($100 / $80 / $30 → basis 100→20→0, $10 long-term gain) and a 1259/1256 classification table (3 assertions; not tax advice).
 - enrich17 (2026-11-12): `11_tax_1259_1256_roc_toy.py` new section C — payments in lieu are not QDI (Form 1099-MISC) and preferred-stock QDI 90/181 only when periods total more than 366 days (now 4 assertions; sections A–B output unchanged; not tax advice).
+
+- enrich18 (2026-11-12): `12_form13h_toy.py` — Form 13H identifying-activity level (calendar day 2 million shares or $20 million; calendar month 20 million shares or $200 million), no netting, equity-option underlying counts and exercises do not (9 assertions; not a public PIT filing; not tax or registration advice).

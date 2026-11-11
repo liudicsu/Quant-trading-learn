@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **31.25 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **31.75 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -128,6 +128,14 @@ disclaimer: synthetic prices; no FOMC or IPO strategy; learning only
 
 **[Regulation M 的 Rule 105](https://www.ecfr.gov/current/title-17/section-242.105)** 又加了一条交易限制。在以现金认购、由承销商包销（firm-commitment）的股票发行里，在 Rule 105 的限制期内卖空标的股票，再向承销商或参与发行的经纪交易商买入这次发行的股份，是违法的。限制期取下面两者中**较短**的一段：定价日前 **5 个营业日**起到定价时；或从最初注册文件（或 Form 1-A / 1-E）提交起到定价时。这条规则不论主观意图。它不适用于不是包销的发行。规则正文里有例外（善意买入、真正分开的账户、某些投资公司）；本课只讲主要禁止，不做合规引擎。
 
+**Regulation M 的 Rule 101 和 102：限制期，以及货架上的每一次发行要单独分析。** 上面的 Rule 105 只禁止“先卖空再买这次发行”。在一次分销（distribution）期间，[17 CFR 242.101(a)](https://www.ecfr.gov/current/title-17/section-242.101) 禁止**分销参与人**或其关联购买人在适用的**限制期**内“买入、求购，或试图诱使任何人买入或求购被覆盖证券”。如果这个人是发行人或出售证券的持有人，则改适用 **[Rule 102](https://www.ecfr.gov/current/title-17/section-242.102)**。
+
+[17 CFR 242.100](https://www.ecfr.gov/current/title-17/section-242.100) 对限制期的定义是：若该证券的 ADTV 价值不少于 **10 万美元**，且发行人普通股的公众持股市值不少于 **2,500 万美元**，限制期从定价日前**一个营业日**与该人成为分销参与人之时两者中较晚者开始，到其完成参与时结束；**其他证券则为五个营业日**，结构相同。[工作人员法律公告第 9 号](https://www.sec.gov/rules-regulations/staff-guidance/staff-legal-bulletins/staff-legal-bulletin-9-faq-regulation-m)（Regulation M 常见问题）：如果定价发生在收盘之前，这 1 天的限制期“需要一个**完整交易日**”。按《证券法》Rule 415 延期发行的 ADTV，在定价日前的两个完整日历月，或在定价日前 10 个日历日之内结束的任意连续 60 个日历日里计量。
+
+**货架注册：** SLB 9 的 “Shelf Offerings”：股东把股份放在货架上、打算分次出售，**不会**从注册之日起一直到最后一股卖完都停留在 Rule 102 里。“股东应当**对货架上的每一次发行单独分析**，看它是否构成一次**分销**。” 101 和 102 用的是同一套分销分析。Rule 100 还把**市价发行**（at-the-market offering）定义成“以**非固定价格**发行证券”。本课只按这个官方定义和货架一次发行测试来讲 ATM，不另编一套 ATM 限制期时钟。
+
+Rule 101 有一条**交投活跃**例外（ADTV 至少 **100 万美元**、公众持股市值至少 **1.50 亿美元**），**发行人的关联方**作为分销参与人时**不能**用这条例外（SLB 9）。Rule 102 是更严的发行人一侧规则；**不要**把 101 的交投活跃例外抄到发行人身上。规则文本里还有其他例外；本课不教合规引擎。围绕后续发行、货架或 ATM 做回测时，不要假设发行人或承销商在分销期间可以自由求购这只股票。这里不推荐任何发行或交易商。
+
 **实验：** `examples/p2/19_rule144_followon_tender_toy.py` 的 A–C 节（只计工作日，不考虑假期；D 节在 `data-cleaning` 使用）：
 
 ```text
@@ -156,6 +164,23 @@ offer first published 2026-03-02; 20th weekday (counting that date as day 1) = 2
 if consideration is increased on 2026-03-20, 10 weekdays from that notice (counting that date as day 1) = 2026-04-02
 the April 16, 2026 exemptive order can shorten some equity offers to 10 business days only when every stated condition is met; this toy does not apply that order
 assertions passed: 15/15
+=== E. Regulation M Rule 101/102 restricted period and shelf takedowns ===
+  ADTV $500,000 and public float $80,000,000 -> 1-business-day restricted period
+  ADTV $50,000 and public float $10,000,000 -> 5-business-day restricted period
+  pricing before the close on 2026-06-09 (Tuesday); 1-day period requires a full trading day
+  restricted period begins prior to the opening on 2026-06-08 (Monday), not at Monday's close
+  ADTV for a delayed / Rule 415 offering is measured in the two full calendar months preceding,
+  or any 60 consecutive calendar days ending within 10 calendar days preceding, pricing
+  shelf: a shareholder with shares on a shelf who plans periodic sales does not stay in Rule 102
+  from registration until the last share is sold; analyze each takedown to see whether it is a distribution
+  shares registered on a shelf, this takedown is not a distribution -> in Rule 102 now? False
+  ATM (Rule 100) means an offering of securities at other than a fixed price; no special ATM clock
+  Rule 101 bars distribution participants (and affiliated purchasers) from bidding for or purchasing
+  a covered security in the restricted period; if that person is the issuer or selling security holder, Rule 102 applies instead
+  Rule 101 actively-traded exception (ADTV $1 million and public float $150 million) may not be used
+  by a distribution participant who is an affiliate of the issuer; do not copy it onto the issuer under Rule 102
+  exceptions exist; this toy is not a compliance engine. Rule 105 (short-then-buy-the-offering) stays as already taught
+assertions passed: 19/19
 ```
 
 ## Walk-forward 实验
@@ -546,6 +571,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 17. 用今天的 227 亿美元门槛筛选过去的标普 500 候选，或把“符合条件”当成“会被纳入”；在美东 17:15 公告之前就交易标普调整；收盘后发布的财报按当天收盘价成交，盘中发布的按当天开盘价成交；把财报日期记成季度末。
 18. 以为锁定协议一到期，Rule 144 就不再适用；把 Form 144 当成已经成交的数量，或在表格提交之前就按卖出成交；把上市股票的数量上限（1% 和四周平均周成交量的较大者）套到场外股票上——SEC 说明对场外股票只用 1%。
 19. 按前收盘价成交增发；在公告当天而不是招股书里的发行或交割日增加股本；或在 Rule 105 限制期内卖空，再向承销商买入这次包销发行的股份。
+20. 假设发行人或承销商在分销期间可以自由求购这只股票；让货架上的股东从注册之日起一直到最后一股卖完都停在 Rule 102 里；把 Rule 101 的交投活跃例外抄到发行人身上；另编一套 Rule 100 里没有的 ATM 限制期时钟。
 
 ## 练习（与任务清单 1:1）
 
@@ -560,6 +586,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 9. **ex9**（可选）：运行 `12_event_time_ipo_toy.py`，把首日开盘价改成 22；**完成标准**：打印按开盘价算的新首日收益，并说明它为什么仍和按发行价算的 +20% 不同。
 10. **ex-sp500-earn** — 运行 `16_index_add_earnings_time_toy.py`；再手算：标普在 2026-04-15（星期三）美东 17:15 公告时的评估日，以及 2026-04-16（星期四）美东 16:30 发布财报时的第 0 天；**完成标准**：2026-04-13（星期一）和 2026-04-17（星期五），各用一句话说明原因。
 
+11. **ex-regm101** — 运行 `19_rule144_followon_tender_toy.py` 的 E 段；写出 1 天与 5 天限制期的 ADTV/公众持股门槛，说明货架上的每一次发行要单独分析，并且不要把 Rule 101 的交投活跃例外抄到发行人身上；**完成标准**：这三点与输出一致。
 ## 测验
 
 <Quiz id="q1-la" question="未 shift 的同日 signal×收益是？" options={["无害", "前瞻", "PSR 必需", "哈希检查"]} answer={1} explanation="当日收盘同时进信号与收益。" />
@@ -585,12 +612,13 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-ipo-history" question="发行价 20，首日开盘 26，收盘 24。一个普通账户在开盘时买入，首日收益约是多少？" options={["+20%，按发行价算", "约 −7.69%", "+30%", "新股不能算收益"]} answer={1} explanation="24 ÷ 26 − 1 ≈ −7.69%；+20% 假设了按发行价成交，SEC 公告说大部分发行份额分给机构和高净值客户。" />
 <Quiz id="bt-rule144" question="关联人按 Rule 144 转售上市股票时，下面哪一项是对的？" options={["三个月数量上限永远是已发行股份的 1%，即使四周平均周成交量更大也不例外", "上限取该类已发行股份的 1% 和四周平均每周报告成交量中的最大者；如果三个月内拟出售数量超过 5,000 股或 50,000 美元，必须在下单同时提交 Form 144，而且这是打算出售的通知，不是已经成交的数量", "报告公司的受限股只要合同锁定期一到就可以卖，不必再满足 Rule 144 的持有期", "Form 144 像 Form 4 一样，是卖出之后再报"]} answer={1} explanation="144(e)(1) 取 1% 和四周平均周成交量中的最大者。144(h) 规定，数量超过 5,000 股或 50,000 美元时，要在下单同时提交 Form 144。锁定协议到期后，报告公司仍可能有 6 个月持有期；Form 144 也不是像 Form 4 那样的事后申报。" />
 <Quiz id="bt-rule105" question="Regulation M 的 Rule 105 一般禁止什么？" options={["在包销的股票发行里，在限制期（定价日前 5 个营业日到定价时，或从最初注册文件提交到定价时，取较短者）卖空，再向承销商或参与发行的经纪交易商买入这次发行的股份", "财报发布前 5 天内对该股票的任何卖空", "已经持有该股票的人，就不能再买这次增发", "由现有股东而不是公司出售的二级发行"]} answer={0} explanation="禁止规定在 17 CFR 242.105，适用于以现金认购、由承销商包销的股票发行。它不适用于不是包销的发行，也不禁止本来就持有该股票，或现有股东的二级出售本身。" />
+<Quiz id="bt-regm101" question="在一次分销期间，Regulation M 的 Rule 101 和 102 限制什么？货架上的一次发行要怎么分析？" options={["股东把股份放在货架上之后，从注册之日起一直到最后一股卖完都停在 Rule 102 里", "发行人可以使用 Rule 101 的交投活跃例外（ADTV 不少于 100 万美元、公众持股市值不少于 1.50 亿美元），而且 ATM 另有一套 Rule 100 里没有的限制期时钟", "Rule 101 禁止分销参与人（及其关联购买人）在限制期内买入、求购或试图诱使他人买入或求购被覆盖证券；如果这个人是发行人或出售证券的持有人，则改适用 Rule 102。ADTV 不少于 10 万美元且公众持股市值不少于 2,500 万美元时，限制期是 1 个营业日（若在收盘前定价，需要一个完整交易日），否则是 5 个营业日。货架上的每一次发行要单独分析是否构成分销。ATM 是指以非固定价格发行。发行人的关联方作为分销参与人时不能使用 101 的交投活跃例外，这条例外也不能抄到 Rule 102 下的发行人身上", "Rule 101/102 和 Rule 105（先卖空再买这次发行）是同一条禁止"]} answer={2} explanation="17 CFR 242.100–102 和 SLB 9：1 天 / 5 天限制期，收盘前定价需要一个完整交易日，货架上的每一次发行单独分析，ATM 定义为以非固定价格发行。SLB 9 还写：发行人的关联方作为分销参与人时不能使用 101 的交投活跃例外；不要把它抄到 Rule 102 上。Rule 105 仍是已经讲过的“先卖空再买这次发行”。" />
 
 ## 完成标准
 
 - Walk-forward 摘要 + PSR/DSR 随 N + 假阳性上下文 + 测验
 
-**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。enrich13（2026-11-11 核实）：[S&P U.S. Indices Methodology，2026 年 11 月版](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)；[Form 8-K 一般说明 B.1 与 Item 2.02](https://www.sec.gov/files/form8-k.pdf)；[Regulation FD，17 CFR 243](https://www.ecfr.gov/current/title-17/part-243)。enrich15（2026-11-11 核实）：[17 CFR 230.144](https://www.ecfr.gov/current/title-17/section-230.144)、[17 CFR 239.144（Form 144）](https://www.ecfr.gov/current/title-17/section-239.144)、[SEC Rule 144 投资者说明](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm)、[17 CFR 242.105](https://www.ecfr.gov/current/title-17/section-242.105)。
+**来源：** PBO [Bailey PDF](https://davidhbailey.com/dhbpapers/backtest-prob.pdf)；[arXiv:2608.27734](https://arxiv.org/abs/2608.27734)；准入门槛 [arXiv:2610.07701](https://arxiv.org/abs/2610.07701)；MinervaScore 仅点名 [arXiv:2608.23808](https://arxiv.org/abs/2608.23808)； 经典 — Canvas m5；AFML 第7/12/14章（purge/embargo + CPCV）。论文 — Bailey & López de Prado 2012 SRE Frontier；2014 Deflated Sharpe（[PDF](https://davidhbailey.com/dhbpapers/deflated-sharpe.pdf)）。前沿 — Quant-Arena arXiv:2610.30113。事件时间与新股（2026-11-10 核实）：[美联储 FOMC 日程](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm)、[FOMC 声明 2026-10-28](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm)、[SEC 投资者公告：投资 IPO](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-17)、[investor.gov 锁定协议](https://www.investor.gov/introduction-investing/investing-basics/glossary/initial-public-offerings-lockup-agreements)。enrich13（2026-11-11 核实）：[S&P U.S. Indices Methodology，2026 年 11 月版](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf)；[Form 8-K 一般说明 B.1 与 Item 2.02](https://www.sec.gov/files/form8-k.pdf)；[Regulation FD，17 CFR 243](https://www.ecfr.gov/current/title-17/part-243)。enrich15（2026-11-11 核实）：[17 CFR 230.144](https://www.ecfr.gov/current/title-17/section-230.144)、[17 CFR 239.144（Form 144）](https://www.ecfr.gov/current/title-17/section-239.144)、[SEC Rule 144 投资者说明](https://www.sec.gov/reports-and-publications/investor-publications/investorpubsrule144htm)、[17 CFR 242.105](https://www.ecfr.gov/current/title-17/section-242.105)。 enrich18（核实于 2026-11-12）：[17 CFR 242.100](https://www.ecfr.gov/current/title-17/section-242.100)、[242.101](https://www.ecfr.gov/current/title-17/section-242.101)、[242.102](https://www.ecfr.gov/current/title-17/section-242.102)；[SEC 工作人员法律公告第 9 号](https://www.sec.gov/rules-regulations/staff-guidance/staff-legal-bulletins/staff-legal-bulletin-9-faq-regulation-m)（最近审阅于 1999-11-22）。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

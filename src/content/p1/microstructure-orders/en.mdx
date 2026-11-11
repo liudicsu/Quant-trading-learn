@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**13.75 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution) + 0.5h overnight trading & overnight price bands + 0.25h Rule 612/610(c) version trap + HK T+1 plan comparison 0.25h + 0.5h official close, closing auction & MOC cutoff + 0.25h official open, opening auction & MOO cutoff + 0.5h tiered round lots & odd-lot quotes + 0.25h SIPC account protection + 0.25h tokenized-stock venue (TSV) data separation + 0.5h early-close MOC cutoff and Nasdaq vs NYSE close cutoffs + 0.25h cash-account freeriding (Reg T payment period and 90-day freeze) + 0.25h Rule 15c3-3 customer protection (possession or control and the reserve account) + 0.25h Texas Stock Exchange (TXSE) launch and sessions + 0.25h intermarket sweep orders (ISO as a current-law Rule 611 exception) + 0.25h stop / stop-limit / trailing stop + 0.25h Rule 610(e) locked/crossed quotations (current law; S7-2026-20 would also rescind it)) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
+This lesson (~**14.25 hours**: 3h concepts + 3h exercises + 1h quiz + 2h US mechanics (T+1 / cash vs margin / NBBO·SIP·IEX / sessions / best execution) + 0.5h overnight trading & overnight price bands + 0.25h Rule 612/610(c) version trap + HK T+1 plan comparison 0.25h + 0.5h official close, closing auction & MOC cutoff + 0.25h official open, opening auction & MOO cutoff + 0.5h tiered round lots & odd-lot quotes + 0.25h SIPC account protection + 0.25h tokenized-stock venue (TSV) data separation + 0.5h early-close MOC cutoff and Nasdaq vs NYSE close cutoffs + 0.25h cash-account freeriding (Reg T payment period and 90-day freeze) + 0.25h Rule 15c3-3 customer protection (possession or control and the reserve account) + 0.25h Texas Stock Exchange (TXSE) launch and sessions + 0.25h intermarket sweep orders (ISO as a current-law Rule 611 exception) + 0.25h stop / stop-limit / trailing stop + 0.25h Rule 610(e) locked/crossed quotations (current law; S7-2026-20 would also rescind it) + 0.5h SIP sale conditions M / Q / T (plus 6 vs M)) builds microstructure intuition: spread, **mid**, market/limit, slippage; why same-bar zero-cost fills are over-optimistic. Prereq: `markets-language`.
 
 **Goals:** hand-calc mid and market-buy bps; write a fill/cost sheet; compare close vs next-open (and shift) narratives.
 
@@ -258,6 +258,59 @@ honest options: (1) signal from data available before 09:28 ET -> MOO in today's
 assertions passed: 5/5
 ```
 
+## SIP sale conditions M, Q, and T: official open/close flags are not a regular last sale (checked 2026-11-12)
+
+The previous sections already taught that the **official close** is the listing-exchange closing-auction price, which is not always the last tape print, and that the **official open** is an auction price that may print after 9:30. The SIP flags those events — and extended-hours prints — with sale-condition codes. This lesson teaches only a short official subset from the CTA CTS matrix, not the full catalog and not a vendor glossary.
+
+In the [CTS Pillar Output Specification (ETH)](https://www.ctaplan.com/publicdocs/ctaplan/CTS_Pillar_Output_Specification_ETH.pdf) sale-condition matrix:
+
+| Code | Name | Consolidated last | Consolidated high/low | Consolidated open | Participant last | Participant high/low | Volume |
+|---|---|---|---|---|---|---|---|
+| **M** | Market Center Official Close | No | No | No | Yes | Yes | No |
+| **Q** | Market Center Official Open | No | No | Yes | No | Yes | No |
+| **T** | Extended Hours Trade / Form T | No | No | No | No | No | Yes |
+| **6** | Market Center Closing Trade | Yes | Yes | (CTS note #4; not the point here) | Yes | Yes | Yes |
+
+Read that slowly. **M** is a market center's official close. It does **not** update the consolidated last, high/low, or open, and it does **not** update volume. It **does** update that participant's last and high/low. So an M print is not the *consolidated* official close, and folding M into a regular-hours last sale uses the wrong number. UTP Note 3 says the same idea in fewer words: M “shall only affect the market center closing/last sale value and will not affect the consolidated market value.”
+
+**Q** is a market center's official open. It does **not** update the consolidated last or high/low, and it does **not** update volume. It **does** update the consolidated **open** and the participant high/low, but **not** the participant last. This lesson follows the CTS matrix for Q.
+
+**T** (Extended Hours Trade / Form T) does **not** update consolidated or participant last, high/low, or open. It **does** update volume. It is **not last-sale eligible**. Prefer the [CTA Extended Trading Hours FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf), Version 1.2, last updated September 29, 2026, for the overnight clock. Q11: trades executed outside Regular Trading Hours (9:30 AM – 4:00 PM) “will continue to use the 'T' sale condition and are not Last Sale eligible. This applies to both the Extended Early Hours (9:00 PM – 9:30 AM) and any trades after the 4:00 PM close.” In 24-hour notation that early-hours window is **21:00–09:30** ET. Q12: ETH trades “are included in consolidated volume totals as per the Sale Conditions eligibility.”
+
+**Version trap:** the UTP Data Feed Services Specification (September 2026) Note 1 still lists Form T windows as 12:00 a.m.–9:30 a.m. and 4:00:01 p.m.–8:00 p.m. That note has **not** been rewritten for 23/5. Do **not** use Note 1 to deny that overnight ETH prints are T. Prefer the ETH FAQ for the overnight clock, and treat the UTP note as stale on the window.
+
+**6** (Market Center Closing Trade; UTP also labels it Closing Prints) **does** update the consolidated last, high/low, and volume. Do not treat every close-related flag as M.
+
+**Backtest pitfall:** a series that folds T or M into the regular-hours last sale, or that uses an M print as the consolidated official close, is using the wrong number.
+
+**Lab:** `examples/p1/13_sale_condition_toy.py` (local synthetic prints only):
+
+```text
+=== A. M is a market-center official close, not the consolidated last ===
+  regular last 100.03; M official-close print 100.00
+  consolidated last stays 100.03; volume stays 1,000,000
+  participant last updates to 100.00
+  do not use an M print as the consolidated official close, or fold it into the regular-hours last sale
+=== B. Q updates the consolidated open, not the consolidated last or volume ===
+  Q official-open print 50.00 -> consolidated open 50.00; consolidated last 50.10; volume 0
+  participant last stays 50.10; participant high/low includes 50.00-50.10
+=== C. T is not last-sale eligible; it does update volume, including ETH ===
+  T print 99.50 at 21:30 ET, Extended Early Hours 21:00-09:30; size 2,000
+    consolidated last stays 100.03; volume 1,000,000 -> 1,002,000
+  T print 100.40 at 16:15 ET, after the 16:00 close; size 3,000
+    consolidated last stays 100.03; volume 1,002,000 -> 1,005,000
+  CTA ETH FAQ v1.2 Q11: T applies to Extended Early Hours 21:00-09:30 and any trades after the 16:00 close
+  Q12: ETH trades are included in consolidated volume; T is not Last Sale eligible
+  UTP September 2026 Note 1 still lists Form T as 12:00 a.m.-9:30 a.m. and 4:00:01 p.m.-8:00 p.m.;
+  that note has not been rewritten for 23/5 — do not use it to deny that overnight ETH prints are T
+=== D. 6 is a closing trade, not the same flag as M ===
+  condition 6 closing trade 100.02, size 10,000 -> consolidated last 100.02; volume 1,010,000
+  6 updates consolidated last? True; updates volume? True
+  M updates consolidated last? False; updates volume? False
+  do not treat every close-related flag as M
+assertions passed: 18/18
+```
+
 ## Early-close MOC cutoffs, and Nasdaq vs NYSE close cutoffs (checked 2026-11-11)
 
 **1. On an early-close day, NYSE's 3:50 p.m. cutoff moves earlier.** The 3:50 p.m. ET time taught above is for a regular day that closes at 4:00 p.m. NYSE Rule 7.35(a)(8) defines the Closing Auction Imbalance Freeze Time as **10 minutes before the scheduled end of Core Trading Hours**. A 2026 NYSE regulatory memo states that clock times such as 3:50 p.m. apply on days whose scheduled close is 4:00 p.m.; "On days when the NYSE is scheduled to close at a time other than 4 p.m., such deadlines—tied to the scheduled end of Core Trading Hours—move accordingly" ([NYSE RM 3.20.2026 n.2](https://www.nyse.com/publicdocs/nyse/markets/nyse/rule-interpretations/2026/Q1_2026_Quarterly_Expiration_RM_3.20.2026.pdf)). So when the close is 1:00 p.m. ET, the free MOC/LOC entry cutoff is **12:50 p.m. ET**. In 2026 the NYSE cash equity markets close early at 1:00 p.m. ET on **2026-11-27** (the day after Thanksgiving) and **2026-12-24** ([ICE / NYSE holiday announcement](https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx); [NYSE hours](https://www.nyse.com/trade/hours-calendars)). Both days fall in US standard time, so 12:50 p.m. ET is **01:50 the next day** in Beijing time. An honest "fill at the close" on an early-close day needs a signal that is ready before 12:50 p.m., not the usual 3:50 p.m.
@@ -306,6 +359,7 @@ Since 2026-09-17 an SEC exemptive order ([Release 34-106402](https://www.sec.gov
 14. Tagging an order “ISO” without simultaneously routing the additional limit orders against better protected quotations, and still calling it an ISO; or reading a print through a protected quote as proof that Rule 611 has been repealed.
 15. Backtesting a stop-loss as a guaranteed fill at the stop price; treating a gap, a halt, or a wick as a fill at the stop; assuming every broker triggers off last sale.
 16. Writing that locked or crossed displays of protected quotations are already legal, or that Rule 610(e) has been repealed; treating a BOLO/NBBO lock as a regulatory lock or cross under 610(e); conflating 610(e) with the Rule 610(c) access-fee caps.
+17. Folding a T or M print into the regular-hours last sale, or using an M print as the *consolidated* official close; treating every close-related flag as M; using the stale UTP Note 1 Form T windows to deny that overnight ETH prints are T.
 
 ## Practice (1:1 with the checklist)
 
@@ -322,6 +376,7 @@ Since 2026-09-17 an SEC exemptive order ([Release 34-106402](https://www.sec.gov
 11. **ex-iso** — In your own words, write the two statutory requirements for an ISO, and say why tagging an order “ISO” is not enough; **done when**: you name the 242.600(b)(47) identification and the simultaneous routing against the full displayed size of better protected quotations, and you note that S7-2026-20 was still a proposal as of 2026-11-12.
 12. **ex-stop** — Run `12_stop_order_toy.py`; state whether a sell stop at 23 is filled at 23 on the gapping tape, and whether the stop-limit with limit 22.50 fills; **done when**: the market-order fill is 22, the stop-limit does not fill, matching the output.
 13. **ex-610e** — In your own words, state what current Rule 610(e) requires members reasonably to avoid, and whether S7-2026-20 has already repealed 611 or 610(e); **done when**: you name displaying quotations that lock or cross a protected quotation, and you say the rescission is still a proposal.
+14. **ex-salecond** — Run `13_sale_condition_toy.py`; state whether M updates the consolidated last or volume, whether a 21:30 ET T print is last-sale eligible and whether it counts in volume, and how 6 differs from M; **done when**: M updates neither consolidated last nor volume, the T print is not last-sale eligible but counts in volume, and 6 updates consolidated last and volume, matching the output.
 
 ## Quiz
 
@@ -347,6 +402,7 @@ Since 2026-09-17 an SEC exemptive order ([Release 34-106402](https://www.sec.gov
 <Quiz id="mo-iso" question="Under current Rule 611, what makes an order an intermarket sweep order (ISO)?" options={["Tagging the order ISO is enough; no other orders need to be routed", "A limit order identified as an ISO, and additional limit orders also marked ISO routed at the same time against the full displayed size of any protected quotation better than that order’s limit", "An ISO proves Rule 611 has been repealed, so a print through a protected quote is always lawful", "ISOs apply only to the A-share auction"]} answer={1} explanation="17 CFR 242.600(b)(47) requires both the identification and the simultaneous routed orders; 611(c) requires the router to take reasonable steps to establish that the definition is met. S7-2026-20 remains a proposal to rescind Rule 611." />
 <Quiz id="mo-stop" question="When a sell stop is triggered, what happens under the investor.gov bulletin (updated 2026-08-18)?" options={["The order is filled at the stop price; that price is guaranteed", "The stop becomes a market order; the stop price is a trigger, not a guaranteed execution price, and the fill can deviate significantly", "The stop becomes a limit order that must fill at the stop or better", "Every broker must trigger the stop off the last-sale price"]} answer={1} explanation="The staff bulletin: when the stop is reached, a stop order becomes a market order. “The stop price is not the guaranteed execution price.” Trigger convention (last-sale vs quotation) differs by firm." />
 <Quiz id="mo-610e" question="What does current Rule 610(e) require, and what is the status of S7-2026-20?" options={["Locked or crossed displays of protected quotations are already legal, because Rules 611 and 610(e) have been repealed", "Members must reasonably avoid displaying quotations that lock or cross any protected quotation in an NMS stock; S7-2026-20 is still a proposal that would rescind Rules 611 and 610(e)", "Rule 610(e) is the same rule as the Rule 610(c) access-fee caps, whose compliance date is November 2027", "A BOLO that locks the NBBO is a regulatory lock under 610(e), because odd-lot quotes are protected"]} answer={1} explanation="17 CFR 242.610(e) is current law and speaks to protected quotations. Odd-lot and BOLO quotes are not protected. S7-2026-20 would rescind Rules 611 and 610(e), but it remains a proposal." />
+<Quiz id="mo-salecond" question="In the CTA CTS sale-condition matrix, which statement about M, Q, T, and 6 is correct?" options={["T and M both update the consolidated last, so a backtest can fold them into the regular-hours last sale", "An M print is the consolidated official close, because M is labeled Market Center Official Close", "M does not update the consolidated last, high/low, or open, and does not update volume; Q updates the consolidated open but not the consolidated last or volume; T is not last-sale eligible but does update volume, including ETH 21:00–09:30 and after the 16:00 close; 6 (Market Center Closing Trade) does update the consolidated last, high/low, and volume", "UTP Note 1’s Form T windows (12:00 a.m.–9:30 a.m. and 4:00:01 p.m.–8:00 p.m.) mean overnight ETH prints are not T"]} answer={2} explanation="The CTS matrix: M updates participant last and high/low only. Q updates the consolidated open and participant high/low, not participant last or volume. T updates volume only and is not last-sale eligible; the CTA ETH FAQ (v1.2, last updated 2026-09-29) applies T to Extended Early Hours 21:00–09:30 and after the 16:00 close. UTP Note 1 has not been rewritten for 23/5. 6 is not the same flag as M." />
 
 ## Done when
 

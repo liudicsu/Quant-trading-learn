@@ -1,5 +1,5 @@
 """Rule 10b-18 safe-harbor volume and timing, and Item 703 disclosure lag
-(checked 2026-11-11).
+(checked 2026-11-11; section E 2026-11-12).
 
 Sources:
 - 17 CFR 240.10b-18: voluntary safe harbor; each of the four daily conditions must be met or
@@ -16,6 +16,13 @@ Sources:
 - SEC, "Further Announcement Regarding Share Repurchase Disclosure Modernization Rule"
   (2024-02-09): Fifth Circuit vacatur 2023-12-19; disclosure requirements revert to those in
   effect before the vacated rule. Technical amendments, 89 FR 24372 (2024-04-08).
+
+- 17 CFR 240.10b-18(b)(2)(iv) and the SEC 10b-18 FAQ (Timing Condition, last
+  reviewed 2016-12-02): limited after-hours safe harbor until last-sale reporting
+  ends in the consolidated system; not the opening transaction of that session;
+  price cap is the lower of the principal-market close and any later lower bid
+  or sale; volume and other conditions still apply. Official 10b-18 sources have
+  not mapped this window onto 21:00-04:00 overnight / 23/5.
 
 Synthetic figures. Learning only; not a buyback or trading signal. The safe harbor is
 optional and is not a required trading rule.
@@ -97,5 +104,27 @@ check(item703_known(date(2026, 5, 6)), "on the filing date, after the file is pu
 print(f"when known, Item 703 reports the January total {january_shares:,} shares (a monthly aggregate, not a daily tape)")
 print("the 2023 daily Form SR / repurchase-modernization rule was vacated 2023-12-19; disclosure reverted to Item 703")
 print("a board authorization press release is not the same as executed daily volume")
+
+
+print("=== E. after-hours prong: not the opening print; price cap; volume still counts ===")
+# 17 CFR 240.10b-18(b)(2)(iv): purchases may be effected following the close of the
+# primary trading session until last-sale prices cease to be reported in the
+# consolidated system, so long as: not the opening transaction of that session;
+# the price does not exceed the lower of the primary-market close and any later
+# lower bid or sale in the consolidated system; and the other conditions (including
+# the day's volume limit) are met. The issuer may use one broker in this period
+# that may be different from the primary-session broker.
+primary_close = 40.00
+later_prints = (39.80, 39.90)  # later lower bid or sale in the consolidated system
+cap = min(primary_close, min(later_prints))
+print(f"  primary-market close {primary_close:.2f}; later lower bid or sale {min(later_prints):.2f} -> price cap {cap:.2f} (lower of the two)")
+check(cap == 39.80, "cap is the lower of the primary close and any later lower bid or sale")
+print("  after-hours purchase at 39.80: inside the price condition; at 39.81: outside")
+check(39.80 <= cap and 39.81 > cap, "39.80 at the cap; 39.81 over")
+print("  the purchase may not be the opening transaction of the session following the primary close")
+print("  the day's 25% ADTV volume limit still applies to after-hours Rule 10b-18 purchases")
+print("  the issuer may use one broker in this period that may be different from the primary-session broker")
+print("  official 10b-18 sources (FAQ last reviewed 2016-12-02; NYSE ETH FAQ does not discuss 10b-18)")
+print("  have not mapped this window onto 21:00-04:00 overnight / 23/5; this toy does not fill that gap")
 
 print(f"OK {checks} assertions")

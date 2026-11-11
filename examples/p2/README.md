@@ -32,3 +32,5 @@ Charts land in `public/p2/` (`cost_ladder.png`, `dsr_vs_N.png`, `cost_breakdown.
 - enrich14 (2026-11-11): `18_buyback_10b18_disclosure_toy.py` — Rule 10b-18 25% ADTV cap and weekly block exception, 10- vs 30-minute close windows, Item 703 known only after the 10-Q is filed (9 assertions).
 
 - enrich15 (2026-11-11): `19_rule144_followon_tender_toy.py` — Rule 144 affiliate three-month volume cap and Form 144 notice threshold, Rule 105 five-business-day restricted window, Rule 14e-1 20- and 10-business-day tender windows (weekday-only toy; 15 assertions).
+
+- enrich18 (2026-11-12): `18_buyback_10b18_disclosure_toy.py` section E — Rule 10b-18 after-hours prong (opening-print ban; price cap = lower of the primary close and any later lower bid or sale; volume still counts; no official 23/5 mapping) (now 11 assertions; sections A–D output unchanged). `19_rule144_followon_tender_toy.py` section E — Regulation M Rule 101/102 1-day vs 5-day restricted period, full trading day if pricing is before the close, each shelf takedown analyzed separately, 101 actively-traded exception not copied onto the issuer (sections A–D still print 15/15; script total 19 assertions).

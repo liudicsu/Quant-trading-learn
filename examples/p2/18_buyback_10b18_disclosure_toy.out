@@ -16,4 +16,12 @@ decision 2026-05-06: January Item 703 monthly total known? True
 when known, Item 703 reports the January total 1,200,000 shares (a monthly aggregate, not a daily tape)
 the 2023 daily Form SR / repurchase-modernization rule was vacated 2023-12-19; disclosure reverted to Item 703
 a board authorization press release is not the same as executed daily volume
-OK 9 assertions
+=== E. after-hours prong: not the opening print; price cap; volume still counts ===
+  primary-market close 40.00; later lower bid or sale 39.80 -> price cap 39.80 (lower of the two)
+  after-hours purchase at 39.80: inside the price condition; at 39.81: outside
+  the purchase may not be the opening transaction of the session following the primary close
+  the day's 25% ADTV volume limit still applies to after-hours Rule 10b-18 purchases
+  the issuer may use one broker in this period that may be different from the primary-session broker
+  official 10b-18 sources (FAQ last reviewed 2016-12-02; NYSE ETH FAQ does not discuss 10b-18)
+  have not mapped this window onto 21:00-04:00 overnight / 23/5; this toy does not fill that gap
+OK 11 assertions

@@ -23,3 +23,20 @@ offer first published 2026-03-02; 20th weekday (counting that date as day 1) = 2
 if consideration is increased on 2026-03-20, 10 weekdays from that notice (counting that date as day 1) = 2026-04-02
 the April 16, 2026 exemptive order can shorten some equity offers to 10 business days only when every stated condition is met; this toy does not apply that order
 assertions passed: 15/15
+=== E. Regulation M Rule 101/102 restricted period and shelf takedowns ===
+  ADTV $500,000 and public float $80,000,000 -> 1-business-day restricted period
+  ADTV $50,000 and public float $10,000,000 -> 5-business-day restricted period
+  pricing before the close on 2026-06-09 (Tuesday); 1-day period requires a full trading day
+  restricted period begins prior to the opening on 2026-06-08 (Monday), not at Monday's close
+  ADTV for a delayed / Rule 415 offering is measured in the two full calendar months preceding,
+  or any 60 consecutive calendar days ending within 10 calendar days preceding, pricing
+  shelf: a shareholder with shares on a shelf who plans periodic sales does not stay in Rule 102
+  from registration until the last share is sold; analyze each takedown to see whether it is a distribution
+  shares registered on a shelf, this takedown is not a distribution -> in Rule 102 now? False
+  ATM (Rule 100) means an offering of securities at other than a fixed price; no special ATM clock
+  Rule 101 bars distribution participants (and affiliated purchasers) from bidding for or purchasing
+  a covered security in the restricted period; if that person is the issuer or selling security holder, Rule 102 applies instead
+  Rule 101 actively-traded exception (ADTV $1 million and public float $150 million) may not be used
+  by a distribution participant who is an affiliate of the issuer; do not copy it onto the issuer under Rule 102
+  exceptions exist; this toy is not a compliance engine. Rule 105 (short-then-buy-the-offering) stays as already taught
+assertions passed: 19/19

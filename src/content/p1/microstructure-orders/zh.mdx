@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **13.75 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **14.25 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -258,6 +258,59 @@ honest options: (1) signal from data available before 09:28 ET -> MOO in today's
 assertions passed: 5/5
 ```
 
+## SIP 成交条件 M、Q 和 T：官方开收盘标记不是普通的最近成交（核实于 2026-11-12）
+
+前面已经讲过：**官方收盘价**是上市交易所收盘竞价的价格，不一定等于行情带上最后一笔成交；**官方开盘价**是竞价价格，也可能在 9:30 之后才印出来。SIP 用成交条件代码来标记这些事件，以及盘后成交。本课只教 CTA CTS 矩阵里这一小段官方子集，不讲完整目录，也不用数据商的术语表。
+
+按 [CTS Pillar 输出规范（ETH）](https://www.ctaplan.com/publicdocs/ctaplan/CTS_Pillar_Output_Specification_ETH.pdf) 的成交条件矩阵：
+
+| 代码 | 名称 | 合并最近成交 | 合并最高/最低 | 合并开盘 | 参与者最近成交 | 参与者最高/最低 | 成交量 |
+|---|---|---|---|---|---|---|---|
+| **M** | 市场中心官方收盘 | 否 | 否 | 否 | 是 | 是 | 否 |
+| **Q** | 市场中心官方开盘 | 否 | 否 | 是 | 否 | 是 | 否 |
+| **T** | 延长时段成交 / Form T | 否 | 否 | 否 | 否 | 否 | 是 |
+| **6** | 市场中心收盘成交 | 是 | 是 | （CTS 注 #4；本课不展开） | 是 | 是 | 是 |
+
+慢慢读。**M** 是某个市场中心的官方收盘。它**不**更新合并的最近成交、最高/最低或开盘，也**不**更新成交量。它**会**更新该参与者的最近成交和最高/最低。所以一笔 M 不是*合并*官方收盘价；把 M 折进常规时段的最近成交，用的是错的数。UTP 注 3 用更短的话说了同一点：M “只影响该市场中心的收盘/最近成交，不影响合并市场价值”。
+
+**Q** 是某个市场中心的官方开盘。它**不**更新合并的最近成交或最高/最低，也**不**更新成交量。它**会**更新合并**开盘价**和该参与者的最高/最低，但**不**更新该参与者的最近成交。本课对 Q 以 CTS 矩阵为准。
+
+**T**（延长时段成交 / Form T）**不**更新合并或参与者的最近成交、最高/最低或开盘。它**会**更新成交量。它**没有最近成交资格**。隔夜时钟请优先看 [CTA 延长交易时段常见问题](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf) 第 1.2 版（2026-09-29 最后更新）。Q11：在常规交易时段（上午 9:30 至下午 4:00）之外成交的交易“仍使用 ‘T’ 成交条件，并且没有最近成交资格。这适用于延长早盘（晚上 9:00 至上午 9:30），以及下午 4:00 收盘之后的任何成交。”写成 24 小时制，这段早盘是美东 **21:00–09:30**。Q12：延长时段成交“按成交条件的资格计入合并成交量”。
+
+**版本陷阱：** UTP 数据规范（2026 年 9 月）注 1 仍把 Form T 的窗口写成凌晨 12:00 至上午 9:30，以及下午 4:00:01 至晚上 8:00。这条注释**还没有**按 23/5 改写。**不要**用注 1 去否认隔夜延长时段成交也是 T。隔夜时钟以 ETH 常见问题为准，并写明 UTP 这条注释在窗口上已经过时。
+
+**6**（市场中心收盘成交；UTP 也叫 Closing Prints）**会**更新合并的最近成交、最高/最低和成交量。不要把所有和收盘有关的标记都当成 M。
+
+**回测陷阱：** 把 T 或 M 折进常规时段的最近成交，或把一笔 M 当成合并官方收盘价，用的都是错的数。
+
+**实验：** `examples/p1/13_sale_condition_toy.py`（仅本地合成成交）：
+
+```text
+=== A. M is a market-center official close, not the consolidated last ===
+  regular last 100.03; M official-close print 100.00
+  consolidated last stays 100.03; volume stays 1,000,000
+  participant last updates to 100.00
+  do not use an M print as the consolidated official close, or fold it into the regular-hours last sale
+=== B. Q updates the consolidated open, not the consolidated last or volume ===
+  Q official-open print 50.00 -> consolidated open 50.00; consolidated last 50.10; volume 0
+  participant last stays 50.10; participant high/low includes 50.00-50.10
+=== C. T is not last-sale eligible; it does update volume, including ETH ===
+  T print 99.50 at 21:30 ET, Extended Early Hours 21:00-09:30; size 2,000
+    consolidated last stays 100.03; volume 1,000,000 -> 1,002,000
+  T print 100.40 at 16:15 ET, after the 16:00 close; size 3,000
+    consolidated last stays 100.03; volume 1,002,000 -> 1,005,000
+  CTA ETH FAQ v1.2 Q11: T applies to Extended Early Hours 21:00-09:30 and any trades after the 16:00 close
+  Q12: ETH trades are included in consolidated volume; T is not Last Sale eligible
+  UTP September 2026 Note 1 still lists Form T as 12:00 a.m.-9:30 a.m. and 4:00:01 p.m.-8:00 p.m.;
+  that note has not been rewritten for 23/5 — do not use it to deny that overnight ETH prints are T
+=== D. 6 is a closing trade, not the same flag as M ===
+  condition 6 closing trade 100.02, size 10,000 -> consolidated last 100.02; volume 1,010,000
+  6 updates consolidated last? True; updates volume? True
+  M updates consolidated last? False; updates volume? False
+  do not treat every close-related flag as M
+assertions passed: 18/18
+```
+
 ## 提前收盘日的 MOC 截止，以及 Nasdaq 与 NYSE 收盘截止的差别（2026-11-11 核实）
 
 **1. 提前收盘日，NYSE 的 15:50 截止会往前移。** 上面教的 15:50 ET，是常规交易日（16:00 收盘）的时间。NYSE Rule 7.35(a)(8) 把“收盘竞价不平衡冻结时点”（Closing Auction Imbalance Freeze Time）定义为**预定核心交易时段结束前 10 分钟**。NYSE 2026 年第一季度到期备忘录写明：备忘录里出现的 15:50 等钟点，只适用于预定 16:00 收盘的日子；“在预定收盘不是 16:00 的日子，这些截止时间——因为它绑在预定的核心交易时段结束点上——会相应移动”（[NYSE RM 2026-03-20 注 2](https://www.nyse.com/publicdocs/nyse/markets/nyse/rule-interpretations/2026/Q1_2026_Quarterly_Expiration_RM_3.20.2026.pdf)）。所以提前收盘到 13:00 ET 时，MOC/LOC 的自由申报截止是 **12:50 ET**。2026 年 NYSE 现金股票市场提前在 13:00 ET 收盘的日子是 **2026-11-27**（感恩节次日）和 **2026-12-24**（[ICE / NYSE 假期公告](https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx)；[NYSE 交易时间](https://www.nyse.com/trade/hours-calendars)）。这两天都在美国冬令时，12:50 ET 换成北京时间是次日 **01:50**。诚实的“按收盘价成交”，在提前收盘日必须用 12:50 之前就能算出来的信号，不能照搬平时的 15:50。
@@ -306,6 +359,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 14. 只在订单上标注 ISO、却没有同时把额外限价单路由出去吃掉更优的受保护报价，还把它当成符合定义；或把一笔穿过受保护报价的成交写成 Rule 611 已被废除的证据。
 15. 把止损回测成一定在止损价成交；把跳空、停牌或影线扫到止损价当成按止损价成交；默认每家券商都按最近成交价触发。
 16. 写成展示锁定或交叉受保护报价已经合法，或写成 Rule 610(e) 已被废除；把 BOLO 与 NBBO 的锁价当成 610(e) 下的监管锁价或交叉；把 610(e) 和 Rule 610(c) 的访问费上限混为一谈。
+17. 把 T 或 M 折进常规时段的最近成交，或把一笔 M 当成*合并*官方收盘价；把所有和收盘有关的标记都当成 M；用已经过时的 UTP 注 1 里的 Form T 窗口去否认隔夜延长时段成交也是 T。
 
 ## 练习（与任务清单 1:1）
 
@@ -322,6 +376,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 11. **ex-iso** — 用自己的话写出 ISO 的两项法定要件，并说明为什么只标注 “ISO” 并不够；**完成标准**：点名 242.600(b)(47) 的标识以及同时路由更优受保护报价的全部显示数量，并写明 S7-2026-20 截至 2026-11-12 仍是提案。
 12. **ex-stop** — 运行 `12_stop_order_toy.py`；说明在跳空行情里，23 美元的卖出止损是否按 23 成交，以及限价 22.50 的止损限价单是否成交；**完成标准**：市价单成交在 22，止损限价单不成交，与输出一致。
 13. **ex-610e** — 用自己的话写出现行 Rule 610(e) 要求会员合理避免什么，以及 S7-2026-20 是否已经废除 611 或 610(e)；**完成标准**：写出避免展示锁定或交叉受保护报价，并说明撤销仍是提案。
+14. **ex-salecond** — 运行 `13_sale_condition_toy.py`；说明 M 是否更新合并最近成交或成交量，21:30 ET 的 T 成交有没有最近成交资格、是否计入成交量，以及 6 和 M 有什么不同；**完成标准**：M 既不更新合并最近成交也不更新成交量，该笔 T 没有最近成交资格但计入成交量，6 会更新合并最近成交和成交量，与输出一致。
 
 ## 测验
 
@@ -347,6 +402,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 <Quiz id="mo-iso" question="在现行 Rule 611 下，怎样才算一份跨市场扫单（ISO）？" options={["只要在订单上标注 ISO 即可，不必再路由其他订单", "一份被标识为 ISO 的限价单，并且同时把额外的限价单（也标成 ISO）路由出去，吃掉任何优于该订单限价的受保护报价的全部显示数量", "ISO 证明 Rule 611 已被废除，穿过受保护报价一律合法", "ISO 只适用于 A 股竞价"]} answer={1} explanation="17 CFR 242.600(b)(47) 要求标识和同时路由两项都满足；611(c) 要求路由方采取合理步骤确认符合定义。S7-2026-20 撤销 611 仍是提案。" />
 <Quiz id="mo-stop" question="按 investor.gov 简报（2026-08-18 更新），卖出止损被触发后会发生什么？" options={["订单按止损价成交，该价格有保证", "止损单变成市价单；止损价只是触发条件，不是保证成交价，实际成交可能明显偏离", "止损单变成限价单，必须按止损价或更好的价格成交", "每家券商都必须按最近成交价触发止损"]} answer={1} explanation="工作人员简报：触及止损价后，止损单变成市价单。“止损价不是保证成交价。”触发约定（最近成交价还是报价）因券商而异。" />
 <Quiz id="mo-610e" question="现行 Rule 610(e) 要求什么，S7-2026-20 目前是什么状态？" options={["展示锁定或交叉受保护报价已经合法，因为 Rule 611 和 610(e) 都已被废除", "会员须合理避免展示会锁定或交叉 NMS 股票上任何受保护报价的报价；S7-2026-20 仍是提案，该提案会撤销 Rule 611 和 610(e)", "Rule 610(e) 就是 Rule 610(c) 的访问费上限，合规日是 2027 年 11 月", "BOLO 与 NBBO 锁价就是 610(e) 下的监管锁价，因为碎股报价也受保护"]} answer={1} explanation="17 CFR 242.610(e) 是现行法，针对的是受保护报价。碎股和 BOLO 报价不受保护。S7-2026-20 会撤销 Rule 611 和 610(e)，但它仍是提案。" />
+<Quiz id="mo-salecond" question="按 CTA CTS 成交条件矩阵，关于 M、Q、T 和 6，哪一句是对的？" options={["T 和 M 都会更新合并最近成交，所以回测可以把它们折进常规时段的最近成交", "一笔 M 就是合并官方收盘价，因为 M 的名称是市场中心官方收盘", "M 不更新合并的最近成交、最高/最低或开盘，也不更新成交量；Q 会更新合并开盘，但不更新合并最近成交或成交量；T 没有最近成交资格，但会更新成交量，包括延长早盘 21:00–09:30 以及 16:00 收盘之后的成交；6（市场中心收盘成交）会更新合并的最近成交、最高/最低和成交量", "UTP 注 1 里的 Form T 窗口（凌晨 12:00 至上午 9:30，以及下午 4:00:01 至晚上 8:00）意味着隔夜延长时段成交不是 T"]} answer={2} explanation="CTS 矩阵：M 只更新参与者的最近成交和最高/最低。Q 更新合并开盘和参与者最高/最低，不更新参与者最近成交或成交量。T 只更新成交量，没有最近成交资格；CTA ETH 常见问题（v1.2，2026-09-29 最后更新）把 T 用在延长早盘 21:00–09:30 以及 16:00 收盘之后。UTP 注 1 尚未按 23/5 改写。6 和 M 不是同一个标记。" />
 
 ## 完成标准
 
