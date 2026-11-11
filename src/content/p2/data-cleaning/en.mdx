@@ -522,16 +522,18 @@ assertions passed: 11/11
 5. No hash / no version.
 6. Treating info bars as an HFT execution recipe rather than a research sampling clock.
 7. Comparing clocks on different underlying tapes without saying so.
-8. Switching data versions (e.g. FIZ→CIZ) without recording it, mistaking a convention change for a strategy change; ffilling **returns** across closed days; computing split-day returns on raw prices.
-9. Treating the raw close as an executable price; treating a FRED series’ public-domain label as permission for the FRED service, caching or model training; calling yfinance official data.
-10. Assuming you get the dividend if you buy on the ex-date; booking the dividend on both the ex-date and the payment date; upgrading yfinance without writing `auto_adjust` explicitly, so `Close` silently changes meaning.
-11. Using the quarter-end date as the date a 10-Q or 13F was known; ignoring that EDGAR dates a filing started after 5:30 p.m. ET to the next business day.
-12. Multiplying CIZ MthRet by the delisting return again, or silently setting a flag-G/M month to 0; merging histories on ticker instead of PERMNO/CIK.
-13. Computing a spin-off ex-date return from raw closes (a fake −19% crash) or adjusting volume for a spin-off; dropping an acquired stock as "end of data".
-14. Aligning a Form 4 signal on its transaction date instead of the EDGAR acceptance time; reading "no Form 4" for a foreign private issuer before 2026-03-18 as "insiders did not trade".
-15. Computing a return across a reverse split from raw prices (a fake +900%); dropping a stock suspended under the $1 or $0.10 rule instead of booking its delisting return; applying the stayed $5 million rule as if it were in force.
+8. In a toy setup, first rolling a mean over limit-up/limit-down or halt closes marked non-executable and then dropping those rows (upstream contamination); or, conversely, treating "could not place an order at the time" as "the information was unavailable".
+9. Treating the headline Sharpe / 213 factors from 2507.07107 as course alpha.
+10. Switching data versions (e.g. FIZ→CIZ) without recording it, mistaking a convention change for a strategy change; ffilling **returns** across closed days; computing split-day returns on raw prices.
+11. Treating the raw close as an executable price; treating a FRED series’ public-domain label as permission for the FRED service, caching or model training; calling yfinance official data.
+12. Assuming you get the dividend if you buy on the ex-date; booking the dividend on both the ex-date and the payment date; upgrading yfinance without writing `auto_adjust` explicitly, so `Close` silently changes meaning.
+13. Using the quarter-end date as the date a 10-Q or 13F was known; ignoring that EDGAR dates a filing started after 5:30 p.m. ET to the next business day.
+14. Multiplying CIZ MthRet by the delisting return again, or silently setting a flag-G/M month to 0; merging histories on ticker instead of PERMNO/CIK.
+15. Computing a spin-off ex-date return from raw closes (a fake −19% crash) or adjusting volume for a spin-off; dropping an acquired stock as "end of data".
+16. Aligning a Form 4 signal on its transaction date instead of the EDGAR acceptance time; reading "no Form 4" for a foreign private issuer before 2026-03-18 as "insiders did not trade".
+17. Computing a return across a reverse split from raw prices (a fake +900%); dropping a stock suspended under the $1 or $0.10 rule instead of booking its delisting return; applying the stayed $5 million rule as if it were in force.
 
-16. Joining XBRL fundamentals by period end, by `fy`, or from the `frames` API for past dates (use `filed`); reading a pre-2023-04-01 Form 4 with no plan box as a discretionary trade; applying Nasdaq's consecutive-day count or 250:1 threshold to an NYSE stock, or NYSE's $0.25 rule before 2027-07-01.
+18. Joining XBRL fundamentals by period end, by `fy`, or from the `frames` API for past dates (use `filed`); reading a pre-2023-04-01 Form 4 with no plan box as a discretionary trade; applying Nasdaq's consecutive-day count or 250:1 threshold to an NYSE stock, or NYSE's $0.25 rule before 2027-07-01.
 
 ## Practice (1:1 with the checklist)
 
