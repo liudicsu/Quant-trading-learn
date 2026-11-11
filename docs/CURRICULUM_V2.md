@@ -31,7 +31,7 @@
 | `returns-vol-corr` | P1 | 9 | 2 | 否 | python-pandas-timeseries, stats-probability-basics, markets-language |
 | `eval-lab` | P1 | 7 | 2 | 否 | returns-vol-corr, microstructure-orders |
 | `data-cleaning` | P2 | 28.25 | 3 | 否 | eval-lab |
-| `backtest-traps` | P2 | 29.25 | 4 | 否 | data-cleaning, stats-probability-basics |
+| `backtest-traps` | P2 | 29.5 | 4 | 否 | data-cleaning, stats-probability-basics |
 | `costs-in-backtest` | P2 | 7.25 | 3 | 否 | backtest-traps |
 | `engines-vectorized-event` | P2 | 8 | 3 | 否 | costs-in-backtest |
 | `momentum-trend` | P3 | 8 | 3 | 否 | engines-vectorized-event |
@@ -60,7 +60,7 @@
 |------|------|-----:|-------:|------:|-------:|--------|
 | P0 | 零基础准备（可测验跳过） / Zero-basis foundations (test-out OK) | 3 | 20h | ~3.3 周 | ~1.7 周 | Foundational skills before market microstructure |
 | P1 | 市场语言与度量 / Market language & measurement | 4 | 33.25h | ~5.5 周 | ~2.8 周 | Market concepts + evaluation language |
-| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 72.75h | ~12.1 周 | ~6.1 周 | Research infrastructure / scientific method for backtests |
+| P2 | 数据与诚实回测 / Data & honest backtests | 4 | 73h | ~12.2 周 | ~6.1 周 | Research infrastructure / scientific method for backtests |
 | P3 | 经典策略族 / Classic strategy families | 4 | 34h | ~5.7 周 | ~2.8 周 | Classic alpha templates before factors/ML |
 | P4 | 因子研究 / Factor research | 2 | 33h | ~5.5 周 | ~2.8 周 | Cross-sectional research methods |
 | P5 | 机器学习与现代流水线 / ML & modern pipelines | 2 | 32h | ~5.3 周 | ~2.7 周 | Supervised ML methodology for finance |
@@ -69,10 +69,10 @@
 | P8 | 前沿与非主流方法 / Frontier & unconventional methods | 2 | 48h | ~8.0 周 | ~4.0 周 | Post-prerequisite frontier / niche methods |
 | P9 | 结业项目 / Capstone | 1 | 26h | ~4.3 周 | ~2.2 周 | Synthesis |
 
-**全量（含 P0）：精确 399.5 学时（跳过 P0 为 379.5）。** 6h/周 ≈ 66.6 周；12h/周 ≈ 33.3 周。
-**跳过 P0 后：精确 379.5 学时。** 6h/周 ≈ 63.3 周；12h/周 ≈ 31.6 周。
+**全量（含 P0）：精确 399.75 学时（跳过 P0 为 379.75）。** 6h/周 ≈ 66.6 周；12h/周 ≈ 33.3 周。
+**跳过 P0 后：精确 379.75 学时。** 6h/周 ≈ 63.3 周；12h/周 ≈ 31.6 周。
 
-精确合计：**399.5h 全量 / 379.5h 跳过 P0**。对外可表述为约 **350–399.5h 全量 / 330–379.5h 跳过基础**（含个人复盘缓冲）。
+精确合计：**399.75h 全量 / 379.75h 跳过 P0**。对外可表述为约 **350–399.75h 全量 / 330–379.75h 跳过基础**（含个人复盘缓冲）。
 
 ## 3. 阶段 ← 来源映射
 
@@ -309,7 +309,7 @@
   - 对照表+三句结论。
 - **Method tags:** classic: Canvas eval; pyfolio tear-sheet docs; Chinese supplement: JoinQuant 策略评价 | niche: @FG731314/2115609441748001008 risk-adjusted traits
 
-### P2 · 数据与诚实回测（Data & honest backtests）— 72.75h / 4 课
+### P2 · 数据与诚实回测（Data & honest backtests）— 73h / 4 课
 
 **阶段目标：** 可版本化数据+陷阱审讯+成本+引擎假设。
 
@@ -339,7 +339,7 @@
 - **Method tags:** classic: Canvas m4; QuantStart securities master; Qlib data layer; US source map: SEC EDGAR / ALFRED / Ken French / CRSP docs; Chinese supplement: JoinQuant data docs | niche: @pyquantnews 45 APIs (2116517809920327801); OpenBB quantitative docs; Binance Vision + @sera00111 crypto data notes | frontier: Alt-data awareness; deeper in P8
 
 #### `backtest-traps` — 回测陷阱与过拟合审讯 / Backtest traps & overfitting interrogation
-- **Hours:** 29.25h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 19h multi-labs (CPCV + one-switch + PBO/CSCV + admission gates) + 4h write-up + 0.5h index membership as-of (Russell semi-annual 2026) + 0.25h FOMC release times as event timestamps + 0.5h IPO data traps (offering price vs fill, short history, lock-ups) — HEAVY
+- **Hours:** 29.5h · **Difficulty:** 4/5 · **Basis:** 5h concepts + 19h multi-labs (CPCV + one-switch + PBO/CSCV + admission gates) + 4h write-up + 0.5h index membership as-of (Russell semi-annual 2026) + 0.25h FOMC release times as event timestamps + 0.5h IPO data traps (offering price vs fill, short history, lock-ups) + 0.25h Nasdaq-100 rule versions (2026-05-01) and December 2026 reconstitution dates — HEAVY
 - **Prereqs:** `data-cleaning`, `stats-probability-basics`
 - **Summary:** 前瞻、walk-forward、PSR/DSR、试验次数、幸存者回顾。
 - **Goals:**
@@ -977,3 +977,4 @@ Net hours ≈ +18h deepen (b07393d) then +11h Phase B (055faaf) then +20h Phase 
 - enrich9 (2026-11-10, US-first): spin-offs & mergers in price series + insider/large-holder filing lags incl. FPI insiders from 2026-03-18 (`data-cleaning` +1h, `examples/p2/11`); risk-free rate from T-bill quotes (`returns-vol-corr` +0.5h, `examples/p1/08`); FOMC release times + IPO data traps (`backtest-traps` +0.75h, `examples/p2/12`); manipulation red lines (15 U.S.C. 78i, FINRA 5210 SM .02/.03, CAT review 2026-37) + self-trade toy (`compliance-ethics` +0.5h, `examples/p7/08`; ledger n_sources=36) and FY2027 exam priorities pointer (press release 2026-109); SIPC protection (`microstructure-orders` +0.25h); portfolio margin FINRA 4210(g) toy (`portfolio-risk-sizing` +0.25h, `examples/p6/11` section D). Hours: **397.25 full / 377.25 skip-P0**; 28 lessons; 273 quiz pairs.
 - enrich10 (2026-11-10, US-first): N5 SEC Innovation Exemption for tokenized NMS stock (Release 34-106402, File 4-927, 91 FR 60168 published 2026-09-22; effective 2026-09-17 until 2031-09-17; no comment closing date set) — status subsection + quiz `ce-tsv-exemption` (`compliance-ethics` +0.25h; ledger n_sources=39 with the order and the Atkins/Uyeda statements) and TSV prints are not exchange prints + quiz `mo-tsv-data` (`microstructure-orders` +0.25h). R67 second reading of the portfolio-margin valuation points (no hour change); R69 78i ledger status compared through PL 119-138 + CAT comment period closed 2026-06-22 (S7-2026-12, 34-105251); R70 Form 4 deadline counted from the execution date / deemed execution date. Hours: **397.75 full / 377.75 skip-P0**; P1 33h, P7 38.25h; 28 lessons; 275 quiz pairs.
 - enrich11 (2026-11-11, US-first): sell-side regulatory fees — SEC Section 31 ($0.00 from 2025-05-14, $20.60 per million from 2026-04-04) and FINRA TAF (2026 $0.000195/share, max $9.79; paused 2026-10-01 to 2026-12-31 by SR-FINRA-2026-021) as dated fee tables (`costs-in-backtest` +0.5h, `examples/p2/13_regulatory_fees_toy.py`, quiz `cb-regfee`); reverse splits & Nasdaq bid-price rule status (34-102245, 34-104318 $0.10 rule, 34-105971 $5M MVLS rule stayed) (`data-cleaning` +0.5h, `examples/p2/14_bid_price_rule_toy.py`, quiz `dc-bidprice`); official open, NYSE DMM open after 9:30, Nasdaq NOOP and MOO 9:28 ET cutoff (`microstructure-orders` +0.25h, `examples/p1/09_open_auction_toy.py`, quiz `mo-open`); SEC trading suspensions under 15 U.S.C. 78l(k) vs exchange halts, 34-106668 example (`market-regimes-crisis` +0.25h, quiz `rc-suspend`); tax lots FIFO vs adequate identification per IRS Pub 550 (`compliance-ethics` +0.25h, `examples/p7/09_tax_lot_toy.py`, quiz `ce-lots`); R72 TSV not a trading/market center under Reg NMS, broker-dealer participants get no Reg NMS relief (VI Q7 asks for comment). Hours: **399.5 full / 379.5 skip-P0**; 28 lessons; 280 quiz pairs.
+- enrich12 (2026-11-11, US-first): N6 Nasdaq-100 methodology effective 2026-05-01 (Fast Entry top 40 with IPO 7th/10th/15th trading days, top-125 quarterly removal replacing the 10 bp rule, ranking on listed+unlisted shares, Modified Market Cap with TSO capped at 3x free float, 10% minimum float removed) and December 2026 annual reconstitution dates derived from the methodology (reference 2026-11-30, announcement after the close 2026-12-11, effective open 2026-12-21; Nasdaq announcement authoritative) (`backtest-traps` +0.25h, quiz `bt-ndx-recon`); R80 settlement-holiday set in `examples/p2/13_regulatory_fees_toy.py` (Good Friday 2026-04-03, NSCC notice a9732); R79 $0.10-rule prior version + Hearings Panel 180-day exception (`data-cleaning`), Rule 15c2-11 quotes after an SEC suspension incl. 60-day piggyback bar (`market-regimes-crisis`), Treas. Reg. 1.1012-1(c)(8) standing orders and settlement-date deadline (`compliance-ethics`); no hour change for R79/R80. Hours: **399.75 full / 379.75 skip-P0**; 28 lessons; 281 quiz pairs.

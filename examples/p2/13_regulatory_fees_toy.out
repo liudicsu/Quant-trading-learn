@@ -6,7 +6,7 @@ trade 2026-11-11 (settle 2026-11-12) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 
 trade 2027-01-04 (settle 2027-01-05) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [check for a newer SEC advisory]
 === A2. boundary: trade date vs charge date ===
 trade 2025-05-13 (Tue) settles 2025-05-14 -> SEC rate 0.00/M, SEC fee 0.0000 (by trade date it would be 27.80/M = 1.3900)
-trade 2026-04-10 (Fri) settles 2026-04-13 (Mon) -> SEC rate 20.60/M
+trade 2026-04-02 (Thu) -> 04-03 Good Friday, no settlement -> settles 2026-04-06 (Mon) -> SEC rate 20.60/M; by trade date it would wrongly be 0.00/M
 === B. the TAF cap binds on large share counts ===
 2026-06-15 sell 100,000 sh @ 5.00: raw TAF 19.50 -> capped 9.79; SEC fee 10.30
 === C. size versus this lesson's toy commission ===

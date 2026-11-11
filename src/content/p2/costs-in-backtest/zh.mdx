@@ -190,7 +190,7 @@ ASSERT_rule605_toy_ok
 
 **算一遍（2026-06-15 卖出 1,000 股、每股 50 美元，共 50,000 美元）：** SEC 费用 = 50,000 × 20.60 ÷ 1,000,000 = 1.03 美元；TAF = 1,000 × 0.000195 = 0.195 美元。同样一笔在 2026-11-11 卖出，要交 1.03 美元的 SEC 费用，但没有 TAF。换成基点，每百万美元 20.60 美元约等于卖出金额的 **0.2 bps**，比本课玩具佣金 2 bps 小得多。更大的风险是**日期弄错**：SEC 费率按 charge date 切换、TAF 按成交日切换，而且最近两年里既出现过 0.00 的时段，也出现过暂停。
 
-**回测规则：** 建一张带生效日期的费率表：SEC 费用按 charge date（经清算机构申报的卖出就是交收日）去查，TAF 按成交日去查；券商向客户转嫁时用的日期口径以券商为准；只对卖出收；不要把今天的费率写死用在整段回测上。各家券商的取整和减免方式不同（有的把每项费用取整到美分，有的对小额卖出免收 TAF），要精确到美分，先看你自己券商的收费页面。本课不讲部分券商也会转嫁的综合审计追踪（CAT）费用。
+**回测规则：** 建一张带生效日期的费率表：SEC 费用按 charge date（经清算机构申报的卖出就是交收日；推算交收日要跳过周末和结算假日，例如 2026-04-03 耶稣受难日 NSCC 不营业，见 [NSCC 通知 a9732](https://files.dtcc.com/download/assets/a9732/84f27534957911f1b6bb4ec37e043074)，以 DTCC 的假日通知为准）去查，TAF 按成交日去查；券商向客户转嫁时用的日期口径以券商为准；只对卖出收；不要把今天的费率写死用在整段回测上。各家券商的取整和减免方式不同（有的把每项费用取整到美分，有的对小额卖出免收 TAF），要精确到美分，先看你自己券商的收费页面。本课不讲部分券商也会转嫁的综合审计追踪（CAT）费用。
 
 **实验：** `examples/p2/13_regulatory_fees_toy.py`（本地运行，不联网）：
 
@@ -203,7 +203,7 @@ trade 2026-11-11 (settle 2026-11-12) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 
 trade 2027-01-04 (settle 2027-01-05) sell 1000 sh @ 50.00 (USD 50,000): SEC fee 1.0300  TAF 0.2320 [check for a newer SEC advisory]
 === A2. boundary: trade date vs charge date ===
 trade 2025-05-13 (Tue) settles 2025-05-14 -> SEC rate 0.00/M, SEC fee 0.0000 (by trade date it would be 27.80/M = 1.3900)
-trade 2026-04-10 (Fri) settles 2026-04-13 (Mon) -> SEC rate 20.60/M
+trade 2026-04-02 (Thu) -> 04-03 Good Friday, no settlement -> settles 2026-04-06 (Mon) -> SEC rate 20.60/M; by trade date it would wrongly be 0.00/M
 === B. the TAF cap binds on large share counts ===
 2026-06-15 sell 100,000 sh @ 5.00: raw TAF 19.50 -> capped 9.79; SEC fee 10.30
 === C. size versus this lesson's toy commission ===

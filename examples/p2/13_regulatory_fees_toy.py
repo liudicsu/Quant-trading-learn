@@ -13,7 +13,10 @@ Sources:
   2026-12-31; assessment resumes 2027-01-01.
 - 17 CFR 240.31(a)(3): the charge date is the settlement date for covered sales an SRO reports from
   designated clearing agency data, and the trade date for all other covered sales. This toy assumes the
-  first case and US T+1 settlement on the next weekday (no holiday calendar).
+  first case and US T+1 settlement on the next business day, skipping weekends and a minimal
+  settlement-holiday set. DTCC/NSCC holiday notices are authoritative; e.g. NSCC Important Notice
+  a9732 (2026-03-06): markets and NSCC closed Fri 2026-04-03 (Good Friday), CNS settlement next on Mon
+  2026-04-06. https://files.dtcc.com/download/assets/a9732/84f27534957911f1b6bb4ec37e043074
 The SEC rate is looked up by charge date (= settlement date here); the TAF by trade date.
 Both fees are assessed on SALES only. Brokers pass them through in their own way (rounding, small-order
 waivers), so this toy prints unrounded amounts. Learning only; not a broker fee schedule.
@@ -45,10 +48,16 @@ TAF = [
 CHECKED_ON = date(2026, 11, 11)
 
 
+# Minimal settlement-holiday set (toy). Not a full calendar: check DTCC/NSCC holiday notices.
+SETTLEMENT_HOLIDAYS = {
+    date(2026, 4, 3),  # Good Friday; NSCC Important Notice a9732: NSCC closed, no CNS processing
+}
+
+
 def settle_t1(trade):
-    """Next weekday (toy: ignores exchange holidays)."""
+    """Next business day: skips weekends and SETTLEMENT_HOLIDAYS (DTCC notices are authoritative)."""
     d = trade + timedelta(days=1)
-    while d.weekday() >= 5:
+    while d.weekday() >= 5 or d in SETTLEMENT_HOLIDAYS:
         d += timedelta(days=1)
     return d
 
@@ -104,8 +113,12 @@ print("=== A2. boundary: trade date vs charge date ===")
 b_sec, b_taf, _ = reg_fees("sell", 1000, 50.0, date(2025, 5, 13))
 print(f"trade 2025-05-13 (Tue) settles {settle_t1(date(2025, 5, 13))} -> SEC rate {sec31_rate(settle_t1(date(2025, 5, 13)))[0]:.2f}/M, SEC fee {b_sec:.4f} (by trade date it would be 27.80/M = 1.3900)")
 check(settle_t1(date(2025, 5, 13)) == date(2025, 5, 14) and b_sec == 0.0, "05-13 sale settles 05-14 -> $0.00")
-check(settle_t1(date(2026, 4, 10)) == date(2026, 4, 13), "Friday trade settles Monday")
-print(f"trade 2026-04-10 (Fri) settles {settle_t1(date(2026, 4, 10))} (Mon) -> SEC rate {sec31_rate(settle_t1(date(2026, 4, 10)))[0]:.2f}/M")
+g_trade = date(2026, 4, 2)
+g_settle = settle_t1(g_trade)
+print(f"trade 2026-04-02 (Thu) -> 04-03 Good Friday, no settlement -> settles {g_settle} (Mon) -> "
+      f"SEC rate {sec31_rate(g_settle)[0]:.2f}/M; by trade date it would wrongly be {sec31_rate(g_trade)[0]:.2f}/M")
+check(g_settle == date(2026, 4, 6) and sec31_rate(g_settle)[0] == 20.60 and sec31_rate(g_trade)[0] == 0.00,
+      "Good Friday: 04-02 trade settles 04-06 at 20.60, not trade-date 0.00")
 
 print("=== B. the TAF cap binds on large share counts ===")
 sec, taf, _ = reg_fees("sell", 100_000, 5.0, date(2026, 6, 15))
