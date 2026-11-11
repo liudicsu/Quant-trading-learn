@@ -105,3 +105,31 @@ do not use the decedent's original purchase price as the heir's basis in the usu
 do not skip the dual-basis rule when FMV at the gift is lower than the donor's adjusted basis
 assertions passed: 16/16
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== J. 1099-DIV box 2a capital-gain distributions ===
+Capital gain distributions (capital gain dividends) are paid or credited by mutual funds (or other RICs) and REITs
+They will be shown in Form 1099-DIV, box 2a
+Report capital gain distributions as long-term capital gains, regardless of how long you owned your shares in the mutual fund or REIT
+  shares held 3 months, no shares sold, box 2a $1000: long-term capital gain? True
+  box 2a is ordinary dividends (box 1a)? False
+  box 2a is QDI (box 1b)? False
+  box 2a is box 3 return of capital? False
+boxes 2b, 2c, 2d, and 2f are official subsets of 2a; this toy is not those rate engines
+undistributed capital gains can appear on Form 2439 rather than on 1099-DIV; this toy is not a 2439 engine
+assertions passed: 20/20
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== K. Pub 550 puts and calls (official $4,000 / $6,000 examples) ===
+ten JJJ call options issued April 8, 2025, for $4,000, expired December 2025 without being exercised
+  holder: short-term capital loss $4000
+  writer: short-term capital gain $4000
+same options sold (closed) May 6, 2025, for $6,000
+  holder: short-term capital gain $2000
+  writer who bought them back: short-term capital loss $2000
+do not apply section 1256 60/40 to these ordinary equity options: 60/40 applies? False
+if instead they are nonequity section 1256 contracts, the $4,000 is split $1600 short-term and $2400 long-term
+  (the already-taught 60/40 rule, not the ordinary-equity rule)
+a later Straddles heading exists in Pub 550; this toy is not that engine
+a Put option as short sale holding-period rule exists in Pub 550; this toy is not that engine
+the official text's "such as the Chicago Board Options Exchange" is an example of a national securities exchange, not a venue recommendation
+do not treat the writer's expired premium as ordinary income
+assertions passed: 26/26
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise

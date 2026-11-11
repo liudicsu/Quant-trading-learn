@@ -165,3 +165,52 @@ print("  an 8-K is due within four business days, so its time can be later than 
 check(day0(acc)[0] == day0(rel)[0], "8-K acceptance after the release maps to the same day 0 here")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: synthetic candidates and dates; no index-inclusion or earnings strategy; learning only")
+
+print("=== D. Form 8-K items beyond Item 2.02 ===")
+# Official Form 8-K (SEC 873 (02-25), opened 2026-11-12). General Instruction
+# B.1: unless otherwise specified, a report "is to be filed or furnished
+# within four business days after occurrence of the event." "A report
+# pursuant to Item 1.05 is to be filed within four business days after the
+# registrant determines that it has experienced a material cybersecurity
+# incident." B.2: Item 2.02 and Item 7.01 information is furnished, not
+# deemed "filed" for Section 18, unless the registrant states otherwise.
+# Official item captions (not Instruction G's "Principal Officers" wording
+# for 5.02): Item 1.01 Entry into a Material Definitive Agreement; Item 1.05
+# Material Cybersecurity Incidents; Item 4.02 Non-Reliance on Previously
+# Issued Financial Statements or a Related Audit Report or Completed Interim
+# Review; Item 5.02 Departure of Directors or Certain Officers; Election of
+# Directors; Appointment of Certain Officers; Compensatory Arrangements of
+# Certain Officers. Item 1.05 Instruction 1: the materiality determination
+# "must be made without unreasonable delay after discovery of the incident."
+# Do not start the 1.05 clock on discovery. The Attorney General delay in
+# 1.05(c) is not the usual clock. Do not flatten Item 5.07 or other special
+# clocks into the same trigger. Form 12b-25 does not apply to an 8-K. This
+# toy is not a complete item-by-item engine. The already-taught Item 2.02
+# earnings-timestamp section in backtest-traps stays as written. No filer
+# or disclosure advice.
+
+official = {
+    "1.01": "Entry into a Material Definitive Agreement",
+    "1.05": "Material Cybersecurity Incidents",
+    "4.02": "Non-Reliance on Previously Issued Financial Statements or a Related Audit Report or Completed Interim Review",
+    "5.02": "Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers",
+}
+for num, caption in official.items():
+    is_earnings = False
+    print(f"Item {num} {caption}: Item 2.02 earnings? {is_earnings}")
+    check(is_earnings is False, f"Item {num} is not Item 2.02 earnings")
+
+print("usual clock: filed or furnished within four business days after occurrence of the event, unless otherwise specified")
+print("Item 1.05 is due within four business days after the registrant determines that it has experienced a material cybersecurity incident")
+clock_starts_on_discovery = False
+print(f"  Item 1.05 clock starts on discovery? {clock_starts_on_discovery}")
+check(clock_starts_on_discovery is False, "1.05 clock does not start on discovery")
+print("  Instruction 1: the materiality determination must be made without unreasonable delay after discovery of the incident")
+print("Item 2.02 / 7.01 are furnished, not deemed filed for Section 18 in the usual case")
+print("Form 12b-25 does not apply to an 8-K")
+print("the Attorney General delay in 1.05(c) is not the usual clock")
+print("do not flatten Item 5.07 or other special clocks into the same trigger")
+print("use the official Item 5.02 caption 'Certain Officers', not Instruction G 'Principal Officers'")
+print("this toy is not a complete item-by-item engine; no filer or disclosure advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official Form 8-K item map; no filer or disclosure advice; learning only")

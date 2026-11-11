@@ -27,3 +27,20 @@ only the 8-K is stored: accepted 2026-02-05 16:20 ET -> day 0 2026-02-06 (same a
   an 8-K is due within four business days, so its time can be later than the release; using it never looks ahead)
 assertions passed: 13/13
 disclaimer: synthetic candidates and dates; no index-inclusion or earnings strategy; learning only
+=== D. Form 8-K items beyond Item 2.02 ===
+Item 1.01 Entry into a Material Definitive Agreement: Item 2.02 earnings? False
+Item 1.05 Material Cybersecurity Incidents: Item 2.02 earnings? False
+Item 4.02 Non-Reliance on Previously Issued Financial Statements or a Related Audit Report or Completed Interim Review: Item 2.02 earnings? False
+Item 5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers: Item 2.02 earnings? False
+usual clock: filed or furnished within four business days after occurrence of the event, unless otherwise specified
+Item 1.05 is due within four business days after the registrant determines that it has experienced a material cybersecurity incident
+  Item 1.05 clock starts on discovery? False
+  Instruction 1: the materiality determination must be made without unreasonable delay after discovery of the incident
+Item 2.02 / 7.01 are furnished, not deemed filed for Section 18 in the usual case
+Form 12b-25 does not apply to an 8-K
+the Attorney General delay in 1.05(c) is not the usual clock
+do not flatten Item 5.07 or other special clocks into the same trigger
+use the official Item 5.02 caption 'Certain Officers', not Instruction G 'Principal Officers'
+this toy is not a complete item-by-item engine; no filer or disclosure advice
+assertions passed: 18/18
+disclaimer: official Form 8-K item map; no filer or disclosure advice; learning only

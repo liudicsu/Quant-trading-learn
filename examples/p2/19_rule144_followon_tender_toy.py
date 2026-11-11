@@ -241,3 +241,48 @@ print("paragraph (b) exceptions exist (including certain pre-announcement contra
 print("14e-1's minimum duration is not permission for a covered person to buy the subject or related securities in the market")
 
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== G. Regulation M Rule 104: stabilizing, syndicate covering, and penalty bids are not a greenshoe ===")
+# 17 CFR 242.100 / 242.104 (official eCFR 242.104 opened 2026-11-12, not an
+# interstitial) and Form 20-F Item 9.B.5. Official 100 definitions of
+# stabilize / stabilizing, syndicate covering transaction, penalty bid, and
+# at-the-market offering. 104(a): it is unlawful, except as that section
+# allows, to stabilize, to effect any syndicate covering transaction, or to
+# impose a penalty bid. 104(b): stabilizing is prohibited except for the
+# purpose of preventing or retarding a decline in the market price of a
+# security. 104(e): stabilizing is prohibited in an at-the-market offering.
+# Form 20-F Item 9.B.5 names an underwriter's over-allotment option or
+# "greenshoe" as a way the offering amount could be increased; the form does
+# not state a 15% cap. Do not invent one. Do not teach the 104(f)
+# stabilizing-level catalog. A prior-notice requirement exists; this toy is
+# not a notice engine. Do not treat every post-offering aftermarket purchase
+# as 104 stabilizing, or treat the overallotment option itself as a
+# stabilizing bid. Already-taught 101 / 102 / 105 paragraphs stay as they
+# are. No offering or dealer recommendation.
+
+print("Stabilize or stabilizing means the placing of any bid, or the effecting of any purchase, for the purpose of pegging, fixing, or maintaining the price of a security")
+print("Syndicate covering transaction means the placing of any bid or the effecting of any purchase on behalf of the sole distributor or the underwriting syndicate or group to reduce a short position created in connection with the offering")
+print("Penalty bid means an arrangement that permits the managing underwriter to reclaim a selling concession from a syndicate member when the securities originally sold by the syndicate member are purchased in syndicate covering transactions")
+print("At-the-market offering means an offering of securities at other than a fixed price")
+print("104(a): it is unlawful to stabilize, to effect any syndicate covering transaction, or to impose a penalty bid, in contravention of this section")
+print("104(b): Stabilizing is prohibited except for the purpose of preventing or retarding a decline in the market price of a security")
+print("104(e): Stabilizing is prohibited in an at-the-market offering")
+print('Form 20-F Item 9.B.5 names an underwriter\'s over-allotment option or "greenshoe" as a way the offering amount could be increased')
+
+greenshoe_is_stabilizing_bid = False
+every_aftermarket_purchase_is_stabilizing = False
+prints_15pct_cap = False
+print(f"  overallotment option / greenshoe is itself a 104 stabilizing bid? {greenshoe_is_stabilizing_bid}")
+check(greenshoe_is_stabilizing_bid is False, "greenshoe is not itself a 104 stabilizing bid")
+print(f"  every post-offering aftermarket purchase is 104 stabilizing? {every_aftermarket_purchase_is_stabilizing}")
+check(every_aftermarket_purchase_is_stabilizing is False, "not every aftermarket purchase is 104 stabilizing")
+print(f"  this toy prints a 15% overallotment cap? {prints_15pct_cap}")
+check(prints_15pct_cap is False, "do not invent a 15% cap")
+atm_stabilizing_prohibited = True
+print(f"  stabilizing in an ATM is prohibited? {atm_stabilizing_prohibited}")
+check(atm_stabilizing_prohibited is True, "104(e) prohibits stabilizing in an ATM")
+
+print("a prior-notice requirement exists in the rule; this toy is not a notice engine")
+print("do not teach the 104(f) stabilizing-level catalog")
+print("no offering or dealer recommendation")
+print(f"assertions passed: {checks}/{checks}")

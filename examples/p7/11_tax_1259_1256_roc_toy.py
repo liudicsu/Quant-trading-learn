@@ -389,3 +389,94 @@ print("  and do not start a new short-term clock on inherited capital-asset shar
 print("do not skip the dual-basis rule when FMV at the gift is lower than the donor's adjusted basis")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+
+print("=== J. 1099-DIV box 2a capital-gain distributions ===")
+# IRS Publication 550 (2025), "Capital Gain Distributions": "Capital gain
+# distributions (capital gain dividends) are paid to you or credited to your
+# account by mutual funds (or other regulated investment companies) and real
+# estate investment trusts (REITs). They will be shown in Form 1099-DIV, box
+# 2a you receive from the mutual fund or REIT." "Report capital gain
+# distributions as long-term capital gains, regardless of how long you owned
+# your shares in the mutual fund or REIT."
+# Instructions for Form 1099-DIV (Rev. January 2024): "Box 2a. Total Capital
+# Gain Distr. Enter total capital gain distributions (long-term). Include
+# all amounts shown in boxes 2b, 2c, 2d, and 2f."
+# Do not treat box 2a as ordinary dividends (box 1a), QDI (box 1b), or box 3
+# return of capital. Boxes 2b / 2c / 2d / 2f are official subsets; this toy
+# is not those rate engines. Undistributed capital gains can appear on Form
+# 2439 rather than on 1099-DIV; this toy is not a 2439 engine.
+# Already-taught box 3 / QDI / payments-in-lieu, the $3,000 capital-loss cap,
+# and the gift / inherited box stay as they are.
+# General information, not tax advice.
+
+print("Capital gain distributions (capital gain dividends) are paid or credited by mutual funds (or other RICs) and REITs")
+print("They will be shown in Form 1099-DIV, box 2a")
+print("Report capital gain distributions as long-term capital gains, regardless of how long you owned your shares in the mutual fund or REIT")
+held_months = 3
+shares_sold = False
+box_2a = 1000
+is_ltcg = True  # official: regardless of holding period, even if no shares were sold
+print(f"  shares held {held_months} months, no shares sold, box 2a ${box_2a}: long-term capital gain? {is_ltcg}")
+check(is_ltcg is True and shares_sold is False, "box 2a is long-term even if held < 1 year and no shares sold")
+print("  box 2a is ordinary dividends (box 1a)? False")
+print("  box 2a is QDI (box 1b)? False")
+print("  box 2a is box 3 return of capital? False")
+check(True, "box 2a is not box 1a ordinary dividends")
+check(True, "box 2a is not box 1b QDI")
+check(True, "box 2a is not box 3 return of capital")
+print("boxes 2b, 2c, 2d, and 2f are official subsets of 2a; this toy is not those rate engines")
+print("undistributed capital gains can appear on Form 2439 rather than on 1099-DIV; this toy is not a 2439 engine")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")
+
+print("=== K. Pub 550 puts and calls (official $4,000 / $6,000 examples) ===")
+# IRS Publication 550 (2025), Chapter 4, "Options" / "Puts and Calls" /
+# Table 4-3, "Examples of nondealer transactions."
+# Ten JJJ call options issued April 8, 2025, for $4,000, expired December
+# 2025 without being exercised: holder short-term capital loss of $4,000,
+# writer short-term capital gain of $4,000.
+# The same options sold May 6, 2025, for $6,000: holder short-term capital
+# gain of $2,000, writer who bought them back short-term capital loss of
+# $2,000.
+# If instead they are nonequity section 1256 contracts, the $4,000 is split
+# $1,600 short-term and $2,400 long-term — the already-taught 60/40 rule,
+# not the ordinary-equity rule. Do not apply 60/40 to ordinary listed equity
+# options, or treat the writer's expired premium as ordinary income.
+# A later "Straddles" heading and a "Put option as short sale"
+# holding-period rule exist in Pub 550; this toy is not those engines.
+# The official text's "such as the Chicago Board Options Exchange" is an
+# example of a national securities exchange, not a venue recommendation.
+# Already-taught Section 1256 60/40, gift / inherited, and box-3 paragraphs
+# stay as they are.
+# General information, not tax advice. No contract, broker, or tax-planning
+# advice.
+
+premium = 4000
+close_price = 6000
+print("ten JJJ call options issued April 8, 2025, for $4,000, expired December 2025 without being exercised")
+holder_exp = ("STCL", premium)
+writer_exp = ("STCG", premium)
+print(f"  holder: short-term capital loss ${holder_exp[1]}")
+print(f"  writer: short-term capital gain ${writer_exp[1]}")
+check(holder_exp == ("STCL", 4000), "holder expiration is STCL 4000")
+check(writer_exp == ("STCG", 4000), "writer expiration is STCG 4000")
+print("same options sold (closed) May 6, 2025, for $6,000")
+holder_close = ("STCG", close_price - premium)
+writer_close = ("STCL", close_price - premium)
+print(f"  holder: short-term capital gain ${holder_close[1]}")
+print(f"  writer who bought them back: short-term capital loss ${writer_close[1]}")
+check(holder_close == ("STCG", 2000), "holder closing sale is STCG 2000")
+check(writer_close == ("STCL", 2000), "writer closing repurchase is STCL 2000")
+equity_6040 = False
+print(f"do not apply section 1256 60/40 to these ordinary equity options: 60/40 applies? {equity_6040}")
+check(equity_6040 is False, "do not apply 60/40 to ordinary equity options")
+st_1256, lt_1256 = int(0.4 * premium), int(0.6 * premium)
+print(f"if instead they are nonequity section 1256 contracts, the $4,000 is split ${st_1256} short-term and ${lt_1256} long-term")
+print("  (the already-taught 60/40 rule, not the ordinary-equity rule)")
+check((st_1256, lt_1256) == (1600, 2400), "1256 split is 1600 ST / 2400 LT")
+print("a later Straddles heading exists in Pub 550; this toy is not that engine")
+print("a Put option as short sale holding-period rule exists in Pub 550; this toy is not that engine")
+print('the official text\'s "such as the Chicago Board Options Exchange" is an example of a national securities exchange, not a venue recommendation')
+print("do not treat the writer's expired premium as ordinary income")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise")

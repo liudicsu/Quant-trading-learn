@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **24.25 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h + 赠与与继承的成本基础（Pub 550）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **24.75 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h + 赠与与继承的成本基础（Pub 550）0.25h + 1099-DIV 第 2a 栏资本利得分配 0.25h + Pub 550 看跌与看涨期权 0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -350,6 +350,54 @@ assertions passed: 16/16
 disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
 ```
 
+**共同基金（或其他 RIC）或 REIT 的资本利得分配，列在 Form 1099-DIV 第 2a 栏，并作为长期资本利得申报，不论股东持有这些份额多久；它不是普通股息（第 1a 栏），不是合格股息（第 1b 栏），也不是资本返还（第 3 栏）（核实于 2026-11-12；一般信息，不是税务建议）。** 不要改写已经教过的 1099-DIV 第 3 栏 / 合格股息 / 替代付款段落、3,000 美元资本亏损上限，或赠与 / 继承框。这一节补上官方的第 2a 栏事实，避免因为没有卖出份额就忽略资本利得分配，或把它当成普通所得或合格股息。本课不判断它是否适用于你。回测除非另有标注，否则仍按税前处理。
+
+[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Capital Gain Distributions”：“Capital gain distributions (capital gain dividends) are paid to you or credited to your account by mutual funds (or other regulated investment companies) and real estate investment trusts (REITs). They will be shown in Form 1099-DIV, box 2a you receive from the mutual fund or REIT.”“Report capital gain distributions as long-term capital gains, regardless of how long you owned your shares in the mutual fund or REIT。”[Form 1099-DIV 说明（2024 年 1 月修订）](https://www.irs.gov/instructions/i1099div)：“Box 2a. Total Capital Gain Distr. Enter total capital gain distributions (long-term). Include all amounts shown in boxes 2b, 2c, 2d, and 2f.”
+
+不要把第 2a 栏当成普通股息或合格股息，也不要因为股东没有卖出份额就跳过它。不要把它和已经教过的第 3 栏资本返还混为一谈。第 2b / 2c / 2d / 2f 栏是 2a 的官方子集（未追回的 1250、第 1202 条、收藏品、第 897 条资本利得）；点名它们存在即可，不要搭建这些税率引擎。基金或 REIT 的未分配资本利得可能出现在 Form 2439 上，而不是 1099-DIV 上；点名这条官方分支存在即可，不要搭建 2439 引擎。这里没有基金、REIT 或税务筹划建议。
+
+**Pub 550 在通常情形下把上市股票看跌和看涨期权当成资本资产：持有人让期权到期，得到的是权利金的资本亏损（持有期在到期日结束）；卖方在期权到期时，得到的是权利金的短期资本利得；平仓和行权按官方表格调整成本基础或实现金额。不要覆盖已经教过的 §1256 60/40，那不是普通股票期权的规则（核实于 2026-11-12；一般信息，不是税务建议）。** 不要改写已经教过的第 1256 条 60/40 段落，或赠与 / 继承 / 第 3 栏段落。这一节补上官方的看跌与看涨事实，避免在股票看涨期权到期时把权利金当成普通所得，或给上市股票期权发明 60/40 分拆。这里没有合约、经纪商或税务筹划建议。
+
+[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) 第 4 章，“Options” / “Puts and Calls” / Table 4-3：“Gain or loss from the sale or trade of an option to buy or sell property that is a capital asset in your hands, or would be if you acquired it, is capital gain or loss.”“If you have a loss because you did not exercise an option to buy or sell, you are considered to have sold or traded the option on the date it expired.”卖方：如果你不以写期权为业，并且你所写的股票期权“未被行权（也未被买回），你收到的金额是短期资本利得。”持有人：“If you buy a put or a call, you may not deduct its cost. It is a capital expenditure.”如果在行权前卖掉，差额按持有期长短作为长期或短期资本利得或亏损。“If the option expires, its cost is either a long-term or short-term capital loss, depending on your holding period, which ends on the expiration date.”如果行权看涨，“把成本加到买入股票的成本基础里。”如果行权看跌，“在计算标的股票出售的实现金额时，减去看跌期权的成本。”卖方：收到权利金时不要计入所得；如果义务到期，“你因写看涨或看跌而收到的金额是短期资本利得”；如果所写的看跌被行权，按权利金调减买入股票的成本基础，持有期从买入日起算；如果所写的看涨被行权，按权利金增加股票出售的实现金额；平仓买回产生相当于差额的短期资本利得或亏损。
+
+官方非交易商例子：2025 年 4 月 8 日发行的十份 JJJ 看涨期权，权利金 4,000 美元，2025 年 12 月到期未被行权——持有人短期资本亏损 4,000 美元，卖方短期资本利得 4,000 美元；同样的期权在 2025 年 5 月 6 日以 6,000 美元平仓——持有人短期资本利得 2,000 美元，买回的卖方短期资本亏损 2,000 美元；如果它们改成适用第 1256 条的非股权期权，这 4,000 美元将拆成 1,600 美元短期和 2,400 美元长期，这是已经教过的 60/40 规则，不是普通股票期权规则。
+
+不要把 §1256 60/40 套到普通上市股票期权上，也不要把卖方到期的权利金当成普通所得。不要重开 §1092 / 合格备兑看涨或跨式亏损递延引擎——点名 Pub 550 后面有 “Straddles” 标题即可，不要搭建。买入看跌可能被当成卖空，并影响已持有一年或更短的股票的持有期；把这条官方 “Put option as short sale” 规则当作陷阱点名即可，不要搭建该引擎。官方文本里的 “such as the Chicago Board Options Exchange” 是全国性证券交易所的例子，不是场所推荐。
+
+**实验：** `examples/p7/11_tax_1259_1256_roc_toy.py` 的 J–K 段（A–I 段仍与此前相同，包括第 3 栏、资本亏损上限、卖空税务性质、无价值证券、投资利息、股票股利，以及赠与 / 继承的官方 10,000 / 9,000 / 9,500 美元例子，I 段之后仍为 16/16；J 段随后打印 20/20；全脚本 26 项断言；一般信息，不是税务建议）：
+
+```text
+=== J. 1099-DIV box 2a capital-gain distributions ===
+Capital gain distributions (capital gain dividends) are paid or credited by mutual funds (or other RICs) and REITs
+They will be shown in Form 1099-DIV, box 2a
+Report capital gain distributions as long-term capital gains, regardless of how long you owned your shares in the mutual fund or REIT
+  shares held 3 months, no shares sold, box 2a $1000: long-term capital gain? True
+  box 2a is ordinary dividends (box 1a)? False
+  box 2a is QDI (box 1b)? False
+  box 2a is box 3 return of capital? False
+boxes 2b, 2c, 2d, and 2f are official subsets of 2a; this toy is not those rate engines
+undistributed capital gains can appear on Form 2439 rather than on 1099-DIV; this toy is not a 2439 engine
+assertions passed: 20/20
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+=== K. Pub 550 puts and calls (official $4,000 / $6,000 examples) ===
+ten JJJ call options issued April 8, 2025, for $4,000, expired December 2025 without being exercised
+  holder: short-term capital loss $4000
+  writer: short-term capital gain $4000
+same options sold (closed) May 6, 2025, for $6,000
+  holder: short-term capital gain $2000
+  writer who bought them back: short-term capital loss $2000
+do not apply section 1256 60/40 to these ordinary equity options: 60/40 applies? False
+if instead they are nonequity section 1256 contracts, the $4,000 is split $1600 short-term and $2400 long-term
+  (the already-taught 60/40 rule, not the ordinary-equity rule)
+a later Straddles heading exists in Pub 550; this toy is not that engine
+a Put option as short sale holding-period rule exists in Pub 550; this toy is not that engine
+the official text's "such as the Chicago Board Options Exchange" is an example of a national securities exchange, not a venue recommendation
+do not treat the writer's expired premium as ordinary income
+assertions passed: 26/26
+disclaimer: general information, not tax advice; backtests stay pre-tax unless labelled otherwise
+```
+
+
 
 
 
@@ -585,6 +633,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 23. 写成所有保证金利息都在经纪商入账的那一年全部可扣；把投资利息和合格住房抵押贷款利息混为一谈，或和已经讲过的 3,000 / 1,500 美元资本亏损上限混为一谈。
 24. 把按比例的股票股利当成现金所得或当成 1099-DIV 第 3 栏的资本返还；在非应税且新旧股相同的股票股利之后仍沿用原来的每股成本基础；把非应税新股的持有期从分配日起重新起算；把零股现金当成合格股息。
 25. 在通常的公允市值情形下，把被继承人原来的买入价当成继承人的成本基础，或对继承的资本资产股份重新起算短期时钟；当赠与时公允市值更低时跳过双重基础规则；把配偶转让和父母的赠与当成同一条规则。
+26. 把 Form 1099-DIV 第 2a 栏资本利得分配当成普通所得、合格股息或第 3 栏资本返还；因为没有卖出份额就跳过第 2a 栏，或按股东自己的持有期把短期持有当成短期分配。
+27. 把 §1256 60/40 套到普通上市股票期权上；把卖方到期的权利金当成普通所得；搭建 §1092 / 跨式 / “Put option as short sale” 引擎；把官方文本里的 “such as the Chicago Board Options Exchange” 读成场所推荐。
 
 ## 练习（1:1）
 
@@ -611,6 +661,8 @@ n_sources=39 us_first_block=25 fields_complete=True
 19. **ex-invint** — 运行同一脚本的 G 节；说明为购买应税证券支付的保证金利息是不是投资利息、扣除受什么限制，以及未能扣除的部分如何处理；**完成标准**：是投资利息，一般以净投资所得为限，其余结转，与输出一致。
 20. **ex-stodiv** — 运行同一脚本的 H 节；写出 Pub 550 例子 1 里的每股成本基础、新股持有期从哪一天开始，以及零股现金是不是股息；**完成标准**：15 美元，与旧股同一天开始，是出售而不是股息，与输出一致。
 21. **ex-giftbasis** — 运行同一脚本的 I 节；写出继承股份在通常公允市值情形下的成本基础和税务性质，以及官方赠与例子（基础 10,000 美元、公允市值 9,000 美元、售价 9,500 美元）的结果；**完成标准**：成本基础是死亡日公允市值而非被继承人买入价，出售按长期处理；该赠与例子既无增益也无亏损，与输出一致。一般信息，不是税务建议。
+22. **ex-cgdist** — 运行同一脚本的 J 节；写出股份只持有三个月、且没有卖出时，第 2a 栏资本利得分配的性质；**完成标准**：它是长期资本利得，并且不是第 1a 栏、第 1b 栏或第 3 栏，与输出一致。一般信息，不是税务建议。
+23. **ex-optstax** — 运行同一脚本的 K 节；写出官方 4,000 美元到期和 6,000 美元平仓例子对这十份 JJJ 看涨的结果，并说明如果它们改成适用第 1256 条的非股权合约会怎样；**完成标准**：到期时持有人短期资本亏损 4,000 美元 / 卖方短期资本利得 4,000 美元，平仓时持有人短期资本利得 2,000 美元 / 卖方短期资本亏损 2,000 美元，只有在已经教过的 60/40 规则下这 4,000 美元才会拆成 1,600 美元短期和 2,400 美元长期，与输出一致。一般信息，不是税务建议。
 
 ## 测验
 
@@ -654,6 +706,9 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-stodiv" question="按 IRS Publication 550（2025），按比例分配相同的新普通股、且一般不纳税时，应当如何处理？" options={["一般而言，股票股利和股票认股权不纳税，也不必在申报表上报告。官方例子 1：一股买进成本 45 美元，每持有一股分配两股新股 → 三股，每股成本基础 15 美元。非应税新股的持有期与旧股从同一天开始。在卖出零股的安排下，零股现金是出售这些零股的实现金额，不是现金股息", "股票股利是现金所得，而且新的持有期从分配日重新起算", "原来的每股成本基础保持不变，并把零股现金当成合格股息", "把零股现金当成 1099-DIV 第 3 栏的资本返还"]} answer={0} explanation="Pub 550 例子 1 把 45 美元的成本基础分摊到三股相同的股票上，每股 15 美元。非应税新股的持有期与旧股从同一天开始。零股现金是出售，不是现金股息、不是合格股息，也不是第 3 栏资本返还。官方例外存在；本课不搭建可税性引擎。一般信息，不是税务建议。" />
 <Quiz id="ce-giftbasis" question="按 IRS Publication 550（2025），继承的股票和受赠的股票，成本基础和持有期一般如何处理？（一般信息，不是税务建议）" options={["继承人通常沿用被继承人原来的买入价作为成本基础，并且从继承日起重新起算短期持有期", "赠与时若公允市值低于赠与人调整后成本基础，受赠人一律只用公允市值，不存在双重基础规则", "继承的资本资产股份，成本基础一般是死亡日（或合格并选择的替代估价日）的公允市值；日后出售不论持有多久都按长期处理。受赠财产须知道赠与人调整后成本基础、赠与时公允市值、已缴赠与税和赠与日。若赠与时公允市值不低于赠与人调整后成本基础，增益和亏损的基础都是赠与人的调整后成本基础（另有列出的调整；1976 年以后缴纳的赠与税可能按列出的分数增加基础）。若公允市值更低，增益基础是赠与人的调整后成本基础，亏损基础是赠与时公允市值。官方例子：基础 10,000 美元、公允市值 9,000 美元、日后售价 9,500 美元——既无增益也无亏损。若基础按赠与人的调整后成本基础确定，持有期视为从赠与人持有期开始的同一天起算；若按公允市值确定，则从赠与日后一天起算", "从配偶处取得财产，适用与父母赠与完全相同的双重基础规则"]} answer={2} explanation="Pub 550：“If you sell or dispose of inherited property that is a capital asset, the gain or loss is considered long-term, regardless of how long you held the property.” 通常用死亡日（或替代估价日）公允市值，而不是被继承人原来的买入价。赠与在公允市值更低时适用双重基础；官方 10,000 / 9,000 / 9,500 美元的例子既无增益也无亏损。配偶转让是另一条官方规则。一般信息，不是税务建议。" />
 
+<Quiz id="ce-cgdist" question="Form 1099-DIV 第 2a 栏资本利得分配应如何处理？（一般信息，不是税务建议。）" options={["如果股东持有基金或 REIT 份额不足一年，第 2a 栏就是普通所得，或第 1b 栏的合格股息", "如果没有卖出份额就跳过第 2a 栏，因为没有出售就没有资本利得，或把它当成第 3 栏资本返还", "共同基金（或其他 RIC）或 REIT 的资本利得分配列在 Form 1099-DIV 第 2a 栏，并作为长期资本利得申报，不论股东持有这些份额多久，即使没有卖出份额。它们不是普通股息（第 1a 栏），不是合格股息（第 1b 栏），也不是资本返还（第 3 栏）。第 2b、2c、2d 和 2f 栏是 2a 的官方子集；未分配资本利得可能出现在 Form 2439 上。本课不搭建这些引擎", "第 2a 栏使用股东自己的持有期，所以持有三个月就会让该分配变成短期"]} answer={2} explanation="Pub 550：“Report capital gain distributions as long-term capital gains, regardless of how long you owned your shares in the mutual fund or REIT.” 1099-DIV 说明把第 2a 栏标为总资本利得分配（长期）。不要把它当成第 1a、1b 或 3 栏。一般信息，不是税务建议。" />
+<Quiz id="ce-optstax" question="根据 IRS Publication 550（2025），官方非交易商例子如何处理普通上市股票看跌和看涨期权？（一般信息，不是税务建议。）" options={["2025 年 4 月 8 日发行的十份 JJJ 看涨期权，权利金 4,000 美元，2025 年 12 月到期：持有人短期资本亏损 4,000 美元，卖方短期资本利得 4,000 美元。如果改在 2025 年 5 月 6 日以 6,000 美元卖掉，持有人短期资本利得 2,000 美元，买回的卖方短期资本亏损 2,000 美元。不要把 §1256 60/40 套到普通上市股票期权上，也不要把卖方到期的权利金当成普通所得。如果它们改成适用第 1256 条的非股权合约，这 4,000 美元将拆成 1,600 美元短期和 2,400 美元长期，这是已经教过的 60/40 规则。Pub 550 后面还有 “Straddles” 标题和 “Put option as short sale” 持有期规则；本课不搭建这些引擎", "把 §1256 60/40 套到普通上市股票期权上，所以 4,000 美元到期总是 1,600 美元短期加 2,400 美元长期", "卖方所写的股票看涨到期时，权利金是普通所得", "官方文本里的 “such as the Chicago Board Options Exchange” 是场所推荐"]} answer={0} explanation="Pub 550 的官方非交易商例子使用这些 4,000 美元到期和 6,000 美元平仓数字。60/40 分拆是已经教过的非股权第 1256 条合约规则，不是普通股票期权规则。卖方到期的权利金是短期资本利得，不是普通所得。官方交易所措辞是全国性证券交易所的例子，不是场所推荐。一般信息，不是税务建议。" />
+
 
 ## 完成标准
 
@@ -664,6 +719,7 @@ n_sources=39 us_first_block=25 fields_complete=True
  enrich20（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Short Sales” / “Worthless Securities”；[26 U.S.C. §165(g)](https://www.law.cornell.edu/uscode/text/26/165)。一般信息，不是税务建议。
  enrich21（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550)，“Investment Interest”（第 3 章）和 “Distributions of Stock and Stock Rights”（第 1 章），含成本基础例子 1 以及非应税新股的持有期。
  enrich22（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) 第 4 章 “Property Received as Inheritance” / “Property Received as a Gift”（继承一般为死亡日公允市值，出售按长期；赠与的双重基础与官方既无增益也无亏损例子；持有期分拆）。一般信息，不是税务建议。
+enrich23（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) “Capital Gain Distributions” 和第 4 章 “Options” / “Puts and Calls” / Table 4-3（第 2a 栏不论持有期均为长期；官方 4,000 美元到期和 6,000 美元平仓例子）；[Form 1099-DIV 说明（2024 年 1 月修订）](https://www.irs.gov/instructions/i1099div) 第 2a 栏。一般信息，不是税务建议。
 
 <Summary>
 **要点**：官方文本+日期；中国证券〔2024〕8 + 期货〔2025〕12 先报告后交易与交易所高频标准；美国 15c3-5 / Reg SHO / 4210-IML（26-10+26-11）/ 15-09；加密看 237 号与非约束性 SEC/CFTC 工作人员声明；欧盟 ESMA 算法交易简报（非约束）。  

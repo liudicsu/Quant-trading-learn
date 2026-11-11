@@ -174,3 +174,73 @@ print("this toy does not invent a G.19 clock or a first-Friday rule")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_event_time_ipo_ok")
 print("disclaimer: official Fed / BEA times; no macro strategy; learning only")
+
+print("=== F. FINRA 5130: a new issue is an equity IPO, not every offering ===")
+# FINRA Rule 5130 (opened 2026-11-12): a member or a person associated with a
+# member "may not sell, or cause to be sold, a new issue to any account in
+# which a restricted person has a beneficial interest, except as otherwise
+# permitted herein." "New issue" means any initial public offering of an
+# equity security as defined in Section 3(a)(11) of the Exchange Act, made
+# pursuant to a registration statement or offering circular, and shall not
+# include the official carve-outs (including preferred, convertibles,
+# registered investment companies, rights / exchange / merger offerings, and
+# ordinary shares or Form F-6 ADRs with a pre-existing market outside the
+# United States). Listed exemptions include a registered investment company
+# and an account in which restricted-person beneficial interests do not
+# exceed in the aggregate 10%. This toy is not a restricted-person or
+# exemption engine. FINRA 5131 is a different rule and is not taught here.
+# Do not treat a follow-on, a preferred or convertible offering, or a
+# security that already traded abroad, as automatically a 5130 new issue.
+# The already-taught offering-price / lock-up facts stay as they are.
+# No product, broker, or allocation recommendation.
+
+print("a member may not sell a new issue to an account in which a restricted person has a beneficial interest, except as the rule permits")
+print("new issue means an initial public offering of an equity security, made pursuant to a registration statement or offering circular")
+print("the offering-price first-day return is not a fill every account could have earned")
+
+def is_5130_new_issue(kind):
+    # Official "shall not include" list plus the definition: a new issue is an
+    # equity IPO, not every offering. This is a teaching classifier, not a
+    # restricted-person / exemption engine.
+    if kind in {
+        "follow-on",
+        "preferred",
+        "convertible",
+        "already-traded-abroad",
+        "registered investment company",
+    }:
+        return False
+    return kind == "equity IPO"
+
+rows = (
+    ("equity IPO", True),
+    ("follow-on / additional offering of already-public stock", False),
+)
+# Map labels used in the print to the classifier keys.
+key = {
+    "equity IPO": "equity IPO",
+    "follow-on / additional offering of already-public stock": "follow-on",
+}
+for label, expect in rows:
+    got = is_5130_new_issue(key[label])
+    print(f"  {label}: 5130 new issue? {got}")
+    check(got is expect, label)
+
+carveouts = {
+    "preferred offering": "preferred",
+    "convertible offering": "convertible",
+    "ordinary shares or Form F-6 ADRs with a pre-existing market outside the United States": "already-traded-abroad",
+}
+for label, kind in carveouts.items():
+    in_list = not is_5130_new_issue(kind)
+    print(f"  {label}: in the official shall-not-include list? {in_list}")
+    check(in_list is True, label)
+
+print("restricted-person categories and listed exemptions exist (including a registered investment company,")
+print("  and an account in which restricted-person beneficial interests do not exceed in the aggregate 10%);")
+print("  this toy is not that engine")
+print("FINRA 5131 is a different rule (new-issue allocation / spinning) and is not taught here")
+print("no product, broker, or allocation recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_event_time_ipo_ok")
+print("disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only")

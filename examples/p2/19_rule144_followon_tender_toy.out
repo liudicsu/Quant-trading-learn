@@ -54,3 +54,20 @@ related securities = immediately convertible into, exchangeable for, or exercisa
 paragraph (b) exceptions exist (including certain pre-announcement contract purchases, specified covering transactions, and a 20-security basket with a 5% value cap); this toy does not build that engine
 14e-1's minimum duration is not permission for a covered person to buy the subject or related securities in the market
 assertions passed: 25/25
+=== G. Regulation M Rule 104: stabilizing, syndicate covering, and penalty bids are not a greenshoe ===
+Stabilize or stabilizing means the placing of any bid, or the effecting of any purchase, for the purpose of pegging, fixing, or maintaining the price of a security
+Syndicate covering transaction means the placing of any bid or the effecting of any purchase on behalf of the sole distributor or the underwriting syndicate or group to reduce a short position created in connection with the offering
+Penalty bid means an arrangement that permits the managing underwriter to reclaim a selling concession from a syndicate member when the securities originally sold by the syndicate member are purchased in syndicate covering transactions
+At-the-market offering means an offering of securities at other than a fixed price
+104(a): it is unlawful to stabilize, to effect any syndicate covering transaction, or to impose a penalty bid, in contravention of this section
+104(b): Stabilizing is prohibited except for the purpose of preventing or retarding a decline in the market price of a security
+104(e): Stabilizing is prohibited in an at-the-market offering
+Form 20-F Item 9.B.5 names an underwriter's over-allotment option or "greenshoe" as a way the offering amount could be increased
+  overallotment option / greenshoe is itself a 104 stabilizing bid? False
+  every post-offering aftermarket purchase is 104 stabilizing? False
+  this toy prints a 15% overallotment cap? False
+  stabilizing in an ATM is prohibited? True
+a prior-notice requirement exists in the rule; this toy is not a notice engine
+do not teach the 104(f) stabilizing-level catalog
+no offering or dealer recommendation
+assertions passed: 29/29

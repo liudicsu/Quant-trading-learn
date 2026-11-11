@@ -41,3 +41,20 @@ this toy does not invent a G.19 clock or a first-Friday rule
 assertions passed: 23/23
 ASSERT_event_time_ipo_ok
 disclaimer: official Fed / BEA times; no macro strategy; learning only
+=== F. FINRA 5130: a new issue is an equity IPO, not every offering ===
+a member may not sell a new issue to an account in which a restricted person has a beneficial interest, except as the rule permits
+new issue means an initial public offering of an equity security, made pursuant to a registration statement or offering circular
+the offering-price first-day return is not a fill every account could have earned
+  equity IPO: 5130 new issue? True
+  follow-on / additional offering of already-public stock: 5130 new issue? False
+  preferred offering: in the official shall-not-include list? True
+  convertible offering: in the official shall-not-include list? True
+  ordinary shares or Form F-6 ADRs with a pre-existing market outside the United States: in the official shall-not-include list? True
+restricted-person categories and listed exemptions exist (including a registered investment company,
+  and an account in which restricted-person beneficial interests do not exceed in the aggregate 10%);
+  this toy is not that engine
+FINRA 5131 is a different rule (new-issue allocation / spinning) and is not taught here
+no product, broker, or allocation recommendation
+assertions passed: 28/28
+ASSERT_event_time_ipo_ok
+disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only

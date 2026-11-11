@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **33.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **33.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -278,6 +278,41 @@ SYN_MACRO_2 没有发布时间 → 排除
 [17 CFR 240.12b-25(a)](https://www.ecfr.gov/current/title-17/section-240.12b-25)：如果列出的报告（包括 Form 10-K 或 Form 10-Q）“未在该报告规定的期限内提交，注册人最迟应在该报告到期日后的一个营业日，提交 Form 12b-25”，并合理详细地披露未能按时提交的原因。12b-25(b)：该报告“应被视为在规定到期日提交”，仅当官方条件都满足，包括：该原因无法在不付出不合理努力或费用的情况下消除；年报将在规定到期日后的**第十五个日历日**或之前提交，季报将在**第五个日历日**或之前提交；**并且**该报告确实在该期限内实际提交。12b-25(d)：即便如此，在该标的报告实际提交之前，注册人不得使用以按时提交报告为前提的 1933 年证券法登记表格。EDGAR 常把该通知标为 NT 10-K 或 NT 10-Q；正式表格是 Form 12b-25。
 
 不要写成每一份迟交的 10-K 都自动再得到 15 天，或法定时钟已经改动。15 天和 5 天是**日历日**，不是营业日；通知本身应在下一**营业日**前提交。不要把 Form 12b-25 或一份 NT 申报当成定期报告。这里没有申报身份规划建议。本节为测验即可，没有新的实验脚本。
+
+**不是每一份 Form 8-K 都是 Item 2.02 的业绩发布：官方项目还包括重大确定协议（1.01）、重大网络安全事件（1.05）、不再依赖此前发布的财务报表（4.02），以及某些高管或董事的离任或任命（5.02）；通常仍是四个营业日，但 Item 1.05 从注册人认定事件具有重要性时起算（核实于 2026-11-12）。** 不要改写已经教过的 10-K / 10-Q 时钟、12b-2、12b-25，或 Form 10-S 提案那一句（“截至 2026-11-11 尚未通过”）。`backtest-traps` 里 Item 2.02 的业绩发布时间框保持原样——这里只做交叉引用。这一节补上短的官方项目对照，避免把每一份 8-K 都当成业绩，或把 1.05 的时钟从发现时起算，而不是从官方认定时起算。这里没有申报人或披露建议。
+
+官方 [Form 8-K](https://www.sec.gov/files/form8-k.pdf) 一般指示 B.1：除非另有规定，报告“应在事件发生后四个营业日内提交或提供。”“根据 Item 1.05 提交的报告，应在注册人认定其经历了重大网络安全事件后四个营业日内提交。”B.2：按 Item 2.02 或 Item 7.01 提供的信息“不应被视为为《证券交易法》第 18 条之目的而‘提交’”，除非注册人另有声明。官方项目标题：**Item 1.01** Entry into a Material Definitive Agreement；**Item 1.05** Material Cybersecurity Incidents（描述事件的性质、范围和时间等重大方面，以及重大影响或合理可能的重大影响；指示 1：重要性认定“必须在发现事件后毫不无故拖延地作出”；(c) 允许在司法部长认定披露会对国家安全或公共安全构成重大风险并书面通知委员会时延迟——该延迟不是通常时钟）；**Item 4.02** Non-Reliance on Previously Issued Financial Statements or a Related Audit Report or Completed Interim Review；**Item 5.02** Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers（5.02(c) 下的任命可以推迟到注册人另行公开宣布之日）。使用官方 Item 5.02 标题里的 “Certain Officers”，不要用指示 G 的 “Principal Officers” 措辞。
+
+不要写成每一份 8-K 都是业绩，或 Form 12b-25 适用于 8-K。不要从发现时起算 1.05 时钟，或把司法部长延迟当成通常时钟。不要在通常情形下把 Item 2.02 / 7.01 当成第 18 条下的“提交”。不要把 Item 5.07（四个营业日从会议结束当日开始；第 (d) 款另有日历）或其他特殊时钟压成同一个起算点。不要搭建完整的逐项合规引擎，也不要把指示 G 针对资产支持证券的省略套到普通股权发行人身上。
+
+**实验：** `examples/p2/16_index_add_earnings_time_toy.py` 的 D 段（A–C 段，包括标普纳入筛选以及周四 16:05 / 周五为 day-0 的业绩例子，仍与此前相同，C 段之后仍为 13/13；全脚本 18 项断言）：
+
+```text
+=== D. Form 8-K items beyond Item 2.02 ===
+Item 1.01 Entry into a Material Definitive Agreement: Item 2.02 earnings? False
+Item 1.05 Material Cybersecurity Incidents: Item 2.02 earnings? False
+Item 4.02 Non-Reliance on Previously Issued Financial Statements or a Related Audit Report or Completed Interim Review: Item 2.02 earnings? False
+Item 5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers: Item 2.02 earnings? False
+usual clock: filed or furnished within four business days after occurrence of the event, unless otherwise specified
+Item 1.05 is due within four business days after the registrant determines that it has experienced a material cybersecurity incident
+  Item 1.05 clock starts on discovery? False
+  Instruction 1: the materiality determination must be made without unreasonable delay after discovery of the incident
+Item 2.02 / 7.01 are furnished, not deemed filed for Section 18 in the usual case
+Form 12b-25 does not apply to an 8-K
+the Attorney General delay in 1.05(c) is not the usual clock
+do not flatten Item 5.07 or other special clocks into the same trigger
+use the official Item 5.02 caption 'Certain Officers', not Instruction G 'Principal Officers'
+this toy is not a complete item-by-item engine; no filer or disclosure advice
+assertions passed: 18/18
+disclaimer: official Form 8-K item map; no filer or disclosure advice; learning only
+```
+
+**外国私人发行人的 Form 20-F 年报，应在财年结束后四个月内提交，不能套用 10-K 的 60 / 75 / 90 天时钟；Form 6-K 当期报告，应在材料于官方的本地市场 / 交易所 / 股东渠道公开后及时（promptly）提供，不能发明一套四个营业日的 8-K 时钟（核实于 2026-11-12）。** 已经教过的境内 10-K / 10-Q / 8-K / 12b-25 时钟、Form 10-S 提案那一句，以及外国私人发行人的 Form 4 那一句（外国私人发行人的董事和高管自 2026-03-18 起也要提交 Form 4），保持原样。这一节补上官方的外国私人发行人定期报告时钟，避免把 60 / 75 / 90 套到 20-F 上，或把 6-K 当成境内 8-K。不要改 `examples/p2/09_filing_dates_toy.py` 或 `examples/p2/17_xbrl_pit_10b51_toy.py`。这里没有申报身份规划建议。本节为测验即可，没有新的实验脚本。
+
+官方 [Form 20-F](https://www.sec.gov/files/form20-f.pdf) 一般指示 A.(a)：除资产支持发行人外，任何外国私人发行人可以把本表用作第 12 条注册说明书，或用作第 13(a) 或 15(d) 条下的年报或过渡报告。A.(b)：“A foreign private issuer must file its annual report on this Form within the four months after the end of the fiscal year covered by the report.”官方 [Form 6-K](https://www.sec.gov/files/form6-k.pdf) 一般指示 B：在本表上提供报告的发行人，应提供并非 Form 40-F 所要求、也尚未提供过的信息，即其 (i) 依照其住所地或设立地法律已经或必须公开的信息，或 (ii) 已经或必须向其证券挂牌的证券交易所提交、并由该交易所公开的信息，或 (iii) 已经或必须向其证券持有人分发的信息，且该信息属于列出的重大事项（包括财务状况和经营成果，以及重大网络安全事件）。“This report is required to be furnished promptly after the material contained in the report is made public as described above. The information and documents furnished in this report shall not be deemed to be “filed” for the purposes of Section 18 of the Exchange Act or otherwise subject to the liabilities of that section。”[17 CFR 240.13a-16(b)](https://www.law.cornell.edu/cfr/text/17/240.13a-16)：此类报告“shall be transmitted promptly after the information required by Form 6-K is made public by the issuer, by the country of its domicile or under the laws of which it was incorporated or organized, or by a foreign securities exchange with which the issuer has filed the information。”13a-16(c) 再次写明，按本规则提供的 6-K 在第 18 条下通常不视为“提交”。
+
+不要把 10-K 的 60 / 75 / 90 或 10-Q 的 40 / 45 套到 20-F 上，也不要为 Form 6-K 发明四个营业日（或“promptly = 10 天”）的时钟。不要在通常情形下把 6-K 当成第 18 条下的“提交”，或当成替代 10-Q。Form 40-F 是另一份 MJDS 表格；不要把它和 20-F 混为一谈。13a-16 不适用于已经在提交 10-K / 10-Q / 8-K 的发行人，也不适用于为外国发行人证券发行 ADR 的发行人（存托机构），见 13a-16(a)。
+
 
 **实验：** `examples/p2/09_filing_dates_toy.py`（玩具日历：周末顺延，不处理美国联邦假日）：
 
@@ -790,6 +825,8 @@ disclaimer: synthetic fixtures; learning only
 27. 用财年末的市值作为 12b-2 的计量日；忽略滞后，在公众持股市值第一次低于 7 亿美元时就把大型加速申报公司降为加速申报公司；仅仅因为公众持股市值超过 7 亿美元，就把刚上市的公司立刻当成大型加速申报公司；把 S7-2026-18 的 20 亿美元门槛或改过的期限当成现行规则。
 28. 写成每一份迟交的 10-K 都自动再得到 15 天，或 60 / 75 / 90 和 40 / 45 的法定时钟已经改动；把 15 天和 5 天当成营业日，或把通知本身当成按日历日计算；把 Form 12b-25 或 NT 申报当成定期报告本身。
 29. 发明一套通用于所有行情、下单端口和数据商文件的后缀；把优先股、类别股、权证、认股权或单位代码当成普通股；用 CQS 惯例向 Nasdaq 一体化平台下单。
+30. 把每一份 Form 8-K 都当成 Item 2.02 业绩发布；把 Item 1.05 的时钟从发现时而不是从注册人作出重要性认定时起算；把司法部长延迟当成通常时钟；在通常情形下把 Item 2.02 / 7.01 当成第 18 条下的“提交”；把 Form 12b-25 套到 8-K 上；把 Item 5.07 或其他特殊时钟压成同一个起算点；用指示 G 的 “Principal Officers” 措辞当作官方 Item 5.02 标题。
+31. 把 10-K 的 60 / 75 / 90 或 10-Q 的 40 / 45 套到 Form 20-F 上；为 Form 6-K 发明四个营业日或“promptly = 10 天”的时钟；在通常情形下把 6-K 当成第 18 条下的“提交”，或当成替代 10-Q；把 Form 20-F 和 Form 40-F 混为一谈；把 13a-16 套到已经在提交 10-K / 10-Q / 8-K 的发行人，或为外国发行人证券发行 ADR 的存托机构身上。
 
 ## 练习（与任务清单 1:1）
 
@@ -819,6 +856,8 @@ disclaimer: synthetic fixtures; learning only
 22. **ex-12b2** — 用自己的话写出现行 12b-2 的进入门槛、计量日、退出门槛，以及 S7-2026-18 是不是现行规则；**完成标准**：写出 7,500 万美元 / 7 亿美元、最近结束的第二个财季的最后一个营业日、6,000 万美元 / 5.60 亿美元，并写明 S7-2026-18 仍是提案。
 23. **ex-12b25** — 用自己的话写出 Form 12b-25 应在何时提交，年报和季报在什么条件下才视为按期提交，以及 15 天 / 5 天和通知本身分别按什么日子计算；**完成标准**：通知不晚于到期日后一个营业日；视为按期提交须满足官方条件，包括年报 15 个日历日、季报 5 个日历日内实际提交；通知按营业日，宽限期按日历日；Form 12b-25 不是定期报告本身。
 24. **ex-cqssuffix** — 运行 `11_spinoff_insider_lag_toy.py` 的 H 节；写出优先股、A 类股份、权证、认股权和单位在 CQS 与 CMS 列上的后缀，并说明 CQS 惯例能否用于向 Nasdaq 一体化平台下单；**完成标准**：CQS p / CMS PR，CQS .A / CMS A，CQS .WS / CMS WS，CQS r / CMS RT，CQS .U / CMS U，CQS 惯例仅供参考、不能用于该平台下单，与输出一致，并写一句这些代码不是普通股。
+25. **ex-8kitems** — 运行 `16_index_add_earnings_time_toy.py` 的 D 段；写出 Item 1.01、1.05、4.02 和 5.02，并说明 Item 1.05 的时钟从何时起算；**完成标准**：这些项目都不是 Item 2.02 业绩，并且 Item 1.05 应在注册人认定事件具有重要性后四个营业日内提交，而不是自动从发现时起算，与输出一致。
+26. **ex-20f6k** — 用自己的话写出 Form 20-F 年报时钟和 Form 6-K 提供时钟，并说明 13a-16 是否适用于已经在提交 10-K / 10-Q / 8-K 的发行人；**完成标准**：20-F 应在财年结束后四个月内提交；6-K 应在材料于官方渠道公开后及时（promptly）提供，通常不视为第 18 条下的“提交”；13a-16 不适用于该境内定期申报人，也不适用于为外国发行人证券发行 ADR 的存托机构。
 
 ## 测验
 
@@ -858,6 +897,9 @@ disclaimer: synthetic fixtures; learning only
 <Quiz id="dc-12b25" question="按 17 CFR 240.12b-25，错过 10-K 或 10-Q 的法定期限之后会发生什么？" options={["每一份迟交的 10-K 都自动再得到 15 天，60 / 75 / 90 和 40 / 45 的法定时钟已经改动", "Form 12b-25 或 EDGAR 上的 NT 10-K 本身就是那份年报", "注册人最迟须在规定到期日后的一个营业日提交 Form 12b-25。只有满足官方条件——包括年报在规定到期日后 15 个日历日内、季报在 5 个日历日内实际提交——该报告才视为在规定到期日提交。15 天和 5 天是日历日；通知本身按营业日计算。EDGAR 常把该通知标为 NT 10-K 或 NT 10-Q，正式表格是 Form 12b-25。法定时钟没有改", "12b-25 的 15 天和 5 天期间按营业日计算，通知本身按日历日计算"]} answer={2} explanation="12b-25(a) 要求在到期日后一个营业日前提交 Form 12b-25。12b-25(b) 的视为按期提交是有条件的，必须在 15 个或 5 个日历日内实际提交。不要把每一份迟交的 10-K 都写成自动再得到 15 天，也不要把 NT 申报当成定期报告。60 / 75 / 90 和 40 / 45 的时钟没有改。" />
 <Quiz id="dc-cqssuffix" question="官方 Nasdaq CQS 代码惯例表在已经讲过的 WI / WD 之外，还编码了什么？清洗数据时不该怎样做？" options={["同一张官方表还有优先股（CQS 为 p，CMS 为 PR）、优先股 A 类（PRA）、A / B 类股份、权证（WS）、认股权（RT）和单位（U）。这些代码不是普通股。官方页面有不止一列编码（CQS、CMS、Integrated、ACT/CTCI）；CQS 惯例仅供参考，不能用来向 Nasdaq 一体化平台下单。不要发明一套通用于所有行情、下单端口和数据商文件的后缀", "只要统一写成 PR 或 WI，就可以在每一份行情、下单端口和数据商文件里通用", "这些后缀就是已发行在外的普通股份，交收仍从 WI 成交日起自动按 T+1", "向 Nasdaq 一体化平台下单必须使用 CQS 惯例"]} answer={0} explanation="官方表有多列。优先股在 CQS 列是 p、在 CMS 列是 PR；权证、认股权和单位同样因列而异。CQS 惯例仅供参考，Nasdaq 协议不支持用它向一体化平台下单。不要把这些代码和普通股合并，也不要重写已经讲过的 11130 交收事实。" />
 
+<Quiz id="dc-8kitems" question="在已经教过的 Item 2.02 业绩发布之外，Form 8-K 还有哪些官方事实？" options={["每一份 Form 8-K 都是业绩发布，而且 Form 12b-25 对 8-K 的适用方式和 10-K 一样", "Item 1.05 的时钟从发现事件时起算，司法部长延迟就是通常时钟", "官方项目还包括 1.01 Entry into a Material Definitive Agreement、1.05 Material Cybersecurity Incidents、4.02 Non-Reliance on Previously Issued Financial Statements or a Related Audit Report or Completed Interim Review，以及 5.02 Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers; Compensatory Arrangements of Certain Officers。通常仍是事件发生后四个营业日，但 Item 1.05 应在注册人认定其经历了重大网络安全事件后四个营业日内提交；指示 1 要求重要性认定必须在发现后毫不无故拖延地作出——不要从发现时起算时钟。Item 2.02 和 Item 7.01 是提供，通常不视为第 18 条下的“提交”。Form 12b-25 不适用于 8-K。不要把 Item 5.07 或其他特殊时钟压成同一个起算点", "用指示 G 的 “Principal Officers” 措辞当作官方 Item 5.02 标题"]} answer={2} explanation="官方 Form 8-K 一般指示 B.1 和官方项目标题。Item 1.05 从注册人认定事件具有重要性时起算；指示 1 要求该认定在发现后毫不无故拖延地作出，但发现本身不是时钟的起点。B.2：Item 2.02 / 7.01 是提供，通常不视为第 18 条下的“提交”。使用官方 Item 5.02 标题里的 “Certain Officers”。" />
+<Quiz id="dc-20f6k" question="外国私人发行人的 Form 20-F 年报和 Form 6-K 当期报告，官方时钟分别是什么？" options={["把 10-K 的 60 / 75 / 90 和 10-Q 的 40 / 45 套到 20-F 上，并把 6-K 当成和境内 8-K 一样要在四个营业日内提交", "外国私人发行人必须在本表所覆盖财年结束后的四个月内，以 Form 20-F 提交年报。Form 6-K 应在报告所载材料于官方的本地市场、交易所或股东渠道公开后及时（promptly）提供，通常不视为第 18 条下的“提交”。Form 40-F 是另一份 MJDS 表格。13a-16 不适用于已经在提交 10-K / 10-Q / 8-K 的发行人，也不适用于为外国发行人证券发行 ADR 的发行人（存托机构）", "Form 6-K 的 “promptly” 等于 10 天，和有时被发明出来的 Form 13H 非官方时钟一样", "Form 20-F 和 Form 40-F 是同一份年报，6-K 是替代 10-Q"]} answer={1} explanation="Form 20-F 一般指示 A.(b) 是四个月的年报时钟。Form 6-K 一般指示 B 和 17 CFR 240.13a-16(b)–(c)：在官方渠道公开后及时提供，通常不视为第 18 条下的提交。不要发明四个营业日或 10 天的 6-K 时钟，也不要把 20-F 和 40-F 混为一谈。" />
+
 
 ## 完成标准
 
@@ -868,6 +910,7 @@ disclaimer: synthetic fixtures; learning only
  enrich20（核实于 2026-11-12）：[FINRA Rule 11130](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11130)；[Nasdaq CQS 代码惯例](https://nasdaqtrader.com/trader.aspx?id=CQSsymbolconvention)（When issued 后缀 WI）；[Nasdaq 代码目录定义](https://www.nasdaqtrader.com/trader.aspx?id=symboldirdefs)。
  enrich21（核实于 2026-11-12）：[17 CFR 240.12b-2](https://www.ecfr.gov/current/title-17/section-240.12b-2)（加速 / 大型加速申报公司定义、进入与退出门槛、第二个财季计量日）；[S7-2026-18](https://www.sec.gov/rules-regulations/2026/05/s7-2026-18) 仍是提案（2026-05-19 发布；评论截止 2026-07-20；最近审阅或更新 2026-07-31）。
  enrich22（核实于 2026-11-12）：[17 CFR 240.12b-25](https://www.ecfr.gov/current/title-17/section-240.12b-25)（Form 12b-25 通知；有条件的 15 个 / 5 个日历日视为按期提交）；[Nasdaq CQS 代码惯例](https://nasdaqtrader.com/trader.aspx?id=CQSsymbolconvention)（CQS / CMS / Integrated / ACT-CTCI 列；优先股、类别股、权证、认股权、单位；CQS 惯例仅供参考）。
+enrich23（核实于 2026-11-12）：[Form 8-K](https://www.sec.gov/files/form8-k.pdf)（Item 1.01 / 1.05 / 4.02 / 5.02；一般指示 B.1 / B.2）；[Form 20-F](https://www.sec.gov/files/form20-f.pdf) 一般指示 A.(b)；[Form 6-K](https://www.sec.gov/files/form6-k.pdf) 一般指示 B；[17 CFR 240.13a-16](https://www.law.cornell.edu/cfr/text/17/240.13a-16)。没有申报人或披露建议。
 
 <Summary>
 **要点**：哈希、幸存者、PIT、时区前瞻、复权声明、mask-first 反上游污染。  
