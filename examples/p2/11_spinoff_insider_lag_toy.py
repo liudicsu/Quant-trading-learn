@@ -10,10 +10,11 @@ Sources (G2): 17 CFR 240.16a-3(g)(1) (Form 4 before the end of the second busine
 17 CFR 240.13d-1(a) (13D within five business days) and (b)(2) (13G 45 days after quarter-end);
 17 CFR 240.0-3 (due date on Saturday, Sunday or holiday -> next business day); SEC HFIA page
 (directors/officers of foreign private issuers file Section 16(a) reports from 2026-03-18; exemptive
-orders exist for some jurisdictions, list may change); SEC HFIA FAQ (EDGAR by 10:00 p.m. ET).
-Synthetic numbers; toy calendar rolls weekends only, US federal holidays are NOT handled (example dates
-avoid them). The value-based back-adjustment below is a teaching version, not CRSP's factor for any real
-event. Learning only: not investment, tax or legal advice.
+orders exist for some jurisdictions, list may change); SEC HFIA FAQ (EDGAR by 10:00 p.m. ET);
+OPM 2026 Holiday Schedule (https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/#url=2026).
+Synthetic numbers; the toy calendar rolls Saturday, Sunday, and OPM-listed 2026 federal holidays under
+Rule 0-3 and 13d-1(i)(2). The value-based back-adjustment below is a teaching version, not CRSP's factor
+for any real event. Learning only: not investment, tax or legal advice.
 """
 from datetime import date, datetime, timedelta
 
@@ -26,16 +27,41 @@ def check(cond, label):
     checks += 1
 
 
+# Official observed dates from the OPM 2026 Holiday Schedule. Independence Day
+# 2026 falls on Saturday, so OPM lists Friday, July 3 (5 U.S.C. 6103(b) in lieu).
+# Washington's Birthday is the statutory name in 5 U.S.C. 6103(a).
+FEDERAL_HOLIDAYS_2026 = frozenset({
+    date(2026, 1, 1),   # New Year's Day
+    date(2026, 1, 19),  # Birthday of Martin Luther King, Jr.
+    date(2026, 2, 16),  # Washington's Birthday
+    date(2026, 5, 25),  # Memorial Day
+    date(2026, 6, 19),  # Juneteenth National Independence Day
+    date(2026, 7, 3),   # Independence Day (observed)
+    date(2026, 9, 7),   # Labor Day
+    date(2026, 10, 12), # Columbus Day
+    date(2026, 11, 11), # Veterans Day
+    date(2026, 11, 26), # Thanksgiving Day
+    date(2026, 12, 25), # Christmas Day
+})
+
+
+def is_business_day(d):
+    """13d-1(i)(2): any day other than Saturday, Sunday, or a Federal holiday."""
+    return d.weekday() < 5 and d not in FEDERAL_HOLIDAYS_2026
+
+
 def add_bdays(d, n):
     while n > 0:
         d += timedelta(days=1)
-        if d.weekday() < 5:
+        if is_business_day(d):
             n -= 1
     return d
 
 
-def roll_weekend(d):
-    while d.weekday() >= 5:
+def roll_rule_03(d):
+    """17 CFR 240.0-3: if the last timely day is Saturday, Sunday or holiday,
+    the filing may be made on the first business day following."""
+    while not is_business_day(d):
         d += timedelta(days=1)
     return d
 
@@ -72,7 +98,7 @@ for a in (date(2026, 11, 2), date(2026, 12, 20)):
 check(f8937_due(date(2026, 11, 2)) == date(2026, 12, 17), "8937 day 45")
 check(f8937_due(date(2026, 12, 20)) == date(2027, 1, 15), "8937 Jan 15")
 
-print("=== C. Form 4 / 13D / 13G deadlines (weekend roll only) ===")
+print("=== C. Form 4 / 13D / 13G deadlines (Rule 0-3 weekend and holiday roll) ===")
 for tx in (date(2026, 11, 4), date(2026, 11, 6)):
     due = add_bdays(tx, 2)
     print(f"Form 4 trade {tx} ({tx:%a}) -> due by end of {due} ({due:%a})")
@@ -82,9 +108,9 @@ d13 = add_bdays(date(2026, 8, 3), 5)
 print(f"13D: crossed 5% on 2026-08-03 (Mon) -> due {d13} ({d13:%a})")
 check(d13 == date(2026, 8, 10), "13D five business days")
 raw13g = date(2026, 9, 30) + timedelta(days=45)
-g = roll_weekend(raw13g)
-print(f"13G (45 days after 2026-09-30, Rule 0-3 weekend roll): raw {raw13g} ({raw13g:%a}) -> {g}")
-check(g == date(2026, 11, 16), "13G 45 days + weekend roll")
+g = roll_rule_03(raw13g)
+print(f"13G (45 days after 2026-09-30, Rule 0-3): raw {raw13g} ({raw13g:%a}) -> {g}")
+check(g == date(2026, 11, 16), "13G 45 days + Rule 0-3 roll")
 
 print("=== D. the signal is usable after acceptance, not on the transaction date ===")
 accepted = datetime(2026, 11, 6, 21, 40)   # before the 22:00 ET cutoff -> timely
@@ -106,7 +132,7 @@ check(not fpi_form4_expected(date(2026, 2, 10)), "no Form 4 before 2026-03-18")
 check(fpi_form4_expected(date(2026, 4, 1)), "Form 4 from 2026-03-18")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
-print("disclaimer: synthetic data; holidays not handled; no Form 4 before 2026-03-18 != no insider trades; learning only")
+print("disclaimer: synthetic data; federal holidays from the OPM 2026 schedule; no Form 4 before 2026-03-18 != no insider trades; learning only")
 
 print("=== E. Form 4 transaction codes; Form 3 / Form 5 clocks ===")
 # Form 4, General Instruction 8 (SEC 1474 (03-26); OMB expires August 31, 2029):
@@ -182,10 +208,13 @@ print(f"Form 3: became an officer {became} -> initial statement due within 10 da
 check(form3 == date(2026, 3, 12), "Form 3 is 10 calendar days as written in 15 U.S.C. 78p(a)(2)(B)")
 fye = date(2025, 12, 31)
 raw_form5 = fye + timedelta(days=45)
-form5 = roll_weekend(raw_form5)
-print(f"Form 5 (45 days after FYE {fye}, Rule 0-3 weekend roll): raw {raw_form5} ({raw_form5:%a}) -> {form5}")
+form5 = roll_rule_03(raw_form5)
+print(
+    f"Form 5 (45 days after FYE {fye}, Rule 0-3): raw {raw_form5} ({raw_form5:%a}) -> {form5}"
+    f" (Tue; 2026-02-16 is Washington's Birthday)"
+)
 check(raw_form5 == date(2026, 2, 14), "Form 5 is FYE + 45 calendar days")
-check(form5 == date(2026, 2, 16), "Form 5 Rule 0-3 weekend roll")
+check(form5 == date(2026, 2, 17), "Form 5 Rule 0-3 rolls past Washington's Birthday")
 
 def form5_required(already_reported_before_due_date):
     # 16a-3(f): no Form 5 where all transactions otherwise required have been
@@ -219,7 +248,7 @@ print("=== F. 13G to 13D switch and 13d-3 beneficial ownership ===")
 # "within five business days thereafter," if still above 5%.
 # 13d-1(i)(2): "business day means any day, other than Saturday, Sunday, or a
 # Federal holiday, from 12 a.m. to 11:59 p.m., Eastern Time."
-# This toy rolls weekends only; the example dates avoid federal holidays.
+# Business days skip Saturday, Sunday, and OPM-listed 2026 federal holidays.
 # Do not revive the pre-2023 "10 calendar days" filing clock. "Tenth day" is
 # the standstill after the 13D is filed.
 # 17 CFR 240.13d-3(a): beneficial owner includes any person who, directly or
@@ -269,8 +298,12 @@ check(path_f_20pct_applies("c") is True and path_f_20pct_applies("b") is False, 
 print("do not copy the 20% cap onto a paragraph (b) 13G filer")
 elig_loss = date(2026, 10, 5)  # Monday
 g_due = add_bdays_from(elig_loss, 5)
-print(f"paragraph (b) filer loses ordinary-course / (b)(1)(ii) eligibility on {elig_loss}, still above 5% -> 13D or 13G amendment due {g_due}")
-check(g_due == date(2026, 10, 12), "13d-1(g) is also five business days if still above 5%")
+print(
+    f"paragraph (b) filer loses ordinary-course / (b)(1)(ii) eligibility on {elig_loss}, still above 5%"
+    f" -> 13D or 13G amendment due {g_due}"
+)
+check(g_due == date(2026, 10, 13), "13d-1(g) five business days skip Columbus Day")
+print("2026-10-12 is Columbus Day, so the fifth business day is 2026-10-13")
 print("business day (13d-1(i)(2)) = any day other than Saturday, Sunday, or a Federal holiday, 12 a.m. to 11:59 p.m. ET")
 
 outstanding = 10_000_000
@@ -303,4 +336,4 @@ check(deemed_owner_now(90, True) is True, "control-purpose right counted immedia
 
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
-print("disclaimer: synthetic data; holidays not handled; no Form 4 / 13G-13D signal; learning only")
+print("disclaimer: synthetic data; federal holidays from the OPM 2026 schedule; no Form 4 / 13G-13D signal; learning only")

@@ -8,11 +8,11 @@ volume (not adjusted for spin-offs per CRSP guide): 1000000 -> 1400000
 DisPERMNO link: parent 10001 -> received 20002
 Form 8937 due (earlier of day 45 / Jan 15) for action 2026-11-02: 2026-12-17
 Form 8937 due (earlier of day 45 / Jan 15) for action 2026-12-20: 2027-01-15
-=== C. Form 4 / 13D / 13G deadlines (weekend roll only) ===
+=== C. Form 4 / 13D / 13G deadlines (Rule 0-3 weekend and holiday roll) ===
 Form 4 trade 2026-11-04 (Wed) -> due by end of 2026-11-06 (Fri)
 Form 4 trade 2026-11-06 (Fri) -> due by end of 2026-11-10 (Tue)
 13D: crossed 5% on 2026-08-03 (Mon) -> due 2026-08-10 (Mon)
-13G (45 days after 2026-09-30, Rule 0-3 weekend roll): raw 2026-11-14 (Sat) -> 2026-11-16
+13G (45 days after 2026-09-30, Rule 0-3): raw 2026-11-14 (Sat) -> 2026-11-16
 === D. the signal is usable after acceptance, not on the transaction date ===
 Form 4 for a 2026-11-04 trade accepted 2026-11-06 21:40 ET
 decision 2026-11-05 10:00 ET usable? False
@@ -21,7 +21,7 @@ FPI director trade 2026-02-10 -> Form 4 expected: False
 FPI director trade 2026-04-01 -> Form 4 expected: True (unless an exemptive order covers the jurisdiction)
 assertions passed: 15/15
 ASSERT_spinoff_insider_lag_ok
-disclaimer: synthetic data; holidays not handled; no Form 4 before 2026-03-18 != no insider trades; learning only
+disclaimer: synthetic data; federal holidays from the OPM 2026 schedule; no Form 4 before 2026-03-18 != no insider trades; learning only
 === E. Form 4 transaction codes; Form 3 / Form 5 clocks ===
   code  open-market-or-private P/S?  V-flag?  note
   P      True  False  open market or private purchase
@@ -37,7 +37,7 @@ disclaimer: synthetic data; holidays not handled; no Form 4 before 2026-03-18 !=
   V marks a transaction voluntarily reported earlier than required; it is not a purchase/sale code
   do not treat every Form 4 acquisition as an open-market buy
 Form 3: became an officer 2026-03-02 -> initial statement due within 10 days: 2026-03-12
-Form 5 (45 days after FYE 2025-12-31, Rule 0-3 weekend roll): raw 2026-02-14 (Sat) -> 2026-02-16
+Form 5 (45 days after FYE 2025-12-31, Rule 0-3): raw 2026-02-14 (Sat) -> 2026-02-17 (Tue; 2026-02-16 is Washington's Birthday)
 Form 5 required if every item was already reported before the due date? False
 === F. 13G to 13D switch and 13d-3 beneficial ownership ===
 intent-change path (13d-1(e)), still above 5%: purpose on 2026-08-03 (Mon) -> 13D due 2026-08-10 (Mon)
@@ -45,7 +45,8 @@ intent-change path (13d-1(e)), still above 5%: purpose on 2026-08-03 (Mon) -> 13
 pre-2023 10-calendar-day filing clock is not used for the switch
 paragraph (c) filer reaches 20% on 2026-09-08 -> 13D due 2026-09-15 (Tue)
 do not copy the 20% cap onto a paragraph (b) 13G filer
-paragraph (b) filer loses ordinary-course / (b)(1)(ii) eligibility on 2026-10-05, still above 5% -> 13D or 13G amendment due 2026-10-12
+paragraph (b) filer loses ordinary-course / (b)(1)(ii) eligibility on 2026-10-05, still above 5% -> 13D or 13G amendment due 2026-10-13
+2026-10-12 is Columbus Day, so the fifth business day is 2026-10-13
 business day (13d-1(i)(2)) = any day other than Saturday, Sunday, or a Federal holiday, 12 a.m. to 11:59 p.m. ET
 4.9% of record (490000) plus a 60-day exercisable warrant for 600000
   deemed shares 1090000; percentage uses warrant in the denominator only for this person: 10.2830%
@@ -55,4 +56,4 @@ business day (13d-1(i)(2)) = any day other than Saturday, Sunday, or a Federal h
 90-day warrant, control purpose: deemed now? True (counted immediately)
 assertions passed: 41/41
 ASSERT_spinoff_insider_lag_ok
-disclaimer: synthetic data; holidays not handled; no Form 4 / 13G-13D signal; learning only
+disclaimer: synthetic data; federal holidays from the OPM 2026 schedule; no Form 4 / 13G-13D signal; learning only
