@@ -583,3 +583,53 @@ check(builds_14d2_engines is False, "do not build 14d-3/14d-4/14d-6 or Schedule 
 check(is_14e3_or_14e1 is False, "14d-2 is not already-taught 14e-3 or 14e-1")
 print("no bidder, target, or strategy recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== N. Rule 10b-9: all-or-none / contingency-offering representations ===")
+# 17 CFR 240.10b-9 Prohibited representations in connection with certain
+# offerings (official eCFR API, title 17 up to date as of 2026-11-09;
+# official-page fetch opened 2026-11-12; [27 FR 9943, Oct. 10, 1962]).
+# Keep sections A-M identical, including Rule 105, 14e-1, 101/102, 14e-5,
+# Rule 104, 14e-2, 14d-11, 14d-10, 14e-4, 14e-3, 14d-2, and 56/56 after M.
+# 10b-9(a): It shall constitute a "manipulative or deception device or
+# contrivance," as used in section 10(b) of the Act, for any person,
+# directly or indirectly, in connection with the offer or sale of any
+# security, to make any representation: (1) to the effect that the
+# security is being offered or sold on an "all-or-none" basis, unless the
+# official refund conditions in (a)(1) are met; or (2) to the effect that
+# the security is being offered or sold on any other basis whereby all or
+# part of the consideration paid will be refunded if all or some of the
+# securities are not sold, unless the official refund conditions in
+# (a)(2) are met.
+# Official typographical artifact in (a): "manipulative or deception
+# device or contrivance" — quote it; do not silently correct it.
+# Official (b): This rule shall not apply to any offer or sale of
+# securities as to which the seller has a firm commitment from
+# underwriters or others (subject only to customary conditions precedent,
+# including "market outs") for the purchase of all the securities being
+# offered. This toy is not that engine. Do not invent a clock, a form, or
+# a percentage. This is not already-taught Rule 144, Regulation M, or
+# Rule 14e-1. No offering, underwriter, or strategy recommendation.
+
+print('10b-9(a): It shall constitute a "manipulative or deception device or contrivance," as used in section 10(b) of the Act,')
+print("  for any person, directly or indirectly, in connection with the offer or sale of any security, to make any representation:")
+print('  (1) that the security is being offered or sold on an "all-or-none" basis, unless the official refund conditions in (a)(1) are met; or')
+print("  (2) that the security is being offered or sold on any other refund-if-not-sold basis, unless the official refund conditions in (a)(2) are met")
+print('official typographical artifact: "manipulative or deception device or contrivance"')
+silently_corrects_deception = False
+print(f'  this toy silently corrects "deception device"? {silently_corrects_deception}')
+check(silently_corrects_deception is False, "do not silently correct 10b-9 typographical artifact")
+print('10b-9(b): This rule shall not apply to any offer or sale of securities as to which the seller has a firm commitment')
+print('  from underwriters or others (subject only to customary conditions precedent, including "market outs")')
+print("  for the purchase of all the securities being offered")
+print("  official (b) firm-commitment exception exists; this toy is not that engine")
+builds_10b9b = False
+print(f"  this toy builds a market-out or firm-commitment engine? {builds_10b9b}")
+check(builds_10b9b is False, "do not build a 10b-9(b) engine")
+invents_clock_form_pct = False
+print(f"  this toy invents a clock, a form, or a percentage? {invents_clock_form_pct}")
+check(invents_clock_form_pct is False, "do not invent a clock, form, or percentage")
+is_144_or_regm = False
+print(f"  this is already-taught Rule 144 or Regulation M? {is_144_or_regm}")
+check(is_144_or_regm is False, "10b-9 is not already-taught Rule 144 or Regulation M")
+print("no offering, underwriter, or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")

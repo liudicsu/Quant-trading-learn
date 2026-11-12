@@ -30,3 +30,21 @@ do not ignore the (b)(3) revision exceptions or the (a)(3) unusual-market relief
 do not conflate 602 with already-taught Rule 604 (display), Rule 611 (trade-through), or Rule 605/606
 assertions passed: 3/3
 disclaimer: official 17 CFR 242.602 facts; learning only; no venue or broker recommendation
+=== E. FINRA 5220: offers at stated prices / firmness of quotations ===
+5220 is a different firmness rule from already-taught Rule 602
+  this is already-taught Rule 602? False
+5220: No member shall make an offer to buy from or sell to any person any security at a stated price
+  unless such member is prepared to purchase or sell, as the case may be, at such price
+  and under such conditions as are stated at the time of such offer to buy or sell
+official .01: under normal circumstances, a member making a "firm trading market"
+  is expected at least to buy or sell a normal unit of trading in the quoted stock
+  at its then prevailing quotations unless clearly designated as not firm
+  or firm for less than a normal unit of trading when supplied by the member
+  official in-process revised-size clause exists; this toy is not a Rule 6420 engine
+  this toy builds a Rule 6420 engine? False
+  a "normal unit of trading" for an NMS stock is the official Rule 600(b) round lot
+  this toy invents a 100-share normal unit? False
+  official not-firm / less-than-a-normal-unit designation and in-process revised-size clause named? True
+no product, broker, or venue recommendation
+assertions passed: 4/4
+disclaimer: official FINRA 5220 facts; learning only; no venue or broker recommendation

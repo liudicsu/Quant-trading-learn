@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **15.25 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **15.50 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -186,6 +186,35 @@ do not ignore the (b)(3) revision exceptions or the (a)(3) unusual-market relief
 do not conflate 602 with already-taught Rule 604 (display), Rule 611 (trade-through), or Rule 605/606
 assertions passed: 3/3
 disclaimer: official 17 CFR 242.602 facts; learning only; no venue or broker recommendation
+```
+
+## FINRA 5220：会员不得按标明价格报价，除非已准备按该价格并在所述条件下买入或卖出（核实于 2026-11-12）
+
+上面已经教过的 Rule 602 段落、600(b)(93) 整手框、610(e)、611 或 6380A，不要改写。这一节补上官方的 FINRA 5220，避免把 602 当成唯一的确定报价规则、发明一个 100 股的“正常交易单位”，或把每一笔已公布报价都当成不会撤回的证明。没有产品、券商或交易场所建议。
+
+[FINRA Rule 5220](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5220)：“No member shall make an offer to buy from or sell to any person any security at a stated price unless such member is prepared to purchase or sell, as the case may be, at such price and under such conditions as are stated at the time of such offer to buy or sell.” 官方补充材料 .01：在正常情况下，对某一证券做 “firm trading market” 的会员，“is expected at least to buy or sell a normal unit of trading in the quoted stock at its then prevailing quotations unless clearly designated as not firm or firm for less than a normal unit of trading when supplied by the member.” 如果在订单提交时，该会员正在完成该证券的一笔交易，并在结束后立即传达修订后的报价数量，则该会员 “shall not be obligated to purchase or sell the quoted security in an amount greater than such revised quotation size.” 就本规则而言，NMS 股票的 “normal unit of trading” “shall mean the “round lot” assigned to such NMS stock pursuant to Rule 600(b) of SEC Regulation NMS”，而 “inter-dealer quotation system” 按 Rule 6420 定义。只点名 Rule 6420，不要搭建该引擎。不要发明 100 股的正常交易单位；指向已经教过的 600(b) 整手。经 SR-FINRA-2025-015 修订，自 2025 年 12 月 3 日生效。这是与已经教过的 Rule 602 不同的确定报价规则。
+
+**实验：** `examples/p1/05_us_market_mechanics.py` 的 E 节（A–D 节的打印与此前相同，包括 D 节 / Rule 602 之后的 **3/3**）：
+
+```text
+=== E. FINRA 5220: offers at stated prices / firmness of quotations ===
+5220 is a different firmness rule from already-taught Rule 602
+  this is already-taught Rule 602? False
+5220: No member shall make an offer to buy from or sell to any person any security at a stated price
+  unless such member is prepared to purchase or sell, as the case may be, at such price
+  and under such conditions as are stated at the time of such offer to buy or sell
+official .01: under normal circumstances, a member making a "firm trading market"
+  is expected at least to buy or sell a normal unit of trading in the quoted stock
+  at its then prevailing quotations unless clearly designated as not firm
+  or firm for less than a normal unit of trading when supplied by the member
+  official in-process revised-size clause exists; this toy is not a Rule 6420 engine
+  this toy builds a Rule 6420 engine? False
+  a "normal unit of trading" for an NMS stock is the official Rule 600(b) round lot
+  this toy invents a 100-share normal unit? False
+  official not-firm / less-than-a-normal-unit designation and in-process revised-size clause named? True
+no product, broker, or venue recommendation
+assertions passed: 4/4
+disclaimer: official FINRA 5220 facts; learning only; no venue or broker recommendation
 ```
 
 ## T+1 是 Rule 15c6-1 的缺省规则，不是每一笔成交的定律（核实于 2026-11-12）
@@ -473,6 +502,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 19. 写成每一笔成交都必须 T+1 交收，或现金合同也按 T+1 交收；发明现行法里并不存在的“次日（next day）”交收类别；写成每一次 IPO 或增发都按 T+2 交收。
 20. 写成每一笔 SIP 报价在所有情形下都是某一具名交易商的 602 确定报价，或客户总能按全部 NBBO 数量成交；把确定报价义务套到碎股订单上；忽略 (b)(3) 的修订例外或 (a)(3) 的异常市场救济；把 602 和 Rule 604、611 或 605/606 混为一谈。
 21. 把 6380A 套到交易所成交上；写成每一笔行情带成交都被推迟 10 秒，或“尽快”意味着可以故意等到第 10 秒；把午夜至上午 4:00 或晚上 8:00 至午夜的成交当成已经适用 10 秒时钟；把 2026-12-06 当成无条件的硬切换，或发明 10b-18 的 23/5 映射。
+22. 把 FINRA 5220 当成已经教过的 Rule 602；发明一个 100 股的 “normal unit of trading”，而不用官方 Rule 600(b) 整手；漏掉官方的 “not firm / firm for less than a normal unit” 标明，或正在完成交易时的修订数量条款；或搭建 Rule 6420 引擎。
 
 ## 练习（与任务清单 1:1）
 
@@ -494,6 +524,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 16. **ex-15c61** — 运行 `11_freeride_txse_15c33_toy.py` 的 F 节；写出 2026-07-06（周一）这笔成交的常规交收、现金和延迟交付日期，以及 15c6-1(c) 的第二个营业日上限；**完成标准**：2026-07-07、当日 2026-07-06、约定 2026-07-10，以及上限 2026-07-08，与输出一致，并写一句现行 11320 没有“次日”类别。
 17. **ex-602** — 运行 `05_us_market_mechanics.py` 的 D 节；说明已公布卖价 100.02、数量 100 时，100 股买单是否落在确定报价数量之内、1 股碎股是否属于 602(b)(2) 义务，以及提交前把数量修订为 50 会怎样；**完成标准**：100 股在已公布数量之内，碎股不适用该义务，修订后义务数量为 50，与输出一致。
 18. **ex-6380a** — 运行 `13_sale_condition_toy.py` 的 E 节；写出上午 10:00、凌晨 2:00 和晚上 10:00 的场外申报时限，以及通过交易所申报的成交是否向 FINRA/Nasdaq TRF 申报；**完成标准**：10 秒、成交日上午 4:15、下一营业日上午 4:15 并标 as/of，交易所成交不向该 TRF 申报，与输出一致，并写一句 SR-FINRA-2026-015 尚未实施。
+19. **ex-5220** — 运行 `05_us_market_mechanics.py` 的 E 节；说明 5220 是不是已经教过的 Rule 602，会员在按标明价格报价前必须准备做什么，NMS 股票的 “normal unit of trading” 是什么，以及本玩具有没有发明 100 股单位；**完成标准**：这是不同的确定报价规则；会员不得按标明价格报价，除非已准备按该价格并在所述条件下买入或卖出；NMS 股票的正常交易单位是官方 600(b) 整手，不是发明的 100 股单位，与输出一致。
 
 ## 测验
 
@@ -524,6 +555,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 <Quiz id="mo-15c61" question="按 Rule 15c6-1 和 FINRA 11320，美国常规交收的缺省规则是什么？官方交收类型有哪些？" options={["每一笔成交都必须 T+1 交收；现金合同也按 T+1 交收；现行 11320 仍有单独的“次日（next day）”类别", "每一次 IPO 或包销承诺增发都必须 T+2 交收", "T+1 是 15c6-1 的缺省规则，除非双方在交易当时另有明确约定。11320 的官方类型包括现金（交易当日交付）、常规交收（在交易日后第一个营业日交付，但不得早于该日）、卖方期权、买方期权，以及延迟交付（交易当时约定的日期）。16:30 美东之后定价的包销承诺发行，除非另有约定，可以到第二个营业日。现行 11320 没有“次日”类别", "现金合同和常规交收合同都在下一个营业日交付"]} answer={2} explanation="15c6-1(a) 是缺省规则，除非双方在交易当时另有明确约定。11320 的现金是交易当日交付；常规交收是在交易日后第一个营业日，但不得早于该日。(c) 款只是列出的“16:30 之后定价的包销承诺”分支，不是普遍的 IPO 时钟。不要发明现行法里的“次日”类别。" />
 <Quiz id="mo-602" question="按 17 CFR 242.602(b)(2)，责任经纪商或自营商已公布的报价一般意味着什么？" options={["客户总能按全部 NBBO 数量成交；每一笔 SIP 报价在所有情形下都是某一具名交易商的 602 确定报价", "除碎股订单外，责任经纪商或自营商一般有义务按对买方或卖方至少与已公布买价或卖价同样有利的价格，就其已公布报价数量以内的任何数量，执行向其提交的订单。(b)(3) 在订单提交前已传达的修订，以及 (a)(3) 在异常市场条件下的救济，可以改变该义务", "确定报价义务也适用于碎股订单", "Rule 602 就是已经讲过的 Rule 604（展示）、Rule 611（禁止交易穿越）或 Rule 605/606"]} answer={1} explanation="17 CFR 242.602(b)(2) 把义务限于已公布数量，并排除碎股订单。(b)(3) 和 (a)(3) 是列出的例外。不要把展示的 NBBO 数量当成保证成交，或把每一笔 SIP 报价都当成某一具名交易商的确定报价。不要把 602 和 Rule 604、611 或 605/606 混为一谈。" />
 <Quiz id="mo-6380a" question="按现行 FINRA 6380A，向 FINRA/Nasdaq TRF 申报场外最近成交的时限是什么？SR-FINRA-2026-015 目前是什么状态？" options={["每一笔行情带成交，包括交易所成交和目前午夜至上午 4:00 的成交，都已经适用 10 秒时钟；2026-12-06 已经生效", "“尽快”意味着可以故意等到第 10 秒再报", "在现行 TRF 时段内，指定证券的最近成交报告应尽快、且不得晚于成交后 10 秒提交；午夜至上午 4:00 美东的成交目前应在成交日上午 4:15 前申报，而不是 10 秒。SR-FINRA-2026-015 已提交并申请立即生效，但实施日是 SIP 修订的实施日，预计 2026-12-06，也可能随 SIP 延后；不要把未来的时钟当成现行法", "6380A 同样适用于在交易所申报或通过交易所申报的成交"]} answer={2} explanation="6380A(a)(1)–(2) 在现行 TRF 时段内要求尽快、且不得晚于 10 秒；午夜至上午 4:00 目前是成交日上午 4:15，晚上 8:00 至午夜或非营业日是下一营业日上午 4:15 并标 “as/of”。(e)(1)(C) 把交易所成交排除在该 TRF 之外。补充材料 .02 禁止故意扣留报告。SR-FINRA-2026-015 的实施日是 SIP 修订实施日，不是无条件的硬切换。" />
+<Quiz id="mo-5220" question="FINRA 5220 要求什么？它和已经教过的 Rule 602，以及 “normal unit of trading”，是什么关系？" options={["每一笔已公布报价都是不会撤回的证明，NMS 股票的正常交易单位永远是 100 股；这就是已经教过的 Rule 602", "官方 .01 没有 “not firm / firm for less than a normal unit” 的标明，也没有正在完成交易时的修订数量条款", "FINRA 5220 是与已经教过的 Rule 602 不同的确定报价规则。会员不得按标明价格向任何人买入或卖出任何证券，除非已准备按该价格并在报价时所称的条件下买入或卖出。官方 .01：在正常情况下，做 “firm trading market” 的会员，至少应按其当时通行报价买入或卖出正常交易单位，除非已清楚标明不是确定报价，或只对少于正常交易单位确定。如果在订单提交时该会员正在完成一笔交易，并在结束后立即传达修订后的报价数量，则没有义务按大于该修订数量买入或卖出。对 NMS 股票而言，“normal unit of trading” 是官方 Rule 600(b) 整手，不是发明的 100 股单位。只点名 Rule 6420，本课不搭建该引擎", "Rule 5220 是对已经教过的 Rule 602、600(b)(93)、610(e)、611 或 6380A 的改写"]} answer={2} explanation="FINRA 5220 是与已经教过的 Rule 602 不同的确定报价规则。会员不得按标明价格报价，除非已准备按该价格并在所述条件下买入或卖出。NMS 股票的 “normal unit of trading” 是官方 Rule 600(b) 整手，不是发明的 100 股单位。官方 .01 点名了 “not firm / less than a normal unit” 标明，以及正在完成交易时的修订数量条款。" />
 
 
 ## 完成标准
@@ -535,6 +567,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
  enrich20（核实于 2026-11-12）：[17 CFR 242.611(b)](https://www.ecfr.gov/current/title-17/section-242.611) 例外目录（在 ISO 之外）。S7-2026-20 仍是提案。
  enrich21（核实于 2026-11-12）：[17 CFR 240.15c6-1](https://www.ecfr.gov/current/title-17/section-240.15c6-1)；[FINRA Rule 11320](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11320)（交收日期类型：现金、常规交收、卖方期权、买方期权、延迟交付；经 SR-FINRA-2023-017 修订，2024-05-28 生效；现行文本没有“次日”类别）。
  enrich22（核实于 2026-11-12）：[17 CFR 242.602](https://www.ecfr.gov/current/title-17/section-242.602)（确定报价义务，碎股除外；(b)(3) 修订例外；(a)(3) 异常市场救济）；[FINRA Rule 6380A](https://www.finra.org/rules-guidance/rulebooks/finra-rules/6380A)（现行选中版本 “Mar 30, 2026 - Dec 05, 2026”）；[SR-FINRA-2026-015](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-015) / [SEC 34-105922](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-finra-2026-015) / [91 FR 45299](https://www.govinfo.gov/content/pkg/FR-2026-07-20/pdf/2026-14528.pdf)（实施日为 SIP 修订实施日，预计 2026-12-06，可能延后）；FINRA 2026-05-22 与 2026-07-10 技术通知（ADF 时段目前不调整）。
+enrich28（核实于 2026-11-12）：[FINRA Rule 5220](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5220)（按标明价格报价；官方 .01 报价确定性；NMS 股票的正常交易单位是官方 Rule 600(b) 整手；只点名 Rule 6420）。没有产品、券商或交易场所建议。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

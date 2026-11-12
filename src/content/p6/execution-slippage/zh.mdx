@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **17.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **18.00 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -368,6 +368,71 @@ no product, broker, or venue recommendation
 assertions passed: 25/25
 ```
 
+**FINRA 5290：会员不得把订单拆成多笔更小的订单来成交，或把一笔成交拆成多笔更小的成交来申报，若其主要目的是最大化因此获得的金钱或实物对价（核实于 2026-11-12）。** 已经教过的 TWAP / VWAP 执行、Rule 606 / PFOF，以及 FINRA 5270 / 5320 保持原样。不要改写那些段落，也不要改写已经教过的 5230 / 5240 / 5250 / 5280 / 10b-10 框。这一节补上官方的 5290，避免把每一次拆单都当成没有成本，或发明一条禁止每一次 TWAP / VWAP 切片的禁令。没有产品、券商或交易场所建议。
+
+[FINRA Rule 5290](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5290)：“No member or associated person shall engage in conduct that has the intent or effect of splitting any order into multiple smaller orders for execution or any execution into multiple smaller executions for transaction reporting for the primary purpose of maximizing a monetary or in-kind amount to be received by the member or associated person as a result of the execution of such orders or the transaction reporting of such executions. For purposes of this Rule, “monetary or in-kind amount” shall be defined to include, but not be limited to, any credits, commissions, gratuities, payments for or rebates of fees, or any other payments of value to the member or associated person.” 按原文引用 “this Rule”。不要写成每一次拆单都被禁止；官方标准是“主要目的是最大化金钱或实物对价”。
+
+**实验：** 同一脚本的 H 节（现有的 606 表、**4/4**、`ASSERT_rule606_ok`、提醒行、5250、5270、5270 之后的 **12/12**、5230、5230 之后的 **15/15**、5280、5280 之后的 **18/18**、10b-10、10b-10 之后的 **22/22**、5240，以及 5240 之后的 **25/25** 保持不变；H 节后为 28/28）：
+
+```text
+=== H. FINRA 5290: no splitting orders or executions for the primary purpose of maximizing credits or rebates ===
+5290: No member or associated person shall engage in conduct that has the intent or effect of
+  splitting any order into multiple smaller orders for execution or any execution into
+  multiple smaller executions for transaction reporting for the primary purpose of
+  maximizing a monetary or in-kind amount to be received by the member or associated person
+  as a result of the execution of such orders or the transaction reporting of such executions
+For purposes of this Rule, "monetary or in-kind amount" shall be defined to include, but not be limited to,
+  any credits, commissions, gratuities, payments for or rebates of fees,
+  or any other payments of value to the member or associated person
+  every TWAP / VWAP slice is banned? False
+  this is a rewrite of already-taught 606 / PFOF, 5270, or 5320? False
+  official test is the primary purpose of maximizing a monetary or in-kind amount? True
+no product, broker, or venue recommendation
+assertions passed: 28/28
+```
+
+**FINRA 2262：受发行人控制、控制发行人或与发行人处于共同控制之下的会员，必须在订立代客户买卖该证券的合同之前披露该控制关系；若第一次披露不是书面的，则应在完成时或完成前补充给予或寄送书面披露（核实于 2026-11-12）。** 已经教过的 Rule 10b-10 在完成时或完成前的书面确认保持原样。不要改写该段落，包括 (c) 的请求时钟或 (d)(8) PFOF。这一节补上官方的 2262，避免把 10b-10 当成唯一的“完成时或完成前”披露，或发明 2262 的第一次披露必须是书面的。不要把 2262 压进 2269。没有产品、券商或发行人建议。
+
+[FINRA Rule 2262](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2262)：“A member controlled by, controlling, or under common control with, the issuer of any security, shall, before entering into any contract with or for a customer for the purchase or sale of such security, disclose to such customer the existence of such control, and if such disclosure is not made in writing, it shall be supplemented by the giving or sending of written disclosure at or before the completion of the transaction.” 第一次披露必须在订立任何客户合同之前做出；官方并不要求第一次披露必须是书面的。只有在第一次披露不是书面时，才必须在完成时或完成前补充书面披露。
+
+**实验：** 同一脚本在 5290 增补之后的 I 节（一旦加入 5290，此前的全部打印，包括 5240 之后的 **25/25** 和新的 5290 节，与此前相同；I 节后为 31/31）：
+
+```text
+=== I. FINRA 2262: control-relationship disclosure before the customer contract ===
+2262: A member controlled by, controlling, or under common control with, the issuer of any security,
+  shall, before entering into any contract with or for a customer for the purchase or sale of such security,
+  disclose to such customer the existence of such control,
+  and if such disclosure is not made in writing, it shall be supplemented by the giving or sending
+  of written disclosure at or before the completion of the transaction
+  this toy invents that the first disclosure must be in writing? False
+  this is a rewrite of already-taught 10b-10? False
+  first disclosure is required before entering into the customer contract? True
+no product, broker, or issuer recommendation
+assertions passed: 31/31
+```
+
+**FINRA 2269：作为客户经纪商（或同时作为该客户与另一人的经纪商），或作为向客户就证券提供建议并收取或已获承诺将收取费用的自营商的会员，必须在完成时或完成前，就该会员参与或在金钱上利害相关的该证券的一级或二级分销，向客户发出书面通知（核实于 2026-11-12）。** 已经教过的 10b-10 和 2262 保持原样。这一节补上官方的 2269，避免把这项书面通知义务压进 2262“第一次披露不必是书面的”规则，或压进 10b-10。官方范围是点名的经纪商 / 顾问型自营商类别；不要发明更宽的范围。没有产品、券商或发行建议。
+
+[FINRA Rule 2269](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2269)：“A member who is acting as a broker for a customer or for both such customer and some other person, or a member who is acting as a dealer and who receives or has promise of receiving a fee from a customer for advising such customer with respect to securities, shall, at or before the completion of any transaction for or with such customer in any security in the primary or secondary distribution of which such member is participating or is otherwise financially interested, give such customer written notification of the existence of such participation or interest.” 与 2262 的第一次披露不同，2269 要求书面通知。
+
+**实验：** 同一脚本在 2262 增补之后的 J 节（一旦加入 2262，此前的全部打印与此前相同；全脚本 34 项断言）：
+
+```text
+=== J. FINRA 2269: written notification of participation or interest in a distribution ===
+2269: A member who is acting as a broker for a customer or for both such customer and some other person,
+  or a member who is acting as a dealer and who receives or has promise of receiving a fee from a customer
+  for advising such customer with respect to securities, shall, at or before the completion of any transaction
+  for or with such customer in any security in the primary or secondary distribution of which such member
+  is participating or is otherwise financially interested, give such customer written notification
+  of the existence of such participation or interest
+  unlike 2262, 2269 requires written notification
+  this is 2262, or the first 2262 disclosure must be in writing? False
+  this is a rewrite of already-taught 10b-10? False
+  this toy invents a broader scope than the official broker / adviser-dealer categories? False
+no product, broker, or offering recommendation
+assertions passed: 34/34
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -387,6 +452,9 @@ assertions passed: 25/25
 15. 把 5280 当成已经教过的 5270 或 5320；把研究报告已经发表当成这条规则唯一可能起作用的时点；或搭建 Rule 2241 “research report” 定义引擎。
 16. 发明 T+1 或交易日确认时钟；把 10b-10(a) 的书面确认压进已经教过的 10b-10(d)(8) PFOF；漏掉 (c) 的五个营业日（交易已超过 30 天则为十五个营业日）时钟；或如果引用 10b-10(a)(8)，悄悄改掉官方印刷瑕疵 “this paragraph (a)(9) shall not apply”。
 17. 把 5240 当成已经教过的 5230、5250、5270、5280 或 5320；写成禁止每一笔单边报价，漏掉官方 (b) 单边例外；或搭建 (b)(1)–(7) 目录引擎。
+18. 把每一次 TWAP / VWAP 切片，或每一次拆单，都写成被 FINRA 5290 禁止；漏掉官方的“主要目的”标准；或把已经教过的 606 / PFOF、5270 或 5320 改写成 5290。
+19. 发明 FINRA 2262 的第一次披露必须是书面的；把 2262 压进已经教过的 10b-10，包括 (c) 的请求时钟或 (d)(8) PFOF；或把 2262 当成与 2269 同一条规则。
+20. 把 FINRA 2269 当成 2262 的第一次披露规则，或当成对已经教过的 10b-10 的改写；发明书面通知是可选的；或发明比官方经纪商 / 顾问型自营商类别更宽的范围。
 
 
 ## 练习（1:1）
@@ -406,6 +474,9 @@ assertions passed: 25/25
 12. **ex-5280** — 运行同一脚本的 E 节；说明 5280 是不是已经教过的 5270 或 5320，以及会员可否基于对研究报告内容或时间的非公开提前知悉调整库存头寸；**完成标准**：这是不同的禁止，不得基于该提前知悉建立、增加、减少或了结库存头寸，与输出一致。
 13. **ex-10b10** — 运行同一脚本的 F 节；说明书面确认应在何时发出，客户要求额外信息时的官方时钟是什么，以及这是不是已经教过的 10b-10(d)(8) PFOF；**完成标准**：在完成时或完成前发出书面通知；要求的信息为五个营业日（交易已超过 30 天则为十五个营业日）；不是 T+1 或交易日确认时钟，也不是已经教过的 (d)(8) PFOF，与输出一致。
 14. **ex-5240** — 运行同一脚本的 G 节；说明 5240 是不是已经教过的 5230、5250、5270、5280 或 5320，禁止哪些协调或恐吓行为，以及是否禁止每一笔单边报价；**完成标准**：这是不同的禁止；不得协调价格、交易或成交报告，不得指示其他会员更改价格，也不得恐吓或不当影响；官方 (b) 单边例外存在，不是对每一笔单边报价的禁止，与输出一致。
+15. **ex-5290** — 运行同一脚本的 H 节；说明 5290 是否禁止每一次 TWAP / VWAP 切片，官方的“主要目的”标准是什么，以及这是不是对已经教过的 606 / PFOF、5270 或 5320 的改写；**完成标准**：不是对每一次切片的禁止；官方标准是主要目的为最大化金钱或实物对价（积分、佣金、馈赠、费用回扣或其他有价给付）；不是对这些已教规则的改写，与输出一致。
+16. **ex-2262** — 运行同一脚本的 I 节；说明控制关系披露应在何时做出，第一次披露是否必须是书面的，以及这是不是已经教过的 10b-10；**完成标准**：必须在订立客户合同之前披露；若第一次披露不是书面的，则应在完成时或完成前给予或寄送书面披露；第一次披露不必是书面的，也不是已经教过的 10b-10，与输出一致。
+17. **ex-2269** — 运行同一脚本的 J 节；说明 2269 是否要求书面通知、应在何时发出，以及这是不是 2262 或已经教过的 10b-10；**完成标准**：必须在完成时或完成前，就一级或二级分销中的参与或利害关系发出书面通知，范围限于官方经纪商 / 顾问型自营商类别；这不是 2262，2262 的第一次披露不必是书面的，也不是已经教过的 10b-10，与输出一致。
 
 ## 测验
 
@@ -432,6 +503,9 @@ assertions passed: 25/25
 <Quiz id="es-5280" question="FINRA 5280 一般禁止什么？它和已经教过的 5270、5320 是什么关系？" options={["5280 就是已经教过的 5270：对即将进行的大宗交易抢先", "5280 就是已经教过的 5320：持有尚未成交的客户股票订单时不得同一方向抢先", "研究报告已经发表，是 5280 唯一可能起作用的时点，而且本课搭建了 Rule 2241 的 “research report” 定义引擎", "5280 与已经教过的 5270 和 5320 是不同的禁止：会员不得基于对某证券研究报告内容或发布时间的非公开提前知悉，在该证券或该证券衍生品上建立、增加、减少或了结库存头寸。5280(b) 要求建立合理设计的政策和程序，以限制或约束研究部门人员（或知悉研究报告内容或时间的其他人）与交易部门人员之间的信息流动。官方 5280(b) 程序是存在的；本课不搭建信息隔离或 Rule 2241 定义引擎"]} answer={3} explanation="FINRA 5280(a) 禁止基于对研究报告内容或时间的非公开提前知悉调整库存头寸。这不是已经教过的 5270，也不是已经教过的 5320。5280(b) 要求限制信息流动的程序；本课不搭建该引擎。" />
 <Quiz id="es-10b10" question="根据 Rule 10b-10，券商应在何时向客户发出书面确认？客户要求额外信息时的官方时钟是什么？" options={["官方时钟是 T+1，或必须在交易日结束前发出确认；这只是已经教过的 10b-10(d)(8) PFOF 的改写", "书面确认可以在完成后任何时候发出；客户要求的信息没有期限", "券商应在完成时或完成前向客户发出书面通知。根据本规则被要求的信息，一般应在收到要求后五个营业日内发出或送达；如果该笔交易已超过 30 天，则为十五个营业日。不要发明 T+1 或交易日确认时钟。这不是已经教过的 10b-10(d)(8) PFOF。官方 10b-10(a) 目录、(b) 和 (e) 例外是存在的；本课不搭建这些引擎。15c1-1 被 (d)(2) 点名为“完成”的定义，本课不搭建该定义引擎", "只要交易最终结算了，书面确认就不是必须的"]} answer={2} explanation="17 CFR 240.10b-10(a) 要求在完成时或完成前发出书面通知。(c) 把客户要求的额外信息定在五个营业日（交易已超过 30 天则为十五个营业日）。不要发明 T+1 或交易日确认时钟。这不是已经教过的 10b-10(d)(8) PFOF。" />
 <Quiz id="es-5240" question="FINRA 5240 禁止什么？它和已经教过的 5230、5250、5270、5280 或 5320 是同一条规则吗？是否禁止每一笔单边报价？" options={["5240 就是已经教过的 5230、5250、5270、5280 或 5320 的改写", "5240 禁止每一笔单边报价，包括官方 (b) 例外里的单边行为", "5240 是不同的禁止：会员不得协调价格、交易或成交报告，不得指示或请求其他会员更改价格（包括报价），也不得威胁、骚扰、强迫、恐吓或以其他方式试图不正当影响另一会员或市场参与者。官方 (b) 单边例外是存在的；这不是对每一笔单边报价的禁止。本课不搭建 (b)(1)–(7) 目录引擎", "只要没有书面协议，协调价格就是允许的"]} answer={2} explanation="FINRA 5240(a) 禁止协调价格、交易或成交报告，指示其他会员更改价格，以及恐吓或不当影响。这不是已经教过的 5230、5250、5270、5280 或 5320。官方 (b) 单边例外存在；不要把它写成禁止每一笔单边报价。" />
+<Quiz id="es-5290" question="FINRA 5290 禁止什么？它是否禁止每一次 TWAP / VWAP 切片？" options={["每一次拆单，包括普通的 TWAP / VWAP 切片，都被禁止", "这是对已经教过的 Rule 606 / PFOF、FINRA 5270 或 5320 的改写", "FINRA 5290：会员或关联人士不得从事具有如下意图或效果的行为：把订单拆成多笔更小的订单来成交，或把一笔成交拆成多笔更小的成交来申报，且其主要目的是最大化因此获得的金钱或实物对价。“monetary or in-kind amount” 包括但不限于积分、佣金、馈赠、对费用的支付或回扣，或其他有价给付。这不是对每一次 TWAP / VWAP 切片的禁止。这不是对已经教过的 606 / PFOF、5270 或 5320 的改写", "只覆盖现金回扣；佣金和馈赠不在规则范围内"]} answer={2} explanation="FINRA 5290 用的是主要目的标准：为最大化金钱或实物对价（积分、佣金、馈赠、费用回扣或其他有价给付）而拆单或拆分成交申报。它不是对每一次 TWAP / VWAP 切片的禁止，也不是对已经教过的 606 / PFOF、5270 或 5320 的改写。" />
+<Quiz id="es-2262" question="按 FINRA 2262，会员应在何时披露与发行人的控制关系？第一次披露必须是书面的吗？" options={["第一次披露必须是书面的", "这是对已经教过的 Rule 10b-10 的改写，或与 FINRA 2269 是同一条规则", "受发行人控制、控制发行人或与发行人处于共同控制之下的会员，应在订立代客户买卖该证券的任何合同之前，向该客户披露该控制关系的存在；若第一次披露不是书面的，则应在完成时或完成前补充给予或寄送书面披露。第一次披露并非官方要求必须是书面的。这不是已经教过的 10b-10，也不是 FINRA 2269", "只有在完成之后，且仅在客户书面要求时，才需要披露"]} answer={2} explanation="FINRA 2262 要求在订立客户合同之前披露控制关系。若第一次披露不是书面的，则应在完成时或完成前给予或寄送书面披露。第一次披露并不被官方要求必须是书面的。这不是已经教过的 10b-10，也不是 2269。" />
+<Quiz id="es-2269" question="FINRA 2269 要求怎样的书面通知？它和 2262 有何不同？" options={["与 2262 的第一次披露一样，书面通知是可选的", "这是对已经教过的 Rule 10b-10 的改写，或与 2262 的第一次披露规则相同；该规则适用于每一名会员、每一只证券", "作为客户经纪商（或同时作为该客户与另一人的经纪商），或作为向客户就证券提供建议并收取或已获承诺将收取费用的自营商的会员，应在完成时或完成前，就该会员参与或在金钱上利害相关的该证券的一级或二级分销，向客户发出书面通知，告知该参与或利害关系的存在。与 2262 的第一次披露不同，2269 要求书面通知。官方范围是这些经纪商 / 顾问型自营商类别。这不是已经教过的 10b-10，也不是 2262", "书面通知可以在完成后的任何时间发出"]} answer={2} explanation="FINRA 2269 要求在完成时或完成前，就一级或二级分销中的参与或利害关系发出书面通知，范围限于官方经纪商 / 顾问型自营商类别。与 2262 的第一次披露不同，2269 要求书面通知。这不是已经教过的 10b-10，也不是 2262。" />
 
 
 ## 完成标准
@@ -440,6 +514,7 @@ assertions passed: 25/25
 
 **来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)。enrich15（2026-11-11 核实）：[17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)、[17 CFR 242.304](https://www.ecfr.gov/current/title-17/section-242.304)、[SEC Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information)。 enrich18（核实于 2026-11-12）：[17 CFR 242.604](https://www.ecfr.gov/current/title-17/section-242.604)；大宗定义见 [17 CFR 242.600](https://www.ecfr.gov/current/title-17/section-242.600)；[FINRA Rule 5320](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5320)。 enrich25（核实于 2026-11-12）：[FINRA Rule 5250](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5250)；[FINRA Rule 5270](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5270)。enrich26（核实于 2026-11-12）：[FINRA Rule 5230](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5230)；[FINRA Rule 5280](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5280)。没有产品、券商或交易场所建议。
 enrich27（核实于 2026-11-12）：[17 CFR 240.10b-10](https://www.ecfr.gov/current/title-17/section-240.10b-10)；[FINRA Rule 5240](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5240)。没有产品、券商或交易场所建议。
+enrich28（核实于 2026-11-12）：[FINRA Rule 5290](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5290)；[FINRA Rule 2262](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2262)；[FINRA Rule 2269](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2269)。没有产品、券商、发行人或发行建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

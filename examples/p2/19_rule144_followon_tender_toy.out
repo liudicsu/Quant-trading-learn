@@ -174,3 +174,19 @@ official (c) 14d-3 / 14d-4 / 14d-6 obligations exist; this toy is not that engin
   this is already-taught 14e-3 or 14e-1? False
 no bidder, target, or strategy recommendation
 assertions passed: 56/56
+=== N. Rule 10b-9: all-or-none / contingency-offering representations ===
+10b-9(a): It shall constitute a "manipulative or deception device or contrivance," as used in section 10(b) of the Act,
+  for any person, directly or indirectly, in connection with the offer or sale of any security, to make any representation:
+  (1) that the security is being offered or sold on an "all-or-none" basis, unless the official refund conditions in (a)(1) are met; or
+  (2) that the security is being offered or sold on any other refund-if-not-sold basis, unless the official refund conditions in (a)(2) are met
+official typographical artifact: "manipulative or deception device or contrivance"
+  this toy silently corrects "deception device"? False
+10b-9(b): This rule shall not apply to any offer or sale of securities as to which the seller has a firm commitment
+  from underwriters or others (subject only to customary conditions precedent, including "market outs")
+  for the purchase of all the securities being offered
+  official (b) firm-commitment exception exists; this toy is not that engine
+  this toy builds a market-out or firm-commitment engine? False
+  this toy invents a clock, a form, or a percentage? False
+  this is already-taught Rule 144 or Regulation M? False
+no offering, underwriter, or strategy recommendation
+assertions passed: 60/60

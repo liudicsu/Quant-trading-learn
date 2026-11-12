@@ -116,3 +116,41 @@ official (b) unilateral-conduct exceptions exist, provided the conduct is otherw
   every unilateral quote is banned? False
 no product, broker, or venue recommendation
 assertions passed: 25/25
+=== H. FINRA 5290: no splitting orders or executions for the primary purpose of maximizing credits or rebates ===
+5290: No member or associated person shall engage in conduct that has the intent or effect of
+  splitting any order into multiple smaller orders for execution or any execution into
+  multiple smaller executions for transaction reporting for the primary purpose of
+  maximizing a monetary or in-kind amount to be received by the member or associated person
+  as a result of the execution of such orders or the transaction reporting of such executions
+For purposes of this Rule, "monetary or in-kind amount" shall be defined to include, but not be limited to,
+  any credits, commissions, gratuities, payments for or rebates of fees,
+  or any other payments of value to the member or associated person
+  every TWAP / VWAP slice is banned? False
+  this is a rewrite of already-taught 606 / PFOF, 5270, or 5320? False
+  official test is the primary purpose of maximizing a monetary or in-kind amount? True
+no product, broker, or venue recommendation
+assertions passed: 28/28
+=== I. FINRA 2262: control-relationship disclosure before the customer contract ===
+2262: A member controlled by, controlling, or under common control with, the issuer of any security,
+  shall, before entering into any contract with or for a customer for the purchase or sale of such security,
+  disclose to such customer the existence of such control,
+  and if such disclosure is not made in writing, it shall be supplemented by the giving or sending
+  of written disclosure at or before the completion of the transaction
+  this toy invents that the first disclosure must be in writing? False
+  this is a rewrite of already-taught 10b-10? False
+  first disclosure is required before entering into the customer contract? True
+no product, broker, or issuer recommendation
+assertions passed: 31/31
+=== J. FINRA 2269: written notification of participation or interest in a distribution ===
+2269: A member who is acting as a broker for a customer or for both such customer and some other person,
+  or a member who is acting as a dealer and who receives or has promise of receiving a fee from a customer
+  for advising such customer with respect to securities, shall, at or before the completion of any transaction
+  for or with such customer in any security in the primary or secondary distribution of which such member
+  is participating or is otherwise financially interested, give such customer written notification
+  of the existence of such participation or interest
+  unlike 2262, 2269 requires written notification
+  this is 2262, or the first 2262 disclosure must be in writing? False
+  this is a rewrite of already-taught 10b-10? False
+  this toy invents a broader scope than the official broker / adviser-dealer categories? False
+no product, broker, or offering recommendation
+assertions passed: 34/34

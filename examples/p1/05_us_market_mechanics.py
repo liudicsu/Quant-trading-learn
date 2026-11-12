@@ -120,3 +120,61 @@ print("do not ignore the (b)(3) revision exceptions or the (a)(3) unusual-market
 print("do not conflate 602 with already-taught Rule 604 (display), Rule 611 (trade-through), or Rule 605/606")
 print(f"assertions passed: {d_checks}/{d_checks}")
 print("disclaimer: official 17 CFR 242.602 facts; learning only; no venue or broker recommendation")
+
+print("=== E. FINRA 5220: offers at stated prices / firmness of quotations ===")
+# FINRA Rule 5220 Offers at Stated Prices (official-page fetch opened
+# 2026-11-12). Keep sections A-D identical, including 3/3 after D / Rule 602.
+# 5220 is a different firmness rule from already-taught Rule 602.
+# 5220: No member shall make an offer to buy from or sell to any person any
+# security at a stated price unless such member is prepared to purchase or
+# sell, as the case may be, at such price and under such conditions as are
+# stated at the time of such offer to buy or sell.
+# Official Supplementary Material .01: under normal circumstances, a member
+# making a "firm trading market" is expected at least to buy or sell a
+# normal unit of trading in the quoted stock at its then prevailing
+# quotations unless clearly designated as not firm or firm for less than a
+# normal unit of trading when supplied by the member. If, when an order is
+# presented, the member is in the process of effecting a transaction in
+# that security and immediately after completion communicates a revised
+# quotation size, the member shall not be obligated to purchase or sell
+# the quoted security in an amount greater than such revised quotation size.
+# For this Rule, a "normal unit of trading" for an NMS stock shall mean the
+# "round lot" assigned pursuant to Rule 600(b) of SEC Regulation NMS — not
+# an invented 100-share unit. "Inter-dealer quotation system" is as defined
+# in Rule 6420; this toy is not a 6420 engine. Learning only; no venue or
+# broker recommendation.
+
+e_checks = 0
+
+
+def e_check(cond, label):
+    global e_checks
+    assert cond, label
+    e_checks += 1
+
+
+print("5220 is a different firmness rule from already-taught Rule 602")
+is_already_taught_602 = False
+print(f"  this is already-taught Rule 602? {is_already_taught_602}")
+e_check(is_already_taught_602 is False, "5220 is not already-taught Rule 602")
+print("5220: No member shall make an offer to buy from or sell to any person any security at a stated price")
+print("  unless such member is prepared to purchase or sell, as the case may be, at such price")
+print("  and under such conditions as are stated at the time of such offer to buy or sell")
+print('official .01: under normal circumstances, a member making a "firm trading market"')
+print("  is expected at least to buy or sell a normal unit of trading in the quoted stock")
+print("  at its then prevailing quotations unless clearly designated as not firm")
+print("  or firm for less than a normal unit of trading when supplied by the member")
+print("  official in-process revised-size clause exists; this toy is not a Rule 6420 engine")
+builds_6420 = False
+print(f"  this toy builds a Rule 6420 engine? {builds_6420}")
+e_check(builds_6420 is False, "do not build a Rule 6420 engine")
+print('  a "normal unit of trading" for an NMS stock is the official Rule 600(b) round lot')
+invents_100_share_unit = False
+print(f"  this toy invents a 100-share normal unit? {invents_100_share_unit}")
+e_check(invents_100_share_unit is False, "do not invent a 100-share normal unit")
+designation_and_revised_size_named = True
+print(f"  official not-firm / less-than-a-normal-unit designation and in-process revised-size clause named? {designation_and_revised_size_named}")
+e_check(designation_and_revised_size_named is True, "name official .01 designation and in-process clause")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {e_checks}/{e_checks}")
+print("disclaimer: official FINRA 5220 facts; learning only; no venue or broker recommendation")

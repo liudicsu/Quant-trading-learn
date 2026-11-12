@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **33.50 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h + FINRA 5131 旋股与市价订单禁令 0.25h + 褐皮书 2:00 p.m.（按官方理事会日历所印）0.25h + FINRA 5131 翻炒 / 锁定期豁免新闻服务机制 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **33.75 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h + FINRA 5131 旋股与市价订单禁令 0.25h + 褐皮书 2:00 p.m.（按官方理事会日历所印）0.25h + FINRA 5131 翻炒 / 锁定期豁免新闻服务机制 0.25h + Rule 10b-9 全部售出或以条件发售的表述 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -310,6 +310,31 @@ no offering or dealer recommendation
 assertions passed: 29/29
 ```
 
+
+**Rule 10b-9：在《交易法》第 10(b) 条所称范围内，把证券表述为按 “all-or-none” 基础发售或出售，或按任何其他“未售出则退款”基础发售或出售，而官方退款条件并未满足，即构成 “manipulative or deception device or contrivance”（核实于 2026-11-12）。** 已经教过的 Rule 144、Regulation M 和 Rule 14e-1 保持原样。不要改写那些段落。这一节补上官方的 10b-9，避免把 “all-or-none” 或附条件表述当成只是营销用语，或发明规则并未写出的时钟。没有发行、承销商或策略建议。
+
+[17 CFR 240.10b-9(a)](https://www.ecfr.gov/current/title-17/section-240.10b-9)：“It shall constitute a *manipulative or deception device or contrivance,* as used in section 10(b) of the Act, for any person, directly or indirectly, in connection with the offer or sale of any security, to make any representation: (1) To the effect that the security is being offered or sold on an “all-or-none” basis, unless the security is part of an offering or distribution being made on the condition that all or a specified amount of the consideration paid for such security will be promptly refunded to the purchaser unless (i) all of the securities being offered are sold at a specified price within a specified time, and (ii) the total amount due to the seller is received by him by a specified date; or (2) To the effect that the security is being offered or sold on any other basis whereby all or part of the consideration paid for any such security will be refunded to the purchaser if all or some of the securities are not sold, unless the security is part of an offering or distribution being made on the condition that all or a specified part of the consideration paid for such security will be promptly refunded to the purchaser unless (i) a specified number of units of the security are sold at a specified price within a specified time, and (ii) the total amount due to the seller is received by him by a specified date.” 官方 (a) 中的印刷瑕疵是 “manipulative or deception device or contrivance”——按原文引用，不要悄悄改正。官方 (b)：“This rule shall not apply to any offer or sale of securities as to which the seller has a firm commitment from underwriters or others (subject only to customary conditions precedent, including “market outs”) for the purchase of all the securities being offered.” 点名官方 (b) 即可，不要搭建市场退出或包销承诺引擎。不要发明官方文本并未写出的时钟、表格或百分比。
+
+**实验：** `examples/p2/19_rule144_followon_tender_toy.py` 的 N 节（A–M 节的打印与此前相同，包括 Rule 105、14e-1、101/102、14e-5、Rule 104、14e-2、14d-11、14d-10、14e-4、14e-3、14d-2，以及 M 节之后的 **56/56**；全脚本 60 项断言）：
+
+```text
+=== N. Rule 10b-9: all-or-none / contingency-offering representations ===
+10b-9(a): It shall constitute a "manipulative or deception device or contrivance," as used in section 10(b) of the Act,
+  for any person, directly or indirectly, in connection with the offer or sale of any security, to make any representation:
+  (1) that the security is being offered or sold on an "all-or-none" basis, unless the official refund conditions in (a)(1) are met; or
+  (2) that the security is being offered or sold on any other refund-if-not-sold basis, unless the official refund conditions in (a)(2) are met
+official typographical artifact: "manipulative or deception device or contrivance"
+  this toy silently corrects "deception device"? False
+10b-9(b): This rule shall not apply to any offer or sale of securities as to which the seller has a firm commitment
+  from underwriters or others (subject only to customary conditions precedent, including "market outs")
+  for the purchase of all the securities being offered
+  official (b) firm-commitment exception exists; this toy is not that engine
+  this toy builds a market-out or firm-commitment engine? False
+  this toy invents a clock, a form, or a percentage? False
+  this is already-taught Rule 144 or Regulation M? False
+no offering, underwriter, or strategy recommendation
+assertions passed: 60/60
+```
 
 ## Walk-forward 实验
 
@@ -779,6 +804,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 25. 把 5131 旋股当成已经教过的 5130 的同一条禁止，或在官方投行条件满足时，把每一个非受限人士账户都当成可以获配新发行股份；在二级市场开始交易前接受新发行股份的市价订单；搭建投行客户、翻炒或发行人指定引擎，或把已经教过的锁定期当成 5131 的替代。
 26. 为褐皮书发明时区，或把 2026 年 1 月日历上 FOMC 声明的 “2 p.m. EST” 抄到只印着 “2:00 p.m.” 的褐皮书卡片上；为 4 月 15 日发明 2:00 p.m.；把褐皮书当成上午 8:30 的 PFEI，或当成可以在当天 09:30 开盘成交；为 G.19 发明一个钟点。
 27. 把翻炒 / 锁定期豁免新闻服务机制当成对已经教过的旋股或市价订单禁令的改写；在没有全团惩罚性出价时仍收回翻炒后的销售佣金；把锁定期解除当成解除当日才出现的意外，而不看至少两个营业日前的主要新闻服务宣布。
+28. 把 “all-or-none” 或其他“未售出则退款”表述当成只是营销用语；悄悄改正官方印刷瑕疵 “manipulative or deception device or contrivance”；发明 Rule 10b-9 并未写出的时钟、表格或百分比；把 10b-9 压进已经教过的 Rule 144、Regulation M 或 Rule 14e-1；或漏掉官方 (b) 的包销承诺例外。
 
 ## 练习（与任务清单 1:1）
 
@@ -802,6 +828,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 16. **ex-5131** — 运行 `12_event_time_ipo_toy.py` 的 G 段；说明旋股是不是与 5130 同一条禁止，在官方投行条件满足时，上市公司高管的账户是不是自动可以获配，以及会员能不能在二级市场开始交易前接受新发行股份的市价订单；**完成标准**：旋股是另一条禁止，高管并非自动可获配，并且不得接受该市价订单，与输出一致。
 17. **ex-beigebook** — 运行 `12_event_time_ipo_toy.py` 的 H 节；写出官方理事会日历为已核对的 2026 年褐皮书日期印着什么时间，这个发布能不能在当天 09:30 开盘成交，以及本玩具有没有为褐皮书发明时区或为 4 月 15 日发明时间；**完成标准**：印着 2:00 p.m.，不能在当天开盘成交，没有发明时区，也没有为 4 月 15 日发明时间，与输出一致。
 18. **ex-5131flip** — 运行同一脚本的 I 节；写出 “Flipped” 的定义，说明没有全团惩罚性出价时可否收回销售佣金，以及锁定期解除或豁免前必须提前多久通过主要新闻服务宣布；**完成标准**：发行日后 30 天内的初次卖出；没有全团惩罚性出价不得收回；至少提前两个营业日宣布，与输出一致。
+19. **ex-10b9** — 运行 `19_rule144_followon_tender_toy.py` 的 N 节；说明 10b-9 禁止什么，引用官方印刷瑕疵，并说明官方 (b) 是否存在，以及这是不是已经教过的 Rule 144 或 Regulation M；**完成标准**：除非满足官方退款条件，否则禁止 “all-or-none” 或其他“未售出则退款”表述；按原文引用 “manipulative or deception device or contrivance”；官方 (b) 包销承诺例外存在，不要搭建该引擎；没有发明时钟、表格或百分比；这不是已经教过的 Rule 144 或 Regulation M，与输出一致。
 
 ## 测验
 
@@ -838,6 +865,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-5131" question="根据 FINRA Rule 5131，什么是旋股（spinning）？会员能不能在二级市场开始交易前，接受新发行股份的市价订单？" options={["旋股就是已经教过的 5130，所以每一个非受限人士账户都可以获配新发行股份", "会员可以在二级市场开始交易前接受新发行股份的市价订单，而且 5131(a) 的利益交换和旋股是同一款", "旋股是不同于 5130 的禁止：如果满足官方投行条件 (A)/(B)/(C)，会员不得向上市公司或被覆盖非公众公司的执行高管或董事（或其重大供养的人）拥有实益权益的账户配售新发行股份。会员不得在二级市场开始交易前，接受在二级市场购买新发行股份的市价订单。“新发行股份”与 Rule 5130(i)(9) 含义相同。官方的 25% / 5130(c) / 补充材料 .01 发行人指定例外存在；本课不搭建该引擎。5131(a) 的利益交换是另一款官方段落", "已经教过的锁定期可以替代 5131，所以开盘前的市价订单是在二级市场开始交易前买入这次 IPO 的办法"]} answer={2} explanation="FINRA 5131(b)(1) 是不同于已经教过的 5130 的配售禁止。5131(d)(4) 禁止会员在二级市场开始交易前接受新发行股份的市价订单。“新发行股份”与 Rule 5130(i)(9) 含义相同。点名官方例外即可，不要搭建该引擎。5131(a) 是另一款官方段落。" />
 <Quiz id="bt-beigebook" question="官方理事会月度日历，为已打开页面的 2026 年褐皮书发布印着什么时间？2:00 p.m. 的发布能不能在当天 09:30 开盘成交？" options={["官方发布页印着美东时间上午 8:30，所以褐皮书可以像 PFEI 一样在当天 09:30 开盘成交", "官方日历为褐皮书印着 “2:00 p.m. EST”，因为 2026 年 1 月日历为 FOMC 声明印着 “2 p.m. EST”，而且 4 月 15 日也是 2:00 p.m.", "官方理事会月度日历为 2026 年 1 月 14 日、3 月 4 日、6 月 3 日、7 月 15 日、9 月 2 日、10 月 14 日和 11 月 25 日印着 2:00 p.m.，这些褐皮书事件卡片没有时区。应教 “2:00 p.m. as printed on the official Board calendar”。不要发明 “Eastern”、“ET”、“EST” 或 “EDT”，也不要把 1 月日历上 FOMC 的 “2 p.m. EST” 通知抄到褐皮书上。2026 年 4 月的月度日历页面当时无法打开；不要为 4 月 15 日发明 2:00 p.m.。2:00 p.m. 的发布不能在当天 09:30 开盘成交。不要为 G.19 发明一个钟点", "本课为 G.19 发明 2:00 p.m. 的钟点，并为褐皮书发明第一个星期五规则"]} answer={2} explanation="官方理事会月度日历为已核对的 2026 年褐皮书日期印着 2:00 p.m.，卡片上没有时区。不要发明时区，不要把 FOMC 的 “2 p.m. EST” 抄到褐皮书上，也不要为 4 月 15 日发明时间。2:00 p.m. 的发布不能在当天 09:30 开盘成交。不要为 G.19 发明钟点。" />
 <Quiz id="bt-5131flip" question="根据 FINRA 5131，“Flipped” 是什么？会员在翻炒后何时可以收回销售佣金？锁定期解除或豁免前必须发生什么？" options={["这是对已经教过的旋股或 5131(d)(4) 市价订单禁令的改写，而且每一个锁定期都正好在上市后 180 天结束", "会员在任何翻炒后都可以收回销售佣金，而且锁定期可以在没有新闻服务宣布的情况下解除", "“Flipped” 指发行日 30 天之后的任何卖出，而且本课搭建了惩罚性出价、直系家庭或注册说明书引擎", "“Flipped” 指在发行日后 30 天内，把本次发行中买入的新发行股份初次卖出。除非主承销商已对整个承销团施加惩罚性出价，会员不得收回（或试图收回）因销售随后被翻炒的新发行股份而支付的佣金或信用。在锁定期或其他转让限制解除或豁免前至少两个营业日，账簿管理人通知发行人，并通过主要新闻服务宣布即将解除或豁免。官方 (d)(2) 例外和补充材料 .03 是存在的（包括由另一会员或发行人宣布，以及在二次发行相关、已公开提交的注册说明书中披露）；本课不搭建惩罚性出价、直系家庭或注册说明书引擎。这不是对已经教过的旋股或市价订单禁令的改写"]} answer={3} explanation="FINRA 5131(e)(4) 把 “Flipped” 定义为发行日后 30 天内的初次卖出。5131(c)(1) 禁止在没有全团惩罚性出价时收回佣金。5131(d)(2)(B) 要求至少提前两个营业日通过主要新闻服务宣布。点名官方例外即可，不要搭建这些引擎。这不是对旋股或市价订单禁令的改写。" />
+<Quiz id="bt-10b9" question="Rule 10b-9 禁止什么？官方印刷瑕疵应如何引用？官方 (b) 是否存在？" options={["悄悄把官方用语改成 “manipulative or deceptive device”；发明时钟、表格或百分比；这就是已经教过的 Rule 144 或 Regulation M", "官方 (b) 并不存在，而且每一项全部售出表述都自动是合法的营销用语", "在《交易法》第 10(b) 条所称范围内，把证券表述为按 “all-or-none” 基础发售或出售，或按任何其他“未售出则退款”基础发售或出售，而官方 (a)(1) 或 (a)(2) 的退款条件并未满足，即构成 “manipulative or deception device or contrivance”。按原文引用官方印刷瑕疵 “manipulative or deception device or contrivance”，不要悄悄改正。官方 (a)(1)：全部售出，除非该发售以如下条件进行——将向购买人立即退还全部或指定金额的对价，除非 (i) 全部待售证券在指定时间内按指定价格售出，并且 (ii) 卖方应收的全部金额在指定日期前由其收到。官方 (a)(2) 是另一种“未售出则退款”基础，对应指定数量的单位和指定部分的对价。官方 (b)：若卖方已从承销商或其他人处获得购买全部待售证券的包销承诺（仅受包括 “market outs” 在内的惯常先决条件约束），则本规则不适用；本课不搭建该引擎。不要发明时钟、表格或百分比。这不是已经教过的 Rule 144、Regulation M 或 Rule 14e-1", "Rule 10b-9 为附条件发售规定了申报截止日和百分比上限"]} answer={2} explanation="17 CFR 240.10b-9(a) 禁止在官方退款条件未满足时作出 “all-or-none” 或其他“未售出则退款”表述。按原文引用官方印刷瑕疵 “manipulative or deception device or contrivance”，不要悄悄改正。官方 (b) 包销承诺例外存在；本课不搭建该引擎。不要发明时钟、表格或百分比，也不要把 10b-9 压进已经教过的 Rule 144、Regulation M 或 Rule 14e-1。" />
 
 ## 完成标准
 
@@ -849,6 +877,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 enrich23（核实于 2026-11-12）：[FINRA Rule 5130](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5130)；[17 CFR 242.100](https://www.law.cornell.edu/cfr/text/17/242.100)；[17 CFR 242.104](https://www.ecfr.gov/current/title-17/section-242.104)；[Form 20-F](https://www.sec.gov/files/form20-f.pdf) Item 9.B.5（超额配售权或“绿鞋”）。不推荐任何产品、经纪商、发行或交易商。
 enrich24（核实于 2026-11-12）：[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(b) 的旋股；5131(d)(4) 的市价订单禁令；“新发行股份”与 5130(i)(9) 含义相同）。不推荐任何产品、经纪商或配售安排。
 enrich26（核实于 2026-11-12）：美联储褐皮书发布页 [beige-book-default](https://www.federalreserve.gov/monetarypolicy/publications/beige-book-default.htm)（每年八次；2026 年日期列表，没有钟点）；官方理事会月度日历为已打开页面的 2026 年褐皮书条目印着 2:00 p.m.，卡片上没有时区；[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(c) 翻炒；5131(e)(4)；5131(d)(2)(B) 与补充材料 .03 的锁定期豁免新闻服务机制）。不发明时区，不为 4 月 15 日发明时间，也不发明宏观交易策略。不推荐任何产品、经纪商或配售安排。
+enrich28（核实于 2026-11-12）：[17 CFR 240.10b-9](https://www.ecfr.gov/current/title-17/section-240.10b-9)（全部售出或以条件发售的表述；官方印刷瑕疵 “manipulative or deception device or contrivance” 按原文引用，不悄悄改正；仅点名官方 (b) 包销承诺例外）。没有发行、承销商或策略建议。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  

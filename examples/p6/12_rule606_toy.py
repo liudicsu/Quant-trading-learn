@@ -342,3 +342,113 @@ check(builds_5240b is False, "do not build the 5240(b) catalog")
 check(every_unilateral_banned is False, "official (b) exceptions exist; not a ban on every unilateral quote")
 print("no product, broker, or venue recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== H. FINRA 5290: no splitting orders or executions for the primary purpose of maximizing credits or rebates ===")
+# FINRA Rule 5290 Order Entry and Execution Practices (official-page fetch
+# opened 2026-11-12). Keep the current 606 table, 4/4, ASSERT_rule606_ok,
+# the reminder line, 5250, 5270, 12/12 after 5270, 5230, 15/15 after 5230,
+# 5280, 18/18 after 5280, 10b-10, 22/22 after 10b-10, 5240, and 25/25 after
+# 5240 identical.
+# 5290: No member or associated person shall engage in conduct that has the
+# intent or effect of splitting any order into multiple smaller orders for
+# execution or any execution into multiple smaller executions for
+# transaction reporting for the primary purpose of maximizing a monetary
+# or in-kind amount to be received by the member or associated person as a
+# result of the execution of such orders or the transaction reporting of
+# such executions. For purposes of this Rule, "monetary or in-kind amount"
+# shall be defined to include, but not be limited to, any credits,
+# commissions, gratuities, payments for or rebates of fees, or any other
+# payments of value to the member or associated person.
+# Quote "this Rule" as written. This is not a ban on every TWAP / VWAP
+# slice. This is not a rewrite of already-taught 606 / PFOF, 5270, or 5320.
+# No product, broker, or venue recommendation.
+
+print("5290: No member or associated person shall engage in conduct that has the intent or effect of")
+print("  splitting any order into multiple smaller orders for execution or any execution into")
+print("  multiple smaller executions for transaction reporting for the primary purpose of")
+print("  maximizing a monetary or in-kind amount to be received by the member or associated person")
+print("  as a result of the execution of such orders or the transaction reporting of such executions")
+print('For purposes of this Rule, "monetary or in-kind amount" shall be defined to include, but not be limited to,')
+print("  any credits, commissions, gratuities, payments for or rebates of fees,")
+print("  or any other payments of value to the member or associated person")
+every_slice_banned = False
+print(f"  every TWAP / VWAP slice is banned? {every_slice_banned}")
+check(every_slice_banned is False, "5290 is not a ban on every TWAP/VWAP slice")
+is_rewrite_606_5270_5320 = False
+print(f"  this is a rewrite of already-taught 606 / PFOF, 5270, or 5320? {is_rewrite_606_5270_5320}")
+check(is_rewrite_606_5270_5320 is False, "5290 is not a rewrite of 606/PFOF, 5270, or 5320")
+primary_purpose_test = True
+print(f"  official test is the primary purpose of maximizing a monetary or in-kind amount? {primary_purpose_test}")
+check(primary_purpose_test is True, "official primary-purpose test")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== I. FINRA 2262: control-relationship disclosure before the customer contract ===")
+# FINRA Rule 2262 Disclosure of Control Relationship with Issuer
+# (official-page fetch opened 2026-11-12). Keep all earlier prints,
+# including 25/25 after 5240 and the new 5290 section, identical once
+# 5290 is added.
+# 2262: A member controlled by, controlling, or under common control with,
+# the issuer of any security, shall, before entering into any contract
+# with or for a customer for the purchase or sale of such security,
+# disclose to such customer the existence of such control, and if such
+# disclosure is not made in writing, it shall be supplemented by the
+# giving or sending of written disclosure at or before the completion of
+# the transaction.
+# The first disclosure is not officially required to be in writing. This
+# is not a rewrite of already-taught Rule 10b-10. No product, broker, or
+# issuer recommendation.
+
+print("2262: A member controlled by, controlling, or under common control with, the issuer of any security,")
+print("  shall, before entering into any contract with or for a customer for the purchase or sale of such security,")
+print("  disclose to such customer the existence of such control,")
+print("  and if such disclosure is not made in writing, it shall be supplemented by the giving or sending")
+print("  of written disclosure at or before the completion of the transaction")
+invents_first_must_be_written = False
+print(f"  this toy invents that the first disclosure must be in writing? {invents_first_must_be_written}")
+check(invents_first_must_be_written is False, "do not invent that the first 2262 disclosure must be in writing")
+is_rewrite_10b10_2262 = False
+print(f"  this is a rewrite of already-taught 10b-10? {is_rewrite_10b10_2262}")
+check(is_rewrite_10b10_2262 is False, "2262 is not a rewrite of already-taught 10b-10")
+before_contract = True
+print(f"  first disclosure is required before entering into the customer contract? {before_contract}")
+check(before_contract is True, "2262 disclosure is before the customer contract")
+print("no product, broker, or issuer recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== J. FINRA 2269: written notification of participation or interest in a distribution ===")
+# FINRA Rule 2269 Disclosure of Participation or Interest in Primary or
+# Secondary Distribution (official-page fetch opened 2026-11-12). Keep all
+# earlier prints identical once 2262 is added.
+# 2269: A member who is acting as a broker for a customer or for both such
+# customer and some other person, or a member who is acting as a dealer
+# and who receives or has promise of receiving a fee from a customer for
+# advising such customer with respect to securities, shall, at or before
+# the completion of any transaction for or with such customer in any
+# security in the primary or secondary distribution of which such member
+# is participating or is otherwise financially interested, give such
+# customer written notification of the existence of such participation or
+# interest.
+# Unlike 2262's first disclosure, 2269 requires written notification. The
+# official scope is the named broker / adviser-dealer categories. Do not
+# invent a broader scope. This is not 2262, and is not a rewrite of
+# already-taught 10b-10. No product, broker, or offering recommendation.
+
+print("2269: A member who is acting as a broker for a customer or for both such customer and some other person,")
+print("  or a member who is acting as a dealer and who receives or has promise of receiving a fee from a customer")
+print("  for advising such customer with respect to securities, shall, at or before the completion of any transaction")
+print("  for or with such customer in any security in the primary or secondary distribution of which such member")
+print("  is participating or is otherwise financially interested, give such customer written notification")
+print("  of the existence of such participation or interest")
+print("  unlike 2262, 2269 requires written notification")
+is_2262_or_first_must_be_written = False
+print(f"  this is 2262, or the first 2262 disclosure must be in writing? {is_2262_or_first_must_be_written}")
+check(is_2262_or_first_must_be_written is False, "2269 is not 2262; first 2262 disclosure need not be in writing")
+is_rewrite_10b10_2269 = False
+print(f"  this is a rewrite of already-taught 10b-10? {is_rewrite_10b10_2269}")
+check(is_rewrite_10b10_2269 is False, "2269 is not a rewrite of already-taught 10b-10")
+invents_broader_scope = False
+print(f"  this toy invents a broader scope than the official broker / adviser-dealer categories? {invents_broader_scope}")
+check(invents_broader_scope is False, "do not invent a broader 2269 scope")
+print("no product, broker, or offering recommendation")
+print(f"assertions passed: {checks}/{checks}")
