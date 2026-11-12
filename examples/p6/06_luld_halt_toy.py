@@ -194,3 +194,68 @@ print("do not treat every Space / Reason Not Available row as no halt")
 print("do not build a Nasdaq Halt Cross or NOII product catalog")
 print(f"assertions passed: {h_checks}/{h_checks}")
 print("disclaimer: official Nasdaq halt-code map; not a Halt Cross engine; learning only; no venue recommendation")
+
+print("=== 6. FINRA 5260: no transacting or quoting during a halt ===")
+# FINRA Rule 5260 Prohibition on Transactions, Publication of Quotations,
+# or Publication of Indications of Interest During Trading Halts (official
+# rule page opened 2026-11-12). Keep sections 1-5 identical, including
+# 7/7 in section 1b, 4/4 after Section VII reopen clocks, and 6/6 after
+# the Nasdaq halt-code map.
+# 5260 is a member-level prohibition on transacting or publishing a
+# quotation or indication of interest in a security as to which a trading
+# halt is currently in effect, except as permitted under the LULD Plan.
+# 5260(a): No member or person associated with a member shall, directly
+# or indirectly, effect any transaction or publish a quotation, a priced
+# bid and/or offer, an unpriced indication of interest (including "bid
+# wanted" and "offer wanted" and name only indications), or a bid or
+# offer accompanied by a modifier to reflect unsolicited customer
+# interest, in any security as to which a trading halt is currently in
+# effect, except as permitted under the Regulation NMS Plan to Address
+# Extraordinary Market Volatility. If FINRA closes trading in a security
+# pursuant to its authority under Rule 6120(a)(3), members would not be
+# prohibited from trading through other markets for which trading is not
+# halted.
+# Official (b) futures provisions exist; this toy is not that engine.
+# This is not a rewrite of already-taught halt codes, LULD reopen clocks,
+# MWCB, or SEC suspensions. Do not teach the Nasdaq T5 "10% in five
+# minutes" sentence as current LULD. No product, broker, or venue
+# recommendation.
+
+s6_checks = 0
+
+
+def s6_check(cond, label):
+    global s6_checks
+    assert cond, label
+    s6_checks += 1
+
+
+print("5260 is a member-level prohibition on transacting or publishing a quotation or indication of interest")
+print("  in a security as to which a trading halt is currently in effect, except as permitted under the LULD Plan")
+print('5260(a): No member or person associated with a member shall, directly or indirectly,')
+print('  effect any transaction or publish a quotation, a priced bid and/or offer,')
+print('  an unpriced indication of interest (including "bid wanted" and "offer wanted" and name only indications),')
+print("  or a bid or offer accompanied by a modifier to reflect unsolicited customer interest,")
+print("  in any security as to which a trading halt is currently in effect,")
+print("  except as permitted under the Regulation NMS Plan to Address Extraordinary Market Volatility")
+print("If FINRA closes trading in a security pursuant to its authority under Rule 6120(a)(3),")
+print("  members would not be prohibited from trading through other markets for which trading is not halted")
+finra_only_halts_all = False
+print(f"  a FINRA-only 6120(a)(3) close halts every other market? {finra_only_halts_all}")
+s6_check(finra_only_halts_all is False, "6120(a)(3) close does not halt other markets")
+luld_exception_exists = True
+print(f"  official LULD Plan exception exists? {luld_exception_exists}")
+s6_check(luld_exception_exists is True, "do not drop the official LULD Plan exception")
+print("official (b) futures provisions exist; this toy is not that engine")
+builds_5260b = False
+is_rewrite_halts = False
+teaches_t5_as_luld = False
+print(f"  this toy builds a futures or Rule 6120 engine? {builds_5260b}")
+print(f"  this is a rewrite of already-taught halt codes or LULD reopen clocks? {is_rewrite_halts}")
+print(f'  this toy teaches the Nasdaq T5 "10% in five minutes" sentence as current LULD? {teaches_t5_as_luld}')
+s6_check(builds_5260b is False, "do not build official (b) or 6120 engines")
+s6_check(is_rewrite_halts is False, "5260 is not a rewrite of halt codes or LULD clocks")
+s6_check(teaches_t5_as_luld is False, "do not teach T5 as current LULD")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {s6_checks}/{s6_checks}")
+print("disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code or LULD rewrite; learning only; no venue recommendation")

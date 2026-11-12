@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **16.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **17.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -309,6 +309,65 @@ no product, broker, or venue recommendation
 assertions passed: 18/18
 ```
 
+**Rule 10b-10：经纪商或交易商一般不得为客户账户促成证券交易，或诱使客户买入或卖出，除非在该笔交易完成时或完成前，向该客户发出或送达披露官方 (a) 款信息的书面通知（核实于 2026-11-12）。** 已经教过的 10b-10(d)(8) 只是 PFOF 定义，保持原样。已经教过的 Rule 606 / 605，以及 FINRA 5230 / 5250 / 5270 / 5280 / 5320 各框，都不要改写。这一节补上官方确认时钟，避免仅仅因为成交已经打印，就把该笔交易当成记录上已经完成，发明 T+1 或成交日确认期限，或把这一规则压进已经教过的 Rule 606 / PFOF。没有产品、券商或交易场所建议。
+
+[17 CFR 240.10b-10](https://www.ecfr.gov/current/title-17/section-240.10b-10) Preliminary Note：“This section requires broker-dealers to disclose specified information in writing to customers at or before completion of a transaction.” 10b-10(a)：“It shall be unlawful for any broker or dealer to effect for or with an account of a customer any transaction in, or to induce the purchase or sale by such customer of, any security (other than U.S. Savings Bonds or municipal securities) unless such broker or dealer, at or before completion of such transaction, gives or sends to such customer written notification disclosing:” 官方 (a)(1)–(8) 是一份披露目录；点名它存在即可，不要作为本项来搭建。美国储蓄债券和市政证券被排除在 (a) 款之外；点名这一排除即可，不要搭建那些引擎。10b-10(c)：“A broker or dealer shall give or send to a customer information requested pursuant to this rule within 5 business days of receipt of the request: Provided, however, That in the case of information pertaining to a transaction effected more than 30 days prior to receipt of the request, the information shall be given or sent to the customer within 15 business days.” 10b-10(d)(2)：“Completion of the transaction shall have the meaning provided in rule 15c1-1 under the Act.” 官方 (b) 替代定期报告和官方 (e) 证券期货产品规定是存在的；点名即可，不要搭建这些引擎，也不要搭建 Rule 15c1-1 “完成”引擎。不要发明 T+1 或成交日确认时钟。如果引用 (a)(8)，官方印刷瑕疵是 “Provided, however, that this paragraph (a)(9) shall not apply”——不要悄悄改掉 “this paragraph (a)(9)”。不要改写已经教过的 10b-10(d)(8) PFOF 用语。
+
+**实验：** 同一脚本的 F 节（当前的 606 表、**4/4**、`ASSERT_rule606_ok`、提示行、5250 节、5270 节、5270 之后的 **12/12**、5230 节、5230 之后的 **15/15**、5280 节，以及 5280 之后的 **18/18**，仍与此前相同；F 节之后为 22/22）：
+
+```text
+=== F. Rule 10b-10: written notification at or before completion ===
+10b-10 requires written notification at or before completion of a customer transaction
+Preliminary Note: This section requires broker-dealers to disclose specified information
+  in writing to customers at or before completion of a transaction
+10b-10(a): It shall be unlawful for any broker or dealer to effect for or with an account of a customer
+  any transaction in, or to induce the purchase or sale by such customer of, any security
+  (other than U.S. Savings Bonds or municipal securities) unless such broker or dealer,
+  at or before completion of such transaction, gives or sends to such customer written notification disclosing:
+  official (a)(1)-(8) disclosure catalog exists; this toy does not build it
+  this is already-taught 10b-10(d)(8) PFOF? False
+10b-10(c): a broker or dealer shall give or send to a customer information requested pursuant to this rule
+  within 5 business days of receipt of the request; Provided, however, That in the case of information
+  pertaining to a transaction effected more than 30 days prior to receipt of the request,
+  the information shall be given or sent to the customer within 15 business days
+10b-10(d)(2): Completion of the transaction shall have the meaning provided in rule 15c1-1 under the Act
+  this toy invents a T+1 confirmation clock? False
+  this toy builds a Rule 15c1-1 completion engine? False
+official (b) alternative periodic reporting and official (e) security-futures product provisions exist; this toy is not that engine
+official typographical artifact in (a)(8): "Provided, however, that this paragraph (a)(9) shall not apply"
+  this toy silently corrects "this paragraph (a)(9)"? False
+no product, broker, or venue recommendation
+assertions passed: 22/22
+```
+
+**FINRA 5240：反胁迫 / 协调是与已经教过的 FINRA 5230、5250、5270、5280 和 5320 不同的禁止：会员不得与他人协调价格、成交或成交报告，不得指示或请求另一会员更改价格，也不得威胁、骚扰、胁迫、恐吓或以其他方式试图不正当影响另一会员或市场参与者（核实于 2026-11-12）。** 那些已经教过的规则保持原样。这一节补上官方的 5240，避免把 5230 或 5280 当成唯一的“影响市场”规则，或把每一笔单边报价都当成协调。没有产品、券商或交易场所建议。
+
+[FINRA Rule 5240(a)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5240)：任何会员或与会员相关联的人，不得“(1) coordinate the prices (including quotations), trades or trade reports of such member with any other member or person associated with a member, or any other person; (2) direct or request another member to alter a price (including a quotation); or (3) engage, directly or indirectly, in any conduct that threatens, harasses, coerces, intimidates or otherwise attempts improperly to influence another member, a person associated with a member, or any other person.” 这包括但不限于试图影响另一会员或关联人士调整或维持价格或报价，“or refusals to trade or other conduct that retaliates against or discourages the competitive activities of another market maker or market participant.” 官方 (b)，前提是该行为在其他方面符合所有适用法律，并不限制会员或关联人士采取官方 (b)(1)–(7) 的单边行动（自行设定买卖报价、价格和数量；自行设定做市价差、报价增量或数量；为探询或协商买卖而沟通自己的价格；为聘用或受聘为代理人而沟通自己的价格；在联邦证券法允许的范围内参与承销；就将与哪些做市商交易及交易条件作出单边决定，除非为 (a) 所禁止；把订单交给另一会员处理）。点名官方 (b) 例外存在即可，不要把该目录作为本项来搭建。不要把 5240 写成禁止每一笔单边报价，或禁止每一笔交给另一会员处理的订单。不要改写已经教过的 5230、5250、5270、5280、5320 或 PFOF / Rule 606。
+
+**实验：** 同一脚本在新的 10b-10 节之后的 G 节（现有的 606、5250、5270、5230 和 5280 打印，包括 5280 之后的 **18/18**，以及新的 10b-10 节，一旦加入，仍与此前相同，包括 F 节后的 22/22；全脚本 25 项断言）：
+
+```text
+=== G. FINRA 5240: anti-intimidation / coordination ===
+5240 is a different prohibition from already-taught 5230, 5250, 5270, 5280, and 5320
+5240(a): no member or person associated with a member shall
+  (1) coordinate the prices (including quotations), trades or trade reports of such member
+  with any other member or person associated with a member, or any other person;
+  (2) direct or request another member to alter a price (including a quotation); or
+  (3) engage, directly or indirectly, in any conduct that threatens, harasses, coerces, intimidates
+  or otherwise attempts improperly to influence another member, a person associated with a member,
+  or any other person
+This includes, but is not limited to, any attempt to influence another member or associated person
+  to adjust or maintain a price or quotation, or refusals to trade or other conduct that retaliates
+  against or discourages the competitive activities of another market maker or market participant
+  this is already-taught 5230, 5250, 5270, 5280, or 5320? False
+official (b) unilateral-conduct exceptions exist, provided the conduct is otherwise in compliance with all applicable law;
+  this toy is not that engine
+  this toy builds the official (b)(1)-(7) catalog? False
+  every unilateral quote is banned? False
+no product, broker, or venue recommendation
+assertions passed: 25/25
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -326,6 +385,8 @@ assertions passed: 18/18
 13. 把 5270 当成已经教过的 5320；把 10,000 股当成硬性下限；把大宗拆成非大宗部分就当成不再是大宗；或把大宗的一部分成交打印，当成整笔大宗已经“公开可得”。
 14. 把 5230 当成已经教过的 5250 或 PFOF / Rule 606 的改写；把每一笔付费通信都写成被禁止，包括可清楚识别的付费广告，或 Rule 2241 所定义的研究报告。
 15. 把 5280 当成已经教过的 5270 或 5320；把研究报告已经发表当成这条规则唯一可能起作用的时点；或搭建 Rule 2241 “research report” 定义引擎。
+16. 发明 T+1 或交易日确认时钟；把 10b-10(a) 的书面确认压进已经教过的 10b-10(d)(8) PFOF；漏掉 (c) 的五个营业日（交易已超过 30 天则为十五个营业日）时钟；或如果引用 10b-10(a)(8)，悄悄改掉官方印刷瑕疵 “this paragraph (a)(9) shall not apply”。
+17. 把 5240 当成已经教过的 5230、5250、5270、5280 或 5320；写成禁止每一笔单边报价，漏掉官方 (b) 单边例外；或搭建 (b)(1)–(7) 目录引擎。
 
 
 ## 练习（1:1）
@@ -343,6 +404,8 @@ assertions passed: 18/18
 10. **ex-5270** — 运行同一脚本的 C 节；说明 5270 是不是已经教过的 5320，10,000 股是不是硬性下限，以及打印出大宗的一部分是否使整笔大宗公开可得；**完成标准**：这是不同的禁止，10,000 股不是硬性下限，部分打印并不使整笔大宗公开可得，与输出一致。
 11. **ex-5230** — 运行同一脚本的 D 节；说明会员可否为影响证券市价的出版物给予有价值之物，这是不是已经教过的 5250，以及是不是每一笔付费通信都被禁止；**完成标准**：一般不得为影响或奖励此类出版物而给予有价值之物，这与已经教过的 5250 不是同一条禁止，并且官方 (b) 例外存在，与输出一致。
 12. **ex-5280** — 运行同一脚本的 E 节；说明 5280 是不是已经教过的 5270 或 5320，以及会员可否基于对研究报告内容或时间的非公开提前知悉调整库存头寸；**完成标准**：这是不同的禁止，不得基于该提前知悉建立、增加、减少或了结库存头寸，与输出一致。
+13. **ex-10b10** — 运行同一脚本的 F 节；说明书面确认应在何时发出，客户要求额外信息时的官方时钟是什么，以及这是不是已经教过的 10b-10(d)(8) PFOF；**完成标准**：在完成时或完成前发出书面通知；要求的信息为五个营业日（交易已超过 30 天则为十五个营业日）；不是 T+1 或交易日确认时钟，也不是已经教过的 (d)(8) PFOF，与输出一致。
+14. **ex-5240** — 运行同一脚本的 G 节；说明 5240 是不是已经教过的 5230、5250、5270、5280 或 5320，禁止哪些协调或恐吓行为，以及是否禁止每一笔单边报价；**完成标准**：这是不同的禁止；不得协调价格、交易或成交报告，不得指示其他会员更改价格，也不得恐吓或不当影响；官方 (b) 单边例外存在，不是对每一笔单边报价的禁止，与输出一致。
 
 ## 测验
 
@@ -367,6 +430,8 @@ assertions passed: 18/18
 <Quiz id="es-5270" question="FINRA 5270 一般禁止什么？它和已经教过的 5320 是什么关系？10,000 股应当如何理解？" options={["5270 就是已经教过的 5320：持有尚未成交的客户股票订单时不得同一方向抢先", "在股票里，10,000 股是硬性下限；少于 10,000 股就不可能是大宗，把一笔大宗拆成非大宗部分就不再是大宗", "只要打印出大宗的一部分，整笔大宗就已经“公开可得”", "5270 与已经教过的 5320 是不同的禁止：会员掌握关于即将进行的大宗交易的重大、非公开市场信息时，不得在该信息已公开可得或已过时、失效之前，促成该证券或相关金融工具的订单成交。补充材料 .03：在股票里，10,000 股或以上一般视为大宗，但少于 10,000 股也可能构成大宗；若整笔交易可能对市场有重大影响，拆成非大宗部分并不改变其性质。补充材料 .02：在整笔大宗完成并公开报告之前，公开可得这一要求并未满足。官方补充材料 .04 例外是存在的；本课不搭建信息隔离 / 同意 / 交易所一侧引擎"]} answer={3} explanation="FINRA 5270(a) 针对即将进行的大宗交易的重大、非公开市场信息，与已经教过的 5320 不是同一条规则。10,000 股一般视为大宗，但不是硬性下限。补充材料 .02：在整笔大宗完成并公开报告之前，公开可得并不满足。" />
 <Quiz id="es-5230" question="FINRA 5230 一般禁止什么？它和已经教过的 FINRA 5250 是同一条规则吗？" options={["5230 就是已经教过的 5250：发行人付给做市商的钱，和为影响出版物而付款是同一条禁止", "每一笔付费通信都被禁止，包括可清楚识别为付费广告的通信，以及 Rule 2241 所定义的研究报告", "除 (b) 款另有规定外，会员不得直接或间接给予、允许给予或提议给予任何人任何有价值之物，以影响或奖励该人在任何电子或其他公共媒体上发表或传播意在影响任何证券市场价格的内容。官方 (b) 例外是：(1) 可清楚识别为付费广告的通信；(2) 按照 1933 年《证券法》第 17(b) 条披露已收到报酬及其金额的通信；以及 (3) Rule 2241 所定义的研究报告。这与已经教过的 5250，以及已经教过的 PFOF / Rule 606，都是不同的禁止。本课不搭建第 17(b) 条或 Rule 2241 引擎", "展示出来的报价就证明会员为意在影响市价的出版物付了钱"]} answer={2} explanation="FINRA 5230(a) 禁止为影响或奖励意在影响证券市价的出版物而给予有价值之物。这不是已经教过的 5250，也不是 PFOF / 606。官方 (b) 例外包括付费广告、第 17(b) 条披露，以及 Rule 2241 研究报告；本课不搭建这些引擎。" />
 <Quiz id="es-5280" question="FINRA 5280 一般禁止什么？它和已经教过的 5270、5320 是什么关系？" options={["5280 就是已经教过的 5270：对即将进行的大宗交易抢先", "5280 就是已经教过的 5320：持有尚未成交的客户股票订单时不得同一方向抢先", "研究报告已经发表，是 5280 唯一可能起作用的时点，而且本课搭建了 Rule 2241 的 “research report” 定义引擎", "5280 与已经教过的 5270 和 5320 是不同的禁止：会员不得基于对某证券研究报告内容或发布时间的非公开提前知悉，在该证券或该证券衍生品上建立、增加、减少或了结库存头寸。5280(b) 要求建立合理设计的政策和程序，以限制或约束研究部门人员（或知悉研究报告内容或时间的其他人）与交易部门人员之间的信息流动。官方 5280(b) 程序是存在的；本课不搭建信息隔离或 Rule 2241 定义引擎"]} answer={3} explanation="FINRA 5280(a) 禁止基于对研究报告内容或时间的非公开提前知悉调整库存头寸。这不是已经教过的 5270，也不是已经教过的 5320。5280(b) 要求限制信息流动的程序；本课不搭建该引擎。" />
+<Quiz id="es-10b10" question="根据 Rule 10b-10，券商应在何时向客户发出书面确认？客户要求额外信息时的官方时钟是什么？" options={["官方时钟是 T+1，或必须在交易日结束前发出确认；这只是已经教过的 10b-10(d)(8) PFOF 的改写", "书面确认可以在完成后任何时候发出；客户要求的信息没有期限", "券商应在完成时或完成前向客户发出书面通知。根据本规则被要求的信息，一般应在收到要求后五个营业日内发出或送达；如果该笔交易已超过 30 天，则为十五个营业日。不要发明 T+1 或交易日确认时钟。这不是已经教过的 10b-10(d)(8) PFOF。官方 10b-10(a) 目录、(b) 和 (e) 例外是存在的；本课不搭建这些引擎。15c1-1 被 (d)(2) 点名为“完成”的定义，本课不搭建该定义引擎", "只要交易最终结算了，书面确认就不是必须的"]} answer={2} explanation="17 CFR 240.10b-10(a) 要求在完成时或完成前发出书面通知。(c) 把客户要求的额外信息定在五个营业日（交易已超过 30 天则为十五个营业日）。不要发明 T+1 或交易日确认时钟。这不是已经教过的 10b-10(d)(8) PFOF。" />
+<Quiz id="es-5240" question="FINRA 5240 禁止什么？它和已经教过的 5230、5250、5270、5280 或 5320 是同一条规则吗？是否禁止每一笔单边报价？" options={["5240 就是已经教过的 5230、5250、5270、5280 或 5320 的改写", "5240 禁止每一笔单边报价，包括官方 (b) 例外里的单边行为", "5240 是不同的禁止：会员不得协调价格、交易或成交报告，不得指示或请求其他会员更改价格（包括报价），也不得威胁、骚扰、强迫、恐吓或以其他方式试图不正当影响另一会员或市场参与者。官方 (b) 单边例外是存在的；这不是对每一笔单边报价的禁止。本课不搭建 (b)(1)–(7) 目录引擎", "只要没有书面协议，协调价格就是允许的"]} answer={2} explanation="FINRA 5240(a) 禁止协调价格、交易或成交报告，指示其他会员更改价格，以及恐吓或不当影响。这不是已经教过的 5230、5250、5270、5280 或 5320。官方 (b) 单边例外存在；不要把它写成禁止每一笔单边报价。" />
 
 
 ## 完成标准
@@ -374,6 +439,7 @@ assertions passed: 18/18
 执行假设（日程、参与率上限、AC λ 或启发式、IS 基准）写入共用主配置——研究与纸面交易使用同一模型。
 
 **来源（已阅读并写入正文）：** Almgren & Chriss 2000/2001 *Journal of Risk* 3(2) pp. 5–39；Perold 1988 *JPM* 14(3) pp. 4–9；业界 TWAP/VWAP TCA 实践；NYU impact/TCA 笔记；QuantStart execution；Canvas m12；@sera00111 场所笔记（niche）；无交易指针 [arXiv:2502.04284](https://arxiv.org/abs/2502.04284)；双√ [arXiv:2502.16246](https://arxiv.org/abs/2502.16246) + [2411.13965](https://arxiv.org/abs/2411.13965)；Gatheral 2010《No-dynamic-arbitrage and market impact》，DOI 10.1080/14697680903373692（已经 Crossref 核实；期刊记录见 [RePEc](https://ideas.repec.org/a/taf/quantf/v10y2010i7p749-759.html)）；公开盘口元订单冲击挑战 [arXiv:2501.17096](https://arxiv.org/abs/2501.17096)。；Rule 605（2026-11-08 核实）：[SEC Rule 605 FAQ](https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/frequently-asked-questions-rule-605-regulation-nms)。enrich15（2026-11-11 核实）：[17 CFR 242.300](https://www.ecfr.gov/current/title-17/section-242.300)、[17 CFR 242.304](https://www.ecfr.gov/current/title-17/section-242.304)、[SEC Form ATS-N Filings and Information](https://www.sec.gov/about/divisions-offices/division-trading-markets/alternative-trading-systems/form-ats-n-filings-information)。 enrich18（核实于 2026-11-12）：[17 CFR 242.604](https://www.ecfr.gov/current/title-17/section-242.604)；大宗定义见 [17 CFR 242.600](https://www.ecfr.gov/current/title-17/section-242.600)；[FINRA Rule 5320](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5320)。 enrich25（核实于 2026-11-12）：[FINRA Rule 5250](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5250)；[FINRA Rule 5270](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5270)。enrich26（核实于 2026-11-12）：[FINRA Rule 5230](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5230)；[FINRA Rule 5280](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5280)。没有产品、券商或交易场所建议。
+enrich27（核实于 2026-11-12）：[17 CFR 240.10b-10](https://www.ecfr.gov/current/title-17/section-240.10b-10)；[FINRA Rule 5240](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5240)。没有产品、券商或交易场所建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

@@ -44,3 +44,22 @@ use the official Item 5.02 caption 'Certain Officers', not Instruction G 'Princi
 this toy is not a complete item-by-item engine; no filer or disclosure advice
 assertions passed: 18/18
 disclaimer: official Form 8-K item map; no filer or disclosure advice; learning only
+=== E. Form 8-K Item 5.07 special clock ===
+Instruction 1 to Item 5.07: The four business day period for reporting the event under this Item 5.07,
+  other than with respect to Item 5.07(d), shall begin to run on the day on which the meeting ended
+The registrant shall disclose on Form 8-K under this Item 5.07 the preliminary voting results
+The registrant shall file an amended report on Form 8-K under this Item 5.07
+  to disclose the final voting results within four business days after the final voting results are known
+However, no preliminary voting results need be disclosed under this Item 5.07
+  if the registrant has disclosed final voting results on Form 8-K under this Item
+the 5.07 four-business-day period, other than 5.07(d), begins on the day the meeting ended
+preliminary results are disclosed, and finals are amended within four business days after they are known
+no preliminary is required if finals have already been disclosed
+  the 5.07 four-business-day clock, other than (d), starts on a generic occurrence date rather than the day the meeting ended? False
+official 5.07(d) uses a different 150-calendar-day / 60-calendar-day-before-14a-8 clock and this toy is not a 14a-8 engine
+  this toy invents a four-business-day clock for 5.07(d)? False
+  this is a rewrite of already-taught Instruction B.1 or Item 1.05? False
+  this toy builds a Rule 14a-8 engine? False
+no issuer or voting advice
+assertions passed: 22/22
+disclaimer: official Form 8-K Item 5.07 special clock; no issuer or voting advice; learning only

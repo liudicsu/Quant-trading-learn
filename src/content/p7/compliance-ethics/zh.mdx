@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **25.50 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h + 赠与与继承的成本基础（Pub 550）0.25h + 1099-DIV 第 2a 栏资本利得分配 0.25h + Pub 550 看跌与看涨期权 0.25h + Pub 550「看跌期权视同卖空」持有期规则 0.25h + 1099-B 第 5 / 12 / 1g 栏 0.25h + Pub 550 清算分配（1099-DIV 第 9 或 10 栏）0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
+本课（约 **25.75 学时**：阅读 8h（含北向 + PDA 撤回 + FY2026/FINRA GenAI + SFC 24EC55 + **ESMA 算法交易监管简报**）+ 写作 4.5h + 测验 2.5h + 规则版本 1h（FINRA 主例 + 上交所对照）+ 美国规则四日期与迁移状态 0.5h + 跨境税务/外汇/CRS 识字框 2.5h + 洗售成本基础实验 0.5h + 持有期与合格股息 0.5h + 税务批次：先进先出与充分指定 0.25h + 操纵红线与自成交实验（wash trade / FINRA 5210 / CAT）0.5h + 代币化 NMS 股票创新豁免状态（SEC 34-106402）0.25h + 《证券交易法》第 16(b) 条短线交易 0.25h + 推定出售（IRC §1259）0.25h + 第 1256 条 60/40 0.25h + 资本返还（1099-DIV 第 3 栏）0.25h + 除息日上空头的现金义务、替代付款（非合格股息）与优先股合格股息 90/181 0.5h + Form 13H 大额交易者识别（识别活动水平；保密）0.25h + 资本亏损扣除上限与结转（IRS Pub 550）0.25h + 卖空的税务性质（IRS Pub 550 Ace 例子）0.25h + 无价值证券视为纳税年度最后一日出售（IRC §165(g)）0.25h + 投资利息（Pub 550 保证金利息与净投资所得上限）0.25h + 股票股利与股票认股权（Pub 550 成本基础与持有期）0.25h + 赠与与继承的成本基础（Pub 550）0.25h + 1099-DIV 第 2a 栏资本利得分配 0.25h + Pub 550 看跌与看涨期权 0.25h + Pub 550「看跌期权视同卖空」持有期规则 0.25h + 1099-B 第 5 / 12 / 1g 栏 0.25h + Pub 550 清算分配（1099-DIV 第 9 或 10 栏）0.25h + 《交易法》第 28(e) 条经纪与研究安全港 0.25h）以**美股为主线**讲零售/程序化交易的**合规基础**（高层次）与研究伦理；中国 A 股（证券与期货）、港股通、欧盟内容作为**有标签的比较阅读**。前置：`paper-trading-infra`。
 
 **默认场景：** 美国上市股票 / 非杠杆 ETF、美元计价。中文是讲解语言，不代表默认市场是中国。
 
@@ -621,6 +621,10 @@ SEC 在 2026-09-17 发布命令，给出**临时、有条件**的豁免（[Relea
 - 禁止只汇报赚钱试验（衔接 P2/P3 DSR 纪律）。
 - 不懂风险或规则 → 零仓位。
 
+**《交易法》第 28(e) 条：行使投资裁量权的人，不得仅因促使账户支付的佣金高于另一会员、经纪商或交易商本来会收取的金额，就被视为违法或违反州或联邦信义义务，只要该人善意确定该佣金相对于所提供的经纪与研究服务的价值是合理的（核实于 2026-11-12）。** 已经教过的 PFOF / Rule 606 和 10b-10(d)(8) 保持原样——那些内容在 `execution-slippage`，不要在这里改写。这一节补上官方的 28(e)，避免把每一笔高于当时最便宜报价的佣金都当成信义违约，或发明制定法并未写出的 “soft-dollar list”。没有产品、券商或交易场所建议。本节为测验即可。不要改 `examples/p2/09_filing_dates_toy.py` 或 `examples/p2/17_xbrl_pit_10b51_toy.py`，也不要把现有的税务或自成交玩具拉长来承载这一项。
+
+[15 U.S.C. 78bb(e)(1)](https://www.law.cornell.edu/uscode/text/15/78bb)：“No person using the mails, or any means or instrumentality of interstate commerce, in the exercise of investment discretion with respect to an account shall be deemed to have acted unlawfully or to have breached a fiduciary duty under State or Federal law unless expressly provided to the contrary by a law enacted by the Congress or any State subsequent to June 4, 1975, solely by reason of his having caused the account to pay a member of an exchange, broker, or dealer an amount of commission for effecting a securities transaction in excess of the amount of commission another member of an exchange, broker, or dealer would have charged for effecting that transaction, if such person determined in good faith that such amount of commission was reasonable in relation to the value of the brokerage and research services provided by such member, broker, or dealer, viewed in terms of either that particular transaction or his overall responsibilities with respect to the accounts as to which he exercises investment discretion.” 官方 (3) 把经纪与研究服务定义成三个法定类别：(A) 就证券价值、买入或卖出证券的适当性，以及证券或买卖方的可获得性，提供建议；(B) 就发行人、行业、证券、经济因素与趋势、投资组合策略以及账户表现，提供分析与报告；或 (C) 促成证券交易并履行与此附带的职能（例如清算、交收和托管），或与此相关所要求的职能。点名官方 (3) 类别即可，不要添加制定法并未列出的例子，也不要发明一份 “soft-dollar list”、一套表格，或制定法并未写出的披露时钟。官方 (2)：佣金政策与做法的披露，按适当监管机构以规则规定的时间和方式进行。官方 (4)：本款不适用于属于证券期货产品的证券。点名官方 (2) 和 (4) 即可，不要搭建这些引擎。不要把 28(e) 压进已经教过的 PFOF，或压进 Rule 10b-10 确认时钟。
+
 ## Python 配套
 
 `examples/p7/02_compliance_sources.py` 打印**本地**来源台账（美国在前；字段 source_url / checked_on / effective_from / status / jurisdiction）——它不联网抓取——并写入 `official_sources.json`。
@@ -723,6 +727,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 28. 发明官方 “Put option as short sale” 段落并未写明的已婚看跌例外；把这条持有期规则当成对已经教过的卖空税务性质的改写；把 §1256 60/40 套到该看跌上；在官方句子之外，为已经持有超过一年的股票另编规则。
 29. 把空白的 1099-B 第 1e 栏当成零成本，或把空白的第 1g 栏当成没有发生洗售的证明；把 1099-B 第 5 栏和已经教过的 1099-DIV 第 5 栏 / §199A 混为一谈；把第 5 栏当成每一批都是已向 IRS 报告成本基础的被覆盖证券。
 30. 把 1099-DIV 第 9 / 10 栏当成第 1a / 1b 栏的普通股息或合格股息，或当成已经教过的第 3 栏资本返还；在成本基础收回之前就把清算分配当成应税，或在导致股票被赎回或注销的最后一次分配之前申报资本亏损。
+31. 把第 28(e) 条当成已经教过的付款流（PFOF）的改写；发明一份“软美元清单”；或把任何贴上“研究”标签的佣金差额都写成自动受保护，而不提善意与合理性。
 
 
 ## 练习（1:1）
@@ -755,6 +760,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 24. **ex-putss** — 运行同一脚本的 L 节；写出买入看跌一般如何被对待，如果股票已持有一年或更短，看跌上的利得如何，以及看跌到期时股票持有期从哪一天开始；**完成标准**：买入看跌一般视为卖空，看跌上的利得是短期的，持有期可以从看跌到期之日开始，与输出一致，并且没有打印已婚看跌例外。一般信息，不是税务建议。
 25. **ex-1099b** — 运行 `09_tax_lot_toy.py` 的 D 节；说明 Arlo 在 2026 年 6 月的一次出售如何报告，空白的第 1e 栏是不是零成本，以及空白的第 1g 栏能不能证明没有发生洗售；**完成标准**：2025 年 4 月长期被覆盖批次、2025 年 8 月短期被覆盖批次和 2024 年 4 月非被覆盖批次（可以勾选第 5 栏）分别用单独表格报告，空白成本基础不是零，空白的第 1g 栏不是没有洗售的证明，与输出一致。一般信息，不是税务建议。
 26. **ex-liqdist** — 运行同一脚本的 M 节；说明清算分配列在哪一栏，合成例子里第一笔 6,000 美元和随后 5,000 美元分别如何处理，以及何时才能申报资本亏损；**完成标准**：第 9 或 10 栏（不是第 1a / 1b 栏，也不是第 3 栏）；第一笔不纳税、成本基础降到 4,000 美元；成本基础降到零后剩余 1,000 美元为资本利得；只有在最后一次赎回或注销分配之后才能申报资本亏损，与输出一致。一般信息，不是税务建议。
+27. **ex-28e** — 只做本课测验 `ce-28e`（不要改 `09_filing_dates_toy.py` 或 `17_xbrl_pit_10b51_toy.py`，也不要把税务或自我交易玩具拉长来承载这一项）；说明第 28(e) 条安全港保护什么，官方 (3) 类别如何命名，以及这是不是已经教过的 PFOF；**完成标准**：这是善意支付的经纪与研究佣金安全港；应按官方 (3) 原文命名类别，不要发明“软美元清单”；这不是已经教过的 PFOF。
 
 
 ## 测验
@@ -806,6 +812,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 <Quiz id="ce-1099b" question="根据 2026 年说明，Form 1099-B 第 5 栏、第 12 栏和第 1g 栏分别表示什么？（一般信息，不是税务建议。）" options={["空白的第 1e 栏就是零成本，空白的第 1g 栏证明没有发生洗售。1099-B 第 5 栏和 1099-DIV 第 5 栏 / §199A 是同一栏", "第 5 栏标明非被覆盖证券：经纪商可以把第 1b、1e、1f、1g 和 2 栏留空，也不必勾选第 12 栏；空白的成本基础不是零成本。在官方 Arlo 例子里，2026 年 6 月一次出售 2024 年 4 月非被覆盖、2025 年 4 月长期被覆盖和 2025 年 8 月短期被覆盖批次，要在单独的 2026 年 Form 1099-B 上报告，非被覆盖表格可以勾选第 5 栏。第 12 栏若勾选，表示第 1e 栏的成本基础已向 IRS 报告。第 1g 栏必须在同一账户、被覆盖证券、同一 CUSIP 的出售和买进都发生时，报告第 1091 条洗售亏损；经纪商可以但不必报告全部第 1091 条亏损。空白的第 1g 栏不是没有发生洗售的证明。本课不改写已经教过的被覆盖证券 2011 / 2012 定义，也不搭建完整的 1091 引擎", "每一份 1099-B 都为每一批报告完整的成本基础，因为每一种证券都是被覆盖证券", "第 12 栏若勾选，表示经纪商没有向 IRS 报告成本基础"]} answer={1} explanation="2026 年 Form 1099-B 说明：第 5 栏是 “Check if a Noncovered Security”；第 1b / 1e / 1f / 1g / 2 栏可以留空，也不必勾选第 12 栏。第 12 栏是 “Check if Basis Reported to IRS。” 第 1g 栏在同一账户、被覆盖、同一 CUSIP 的第 1091 条亏损时必须报告，对全部第 1091 条亏损则可以但不必报告。不要把空白的第 1e 栏当成零，或把空白的第 1g 栏当成没有洗售的证明，也不要把 1099-B 第 5 栏和 1099-DIV 第 5 栏混为一谈。一般信息，不是税务建议。" />
 
 <Quiz id="ce-liqdist" question="根据 IRS Publication 550（2025），清算分配应如何处理？（一般信息，不是税务建议。）" options={["把它当成第 1a / 1b 栏的普通股息或合格股息，或当成已经教过的第 3 栏资本返还，并且在成本基础收回之前就要纳税", "只要还没收到最后一次分配，就可以先申报资本亏损", "清算分配有时也称清算股利，列在 Form 1099-DIV 第 9 栏或第 10 栏（第 9 栏是现金清算分配，第 10 栏是非现金清算分配，按分配日公允市值），不计入第 1a 或 1b 栏，也不是已经教过的第 3 栏。在收回股票成本基础之前不纳税；成本基础降到零之后，后续金额按资本利得申报。只有在导致股票被赎回或注销的最后一次清算分配之后，才能申报资本亏损。完全清算时按各批次股数占总股数的比例分摊是官方规则；本课不搭建该引擎", "第 9 / 10 栏是立即应税的普通所得，而且完全清算的分摊引擎已经在本课搭好"]} answer={2} explanation="IRS Publication 550 把清算分配列在 1099-DIV 第 9 栏或第 10 栏，不是第 1a / 1b 栏，也不是已经教过的第 3 栏。在收回成本基础之前不纳税；成本基础为零之后按资本利得申报；只有在最后一次赎回或注销分配之后才能申报资本亏损。一般信息，不是税务建议。" />
+<Quiz id="ce-28e" question="《交易法》第 28(e) 条安全港保护什么？它是不是已经教过的 PFOF 的改写？本课有没有发明一份“软美元清单”？" options={["第 28(e) 条就是已经教过的付款流（PFOF）的改写", "本课发明了一份允许的“软美元清单”，涵盖所有研究产品", "第 28(e) 条是善意支付的经纪与研究佣金安全港。某人支付的佣金高于另一经纪商本来会收取的金额，本身不视为违反 28(e)(1)，只要该人善意认定该佣金金额相对于经纪与研究服务是合理的。官方 (3) 类别是：(A) 就证券的价值、买入、卖出或投资的适当性，以及证券或买卖方的可得性提供建议；(B) 提供关于发行人、行业、证券、经济因素与趋势、投资组合策略，以及账户业绩的分析与报告；或 (C) 促成证券交易，并履行与此附带的职能（例如清算、交收和托管）或因此所需的职能。不要发明一份“软美元清单”。这不是已经教过的 PFOF。官方 (2) 和 (4) 是存在的；本课不搭建这些引擎", "只要贴上“研究”标签，任何佣金差额都自动受到保护"]} answer={2} explanation="《交易法》第 28(e) 条是善意支付的经纪与研究佣金安全港。官方 (3) 类别应按其原文来命名；不要发明一份“软美元清单”。这不是已经教过的 PFOF。" />
 
 
 
@@ -821,6 +828,7 @@ n_sources=39 us_first_block=25 fields_complete=True
 enrich23（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) “Capital Gain Distributions” 和第 4 章 “Options” / “Puts and Calls” / Table 4-3（第 2a 栏不论持有期均为长期；官方 4,000 美元到期和 6,000 美元平仓例子）；[Form 1099-DIV 说明（2024 年 1 月修订）](https://www.irs.gov/instructions/i1099div) 第 2a 栏。一般信息，不是税务建议。
 enrich24（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) “Put option as short sale”；[2026 年 Form 1099-B 说明](https://www.irs.gov/instructions/i1099b)（第 5 / 12 / 1g 栏；官方 Arlo 例子）。一般信息，不是税务建议。
 enrich25（核实于 2026-11-12）：[IRS Publication 550（2025）](https://www.irs.gov/publications/p550) “Liquidating Distributions”；[Form 1099-DIV 说明（2024 年 1 月修订）](https://www.irs.gov/instructions/i1099div)（第 9 / 10 栏；页面最近审阅或更新于 2026-04-30）。一般信息，不是税务建议。
+enrich27（核实于 2026-11-12）：[15 U.S.C. 78bb(e)](https://www.law.cornell.edu/uscode/text/15/78bb)（《交易法》第 28(e) 条经纪与研究安全港）。没有产品、券商或交易场所建议。
 
 
 <Summary>

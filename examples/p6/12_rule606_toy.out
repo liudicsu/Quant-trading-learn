@@ -75,3 +75,44 @@ official 5280(b) information-flow procedures exist; this toy is not that engine
   this toy builds an information-barrier or Rule 2241 research-report definition engine? False
 no product, broker, or venue recommendation
 assertions passed: 18/18
+=== F. Rule 10b-10: written notification at or before completion ===
+10b-10 requires written notification at or before completion of a customer transaction
+Preliminary Note: This section requires broker-dealers to disclose specified information
+  in writing to customers at or before completion of a transaction
+10b-10(a): It shall be unlawful for any broker or dealer to effect for or with an account of a customer
+  any transaction in, or to induce the purchase or sale by such customer of, any security
+  (other than U.S. Savings Bonds or municipal securities) unless such broker or dealer,
+  at or before completion of such transaction, gives or sends to such customer written notification disclosing:
+  official (a)(1)-(8) disclosure catalog exists; this toy does not build it
+  this is already-taught 10b-10(d)(8) PFOF? False
+10b-10(c): a broker or dealer shall give or send to a customer information requested pursuant to this rule
+  within 5 business days of receipt of the request; Provided, however, That in the case of information
+  pertaining to a transaction effected more than 30 days prior to receipt of the request,
+  the information shall be given or sent to the customer within 15 business days
+10b-10(d)(2): Completion of the transaction shall have the meaning provided in rule 15c1-1 under the Act
+  this toy invents a T+1 confirmation clock? False
+  this toy builds a Rule 15c1-1 completion engine? False
+official (b) alternative periodic reporting and official (e) security-futures product provisions exist; this toy is not that engine
+official typographical artifact in (a)(8): "Provided, however, that this paragraph (a)(9) shall not apply"
+  this toy silently corrects "this paragraph (a)(9)"? False
+no product, broker, or venue recommendation
+assertions passed: 22/22
+=== G. FINRA 5240: anti-intimidation / coordination ===
+5240 is a different prohibition from already-taught 5230, 5250, 5270, 5280, and 5320
+5240(a): no member or person associated with a member shall
+  (1) coordinate the prices (including quotations), trades or trade reports of such member
+  with any other member or person associated with a member, or any other person;
+  (2) direct or request another member to alter a price (including a quotation); or
+  (3) engage, directly or indirectly, in any conduct that threatens, harasses, coerces, intimidates
+  or otherwise attempts improperly to influence another member, a person associated with a member,
+  or any other person
+This includes, but is not limited to, any attempt to influence another member or associated person
+  to adjust or maintain a price or quotation, or refusals to trade or other conduct that retaliates
+  against or discourages the competitive activities of another market maker or market participant
+  this is already-taught 5230, 5250, 5270, 5280, or 5320? False
+official (b) unilateral-conduct exceptions exist, provided the conduct is otherwise in compliance with all applicable law;
+  this toy is not that engine
+  this toy builds the official (b)(1)-(7) catalog? False
+  every unilateral quote is banned? False
+no product, broker, or venue recommendation
+assertions passed: 25/25

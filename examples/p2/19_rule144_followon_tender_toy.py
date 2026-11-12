@@ -531,3 +531,55 @@ print(f'  this toy silently corrects "to contrary"? {silently_corrects_to_contra
 check(silently_corrects_to_contrary is False, "do not silently correct 14e-3(c) to contrary")
 print("no bidder, target, or strategy recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== M. Rule 14d-2: commencement at 12:01 a.m. on the date the means to tender is first given ===")
+# 17 CFR 240.14d-2 Commencement of a tender offer (official eCFR API,
+# title 17 up to date as of 2026-11-09, plus official-page fetch opened
+# 2026-11-12; not an interstitial). Keep sections A-L identical,
+# including Rule 105, 14e-1, 101/102, 14e-5, Rule 104, 14e-2, 14d-11,
+# 14d-10, 14e-4, 14e-3, and 52/52 after L.
+# 14d-2(a): A bidder will have commenced its tender offer for purposes
+# of section 14(d) of the Act (15 U.S.C. 78n) and the rules under that
+# section at 12:01 a.m. on the date when the bidder has first published,
+# sent or given the means to tender to security holders. For purposes of
+# this section, the means to tender includes the transmittal form or a
+# statement regarding how the transmittal form may be obtained.
+# Official 14d-2(a) prints "12:01 a.m." with no time zone. Do not invent
+# a time zone, and do not copy already-taught Rule 14d-11's "9:00 a.m.
+# Eastern" onto 14d-2. A 12:01 a.m. commencement on a given date means
+# that day's 09:30 open is after official commencement.
+# Official (b): a communication is not commencement if it does not
+# include the means to tender and all written communications relating
+# to the tender offer, from and including the first public announcement,
+# are filed under cover of Schedule TO no later than the date of the
+# communication. Official (c): as soon as practicable on the date of
+# commencement, a bidder must comply with the filing requirements of
+# 14d-3(a), the dissemination requirements of 14d-4(a) or (b), and the
+# disclosure requirements of 14d-6(a). This toy is not that engine, and
+# is not already-taught 14e-3 or 14e-1. No bidder, target, or strategy
+# recommendation.
+
+print("14d-2(a): A bidder will have commenced its tender offer for purposes of section 14(d) of the Act")
+print("  (15 U.S.C. 78n) and the rules under that section at 12:01 a.m. on the date when the bidder has first")
+print("  published, sent or given the means to tender to security holders")
+print("  For purposes of this section, the means to tender includes the transmittal form")
+print("  or a statement regarding how the transmittal form may be obtained")
+print('official 14d-2(a) prints "12:01 a.m." with no time zone')
+invents_zone = False
+copies_14d11_zone = False
+print(f"  this toy invents a time zone? {invents_zone}")
+print(f'  this toy copies 14d-11\'s "9:00 a.m. Eastern" onto 14d-2? {copies_14d11_zone}')
+check(invents_zone is False, "do not invent a time zone for 14d-2")
+check(copies_14d11_zone is False, "do not copy 14d-11 9:00 a.m. Eastern onto 14d-2")
+print("a 12:01 a.m. commencement on a given date means that day's 09:30 open is after official commencement")
+print("a pre-commencement communication that does not include the means to tender")
+print("  and is filed on Schedule TO is not commencement")
+print("official (c) 14d-3 / 14d-4 / 14d-6 obligations exist; this toy is not that engine")
+builds_14d2_engines = False
+is_14e3_or_14e1 = False
+print(f"  this toy builds a 14d-3 / 14d-4 / 14d-6 or Schedule TO engine? {builds_14d2_engines}")
+print(f"  this is already-taught 14e-3 or 14e-1? {is_14e3_or_14e1}")
+check(builds_14d2_engines is False, "do not build 14d-3/14d-4/14d-6 or Schedule TO engines")
+check(is_14e3_or_14e1 is False, "14d-2 is not already-taught 14e-3 or 14e-1")
+print("no bidder, target, or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")

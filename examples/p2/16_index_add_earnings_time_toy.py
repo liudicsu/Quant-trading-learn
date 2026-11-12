@@ -214,3 +214,52 @@ print("use the official Item 5.02 caption 'Certain Officers', not Instruction G 
 print("this toy is not a complete item-by-item engine; no filer or disclosure advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official Form 8-K item map; no filer or disclosure advice; learning only")
+
+print("=== E. Form 8-K Item 5.07 special clock ===")
+# Official Form 8-K Item 5.07 (SEC 873 (02-25); OMB Number 3235-0060,
+# Expires November 30, 2027; official PDF opened 2026-11-12). Keep
+# sections A-D identical, including 13/13 after C and 18/18 after D,
+# and the existing line "do not flatten Item 5.07 or other special
+# clocks into the same trigger."
+# Instruction 1 to Item 5.07: The four business day period for reporting
+# the event under this Item 5.07, other than with respect to Item
+# 5.07(d), shall begin to run on the day on which the meeting ended.
+# The registrant shall disclose on Form 8-K under this Item 5.07 the
+# preliminary voting results. The registrant shall file an amended
+# report on Form 8-K under this Item 5.07 to disclose the final voting
+# results within four business days after the final voting results are
+# known. However, no preliminary voting results need be disclosed under
+# this Item 5.07 if the registrant has disclosed final voting results
+# on Form 8-K under this Item.
+# Official 5.07(d) uses a different 150-calendar-day / 60-calendar-day-
+# before-14a-8 clock; this toy is not a 14a-8 engine and does not invent
+# a four-business-day clock for 5.07(d). This is not a rewrite of
+# already-taught Instruction B.1 or Item 1.05. No issuer or voting
+# advice.
+
+print("Instruction 1 to Item 5.07: The four business day period for reporting the event under this Item 5.07,")
+print("  other than with respect to Item 5.07(d), shall begin to run on the day on which the meeting ended")
+print("The registrant shall disclose on Form 8-K under this Item 5.07 the preliminary voting results")
+print("The registrant shall file an amended report on Form 8-K under this Item 5.07")
+print("  to disclose the final voting results within four business days after the final voting results are known")
+print("However, no preliminary voting results need be disclosed under this Item 5.07")
+print("  if the registrant has disclosed final voting results on Form 8-K under this Item")
+print("the 5.07 four-business-day period, other than 5.07(d), begins on the day the meeting ended")
+print("preliminary results are disclosed, and finals are amended within four business days after they are known")
+print("no preliminary is required if finals have already been disclosed")
+starts_on_occurrence = False
+print(f"  the 5.07 four-business-day clock, other than (d), starts on a generic occurrence date rather than the day the meeting ended? {starts_on_occurrence}")
+check(starts_on_occurrence is False, "5.07 clock other than (d) begins on the day the meeting ended")
+print("official 5.07(d) uses a different 150-calendar-day / 60-calendar-day-before-14a-8 clock and this toy is not a 14a-8 engine")
+invents_d_four_bd = False
+is_b1_or_105 = False
+builds_14a8 = False
+print(f"  this toy invents a four-business-day clock for 5.07(d)? {invents_d_four_bd}")
+print(f"  this is a rewrite of already-taught Instruction B.1 or Item 1.05? {is_b1_or_105}")
+print(f"  this toy builds a Rule 14a-8 engine? {builds_14a8}")
+check(invents_d_four_bd is False, "do not invent a four-business-day clock for 5.07(d)")
+check(is_b1_or_105 is False, "5.07 is not a rewrite of Instruction B.1 or Item 1.05")
+check(builds_14a8 is False, "do not build a Rule 14a-8 engine")
+print("no issuer or voting advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official Form 8-K Item 5.07 special clock; no issuer or voting advice; learning only")

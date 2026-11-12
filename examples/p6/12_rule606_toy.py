@@ -230,3 +230,115 @@ print(f"  this toy builds an information-barrier or Rule 2241 research-report de
 check(builds_5280_engine is False, "do not build a 5280(b) or 2241 engine")
 print("no product, broker, or venue recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+
+print("=== F. Rule 10b-10: written notification at or before completion ===")
+# 17 CFR 240.10b-10 Confirmation of transactions (official eCFR API,
+# title 17 up to date as of 2026-11-09, plus official-page fetch opened
+# 2026-11-12; not an interstitial). Keep the current 606 table, 4/4,
+# ASSERT_rule606_ok, the reminder line, the 5250 section, the 5270
+# section, 12/12 after 5270, the 5230 section, 15/15 after 5230, the
+# 5280 section, and 18/18 after 5280 identical.
+# Preliminary Note: This section requires broker-dealers to disclose
+# specified information in writing to customers at or before completion
+# of a transaction.
+# 10b-10(a): it shall be unlawful for any broker or dealer to effect
+# for or with an account of a customer any transaction in, or to induce
+# the purchase or sale by such customer of, any security (other than
+# U.S. Savings Bonds or municipal securities) unless such broker or
+# dealer, at or before completion of such transaction, gives or sends
+# to such customer written notification disclosing: official (a)(1)-(8)
+# disclosure catalog exists; this toy does not build it.
+# 10b-10(c): requested information within 5 business days of receipt
+# of the request; 15 business days if the transaction was effected more
+# than 30 days prior to receipt of the request.
+# 10b-10(d)(2): Completion of the transaction shall have the meaning
+# provided in rule 15c1-1 under the Act. This toy does not build a
+# Rule 15c1-1 completion engine and does not invent a T+1 confirmation
+# clock. Official (b) alternative periodic reporting and official (e)
+# security-futures product provisions exist; this toy is not that
+# engine. This is not already-taught 10b-10(d)(8) PFOF. Official
+# typographical artifact in (a)(8): "Provided, however, that this
+# paragraph (a)(9) shall not apply" — quote it; do not silently
+# correct "(a)(9)." No product, broker, or venue recommendation.
+
+print("10b-10 requires written notification at or before completion of a customer transaction")
+print("Preliminary Note: This section requires broker-dealers to disclose specified information")
+print("  in writing to customers at or before completion of a transaction")
+print("10b-10(a): It shall be unlawful for any broker or dealer to effect for or with an account of a customer")
+print("  any transaction in, or to induce the purchase or sale by such customer of, any security")
+print("  (other than U.S. Savings Bonds or municipal securities) unless such broker or dealer,")
+print("  at or before completion of such transaction, gives or sends to such customer written notification disclosing:")
+print("  official (a)(1)-(8) disclosure catalog exists; this toy does not build it")
+is_10b10_pfof = False
+print(f"  this is already-taught 10b-10(d)(8) PFOF? {is_10b10_pfof}")
+check(is_10b10_pfof is False, "10b-10 confirmation clock is not already-taught 10b-10(d)(8) PFOF")
+print("10b-10(c): a broker or dealer shall give or send to a customer information requested pursuant to this rule")
+print("  within 5 business days of receipt of the request; Provided, however, That in the case of information")
+print("  pertaining to a transaction effected more than 30 days prior to receipt of the request,")
+print("  the information shall be given or sent to the customer within 15 business days")
+print("10b-10(d)(2): Completion of the transaction shall have the meaning provided in rule 15c1-1 under the Act")
+invents_t1_clock = False
+builds_15c11 = False
+print(f"  this toy invents a T+1 confirmation clock? {invents_t1_clock}")
+print(f"  this toy builds a Rule 15c1-1 completion engine? {builds_15c11}")
+check(invents_t1_clock is False, "do not invent a T+1 confirmation clock")
+check(builds_15c11 is False, "do not build a Rule 15c1-1 completion engine")
+print("official (b) alternative periodic reporting and official (e) security-futures product provisions exist; this toy is not that engine")
+print('official typographical artifact in (a)(8): "Provided, however, that this paragraph (a)(9) shall not apply"')
+silently_corrects_a9 = False
+print(f'  this toy silently corrects "this paragraph (a)(9)"? {silently_corrects_a9}')
+check(silently_corrects_a9 is False, "do not silently correct 10b-10(a)(8) typographical artifact")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== G. FINRA 5240: anti-intimidation / coordination ===")
+# FINRA Rule 5240 Anti-Intimidation/Coordination (official rule page
+# opened 2026-11-12). Keep the existing 606, 5250, 5270, 5230, and 5280
+# prints, including 18/18 after 5280, and the new 10b-10 section,
+# identical once 10b-10 is added.
+# 5240 is a different prohibition from already-taught FINRA 5230, 5250,
+# 5270, 5280, and 5320.
+# 5240(a): no member or person associated with a member shall (1)
+# coordinate the prices (including quotations), trades or trade reports
+# of such member with any other member or person associated with a
+# member, or any other person; (2) direct or request another member to
+# alter a price (including a quotation); or (3) engage, directly or
+# indirectly, in any conduct that threatens, harasses, coerces,
+# intimidates or otherwise attempts improperly to influence another
+# member, a person associated with a member, or any other person.
+# This includes, but is not limited to, any attempt to influence
+# another member or associated person to adjust or maintain a price or
+# quotation, or refusals to trade or other conduct that retaliates
+# against or discourages the competitive activities of another market
+# maker or market participant.
+# Official (b)(1)-(7) unilateral-conduct exceptions exist, provided the
+# conduct is otherwise in compliance with all applicable law; this toy
+# is not that engine. Do not treat every unilateral quote as banned.
+# Do not rewrite already-taught 5230, 5250, 5270, 5280, 5320, or PFOF /
+# Rule 606. No product, broker, or venue recommendation.
+
+print("5240 is a different prohibition from already-taught 5230, 5250, 5270, 5280, and 5320")
+print("5240(a): no member or person associated with a member shall")
+print("  (1) coordinate the prices (including quotations), trades or trade reports of such member")
+print("  with any other member or person associated with a member, or any other person;")
+print("  (2) direct or request another member to alter a price (including a quotation); or")
+print("  (3) engage, directly or indirectly, in any conduct that threatens, harasses, coerces, intimidates")
+print("  or otherwise attempts improperly to influence another member, a person associated with a member,")
+print("  or any other person")
+print("This includes, but is not limited to, any attempt to influence another member or associated person")
+print("  to adjust or maintain a price or quotation, or refusals to trade or other conduct that retaliates")
+print("  against or discourages the competitive activities of another market maker or market participant")
+is_already_taught_5240 = False
+print(f"  this is already-taught 5230, 5250, 5270, 5280, or 5320? {is_already_taught_5240}")
+check(is_already_taught_5240 is False, "5240 is not already-taught 5230/5250/5270/5280/5320")
+print("official (b) unilateral-conduct exceptions exist, provided the conduct is otherwise in compliance with all applicable law;")
+print("  this toy is not that engine")
+builds_5240b = False
+every_unilateral_banned = False
+print(f"  this toy builds the official (b)(1)-(7) catalog? {builds_5240b}")
+print(f"  every unilateral quote is banned? {every_unilateral_banned}")
+check(builds_5240b is False, "do not build the 5240(b) catalog")
+check(every_unilateral_banned is False, "official (b) exceptions exist; not a ban on every unilateral quote")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {checks}/{checks}")

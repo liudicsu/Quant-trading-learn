@@ -157,3 +157,20 @@ official typographical artifact in 14e-3(c): "Notwithstanding anything in paragr
   this toy silently corrects "to contrary"? False
 no bidder, target, or strategy recommendation
 assertions passed: 52/52
+=== M. Rule 14d-2: commencement at 12:01 a.m. on the date the means to tender is first given ===
+14d-2(a): A bidder will have commenced its tender offer for purposes of section 14(d) of the Act
+  (15 U.S.C. 78n) and the rules under that section at 12:01 a.m. on the date when the bidder has first
+  published, sent or given the means to tender to security holders
+  For purposes of this section, the means to tender includes the transmittal form
+  or a statement regarding how the transmittal form may be obtained
+official 14d-2(a) prints "12:01 a.m." with no time zone
+  this toy invents a time zone? False
+  this toy copies 14d-11's "9:00 a.m. Eastern" onto 14d-2? False
+a 12:01 a.m. commencement on a given date means that day's 09:30 open is after official commencement
+a pre-commencement communication that does not include the means to tender
+  and is filed on Schedule TO is not commencement
+official (c) 14d-3 / 14d-4 / 14d-6 obligations exist; this toy is not that engine
+  this toy builds a 14d-3 / 14d-4 / 14d-6 or Schedule TO engine? False
+  this is already-taught 14e-3 or 14e-1? False
+no bidder, target, or strategy recommendation
+assertions passed: 56/56

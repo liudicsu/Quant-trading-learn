@@ -54,3 +54,23 @@ do not treat every Space / Reason Not Available row as no halt
 do not build a Nasdaq Halt Cross or NOII product catalog
 assertions passed: 6/6
 disclaimer: official Nasdaq halt-code map; not a Halt Cross engine; learning only; no venue recommendation
+=== 6. FINRA 5260: no transacting or quoting during a halt ===
+5260 is a member-level prohibition on transacting or publishing a quotation or indication of interest
+  in a security as to which a trading halt is currently in effect, except as permitted under the LULD Plan
+5260(a): No member or person associated with a member shall, directly or indirectly,
+  effect any transaction or publish a quotation, a priced bid and/or offer,
+  an unpriced indication of interest (including "bid wanted" and "offer wanted" and name only indications),
+  or a bid or offer accompanied by a modifier to reflect unsolicited customer interest,
+  in any security as to which a trading halt is currently in effect,
+  except as permitted under the Regulation NMS Plan to Address Extraordinary Market Volatility
+If FINRA closes trading in a security pursuant to its authority under Rule 6120(a)(3),
+  members would not be prohibited from trading through other markets for which trading is not halted
+  a FINRA-only 6120(a)(3) close halts every other market? False
+  official LULD Plan exception exists? True
+official (b) futures provisions exist; this toy is not that engine
+  this toy builds a futures or Rule 6120 engine? False
+  this is a rewrite of already-taught halt codes or LULD reopen clocks? False
+  this toy teaches the Nasdaq T5 "10% in five minutes" sentence as current LULD? False
+no product, broker, or venue recommendation
+assertions passed: 5/5
+disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code or LULD rewrite; learning only; no venue recommendation

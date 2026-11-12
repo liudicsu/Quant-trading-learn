@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **35.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h + Rule 14d-10 全体持有人 / 最高对价 0.25h + Rule 14e-4 局部要约中的短交 / 净多头 0.25h + 第 12(g) 条 / Rule 12g-1 注册门槛 0.25h + Rule 14e-3 披露或回避 0.25h + Rule 12g-4 / 第 12(g)(4) 条终止 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **36.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h + Rule 14d-10 全体持有人 / 最高对价 0.25h + Rule 14e-4 局部要约中的短交 / 净多头 0.25h + 第 12(g) 条 / Rule 12g-1 注册门槛 0.25h + Rule 14e-3 披露或回避 0.25h + Rule 12g-4 / 第 12(g)(4) 条终止 0.25h + Rule 14d-2 开始时点 0.25h + Form 8-K Item 5.07 特殊时钟 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -324,6 +324,36 @@ use the official Item 5.02 caption 'Certain Officers', not Instruction G 'Princi
 this toy is not a complete item-by-item engine; no filer or disclosure advice
 assertions passed: 18/18
 disclaimer: official Form 8-K item map; no filer or disclosure advice; learning only
+```
+
+**Form 8-K Item 5.07 是已经教过的 8-K 框告诉你不要压扁的那条官方特殊时钟：除 5.07(d) 外，四个营业日期间从会议结束当日起算；应披露初步投票结果，并在最终结果知悉后四个营业日内以修订后的 8-K 披露最终结果（核实于 2026-11-12）。** 已经教过的一般指示 B.1 四个营业日默认、Item 1.05 认定时钟，以及点名的 1.01 / 2.02 / 4.02 / 5.02 / 7.01，都不要改写。上面“不要把 Item 5.07 或其他特殊时钟压成同一个起算点”那一句保持原样——这一节补上官方时钟，而不是删掉那句警告。不要仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句。这里没有发行人或投票建议。
+
+官方 [Form 8-K](https://www.sec.gov/files/form8-k.pdf)（SEC 873 (02-25)；OMB Number 3235-0060，Expires November 30, 2027）Item 5.07 指示 1：“The four business day period for reporting the event under this Item 5.07, other than with respect to Item 5.07(d), shall begin to run on the day on which the meeting ended. The registrant shall disclose on Form 8-K under this Item 5.07 the preliminary voting results. The registrant shall file an amended report on Form 8-K under this Item 5.07 to disclose the final voting results within four business days after the final voting results are known. However, no preliminary voting results need be disclosed under this Item 5.07 if the registrant has disclosed final voting results on Form 8-K under this Item.” 官方 5.07(d) 是被排除在这条四个营业日时钟之外的那一支：不晚于股东就《交易法》第 14A(a)(2) 条所要求的高管薪酬投票频率进行表决的年会或其他会议结束后一百五十个日历日，但在任何情形下不晚于 §240.14a-8 股东提案截止日期前六十个日历日，以对最近一份按 5.07(b) 提交的 Form 8-K 的修订，披露公司根据该次表决就此后至下一次规定频率表决前、将在委托材料中纳入高管薪酬股东投票的频率所作决定。点名官方 (d) 的 150 个日历日 / 14a-8 前 60 个日历日双重时钟即可，不要搭建 Rule 14a-8 引擎，也不要为 (d) 发明四个营业日时钟。
+
+不要把 5.07 压进已经教过的一般指示 B.1，或压进 Item 2.02 / 1.05。不要把 5.07 的四个营业日时钟从会议结束当日以外的日子起算。
+
+**实验：** 同一脚本的 E 节（A–D 节的打印与此前相同，包括 C 节后的 13/13、D 节后的 18/18，以及现有的 “do not flatten Item 5.07 or other special clocks into the same trigger” 那一行；E 节之后为 22/22）：
+
+```text
+=== E. Form 8-K Item 5.07 special clock ===
+Instruction 1 to Item 5.07: The four business day period for reporting the event under this Item 5.07,
+  other than with respect to Item 5.07(d), shall begin to run on the day on which the meeting ended
+The registrant shall disclose on Form 8-K under this Item 5.07 the preliminary voting results
+The registrant shall file an amended report on Form 8-K under this Item 5.07
+  to disclose the final voting results within four business days after the final voting results are known
+However, no preliminary voting results need be disclosed under this Item 5.07
+  if the registrant has disclosed final voting results on Form 8-K under this Item
+the 5.07 four-business-day period, other than 5.07(d), begins on the day the meeting ended
+preliminary results are disclosed, and finals are amended within four business days after they are known
+no preliminary is required if finals have already been disclosed
+  the 5.07 four-business-day clock, other than (d), starts on a generic occurrence date rather than the day the meeting ended? False
+official 5.07(d) uses a different 150-calendar-day / 60-calendar-day-before-14a-8 clock and this toy is not a 14a-8 engine
+  this toy invents a four-business-day clock for 5.07(d)? False
+  this is a rewrite of already-taught Instruction B.1 or Item 1.05? False
+  this toy builds a Rule 14a-8 engine? False
+no issuer or voting advice
+assertions passed: 22/22
+disclaimer: official Form 8-K Item 5.07 special clock; no issuer or voting advice; learning only
 ```
 
 **外国私人发行人的 Form 20-F 年报，应在财年结束后四个月内提交，不能套用 10-K 的 60 / 75 / 90 天时钟；Form 6-K 当期报告，应在材料于官方的本地市场 / 交易所 / 股东渠道公开后及时（promptly）提供，不能发明一套四个营业日的 8-K 时钟（核实于 2026-11-12）。** 已经教过的境内 10-K / 10-Q / 8-K / 12b-25 时钟、Form 10-S 提案那一句，以及外国私人发行人的 Form 4 那一句（外国私人发行人的董事和高管自 2026-03-18 起也要提交 Form 4），保持原样。这一节补上官方的外国私人发行人定期报告时钟，避免把 60 / 75 / 90 套到 20-F 上，或把 6-K 当成境内 8-K。不要改 `examples/p2/09_filing_dates_toy.py` 或 `examples/p2/17_xbrl_pit_10b51_toy.py`。这里没有申报身份规划建议。本节为测验即可，没有新的实验脚本。
@@ -928,6 +958,32 @@ no bidder, target, or strategy recommendation
 assertions passed: 52/52
 ```
 
+**Rule 14d-2：就《交易法》第 14(d) 条及该项下规则而言，要约人在首次向证券持有人公布、寄送或交付交存手段之日的 12:01 a.m. 开始要约收购（核实于 2026-11-12）。** 已经教过的 14e-1 最短开放期和条款变更窗口、14e-2 立场声明、14e-3 披露或回避、14d-10 全体持有人 / 最高对价、14e-4 短交、14e-5 和 14d-11，都不要改写。这一节补上官方的开始时点，避免把开始前的宣布当成开始，把开始压进已经教过的 14e-3 “重大步骤”，或发明官方文本并未印出的时区。不推荐任何要约人、目标公司或策略。
+
+[17 CFR 240.14d-2(a)](https://www.ecfr.gov/current/title-17/section-240.14d-2)：“A bidder will have commenced its tender offer for purposes of section 14(d) of the Act (15 U.S.C. 78n) and the rules under that section at 12:01 a.m. on the date when the bidder has first published, sent or given the means to tender to security holders. For purposes of this section, the means to tender includes the transmittal form or a statement regarding how the transmittal form may be obtained.” 官方 (b)：一项通信不构成开始，如果它不含交存手段，并且与该要约有关的全部书面通信，从第一次公开宣布起（含该次宣布），均不晚于该通信之日按 Schedule TO 提交。官方 (c)：在开始当日尽快，要约人必须遵守 14d-3(a) 的提交要求、14d-4(a) 或 (b) 的传播要求，以及 14d-6(a) 的披露要求。点名官方 (b) 开始前通信和 (c) 的 14d-3 / 14d-4 / 14d-6 义务存在即可，不要把这些目录当成这一项来搭建，也不要搭建 Schedule TO 引擎。官方 14d-2(a) 印着 “12:01 a.m.”，**没有时区**。某一日 12:01 a.m. 开始，意味着该要约从该日一开始就已经开始，所以当日 09:30 开盘已在官方开始之后；符合 (b) 的开始前通信不是开始。不要发明时区，也不要把已经教过的 Rule 14d-11 的 “9:00 a.m. Eastern” 抄到 14d-2 上。不要把 14d-2 压进已经教过的 14e-1、14e-2、14e-3、14d-10、14e-4、14e-5 或 14d-11。
+
+**实验：** 同一脚本的 M 节（A–L 节的打印与此前相同，包括 Rule 105、14e-1、101/102、14e-5、Rule 104、14e-2、14d-11、14d-10、14e-4、14e-3，以及 L 节后的 52/52；M 节之后为 56/56）：
+
+```text
+=== M. Rule 14d-2: commencement at 12:01 a.m. on the date the means to tender is first given ===
+14d-2(a): A bidder will have commenced its tender offer for purposes of section 14(d) of the Act
+  (15 U.S.C. 78n) and the rules under that section at 12:01 a.m. on the date when the bidder has first
+  published, sent or given the means to tender to security holders
+  For purposes of this section, the means to tender includes the transmittal form
+  or a statement regarding how the transmittal form may be obtained
+official 14d-2(a) prints "12:01 a.m." with no time zone
+  this toy invents a time zone? False
+  this toy copies 14d-11's "9:00 a.m. Eastern" onto 14d-2? False
+a 12:01 a.m. commencement on a given date means that day's 09:30 open is after official commencement
+a pre-commencement communication that does not include the means to tender
+  and is filed on Schedule TO is not commencement
+official (c) 14d-3 / 14d-4 / 14d-6 obligations exist; this toy is not that engine
+  this toy builds a 14d-3 / 14d-4 / 14d-6 or Schedule TO engine? False
+  this is already-taught 14e-3 or 14e-1? False
+no bidder, target, or strategy recommendation
+assertions passed: 56/56
+```
+
 ## 分红日期与 yfinance 的 auto_adjust 陷阱（2026-11-10 核实）
 
 **1. 现金分红的四个日期。** 公司先宣布分红（宣布日），再确定股东名单（登记日），之后股票开始不带这次分红交易（除息日），最后发放现金（派息日）。决定你能不能拿到分红的是**除息日**：在除息日当天或之后买入，就拿不到这一次分红。美国交收改为 T+1 之后，investor.gov 写明除息日**一般就是登记日**；登记日不是营业日时，除息日是它之前的一个营业日（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)）。页面的例子：宣布日 2026-03-02，登记日 2026-03-16，除息日 2026-03-16，派息日 2026-03-17。
@@ -1029,6 +1085,8 @@ disclaimer: synthetic fixtures; learning only
 37. 发明官方现行文本并未写出的、经通胀调整的 12(g) 资产门槛；把 12g-1 的豁免写成“不足 2,000 人**或** 500 名非合格投资者”；把 120 天或 60 天时钟压进已经教过的 12b-2、10-K / 10-Q 或 Form 13F 的 45 天句；仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句。
 38. 把 14e-3 压进已经教过的 14e-2、14e-1、14d-10、14e-4、14e-5 或 10b5-1；为 “a reasonable time” 发明固定天数，或编一份 “substantial step” 目录；悄悄改掉 14e-3(c) 的官方印刷瑕疵 “to contrary”。
 39. 把 Form 15 的提交日当成 12(g) 注册的终止日；发明通胀调整后的 12g-4 资产数字；把法条和规则压成同一张地图，漏掉规则里的 500 人 / 1,000 万美元、三个财年这一支、立即中止的 13(a) 义务，或撤回 / 拒绝后的 60 天补交时钟；如果引用法条那一句，悄悄改掉 LII 的印刷瑕疵 “1,200 persons persons. [1]”。
+40. 把开始前的宣布当成 14d-2 的开始，把开始压进已经教过的 14e-3 或 14e-1，发明时区，或把已经教过的 14d-11 “9:00 a.m. Eastern”抄到 14d-2 的 “12:01 a.m.” 上。
+41. 把 Item 5.07 压进已经教过的一般指示 B.1 或 Item 1.05；把 5.07 四个营业日时钟从会议结束当日以外的日子起算；为 5.07(d) 发明四个营业日时钟，或搭建 Rule 14a-8 引擎。
 
 
 ## 练习（与任务清单 1:1）
@@ -1069,6 +1127,8 @@ disclaimer: synthetic fixtures; learning only
 32. **ex-12g1** — 用自己的话写出官方现行 12(g) / 12g-1 地图：12g-1 豁免、法定触发、120 天和 60 天时钟，以及银行分支；**完成标准**：写出不超过 1,000 万美元，或不足 2,000 人**并且**其中非合格投资者不足 500 人；触发是资产超过 1,000 万美元且登记持有人达到 2,000 人**或** 500 名非合格投资者；120 天在财年结束后，注册说明书在提交后六十天（或更短指定期间）生效；银行没有 500 人这一支；并写明不要发明通胀调整后的资产数字。
 33. **ex-14e3** — 运行同一脚本的 L 节；说明一旦已采取开始要约的重大步骤或已经开始，持有来自官方来源的重大非公开要约信息的人能否买入或卖出，这是不是已经教过的 14e-2 或 10b5-1，以及本课有没有为 “a reasonable time” 发明固定天数；**完成标准**：不得买入或卖出，除非在合理时间之前已公开披露该信息及其来源；这不是已经教过的 14e-2 或 10b5-1；没有发明固定天数，与输出一致。
 34. **ex-12g4** — 用自己的话写出官方 12(g)(4) / 12g-4 终止地图：90 天时钟、300 / 1,200 人测试、规则里的 500 人 / 1,000 万美元三个财年这一支，以及提交 Form 15 时立即中止 13(a) 义务（含撤回或拒绝后的 60 天补交时钟）；**完成标准**：终止不是在 Form 15 提交日，立即中止的是 13(a) 义务；不要发明通胀调整后的资产数字，也不要把法条和规则压成同一张地图。
+35. **ex-14d2** — 运行同一脚本的 M 节；说明 14d-2 的开始时点是什么，本课有没有发明时区或把 14d-11 的 “9:00 a.m. Eastern”抄过来，以及符合条件的开始前通信是不是开始；**完成标准**：开始是首次给予交存手段之日的 12:01 a.m.，没有发明时区，符合条件的开始前通信不是开始，这不是已经教过的 14e-3 或 14e-1，与输出一致。
+36. **ex-8k507** — 运行 `16_index_add_earnings_time_toy.py` 的 E 节；说明 Item 5.07 除 (d) 外的四个营业日期间从哪一天起算，初步与最终结果如何披露，以及 5.07(d) 是否也用四个营业日；**完成标准**：从会议结束当日起算，先披露初步再在最终结果知悉后四个营业日内修订（最终结果已披露则不必披露初步），(d) 使用 150 个日历日 / 14a-8 前 60 个日历日时钟，不是一般指示 B.1 或 Item 1.05，与输出一致。
 
 
 ## 测验
@@ -1121,6 +1181,8 @@ disclaimer: synthetic fixtures; learning only
 <Quiz id="dc-12g1" question="按现行 Rule 12g-1 和《交易法》第 12(g) 条，发行人何时不必注册一类股权证券？法定时钟是什么？" options={["官方现行文本已经把 12(g) 的资产门槛按通胀上调，本课应使用那个更高的数字；12g-1 的豁免是不足 2,000 人或者 500 名非合格投资者", "12(g) 就是已经教过的 12b-2 申报人类别，120 天和 60 天时钟就是 10-K / 10-Q 时钟；并且应把 Form 10-S “截至 2026-11-11 尚未通过”改成更新的日期", "按现行 Rule 12g-1，若在最近结束的财年最后一日，发行人总资产不超过 1,000 万美元，或者该类别由不足 2,000 名登记持有人持有、且其中非合格投资者不足 500 人，则不必按第 12(g) 条注册该类别股权（银行、储蓄贷款控股公司和银行控股公司适用不足 2,000 人的测试，没有 500 人这一支）。法定触发是另一面：总资产超过 1,000 万美元，且登记持有人达到 2,000 人或者 500 名非合格投资者，并须在该财年结束后 120 天内注册；注册说明书在提交后六十天（或委员会指定的更短期间）生效。不要把 12g-1 豁免里的 “and” 换成含糊的 “or”。现行官方文本仍用 1,000 万美元 / $10,000,000，不要发明通胀调整后的资产数字。“Accredited investor” 按 § 230.501(a) 在该日确定；“held of record” 的定义在 Rule 12g5-1（存在员工薪酬计划排除）；12(g)(4) 终止是另一条官方段落——点名即可，不要搭建这些引擎。不要把这些时钟压进已经教过的 12b-2、10-K / 10-Q，或 Form 13F 的 45 天句", "每一家有公众股东的美国公司都是 12(g) 注册人，与资产和登记持有人数无关"]} answer={2} explanation="17 CFR 240.12g-1 的豁免是资产不超过 1,000 万美元，或者不足 2,000 人并且其中非合格投资者不足 500 人。15 U.S.C. 78l(g)(1) 的触发用 2,000 人或者 500 名非合格投资者，加上超过 1,000 万美元的资产和 120 天时钟；注册说明书在提交后六十天（或更短指定期间）生效。不要发明通胀调整数字，也不要把豁免里的 “and” 换成 “or”。" />
 <Quiz id="dc-14e3" question="根据 Rule 14e-3，一旦已采取开始要约收购的重大步骤或已经开始，持有来自官方来源的重大非公开要约信息的人一般不得做什么？" options={["这就是已经教过的 14e-2 或 10b5-1，所以只要要约尚未正式开始，该信息就可以使用", "“a reasonable time” 是本课发明的固定天数，而且 14e-3(c) 的官方措辞 “to contrary” 应当被悄悄改正", "该人不得买入或卖出（或促使买入或卖出）这些证券——或可转换证券、期权或权利——除非在任何买入或卖出之前的合理时间内，该信息及其来源已通过新闻稿或其他方式公开披露。官方 (b) 实体程序 / 信息隔离抗辩、(c) 代表要约人买进以及向要约人卖出，和 (d) 反传播是存在的；本课不搭建这些引擎。不要为 “a reasonable time” 发明固定天数。不要把 14e-3 压进已经教过的 14e-2、14e-1、14d-10、14e-4、14e-5 或 10b5-1", "这项禁止只在正式开始之后才适用，而且可转换证券、期权或权利不在规则范围内"]} answer={2} explanation="17 CFR 240.14e-3(a) 是披露或回避规则：一旦已采取重大步骤或已经开始，持有来自官方来源的重大非公开要约信息的人，一般不得买入或卖出，除非在合理时间之前公开披露该信息及其来源。这不是已经教过的 14e-2 或 10b5-1。不要为 “a reasonable time” 发明固定天数，也不要悄悄改掉 “to contrary”。" />
 <Quiz id="dc-12g4" question="根据《交易法》第 12(g)(4) 条和 Rule 12g-4，12(g) 注册何时终止？提交 Form 15 时会发生什么？" options={["Form 15 在提交日就结束 12(g) 注册，而且官方现行 12g-4 已经按通胀把 1,000 万美元上调", "注册在 Form 15 证明登记持有人已减至不足 300 人（银行、储蓄贷款控股公司或银行控股公司为 1,200 人）之后 90 天（或委员会确定的更短期间）终止。Rule 12g-4 还有第二支：不足 500 人，且发行人总资产在最近三个财年的每一财年最后一日均未超过 1,000 万美元。发行人按第 13(a) 条提交报告的义务 “shall be suspended immediately upon filing a certification on Form 15”；如果该证明随后被撤回或拒绝，发行人应在 60 天内提交若未提交该证明本应提交的全部报告。现行官方 12g-4 仍使用 1,000 万美元（最近一次修订于 2016-05-10）。不要把法条和规则压成同一张地图，不要发明通胀调整后的资产数字；如果引用法条那一句，不要悄悄改掉 LII 的印刷瑕疵 “1,200 persons persons. [1]”", "这是对已经教过的 12g-1 的改写，而且 120 天时钟就是终止时钟", "应当仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句，并且本项会改 09 / 17 实验"]} answer={1} explanation="15 U.S.C. 78l(g)(4) 和 17 CFR 240.12g-4：终止在 Form 15 证明之后 90 天（或更短指定期间）生效，不是在提交日。立即中止的是 13(a) 义务；撤回或拒绝后有 60 天补交时钟。规则还有 500 人 / 1,000 万美元、三个财年这一支。不要发明通胀调整数字，也不要把法条和规则压扁。" />
+<Quiz id="dc-14d2" question="根据 Rule 14d-2，要约收购何时开始？符合条件的开始前通信是不是开始？" options={["开始时点就是已经教过的 14e-3 “重大步骤”，或 14e-1 的 20 个营业日", "官方 14d-2 印着 “12:01 a.m. Eastern”，应把已经教过的 14d-11 “9:00 a.m. Eastern”抄过来", "就《交易法》第 14(d) 条及该项下规则而言，要约人在首次向证券持有人公布、寄送或交付交存手段之日的 12:01 a.m. 开始要约。交存手段包括交存表格，或关于如何取得交存表格的说明。官方 14d-2(a) 印着 “12:01 a.m.”，没有时区；不要发明时区，也不要把 14d-11 的 “9:00 a.m. Eastern”抄到 14d-2 上。某一日 12:01 a.m. 开始，意味着当日 09:30 开盘已在官方开始之后。符合条件的开始前通信（不含交存手段，并已按 Schedule TO 提交）不是开始。官方 (c) 的 14d-3 / 14d-4 / 14d-6 义务是存在的；本课不搭建这些引擎", "任何关于要约的公开宣布都等于开始，即使没有交存手段"]} answer={2} explanation="17 CFR 240.14d-2(a) 把开始定在首次给予交存手段之日的 12:01 a.m.。官方文本没有时区；不要发明时区，也不要把 14d-11 的 “9:00 a.m. Eastern”抄过来。符合 (b) 的开始前通信不是开始。这不是已经教过的 14e-3 或 14e-1。" />
+<Quiz id="dc-8k507" question="Form 8-K Item 5.07 的官方时钟是什么？它和已经教过的一般指示 B.1 或 Item 1.05 是同一条时钟吗？" options={["5.07 就是已经教过的一般指示 B.1 或 Item 1.05，四个营业日从一般“发生”日起算", "5.07(d) 也使用四个营业日的会议结束时钟，而且本课搭建了 Rule 14a-8 引擎", "Item 5.07 的四个营业日期间，除 5.07(d) 外，从会议结束当日起算；应披露初步投票结果，并在最终结果知悉后四个营业日内以修订后的 8-K 披露最终结果；如果最终结果已经披露，则不必披露初步结果。5.07(d) 使用另一套官方时钟：不晚于会议结束后 150 个日历日，且在任何情形下不晚于 Rule 14a-8 股东提案截止日期前 60 个日历日，以修订披露频率决定。不要把 5.07 压进一般指示 B.1 或 Item 1.05，也不要为 (d) 发明四个营业日时钟。本课不搭建 Rule 14a-8 引擎", "必须先披露初步结果，即使最终结果已经披露"]} answer={2} explanation="官方 Form 8-K Item 5.07 指示 1：除 (d) 外，四个营业日从会议结束当日起算；初步然后最终（或只披露最终）。5.07(d) 是 150 个日历日 / 14a-8 前 60 个日历日的双重时钟，不是四个营业日。不要把它压进一般指示 B.1 或 Item 1.05。" />
 
 
 
@@ -1137,6 +1199,7 @@ enrich23（核实于 2026-11-12）：[Form 8-K](https://www.sec.gov/files/form8-
 enrich24（核实于 2026-11-12）：[17 CFR 240.13d-2](https://www.ecfr.gov/current/title-17/section-240.13d-2)；[17 CFR 240.14e-2](https://www.ecfr.gov/current/title-17/section-240.14e-2)；[17 CFR 240.14d-11](https://www.ecfr.gov/current/title-17/section-240.14d-11)；[17 CFR 240.14d-7](https://www.ecfr.gov/current/title-17/section-240.14d-7)；[17 CFR 240.14d-9](https://www.ecfr.gov/current/title-17/section-240.14d-9) 作为支持。没有申报人、要约人、目标或策略建议。
 enrich25（核实于 2026-11-12）：[17 CFR 240.14d-10](https://www.ecfr.gov/current/title-17/section-240.14d-10)；[17 CFR 240.14e-4](https://www.ecfr.gov/current/title-17/section-240.14e-4)；[17 CFR 240.14d-8](https://www.ecfr.gov/current/title-17/section-240.14d-8) 作为支持；[17 CFR 240.12g-1](https://www.ecfr.gov/current/title-17/section-240.12g-1)；[15 U.S.C. 78l(g)](https://www.law.cornell.edu/uscode/text/15/78l)；[17 CFR 240.12g5-1](https://www.ecfr.gov/current/title-17/section-240.12g5-1) 作为支持。没有要约人、目标、发行人或策略建议。
 enrich26（核实于 2026-11-12）：[17 CFR 240.14e-3](https://www.ecfr.gov/current/title-17/section-240.14e-3)；[17 CFR 240.12g-4](https://www.ecfr.gov/current/title-17/section-240.12g-4)；[15 U.S.C. 78l(g)(4)](https://www.law.cornell.edu/uscode/text/15/78l)。eCFR 第 17 编截至 2026-11-09 为最新；12g-4 最近一次修订于 2016-05-10。不推荐任何要约人、目标公司、发行人或策略。
+enrich27（核实于 2026-11-12）：[17 CFR 240.14d-2](https://www.ecfr.gov/current/title-17/section-240.14d-2)；[Form 8-K](https://www.sec.gov/files/form8-k.pdf) Item 5.07 及指示 1（SEC 873 (02-25)；OMB Number 3235-0060，Expires November 30, 2027）。不推荐任何要约人、目标公司、发行人或投票策略。
 
 
 <Summary>
