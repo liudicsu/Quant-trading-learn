@@ -331,3 +331,49 @@ Amended by SR-FINRA-2021-032 eff. Dec. 7, 2021.
 literacy only; not a proxy-voting or reimbursement how-to
 no broker or product recommendation
 assertions passed: 58/58
+=== T. FINRA 2268: Requirements When Using Predispute Arbitration Agreements for Customer Accounts ===
+official caption typography is 2268. Requirements When Using Predispute Arbitration
+  Agreements for Customer Accounts (no period at the end of the caption)
+2268(a) opening: Any predispute arbitration clause shall be highlighted and shall be
+  immediately preceded by the following language in outline form.
+official typography is one-word lowercase "predispute"
+official (a)(1)-(7) prescribed lead-in language exists and is named only; this toy
+  does not pack that catalog as a how-to for writing a clause
+if official (a)(3) is quoted, typography is "documents, witness statements and other
+  discovery" (no Oxford comma)
+2268(b)(1): In any agreement containing a predispute arbitration agreement, there
+  shall be a highlighted statement immediately preceding any signature line or other
+  place for indicating agreement that states that the agreement contains a
+  predispute arbitration clause. The statement shall also indicate at what page and
+  paragraph the arbitration clause is located.
+2268(b)(2): Within thirty days of signing, a copy of the agreement containing any
+  such clause shall be given to the customer who shall acknowledge receipt thereof
+  on the agreement or on a separate document.
+official typography is "thirty days" (words, not "30")
+2268(c)(1): A member shall provide a customer with a copy of any predispute
+  arbitration clause or customer agreement executed between the customer and the
+  member, or inform the customer that the member does not have a copy thereof,
+  within ten business days of receipt of the customer's request. If a customer
+  requests such a copy before the member has provided the customer with a copy
+  pursuant to paragraph (b)(2) above, the member must provide a copy to the customer
+  by the earlier date required by this paragraph (c)(1) or by paragraph (b)(2).
+official typography is "ten business days" (words, not "10") and a straight
+  apostrophe in "customer's request"
+2268(d) opening: No predispute arbitration agreement shall include any condition
+  that:
+  (1) limits or contradicts the rules of any self-regulatory organization;
+  (2) limits the ability of a party to file any claim in arbitration;
+  (3) limits the ability of a party to file any claim in court permitted to be filed
+  in court under the rules of the forums in which a claim may be filed under the
+  agreement;
+  (4) limits the ability of arbitrators to make any award.
+official (c)(2) (names of / how to contact arbitration forums), official (e)/(f)
+  and later, and FINRA 2263 (a different audience) exist and are named only
+if official (f) is quoted, typography there uses hyphenated "pre-dispute" inside a
+  statement in straight quotes; this toy does not tidy that into "predispute"
+  this is a flatten into packed 2140, packed 2273, packed 2251, or already-named 11870, or an invention that every customer must arbitrate? False
+  this toy writes "predispute" as "pre-dispute" in official (a)/(b)/(c)/(d), or writes "thirty days" / "ten business days" as "30" / "10"? False
+  any predispute arbitration clause shall be highlighted and immediately preceded by the official outline language; a highlighted location statement shall precede any signature line; a copy shall be given within thirty days of signing; a copy (or a statement that the member does not have a copy) shall be provided within ten business days of the customer's request, or by the earlier of that clock and paragraph (b)(2) if the request comes first; and no predispute arbitration agreement shall include a condition that official (d)(1)-(4) prohibit? True
+literacy only; not a how-to for writing an arbitration clause, and not legal advice
+no broker or product recommendation
+assertions passed: 61/61

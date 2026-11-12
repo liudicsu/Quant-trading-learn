@@ -1,0 +1,40 @@
+=== A. 17 CFR 240.14b-1: Obligation of registered brokers and dealers in connection with the prompt forwarding of certain communications to beneficial owners ===
+official caption typography is Obligation of registered brokers and dealers in
+  connection with the prompt forwarding of certain communications to beneficial
+  owners.
+official (b) heading typography is Dissemination and beneficial owner information
+  requirements.
+14b-1(b)(1): The broker or dealer shall respond, by first class mail or other equally
+  prompt means, directly to the registrant no later than seven business days after
+  the date it receives an inquiry made in accordance with § 240.14a-13(a) or
+  § 240.14c-7(a) by indicting, by means of a search card or otherwise:
+official typography is "by indicting" (not "indicating") and "first class mail"
+  (no hyphen)
+official (b)(1)(ii) typography is "addresses,and" (comma, no space) and, later in
+  the same sentence, "names, addresses and securities positions" (spaces; no comma
+  before "and"); this toy does not tidy either
+14b-1(b)(2): The broker or dealer shall, upon receipt of the proxy, other proxy
+  soliciting material, information statement, and/or annual report to security
+  holders from the registrant or other soliciting person, forward such materials to
+  its customers who are beneficial owners of the registrant's securities no later
+  than five business days after receipt of the proxy material, information statement
+  or annual report to security holders.
+official typography is "and/or annual report to security holders"; official (b)(2)
+  has no Oxford comma before "or annual report to security holders"; a straight
+  apostrophe in "registrant's"
+official (a) definitions exist and are named only; official typography uses
+  typographic quotes around “registrant”
+official (b)(3) non-objecting beneficial-owner names, addresses, and securities
+  positions, the householding paragraph that names 14a-3(e)(1) / 14c-3(c), official
+  (c) and later, 17 CFR 240.14b-2, and 17 CFR 240.14a-13 exist and are named only;
+  this toy is not those catalogs
+cite 17 CFR 240.14b-1; title 17 up_to_date_as_of 2026-11-09
+this is a later separate item from packed FINRA 2251; packing 14b-1 as a second
+  core of the 2251 box remains wrong
+  this is a flatten into packed 2251, or a recast of 2251 as this rule, or a street-name / ACATS primer? False
+  this toy tidies official "by indicting" into "indicating", tidies official (b)(1)(ii) "addresses,and", or hyphenates "first class mail"? False
+  the broker or dealer shall respond by first class mail or other equally prompt means no later than seven business days after receiving an official 14a-13(a) or 14c-7(a) inquiry, by indicting by a search card or otherwise, and shall forward proxy, information-statement, and/or annual-report materials to beneficial-owner customers no later than five business days after receipt? True
+literacy only; not a street-name, ACATS, or proxy-processing how-to
+no broker or product recommendation
+assertions passed: 3/3
+disclaimer: official 17 CFR 240.14b-1; learning only; not legal advice; no broker or product recommendation

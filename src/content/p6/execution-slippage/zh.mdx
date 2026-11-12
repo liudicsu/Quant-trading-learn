@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **19.50 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h + FINRA 2232(b)(1) NMS 交收日确认披露 0.25h + FINRA 2232(b)(2) 可赎回权益证券确认披露 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **19.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h + FINRA 2232(b)(1) NMS 交收日确认披露 0.25h + FINRA 2232(b)(2) 可赎回权益证券确认披露 0.25h + 17 CFR 240.15c2-4 与承销相关的收款的转交或保管（firm-commitment 承销除外）0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -614,6 +614,59 @@ no broker or confirmation-vendor recommendation
 assertions passed: 52/52
 ```
 
+## 17 CFR 240.15c2-4：与承销相关的收款的转交或保管（核实于 2026-11-12）
+
+上面已经打包的 2232(b)(2) 保持原样。不要改写那个已上线的框，也不要改写已经打印的 O / 2232(b)(1) 或 P / 2232(b)(2) 实验摘录。这一节打包现行 17 CFR 240.15c2-4 的全文（官方开句 + 官方 (a)/(b)），避免为官方 “promptly” 发明 T+1 或其他数字时钟，把本规则写成适用于 firm-commitment 承销，或把它压进已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105。这讲的是在 *firm-commitment 承销以外* 的分销里，认购款项放在哪里。仅供学习；没有券商、承销商或托管银行建议。
+
+[17 CFR 240.15c2-4](https://www.ecfr.gov/current/title-17/section-240.15c2-4)：“It shall constitute a “fraudulent, deceptive, or manipulative act or practice” as used in section 15(c)(2) of the Act, for any broker, dealer or municipal securities dealer participating in any distribution of securities, other than a firm-commitment underwriting, to accept any part of the sale price of any security being distributed unless:” 官方标题印刷是 “Transmission or maintenance of payments received in connection with underwritings。” 官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号（U+201C / U+201D）。官方印刷是带连字符的 “firm-commitment，” 以及 “municipal securities dealer。” 官方 “promptly” 没有数字时钟。Title 17 `up_to_date_as_of` 2026-11-09。
+
+官方 (a)：“The money or other consideration received is promptly transmitted to the persons entitled thereto; or”
+
+官方 (b)：“If the distribution is being made on an “all-or-none” basis, or on any other basis which contemplates that payment is not to be made to the person on whose behalf the distribution is being made until some further event or contingency occurs, (1) the money or other consideration received is promptly deposited in a separate bank account, as agent or trustee for the persons who have the beneficial interests therein, until the appropriate event or contingency has occurred, and then the funds are promptly transmitted or returned to the persons entitled thereto, or (2) all such funds are promptly transmitted to a bank which has agreed in writing to hold all such funds in escrow for the persons who have the beneficial interests therein and to transmit or return such funds directly to the persons entitled thereto when the appropriate event or contingency has occurred。”
+
+官方来源行：“[41 FR 22826, June 7, 1976]。” 已经教过的 10b-9（all-or-none *陈述*）和已经教过的 Regulation M Rule 105 存在，只作为对照点名。不要打包 firm-commitment 操作指南或托管协议目录。
+
+**实验：** `examples/p6/12_rule606_toy.py` 的 Q 节（前面的 **52/52 after P / 2232(b)(2)** 保持不变；Q 节之后为 55/55）：
+
+```text
+=== Q. 17 CFR 240.15c2-4: Transmission or maintenance of payments received in connection with underwritings ===
+official caption typography is Transmission or maintenance of payments received in
+  connection with underwritings.
+15c2-4 opening: It shall constitute a “fraudulent, deceptive, or manipulative act or
+  practice” as used in section 15(c)(2) of the Act, for any broker, dealer or
+  municipal securities dealer participating in any distribution of securities, other
+  than a firm-commitment underwriting, to accept any part of the sale price of any
+  security being distributed unless:
+15c2-4(a): The money or other consideration received is promptly transmitted to the
+  persons entitled thereto; or
+15c2-4(b): If the distribution is being made on an “all-or-none” basis, or on any
+  other basis which contemplates that payment is not to be made to the person on
+  whose behalf the distribution is being made until some further event or
+  contingency occurs, (1) the money or other consideration received is promptly
+  deposited in a separate bank account, as agent or trustee for the persons who have
+  the beneficial interests therein, until the appropriate event or contingency has
+  occurred, and then the funds are promptly transmitted or returned to the persons
+  entitled thereto, or (2) all such funds are promptly transmitted to a bank which
+  has agreed in writing to hold all such funds in escrow for the persons who have
+  the beneficial interests therein and to transmit or return such funds directly to
+  the persons entitled thereto when the appropriate event or contingency has
+  occurred.
+official typography uses typographic quotes (U+201C / U+201D) around
+  “fraudulent, deceptive, or manipulative act or practice” and “all-or-none”;
+  official typography is hyphenated "firm-commitment" and "municipal securities
+  dealer"; official "promptly" has no numeric clock
+cite 17 CFR 240.15c2-4; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22826, June 7, 1976].
+already-taught 10b-9 (all-or-none representations) and Regulation M Rule 105 exist
+  and are named only as foils; this toy is not those rules, and is not packed 10b-5
+  this is a flatten into packed 10b-5, already-taught 10b-9, or already-taught Regulation M Rule 105? False
+  this toy invents a T+1 or other numeric clock for "promptly", or teaches that this rule applies to a firm-commitment underwriting? False
+  it is a fraudulent, deceptive, or manipulative act or practice for a broker, dealer or municipal securities dealer participating in a distribution other than a firm-commitment underwriting to accept any part of the sale price unless the money is promptly transmitted to the persons entitled thereto, or, on an all-or-none or other contingent basis, promptly deposited in a separate bank account as agent or trustee or promptly transmitted to a written bank escrow, until the event or contingency has occurred, and then promptly transmitted or returned? True
+literacy only; not a firm-commitment how-to or an escrow-agreement catalog
+no broker, underwriter, or escrow-bank recommendation
+assertions passed: 55/55
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -642,6 +695,7 @@ assertions passed: 52/52
 24. 把 17 CFR 242.607 压进已经教过的 Rule 606 季度路由报告或已经教过的 Rule 10b-10 / 10b-10(d)(8) 对 PFOF 的定义，或压进已经打包的 2121 / 2122 / 2124 或 2266 / 2267 / 2231 时钟；在被引用的句子里悄悄把 “national best bid and national best offer” 换成 “NBBO”；或漏掉官方 (a)(1)–(2) 或官方 (b)。
 25. 把 FINRA 2232(b)(1) 压进已经教过的 T+1 / 15c6-1，或压进已经打包的 15c6-2；把官方 (a) 当成教学核心；把已经打包的 4340 压进官方 (b)(1) 或官方 (b)(2)（官方 (b)(2) 在本课后面另行打包）；在 “FINRA Rule 6420” 后的逗号前插入空格；或搭建官方 (c)–(e) 的债务目录。
 26. 把 FINRA 2232(b)(2) 压进已经打包的 4340 或已经打包的 2232(b)(1)；把官方 (a) 当成教学核心（压进已经打包的 10b-10）；发明每一只普通股都可以被提前赎回；为 SR-FINRA-2019-008 发明生效日；或搭建官方 (c)–(f) 目录。
+27. 把 17 CFR 240.15c2-4 压进已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105；为官方 “promptly” 发明 T+1 或其他数字时钟；把本规则写成适用于 firm-commitment 承销；或丢掉 “fraudulent, deceptive, or manipulative act or practice” 或 “all-or-none” 两侧的官方弯引号。
 
 
 ## 练习（1:1）
@@ -670,6 +724,7 @@ assertions passed: 52/52
 21. **ex-607** — 运行同一脚本的 N 节；说明书面 PFOF 与路由政策信息须在何时提供，官方 (a)(2) 对优于 national best bid and national best offer 的价格有何要求，以及这是不是已经教过的 606 或 10b-10；**完成标准**：须在开立新账户时以及此后每年一次提供书面信息，包括官方 (a)(2) 优于 national best bid and national best offer 的价格；官方印刷包括 “broker's or dealer's”；官方 (b) 存在；这不是已经教过的 606 或 10b-10，与输出一致。
 22. **ex-2232** — 运行同一脚本的 O 节；说明 2232(b)(1) 要求确认进一步披露什么，打包的是不是官方 (a)，以及这是不是已经教过的 T+1 / 15c6-1 或已经打包的 15c6-2；**完成标准：** 就任何 NMS 股票或受 FINRA Rule 6600 Series 报告要求约束的证券（FINRA Rule 6420 所定义的直接参与计划除外）的交易，确认须进一步披露该笔交易的交收日；官方印刷是 “shall further disclose”，并且在 “FINRA Rule 6420” 后的逗号前没有空格；官方 (a) 只点名；官方 (b)(2) 在本课后面另行打包；这不是已经教过的 T+1 / 15c6-1，也不是已经打包的 15c6-2，并与输出一致。
 23. **ex-2232b2** — 运行同一脚本的 P 节；说明官方 2232(b)(2) 要求确认进一步披露什么，官方 (a) 是否被打包，以及是不是每一只普通股都可以被提前赎回；**完成标准：** 官方 (b) 开句印刷是 “shall further disclose”；官方 (b)(2) 要求就任何可赎回权益证券的交易披露 (A) 该证券是可赎回权益证券；以及 (B) 客户可以联系该会员以获取有关该证券的更多信息；官方 (a) 和官方 (c)–(f) 只点名；本课不发明每一只普通股都可以被提前赎回，也不为 SR-FINRA-2019-008 发明生效日；官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包，这不是把已经打包的 4340 压进那些确认披露，并与输出一致。
+24. **ex-15c24** — 运行同一脚本的 Q 节；说明在 firm-commitment 承销以外的分销里 15c2-4 要求什么，官方 “promptly” 有没有数字时钟，以及这是不是已经打包的 10b-5 或已经教过的 10b-9；**完成标准：** 官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号，并且是带连字符的 “firm-commitment”；官方 “promptly” 没有数字时钟；官方来源行是 “[41 FR 22826, June 7, 1976]。”；这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105，并与输出一致。
 
 ## 测验
 
@@ -707,6 +762,8 @@ assertions passed: 52/52
 
 <Quiz id="es-2232b2" question="根据 FINRA 2232(b)(2)，就一笔可赎回权益证券交易，确认须进一步披露什么？打包的是不是官方 (a)？是不是每一只普通股都可以被提前赎回？这是把已经打包的 4340 压进来吗？" options={["每一只普通股都可以被提前赎回，而且本课为 SR-FINRA-2019-008 发明了生效日", "教学核心是官方 (a)（压进已经打包的 10b-10），或这是把已经打包的 4340 压进官方 2232(b)(2)", "A confirmation given or sent pursuant to this Rule shall further disclose, with respect to any transaction in a callable equity security, that: (A) the security is a callable equity security; and (B) a customer may contact the member for more information concerning the security. 官方 (b) 开句印刷是 “shall further disclose。” 官方标题印刷是 “Customer Confirmations。” 官方 (a) 只点名，不当成教学核心。官方 (c)–(f) 是存在的，只点名。本课不发明每一只普通股都可以被提前赎回，也不为 SR-FINRA-2019-008 发明生效日。官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包；这不是把已经打包的 4340 压进那些确认披露", "确认只需说明该证券可能被提前赎回，不必有官方 (b)(2)(B) 的联系披露"]} answer={2} explanation="FINRA 2232(b)(2) 要求确认进一步披露该证券是可赎回权益证券，以及客户可以联系该会员以获取有关该证券的更多信息。官方印刷是 “shall further disclose。” 官方 (a) 只点名。本课不发明每一只普通股都可以被提前赎回，也不为 SR-FINRA-2019-008 发明生效日。官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包；不要把已经打包的 4340 压进那些确认披露。" />
 
+<Quiz id="es-15c24" question="根据 17 CFR 240.15c2-4，在 firm-commitment 承销以外的分销里，经纪商、交易商或市政证券交易商何时可以接受任何部分售价？官方 “promptly” 有没有数字时钟？" options={["本规则适用于 firm-commitment 承销，而且 “promptly” 就是 T+1", "这是对已经打包的 10b-5、已经教过的 10b-9 或已经教过的 Regulation M Rule 105 的压入，或官方印刷丢掉了 “all-or-none” 两侧的弯引号", "It shall constitute a “fraudulent, deceptive, or manipulative act or practice” as used in section 15(c)(2) of the Act, for any broker, dealer or municipal securities dealer participating in any distribution of securities, other than a firm-commitment underwriting, to accept any part of the sale price of any security being distributed unless：官方 (a) 收到的款项或其他对价 promptly transmitted to the persons entitled thereto，或官方 (b) 在 “all-or-none” 或任何其他须待进一步事件或条件发生才向被分销一方付款的基础上，款项被 promptly deposited 在单独的银行账户中作为 agent or trustee，或 promptly transmitted 给已书面同意以 escrow 持有的银行，直到该事件或条件发生，然后再 promptly transmitted or returned。官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号，并且是带连字符的 “firm-commitment。” 官方 “promptly” 没有数字时钟。官方来源行：“[41 FR 22826, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105", "官方 (a) 是撰写托管协议的操作指南，而且官方 (b) 只是重述已经教过的 10b-9 陈述"]} answer={2} explanation="17 CFR 240.15c2-4 打包官方开句和官方 (a)/(b)。官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号。官方 “promptly” 没有数字时钟。本规则不适用于 firm-commitment 承销。这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Rule 105。" />
+
 
 
 ## 完成标准
@@ -721,6 +778,7 @@ enrich30（核实于 2026-11-12）：[FINRA Rule 2122](https://www.finra.org/rul
 enrich31（核实于 2026-11-12）：[17 CFR 242.607](https://www.ecfr.gov/current/title-17/section-242.607)（Title 17 `up_to_date_as_of` 2026-11-09）。没有券商、交易场所或 PFOF 建议。
 enrich34（核实于 2026-11-12）：[FINRA Rule 2232](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2232)（本课只打包官方 (b)(1)）。没有券商或确认服务商建议。
 enrich36（核实于 2026-11-12）：[FINRA Rule 2232](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2232)（本课现在也打包官方 (b)(2)；官方 (b) 开句印刷是 “shall further disclose”；官方 (a) 和官方 (c)–(f) 只点名；官方修订行印刷是 “Amended by SR-FINRA-2019-008.”，没有发明生效日）。官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包；不要把已经打包的 4340 压进那些确认披露。没有券商或确认服务商建议。
+enrich37（核实于 2026-11-12）：[17 CFR 240.15c2-4](https://www.ecfr.gov/current/title-17/section-240.15c2-4)（本课打包官方开句和官方 (a)/(b)；官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号，并且是带连字符的 “firm-commitment”；官方 “promptly” 没有数字时钟；官方来源行是 “[41 FR 22826, June 7, 1976]。”；Title 17 截至 2026-11-09；这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105）。仅供学习；不是 firm-commitment 操作指南或托管协议目录。没有券商、承销商或托管银行建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

@@ -445,3 +445,64 @@ no issuer, associated-person, or broker recommendation
 assertions passed: 61/61
 ASSERT_10b52_ok
 disclaimer: official 17 CFR 240.10b5-2; learning only; not legal advice; literacy only, not an insider-trading how-to
+=== V. FINRA 3130: Annual Certification of Compliance and Supervisory Processes ===
+official caption typography is 3130. Annual Certification of Compliance and
+  Supervisory Processes (no period after Processes)
+official (a) heading typography is (a) Designation of Chief Compliance Officer(s)
+  (no period)
+3130(a): Each member shall designate and specifically identify to FINRA on Schedule A
+  of Form BD one or more principals to serve as a chief compliance officer.
+official (b) heading typography is (b) Annual Certification Requirement (no period)
+3130(b): Each member shall have its chief executive officer(s) (or equivalent
+  officer(s)) certify annually,1 as set forth in paragraph (c), that the member has
+  in place processes to establish, maintain, review, test and modify written
+  compliance policies and written supervisory procedures reasonably designed to
+  achieve compliance with applicable FINRA rules, MSRB rules and federal securities
+  laws and regulations, and that the chief executive officer(s) has conducted one or
+  more meetings with the chief compliance officer(s) in the preceding 12 months to
+  discuss such processes.
+official typography includes a comma after "annually" before the footnote marker,
+  official "(s)", and official "preceding 12 months."
+official footnote 1: Members must ensure that each ensuing annual certification is
+  effected no later than on the anniversary date of the previous year's
+  certification. (straight apostrophe in "year's")
+official (c) Certification (no period) and the prescribed certification text, and
+  official SM .01-.10, exist and are named only; this toy is not those catalogs
+if the official SM header is quoted, typography is • • • Supplementary Material: --------------
+  (U+2022, U+00A0 NBSP, 14 ASCII hyphens); this toy does not copy packed 2273's
+  ordinary-space / 15-hyphen SM header onto 3130
+  this is a flatten into packed 2010, packed 3310, or still-unpacked 3110 / 3120, or a how-to for the certification? False
+  this toy invents a period after official (a) "Officer(s)", official (b) "Requirement", official (c) "Certification", or official caption "Processes"? False
+  each member shall designate and specifically identify to FINRA on Schedule A of Form BD one or more principals to serve as a chief compliance officer, and shall have its chief executive officer(s) (or equivalent officer(s)) certify annually, as set forth in paragraph (c), including the official footnote 1 anniversary clock (no later than on the anniversary date of the previous year's certification) and one or more meetings with the chief compliance officer(s) in the preceding 12 months? True
+literacy only; not a how-to for writing the certification
+no member, officer, or product recommendation
+assertions passed: 64/64
+=== W. FINRA 2270: Day-Trading Risk Disclosure Statement ===
+official caption typography is 2270. Day-Trading Risk Disclosure Statement (no
+  period after Statement)
+2270(a) opening: Except as provided in paragraph (b), no member that is promoting a
+  day-trading strategy, directly or indirectly, shall open an account for or on
+  behalf of a non-institutional customer unless, prior to opening the account, the
+  member has furnished to each customer, individually, in paper or electronic form,
+  the disclosure statement specified in this paragraph (a). In addition, any member
+  that is promoting a day-trading strategy, directly or indirectly, must post such
+  disclosure statement on the member's Web site in a clear and conspicuous manner.
+official typography is two-word "Web site" (capital W), a straight apostrophe in
+  "member's Web site", hyphenated "day-trading strategy" and "non-institutional",
+  "paper or electronic form", and "clear and conspicuous manner"
+the prescribed "Day-Trading Risk Disclosure Statement" text exists and is named
+  only, including its model figures ($50,000, $16, 29 transactions, $111,360); those
+  model figures are not legal thresholds and are not a substitute for already-taught
+  IML/IMD / the former $25,000 PDT minimum equity
+official (b) substantially similar alternative, official SM (including SM .02, which
+  names Rule 2130 and Rule 4210(f)(8)(B)), and FINRA 2130 exist and are named only
+already-taught PDT / Notice 26-10 / 26-11 stay as written; this toy does not invent
+  that those notices repealed 2270
+  this is a flatten into packed 2264 / 2265 / 2267, packed 2090, or still-unpacked 2130, a day-trading how-to, or an invention that Notice 26-10 / 26-11 repealed 2270? False
+  this toy tidies official "Web site" into "website", or treats the model $50,000 / $16 / 29 / $111,360 figures as legal thresholds? False
+  except as provided in paragraph (b), no member promoting a day-trading strategy, directly or indirectly, shall open an account for or on behalf of a non-institutional customer unless, prior to opening the account, the member has furnished to each customer, individually, in paper or electronic form, the disclosure statement specified in official (a), and any such member must post that statement on the member's Web site in a clear and conspicuous manner? True
+literacy only; not a day-trading how-to, and not legal advice
+no broker, day-trading firm, or product recommendation
+assertions passed: 67/67
+ASSERT_3130_2270_ok
+disclaimer: official FINRA 3130 and 2270; learning only; not legal advice; literacy only, not a certification or day-trading how-to

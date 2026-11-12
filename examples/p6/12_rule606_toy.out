@@ -273,3 +273,39 @@ Amended by SR-FINRA-2019-008. (no effective date on that amendment line; this to
   a confirmation shall further disclose, with respect to any transaction in a callable equity security, that the security is a callable equity security and that a customer may contact the member for more information concerning the security? True
 no broker or confirmation-vendor recommendation
 assertions passed: 52/52
+=== Q. 17 CFR 240.15c2-4: Transmission or maintenance of payments received in connection with underwritings ===
+official caption typography is Transmission or maintenance of payments received in
+  connection with underwritings.
+15c2-4 opening: It shall constitute a “fraudulent, deceptive, or manipulative act or
+  practice” as used in section 15(c)(2) of the Act, for any broker, dealer or
+  municipal securities dealer participating in any distribution of securities, other
+  than a firm-commitment underwriting, to accept any part of the sale price of any
+  security being distributed unless:
+15c2-4(a): The money or other consideration received is promptly transmitted to the
+  persons entitled thereto; or
+15c2-4(b): If the distribution is being made on an “all-or-none” basis, or on any
+  other basis which contemplates that payment is not to be made to the person on
+  whose behalf the distribution is being made until some further event or
+  contingency occurs, (1) the money or other consideration received is promptly
+  deposited in a separate bank account, as agent or trustee for the persons who have
+  the beneficial interests therein, until the appropriate event or contingency has
+  occurred, and then the funds are promptly transmitted or returned to the persons
+  entitled thereto, or (2) all such funds are promptly transmitted to a bank which
+  has agreed in writing to hold all such funds in escrow for the persons who have
+  the beneficial interests therein and to transmit or return such funds directly to
+  the persons entitled thereto when the appropriate event or contingency has
+  occurred.
+official typography uses typographic quotes (U+201C / U+201D) around
+  “fraudulent, deceptive, or manipulative act or practice” and “all-or-none”;
+  official typography is hyphenated "firm-commitment" and "municipal securities
+  dealer"; official "promptly" has no numeric clock
+cite 17 CFR 240.15c2-4; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22826, June 7, 1976].
+already-taught 10b-9 (all-or-none representations) and Regulation M Rule 105 exist
+  and are named only as foils; this toy is not those rules, and is not packed 10b-5
+  this is a flatten into packed 10b-5, already-taught 10b-9, or already-taught Regulation M Rule 105? False
+  this toy invents a T+1 or other numeric clock for "promptly", or teaches that this rule applies to a firm-commitment underwriting? False
+  it is a fraudulent, deceptive, or manipulative act or practice for a broker, dealer or municipal securities dealer participating in a distribution other than a firm-commitment underwriting to accept any part of the sale price unless the money is promptly transmitted to the persons entitled thereto, or, on an all-or-none or other contingent basis, promptly deposited in a separate bank account as agent or trustee or promptly transmitted to a written bank escrow, until the event or contingency has occurred, and then promptly transmitted or returned? True
+literacy only; not a firm-commitment how-to or an escrow-agreement catalog
+no broker, underwriter, or escrow-bank recommendation
+assertions passed: 55/55
