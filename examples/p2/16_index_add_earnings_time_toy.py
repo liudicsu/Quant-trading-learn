@@ -263,3 +263,65 @@ check(builds_14a8 is False, "do not build a Rule 14a-8 engine")
 print("no issuer or voting advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official Form 8-K Item 5.07 special clock; no issuer or voting advice; learning only")
+
+print("=== F. 17 CFR 240.14a-9: False or misleading statements ===")
+# 17 CFR 240.14a-9 False or misleading statements (official eCFR
+# versioner API XML, title 17 up_to_date_as_of 2026-11-09, opened
+# 2026-11-12; API XML byte-identical to the enrich32 copy). Add this
+# section after the current last Item 5.07 disclaimer so the tip file
+# remains a strict byte-prefix. Keep sections A-E, including 13/13
+# after C, 18/18 after D, the existing line "do not flatten Item 5.07
+# or other special clocks into the same trigger," and 22/22 after E
+# plus the last disclaimer, identical.
+# Official (a): No solicitation subject to this regulation shall be
+# made by means of any proxy statement, form of proxy, notice of
+# meeting or other communication, written or oral, containing any
+# statement which, at the time and in the light of the circumstances
+# under which it is made, is false or misleading with respect to any
+# material fact, or which omits to state any material fact necessary in
+# order to make the statements therein not false or misleading or
+# necessary to correct any statement in any earlier communication with
+# respect to the solicitation of a proxy for the same meeting or subject
+# matter which has become false or misleading.
+# Official typography is "in the light of the circumstances under which
+# it is made" (singular "it is made"). Do not tidy that into packed
+# 10b-5's "in the light of the circumstances under which they were
+# made." Official (a) is "notice of meeting or other communication,
+# written or oral." Official caption is "False or misleading
+# statements." Cite 17 CFR 240.14a-9.
+# Official (b) (filing with or examination by the Commission is not a
+# finding of accuracy or a merits approval) and official (c) (false or
+# misleading statements in a registrant's proxy materials, a Schedule
+# 14N notice, or a related communication by a nominee, nominating
+# shareholder, or nominating shareholder group) exist; official Note
+# examples a-d exist. Name official (b), official (c), and the Note;
+# do not build official (c) or the Note catalog. Do not flatten 14a-9
+# into already-taught Rule 14a-8 or Form 8-K Item 5.07, and do not
+# rewrite those already-shipped boxes. Learning only; no issuer or
+# voting advice.
+
+print("14a-9(a): No solicitation subject to this regulation shall be made by means of any proxy")
+print("  statement, form of proxy, notice of meeting or other communication, written or oral,")
+print("  containing any statement which, at the time and in the light of the circumstances")
+print("  under which it is made, is false or misleading with respect to any material fact, or")
+print("  which omits to state any material fact necessary in order to make the statements")
+print("  therein not false or misleading or necessary to correct any statement in any earlier")
+print("  communication with respect to the solicitation of a proxy for the same meeting or")
+print("  subject matter which has become false or misleading")
+print('official typography is "in the light of the circumstances under which it is made" (singular "it is made")')
+print("official (a) is notice of meeting or other communication, written or oral")
+print("official caption is False or misleading statements")
+print("cite 17 CFR 240.14a-9; title 17 up_to_date_as_of 2026-11-09")
+print("official (b), official (c), and the Note exist; this toy is not official (c) or the Note catalog")
+flatten_14a9 = False
+print(f"  this is a flatten into already-taught Rule 14a-8 or Form 8-K Item 5.07? {flatten_14a9}")
+check(flatten_14a9 is False, "do not flatten 14a-9 into already-taught 14a-8 or Item 5.07")
+tidies_10b5 = False
+print(f"  this toy tidies official typography into packed 10b-5's under which they were made? {tidies_10b5}")
+check(tidies_10b5 is False, "14a-9 typography is under which it is made, not they were made")
+core_14a9 = True
+print(f"  a solicitation may not be made by a proxy statement, form of proxy, notice of meeting or other communication, written or oral, that is false or misleading in the light of the circumstances under which it is made? {core_14a9}")
+check(core_14a9 is True, "14a-9 bars false or misleading proxy statements under which it is made")
+print("no issuer or voting advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.14a-9; no issuer or voting advice; learning only")

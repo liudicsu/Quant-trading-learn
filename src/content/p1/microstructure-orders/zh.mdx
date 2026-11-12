@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **18.00 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h + FINRA 2265 延长交易时段风险披露 0.25h + FINRA 2266 书面 SIPC 信息 0.25h + FINRA 5330 未成交订单调整 0.25h + FINRA 2264 保证金披露声明 0.25h + FINRA 2267 投资者教育与保护 / BrokerCheck 0.25h + FINRA 2261 财务状况披露 / 最近资产负债表 0.25h + FINRA 2231 客户账户结单 0.25h + FINRA 2090 了解你的客户 0.25h + FINRA 4370 书面业务连续性计划 / 客户披露 0.25h + FINRA 4340 可赎回证券公平分配 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **18.25 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h + FINRA 2265 延长交易时段风险披露 0.25h + FINRA 2266 书面 SIPC 信息 0.25h + FINRA 5330 未成交订单调整 0.25h + FINRA 2264 保证金披露声明 0.25h + FINRA 2267 投资者教育与保护 / BrokerCheck 0.25h + FINRA 2261 财务状况披露 / 最近资产负债表 0.25h + FINRA 2231 客户账户结单 0.25h + FINRA 2090 了解你的客户 0.25h + FINRA 4370 书面业务连续性计划 / 客户披露 0.25h + FINRA 4340 可赎回证券公平分配 0.25h + FINRA 2140 不得干扰客户账户转移请求 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -548,6 +548,36 @@ no broker or product recommendation
 assertions passed: 43/43
 ```
 
+## FINRA 2140：不得干扰与注册代表换工作有关的客户账户转移请求（核实于 2026-11-12）
+
+已经教过的 15c3-3 / SIPC 教学，以及新加入的 4370 / 4340，保持原样。不要改写那些段落。这一节补上官方的 2140，避免把 2140 改写成街道名义 / ACATS 入门，发明一套 Rule 11870 引擎，或发明每一次账户转移都受本规则覆盖。Rule 11870 只点名（它已经在已经打包的 2165 SM .01 里被点名）。没有券商或产品建议。
+
+[FINRA Rule 2140](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2140)：“No member or person associated with a member shall interfere with a customer's request to transfer his or her account in connection with the change in employment of the customer's registered representative where the account is not subject to any lien for monies owed by the customer or other bona fide claim. Prohibited interference includes, but is not limited to, seeking a judicial order or decree that would bar or restrict the submission, delivery or acceptance of a written request from a customer to transfer his or her account. Nothing in this Rule shall affect the operation of Rule 11870.” 官方标题印刷是 “Interfering With the Transfer of Customer Accounts in the Context of Employment Disputes。” 官方印刷是 “his or her account、” “includes, but is not limited to，” 以及 “written request from a customer to transfer his or her account。” 引用 “Nothing in this Rule shall affect the operation of Rule 11870” 时用普通的单个空格；官方 HTML 里链接前那个空的页面装饰 span 不是官方印刷。官方文本只覆盖与客户注册代表换工作有关的转移请求，并且仅在该账户不受客户所欠款项的任何留置权或其他善意请求权约束时适用。只点名 Rule 11870；不要把 2140 改写成街道名义 / ACATS / CNS 产品入门，也不要发明一套 11870 引擎。不要发明每一次账户转移都受本规则覆盖。不要把 2140 压进已经打包的 2165、已经打包的 4370 / 4340 / 2090 / 2231，或已经教过的 15c3-3 / SIPC。
+
+**实验：** 同一脚本的 O 节（包括 **43/43 after N / 4340**，在加入 4340 后与此前相同；O 节之后为 46/46）：
+
+```text
+=== O. FINRA 2140: no interference with a customer's account-transfer request in an employment-change context ===
+2140: No member or person associated with a member shall interfere with a customer's
+  request to transfer his or her account in connection with the change in employment
+  of the customer's registered representative where the account is not subject to any
+  lien for monies owed by the customer or other bona fide claim
+Prohibited interference includes, but is not limited to, seeking a judicial order or
+  decree that would bar or restrict the submission, delivery or acceptance of a
+  written request from a customer to transfer his or her account
+Nothing in this Rule shall affect the operation of Rule 11870
+official typography uses a normal single space before "Rule 11870"; empty page-chrome spans are not typography
+official typography is "his or her account," "includes, but is not limited to," and
+  "written request from a customer to transfer his or her account"
+official caption typography is Interfering With the Transfer of Customer Accounts in the Context of Employment Disputes
+Rule 11870 is named only; this toy is not a street-name / ACATS / CNS primer or a 11870 engine
+  this is a flatten into packed 2165, packed 4370 / 4340 / 2090 / 2231, or already-taught 15c3-3 / SIPC? False
+  this toy invents that every account transfer is covered? False
+  no interference with a customer's request to transfer his or her account in connection with the change in employment of the customer's registered representative, where the account is not subject to any lien for monies owed by the customer or other bona fide claim? True
+no broker or product recommendation
+assertions passed: 46/46
+```
+
 ## 跨市场扫单（ISO）：现行 Rule 611 的例外，不是废除规则（核实于 2026-11-12）
 
 上面的状态框已经说明：SEC 撤销 Rule 611 的提案（S7-2026-20）截至 2026-11-12 仍是**提案**，eCFR 仍列 §242.611。在现行法下，交易中心仍须有合理设计的政策，防止在 NMS 股票上穿越受保护报价（trade-through），**除非**适用例外。
@@ -842,6 +872,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 30. 把 FINRA 2090 压进 FINRA 2111 或 Regulation Best Interest / Form CRS；把 2090 当成开户披露时钟；丢掉官方括号 “(and retain)”；或悄悄改掉官方 SM .01 在 "essential" / "knowing the customer" 上的引号。
 31. 把 FINRA 4370 压进已经教过的 15c3-3 或 SIPC，或压进已经打包的 2261 / 2266 / 2267 / 2231 / 2090；把官方 “Web site” 改整齐成 “website”；发明没有 Web site 的会员仍须在网站上发布该披露；发明官方开户 / 应要求邮寄 / 在 Web site 发布之外的时钟；或搭建官方 (c) 的十项目录。
 32. 把 FINRA 4340 压进已经教过的 15c3-3 “possession or control，” 或压进 FINRA 2232(b)(2)；把官方一个词的 “website” 改整齐成已经打包的 4370 的官方 “Web site，” 或反过来；发明每一只普通股都可以被提前赎回；或搭建官方 SM .01 的文书与事务性目录或 SM .03 的介绍会员目录。
+33. 把 FINRA 2140 压进已经打包的 2165、已经打包的 4370 / 4340 / 2090 / 2231，或已经教过的 15c3-3 / SIPC；把 2140 改写成街道名义 / ACATS 入门，或发明一套 Rule 11870 引擎；发明每一次账户转移都受本规则覆盖；或在 “Nothing in this Rule shall affect the operation of Rule 11870” 里丢掉普通的单个空格。
 
 ## 练习（与任务清单 1:1）
 
@@ -874,6 +905,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 27. **ex-2090** — 运行同一脚本的 L 节；说明 2090 要求什么，它是不是开户披露时钟，以及这是不是 FINRA 2111 或 Regulation Best Interest / Form CRS；**完成标准**：每个会员须以合理勤勉，就每个账户的开立与维护，了解（并保留）关于每位客户以及代表该客户行事之人权限的基本事实；官方 SM .01 的四类事实存在；这是勤勉与事实义务，不是开户披露时钟，也不是已经打包的 2264 / 2266 / 2267 / 2261 / 2231，或 FINRA 2111 / Reg BI / Form CRS，与输出一致。
 28. **ex-4370** — 运行同一脚本的 M 节；说明 4370 要求会员创建并维持什么、官方 (e) 至少须作哪些披露，以及官方印刷是不是 “Web site”；**完成标准：** 书面业务连续性计划必须识别与紧急情况或重大业务中断有关的程序，并合理设计以使会员能够履行其对客户的现有义务；官方 (e) 披露须在开户时以书面形式作出，在会员维持 Web site 时在该 Web site 上发布，并应要求邮寄；官方印刷是 “Web site”；官方 (b)、(c)、(d) 和 (f) 是存在的，本课不搭建那些引擎；这不是已经教过的 15c3-3 或 SIPC，也不是已经打包的 2261 / 2266 / 2267 / 2231 / 2090，并与输出一致。
 29. **ex-4340** — 运行同一脚本的 N 节；说明 4340 要求哪些分配程序和客户通知、官方印刷是不是 “website，” 以及是不是每一只普通股都可以被提前赎回；**完成标准：** 须在会员的 website 上提供公平公正的分配程序，并向新客户在开户时、向所有客户每个日历年至少一次提供书面通知（可以采用电子形式）；官方印刷是一个词、小写的 “website”；官方 (b) 和 (c) 是存在的；这不是已经教过的 15c3-3 “possession or control，” 本课也不发明每一只普通股都可以被提前赎回，并与输出一致。
+30. **ex-2140** — 运行同一脚本的 O 节；说明 2140 禁止什么、是不是每一次账户转移都受覆盖，以及这是不是街道名义 / ACATS 入门；**完成标准：** 会员或关联人士不得干扰与客户注册代表换工作有关的账户转移请求，前提是该账户不受客户所欠款项的任何留置权或其他善意请求权约束；“Nothing in this Rule shall affect the operation of Rule 11870” 用普通的单个空格引用；官方文本并不覆盖每一次账户转移；这不是街道名义 / ACATS 入门，也不是已经打包的 2165 / 4370 / 4340，并与输出一致。
 
 ## 测验
 
@@ -915,6 +947,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 <Quiz id="mo-2090" question="根据 FINRA 2090，会员就每个账户的开立与维护必须做什么？这是开户披露时钟吗？它是不是对 FINRA 2111 或 Regulation Best Interest / Form CRS 的压平？" options={["2090 是开户披露时钟，与已经打包的 2264 / 2266 / 2267 / 2261 / 2231 相同", "2090 就是 FINRA 2111 适当性规则，或就是 Regulation Best Interest / Form CRS", "每个会员须以合理勤勉，就每个账户的开立与维护，了解（并保留）关于每位客户以及代表该客户行事之人权限的基本事实。引用官方括号 “(and retain)。” 官方 SM .01 的四类事实存在，并在 \"essential\" / \"knowing the customer\" 上使用官方引号，仅被点名。这是勤勉与事实义务，不是开户披露时钟。这不是已经打包的 2264 / 2266 / 2267 / 2261 / 2231，也不是 FINRA 2111 或 Regulation Best Interest / Form CRS", "账户一经开立，基本事实就不必再保留"]} answer={2} explanation="FINRA 2090 要求以合理勤勉，就每个账户的开立与维护，了解（并保留）基本事实。官方 SM .01 的四类事实存在。这是勤勉与事实义务，不是开户披露时钟，也不是 FINRA 2111 或 Regulation Best Interest / Form CRS。" />
 <Quiz id="mo-4370" question="根据 FINRA 4370，会员必须创建并维持什么，以及至少须向客户作哪些披露？官方印刷是 “Web site” 还是 “website”？这是已经教过的 15c3-3 或 SIPC，或已经打包的 2261 / 2266 / 2267 / 2231 / 2090 吗？" options={["4370 是对已经教过的 15c3-3 或 SIPC，或对已经打包的 2261 / 2266 / 2267 / 2231 / 2090 的改写", "没有 Web site 的会员仍须在网站上发布该披露，而且官方印刷是一个词的 “website”", "每个会员必须创建并维持一份书面业务连续性计划，识别与紧急情况或重大业务中断有关的程序；这些程序必须合理设计，以使会员能够履行其对客户的现有义务。官方 (e)：每个会员必须向客户披露其业务连续性计划如何应对未来重大业务中断的可能性，以及会员计划如何应对不同范围的事件。至少须在开户时以书面形式向客户作出该披露，在会员的 Web site 上发布（如果该会员维持 Web site），并应要求邮寄给客户。官方印刷是两个单词、W 大写的 “Web site。” 官方 (c) 十项目录、官方 (b) 年度审查、官方 (d) 高级管理人员 / 注册负责人批准，以及官方 (f) 紧急联系人报告是存在的，只点名；本课不搭建那些引擎。官方 (f)(1) 印刷在点名时包括 “e.g., the member's attorney, accountant, or clearing firm contact。” 不要发明没有 Web site 的会员仍须在网站上发布该披露。这不是已经教过的 15c3-3 或 SIPC，也不是已经打包的 2261 / 2266 / 2267 / 2231 / 2090", "必须把官方 (c) 搭成十项引擎，而且唯一要求的披露是中断已经发生之后的口头通知"]} answer={2} explanation="FINRA 4370 要求一份合理设计以使会员能够履行对客户现有义务的书面业务连续性计划，以及官方 (e) 在开户时的书面披露、在会员维持 Web site 时在该 Web site 上发布，并应要求邮寄。官方印刷是 “Web site。” 官方 (b)、(c)、(d) 和 (f) 只点名。这不是已经教过的 15c3-3 或 SIPC，也不是已经打包的 2261 / 2266 / 2267 / 2231 / 2090。" />
 <Quiz id="mo-4340" question="根据 FINRA 4340，对其占有或控制下的可赎回证券，会员必须建立什么，以及须向客户提供什么通知？官方印刷是 “website” 还是 “Web site”？是不是每一只普通股都可以被提前赎回？这是已经教过的 15c3-3 “possession or control” 吗？" options={["官方印刷是两个单词的 “Web site，” 与已经打包的 4370 相同，而且每一只普通股都可以被提前赎回", "这是对已经教过的 15c3-3 “possession or control，” 或对 FINRA 2232(b)(2) 的改写", "每个在其占有或控制下持有按条款可在到期前被赎回或提前兑付的证券的会员，应当在该会员的 website 上建立并提供按公平公正基础在客户之间分配将被赎回或被选为提前兑付的证券的程序，并应向新客户在开户时、向所有客户每个日历年至少一次，提供书面通知（可以采用电子形式），说明他们如何在该会员的 website 上查阅分配程序，以及应客户要求，会员将向该客户提供分配程序的纸质副本。官方印刷是一个词、小写的 “website。” 官方 (b) 有利赎回：会员 / 关联人士账户须等到所有其他客户的头寸都已得到满足。官方 (c) 不利赎回：会员不得把它或其关联人士的头寸排除出证券池。官方 SM .02 可以点名公正抽签、按比例，或其他能够实现公平公正分配的方式，只点名。官方 SM .01 和 SM .03 是存在的，只点名；本课不搭建那些目录。这不是已经教过的 15c3-3 “possession or control，” 本课也不发明每一只普通股都可以被提前赎回", "书面通知只在开户时要求一次，以后不再要求，而且官方 (b) 和 (c) 并不存在"]} answer={2} explanation="FINRA 4340 要求在会员的 website 上提供公平公正的分配程序，并向新客户在开户时、向所有客户每个日历年至少一次提供书面通知。官方印刷是一个词、小写的 “website。” 官方 (b) 和 (c) 是存在的。这不是已经教过的 15c3-3 “possession or control，” 也不是每一只普通股都可以被提前赎回。" />
+<Quiz id="mo-2140" question="根据 FINRA 2140，会员或关联人士不得做什么？本规则是否覆盖每一次账户转移？这是街道名义 / ACATS 入门，或是对已经打包的 2165 / 4370 / 4340 的改写吗？" options={["每一次账户转移都受覆盖，包括与客户注册代表换工作无关的转移", "这是街道名义 / ACATS 入门，或是对已经打包的 2165、已经打包的 4370 / 4340 / 2090 / 2231、已经教过的 15c3-3 / SIPC 的改写，或一套 Rule 11870 引擎", "No member or person associated with a member shall interfere with a customer's request to transfer his or her account in connection with the change in employment of the customer's registered representative where the account is not subject to any lien for monies owed by the customer or other bona fide claim. Prohibited interference includes, but is not limited to, seeking a judicial order or decree that would bar or restrict the submission, delivery or acceptance of a written request from a customer to transfer his or her account. Nothing in this Rule shall affect the operation of Rule 11870. 官方印刷在 “Nothing in this Rule shall affect the operation of Rule 11870” 里使用普通的单个空格。官方标题印刷是 “Interfering With the Transfer of Customer Accounts in the Context of Employment Disputes。” 官方印刷是 “his or her account、” “includes, but is not limited to，” 以及 “written request from a customer to transfer his or her account。” 只点名 Rule 11870；本课不把 2140 改写成街道名义 / ACATS 入门，也不发明一套 11870 引擎。官方文本只覆盖与客户注册代表换工作有关的转移请求，并且仅在该账户不受客户所欠款项的任何留置权或其他善意请求权约束时适用。这不是已经打包的 2165、已经打包的 4370 / 4340 / 2090 / 2231，或已经教过的 15c3-3 / SIPC", "会员可以寻求禁止提交书面转移请求的司法命令，而且官方印刷在 Rule 11870 前丢掉了空格"]} answer={2} explanation="FINRA 2140 禁止干扰与客户注册代表换工作有关的、将其账户转出的请求，前提是该账户不受客户所欠款项的任何留置权或其他善意请求权约束。引用 “Nothing in this Rule shall affect the operation of Rule 11870” 时用普通的单个空格。官方文本并不覆盖每一次账户转移。这不是街道名义 / ACATS 入门，也不是已经打包的 2165 / 4370 / 4340。" />
 
 
 
@@ -932,6 +965,7 @@ enrich29（核实于 2026-11-12）：[FINRA Rule 2265](https://www.finra.org/rul
 enrich30（核实于 2026-11-12）：[FINRA Rule 5330](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5330)；[FINRA Rule 2264](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2264)；[FINRA Rule 2267](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2267)。没有产品、券商、订单类型、保证金或 BrokerCheck 建议。
 enrich31（核实于 2026-11-12）：[FINRA Rule 2261](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2261)；[FINRA Rule 2231](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2231)；[FINRA Rule 2090](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2090)。没有券商、产品或财务状况建议。
 enrich32（核实于 2026-11-12）：[FINRA Rule 4370](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4370)；[FINRA Rule 4340](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4340)。没有券商或产品建议。
+enrich33（核实于 2026-11-12）：[FINRA Rule 2140](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2140)。没有券商或产品建议。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

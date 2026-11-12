@@ -63,3 +63,23 @@ official 5.07(d) uses a different 150-calendar-day / 60-calendar-day-before-14a-
 no issuer or voting advice
 assertions passed: 22/22
 disclaimer: official Form 8-K Item 5.07 special clock; no issuer or voting advice; learning only
+=== F. 17 CFR 240.14a-9: False or misleading statements ===
+14a-9(a): No solicitation subject to this regulation shall be made by means of any proxy
+  statement, form of proxy, notice of meeting or other communication, written or oral,
+  containing any statement which, at the time and in the light of the circumstances
+  under which it is made, is false or misleading with respect to any material fact, or
+  which omits to state any material fact necessary in order to make the statements
+  therein not false or misleading or necessary to correct any statement in any earlier
+  communication with respect to the solicitation of a proxy for the same meeting or
+  subject matter which has become false or misleading
+official typography is "in the light of the circumstances under which it is made" (singular "it is made")
+official (a) is notice of meeting or other communication, written or oral
+official caption is False or misleading statements
+cite 17 CFR 240.14a-9; title 17 up_to_date_as_of 2026-11-09
+official (b), official (c), and the Note exist; this toy is not official (c) or the Note catalog
+  this is a flatten into already-taught Rule 14a-8 or Form 8-K Item 5.07? False
+  this toy tidies official typography into packed 10b-5's under which they were made? False
+  a solicitation may not be made by a proxy statement, form of proxy, notice of meeting or other communication, written or oral, that is false or misleading in the light of the circumstances under which it is made? True
+no issuer or voting advice
+assertions passed: 25/25
+disclaimer: official 17 CFR 240.14a-9; no issuer or voting advice; learning only

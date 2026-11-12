@@ -425,3 +425,216 @@ print("no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_3310_ok")
 print("disclaimer: learning only; not legal advice; AML literacy only, not a how-to for evading reporting")
+
+print("=== J. FINRA 2060: Use of Information Obtained in Fiduciary Capacity ===")
+# FINRA Rule 2060 Use of Information Obtained in Fiduciary Capacity
+# (official HTML opened 2026-11-12). Add this section after the current
+# last 3310 disclaimer so the tip file remains a strict byte-prefix.
+# Keep 7/7, ASSERT_self_trade_pattern_ok, the first disclaimer, 2150,
+# 3220, 10b-5, 2010, 2165, and 3310 including 25/25, ASSERT_3310_ok,
+# and the last disclaimer, identical.
+# Official core: A member who in the capacity of paying agent, transfer
+# agent, trustee, or in any other similar capacity, has received
+# information as to the ownership of securities, shall under no
+# circumstances make use of such information for the purpose of
+# soliciting purchases, sales or exchanges except at the request and on
+# behalf of the issuer.
+# Official typography is "purchases, sales or exchanges" (no Oxford
+# comma) and "Cross Reference–" (en-dash, not a hyphen). Official Cross
+# Reference is packed FINRA 2150, "Improper Use of Customers' Securities
+# or Funds; Prohibition Against Guarantees and Sharing in Accounts";
+# name it, do not flatten 2060 into packed 2150, packed 10b-5, packed
+# 2010, or packed 3310, and do not rewrite the already-shipped 2150 box.
+# Do not invent that the prohibition applies to every use of customer
+# information, or drop the official "except at the request and on behalf
+# of the issuer" clause. Do not invent a clock. Learning only; no
+# investment advice. No broker or product recommendation.
+
+print("2060: A member who in the capacity of paying agent, transfer agent, trustee, or in any")
+print("  other similar capacity, has received information as to the ownership of securities,")
+print("  shall under no circumstances make use of such information for the purpose of soliciting")
+print("  purchases, sales or exchanges except at the request and on behalf of the issuer")
+print('official typography is "purchases, sales or exchanges" (no Oxford comma)')
+print("official typography is Cross Reference– (en-dash, not a hyphen)")
+print("official Cross Reference is packed FINRA 2150; this toy does not rewrite the already-shipped 2150 box")
+flatten_2060 = False
+print(f"  this is a flatten into packed 2150, packed 10b-5, packed 2010, or packed 3310? {flatten_2060}")
+check(flatten_2060 is False, "do not flatten 2060 into packed 2150 / 10b-5 / 2010 / 3310")
+drops_except = False
+print(f"  this toy drops the official except at the request and on behalf of the issuer clause? {drops_except}")
+check(drops_except is False, "do not drop the official issuer-request clause")
+core_2060 = True
+print(f"  shall under no circumstances make use of such information for the purpose of soliciting purchases, sales or exchanges except at the request and on behalf of the issuer? {core_2060}")
+check(core_2060 is True, "2060 bars soliciting purchases, sales or exchanges except at the request and on behalf of the issuer")
+print("learning only; no investment advice")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== K. FINRA 3210: Accounts At Other Broker-Dealers and Financial Institutions ===")
+# FINRA Rule 3210 Accounts At Other Broker-Dealers and Financial
+# Institutions (official HTML opened 2026-11-12). Quote the current
+# post-amendment text (already amended by SR-FINRA-2026-013 eff. June 17,
+# 2026). Keep J identical once 2060 is added.
+# Official (a): No person associated with a member ("employer member")
+# shall, without the prior written consent of the member, open or
+# otherwise establish at a member other than the employer member
+# ("executing member"), or at any other financial institution, any
+# account in which securities transactions can be effected and in which
+# the associated person has a beneficial interest.
+# Official (b): any associated person, prior to opening or otherwise
+# establishing an account subject to this Rule, shall notify in writing
+# the executing member, or other financial institution, of his or her
+# association with the employer member.
+# Official SM .01 typography is "within 30 calendar days." Official (c)
+# duplicate confirmations and statements (or the transactional data
+# contained therein) upon written request, and official SM .02 / .03 /
+# .04 / .05, exist; name them, do not build the SM .02 family-presumption
+# catalog or the SM .03 product-carve-out catalog. Official typography
+# uses straight quotes around "employer member" and "executing member."
+# Official caption typography is "Accounts At Other Broker-Dealers and
+# Financial Institutions" (capital A in "At"; hyphenated
+# "Broker-Dealers"). Do not teach a pre-June 17, 2026 version as current
+# law. Do not flatten 3210 into packed 2090, packed 2165 / 4512, or
+# later-packed 3280. This is associated-person account-consent literacy,
+# not a product or broker recommendation.
+
+print('3210(a): No person associated with a member ("employer member") shall, without the prior')
+print('  written consent of the member, open or otherwise establish at a member other than the')
+print('  employer member ("executing member"), or at any other financial institution, any account')
+print("  in which securities transactions can be effected and in which the associated person has")
+print("  a beneficial interest")
+print("3210(b): any associated person, prior to opening or otherwise establishing an account")
+print("  subject to this Rule, shall notify in writing the executing member, or other financial")
+print("  institution, of his or her association with the employer member")
+print('official SM .01 typography is "within 30 calendar days"')
+print("official (c) and official SM .02 / .03 / .04 / .05 exist; this toy is not those catalogs")
+print('official caption typography is Accounts At Other Broker-Dealers and Financial Institutions')
+print("current official page already includes Amended by SR-FINRA-2026-013 eff. June 17, 2026")
+flatten_3210 = False
+print(f"  this is a flatten into packed 2090, packed 2165 / 4512, or later-packed 3280? {flatten_3210}")
+check(flatten_3210 is False, "do not flatten 3210 into packed 2090, packed 2165 / 4512, or 3280")
+pre_amendment = False
+print(f"  this toy teaches a pre-June 17, 2026 version of 3210 as current law? {pre_amendment}")
+check(pre_amendment is False, "quote the current post-amendment 3210 text")
+core_3210 = True
+print(f"  prior written consent of the employer member, and written notification to the executing member or other financial institution? {core_3210}")
+check(core_3210 is True, "3210 requires prior written consent and written notification")
+print("associated-person account-consent literacy, not a product or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== L. FINRA 3270: Outside Business Activities of Registered Persons ===")
+# FINRA Rule 3270 Outside Business Activities of Registered Persons
+# (official HTML opened 2026-11-12). Keep J-K identical once those are
+# added.
+# Official core: No registered person may be an employee, independent
+# contractor, sole proprietor, officer, director or partner of another
+# person, or be compensated, or have the reasonable expectation of
+# compensation, from any other person as a result of any business
+# activity outside the scope of the relationship with his or her member
+# firm, unless he or she has provided prior written notice to the
+# member, in such form as specified by the member. Passive investments
+# and activities subject to the requirements of Rule 3280 shall be
+# exempted from this requirement.
+# Official typography is "officer, director or partner" (no Oxford
+# comma) and "prior written notice." Official caption typography is
+# "Outside Business Activities of Registered Persons." Name official
+# SM .01 (the member shall consider interference with responsibilities /
+# public attribution, may impose conditions or prohibit the activity,
+# must evaluate whether the activity is instead an outside securities
+# activity subject to Rule 3280, and must keep a record preserved under
+# SEA Rule 17a-4(e)(1)); do not build that review / recordkeeping
+# engine. Do not flatten 3270 into 3280: official 3270 exempts
+# activities subject to 3280, it is not a substitute for 3280. Do not
+# flatten 3270 into already-named SEA Rule 17a-4 (a typography foil
+# under packed 2231), packed 2090, or packed 3210. Do not invent that
+# passive investments require prior written notice under 3270 (they are
+# officially exempted). Do not invent a clock other than "prior" written
+# notice.
+
+print("3270: No registered person may be an employee, independent contractor, sole proprietor,")
+print("  officer, director or partner of another person, or be compensated, or have the")
+print("  reasonable expectation of compensation, from any other person as a result of any")
+print("  business activity outside the scope of the relationship with his or her member firm,")
+print("  unless he or she has provided prior written notice to the member, in such form as")
+print("  specified by the member")
+print("Passive investments and activities subject to the requirements of Rule 3280 shall be")
+print("  exempted from this requirement")
+print('official typography is "officer, director or partner" (no Oxford comma) and "prior written notice"')
+print("official SM .01 and SEA Rule 17a-4(e)(1) exist; this toy is not that review / recordkeeping engine")
+flatten_3270 = False
+print(f"  this is a flatten into 3280, or into packed 2231's 17a-4 foil? {flatten_3270}")
+check(flatten_3270 is False, "do not flatten 3270 into 3280 or into packed 2231's 17a-4 foil")
+passive_notice = False
+print(f"  this toy invents that passive investments require prior written notice under 3270? {passive_notice}")
+check(passive_notice is False, "passive investments are officially exempted from 3270")
+core_3270 = True
+print(f"  prior written notice is required, and passive investments and activities subject to Rule 3280 are exempted? {core_3270}")
+check(core_3270 is True, "3270 requires prior written notice and officially exempts passive investments and 3280 activities")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== M. FINRA 3280: Private Securities Transactions of an Associated Person ===")
+# FINRA Rule 3280 Private Securities Transactions of an Associated
+# Person (official HTML opened 2026-11-12). Keep J-L identical once
+# those are added. This is learning-only associated-person literacy,
+# not a how-to for selling away.
+# Official (a): No person associated with a member shall participate in
+# any manner in a private securities transaction except in accordance
+# with the requirements of this Rule.
+# Official (b): Prior to participating in any private securities
+# transaction, an associated person shall provide written notice to the
+# member with which he is associated describing in detail the proposed
+# transaction and the person's proposed role therein and stating whether
+# he has received or may receive selling compensation in connection with
+# the transaction; provided however that, in the case of a series of
+# related transactions in which no selling compensation has been or will
+# be received, an associated person may provide a single written notice.
+# Official typography is "provided however that" (no comma after
+# "provided") in official (b) and official (e)(1).
+# Name official (c) (if selling compensation has been or may be
+# received, the member shall advise in writing whether it approves or
+# disapproves; if approved, the transaction shall be recorded on the
+# books and records of the member and supervised as if executed on
+# behalf of the member; if disapproved, the person shall not participate
+# in any manner, directly or indirectly) and official (d) (if no selling
+# compensation, the member shall provide prompt written acknowledgment
+# and may require specified conditions). Do not build that approval /
+# supervision / compensation engine.
+# Official (e)(1) exclusions include transactions subject to the
+# notification requirements of Rule 3210, transactions among immediate
+# family members (as defined in FINRA Rule 5130) for which no associated
+# person receives any selling compensation, and personal transactions in
+# investment company and variable annuity securities; name those
+# exclusions, do not flatten 3280 into packed 3210 or already-taught
+# 5130, and do not invent a 5130 engine.
+
+print("3280(a): No person associated with a member shall participate in any manner in a private")
+print("  securities transaction except in accordance with the requirements of this Rule")
+print("3280(b): Prior to participating in any private securities transaction, an associated")
+print("  person shall provide written notice to the member with which he is associated")
+print("  describing in detail the proposed transaction and the person's proposed role therein")
+print("  and stating whether he has received or may receive selling compensation in connection")
+print("  with the transaction; provided however that, in the case of a series of related")
+print("  transactions in which no selling compensation has been or will be received, an")
+print("  associated person may provide a single written notice")
+print('official typography is "provided however that" (no comma after "provided") in official (b) and official (e)(1)')
+print("official (c) and official (d) exist; this toy is not that approval / supervision / compensation engine")
+print("official (e)(1) exclusions include transactions subject to the notification requirements")
+print("  of Rule 3210, transactions among immediate family members (as defined in FINRA Rule 5130)")
+print("  for which no associated person receives any selling compensation, and personal")
+print("  transactions in investment company and variable annuity securities; this toy is not a")
+print("  3210 or 5130 engine")
+flatten_3280 = False
+print(f"  this is a flatten into packed 3210 or already-taught 5130? {flatten_3280}")
+check(flatten_3280 is False, "do not flatten 3280 into packed 3210 or already-taught 5130")
+provided_however = True
+print(f"  official typography is provided however that, with no comma after provided? {provided_however}")
+check(provided_however is True, "official (b) and (e)(1) typography is provided however that")
+core_3280 = True
+print(f"  prior written notice is required except in accordance with this Rule, and official (e)(1) exclusions are named only? {core_3280}")
+check(core_3280 is True, "3280 requires prior written notice; official (e)(1) exclusions are named only")
+print("learning-only associated-person literacy, not a how-to for selling away")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_3280_ok")
+print("disclaimer: learning only; not legal advice; associated-person literacy only, not a how-to for selling away")

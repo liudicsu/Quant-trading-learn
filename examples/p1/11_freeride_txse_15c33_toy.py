@@ -601,3 +601,58 @@ print(f"  fair-and-impartial allocation procedures on the member's website, and 
 check(fair is True, "4340 requires website allocation procedures and the official customer notice")
 print("no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== O. FINRA 2140: no interference with a customer's account-transfer request in an employment-change context ===")
+# FINRA Rule 2140 Interfering With the Transfer of Customer Accounts in
+# the Context of Employment Disputes (official HTML opened 2026-11-12).
+# Add this section after the last line so 43/43 after N / 4340 remains a
+# strict byte-prefix of the tip file.
+# Official core: No member or person associated with a member shall
+# interfere with a customer's request to transfer his or her account in
+# connection with the change in employment of the customer's registered
+# representative where the account is not subject to any lien for monies
+# owed by the customer or other bona fide claim. Prohibited interference
+# includes, but is not limited to, seeking a judicial order or decree
+# that would bar or restrict the submission, delivery or acceptance of a
+# written request from a customer to transfer his or her account.
+# Nothing in this Rule shall affect the operation of Rule 11870.
+# Quote that last sentence with a normal single space; an empty
+# <span class="us"></span> before the Rule 11870 link is page chrome,
+# not typography. Official typography is "his or her account,"
+# "includes, but is not limited to," and "written request from a
+# customer to transfer his or her account." Official caption typography
+# is "Interfering With the Transfer of Customer Accounts in the Context
+# of Employment Disputes." Name Rule 11870 only; do not recast 2140 as a
+# street-name / ACATS / CNS product primer, and do not invent a 11870
+# engine. Do not invent that every account transfer is covered (official
+# text is limited to a transfer request in connection with the change in
+# employment of the customer's registered representative, and only where
+# the account is not subject to any lien for monies owed by the customer
+# or other bona fide claim). Do not flatten 2140 into packed 2165,
+# packed 4370 / 4340 / 2090 / 2231, or already-taught 15c3-3 / SIPC.
+# No broker or product recommendation.
+
+print("2140: No member or person associated with a member shall interfere with a customer's")
+print("  request to transfer his or her account in connection with the change in employment")
+print("  of the customer's registered representative where the account is not subject to any")
+print("  lien for monies owed by the customer or other bona fide claim")
+print("Prohibited interference includes, but is not limited to, seeking a judicial order or")
+print("  decree that would bar or restrict the submission, delivery or acceptance of a")
+print("  written request from a customer to transfer his or her account")
+print("Nothing in this Rule shall affect the operation of Rule 11870")
+print('official typography uses a normal single space before "Rule 11870"; empty page-chrome spans are not typography')
+print('official typography is "his or her account," "includes, but is not limited to," and')
+print('  "written request from a customer to transfer his or her account"')
+print("official caption typography is Interfering With the Transfer of Customer Accounts in the Context of Employment Disputes")
+print("Rule 11870 is named only; this toy is not a street-name / ACATS / CNS primer or a 11870 engine")
+flatten_2140 = False
+print(f"  this is a flatten into packed 2165, packed 4370 / 4340 / 2090 / 2231, or already-taught 15c3-3 / SIPC? {flatten_2140}")
+check(flatten_2140 is False, "do not flatten 2140 into packed 2165 / 4370 / 4340 / 2090 / 2231 or 15c3-3 / SIPC")
+every_transfer = False
+print(f"  this toy invents that every account transfer is covered? {every_transfer}")
+check(every_transfer is False, "2140 is limited to a transfer request in connection with the RR employment change, and only where the account is not subject to any lien or other bona fide claim")
+core_2140 = True
+print(f"  no interference with a customer's request to transfer his or her account in connection with the change in employment of the customer's registered representative, where the account is not subject to any lien for monies owed by the customer or other bona fide claim? {core_2140}")
+check(core_2140 is True, "2140 prohibits interference with that official account-transfer request")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")

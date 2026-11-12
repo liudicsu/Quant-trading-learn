@@ -143,3 +143,76 @@ no broker or product recommendation
 assertions passed: 25/25
 ASSERT_3310_ok
 disclaimer: learning only; not legal advice; AML literacy only, not a how-to for evading reporting
+=== J. FINRA 2060: Use of Information Obtained in Fiduciary Capacity ===
+2060: A member who in the capacity of paying agent, transfer agent, trustee, or in any
+  other similar capacity, has received information as to the ownership of securities,
+  shall under no circumstances make use of such information for the purpose of soliciting
+  purchases, sales or exchanges except at the request and on behalf of the issuer
+official typography is "purchases, sales or exchanges" (no Oxford comma)
+official typography is Cross Reference– (en-dash, not a hyphen)
+official Cross Reference is packed FINRA 2150; this toy does not rewrite the already-shipped 2150 box
+  this is a flatten into packed 2150, packed 10b-5, packed 2010, or packed 3310? False
+  this toy drops the official except at the request and on behalf of the issuer clause? False
+  shall under no circumstances make use of such information for the purpose of soliciting purchases, sales or exchanges except at the request and on behalf of the issuer? True
+learning only; no investment advice
+no broker or product recommendation
+assertions passed: 28/28
+=== K. FINRA 3210: Accounts At Other Broker-Dealers and Financial Institutions ===
+3210(a): No person associated with a member ("employer member") shall, without the prior
+  written consent of the member, open or otherwise establish at a member other than the
+  employer member ("executing member"), or at any other financial institution, any account
+  in which securities transactions can be effected and in which the associated person has
+  a beneficial interest
+3210(b): any associated person, prior to opening or otherwise establishing an account
+  subject to this Rule, shall notify in writing the executing member, or other financial
+  institution, of his or her association with the employer member
+official SM .01 typography is "within 30 calendar days"
+official (c) and official SM .02 / .03 / .04 / .05 exist; this toy is not those catalogs
+official caption typography is Accounts At Other Broker-Dealers and Financial Institutions
+current official page already includes Amended by SR-FINRA-2026-013 eff. June 17, 2026
+  this is a flatten into packed 2090, packed 2165 / 4512, or later-packed 3280? False
+  this toy teaches a pre-June 17, 2026 version of 3210 as current law? False
+  prior written consent of the employer member, and written notification to the executing member or other financial institution? True
+associated-person account-consent literacy, not a product or broker recommendation
+assertions passed: 31/31
+=== L. FINRA 3270: Outside Business Activities of Registered Persons ===
+3270: No registered person may be an employee, independent contractor, sole proprietor,
+  officer, director or partner of another person, or be compensated, or have the
+  reasonable expectation of compensation, from any other person as a result of any
+  business activity outside the scope of the relationship with his or her member firm,
+  unless he or she has provided prior written notice to the member, in such form as
+  specified by the member
+Passive investments and activities subject to the requirements of Rule 3280 shall be
+  exempted from this requirement
+official typography is "officer, director or partner" (no Oxford comma) and "prior written notice"
+official SM .01 and SEA Rule 17a-4(e)(1) exist; this toy is not that review / recordkeeping engine
+  this is a flatten into 3280, or into packed 2231's 17a-4 foil? False
+  this toy invents that passive investments require prior written notice under 3270? False
+  prior written notice is required, and passive investments and activities subject to Rule 3280 are exempted? True
+no broker or product recommendation
+assertions passed: 34/34
+=== M. FINRA 3280: Private Securities Transactions of an Associated Person ===
+3280(a): No person associated with a member shall participate in any manner in a private
+  securities transaction except in accordance with the requirements of this Rule
+3280(b): Prior to participating in any private securities transaction, an associated
+  person shall provide written notice to the member with which he is associated
+  describing in detail the proposed transaction and the person's proposed role therein
+  and stating whether he has received or may receive selling compensation in connection
+  with the transaction; provided however that, in the case of a series of related
+  transactions in which no selling compensation has been or will be received, an
+  associated person may provide a single written notice
+official typography is "provided however that" (no comma after "provided") in official (b) and official (e)(1)
+official (c) and official (d) exist; this toy is not that approval / supervision / compensation engine
+official (e)(1) exclusions include transactions subject to the notification requirements
+  of Rule 3210, transactions among immediate family members (as defined in FINRA Rule 5130)
+  for which no associated person receives any selling compensation, and personal
+  transactions in investment company and variable annuity securities; this toy is not a
+  3210 or 5130 engine
+  this is a flatten into packed 3210 or already-taught 5130? False
+  official typography is provided however that, with no comma after provided? True
+  prior written notice is required except in accordance with this Rule, and official (e)(1) exclusions are named only? True
+learning-only associated-person literacy, not a how-to for selling away
+no broker or product recommendation
+assertions passed: 37/37
+ASSERT_3280_ok
+disclaimer: learning only; not legal advice; associated-person literacy only, not a how-to for selling away
