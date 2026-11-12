@@ -218,3 +218,52 @@ print("  wait until the tenth second on purpose, treat midnight-4:00 a.m. or 8:0
 print("  or treat December 6, 2026 as an unconditional hard switch")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official FINRA 6380A current-law clocks; learning only; no venue recommendation")
+
+print("=== F. FINRA 2265: extended hours trading risk disclosure ===")
+# FINRA Rule 2265 Extended Hours Trading Risk Disclosure (official-page
+# fetch opened 2026-11-12). Keep sections A-E identical, including ETH
+# sale-condition T, 18/18 after D, 6380A, 25/25 after E, and the
+# section-E disclaimer.
+# 2265(a): No member shall permit a customer to engage in extended hours
+# trading unless the member has furnished to the customer, individually,
+# in paper or electronic form, a disclosure statement highlighting the
+# risks specific to extended hours trading.
+# Official model: "Extended hours trading" means trading outside of
+# “regular trading hours.” “Regular trading hours” generally
+# means the time between 9:30 a.m. and 4:00 p.m. Eastern Standard Time.
+# Quote "Eastern Standard Time" as written; do not silently change it
+# to ET or EDT. Official model wording includes "upon the opening the
+# next morning"; do not silently insert "of." Official typography
+# includes "on-line" and "Web site."
+# Official six risks: Lower Liquidity, Higher Volatility, Changing
+# Prices, Unlinked Markets, News Announcements, Wider Spreads.
+# Official (b) allows a substantially similar alternative addressing,
+# at a minimum, the official six risks. Official (c) requires members
+# to consider additional disclosures as necessary. Do not invent that
+# the model statement is the only permitted text. Name official (b)
+# and (c); do not require a rewrite of the full model paragraphs as a
+# catalog engine. Do not flatten 2265 into already-taught ETH
+# sale-condition T, overnight LULD bands, 23/5 session facts, 6380A,
+# or 5220. No product, broker, or venue recommendation.
+
+print("2265(a): No member shall permit a customer to engage in extended hours trading unless the member has furnished")
+print("  to the customer, individually, in paper or electronic form, a disclosure statement highlighting")
+print("  the risks specific to extended hours trading")
+print('official model: "Extended hours trading" means trading outside of “regular trading hours.” “Regular trading hours” generally means')
+print("  the time between 9:30 a.m. and 4:00 p.m. Eastern Standard Time")
+print('official model wording includes "upon the opening the next morning"')
+print('official typography includes "on-line" and "Web site"')
+print("official six risks: Lower Liquidity, Higher Volatility, Changing Prices, Unlinked Markets, News Announcements, Wider Spreads")
+print("official (b): a member may furnish a substantially similar alternative addressing, at a minimum, the official six risks")
+print("official (c): members must consider additional disclosures as necessary")
+only_model = False
+print(f"  the model statement is the only permitted text? {only_model}")
+check(only_model is False, "do not invent that the model statement is the only permitted text")
+changes_est = False
+print(f'  this toy silently changes "Eastern Standard Time" to ET or EDT? {changes_est}')
+check(changes_est is False, "quote Eastern Standard Time as written")
+is_rewrite_eth = False
+print(f"  this is a rewrite of already-taught ETH sale-condition T or 6380A? {is_rewrite_eth}")
+check(is_rewrite_eth is False, "2265 is not a rewrite of ETH sale-condition T or 6380A")
+print("no product, broker, or venue recommendation")
+print(f"assertions passed: {checks}/{checks}")

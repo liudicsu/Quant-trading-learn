@@ -48,3 +48,19 @@ do not apply 6380A to exchange prints, write that every tape print is delayed by
   or treat December 6, 2026 as an unconditional hard switch
 assertions passed: 25/25
 disclaimer: official FINRA 6380A current-law clocks; learning only; no venue recommendation
+=== F. FINRA 2265: extended hours trading risk disclosure ===
+2265(a): No member shall permit a customer to engage in extended hours trading unless the member has furnished
+  to the customer, individually, in paper or electronic form, a disclosure statement highlighting
+  the risks specific to extended hours trading
+official model: "Extended hours trading" means trading outside of “regular trading hours.” “Regular trading hours” generally means
+  the time between 9:30 a.m. and 4:00 p.m. Eastern Standard Time
+official model wording includes "upon the opening the next morning"
+official typography includes "on-line" and "Web site"
+official six risks: Lower Liquidity, Higher Volatility, Changing Prices, Unlinked Markets, News Announcements, Wider Spreads
+official (b): a member may furnish a substantially similar alternative addressing, at a minimum, the official six risks
+official (c): members must consider additional disclosures as necessary
+  the model statement is the only permitted text? False
+  this toy silently changes "Eastern Standard Time" to ET or EDT? False
+  this is a rewrite of already-taught ETH sale-condition T or 6380A? False
+no product, broker, or venue recommendation
+assertions passed: 28/28

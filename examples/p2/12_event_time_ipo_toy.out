@@ -124,3 +124,18 @@ no product, broker, or allocation recommendation
 assertions passed: 44/44
 ASSERT_event_time_ipo_ok
 disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
+=== J. FINRA 5131(e)(3): covered-non-public-company financial tests ===
+5131(e)(3): "Covered non-public company" means any non-public company, except for an unaffiliated charitable organization, satisfying the following criteria:
+  (i) income of at least $1 million in the last fiscal year or in two of the last three fiscal years
+  and shareholders' equity of at least $15 million;
+  (ii) shareholders' equity of at least $30 million and a two-year operating history; or
+  (iii) total assets and total revenue of at least $75 million in the latest fiscal year
+  or in two of the last three fiscal years
+official (e)(9) defines "unaffiliated charitable organization"; this toy is not a Form 990 / 501(c)(3) engine
+  this is a rewrite of already-taught spinning, the market-order ban, or flipping? False
+  this toy invents different dollar amounts? False
+  this is already-taught 5130 restricted persons? False
+no product, broker, or allocation recommendation
+assertions passed: 47/47
+ASSERT_event_time_ipo_ok
+disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only

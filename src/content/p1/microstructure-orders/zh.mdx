@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **15.50 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **16.00 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h + FINRA 2265 延长交易时段风险披露 0.25h + FINRA 2266 书面 SIPC 信息 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -247,6 +247,37 @@ disclaimer: learning only; not a UPC or close-out engine; no product or venue re
 
 
 
+
+## FINRA 2266：在开户时以及至少每年一次提供书面 SIPC 信息（核实于 2026-11-12）
+
+已经教过的 SIPC 保障上限（$500,000，其中现金上限 $250,000；不是 FDIC）保持原样。不要改写该段落，也不要改写已经教过的 15c3-3 / Regulation T / 15c6-1。这一节补上官方的 2266，避免把保障上限那一段当成唯一的 SIPC 教学内容，或在本规则中发明保障金额或时钟。没有券商或 SIPC 会员资格建议（已经教过的 SIPC 文本已经指向 SIPC 自己的网站去核对该会员资格）。
+
+[FINRA Rule 2266](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2266)：“All members, except those members: (a) that pursuant to Section 3(a)(2)(A)(i) through (iii) of the Securities Investor Protection Act of 1970 (SIPA) are excluded from membership in the Securities Investor Protection Corporation (SIPC) and that are not SIPC members; or (b) whose business consists exclusively of the sale of investments that are ineligible for SIPC protection, shall advise all new customers, in writing, at the opening of an account, that they may obtain information about SIPC, including the SIPC brochure, by contacting SIPC, and also shall provide the Web site address and telephone number of SIPC. In addition, such members shall provide all customers with the same information, in writing, at least once each year. In cases where both an introducing firm and clearing firm service an account, the firms may assign these requirements to one of the firms.” 官方印刷是两个词的 “Web site”。官方 (a)–(b) 例外是存在的；本课只点名它们，不搭建 SIPA 排除引擎。不要发明本规则并未写出的保障金额、表格或时钟。
+
+**实验：** `examples/p1/11_freeride_txse_15c33_toy.py` 的 G 节（A–F 节与此前相同，包括 15c3-3 的 “this is separate from SIPC” 一行、E 节后的 **14/14**、15c6-1 / 11320，以及 F 节后的 **19/19**；G 节后为 22/22）：
+
+```text
+=== G. FINRA 2266: written SIPC information at account opening and at least annually ===
+2266: All members, except those members: (a) that pursuant to Section 3(a)(2)(A)(i) through (iii)
+  of the Securities Investor Protection Act of 1970 (SIPA) are excluded from membership in the
+  Securities Investor Protection Corporation (SIPC) and that are not SIPC members; or (b) whose
+  business consists exclusively of the sale of investments that are ineligible for SIPC protection,
+  shall advise all new customers, in writing, at the opening of an account, that they may obtain
+  information about SIPC, including the SIPC brochure, by contacting SIPC, and also shall provide
+  the Web site address and telephone number of SIPC.
+  In addition, such members shall provide all customers with the same information, in writing,
+  at least once each year.
+  In cases where both an introducing firm and clearing firm service an account,
+  the firms may assign these requirements to one of the firms
+official typography is "Web site" as two words
+official (a)-(b) exceptions exist; this toy is not a SIPA-exclusion engine
+  this is a rewrite of already-taught SIPC coverage limits? False
+  this toy invents a coverage amount, form, or clock this rule does not state? False
+  written information is required at account opening and at least once each year? True
+no broker or SIPC-membership recommendation
+assertions passed: 22/22
+```
+
 ## 跨市场扫单（ISO）：现行 Rule 611 的例外，不是废除规则（核实于 2026-11-12）
 
 上面的状态框已经说明：SEC 撤销 Rule 611 的提案（S7-2026-20）截至 2026-11-12 仍是**提案**，eCFR 仍列 §242.611。在现行法下，交易中心仍须有合理设计的政策，防止在 NMS 股票上穿越受保护报价（trade-through），**除非**适用例外。
@@ -449,6 +480,34 @@ assertions passed: 25/25
 disclaimer: official FINRA 6380A current-law clocks; learning only; no venue recommendation
 ```
 
+
+## FINRA 2265：会员不得允许客户进行延长时段交易，除非已单独提供突出延长时段特有风险的披露（核实于 2026-11-12）
+
+已经教过的 ETH 成交条件 T、隔夜 LULD 价格带和 23/5 时段事实保持原样。不要改写那些段落、6380A 框，或已经教过的 5220。这一节补上官方的 2265，避免把延长时段接入当成无需披露，发明示范文本是唯一被允许的文本，或悄悄把官方 “Eastern Standard Time” 改成 ET 或 EDT。没有产品、券商或交易场所建议。
+
+[FINRA Rule 2265(a)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2265)：“No member shall permit a customer to engage in extended hours trading unless the member has furnished to the customer, individually, in paper or electronic form, a disclosure statement highlighting the risks specific to extended hours trading.” 官方示范文本：`"Extended hours trading" means trading outside of “regular trading hours.” “Regular trading hours” generally means the time between 9:30 a.m. and 4:00 p.m. Eastern Standard Time.` 按原文引用 “Eastern Standard Time”；不要悄悄改成 ET 或 EDT。官方示范用语包括 “upon the opening the next morning”；不要悄悄插入 “of”。官方印刷包括 “on-line” 和 “Web site”。官方示范文本列出六项风险：Lower Liquidity、Higher Volatility、Changing Prices、Unlinked Markets、News Announcements 和 Wider Spreads。官方 (b) 允许使用实质相似的替代文本，至少涵盖这官方六项风险。官方 (c) 要求会员视必要考虑额外披露。不要发明示范文本是唯一被允许的文本。点名官方 (b) 和 (c)；本课不要求把示范全文改写成目录引擎。
+
+**实验：** `examples/p1/13_sale_condition_toy.py` 的 F 节（A–E 节与此前相同，包括 ETH 成交条件 T、D 节后的 **18/18**、6380A，以及 E 节后的 **25/25**；F 节后为 28/28）：
+
+```text
+=== F. FINRA 2265: extended hours trading risk disclosure ===
+2265(a): No member shall permit a customer to engage in extended hours trading unless the member has furnished
+  to the customer, individually, in paper or electronic form, a disclosure statement highlighting
+  the risks specific to extended hours trading
+official model: "Extended hours trading" means trading outside of “regular trading hours.” “Regular trading hours” generally means
+  the time between 9:30 a.m. and 4:00 p.m. Eastern Standard Time
+official model wording includes "upon the opening the next morning"
+official typography includes "on-line" and "Web site"
+official six risks: Lower Liquidity, Higher Volatility, Changing Prices, Unlinked Markets, News Announcements, Wider Spreads
+official (b): a member may furnish a substantially similar alternative addressing, at a minimum, the official six risks
+official (c): members must consider additional disclosures as necessary
+  the model statement is the only permitted text? False
+  this toy silently changes "Eastern Standard Time" to ET or EDT? False
+  this is a rewrite of already-taught ETH sale-condition T or 6380A? False
+no product, broker, or venue recommendation
+assertions passed: 28/28
+```
+
 ## 提前收盘日的 MOC 截止，以及 Nasdaq 与 NYSE 收盘截止的差别（2026-11-11 核实）
 
 **1. 提前收盘日，NYSE 的 15:50 截止会往前移。** 上面教的 15:50 ET，是常规交易日（16:00 收盘）的时间。NYSE Rule 7.35(a)(8) 把“收盘竞价不平衡冻结时点”（Closing Auction Imbalance Freeze Time）定义为**预定核心交易时段结束前 10 分钟**。NYSE 2026 年第一季度到期备忘录写明：备忘录里出现的 15:50 等钟点，只适用于预定 16:00 收盘的日子；“在预定收盘不是 16:00 的日子，这些截止时间——因为它绑在预定的核心交易时段结束点上——会相应移动”（[NYSE RM 2026-03-20 注 2](https://www.nyse.com/publicdocs/nyse/markets/nyse/rule-interpretations/2026/Q1_2026_Quarterly_Expiration_RM_3.20.2026.pdf)）。所以提前收盘到 13:00 ET 时，MOC/LOC 的自由申报截止是 **12:50 ET**。2026 年 NYSE 现金股票市场提前在 13:00 ET 收盘的日子是 **2026-11-27**（感恩节次日）和 **2026-12-24**（[ICE / NYSE 假期公告](https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx)；[NYSE 交易时间](https://www.nyse.com/trade/hours-calendars)）。这两天都在美国冬令时，12:50 ET 换成北京时间是次日 **01:50**。诚实的“按收盘价成交”，在提前收盘日必须用 12:50 之前就能算出来的信号，不能照搬平时的 15:50。
@@ -503,6 +562,8 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 20. 写成每一笔 SIP 报价在所有情形下都是某一具名交易商的 602 确定报价，或客户总能按全部 NBBO 数量成交；把确定报价义务套到碎股订单上；忽略 (b)(3) 的修订例外或 (a)(3) 的异常市场救济；把 602 和 Rule 604、611 或 605/606 混为一谈。
 21. 把 6380A 套到交易所成交上；写成每一笔行情带成交都被推迟 10 秒，或“尽快”意味着可以故意等到第 10 秒；把午夜至上午 4:00 或晚上 8:00 至午夜的成交当成已经适用 10 秒时钟；把 2026-12-06 当成无条件的硬切换，或发明 10b-18 的 23/5 映射。
 22. 把 FINRA 5220 当成已经教过的 Rule 602；发明一个 100 股的 “normal unit of trading”，而不用官方 Rule 600(b) 整手；漏掉官方的 “not firm / firm for less than a normal unit” 标明，或正在完成交易时的修订数量条款；或搭建 Rule 6420 引擎。
+23. 把延长时段接入当成 FINRA 2265 下无需披露；发明示范文本是唯一被允许的文本；悄悄把官方 “Eastern Standard Time” 改成 ET 或 EDT，或在 “upon the opening the next morning” 里插入 “of”；或把 2265 压进已经教过的 ETH 成交条件 T、隔夜 LULD 价格带、23/5 时段事实、6380A 或 5220。
+24. 把已经教过的 SIPC 保障上限当成唯一的 SIPC 教学内容；发明 FINRA 2266 并未写出的保障金额、表格或时钟；漏掉官方 (a)–(b) 例外；或把已经教过的 SIPC 保障上限、15c3-3、Regulation T 或 15c6-1 改写成 2266。官方印刷是两个词的 “Web site”。
 
 ## 练习（与任务清单 1:1）
 
@@ -525,6 +586,8 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 17. **ex-602** — 运行 `05_us_market_mechanics.py` 的 D 节；说明已公布卖价 100.02、数量 100 时，100 股买单是否落在确定报价数量之内、1 股碎股是否属于 602(b)(2) 义务，以及提交前把数量修订为 50 会怎样；**完成标准**：100 股在已公布数量之内，碎股不适用该义务，修订后义务数量为 50，与输出一致。
 18. **ex-6380a** — 运行 `13_sale_condition_toy.py` 的 E 节；写出上午 10:00、凌晨 2:00 和晚上 10:00 的场外申报时限，以及通过交易所申报的成交是否向 FINRA/Nasdaq TRF 申报；**完成标准**：10 秒、成交日上午 4:15、下一营业日上午 4:15 并标 as/of，交易所成交不向该 TRF 申报，与输出一致，并写一句 SR-FINRA-2026-015 尚未实施。
 19. **ex-5220** — 运行 `05_us_market_mechanics.py` 的 E 节；说明 5220 是不是已经教过的 Rule 602，会员在按标明价格报价前必须准备做什么，NMS 股票的 “normal unit of trading” 是什么，以及本玩具有没有发明 100 股单位；**完成标准**：这是不同的确定报价规则；会员不得按标明价格报价，除非已准备按该价格并在所述条件下买入或卖出；NMS 股票的正常交易单位是官方 600(b) 整手，不是发明的 100 股单位，与输出一致。
+20. **ex-2265** — 运行 `13_sale_condition_toy.py` 的 F 节；说明会员可否在没有风险披露的情况下允许延长时段交易，官方如何描述常规交易时段，以及示范文本是不是唯一被允许的文本；**完成标准**：必须先单独以纸质或电子形式提供披露，会员才可允许延长时段交易；官方常规交易时段一般是上午 9:30 至下午 4:00 Eastern Standard Time，按原文引用；官方 (b) 替代文本存在，且这不是对已经教过的 ETH 成交条件 T 或 6380A 的改写，与输出一致。
+21. **ex-2266** — 运行 `11_freeride_txse_15c33_toy.py` 的 G 节；说明书面 SIPC 信息应在何时提供，是否必须包括官方 Web site 地址和电话号码，以及这是不是对已经教过的 SIPC 保障上限的改写；**完成标准**：必须在开户时以及至少每年一次提供书面信息，包括官方 Web site 地址和电话号码；官方 (a)–(b) 例外存在；这不是对已经教过的 SIPC 保障上限的改写，与输出一致。
 
 ## 测验
 
@@ -556,6 +619,8 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 <Quiz id="mo-602" question="按 17 CFR 242.602(b)(2)，责任经纪商或自营商已公布的报价一般意味着什么？" options={["客户总能按全部 NBBO 数量成交；每一笔 SIP 报价在所有情形下都是某一具名交易商的 602 确定报价", "除碎股订单外，责任经纪商或自营商一般有义务按对买方或卖方至少与已公布买价或卖价同样有利的价格，就其已公布报价数量以内的任何数量，执行向其提交的订单。(b)(3) 在订单提交前已传达的修订，以及 (a)(3) 在异常市场条件下的救济，可以改变该义务", "确定报价义务也适用于碎股订单", "Rule 602 就是已经讲过的 Rule 604（展示）、Rule 611（禁止交易穿越）或 Rule 605/606"]} answer={1} explanation="17 CFR 242.602(b)(2) 把义务限于已公布数量，并排除碎股订单。(b)(3) 和 (a)(3) 是列出的例外。不要把展示的 NBBO 数量当成保证成交，或把每一笔 SIP 报价都当成某一具名交易商的确定报价。不要把 602 和 Rule 604、611 或 605/606 混为一谈。" />
 <Quiz id="mo-6380a" question="按现行 FINRA 6380A，向 FINRA/Nasdaq TRF 申报场外最近成交的时限是什么？SR-FINRA-2026-015 目前是什么状态？" options={["每一笔行情带成交，包括交易所成交和目前午夜至上午 4:00 的成交，都已经适用 10 秒时钟；2026-12-06 已经生效", "“尽快”意味着可以故意等到第 10 秒再报", "在现行 TRF 时段内，指定证券的最近成交报告应尽快、且不得晚于成交后 10 秒提交；午夜至上午 4:00 美东的成交目前应在成交日上午 4:15 前申报，而不是 10 秒。SR-FINRA-2026-015 已提交并申请立即生效，但实施日是 SIP 修订的实施日，预计 2026-12-06，也可能随 SIP 延后；不要把未来的时钟当成现行法", "6380A 同样适用于在交易所申报或通过交易所申报的成交"]} answer={2} explanation="6380A(a)(1)–(2) 在现行 TRF 时段内要求尽快、且不得晚于 10 秒；午夜至上午 4:00 目前是成交日上午 4:15，晚上 8:00 至午夜或非营业日是下一营业日上午 4:15 并标 “as/of”。(e)(1)(C) 把交易所成交排除在该 TRF 之外。补充材料 .02 禁止故意扣留报告。SR-FINRA-2026-015 的实施日是 SIP 修订实施日，不是无条件的硬切换。" />
 <Quiz id="mo-5220" question="FINRA 5220 要求什么？它和已经教过的 Rule 602，以及 “normal unit of trading”，是什么关系？" options={["每一笔已公布报价都是不会撤回的证明，NMS 股票的正常交易单位永远是 100 股；这就是已经教过的 Rule 602", "官方 .01 没有 “not firm / firm for less than a normal unit” 的标明，也没有正在完成交易时的修订数量条款", "FINRA 5220 是与已经教过的 Rule 602 不同的确定报价规则。会员不得按标明价格向任何人买入或卖出任何证券，除非已准备按该价格并在报价时所称的条件下买入或卖出。官方 .01：在正常情况下，做 “firm trading market” 的会员，至少应按其当时通行报价买入或卖出正常交易单位，除非已清楚标明不是确定报价，或只对少于正常交易单位确定。如果在订单提交时该会员正在完成一笔交易，并在结束后立即传达修订后的报价数量，则没有义务按大于该修订数量买入或卖出。对 NMS 股票而言，“normal unit of trading” 是官方 Rule 600(b) 整手，不是发明的 100 股单位。只点名 Rule 6420，本课不搭建该引擎", "Rule 5220 是对已经教过的 Rule 602、600(b)(93)、610(e)、611 或 6380A 的改写"]} answer={2} explanation="FINRA 5220 是与已经教过的 Rule 602 不同的确定报价规则。会员不得按标明价格报价，除非已准备按该价格并在所述条件下买入或卖出。NMS 股票的 “normal unit of trading” 是官方 Rule 600(b) 整手，不是发明的 100 股单位。官方 .01 点名了 “not firm / less than a normal unit” 标明，以及正在完成交易时的修订数量条款。" />
+<Quiz id="mo-2265" question="根据 FINRA 2265，会员在允许客户进行延长时段交易之前必须提供什么？示范文本是唯一被允许的文本吗？" options={["延长时段接入无需披露，或示范文本是唯一被允许的文本", "这是对已经教过的 ETH 成交条件 T、隔夜 LULD 价格带或 FINRA 6380A 的改写；官方常规交易时段用的是 ET 或 EDT", "会员不得允许客户进行延长时段交易，除非已单独以纸质或电子形式向该客户提供突出延长时段特有风险的披露声明。官方常规交易时段一般指上午 9:30 至下午 4:00 Eastern Standard Time，按原文引用。官方示范用语包括 “upon the opening the next morning”。官方印刷包括 “on-line” 和 “Web site”。官方 (b) 允许使用实质相似的替代文本，至少涵盖官方六项风险（Lower Liquidity、Higher Volatility、Changing Prices、Unlinked Markets、News Announcements、Wider Spreads）。官方 (c) 要求会员视必要考虑额外披露。示范文本不是唯一被允许的文本。这不是对已经教过的 ETH 成交条件 T 或 6380A 的改写", "只需在网站上发布，不必单独向客户提供，即可满足 (a)"]} answer={2} explanation="FINRA 2265(a) 要求在允许延长时段交易之前，单独以纸质或电子形式向客户提供风险披露。官方常规交易时段一般是上午 9:30 至下午 4:00 Eastern Standard Time，按原文引用。官方 (b) 允许实质相似的替代文本；不要发明示范文本是唯一被允许的文本。这不是对已经教过的 ETH 成交条件 T 或 6380A 的改写。" />
+<Quiz id="mo-2266" question="根据 FINRA 2266，会员必须提供哪些 SIPC 信息、应在何时提供？这条规则是不是在重述已经教过的保障上限？" options={["这条规则重述了已经教过的 $500,000 / $250,000 SIPC 保障上限，或发明了一个保障金额", "事后口头通知即可，Web site 地址是可选的", "会员（连同官方 (a)–(b) 例外）应在开户时以书面形式告知所有新客户，可通过联系 SIPC 获取有关 SIPC 的信息，包括 SIPC 手册，并且还应提供 SIPC 的 Web site 地址和电话号码；同样的书面信息必须至少每年提供一次。官方印刷是两个词的 “Web site”。介绍经纪商和清算经纪商可以把这些要求分配给其中一家。官方 (a)–(b) 例外是存在的；本课不搭建 SIPA 排除引擎。这不是对已经教过的 SIPC 保障上限的改写，本规则也没有写出保障金额", "书面信息只在开户时需要一次，之后再也不需要"]} answer={2} explanation="FINRA 2266 要求在开户时以及至少每年一次提供书面 SIPC 信息，包括官方 Web site 地址和电话号码。官方印刷是两个词的 “Web site”。官方 (a)–(b) 例外存在，仅被点名。这不是对已经教过的 SIPC 保障上限的改写，本规则也没有写出保障金额。" />
 
 
 ## 完成标准
@@ -568,6 +633,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
  enrich21（核实于 2026-11-12）：[17 CFR 240.15c6-1](https://www.ecfr.gov/current/title-17/section-240.15c6-1)；[FINRA Rule 11320](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11320)（交收日期类型：现金、常规交收、卖方期权、买方期权、延迟交付；经 SR-FINRA-2023-017 修订，2024-05-28 生效；现行文本没有“次日”类别）。
  enrich22（核实于 2026-11-12）：[17 CFR 242.602](https://www.ecfr.gov/current/title-17/section-242.602)（确定报价义务，碎股除外；(b)(3) 修订例外；(a)(3) 异常市场救济）；[FINRA Rule 6380A](https://www.finra.org/rules-guidance/rulebooks/finra-rules/6380A)（现行选中版本 “Mar 30, 2026 - Dec 05, 2026”）；[SR-FINRA-2026-015](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-015) / [SEC 34-105922](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-finra-2026-015) / [91 FR 45299](https://www.govinfo.gov/content/pkg/FR-2026-07-20/pdf/2026-14528.pdf)（实施日为 SIP 修订实施日，预计 2026-12-06，可能延后）；FINRA 2026-05-22 与 2026-07-10 技术通知（ADF 时段目前不调整）。
 enrich28（核实于 2026-11-12）：[FINRA Rule 5220](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5220)（按标明价格报价；官方 .01 报价确定性；NMS 股票的正常交易单位是官方 Rule 600(b) 整手；只点名 Rule 6420）。没有产品、券商或交易场所建议。
+enrich29（核实于 2026-11-12）：[FINRA Rule 2265](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2265)；[FINRA Rule 2266](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2266)。没有产品、券商、交易场所或 SIPC 会员资格建议。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

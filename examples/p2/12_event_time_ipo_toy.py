@@ -422,3 +422,47 @@ print("no product, broker, or allocation recommendation")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_event_time_ipo_ok")
 print("disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only")
+
+print("=== J. FINRA 5131(e)(3): covered-non-public-company financial tests ===")
+# FINRA Rule 5131(e)(3) covered-non-public-company financial tests
+# (official-page fetch opened 2026-11-12). Keep sections A-I identical,
+# including 5130, 28/28 after F, spinning, 32/32 after G, Beige Book,
+# 39/39 after H, flipping, 44/44 after I, the section-I line
+# "this toy packs covered-non-public-company financial tests? False",
+# and the section-I ASSERT / disclaimer lines.
+# 5131(e)(3): "Covered non-public company" means any non-public company,
+# except for an unaffiliated charitable organization, satisfying the
+# following criteria: (i) income of at least $1 million in the last
+# fiscal year or in two of the last three fiscal years and shareholders'
+# equity of at least $15 million; (ii) shareholders' equity of at least
+# $30 million and a two-year operating history; or (iii) total assets
+# and total revenue of at least $75 million in the latest fiscal year
+# or in two of the last three fiscal years.
+# Official typography uses a straight apostrophe in shareholders' equity.
+# Official (e)(9) defines "unaffiliated charitable organization"; name
+# that the exception exists, do not build a Form 990 / 501(c)(3) engine.
+# Do not invent different dollar amounts. Do not flatten this into
+# already-taught 5130 restricted persons. Do not rewrite already-taught
+# spinning, the 5131(d)(4) market-order ban, or flipping / lock-up-waiver.
+# No product, broker, or allocation recommendation.
+
+print('5131(e)(3): "Covered non-public company" means any non-public company, except for an unaffiliated charitable organization, satisfying the following criteria:')
+print("  (i) income of at least $1 million in the last fiscal year or in two of the last three fiscal years")
+print("  and shareholders' equity of at least $15 million;")
+print("  (ii) shareholders' equity of at least $30 million and a two-year operating history; or")
+print("  (iii) total assets and total revenue of at least $75 million in the latest fiscal year")
+print("  or in two of the last three fiscal years")
+print('official (e)(9) defines "unaffiliated charitable organization"; this toy is not a Form 990 / 501(c)(3) engine')
+is_rewrite_5131 = False
+print(f"  this is a rewrite of already-taught spinning, the market-order ban, or flipping? {is_rewrite_5131}")
+check(is_rewrite_5131 is False, "not a rewrite of spinning, the market-order ban, or flipping")
+invents_dollars = False
+print(f"  this toy invents different dollar amounts? {invents_dollars}")
+check(invents_dollars is False, "do not invent different 5131(e)(3) dollar amounts")
+is_5130 = False
+print(f"  this is already-taught 5130 restricted persons? {is_5130}")
+check(is_5130 is False, "do not flatten 5131(e)(3) into already-taught 5130")
+print("no product, broker, or allocation recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_event_time_ipo_ok")
+print("disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only")

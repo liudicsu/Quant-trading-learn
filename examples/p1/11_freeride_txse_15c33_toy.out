@@ -34,3 +34,22 @@ current FINRA 11320 has no separate next-day category (amended by SR-FINRA-2023-
 a not-regular-way contract can be a listed Rule 611(b)(2) trade-through exception; that does not make every such print a data error
 assertions passed: 19/19
 disclaimer: learning only; not a UPC or close-out engine; no product or venue recommendation
+=== G. FINRA 2266: written SIPC information at account opening and at least annually ===
+2266: All members, except those members: (a) that pursuant to Section 3(a)(2)(A)(i) through (iii)
+  of the Securities Investor Protection Act of 1970 (SIPA) are excluded from membership in the
+  Securities Investor Protection Corporation (SIPC) and that are not SIPC members; or (b) whose
+  business consists exclusively of the sale of investments that are ineligible for SIPC protection,
+  shall advise all new customers, in writing, at the opening of an account, that they may obtain
+  information about SIPC, including the SIPC brochure, by contacting SIPC, and also shall provide
+  the Web site address and telephone number of SIPC.
+  In addition, such members shall provide all customers with the same information, in writing,
+  at least once each year.
+  In cases where both an introducing firm and clearing firm service an account,
+  the firms may assign these requirements to one of the firms
+official typography is "Web site" as two words
+official (a)-(b) exceptions exist; this toy is not a SIPA-exclusion engine
+  this is a rewrite of already-taught SIPC coverage limits? False
+  this toy invents a coverage amount, form, or clock this rule does not state? False
+  written information is required at account opening and at least once each year? True
+no broker or SIPC-membership recommendation
+assertions passed: 22/22

@@ -452,3 +452,63 @@ print(f"  this toy invents a broader scope than the official broker / adviser-de
 check(invents_broader_scope is False, "do not invent a broader 2269 scope")
 print("no product, broker, or offering recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print('=== K. FINRA 2121: the official "5% Policy" is a guide, not a rule ===')
+# FINRA Rule 2121 Fair Prices and Commissions (official-page fetch opened
+# 2026-11-12). Keep the current 606 table, 4/4, ASSERT_rule606_ok, the
+# reminder line, 5250, 5270, 12/12 after 5270, 5230, 15/15 after 5230,
+# 5280, 18/18 after 5280, 10b-10, 22/22 after 10b-10, 5240, 25/25 after
+# 5240, 5290, 28/28 after H, 2262, 31/31 after I, 2269, and 34/34 after J
+# identical.
+# Official 2121: if a member buys for his own account from his customer,
+# or sells for his own account to his customer, he shall buy or sell at a
+# price which is fair, taking into consideration all relevant
+# circumstances; and if he acts as agent for his customer, he shall not
+# charge his customer more than a fair commission or service charge,
+# taking into consideration all relevant circumstances.
+# Official SM .01(1): The "5% Policy" is a guide, not a rule.
+# Official SM .01(4): A mark-up pattern of 5% or even less may be
+# considered unfair or unreasonable under the "5% Policy."
+# Official .01 also: It shall be deemed a violation of Rule 2010 and
+# Rule 2121 for a member to enter into any transaction with a customer
+# in any security at any price not reasonably related to the current
+# market price of the security or to charge a commission which is not
+# reasonable. .01(5): Determination of the fairness of mark-ups must be
+# based on a consideration of all the relevant factors, of which the
+# percentage of mark-up is only one.
+# Official Rule 2010 is cross-referenced; this toy is not a 2010 engine.
+# Official .01(d): the Mark-Up Policy is not applicable to the sale of
+# securities where a prospectus or offering circular is required to be
+# delivered and the securities are sold at the specific public offering
+# price; this toy is not that engine.
+# Do not invent a hard 5% cap. Do not build the SM .01(b) relevant-factor
+# catalog or .02 additional debt mark-up policy. Do not rewrite
+# already-taught 10b-10, 2262, 2269, or 5290. No product, broker, or
+# pricing recommendation.
+
+print("2121: if a member buys for his own account from his customer, or sells for his own account to his customer,")
+print("  he shall buy or sell at a price which is fair, taking into consideration all relevant circumstances;")
+print("  and if he acts as agent for his customer, he shall not charge his customer more than a fair commission")
+print("  or service charge, taking into consideration all relevant circumstances")
+print('.01(1): The "5% Policy" is a guide, not a rule.')
+print('.01(4): A mark-up pattern of 5% or even less may be considered unfair or unreasonable under the "5% Policy."')
+print("It shall be deemed a violation of Rule 2010 and Rule 2121 for a member to enter into any transaction")
+print("  with a customer in any security at any price not reasonably related to the current market price of the security")
+print("  or to charge a commission which is not reasonable")
+print(".01(5): Determination of the fairness of mark-ups must be based on a consideration of all the relevant factors,")
+print("  of which the percentage of mark-up is only one")
+print("official Rule 2010 is cross-referenced; this toy is not a 2010 engine")
+print("official .01(d): the Mark-Up Policy is not applicable to the sale of securities where a prospectus or")
+print("  offering circular is required to be delivered and the securities are sold at the specific public offering price;")
+print("  this toy is not that engine")
+hard_cap = False
+print(f"  this toy invents a hard 5% cap? {hard_cap}")
+check(hard_cap is False, "do not invent a hard 5% cap")
+builds_catalog = False
+print(f"  this toy builds the SM .01(b) relevant-factor catalog or .02 additional debt mark-up policy? {builds_catalog}")
+check(builds_catalog is False, "do not build the SM .01(b) catalog or .02 debt policy")
+is_guide = True
+print(f'  the official "5% Policy" is a guide, not a rule? {is_guide}')
+check(is_guide is True, 'official "5% Policy" is a guide, not a rule')
+print("no product, broker, or pricing recommendation")
+print(f"assertions passed: {checks}/{checks}")

@@ -154,3 +154,24 @@ assertions passed: 31/31
   this toy invents a broader scope than the official broker / adviser-dealer categories? False
 no product, broker, or offering recommendation
 assertions passed: 34/34
+=== K. FINRA 2121: the official "5% Policy" is a guide, not a rule ===
+2121: if a member buys for his own account from his customer, or sells for his own account to his customer,
+  he shall buy or sell at a price which is fair, taking into consideration all relevant circumstances;
+  and if he acts as agent for his customer, he shall not charge his customer more than a fair commission
+  or service charge, taking into consideration all relevant circumstances
+.01(1): The "5% Policy" is a guide, not a rule.
+.01(4): A mark-up pattern of 5% or even less may be considered unfair or unreasonable under the "5% Policy."
+It shall be deemed a violation of Rule 2010 and Rule 2121 for a member to enter into any transaction
+  with a customer in any security at any price not reasonably related to the current market price of the security
+  or to charge a commission which is not reasonable
+.01(5): Determination of the fairness of mark-ups must be based on a consideration of all the relevant factors,
+  of which the percentage of mark-up is only one
+official Rule 2010 is cross-referenced; this toy is not a 2010 engine
+official .01(d): the Mark-Up Policy is not applicable to the sale of securities where a prospectus or
+  offering circular is required to be delivered and the securities are sold at the specific public offering price;
+  this toy is not that engine
+  this toy invents a hard 5% cap? False
+  this toy builds the SM .01(b) relevant-factor catalog or .02 additional debt mark-up policy? False
+  the official "5% Policy" is a guide, not a rule? True
+no product, broker, or pricing recommendation
+assertions passed: 37/37

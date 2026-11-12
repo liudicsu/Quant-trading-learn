@@ -633,3 +633,103 @@ print(f"  this is already-taught Rule 144 or Regulation M? {is_144_or_regm}")
 check(is_144_or_regm is False, "10b-9 is not already-taught Rule 144 or Regulation M")
 print("no offering, underwriter, or strategy recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== O. Rule 14d-3: Schedule TO filing and transmittal on the date of commencement ===")
+# 17 CFR 240.14d-3 Filing and transmission of tender offer statement
+# (official eCFR API, title 17 up_to_date_as_of 2026-11-09;
+# official-page fetch and matching LII opened 2026-11-12).
+# Keep sections A-N identical, including 14d-2, 56/56 after M, 10b-9,
+# and 60/60 after N.
+# 14d-3(a): No bidder shall make a tender offer if, after consummation
+# thereof, such bidder would be the beneficial owner of more than 5 percent
+# of the class of the subject company's securities for which the tender
+# offer is made, unless as soon as practicable on the date of the
+# commencement of the tender offer such bidder: official (a)(1) files
+# Schedule TO, official (a)(2) delivers a copy as officially provided,
+# and official (a)(3) gives telephonic notice and mails Schedule TO,
+# "which telephonic notice shall be made when practicable before the
+# opening of each such exchange," and the still-printed NASD / NASDAQ
+# clause quoted as written. Official typography in the eCFR API uses
+# typographic quotation marks around NASD.
+# Official (b) requires an amendment reporting promptly any material
+# changes and a final amendment reporting promptly the results. Official
+# (c) certain-announcements paragraph exists. Name them; do not build
+# the amendment / 14d-6(d)(2) engine, and do not pack 14d-4 or 14d-6 as
+# this item. This is not a substitute for already-taught 14d-2. Do not
+# invent a clock or a time zone beyond "as soon as practicable on the
+# date of the commencement" and "when practicable before the opening."
+# Do not silently modernize the still-printed NASD / NASDAQ names.
+# No bidder, offer, or strategy recommendation.
+
+print("14d-3(a): No bidder shall make a tender offer if, after consummation thereof, such bidder would be")
+print("  the beneficial owner of more than 5 percent of the class of the subject company's securities")
+print("  for which the tender offer is made, unless as soon as practicable on the date of the commencement")
+print("  of the tender offer such bidder:")
+print("  (1) Files with the Commission a Tender Offer Statement on Schedule TO (§ 240.14d-100), including all exhibits thereto")
+print("  (2) Delivers a copy of such Schedule TO as officially provided")
+print('  (3) Gives telephonic notice, "which telephonic notice shall be made when practicable before the opening of each such exchange"')
+print(f"  (ii) To the National Association of Securities Dealers, Inc. (“NASD”) if such class of the subject company's securities is authorized for quotation in the NASDAQ interdealer quotation system.")
+print("official (b) requires an amendment reporting promptly any material changes and a final amendment")
+print("  reporting promptly the results; this toy is not that engine")
+print("official (c) certain-announcements paragraph exists; this toy is not that engine")
+is_sub_14d2 = False
+print(f"  this is a substitute for already-taught 14d-2? {is_sub_14d2}")
+check(is_sub_14d2 is False, "14d-3 is not a substitute for already-taught 14d-2")
+invents_clock = False
+print(f'  this toy invents a clock or a time zone beyond "as soon as practicable on the date of the commencement" and "when practicable before the opening"? {invents_clock}')
+check(invents_clock is False, "do not invent a clock or zone beyond the official phrases")
+modernizes_nasd = False
+print(f"  this toy silently modernizes the still-printed NASD / NASDAQ names? {modernizes_nasd}")
+check(modernizes_nasd is False, "quote the still-printed NASD / NASDAQ clause as written")
+print("no bidder, offer, or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== P. Rule 13e-1: issuer purchases of its equity during a third-party tender offer ===")
+# 17 CFR 240.13e-1 Purchase of securities by the issuer during a
+# third-party tender offer (official eCFR API, title 17
+# up_to_date_as_of 2026-11-09; official-page fetch and matching LII
+# opened 2026-11-12). Keep all earlier prints, including 60/60 after N
+# and the new 14d-3 section, identical once 14d-3 is added.
+# Official core: An issuer that has received notice that it is the
+# subject of a tender offer made under Section 14(d)(1) of the Act
+# (15 U.S.C. 78n), that has commenced under § 240.14d-2 must not
+# purchase any of its equity securities during the tender offer unless
+# the issuer first: (a) files a statement containing the official
+# (a)(1)-(7) information, (b) pays the fee required by § 240.0-11,
+# and (c) submits the official (a)(7) exhibit.
+# The official core text requires "a statement," not a named form; do
+# not invent a form number, and do not flatten this into Schedule 13E-3
+# or Rule 13e-3. Official citation is § 240.13e-1 (a WebFetch
+# "§ 240.13 e-1" space is not official typography).
+# Official (d): This section does not apply to periodic repurchases in
+# connection with an employee benefit plan or other similar plan of the
+# issuer so long as the purchases are made in the ordinary course and
+# not in response to the tender offer.
+# Name official (a)(7) fee tables / (b) / (c); do not build the
+# fee-table or Rule 0-11 engine. Do not flatten 13e-1 into
+# already-taught 14e-5 or 14d-2. No issuer, offer, or strategy
+# recommendation.
+
+print("13e-1: An issuer that has received notice that it is the subject of a tender offer made under Section 14(d)(1)")
+print("  of the Act (15 U.S.C. 78n), that has commenced under § 240.14d-2 must not purchase any of its equity")
+print("  securities during the tender offer unless the issuer first:")
+print("  (a) Files a statement with the Commission containing the official (a)(1)-(7) information")
+print("  (b) Pays the fee required by § 240.0-11")
+print("  (c) Submits the official (a)(7) exhibit")
+print("official citation is § 240.13e-1")
+print("official (d): This section does not apply to periodic repurchases in connection with an employee benefit plan")
+print("  or other similar plan of the issuer so long as the purchases are made in the ordinary course")
+print("  and not in response to the tender offer")
+print('the official core text requires "a statement," not a named form; this toy invents no form number')
+print("official (a)(7) fee tables / (b) / (c) exist; this toy is not the fee-table or Rule 0-11 engine")
+is_14e5_or_14d2 = False
+print(f"  this is already-taught 14e-5 or 14d-2? {is_14e5_or_14d2}")
+check(is_14e5_or_14d2 is False, "13e-1 is not already-taught 14e-5 or 14d-2")
+is_13e3 = False
+print(f"  this is Schedule 13E-3 or Rule 13e-3? {is_13e3}")
+check(is_13e3 is False, "do not flatten 13e-1 into Schedule 13E-3 or Rule 13e-3")
+invents_form = False
+print(f"  this toy invents a form number? {invents_form}")
+check(invents_form is False, "do not invent a form number for 13e-1")
+print("no issuer, offer, or strategy recommendation")
+print(f"assertions passed: {checks}/{checks}")

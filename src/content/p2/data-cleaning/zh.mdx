@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **36.25 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h + Rule 14d-10 全体持有人 / 最高对价 0.25h + Rule 14e-4 局部要约中的短交 / 净多头 0.25h + 第 12(g) 条 / Rule 12g-1 注册门槛 0.25h + Rule 14e-3 披露或回避 0.25h + Rule 12g-4 / 第 12(g)(4) 条终止 0.25h + Rule 14d-2 开始时点 0.25h + Form 8-K Item 5.07 特殊时钟 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
+本课（约 **36.75 学时**：概念 5h + 管线实验 6h（含 mask-first）+ 信息 bar 2h + crypto-PIT 注 1h + 文档/测验 3h + 数据版本/公司行为/交易日历实验 2h + 美股数据源与许可/PIT 实验 3h + 公司行为与退市 2h + ALFRED 修订 as-of 1h + T+1 下的分红日期 0.5h + yfinance auto_adjust 版本陷阱 0.25h + 申报期限与 EDGAR 提交日 0.5h + 退市收益与永久标识 0.5h + 分拆与并购进价格序列 0.5h + 内部人与大股东申报时滞（Form 4 / 13D / 13G）0.5h + 反向拆股与 Nasdaq 最低买价规则状态 0.5h + SEC XBRL 接口按 `filed` 日期取数 0.5h + Rule 10b5-1 计划标记与冷静期 0.25h + NYSE 价格标准与 0.25 美元规则 0.5h + Rule 10b-18 回购安全港 0.5h + Item 703 月度披露时滞 0.25h + 要约收购（Rule 14e-1 最短期限）0.5h + Rule 10b-18 盘后分支（官方文本尚未映射 23/5）0.25h + Rule 10b-17 发行人对登记日的通知 0.25h + Form 4 交易代码与 Form 3 / Form 5 时钟 0.25h + 13G 转 13D 与 13d-3 实益所有权 0.5h + Rule 14e-5 要约外买进 0.25h + 当发行 / 当分配合约（FINRA 11130；Nasdaq CQS 后缀 WI）0.25h + 12b-2 申报人门槛与滞后退出 0.25h + Rule 12b-25 / Form 12b-25 迟交通知 0.25h + Nasdaq CQS 后缀（优先股 / 类别股 / 权证 / 认股权 / 单位）0.25h + Form 8-K 在 Item 2.02 之外的官方项目 0.25h + Form 20-F 四个月 / Form 6-K 及时（promptly）提交时钟 0.25h + Rule 13d-2 的 1% 重大性与 13G 修订时钟 0.25h + Rule 14e-2 目标公司立场声明 0.25h + Rule 14d-11 后续要约期 0.25h + Rule 14d-10 全体持有人 / 最高对价 0.25h + Rule 14e-4 局部要约中的短交 / 净多头 0.25h + 第 12(g) 条 / Rule 12g-1 注册门槛 0.25h + Rule 14e-3 披露或回避 0.25h + Rule 12g-4 / 第 12(g)(4) 条终止 0.25h + Rule 14d-2 开始时点 0.25h + Form 8-K Item 5.07 特殊时钟 0.25h + Rule 14d-3 Schedule TO 申报与送交 0.25h + Rule 13e-1 第三方要约期间发行人买回自身股票 0.25h）把「可版本化数据」做成习惯：哈希校验、幸存者偏差、PIT、时区错标前瞻、复权对照，并写数据说明书。前置：`eval-lab`。
 
 **课内目标：** 版本化下载与哈希；举例幸存者偏差；写数据说明书。
 
@@ -984,6 +984,60 @@ no bidder, target, or strategy recommendation
 assertions passed: 56/56
 ```
 
+
+**Rule 14d-3：要约结束后会实益拥有该类证券 5% 以上的收购人，必须在开始日尽快申报 Schedule TO，并按官方规定送达，包括在可行时于各交易所开盘前给出电话通知（核实于 2026-11-12）。** 已经教过的 Rule 14d-2 在上午 12:01 开始保持原样。不要改写该段落，也不要改写已经教过的 14e-1 / 14d-11 / 14d-10 / 14e-5。这一节补上官方的 14d-3，避免把 14d-2 当成 Regulation 14D 唯一的申报义务，发明时钟或时区，或悄悄把仍印在规则里的名称现代化。没有收购人、要约或策略建议。
+
+[17 CFR 240.14d-3(a)](https://www.ecfr.gov/current/title-17/section-240.14d-3)：“No bidder shall make a tender offer if, after consummation thereof, such bidder would be the beneficial owner of more than 5 percent of the class of the subject company's securities for which the tender offer is made, unless as soon as practicable on the date of the commencement of the tender offer such bidder:” 官方 (a)(1) 向委员会申报 Schedule TO（§ 240.14d-100），包括全部附件；官方 (a)(2) 按官方规定送达副本；官方 (a)(3) 发出电话通知并邮寄 Schedule TO，且 “which telephonic notice shall be made when practicable before the opening of each such exchange”，以及 “(ii) To the National Association of Securities Dealers, Inc. (“NASD”) if such class of the subject company's securities is authorized for quotation in the NASDAQ interdealer quotation system.” 官方 eCFR API 在 NASD 两侧使用弯引号。按原文引用该条款；不要悄悄把名称现代化。不要在 “as soon as practicable on the date of the commencement” 和 “when practicable before the opening” 之外发明时钟或时区。这不是对已经教过的 14d-2 的替代。官方 (b) 要求及时申报任何重大变化的修订，以及及时报告结果的最终修订。官方 (c) 关于某些宣布的段落是存在的。点名官方 (b) 和官方 (c)；不要搭建修订 / 14d-6(d)(2) 引擎，也不要把 14d-4 或 14d-6 作为本项打包。
+
+**实验：** `examples/p2/19_rule144_followon_tender_toy.py` 的 O 节（A–N 节与此前相同，包括 14d-2、M 节后的 **56/56**、10b-9，以及 N 节后的 **60/60**；O 节后为 63/63）：
+
+```text
+=== O. Rule 14d-3: Schedule TO filing and transmittal on the date of commencement ===
+14d-3(a): No bidder shall make a tender offer if, after consummation thereof, such bidder would be
+  the beneficial owner of more than 5 percent of the class of the subject company's securities
+  for which the tender offer is made, unless as soon as practicable on the date of the commencement
+  of the tender offer such bidder:
+  (1) Files with the Commission a Tender Offer Statement on Schedule TO (§ 240.14d-100), including all exhibits thereto
+  (2) Delivers a copy of such Schedule TO as officially provided
+  (3) Gives telephonic notice, "which telephonic notice shall be made when practicable before the opening of each such exchange"
+  (ii) To the National Association of Securities Dealers, Inc. (“NASD”) if such class of the subject company's securities is authorized for quotation in the NASDAQ interdealer quotation system.
+official (b) requires an amendment reporting promptly any material changes and a final amendment
+  reporting promptly the results; this toy is not that engine
+official (c) certain-announcements paragraph exists; this toy is not that engine
+  this is a substitute for already-taught 14d-2? False
+  this toy invents a clock or a time zone beyond "as soon as practicable on the date of the commencement" and "when practicable before the opening"? False
+  this toy silently modernizes the still-printed NASD / NASDAQ names? False
+no bidder, offer, or strategy recommendation
+assertions passed: 63/63
+```
+
+**Rule 13e-1：已收到通知、得知自己成为已按 Rule 14d-2 开始的第 14(d)(1) 条要约收购标的的发行人，在该要约期间不得买回自身任何权益证券，除非发行人先申报一份声明、缴纳官方费用并提交官方附件；官方 (d) 把并非为回应要约、在正常过程中为雇员福利计划或类似计划进行的定期买回排除在外（核实于 2026-11-12）。** 已经教过的 14d-2、14e-5，以及上面的 14d-3 框保持原样。不要改写那些段落。这一节补上官方的 13e-1，避免把 14e-5 当成唯一的“要约期间买进”规则，发明表格编号，或把它压进 Rule 13e-3 / Schedule 13E-3。没有发行人、要约或策略建议。
+
+[17 CFR 240.13e-1](https://www.ecfr.gov/current/title-17/section-240.13e-1)：“An issuer that has received notice that it is the subject of a tender offer made under Section 14(d)(1) of the Act (15 U.S.C. 78n), that has commenced under § 240.14d-2 must not purchase any of its equity securities during the tender offer unless the issuer first:” 官方 (a) 申报一份载有官方 (a)(1)–(7) 信息的声明，官方 (b) 缴纳 § 240.0-11 要求的费用，官方 (c) 提交官方 (a)(7) 附件。官方核心文本要求的是 “a statement”，而不是一份被点名的表格；不要发明表格编号，也不要把本规则压进 Schedule 13E-3 或 Rule 13e-3。官方引用是 § 240.13e-1。官方 (d)：“This section does not apply to periodic repurchases in connection with an employee benefit plan or other similar plan of the issuer so long as the purchases are made in the ordinary course and not in response to the tender offer.” 点名官方 (a)(7) 费用表 / (b) / (c)；不要搭建费用表或 Rule 0-11 引擎。不要把 13e-1 压进已经教过的 14e-5 或已经教过的 14d-2。
+
+**实验：** 同一脚本在 14d-3 增补之后的 P 节（一旦加入 14d-3，此前的全部打印，包括 N 节后的 **60/60** 和新的 14d-3 节，与此前相同；P 节后为 66/66）：
+
+```text
+=== P. Rule 13e-1: issuer purchases of its equity during a third-party tender offer ===
+13e-1: An issuer that has received notice that it is the subject of a tender offer made under Section 14(d)(1)
+  of the Act (15 U.S.C. 78n), that has commenced under § 240.14d-2 must not purchase any of its equity
+  securities during the tender offer unless the issuer first:
+  (a) Files a statement with the Commission containing the official (a)(1)-(7) information
+  (b) Pays the fee required by § 240.0-11
+  (c) Submits the official (a)(7) exhibit
+official citation is § 240.13e-1
+official (d): This section does not apply to periodic repurchases in connection with an employee benefit plan
+  or other similar plan of the issuer so long as the purchases are made in the ordinary course
+  and not in response to the tender offer
+the official core text requires "a statement," not a named form; this toy invents no form number
+official (a)(7) fee tables / (b) / (c) exist; this toy is not the fee-table or Rule 0-11 engine
+  this is already-taught 14e-5 or 14d-2? False
+  this is Schedule 13E-3 or Rule 13e-3? False
+  this toy invents a form number? False
+no issuer, offer, or strategy recommendation
+assertions passed: 66/66
+```
+
 ## 分红日期与 yfinance 的 auto_adjust 陷阱（2026-11-10 核实）
 
 **1. 现金分红的四个日期。** 公司先宣布分红（宣布日），再确定股东名单（登记日），之后股票开始不带这次分红交易（除息日），最后发放现金（派息日）。决定你能不能拿到分红的是**除息日**：在除息日当天或之后买入，就拿不到这一次分红。美国交收改为 T+1 之后，investor.gov 写明除息日**一般就是登记日**；登记日不是营业日时，除息日是它之前的一个营业日（[investor.gov](https://www.investor.gov/introduction-investing/investing-basics/glossary/ex-dividend-dates-when-are-you-entitled-stock-and)）。页面的例子：宣布日 2026-03-02，登记日 2026-03-16，除息日 2026-03-16，派息日 2026-03-17。
@@ -1087,6 +1141,8 @@ disclaimer: synthetic fixtures; learning only
 39. 把 Form 15 的提交日当成 12(g) 注册的终止日；发明通胀调整后的 12g-4 资产数字；把法条和规则压成同一张地图，漏掉规则里的 500 人 / 1,000 万美元、三个财年这一支、立即中止的 13(a) 义务，或撤回 / 拒绝后的 60 天补交时钟；如果引用法条那一句，悄悄改掉 LII 的印刷瑕疵 “1,200 persons persons. [1]”。
 40. 把开始前的宣布当成 14d-2 的开始，把开始压进已经教过的 14e-3 或 14e-1，发明时区，或把已经教过的 14d-11 “9:00 a.m. Eastern”抄到 14d-2 的 “12:01 a.m.” 上。
 41. 把 Item 5.07 压进已经教过的一般指示 B.1 或 Item 1.05；把 5.07 四个营业日时钟从会议结束当日以外的日子起算；为 5.07(d) 发明四个营业日时钟，或搭建 Rule 14a-8 引擎。
+42. 把 14d-3 当成对已经教过的 14d-2 的替代；在 “as soon as practicable on the date of the commencement” 和 “when practicable before the opening” 之外发明时钟或时区；悄悄把仍印在规则里的 NASD / NASDAQ 条款现代化；或搭建官方 (b) 修订 / 14d-6(d)(2) 引擎，或把 14d-4 或 14d-6 作为本项打包。
+43. 为 Rule 13e-1 发明表格编号，或把它压进 Schedule 13E-3 或 Rule 13e-3；把 13e-1 压进已经教过的 14e-5 或已经教过的 14d-2；或搭建官方 (a)(7) 费用表或 Rule 0-11 引擎。
 
 
 ## 练习（与任务清单 1:1）
@@ -1129,6 +1185,8 @@ disclaimer: synthetic fixtures; learning only
 34. **ex-12g4** — 用自己的话写出官方 12(g)(4) / 12g-4 终止地图：90 天时钟、300 / 1,200 人测试、规则里的 500 人 / 1,000 万美元三个财年这一支，以及提交 Form 15 时立即中止 13(a) 义务（含撤回或拒绝后的 60 天补交时钟）；**完成标准**：终止不是在 Form 15 提交日，立即中止的是 13(a) 义务；不要发明通胀调整后的资产数字，也不要把法条和规则压成同一张地图。
 35. **ex-14d2** — 运行同一脚本的 M 节；说明 14d-2 的开始时点是什么，本课有没有发明时区或把 14d-11 的 “9:00 a.m. Eastern”抄过来，以及符合条件的开始前通信是不是开始；**完成标准**：开始是首次给予交存手段之日的 12:01 a.m.，没有发明时区，符合条件的开始前通信不是开始，这不是已经教过的 14e-3 或 14e-1，与输出一致。
 36. **ex-8k507** — 运行 `16_index_add_earnings_time_toy.py` 的 E 节；说明 Item 5.07 除 (d) 外的四个营业日期间从哪一天起算，初步与最终结果如何披露，以及 5.07(d) 是否也用四个营业日；**完成标准**：从会议结束当日起算，先披露初步再在最终结果知悉后四个营业日内修订（最终结果已披露则不必披露初步），(d) 使用 150 个日历日 / 14a-8 前 60 个日历日时钟，不是一般指示 B.1 或 Item 1.05，与输出一致。
+37. **ex-14d3** — 运行 `19_rule144_followon_tender_toy.py` 的 O 节；说明若收购人在要约后会实益拥有 5% 以上，Schedule TO 应在何时申报，按原文引用仍印在规则里的 NASD / NASDAQ 条款，并说明这是不是对已经教过的 14d-2 的替代；**完成标准**：在开始日尽快申报；按原文引用仍印着的 NASD / NASDAQ 条款；官方 (b) 和 (c) 存在但本玩具不搭建；这不是对已经教过的 14d-2 的替代，与输出一致。
+38. **ex-13e1** — 运行同一脚本的 P 节；说明已收到已开始的第 14(d)(1) 条要约通知的发行人，在要约期间买回自身权益证券之前必须先做什么，官方核心文本有没有点名一份表格，以及官方 (d) 是否存在；**完成标准**：发行人必须先申报一份声明、缴纳官方费用并提交官方附件；官方核心文本要求的是 “a statement”，而不是一份被点名的表格；官方 (d) 把并非为回应要约、在正常过程中为雇员福利计划进行的定期买回排除在外；这不是已经教过的 14e-5、14d-2 或 Rule 13e-3，与输出一致。
 
 
 ## 测验
@@ -1183,6 +1241,8 @@ disclaimer: synthetic fixtures; learning only
 <Quiz id="dc-12g4" question="根据《交易法》第 12(g)(4) 条和 Rule 12g-4，12(g) 注册何时终止？提交 Form 15 时会发生什么？" options={["Form 15 在提交日就结束 12(g) 注册，而且官方现行 12g-4 已经按通胀把 1,000 万美元上调", "注册在 Form 15 证明登记持有人已减至不足 300 人（银行、储蓄贷款控股公司或银行控股公司为 1,200 人）之后 90 天（或委员会确定的更短期间）终止。Rule 12g-4 还有第二支：不足 500 人，且发行人总资产在最近三个财年的每一财年最后一日均未超过 1,000 万美元。发行人按第 13(a) 条提交报告的义务 “shall be suspended immediately upon filing a certification on Form 15”；如果该证明随后被撤回或拒绝，发行人应在 60 天内提交若未提交该证明本应提交的全部报告。现行官方 12g-4 仍使用 1,000 万美元（最近一次修订于 2016-05-10）。不要把法条和规则压成同一张地图，不要发明通胀调整后的资产数字；如果引用法条那一句，不要悄悄改掉 LII 的印刷瑕疵 “1,200 persons persons. [1]”", "这是对已经教过的 12g-1 的改写，而且 120 天时钟就是终止时钟", "应当仅为改日期而改写 Form 10-S “截至 2026-11-11 尚未通过”那一句，并且本项会改 09 / 17 实验"]} answer={1} explanation="15 U.S.C. 78l(g)(4) 和 17 CFR 240.12g-4：终止在 Form 15 证明之后 90 天（或更短指定期间）生效，不是在提交日。立即中止的是 13(a) 义务；撤回或拒绝后有 60 天补交时钟。规则还有 500 人 / 1,000 万美元、三个财年这一支。不要发明通胀调整数字，也不要把法条和规则压扁。" />
 <Quiz id="dc-14d2" question="根据 Rule 14d-2，要约收购何时开始？符合条件的开始前通信是不是开始？" options={["开始时点就是已经教过的 14e-3 “重大步骤”，或 14e-1 的 20 个营业日", "官方 14d-2 印着 “12:01 a.m. Eastern”，应把已经教过的 14d-11 “9:00 a.m. Eastern”抄过来", "就《交易法》第 14(d) 条及该项下规则而言，要约人在首次向证券持有人公布、寄送或交付交存手段之日的 12:01 a.m. 开始要约。交存手段包括交存表格，或关于如何取得交存表格的说明。官方 14d-2(a) 印着 “12:01 a.m.”，没有时区；不要发明时区，也不要把 14d-11 的 “9:00 a.m. Eastern”抄到 14d-2 上。某一日 12:01 a.m. 开始，意味着当日 09:30 开盘已在官方开始之后。符合条件的开始前通信（不含交存手段，并已按 Schedule TO 提交）不是开始。官方 (c) 的 14d-3 / 14d-4 / 14d-6 义务是存在的；本课不搭建这些引擎", "任何关于要约的公开宣布都等于开始，即使没有交存手段"]} answer={2} explanation="17 CFR 240.14d-2(a) 把开始定在首次给予交存手段之日的 12:01 a.m.。官方文本没有时区；不要发明时区，也不要把 14d-11 的 “9:00 a.m. Eastern”抄过来。符合 (b) 的开始前通信不是开始。这不是已经教过的 14e-3 或 14e-1。" />
 <Quiz id="dc-8k507" question="Form 8-K Item 5.07 的官方时钟是什么？它和已经教过的一般指示 B.1 或 Item 1.05 是同一条时钟吗？" options={["5.07 就是已经教过的一般指示 B.1 或 Item 1.05，四个营业日从一般“发生”日起算", "5.07(d) 也使用四个营业日的会议结束时钟，而且本课搭建了 Rule 14a-8 引擎", "Item 5.07 的四个营业日期间，除 5.07(d) 外，从会议结束当日起算；应披露初步投票结果，并在最终结果知悉后四个营业日内以修订后的 8-K 披露最终结果；如果最终结果已经披露，则不必披露初步结果。5.07(d) 使用另一套官方时钟：不晚于会议结束后 150 个日历日，且在任何情形下不晚于 Rule 14a-8 股东提案截止日期前 60 个日历日，以修订披露频率决定。不要把 5.07 压进一般指示 B.1 或 Item 1.05，也不要为 (d) 发明四个营业日时钟。本课不搭建 Rule 14a-8 引擎", "必须先披露初步结果，即使最终结果已经披露"]} answer={2} explanation="官方 Form 8-K Item 5.07 指示 1：除 (d) 外，四个营业日从会议结束当日起算；初步然后最终（或只披露最终）。5.07(d) 是 150 个日历日 / 14a-8 前 60 个日历日的双重时钟，不是四个营业日。不要把它压进一般指示 B.1 或 Item 1.05。" />
+<Quiz id="dc-14d3" question="根据 Rule 14d-3，要约后会实益拥有该类证券 5% 以上的收购人应在何时申报 Schedule TO？仍印在规则里的 NASD / NASDAQ 条款应如何引用？" options={["这就是对已经教过的 Rule 14d-2 在上午 12:01 开始的替代", "悄悄把 NASD / NASDAQ 改成现在的交易所名称，或发明官方文本并未写出的时钟和时区", "任何收购人，若在要约结束后会实益拥有该类证券 5% 以上，则除非在开始日尽快申报 Schedule TO 并按官方规定送达，包括 “which telephonic notice shall be made when practicable before the opening of each such exchange”，以及 “To the National Association of Securities Dealers, Inc. (“NASD”) if such class of the subject company's securities is authorized for quotation in the NASDAQ interdealer quotation system.” 按原文引用该条款。官方 (b) 和官方 (c) 是存在的；本课不搭建这些引擎。这不是对已经教过的 14d-2 的替代", "Schedule TO 可以在开始后的任何时间申报，而且官方 (b) 修订被作为本项打包"]} answer={2} explanation="Rule 14d-3 要求，若收购人在要约后会实益拥有 5% 以上，则须在开始日尽快申报并送达 Schedule TO。按原文引用仍印着的 NASD / NASDAQ 条款；不要发明时钟或时区，也不要把这当成对已经教过的 14d-2 的替代。" />
+<Quiz id="dc-13e1" question="根据 Rule 13e-1，已收到已开始的第 14(d)(1) 条要约通知的发行人，可否在要约期间买回自身权益证券？官方核心文本有没有点名一份表格？" options={["只要 14d-2 已经开始，发行人就可以自由买回；这就是已经教过的 Rule 14e-5", "官方核心文本要求一份被点名的表格，或者这就是 Schedule 13E-3 / Rule 13e-3", "已收到通知、得知自己成为已按 § 240.14d-2 开始的第 14(d)(1) 条要约收购标的的发行人，在该要约期间不得买回自身任何权益证券，除非发行人先申报一份载有官方 (a)(1)–(7) 信息的声明，缴纳 § 240.0-11 要求的费用，并提交官方 (a)(7) 附件。官方核心文本要求的是 “a statement”，而不是一份被点名的表格；不要发明表格编号，也不要把本规则压进 Schedule 13E-3 或 Rule 13e-3。官方引用是 § 240.13e-1。官方 (d) 不适用于与发行人雇员福利计划或类似计划相关的定期买回，只要买回是在正常过程中进行、且并非为回应要约。官方 (a)(7) / (b) / (c) 是存在的；本课不搭建费用表引擎。这不是已经教过的 14e-5 或 14d-2", "官方 (d) 并不存在；要约期间每一次雇员福利计划买回都被禁止"]} answer={2} explanation="Rule 13e-1 禁止发行人在已开始的第 14(d)(1) 条第三方要约期间买回自身权益证券，除非发行人先申报一份声明、缴纳费用并提交附件。官方核心文本要求的是 “a statement”，而不是一份被点名的表格。官方 (d) 把并非为回应要约、在正常过程中为雇员福利计划进行的定期买回排除在外。这不是已经教过的 14e-5、14d-2 或 Rule 13e-3。" />
 
 
 
@@ -1200,6 +1260,7 @@ enrich24（核实于 2026-11-12）：[17 CFR 240.13d-2](https://www.ecfr.gov/cur
 enrich25（核实于 2026-11-12）：[17 CFR 240.14d-10](https://www.ecfr.gov/current/title-17/section-240.14d-10)；[17 CFR 240.14e-4](https://www.ecfr.gov/current/title-17/section-240.14e-4)；[17 CFR 240.14d-8](https://www.ecfr.gov/current/title-17/section-240.14d-8) 作为支持；[17 CFR 240.12g-1](https://www.ecfr.gov/current/title-17/section-240.12g-1)；[15 U.S.C. 78l(g)](https://www.law.cornell.edu/uscode/text/15/78l)；[17 CFR 240.12g5-1](https://www.ecfr.gov/current/title-17/section-240.12g5-1) 作为支持。没有要约人、目标、发行人或策略建议。
 enrich26（核实于 2026-11-12）：[17 CFR 240.14e-3](https://www.ecfr.gov/current/title-17/section-240.14e-3)；[17 CFR 240.12g-4](https://www.ecfr.gov/current/title-17/section-240.12g-4)；[15 U.S.C. 78l(g)(4)](https://www.law.cornell.edu/uscode/text/15/78l)。eCFR 第 17 编截至 2026-11-09 为最新；12g-4 最近一次修订于 2016-05-10。不推荐任何要约人、目标公司、发行人或策略。
 enrich27（核实于 2026-11-12）：[17 CFR 240.14d-2](https://www.ecfr.gov/current/title-17/section-240.14d-2)；[Form 8-K](https://www.sec.gov/files/form8-k.pdf) Item 5.07 及指示 1（SEC 873 (02-25)；OMB Number 3235-0060，Expires November 30, 2027）。不推荐任何要约人、目标公司、发行人或投票策略。
+enrich29（核实于 2026-11-12）：[17 CFR 240.14d-3](https://www.ecfr.gov/current/title-17/section-240.14d-3)；[17 CFR 240.13e-1](https://www.ecfr.gov/current/title-17/section-240.13e-1)（Title 17 更新至 2026-11-09）。没有收购人、发行人、要约或策略建议。
 
 
 <Summary>

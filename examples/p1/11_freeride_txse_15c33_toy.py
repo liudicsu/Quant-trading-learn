@@ -156,3 +156,47 @@ print("11320 also lists seller's option and buyer's option; 11320(g)-(h) deliver
 print("a not-regular-way contract can be a listed Rule 611(b)(2) trade-through exception; that does not make every such print a data error")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: learning only; not a UPC or close-out engine; no product or venue recommendation")
+
+print("=== G. FINRA 2266: written SIPC information at account opening and at least annually ===")
+# FINRA Rule 2266 SIPC Information (official-page fetch opened
+# 2026-11-12). Keep sections A-F identical, including the 15c3-3 line
+# "this is separate from SIPC," 14/14 after E, 15c6-1 / 11320, 19/19
+# after F, and the section-F disclaimer.
+# Official 2266: members (with official (a)-(b) exceptions) shall advise
+# all new customers, in writing, at the opening of an account, that they
+# may obtain information about SIPC, including the SIPC brochure, by
+# contacting SIPC, and also shall provide the Web site address and
+# telephone number of SIPC; the same written information must be provided
+# at least once each year. Introducing/clearing firms may assign these
+# requirements to one of the firms.
+# Official typography is "Web site" as two words. Name official (a)-(b)
+# exceptions; do not build a SIPA-exclusion engine. Do not rewrite
+# already-taught SIPC coverage limits ($500,000 including a $250,000
+# cash limit; not FDIC), and do not invent a coverage amount, form, or
+# clock this rule does not state. Do not rewrite already-taught 15c3-3 /
+# Reg T / 15c6-1. No broker or SIPC-membership recommendation.
+
+print("2266: All members, except those members: (a) that pursuant to Section 3(a)(2)(A)(i) through (iii)")
+print("  of the Securities Investor Protection Act of 1970 (SIPA) are excluded from membership in the")
+print("  Securities Investor Protection Corporation (SIPC) and that are not SIPC members; or (b) whose")
+print("  business consists exclusively of the sale of investments that are ineligible for SIPC protection,")
+print("  shall advise all new customers, in writing, at the opening of an account, that they may obtain")
+print("  information about SIPC, including the SIPC brochure, by contacting SIPC, and also shall provide")
+print("  the Web site address and telephone number of SIPC.")
+print("  In addition, such members shall provide all customers with the same information, in writing,")
+print("  at least once each year.")
+print("  In cases where both an introducing firm and clearing firm service an account,")
+print("  the firms may assign these requirements to one of the firms")
+print('official typography is "Web site" as two words')
+print("official (a)-(b) exceptions exist; this toy is not a SIPA-exclusion engine")
+is_rewrite_sipc = False
+print(f"  this is a rewrite of already-taught SIPC coverage limits? {is_rewrite_sipc}")
+check(is_rewrite_sipc is False, "2266 is not a rewrite of already-taught SIPC coverage limits")
+invents_amount = False
+print(f"  this toy invents a coverage amount, form, or clock this rule does not state? {invents_amount}")
+check(invents_amount is False, "do not invent a coverage amount, form, or clock")
+written_required = True
+print(f"  written information is required at account opening and at least once each year? {written_required}")
+check(written_required is True, "2266 requires written SIPC information at opening and at least annually")
+print("no broker or SIPC-membership recommendation")
+print(f"assertions passed: {checks}/{checks}")

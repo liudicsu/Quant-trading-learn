@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **33.75 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h + FINRA 5131 旋股与市价订单禁令 0.25h + 褐皮书 2:00 p.m.（按官方理事会日历所印）0.25h + FINRA 5131 翻炒 / 锁定期豁免新闻服务机制 0.25h + Rule 10b-9 全部售出或以条件发售的表述 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
+本课（约 **34.00 学时**：概念 5h + 含 CPCV / one-switch / PBO·CSCV / 准入门槛 的多实验 19h + 写作 4h + 指数成分按时点取 0.5h + FOMC 发布时刻当作事件时间戳 0.25h + 新股（IPO）数据陷阱 0.5h + Nasdaq-100 规则版本与重构日期 0.25h + 标普 500 纳入规则与公告时点 0.5h + 财报发布时刻当作事件时间戳 0.25h + Rule 144 限制股与控制股转售 0.5h + 后续发行与 Regulation M Rule 105 0.5h + Regulation M Rule 101/102 限制期与货架一次发行分析 0.5h + BLS PFEI 与非 PFEI 发布时间 0.25h + 美联储 G.17 月报 上午 9:15 与年度修订 中午 0.25h + FINRA 5130 新发行股份 0.25h + Regulation M Rule 104 稳定操作与绿鞋 0.25h + FINRA 5131 旋股与市价订单禁令 0.25h + 褐皮书 2:00 p.m.（按官方理事会日历所印）0.25h + FINRA 5131 翻炒 / 锁定期豁免新闻服务机制 0.25h + Rule 10b-9 全部售出或以条件发售的表述 0.25h + FINRA 5131(e)(3) 受覆盖非公众公司财务标准 0.25h）是课程**核心审讯**模块：前瞻、幸存者/数据挖掘、walk-forward、试验次数，以及 **PSR / 紧缩夏普（DSR）**（Bailey & López de Prado）。前置：`data-cleaning`、`stats-probability-basics`。
 
 **课内目标：** 作弊/诚实对照；滚动 walk-forward 与结果表；PSR/DSR 随 N 变化；记录失败与试验次数。
 
@@ -209,6 +209,31 @@ official exceptions exist: a transfer not for consideration, or to an immediate 
   this toy packs covered-non-public-company financial tests? False
 no product, broker, or allocation recommendation
 assertions passed: 44/44
+ASSERT_event_time_ipo_ok
+disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
+```
+
+
+**FINRA 5131(e)(3)：“covered non-public company” 指除无关联慈善组织外、满足三项官方财务标准之一的任何非公众公司（核实于 2026-11-12）。** 已经教过的 5131 旋股、5131(d)(4) 市价订单禁令，以及翻炒 / 锁定期豁免保持原样。不要改写那些段落。这一节补上官方的 5131(e)(3)，避免把每一家私人公司都自动当成受覆盖的非公众公司，或发明不同的金额标准。IPO 玩具 I 节，包括 “this toy packs covered-non-public-company financial tests? False” 这一行，与此前相同。没有产品、券商或分配建议。
+
+[FINRA Rule 5131(e)(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)：“"Covered non-public company" means any non-public company, except for an unaffiliated charitable organization, satisfying the following criteria: (i) income of at least $1 million in the last fiscal year or in two of the last three fiscal years and shareholders' equity of at least $15 million; (ii) shareholders' equity of at least $30 million and a two-year operating history; or (iii) total assets and total revenue of at least $75 million in the latest fiscal year or in two of the last three fiscal years.” 官方印刷在 shareholders' equity 里使用直撇号。官方 (e)(9) 定义了 “unaffiliated charitable organization”；本课只点名该例外存在，不搭建 Form 990 / 501(c)(3) 引擎。不要发明不同的金额。不要把这一定义压进已经教过的 5130 受限制人士。
+
+**实验：** `examples/p2/12_event_time_ipo_toy.py` 的 J 节（A–I 节与此前相同，包括 5130、F 节后的 **28/28**、旋股、G 节后的 **32/32**、褐皮书、H 节后的 **39/39**、翻炒、I 节后的 **44/44**，以及 I 节的 “this toy packs covered-non-public-company financial tests? False” 这一行；J 节后为 47/47）：
+
+```text
+=== J. FINRA 5131(e)(3): covered-non-public-company financial tests ===
+5131(e)(3): "Covered non-public company" means any non-public company, except for an unaffiliated charitable organization, satisfying the following criteria:
+  (i) income of at least $1 million in the last fiscal year or in two of the last three fiscal years
+  and shareholders' equity of at least $15 million;
+  (ii) shareholders' equity of at least $30 million and a two-year operating history; or
+  (iii) total assets and total revenue of at least $75 million in the latest fiscal year
+  or in two of the last three fiscal years
+official (e)(9) defines "unaffiliated charitable organization"; this toy is not a Form 990 / 501(c)(3) engine
+  this is a rewrite of already-taught spinning, the market-order ban, or flipping? False
+  this toy invents different dollar amounts? False
+  this is already-taught 5130 restricted persons? False
+no product, broker, or allocation recommendation
+assertions passed: 47/47
 ASSERT_event_time_ipo_ok
 disclaimer: official allocation rule; no product, broker, or allocation recommendation; learning only
 ```
@@ -805,6 +830,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 26. 为褐皮书发明时区，或把 2026 年 1 月日历上 FOMC 声明的 “2 p.m. EST” 抄到只印着 “2:00 p.m.” 的褐皮书卡片上；为 4 月 15 日发明 2:00 p.m.；把褐皮书当成上午 8:30 的 PFEI，或当成可以在当天 09:30 开盘成交；为 G.19 发明一个钟点。
 27. 把翻炒 / 锁定期豁免新闻服务机制当成对已经教过的旋股或市价订单禁令的改写；在没有全团惩罚性出价时仍收回翻炒后的销售佣金；把锁定期解除当成解除当日才出现的意外，而不看至少两个营业日前的主要新闻服务宣布。
 28. 把 “all-or-none” 或其他“未售出则退款”表述当成只是营销用语；悄悄改正官方印刷瑕疵 “manipulative or deception device or contrivance”；发明 Rule 10b-9 并未写出的时钟、表格或百分比；把 10b-9 压进已经教过的 Rule 144、Regulation M 或 Rule 14e-1；或漏掉官方 (b) 的包销承诺例外。
+29. 把每一家私人公司都自动当成 FINRA 5131 的 “covered non-public company”，或发明与官方 (i) 100 万美元 / 1,500 万美元、(ii) 3,000 万美元且有两年经营历史、或 (iii) 7,500 万美元标准不同的金额；把这一定义压进已经教过的 5130 受限制人士；改写已经教过的旋股、市价订单禁令或翻炒；或改掉 I 节 “this toy packs covered-non-public-company financial tests? False” 那一行。
 
 ## 练习（与任务清单 1:1）
 
@@ -829,6 +855,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 17. **ex-beigebook** — 运行 `12_event_time_ipo_toy.py` 的 H 节；写出官方理事会日历为已核对的 2026 年褐皮书日期印着什么时间，这个发布能不能在当天 09:30 开盘成交，以及本玩具有没有为褐皮书发明时区或为 4 月 15 日发明时间；**完成标准**：印着 2:00 p.m.，不能在当天开盘成交，没有发明时区，也没有为 4 月 15 日发明时间，与输出一致。
 18. **ex-5131flip** — 运行同一脚本的 I 节；写出 “Flipped” 的定义，说明没有全团惩罚性出价时可否收回销售佣金，以及锁定期解除或豁免前必须提前多久通过主要新闻服务宣布；**完成标准**：发行日后 30 天内的初次卖出；没有全团惩罚性出价不得收回；至少提前两个营业日宣布，与输出一致。
 19. **ex-10b9** — 运行 `19_rule144_followon_tender_toy.py` 的 N 节；说明 10b-9 禁止什么，引用官方印刷瑕疵，并说明官方 (b) 是否存在，以及这是不是已经教过的 Rule 144 或 Regulation M；**完成标准**：除非满足官方退款条件，否则禁止 “all-or-none” 或其他“未售出则退款”表述；按原文引用 “manipulative or deception device or contrivance”；官方 (b) 包销承诺例外存在，不要搭建该引擎；没有发明时钟、表格或百分比；这不是已经教过的 Rule 144 或 Regulation M，与输出一致。
+20. **ex-5131cnp** — 运行 `12_event_time_ipo_toy.py` 的 J 节；说明官方 5131(e)(3) 的三项财务标准和无关联慈善组织例外，并说明这是不是对已经教过的旋股、市价订单禁令、翻炒或 5130 受限制人士的改写；**完成标准**：按原文引用官方 (i)/(ii)/(iii) 标准和该例外，仅点名官方 (e)(9)，且这不是对这些已教段落的改写，与输出一致。
 
 ## 测验
 
@@ -866,6 +893,7 @@ Table 7（绝对、修正前）t≈4: G6=0.40 F6=0.20 F1=0.80 DSR=1.00
 <Quiz id="bt-beigebook" question="官方理事会月度日历，为已打开页面的 2026 年褐皮书发布印着什么时间？2:00 p.m. 的发布能不能在当天 09:30 开盘成交？" options={["官方发布页印着美东时间上午 8:30，所以褐皮书可以像 PFEI 一样在当天 09:30 开盘成交", "官方日历为褐皮书印着 “2:00 p.m. EST”，因为 2026 年 1 月日历为 FOMC 声明印着 “2 p.m. EST”，而且 4 月 15 日也是 2:00 p.m.", "官方理事会月度日历为 2026 年 1 月 14 日、3 月 4 日、6 月 3 日、7 月 15 日、9 月 2 日、10 月 14 日和 11 月 25 日印着 2:00 p.m.，这些褐皮书事件卡片没有时区。应教 “2:00 p.m. as printed on the official Board calendar”。不要发明 “Eastern”、“ET”、“EST” 或 “EDT”，也不要把 1 月日历上 FOMC 的 “2 p.m. EST” 通知抄到褐皮书上。2026 年 4 月的月度日历页面当时无法打开；不要为 4 月 15 日发明 2:00 p.m.。2:00 p.m. 的发布不能在当天 09:30 开盘成交。不要为 G.19 发明一个钟点", "本课为 G.19 发明 2:00 p.m. 的钟点，并为褐皮书发明第一个星期五规则"]} answer={2} explanation="官方理事会月度日历为已核对的 2026 年褐皮书日期印着 2:00 p.m.，卡片上没有时区。不要发明时区，不要把 FOMC 的 “2 p.m. EST” 抄到褐皮书上，也不要为 4 月 15 日发明时间。2:00 p.m. 的发布不能在当天 09:30 开盘成交。不要为 G.19 发明钟点。" />
 <Quiz id="bt-5131flip" question="根据 FINRA 5131，“Flipped” 是什么？会员在翻炒后何时可以收回销售佣金？锁定期解除或豁免前必须发生什么？" options={["这是对已经教过的旋股或 5131(d)(4) 市价订单禁令的改写，而且每一个锁定期都正好在上市后 180 天结束", "会员在任何翻炒后都可以收回销售佣金，而且锁定期可以在没有新闻服务宣布的情况下解除", "“Flipped” 指发行日 30 天之后的任何卖出，而且本课搭建了惩罚性出价、直系家庭或注册说明书引擎", "“Flipped” 指在发行日后 30 天内，把本次发行中买入的新发行股份初次卖出。除非主承销商已对整个承销团施加惩罚性出价，会员不得收回（或试图收回）因销售随后被翻炒的新发行股份而支付的佣金或信用。在锁定期或其他转让限制解除或豁免前至少两个营业日，账簿管理人通知发行人，并通过主要新闻服务宣布即将解除或豁免。官方 (d)(2) 例外和补充材料 .03 是存在的（包括由另一会员或发行人宣布，以及在二次发行相关、已公开提交的注册说明书中披露）；本课不搭建惩罚性出价、直系家庭或注册说明书引擎。这不是对已经教过的旋股或市价订单禁令的改写"]} answer={3} explanation="FINRA 5131(e)(4) 把 “Flipped” 定义为发行日后 30 天内的初次卖出。5131(c)(1) 禁止在没有全团惩罚性出价时收回佣金。5131(d)(2)(B) 要求至少提前两个营业日通过主要新闻服务宣布。点名官方例外即可，不要搭建这些引擎。这不是对旋股或市价订单禁令的改写。" />
 <Quiz id="bt-10b9" question="Rule 10b-9 禁止什么？官方印刷瑕疵应如何引用？官方 (b) 是否存在？" options={["悄悄把官方用语改成 “manipulative or deceptive device”；发明时钟、表格或百分比；这就是已经教过的 Rule 144 或 Regulation M", "官方 (b) 并不存在，而且每一项全部售出表述都自动是合法的营销用语", "在《交易法》第 10(b) 条所称范围内，把证券表述为按 “all-or-none” 基础发售或出售，或按任何其他“未售出则退款”基础发售或出售，而官方 (a)(1) 或 (a)(2) 的退款条件并未满足，即构成 “manipulative or deception device or contrivance”。按原文引用官方印刷瑕疵 “manipulative or deception device or contrivance”，不要悄悄改正。官方 (a)(1)：全部售出，除非该发售以如下条件进行——将向购买人立即退还全部或指定金额的对价，除非 (i) 全部待售证券在指定时间内按指定价格售出，并且 (ii) 卖方应收的全部金额在指定日期前由其收到。官方 (a)(2) 是另一种“未售出则退款”基础，对应指定数量的单位和指定部分的对价。官方 (b)：若卖方已从承销商或其他人处获得购买全部待售证券的包销承诺（仅受包括 “market outs” 在内的惯常先决条件约束），则本规则不适用；本课不搭建该引擎。不要发明时钟、表格或百分比。这不是已经教过的 Rule 144、Regulation M 或 Rule 14e-1", "Rule 10b-9 为附条件发售规定了申报截止日和百分比上限"]} answer={2} explanation="17 CFR 240.10b-9(a) 禁止在官方退款条件未满足时作出 “all-or-none” 或其他“未售出则退款”表述。按原文引用官方印刷瑕疵 “manipulative or deception device or contrivance”，不要悄悄改正。官方 (b) 包销承诺例外存在；本课不搭建该引擎。不要发明时钟、表格或百分比，也不要把 10b-9 压进已经教过的 Rule 144、Regulation M 或 Rule 14e-1。" />
+<Quiz id="bt-5131cnp" question="根据 FINRA 5131(e)(3)，什么是 “covered non-public company”？是不是每一家私人公司都自动被覆盖？" options={["每一家私人公司都自动是受覆盖的非公众公司", "这是对已经教过的 5131 旋股、市价订单禁令或翻炒的改写，或对已经教过的 5130 受限制人士的改写", "“covered non-public company” 指除无关联慈善组织外、满足下列标准的任何非公众公司：(i) 上一财年或最近三个财年中的两个财年收入至少 100 万美元，且 shareholders' equity 至少 1,500 万美元；(ii) shareholders' equity 至少 3,000 万美元，且有两年经营历史；或 (iii) 最近一财年或最近三个财年中的两个财年总资产和总收入均至少 7,500 万美元。官方 (e)(9) 定义了 “unaffiliated charitable organization”；本课不搭建 Form 990 / 501(c)(3) 引擎。这不是对已经教过的旋股、市价订单禁令或翻炒的改写，也不是已经教过的 5130 受限制人士", "官方标准使用不同的金额，或只需总资产 1,500 万美元"]} answer={2} explanation="FINRA 5131(e)(3) 用三项官方财务标准定义受覆盖的非公众公司，并把无关联慈善组织排除在外。不要把每一家私人公司都当成自动被覆盖，也不要发明不同的金额。仅点名官方 (e)(9)。这不是对已经教过的旋股、市价订单禁令、翻炒或 5130 的改写。" />
 
 ## 完成标准
 
@@ -878,6 +906,7 @@ enrich23（核实于 2026-11-12）：[FINRA Rule 5130](https://www.finra.org/rul
 enrich24（核实于 2026-11-12）：[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(b) 的旋股；5131(d)(4) 的市价订单禁令；“新发行股份”与 5130(i)(9) 含义相同）。不推荐任何产品、经纪商或配售安排。
 enrich26（核实于 2026-11-12）：美联储褐皮书发布页 [beige-book-default](https://www.federalreserve.gov/monetarypolicy/publications/beige-book-default.htm)（每年八次；2026 年日期列表，没有钟点）；官方理事会月度日历为已打开页面的 2026 年褐皮书条目印着 2:00 p.m.，卡片上没有时区；[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(c) 翻炒；5131(e)(4)；5131(d)(2)(B) 与补充材料 .03 的锁定期豁免新闻服务机制）。不发明时区，不为 4 月 15 日发明时间，也不发明宏观交易策略。不推荐任何产品、经纪商或配售安排。
 enrich28（核实于 2026-11-12）：[17 CFR 240.10b-9](https://www.ecfr.gov/current/title-17/section-240.10b-9)（全部售出或以条件发售的表述；官方印刷瑕疵 “manipulative or deception device or contrivance” 按原文引用，不悄悄改正；仅点名官方 (b) 包销承诺例外）。没有发行、承销商或策略建议。
+enrich29（核实于 2026-11-12）：[FINRA Rule 5131](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5131)（5131(e)(3) 受覆盖非公众公司财务标准；仅点名官方 (e)(9)）。没有产品、券商或分配建议。
 
 <Summary>
 **要点**：walk-forward 表、试验次数、PSR/DSR 随 N、零假设假阳性数学、幸存者/数据挖掘回顾。  
