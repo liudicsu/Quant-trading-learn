@@ -295,3 +295,39 @@ Adopted by SR-FINRA-2013-025 eff. Dec. 1, 2014. Selected Notice: 14-10.
   a member may hold mail for a customer who will not be receiving mail at his or her usual address, subject to written instructions, alternate-method notice, and reasonable-interval verification? True
 learning only; no broker or product recommendation
 assertions passed: 55/55
+=== S. FINRA 2251: Processing and Forwarding of Proxy and Other Issuer-Related Materials ===
+2251(a): A member shall process and forward promptly all information as required by this
+  Rule and applicable SEC rules regarding a security to the beneficial owner (or the
+  beneficial owner's designated investment adviser) if the member carries the account in
+  which the security is held for the beneficial owner and the security is registered in a
+  name other than the name of the beneficial owner.
+official typography is "process and forward promptly" and a straight apostrophe in "beneficial owner's"
+official (a)(1) equity: process and forward (A) all proxy material furnished by the issuer
+  or a stockholder of such issuer and (B) "all annual reports, information statements and
+  other material sent to stockholders that are furnished to the member by the issuer of
+  the securities" (no Oxford comma before "and other material")
+official (a)(2) debt (other than a municipal security): only "make reasonable efforts to
+  process and forward"; typography is "any communication, document, or collection of
+  documents" (Oxford comma) and "prepared by or on behalf of, the issuer" / "prepared by
+  or on behalf of, the trustee" (comma after "of"); do not tidy that comma, and do not
+  recast the equity duty and the debt reasonable-efforts duty as the same standard
+2251(b): No member shall give a proxy to vote stock that is registered in its name, except
+  as required or permitted under the provisions of paragraphs (c) or (d) of this Rule,
+  unless such member is the beneficial owner of such stock.
+official (c) later uses "process and transmit promptly" (transmit, not only forward);
+  official (c)-(g), including official (c)(2) exchange-rule proxy procedure, official
+  (c)(3) beneficial owners residing outside of the United States, official (d)
+  representative / ERISA / designated-investment-adviser voting, official (e)
+  process-and-forward continuation, official (f) "designated investment adviser"
+  definition, and official (g) Board of Governors suggested reimbursement-rate
+  authorization, exist; this toy is not those catalogs
+17 CFR 240.14b-1 is named only as the SEC companion obligation in connection with the
+  prompt forwarding of certain communications to beneficial owners; this toy does not
+  pack 14b-1, and does not tidy official 14b-1 "by indicting" / "addresses,and"
+Amended by SR-FINRA-2021-032 eff. Dec. 7, 2021.
+  this is a flatten into already-taught Item 5.07, Rule 14a-8, packed 14a-9 / 12b-20, packed 2140, or packed 3150, or a street-name / ACATS primer? False
+  this toy tidies official (a)(2) "on behalf of, the issuer" by dropping the comma after "of", or recasts the equity and debt duties as the same standard? False
+  a member shall process and forward promptly required information to the beneficial owner (or the beneficial owner's designated investment adviser) when the member carries the account and the security is registered in a name other than the beneficial owner's, and no member shall give a proxy to vote stock registered in its name, except as official (c) or (d) require or permit, unless the member is the beneficial owner? True
+literacy only; not a proxy-voting or reimbursement how-to
+no broker or product recommendation
+assertions passed: 58/58

@@ -715,3 +715,52 @@ print(f"  a confirmation given or sent pursuant to this Rule shall further discl
 check(core_2232 is True, "2232(b)(1) requires settlement-date confirmation disclosure for that official scope")
 print("no broker or confirmation-vendor recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== P. FINRA 2232(b)(2): callable-equity confirmation disclosure ===")
+# FINRA Rule 2232 Customer Confirmations (official #the-rule / <h1>
+# HTML typography, opened 2026-11-12). Keep 49/49 after O / 2232(b)(1)
+# identical as a strict byte-prefix. The already-printed O foil that
+# official (b)(2) "exists and is named only" is updated only in this
+# add-on; do not rewrite the already-printed O prefix.
+# Packed slice is official (b)(2) only. Official (b) chapeau: "A
+# confirmation given or sent pursuant to this Rule shall further
+# disclose:" Official (b)(2): with respect to any transaction in a
+# callable equity security, that: (A) the security is a callable
+# equity security; and (B) a customer may contact the member for more
+# information concerning the security. Official typography has no
+# extra words in (A)/(B). Official (a) remains named only; do not pack
+# official (a) as the teaching core (it would flatten into already-
+# taught Rule 10b-10). Official (c)-(e) debt catalog and official (f)
+# definitions exist; name them, do not build those catalogs. Do not
+# invent that every common stock is callable. Do not invent an
+# effective date for SR-FINRA-2019-008 (the official amendment line
+# has no effective date). Do not flatten packed 4340 into official
+# (b)(1) or official (b)(2) confirmation disclosures, or flatten
+# official (b)(2) into already-taught T+1 / 15c6-1 or packed 15c6-2.
+# Literacy only; no broker or confirmation-vendor recommendation.
+
+print("2232(b): A confirmation given or sent pursuant to this Rule shall further disclose:")
+print("2232(b)(2): with respect to any transaction in a callable equity security, that:")
+print("  (A) the security is a callable equity security; and")
+print("  (B) a customer may contact the member for more information concerning the security.")
+print('official typography is "shall further disclose"; official (A)/(B) have no extra words')
+print("official caption typography is Customer Confirmations.")
+print('official (a) uses straight quotes around "confirmation" and is named only; this toy does')
+print("  not pack official (a) as the teaching core")
+print("official (b)(2) is packed in this section; the already-printed O prefix that official")
+print("  (b)(2) exists and is named only is not rewritten")
+print("official (c)-(e) debt catalog and official (f) definitions exist; this toy is not")
+print("  those catalogs")
+print("Amended by SR-FINRA-2019-008. (no effective date on that amendment line; this toy")
+print("  invents none)")
+flatten_2232b2 = False
+print(f"  this is a flatten into packed 4340, already-taught T+1 / 15c6-1, or packed 15c6-2? {flatten_2232b2}")
+check(flatten_2232b2 is False, "do not flatten 2232(b)(2) into packed 4340, T+1 / 15c6-1, or packed 15c6-2")
+invent_callable = False
+print(f"  this toy invents that every common stock is callable, or invents an effective date for SR-FINRA-2019-008? {invent_callable}")
+check(invent_callable is False, "do not invent that every common stock is callable, and do not invent an effective date for SR-FINRA-2019-008")
+core_2232b2 = True
+print(f"  a confirmation shall further disclose, with respect to any transaction in a callable equity security, that the security is a callable equity security and that a customer may contact the member for more information concerning the security? {core_2232b2}")
+check(core_2232b2 is True, "2232(b)(2) requires callable-equity confirmation disclosure")
+print("no broker or confirmation-vendor recommendation")
+print(f"assertions passed: {checks}/{checks}")

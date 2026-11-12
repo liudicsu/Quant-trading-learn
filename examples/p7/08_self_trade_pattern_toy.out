@@ -328,3 +328,120 @@ no customer, associated-person, or broker recommendation
 assertions passed: 52/52
 ASSERT_8210_ok
 disclaimer: learning only; not legal advice; literacy only, not an investigation-procedure how-to
+=== S. FINRA 2273: Educational Communication Related to Recruitment Practices and Account Transfers ===
+2273(a): A member that hires or associates with a registered person shall provide to a
+  former customer of the registered person, individually, in paper or electronic form,
+  an educational communication prepared by FINRA when (1) the member, directly or
+  through that registered person, individually contacts the former customer of that
+  registered person to transfer assets or (2) the former customer of that registered
+  person, absent individualized contact, transfers assets to an account assigned, or
+  to be assigned, to the registered person at the member.
+official typography is "individually, in paper or electronic form"; "educational
+  communication prepared by FINRA"; "individually contacts"; "transfer assets";
+  "absent individualized contact"; "an account assigned, or to be assigned"
+2273(b)(1): deliver the communication in paragraph (a) at the time of first individualized
+  contact with a former customer by the registered person or the member regarding the
+  former customer transferring assets to the member.
+2273(b)(1)(A): if the contact is in writing, the written communication required in
+  paragraph (a) must accompany the written communication; if the contact is by
+  electronic communication, the member may hyperlink directly to the educational
+  communication.
+2273(b)(1)(B): if the contact is oral, the member or registered person must notify the
+  former customer orally that an educational communication that includes important
+  considerations in deciding whether to transfer assets to the member will be provided
+  not later than three business days after the contact. The educational communication
+  must be sent within three business days from such oral contact or with any other
+  documentation sent to the former customer related to transferring assets to the
+  member, whichever is earlier.
+quote both official phrasings; do not merge "not later than three business days after
+  the contact" with "within three business days from such oral contact"
+2273(b)(2): if a former customer attempts to transfer assets but no individualized
+  contact occurs before the former customer seeks to transfer assets, the member shall
+  deliver the educational communication with the account transfer approval documentation.
+2273(b)(3): the delivery requirement shall apply for a period of three months following
+  the date the registered person begins employment or associates with the member.
+official SM header typography is exactly • • • Supplementary Material:---------------
+  (U+2022 bullets, ordinary U+0020 spaces, no NBSP, 15 ASCII hyphens immediately after
+  the colon)
+official SM .01 typography uses typographic quotes around “former customer”; the term
+  shall not include an account of a non-natural person that meets the definition of an
+  institutional account pursuant to Rule 4512(c); official SM .02 express rejection
+  ("he or she") exists; this toy is not a 4512, packed 2140, or 11870 / ACATS engine
+Adopted by SR-FINRA-2015-057 eff. Nov. 11, 2016. Selected Notice: 16-18.
+  this is a flatten into packed / named 4512, packed 2140, or already-named 11870 / ACATS, or a recruitment / account-transfer how-to? False
+  this toy merges official (b)(1)(B) "not later than three business days after the contact" with "within three business days from such oral contact"? False
+  a member that hires or associates with a registered person shall provide, individually, in paper or electronic form, an educational communication prepared by FINRA, and official (b)(3) applies for a period of three months following the date the registered person begins employment or associates with the member? True
+literacy only; not a recruitment or account-transfer how-to
+no associated-person, customer, or broker recommendation
+assertions passed: 55/55
+=== T. FINRA 2040(a): Payments to Unregistered Persons, official (a) General only ===
+2040(a) heading: General
+2040(a): No member or associated person shall, directly or indirectly, pay any
+  compensation, fees, concessions, discounts, commissions or other allowances to:
+  (1) any person that is not registered as a broker-dealer under Section 15(a) of the
+  Exchange Act but, by reason of receipt of any such payments and the activities
+  related thereto, is required to be so registered under applicable federal securities
+  laws and SEA rules and regulations; or
+  (2) any appropriately registered associated person unless such payment complies with
+  all applicable federal securities laws, FINRA rules and SEA rules and regulations.
+official (a) heading is "General" (no period; heading and chapeau are separate; this toy does not
+  quote a run-on "GeneralNo member" from HTML tag-stripping)
+official typography has no Oxford comma before "commissions or other allowances"
+official (a)(2) typography has a comma after "federal securities laws" and no Oxford
+  comma before "and SEA rules and regulations"; official typography is "SEA rules and
+  regulations"
+official (b) retiring representatives and official (c) nonregistered foreign finders
+  exist; this toy is not those catalogs
+official (b)(2) uses straight quotes around "retiring registered representative,"
+  including the comma inside the closing quote
+Amended by SR-FINRA-2014-037 eff. Aug. 24, 2015. Selected Notices: 95-37, 15-07.
+  this is a flatten into packed 1122, packed 2010, or packed 3280? False
+  this toy invents an Oxford comma before "commissions or other allowances", or quotes a run-on "GeneralNo member"? False
+  no member or associated person shall, directly or indirectly, pay any compensation, fees, concessions, discounts, commissions or other allowances to an unregistered person who is required to be registered, or to a registered associated person unless the payment complies with all applicable federal securities laws, FINRA rules and SEA rules and regulations? True
+literacy only; not a compensation-arrangement how-to
+no associated-person or broker recommendation
+assertions passed: 58/58
+=== U. 17 CFR 240.10b5-2: Duties of trust or confidence in misappropriation insider trading cases ===
+10b5-2 intro: This section provides a non-exclusive definition of circumstances in which
+  a person has a duty of trust or confidence for purposes of the “misappropriation”
+  theory of insider trading under Section 10(b) of the Act and Rule 10b-5. The law of
+  insider trading is otherwise defined by judicial opinions construing Rule 10b-5, and
+  Rule 10b5-2 does not modify the scope of insider trading law in any other respect.
+official typography uses typographic quotes U+201C/U+201D around “misappropriation”
+official (a) Scope of Rule is named: this section shall apply to any violation of
+  Section 10(b) of the Act (15 U.S.C. 78j(b)) and § 240.10b-5 thereunder that is based
+  on the purchase or sale of securities on the basis of, or the communication of,
+  material nonpublic information misappropriated in breach of a duty of trust or
+  confidence; official typography is "material nonpublic information" (no hyphen in
+  nonpublic)
+10b5-2(b): Enumerated “duties of trust or confidence.” For purposes of this section, a
+  “duty of trust or confidence” exists in the following circumstances, among others:
+official (b) heading typography is Enumerated “duties of trust or confidence.” with
+  the period inside the closing typographic quote
+  (1) Whenever a person agrees to maintain information in confidence;
+  (2) Whenever the person communicating the material nonpublic information and the
+  person to whom it is communicated have a history, pattern, or practice of sharing
+  confidences, such that the recipient of the information knows or reasonably should
+  know that the person communicating the material nonpublic information expects that
+  the recipient will maintain its confidentiality; or
+  (3) Whenever a person receives or obtains material nonpublic information from his or
+  her spouse, parent, child, or sibling; provided, however, that a no-duty showing
+  exists as official text then states (including "he or she," "the parties' history,
+  pattern, or practice of sharing and maintaining confidences," and "there was no
+  agreement or understanding to maintain the confidentiality of the information").
+official typography is "history, pattern, or practice" and "spouse, parent, child, or
+  sibling" (Oxford commas); "provided, however,"; "his or her"; straight apostrophe in
+  "parties'"
+cite 17 CFR 240.10b5-2; title 17 up_to_date_as_of 2026-11-09
+[65 FR 51738, Aug. 24, 2000]
+official (a) and the official (b)(3) proviso are named; this toy is not a scienter,
+  materiality, or judicial-opinion catalog, and does not invent that this section is a
+  complete insider-trading code
+  this is a flatten into packed 10b-5, already-taught 10b5-1, already-taught 14e-3, or already-taught 15 U.S.C. 78i / FINRA 5210? False
+  this toy invents that 10b5-2 is a complete insider-trading code, or invents a numeric clock? False
+  this section provides a non-exclusive definition of circumstances in which a person has a duty of trust or confidence for purposes of the misappropriation theory, including official (b)(1) an agreement to maintain information in confidence, official (b)(2) a history, pattern, or practice of sharing confidences, and official (b)(3) receipt from a spouse, parent, child, or sibling, subject to the official proviso? True
+learning only; no investigation or trading how-to
+no issuer, associated-person, or broker recommendation
+assertions passed: 61/61
+ASSERT_10b52_ok
+disclaimer: official 17 CFR 240.10b5-2; learning only; not legal advice; literacy only, not an insider-trading how-to

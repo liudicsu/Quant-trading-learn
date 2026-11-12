@@ -253,3 +253,23 @@ official (b)(2) callable-equity confirmation language exists and is named only;
   a confirmation given or sent pursuant to this Rule shall further disclose the settlement date of the transaction in any NMS stock or FINRA Rule 6600 Series security, other than direct participation programs as defined in FINRA Rule 6420? True
 no broker or confirmation-vendor recommendation
 assertions passed: 49/49
+=== P. FINRA 2232(b)(2): callable-equity confirmation disclosure ===
+2232(b): A confirmation given or sent pursuant to this Rule shall further disclose:
+2232(b)(2): with respect to any transaction in a callable equity security, that:
+  (A) the security is a callable equity security; and
+  (B) a customer may contact the member for more information concerning the security.
+official typography is "shall further disclose"; official (A)/(B) have no extra words
+official caption typography is Customer Confirmations.
+official (a) uses straight quotes around "confirmation" and is named only; this toy does
+  not pack official (a) as the teaching core
+official (b)(2) is packed in this section; the already-printed O prefix that official
+  (b)(2) exists and is named only is not rewritten
+official (c)-(e) debt catalog and official (f) definitions exist; this toy is not
+  those catalogs
+Amended by SR-FINRA-2019-008. (no effective date on that amendment line; this toy
+  invents none)
+  this is a flatten into packed 4340, already-taught T+1 / 15c6-1, or packed 15c6-2? False
+  this toy invents that every common stock is callable, or invents an effective date for SR-FINRA-2019-008? False
+  a confirmation shall further disclose, with respect to any transaction in a callable equity security, that the security is a callable equity security and that a customer may contact the member for more information concerning the security? True
+no broker or confirmation-vendor recommendation
+assertions passed: 52/52

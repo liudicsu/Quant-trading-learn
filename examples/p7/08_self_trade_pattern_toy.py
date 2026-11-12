@@ -895,3 +895,209 @@ print("no customer, associated-person, or broker recommendation")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_8210_ok")
 print("disclaimer: learning only; not legal advice; literacy only, not an investigation-procedure how-to")
+
+print("=== S. FINRA 2273: Educational Communication Related to Recruitment Practices and Account Transfers ===")
+# FINRA Rule 2273 Educational Communication Related to Recruitment
+# Practices and Account Transfers (official #the-rule / <h1> HTML
+# typography, opened 2026-11-12). Keep 52/52 after R / 8210,
+# ASSERT_8210_ok, and the closing 8210 disclaimer identical as a
+# strict byte-prefix of the tip file.
+# Official typography is "individually, in paper or electronic form";
+# "educational communication prepared by FINRA"; "individually
+# contacts"; "transfer assets"; "absent individualized contact";
+# "an account assigned, or to be assigned." Official (b)(1)(B) has
+# two official clock phrasings that must not be merged: "not later
+# than three business days after the contact" and "within three
+# business days from such oral contact" ... "whichever is earlier."
+# Official (b)(3) three-month window. Official SM header typography is
+# exactly "• • • Supplementary Material:---------------" (U+2022
+# bullets, ordinary U+0020 spaces, no NBSP, 15 ASCII hyphens
+# immediately after the colon). Official SM .01 typography uses
+# typographic quotes around "former customer"; the term shall not
+# include an account of a non-natural person that meets the definition
+# of an institutional account pursuant to Rule 4512(c). Name SM .01 /
+# SM .02 (express rejection; "he or she"); do not flatten packed /
+# named 4512, packed 2140, or already-named 11870 / ACATS. Literacy
+# only, not a recruitment or account-transfer how-to. Adopted by
+# SR-FINRA-2015-057 eff. Nov. 11, 2016. Selected Notice: 16-18.
+
+print("2273(a): A member that hires or associates with a registered person shall provide to a")
+print("  former customer of the registered person, individually, in paper or electronic form,")
+print("  an educational communication prepared by FINRA when (1) the member, directly or")
+print("  through that registered person, individually contacts the former customer of that")
+print("  registered person to transfer assets or (2) the former customer of that registered")
+print("  person, absent individualized contact, transfers assets to an account assigned, or")
+print("  to be assigned, to the registered person at the member.")
+print('official typography is "individually, in paper or electronic form"; "educational')
+print('  communication prepared by FINRA"; "individually contacts"; "transfer assets";')
+print('  "absent individualized contact"; "an account assigned, or to be assigned"')
+print("2273(b)(1): deliver the communication in paragraph (a) at the time of first individualized")
+print("  contact with a former customer by the registered person or the member regarding the")
+print("  former customer transferring assets to the member.")
+print("2273(b)(1)(A): if the contact is in writing, the written communication required in")
+print("  paragraph (a) must accompany the written communication; if the contact is by")
+print("  electronic communication, the member may hyperlink directly to the educational")
+print("  communication.")
+print("2273(b)(1)(B): if the contact is oral, the member or registered person must notify the")
+print("  former customer orally that an educational communication that includes important")
+print("  considerations in deciding whether to transfer assets to the member will be provided")
+print("  not later than three business days after the contact. The educational communication")
+print("  must be sent within three business days from such oral contact or with any other")
+print("  documentation sent to the former customer related to transferring assets to the")
+print("  member, whichever is earlier.")
+print('quote both official phrasings; do not merge "not later than three business days after')
+print('  the contact" with "within three business days from such oral contact"')
+print("2273(b)(2): if a former customer attempts to transfer assets but no individualized")
+print("  contact occurs before the former customer seeks to transfer assets, the member shall")
+print("  deliver the educational communication with the account transfer approval documentation.")
+print("2273(b)(3): the delivery requirement shall apply for a period of three months following")
+print("  the date the registered person begins employment or associates with the member.")
+print("official SM header typography is exactly \u2022 \u2022 \u2022 Supplementary Material:---------------")
+print("  (U+2022 bullets, ordinary U+0020 spaces, no NBSP, 15 ASCII hyphens immediately after")
+print("  the colon)")
+print('official SM .01 typography uses typographic quotes around \u201cformer customer\u201d; the term')
+print("  shall not include an account of a non-natural person that meets the definition of an")
+print("  institutional account pursuant to Rule 4512(c); official SM .02 express rejection")
+print('  ("he or she") exists; this toy is not a 4512, packed 2140, or 11870 / ACATS engine')
+print("Adopted by SR-FINRA-2015-057 eff. Nov. 11, 2016. Selected Notice: 16-18.")
+flatten_2273 = False
+print(f"  this is a flatten into packed / named 4512, packed 2140, or already-named 11870 / ACATS, or a recruitment / account-transfer how-to? {flatten_2273}")
+check(flatten_2273 is False, "do not flatten 2273 into packed/named 4512, packed 2140, or already-named 11870 / ACATS")
+merged_clock = False
+print(f'  this toy merges official (b)(1)(B) "not later than three business days after the contact" with "within three business days from such oral contact"? {merged_clock}')
+check(merged_clock is False, "quote both official 2273 clock phrasings; do not merge them")
+core_2273 = True
+print(f"  a member that hires or associates with a registered person shall provide, individually, in paper or electronic form, an educational communication prepared by FINRA, and official (b)(3) applies for a period of three months following the date the registered person begins employment or associates with the member? {core_2273}")
+check(core_2273 is True, "2273 requires the FINRA educational communication in the official contact / transfer cases, for three months")
+print("literacy only; not a recruitment or account-transfer how-to")
+print("no associated-person, customer, or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== T. FINRA 2040(a): Payments to Unregistered Persons, official (a) General only ===")
+# FINRA Rule 2040 Payments to Unregistered Persons (official #the-rule
+# / <h1> HTML typography, opened 2026-11-12). Keep S identical once
+# 2273 is added. Packed slice is official (a) only. Official (a)
+# heading is "General" (no period). Official chapeau: "No member or associated
+# person shall, directly or indirectly, pay any compensation, fees,
+# concessions, discounts, commissions or other allowances to:" No
+# Oxford comma before "commissions or other allowances." Do not quote
+# a run-on "GeneralNo member" from HTML tag-stripping; the heading and
+# the chapeau are separate. Official (a)(2) has a comma after "federal
+# securities laws" and no Oxford comma before "and SEA rules and
+# regulations." Official typography is "SEA rules and regulations."
+# Official (b) retiring representatives and official (c) nonregistered
+# foreign finders exist; name them, do not build those catalogs. If
+# official (c) is named, typographic quotes around "finder,"; official
+# (c)(1) HTML contains a NBSP in "Article III,\u00a0Section 4" — this
+# toy names official (c) and does not quote that sentence, so it does
+# not drop or normalize that space. Official (b)(2) uses straight
+# quotes around "retiring registered representative," including the
+# comma inside the closing quote. Do not flatten into packed 1122,
+# packed 2010, or packed 3280. Literacy only, not a compensation-
+# arrangement how-to. Amended by SR-FINRA-2014-037 eff. Aug. 24, 2015.
+# Selected Notices: 95-37, 15-07.
+
+print("2040(a) heading: General")
+print("2040(a): No member or associated person shall, directly or indirectly, pay any")
+print("  compensation, fees, concessions, discounts, commissions or other allowances to:")
+print("  (1) any person that is not registered as a broker-dealer under Section 15(a) of the")
+print("  Exchange Act but, by reason of receipt of any such payments and the activities")
+print("  related thereto, is required to be so registered under applicable federal securities")
+print("  laws and SEA rules and regulations; or")
+print("  (2) any appropriately registered associated person unless such payment complies with")
+print("  all applicable federal securities laws, FINRA rules and SEA rules and regulations.")
+print("official (a) heading is \"General\" (no period; heading and chapeau are separate; this toy does not")
+print('  quote a run-on "GeneralNo member" from HTML tag-stripping)')
+print('official typography has no Oxford comma before "commissions or other allowances"')
+print('official (a)(2) typography has a comma after "federal securities laws" and no Oxford')
+print('  comma before "and SEA rules and regulations"; official typography is "SEA rules and')
+print('  regulations"')
+print("official (b) retiring representatives and official (c) nonregistered foreign finders")
+print("  exist; this toy is not those catalogs")
+print('official (b)(2) uses straight quotes around "retiring registered representative,"')
+print("  including the comma inside the closing quote")
+print("Amended by SR-FINRA-2014-037 eff. Aug. 24, 2015. Selected Notices: 95-37, 15-07.")
+flatten_2040 = False
+print(f"  this is a flatten into packed 1122, packed 2010, or packed 3280? {flatten_2040}")
+check(flatten_2040 is False, "do not flatten 2040(a) into packed 1122 / 2010 / 3280")
+oxford_or_runon = False
+print(f'  this toy invents an Oxford comma before "commissions or other allowances", or quotes a run-on "GeneralNo member"? {oxford_or_runon}')
+check(oxford_or_runon is False, "no Oxford comma before commissions or other allowances; heading and chapeau are separate")
+core_2040 = True
+print(f"  no member or associated person shall, directly or indirectly, pay any compensation, fees, concessions, discounts, commissions or other allowances to an unregistered person who is required to be registered, or to a registered associated person unless the payment complies with all applicable federal securities laws, FINRA rules and SEA rules and regulations? {core_2040}")
+check(core_2040 is True, "2040(a) is the general bar on payments to unregistered persons and on non-compliant payments to registered associated persons")
+print("literacy only; not a compensation-arrangement how-to")
+print("no associated-person or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== U. 17 CFR 240.10b5-2: Duties of trust or confidence in misappropriation insider trading cases ===")
+# 17 CFR 240.10b5-2 Duties of trust or confidence in misappropriation
+# insider trading cases (official eCFR versioner API XML typography,
+# title 17 up_to_date_as_of 2026-11-09, opened 2026-11-12; byte-
+# identical to the enrich35 copy). Keep T identical once 2040(a) is
+# added. Pack the official introductory non-exclusive-definition
+# sentence plus official (b). Official typography uses typographic
+# quotes U+201C/U+201D around “misappropriation,” and official (b)
+# heading typography is Enumerated “duties of trust or confidence.”
+# with the period inside the closing quote. Official typography is
+# "material nonpublic information" (no hyphen in nonpublic);
+# "history, pattern, or practice" and "spouse, parent, child, or
+# sibling" (Oxford commas); "provided, however,"; straight apostrophe
+# in "parties'". Name official (a) and the official (b)(3) proviso; do
+# not build a scienter / materiality / judicial-opinion catalog, and
+# do not invent that this section is a complete insider-trading code
+# (the official introductory sentence says the opposite). Do not
+# flatten into packed 10b-5, already-taught 10b5-1, already-taught
+# 14e-3, or already-taught 15 U.S.C. 78i / FINRA 5210. Official
+# citation: [65 FR 51738, Aug. 24, 2000]. Learning only; no
+# investigation or trading how-to.
+
+print("10b5-2 intro: This section provides a non-exclusive definition of circumstances in which")
+print("  a person has a duty of trust or confidence for purposes of the \u201cmisappropriation\u201d")
+print("  theory of insider trading under Section 10(b) of the Act and Rule 10b-5. The law of")
+print("  insider trading is otherwise defined by judicial opinions construing Rule 10b-5, and")
+print("  Rule 10b5-2 does not modify the scope of insider trading law in any other respect.")
+print("official typography uses typographic quotes U+201C/U+201D around \u201cmisappropriation\u201d")
+print("official (a) Scope of Rule is named: this section shall apply to any violation of")
+print("  Section 10(b) of the Act (15 U.S.C. 78j(b)) and \u00a7 240.10b-5 thereunder that is based")
+print("  on the purchase or sale of securities on the basis of, or the communication of,")
+print("  material nonpublic information misappropriated in breach of a duty of trust or")
+print("  confidence; official typography is \"material nonpublic information\" (no hyphen in")
+print("  nonpublic)")
+print("10b5-2(b): Enumerated \u201cduties of trust or confidence.\u201d For purposes of this section, a")
+print("  \u201cduty of trust or confidence\u201d exists in the following circumstances, among others:")
+print("official (b) heading typography is Enumerated \u201cduties of trust or confidence.\u201d with")
+print("  the period inside the closing typographic quote")
+print("  (1) Whenever a person agrees to maintain information in confidence;")
+print("  (2) Whenever the person communicating the material nonpublic information and the")
+print("  person to whom it is communicated have a history, pattern, or practice of sharing")
+print("  confidences, such that the recipient of the information knows or reasonably should")
+print("  know that the person communicating the material nonpublic information expects that")
+print("  the recipient will maintain its confidentiality; or")
+print("  (3) Whenever a person receives or obtains material nonpublic information from his or")
+print("  her spouse, parent, child, or sibling; provided, however, that a no-duty showing")
+print("  exists as official text then states (including \"he or she,\" \"the parties' history,")
+print("  pattern, or practice of sharing and maintaining confidences,\" and \"there was no")
+print("  agreement or understanding to maintain the confidentiality of the information\").")
+print('official typography is "history, pattern, or practice" and "spouse, parent, child, or')
+print('  sibling" (Oxford commas); "provided, however,"; "his or her"; straight apostrophe in')
+print("  \"parties\'\"")
+print("cite 17 CFR 240.10b5-2; title 17 up_to_date_as_of 2026-11-09")
+print("[65 FR 51738, Aug. 24, 2000]")
+print("official (a) and the official (b)(3) proviso are named; this toy is not a scienter,")
+print("  materiality, or judicial-opinion catalog, and does not invent that this section is a")
+print("  complete insider-trading code")
+flatten_10b52 = False
+print(f"  this is a flatten into packed 10b-5, already-taught 10b5-1, already-taught 14e-3, or already-taught 15 U.S.C. 78i / FINRA 5210? {flatten_10b52}")
+check(flatten_10b52 is False, "do not flatten 10b5-2 into packed 10b-5, already-taught 10b5-1, 14e-3, or 15 U.S.C. 78i / FINRA 5210")
+complete_code = False
+print(f"  this toy invents that 10b5-2 is a complete insider-trading code, or invents a numeric clock? {complete_code}")
+check(complete_code is False, "official intro says this is a non-exclusive definition; do not invent a complete code or a numeric clock")
+core_10b52 = True
+print(f"  this section provides a non-exclusive definition of circumstances in which a person has a duty of trust or confidence for purposes of the misappropriation theory, including official (b)(1) an agreement to maintain information in confidence, official (b)(2) a history, pattern, or practice of sharing confidences, and official (b)(3) receipt from a spouse, parent, child, or sibling, subject to the official proviso? {core_10b52}")
+check(core_10b52 is True, "10b5-2 packs the official introductory non-exclusive-definition sentence plus official (b)")
+print("learning only; no investigation or trading how-to")
+print("no issuer, associated-person, or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_10b52_ok")
+print("disclaimer: official 17 CFR 240.10b5-2; learning only; not legal advice; literacy only, not an insider-trading how-to")

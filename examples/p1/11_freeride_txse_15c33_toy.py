@@ -808,3 +808,78 @@ print(f"  a member may hold mail for a customer who will not be receiving mail a
 check(core_3150 is True, "3150(a) is a permissive hold-mail rule with written instructions and the official conditions")
 print("learning only; no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== S. FINRA 2251: Processing and Forwarding of Proxy and Other Issuer-Related Materials ===")
+# FINRA Rule 2251 Processing and Forwarding of Proxy and Other
+# Issuer-Related Materials (official #the-rule / <h1> HTML typography,
+# opened 2026-11-12). Add this section after the last line so 55/55
+# after R / 3150 remains a strict byte-prefix of the tip file.
+# Packed slice is official (a)'s opening sentence and official (b)
+# only. Official typography is "process and forward promptly" and a
+# straight apostrophe in "beneficial owner's." Official (a)(1) equity
+# duty is to process and forward, including official (a)(1)(B) "all
+# annual reports, information statements and other material" (no
+# Oxford comma before "and other material"). Official (a)(2) debt duty
+# (other than a municipal security) is only to "make reasonable
+# efforts to process and forward"; official typography is "any
+# communication, document, or collection of documents" (Oxford comma)
+# and "prepared by or on behalf of, the issuer" / "prepared by or on
+# behalf of, the trustee" (comma after "of"). Do not tidy that comma,
+# and do not recast the equity duty and the debt "reasonable efforts"
+# duty as the same standard. Official (b): no member shall give a
+# proxy to vote stock registered in its name, except as required or
+# permitted under official (c) or (d), unless the member is the
+# beneficial owner of such stock. Official (c)-(g) exist, including
+# official (c) later "process and transmit promptly" (transmit, not
+# only forward) and official (g) suggested reimbursement-rate
+# authorization; name them, do not build those catalogs. Name 17 CFR
+# 240.14b-1 only; do not pack it, and do not tidy official 14b-1 "by
+# indicting" / "addresses,and" if named. Do not flatten into already-
+# taught Item 5.07, Rule 14a-8, packed 14a-9 / 12b-20, packed 2140, or
+# packed 3150, and do not recast 2251 as a street-name or ACATS primer.
+# Amended by SR-FINRA-2021-032 eff. Dec. 7, 2021. Literacy only, not a
+# proxy-voting or reimbursement how-to; no broker or product
+# recommendation.
+
+print("2251(a): A member shall process and forward promptly all information as required by this")
+print("  Rule and applicable SEC rules regarding a security to the beneficial owner (or the")
+print("  beneficial owner's designated investment adviser) if the member carries the account in")
+print("  which the security is held for the beneficial owner and the security is registered in a")
+print("  name other than the name of the beneficial owner.")
+print('official typography is "process and forward promptly" and a straight apostrophe in "beneficial owner\'s"')
+print('official (a)(1) equity: process and forward (A) all proxy material furnished by the issuer')
+print('  or a stockholder of such issuer and (B) "all annual reports, information statements and')
+print('  other material sent to stockholders that are furnished to the member by the issuer of')
+print('  the securities" (no Oxford comma before "and other material")')
+print('official (a)(2) debt (other than a municipal security): only "make reasonable efforts to')
+print('  process and forward"; typography is "any communication, document, or collection of')
+print('  documents" (Oxford comma) and "prepared by or on behalf of, the issuer" / "prepared by')
+print('  or on behalf of, the trustee" (comma after "of"); do not tidy that comma, and do not')
+print('  recast the equity duty and the debt reasonable-efforts duty as the same standard')
+print("2251(b): No member shall give a proxy to vote stock that is registered in its name, except")
+print("  as required or permitted under the provisions of paragraphs (c) or (d) of this Rule,")
+print("  unless such member is the beneficial owner of such stock.")
+print('official (c) later uses "process and transmit promptly" (transmit, not only forward);')
+print("  official (c)-(g), including official (c)(2) exchange-rule proxy procedure, official")
+print("  (c)(3) beneficial owners residing outside of the United States, official (d)")
+print('  representative / ERISA / designated-investment-adviser voting, official (e)')
+print('  process-and-forward continuation, official (f) "designated investment adviser"')
+print("  definition, and official (g) Board of Governors suggested reimbursement-rate")
+print("  authorization, exist; this toy is not those catalogs")
+print("17 CFR 240.14b-1 is named only as the SEC companion obligation in connection with the")
+print("  prompt forwarding of certain communications to beneficial owners; this toy does not")
+print('  pack 14b-1, and does not tidy official 14b-1 "by indicting" / "addresses,and"')
+print("Amended by SR-FINRA-2021-032 eff. Dec. 7, 2021.")
+flatten_2251 = False
+print(f"  this is a flatten into already-taught Item 5.07, Rule 14a-8, packed 14a-9 / 12b-20, packed 2140, or packed 3150, or a street-name / ACATS primer? {flatten_2251}")
+check(flatten_2251 is False, "do not flatten 2251 into Item 5.07, 14a-8, packed 14a-9 / 12b-20 / 2140 / 3150, or recast it as a street-name / ACATS primer")
+tidy_comma = False
+print(f'  this toy tidies official (a)(2) "on behalf of, the issuer" by dropping the comma after "of", or recasts the equity and debt duties as the same standard? {tidy_comma}')
+check(tidy_comma is False, "do not tidy the official comma after of, and do not recast equity and debt duties as the same standard")
+core_2251 = True
+print(f"  a member shall process and forward promptly required information to the beneficial owner (or the beneficial owner's designated investment adviser) when the member carries the account and the security is registered in a name other than the beneficial owner's, and no member shall give a proxy to vote stock registered in its name, except as official (c) or (d) require or permit, unless the member is the beneficial owner? {core_2251}")
+check(core_2251 is True, "2251(a) opening plus 2251(b) is the packed slice")
+print("literacy only; not a proxy-voting or reimbursement how-to")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+

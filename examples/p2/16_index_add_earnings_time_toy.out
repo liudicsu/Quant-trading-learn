@@ -146,3 +146,48 @@ official (b)(1)(iv)(C) typography is "the requirements of26 U.S.C. 401(a)(13)" (
 no issuer, compensation, or disclosure advice
 assertions passed: 34/34
 disclaimer: official 17 CFR 240.10D-1; no issuer, compensation, or disclosure advice; learning only
+=== J. 17 CFR 244.100(a): Regulation G non-GAAP financial measure presentation and reconciliation ===
+244.100(a): Whenever a registrant, or person acting on its behalf, publicly discloses
+  material information that includes a non-GAAP financial measure, the registrant must
+  accompany that non-GAAP financial measure with:
+  (1) A presentation of the most directly comparable financial measure calculated and
+  presented in accordance with Generally Accepted Accounting Principles (GAAP); and
+  (2) A reconciliation (by schedule or other clearly understandable method), which shall
+  be quantitative for historical non-GAAP measures presented, and quantitative, to the
+  extent available without unreasonable efforts, for forward-looking information, of
+  the differences between the non-GAAP financial measure disclosed or released with the
+  most comparable financial measure or measures calculated and presented in accordance
+  with GAAP identified in paragraph (a)(1) of this section.
+official (a)(1) typography is "Generally Accepted Accounting Principles (GAAP)" with
+  initial capitals; official (c)(2) later uses lowercase "generally accepted accounting
+  principles in the United States"; this toy does not tidy one into the other
+official caption is General rules regarding disclosure of non-GAAP financial measures.
+cite 17 CFR 244.100; title 17 up_to_date_as_of 2026-11-09
+official (b) typography is "in light of the circumstances under which it is presented,
+  not misleading" (not packed 10b-5 / 12b-20 "in the light of," and not 12b-20's "they
+  are made," and not "they are presented"); official (b) is named only
+official (c) FPI conditions and official (d) proposed-business-combination exception
+  exist; official (d) typography is "the entity resulting therefrom or an entity that
+  is a party thereto" (no Oxford comma); this toy is not those catalogs
+official notes heading is Notes to § 244.100:
+official Note 1 typography is "orally, telephonically, by Web cast, by broadcast, or by
+  similar means" (two-word "Web cast," capital W, Oxford comma) and cites "paragraphs
+  (a)(1)(i) and (a)(1)(ii) of this section" even though official (a) is numbered (a)(1)
+  and (a)(2); this toy does not silently renumber the official note
+official Note 1(i) typography is "the registrant's Web site" (capital W, two words);
+  official Note 1(ii) typography is "the location of the web site" (lowercase w, two
+  words); official Note 2(iii) typography is "web sites" (lowercase); this toy does not
+  tidy those into "website" or "webcast," packed 4370 / 2264 "Web site," or packed 3150
+  "website"
+17 CFR 244.101 (definitions, including official (a) Non-GAAP financial measure), 17 CFR
+  244.102 ("No effect on antifraud liability"; official typography "compliance or
+  non-compliance," "shall in itself affect"), and Regulation S-K Item 10(e) / 17 CFR
+  229.10 exist and are named only; this toy does not pack them as second cores, and
+  does not flatten 244.102 into packed 10b-5
+  this is a flatten into already-taught earnings / 10-K / 10-Q clocks, packed 13a-14, packed 12b-20, or packed 10D-1? False
+  this toy tidies official (b) into "in the light of" or "they are presented", tidies "Web cast" / "Web site" / "web site" into "website" or "webcast", or silently renumbers official Note 1's (a)(1)(i) and (a)(1)(ii)? False
+  whenever a registrant publicly discloses material information that includes a non-GAAP financial measure, the registrant must accompany that measure with the most directly comparable GAAP measure and a reconciliation? True
+learning only; a non-GAAP figure is not a substitute for the accompanying GAAP measure and reconciliation
+no investment advice and no use / avoid non-GAAP product recommendation
+assertions passed: 37/37
+disclaimer: official 17 CFR 244.100; no issuer, disclosure, or investment advice; learning only

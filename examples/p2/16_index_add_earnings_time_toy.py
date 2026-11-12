@@ -476,3 +476,92 @@ check(core_10d1 is True, "10D-1(b)(1) requires a written policy to recover reaso
 print("no issuer, compensation, or disclosure advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 240.10D-1; no issuer, compensation, or disclosure advice; learning only")
+
+print("=== J. 17 CFR 244.100(a): Regulation G non-GAAP financial measure presentation and reconciliation ===")
+# 17 CFR 244.100 General rules regarding disclosure of non-GAAP
+# financial measures (official eCFR versioner API XML typography,
+# title 17 up_to_date_as_of 2026-11-09, opened 2026-11-12). Keep
+# 34/34 after I / 10D-1 plus the closing 10D-1 disclaimer identical
+# as a strict byte-prefix of the tip file. Packed slice is official
+# (a) only. Official typography in (a)(1) is "Generally Accepted
+# Accounting Principles (GAAP)" with initial capitals; official (c)(2)
+# later uses lowercase "generally accepted accounting principles in
+# the United States" — do not tidy one into the other. Official (b)
+# typography is "in light of the circumstances under which it is
+# presented, not misleading" (not packed 10b-5 / 12b-20 "in the light
+# of," and not 12b-20's "they are made," and not "they are presented").
+# Name official (b); do not flatten packed 10b-5, packed 12b-20, or
+# packed 14a-9 into it. Official (c) FPI conditions and official (d)
+# proposed-business-combination exception exist; name them, do not
+# build those catalogs. Official (d) typography is "the entity
+# resulting therefrom or an entity that is a party thereto" (no Oxford
+# comma). Official notes heading is "Notes to § 244.100:". Official
+# Note 1 typography is "by Web cast" (two-word, capital W) and cites
+# "paragraphs (a)(1)(i) and (a)(1)(ii) of this section" even though
+# official (a) is numbered (a)(1) and (a)(2) — do not silently
+# renumber the official note. Official Note 1(i) is "the registrant's
+# Web site" (capital W, two words); official Note 1(ii) is "the
+# location of the web site" (lowercase w, two words); official Note
+# 2(iii) is "web sites" (lowercase). Do not tidy those into "website"
+# or "webcast," packed 4370 / 2264 "Web site," or packed 3150
+# "website." Name 17 CFR 244.101 / 244.102 and Regulation S-K Item
+# 10(e) / 17 CFR 229.10 only; do not pack them as second cores, and
+# do not flatten 244.102 into packed 10b-5. Official 244.102
+# typography is "compliance or non-compliance," "shall in itself
+# affect." Do not flatten into already-taught earnings / 10-K / 10-Q
+# clocks, packed 13a-14, packed 12b-20, or packed 10D-1. Learning
+# only; a non-GAAP figure in a press release or slide is not a
+# substitute for the accompanying GAAP measure and reconciliation; no
+# investment advice and no "use / avoid non-GAAP" product
+# recommendation.
+
+print("244.100(a): Whenever a registrant, or person acting on its behalf, publicly discloses")
+print("  material information that includes a non-GAAP financial measure, the registrant must")
+print("  accompany that non-GAAP financial measure with:")
+print("  (1) A presentation of the most directly comparable financial measure calculated and")
+print("  presented in accordance with Generally Accepted Accounting Principles (GAAP); and")
+print("  (2) A reconciliation (by schedule or other clearly understandable method), which shall")
+print("  be quantitative for historical non-GAAP measures presented, and quantitative, to the")
+print("  extent available without unreasonable efforts, for forward-looking information, of")
+print("  the differences between the non-GAAP financial measure disclosed or released with the")
+print("  most comparable financial measure or measures calculated and presented in accordance")
+print("  with GAAP identified in paragraph (a)(1) of this section.")
+print('official (a)(1) typography is "Generally Accepted Accounting Principles (GAAP)" with')
+print("  initial capitals; official (c)(2) later uses lowercase \"generally accepted accounting")
+print('  principles in the United States"; this toy does not tidy one into the other')
+print("official caption is General rules regarding disclosure of non-GAAP financial measures.")
+print("cite 17 CFR 244.100; title 17 up_to_date_as_of 2026-11-09")
+print('official (b) typography is "in light of the circumstances under which it is presented,')
+print('  not misleading" (not packed 10b-5 / 12b-20 "in the light of," and not 12b-20\'s "they')
+print('  are made," and not "they are presented"); official (b) is named only')
+print("official (c) FPI conditions and official (d) proposed-business-combination exception")
+print('  exist; official (d) typography is "the entity resulting therefrom or an entity that')
+print('  is a party thereto" (no Oxford comma); this toy is not those catalogs')
+print("official notes heading is Notes to \u00a7 244.100:")
+print('official Note 1 typography is "orally, telephonically, by Web cast, by broadcast, or by')
+print('  similar means" (two-word "Web cast," capital W, Oxford comma) and cites "paragraphs')
+print('  (a)(1)(i) and (a)(1)(ii) of this section" even though official (a) is numbered (a)(1)')
+print("  and (a)(2); this toy does not silently renumber the official note")
+print("official Note 1(i) typography is \"the registrant's Web site\" (capital W, two words);")
+print('  official Note 1(ii) typography is "the location of the web site" (lowercase w, two')
+print('  words); official Note 2(iii) typography is "web sites" (lowercase); this toy does not')
+print('  tidy those into "website" or "webcast," packed 4370 / 2264 "Web site," or packed 3150')
+print('  "website"')
+print("17 CFR 244.101 (definitions, including official (a) Non-GAAP financial measure), 17 CFR")
+print('  244.102 ("No effect on antifraud liability"; official typography "compliance or')
+print('  non-compliance," "shall in itself affect"), and Regulation S-K Item 10(e) / 17 CFR')
+print("  229.10 exist and are named only; this toy does not pack them as second cores, and")
+print("  does not flatten 244.102 into packed 10b-5")
+flatten_244100 = False
+print(f"  this is a flatten into already-taught earnings / 10-K / 10-Q clocks, packed 13a-14, packed 12b-20, or packed 10D-1? {flatten_244100}")
+check(flatten_244100 is False, "do not flatten 244.100 into already-taught earnings / 10-K / 10-Q clocks, packed 13a-14, packed 12b-20, or packed 10D-1")
+tidy_regg = False
+print(f'  this toy tidies official (b) into "in the light of" or "they are presented", tidies "Web cast" / "Web site" / "web site" into "website" or "webcast", or silently renumbers official Note 1\'s (a)(1)(i) and (a)(1)(ii)? {tidy_regg}')
+check(tidy_regg is False, "do not tidy Regulation G typography or silently renumber official Note 1")
+core_244100 = True
+print(f"  whenever a registrant publicly discloses material information that includes a non-GAAP financial measure, the registrant must accompany that measure with the most directly comparable GAAP measure and a reconciliation? {core_244100}")
+check(core_244100 is True, "244.100(a) requires the most directly comparable GAAP measure and a reconciliation")
+print("learning only; a non-GAAP figure is not a substitute for the accompanying GAAP measure and reconciliation")
+print("no investment advice and no use / avoid non-GAAP product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 244.100; no issuer, disclosure, or investment advice; learning only")
