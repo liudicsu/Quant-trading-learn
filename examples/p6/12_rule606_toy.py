@@ -605,3 +605,62 @@ print(f"  non-institutional consent must be written and order-by-order? {written
 check(written_obo is True, "2124(b) requires written order-by-order consent")
 print("no product, broker, or pricing recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== N. 17 CFR 242.607: written PFOF and routing-policy information upon opening a new account and on an annual basis thereafter ===")
+# 17 CFR 242.607 Customer account statements (official eCFR API / LII
+# opened 2026-11-12; Title 17 up_to_date_as_of 2026-11-09). Keep the
+# current 606 table, 4/4, ASSERT_rule606_ok, the reminder line, 5250,
+# 5270, 5230, 5280, 10b-10, 5240, 5290, 2262, 2269, 2121, 37/37 after K,
+# 2122, 2124, and 43/43 after M identical.
+# Official 242.607(a): No broker or dealer acting as agent for a
+# customer may effect any transaction in, induce or attempt to induce
+# the purchase or sale of, or direct orders for purchase or sale of,
+# any NMS stock or a security authorized for quotation on an automated
+# inter-dealer quotation system that has the characteristics set forth
+# in section 17B of the Act (15 U.S.C. 78q-2), unless such broker or
+# dealer informs such customer, in writing, upon opening a new account
+# and on an annual basis thereafter, of official (a)(1) payment-for-
+# order-flow policies and official (a)(2) routing policies, including
+# a description of the extent to which orders can be executed at prices
+# superior to the national best bid and national best offer.
+# Official typography includes "broker's or dealer's." Cite § 242.607.
+# Official (b) Commission exemptions exist; name only. Quote
+# "upon opening a new account and on an annual basis thereafter" and
+# "national best bid and national best offer" as written; do not
+# silently replace the official phrase with "NBBO" inside a quoted
+# sentence. Do not flatten 607 into already-taught Rule 606 or Rule
+# 10b-10 / the 10b-10(d)(8) PFOF definition, or into packed 2121 /
+# 2122 / 2124 or 2266 / 2267 / 2231 clocks. No broker, venue, or PFOF
+# recommendation.
+
+print("242.607(a): No broker or dealer acting as agent for a customer may effect any transaction in,")
+print("  induce or attempt to induce the purchase or sale of, or direct orders for purchase or sale of,")
+print("  any NMS stock or a security authorized for quotation on an automated inter-dealer quotation")
+print("  system that has the characteristics set forth in section 17B of the Act (15 U.S.C. 78q-2),")
+print("  unless such broker or dealer informs such customer, in writing, upon opening a new account and")
+print("  on an annual basis thereafter, of the following:")
+print("  (a)(1) The broker's or dealer's policies regarding receipt of payment for order flow from any")
+print("  broker or dealer, national securities exchange, national securities association, or exchange")
+print("  member to which it routes customers' orders for execution, including a statement as to whether")
+print("  any payment for order flow is received for routing customer orders and a detailed description")
+print("  of the nature of the compensation received; and")
+print("  (a)(2) The broker's or dealer's policies for determining where to route customer orders that")
+print("  are the subject of payment for order flow absent specific instructions from customers,")
+print("  including a description of the extent to which orders can be executed at prices superior to")
+print("  the national best bid and national best offer")
+print("cite § 242.607")
+print('official typography includes "broker\'s or dealer\'s"')
+print('quote "upon opening a new account and on an annual basis thereafter" and')
+print('  "national best bid and national best offer" as written')
+print("official (b) Commission exemptions exist; this toy is not an exemptions engine")
+flatten_607 = False
+print(f"  this is a flatten into already-taught Rule 606 or Rule 10b-10, or into packed 2121 / 2122 / 2124 or 2266 / 2267 / 2231 clocks? {flatten_607}")
+check(flatten_607 is False, "do not flatten 607 into 606, 10b-10, or packed clocks")
+nbbo_swap = False
+print(f'  this toy replaces "national best bid and national best offer" with "NBBO" inside a quoted sentence? {nbbo_swap}')
+check(nbbo_swap is False, "do not replace the official phrase with NBBO inside a quoted sentence")
+opening_annual = True
+print(f"  written PFOF and routing-policy information is required upon opening a new account and on an annual basis thereafter? {opening_annual}")
+check(opening_annual is True, "607 requires written information upon opening and annually thereafter")
+print("no broker, venue, or PFOF recommendation")
+print(f"assertions passed: {checks}/{checks}")

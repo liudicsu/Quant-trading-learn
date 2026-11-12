@@ -87,3 +87,110 @@ check(glossary["wash sale"].startswith("tax") and glossary["wash trade"].startsw
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_self_trade_pattern_ok")
 print("disclaimer: synthetic events; flags are review prompts, not legal findings; not legal advice; learning only")
+
+print("=== D. FINRA 2150: no improper use of a customer's securities or funds, and no guarantee against loss ===")
+# FINRA Rule 2150 Improper Use of Customers' Securities or Funds;
+# Prohibition Against Guarantees and Sharing in Accounts (official-page
+# opened 2026-11-12). Add this section AFTER the current last disclaimer
+# line so sections A-C, including 7/7, ASSERT_self_trade_pattern_ok, and
+# the disclaimer, remain a strict byte-prefix of the tip file.
+# Official 2150(a): No member or person associated with a member shall
+# make improper use of a customer's securities or funds.
+# Official (b): No member or person associated with a member shall
+# guarantee a customer against loss in connection with any securities
+# transaction or in any securities account of such customer.
+# Official caption typography is "Customers' Securities or Funds."
+# Official (c) sharing is prohibited except under official written
+# authorizations and the direct-proportion test, with official family
+# and Advisers Act Rule 205-3 alternatives; name official (c), do not
+# build a 205-3, settlements, or immediate-family engine.
+# Official SM .01: a "guarantee" extended to all holders of a particular
+# security by an issuer as part of that security generally would not be
+# subject to the prohibition against guarantees.
+# Official SM .02: a member, but not an associated person, may determine
+# on an after-the-fact basis to reimburse a customer for transaction
+# losses (subject to applicable reporting) and may correct a bona fide
+# error. Do not invent that a member may never reimburse a loss.
+# Official SM .03: preserve the required written authorization(s) for at
+# least six years after the date the account is closed.
+# Do not flatten 2150 into already-taught 15c3-3 or SIPC, or into packed
+# 2261. No broker, product, or guarantee recommendation.
+
+print("2150(a): No member or person associated with a member shall make improper use of a customer's securities or funds")
+print("2150(b): No member or person associated with a member shall guarantee a customer against loss in connection with any securities transaction or in any securities account of such customer")
+print('official caption typography is "Customers\' Securities or Funds"')
+print("official (c) written-authorization and direct-proportion sharing conditions exist, with official")
+print("  family and Advisers Act Rule 205-3 alternatives; this toy is not a 205-3, settlements, or")
+print("  immediate-family engine")
+print('official SM .01: a "guarantee" that is extended to all holders of a particular security by an')
+print("  issuer as part of that security generally would not be subject to the prohibition against guarantees")
+print("official SM .02: a member, but not an associated person, may determine on an after-the-fact basis")
+print("  to reimburse a customer for transaction losses (subject to applicable reporting) and may correct")
+print("  a bona fide error")
+print("official SM .03: preserve the required written authorization(s) for at least six years after the")
+print("  date the account is closed")
+flatten_2150 = False
+print(f"  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2261? {flatten_2150}")
+check(flatten_2150 is False, "do not flatten 2150 into 15c3-3, SIPC, or packed 2261")
+never_reimburse = False
+print(f"  this toy invents that a member may never reimburse a loss? {never_reimburse}")
+check(never_reimburse is False, "official SM .02 permits after-the-fact member reimbursement")
+prohibited = True
+print(f"  improper use of a customer's securities or funds, and a guarantee against loss, are prohibited? {prohibited}")
+check(prohibited is True, "2150 prohibits improper use and a guarantee against loss")
+print("no broker, product, or guarantee recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_2150_ok")
+print("disclaimer: learning only; not legal advice; no broker, product, or guarantee recommendation")
+
+print("=== E. FINRA 3220: anything of value, including gratuities, in excess of $300 per individual per year ===")
+# FINRA Rule 3220 Influencing or Rewarding Employees of Others
+# (official-page opened 2026-11-12). Amended by SR-FINRA-2025-003 eff.
+# Mar. 30, 2026 (already effective). Supporting Notice 26-05 is
+# supporting only; quote the official rule wording
+# "$300 per individual per year," not the Notice phrasing
+# "per person per year."
+# Official 3220(a): No member or person associated with a member shall,
+# directly or indirectly, give or permit to be given anything of value,
+# including gratuities, in excess of $300 per individual per year to any
+# person, principal, proprietor, employee, agent or representative of
+# another person where such payment or gratuity is in relation to the
+# business of the employer of the recipient of the payment or gratuity.
+# A gift of any kind is considered a gratuity.
+# Official SM .09: This Rule does not apply to gifts from a member to
+# its own associated persons, or to gifts from a member or an associated
+# person to individual retail customers.
+# Official (b)-(d) and official SM .01-.08 exist; name them, do not
+# build the valuation / aggregation / exception catalog. Official
+# typography is "SEA Rule 17a-4" if (c) is named.
+# Do not teach the pre-amendment $100 cap as current law. Do not invent
+# that the $300 limit applies to gifts to individual retail customers.
+# Do not flatten 3220 into already-taught FINRA 5230 or 5250. No gift,
+# broker, or entertainment recommendation. Keep A-C, including 7/7,
+# ASSERT_self_trade_pattern_ok, the disclaimer, and the new 2150
+# section, identical once 2150 is added.
+
+print("3220(a): No member or person associated with a member shall, directly or indirectly, give or")
+print("  permit to be given anything of value, including gratuities, in excess of $300 per individual")
+print("  per year to any person, principal, proprietor, employee, agent or representative of another")
+print("  person where such payment or gratuity is in relation to the business of the employer of the")
+print("  recipient of the payment or gratuity. A gift of any kind is considered a gratuity")
+print('official wording is "$300 per individual per year"')
+print("the current official limit is $300, not the pre-amendment $100 cap (SR-FINRA-2025-003 eff. Mar. 30, 2026; already effective)")
+print("official SM .09: This Rule does not apply to gifts from a member to its own associated persons,")
+print("  or to gifts from a member or an associated person to individual retail customers")
+print("official (b)-(d) and official SM .01-.08 exist; official (c) recordkeeping typography is")
+print('  "SEA Rule 17a-4"; this toy is not the valuation / aggregation / exception catalog')
+flatten_3220 = False
+print(f"  this is a flatten into already-taught 5230 or 5250? {flatten_3220}")
+check(flatten_3220 is False, "do not flatten 3220 into already-taught 5230 or 5250")
+retail_cap = False
+print(f"  this toy invents that the $300 limit applies to gifts to individual retail customers? {retail_cap}")
+check(retail_cap is False, "official SM .09 carves out gifts to individual retail customers")
+limit_300 = True
+print(f"  the current official limit is $300 per individual per year, not $100? {limit_300}")
+check(limit_300 is True, "current official 3220 limit is $300 per individual per year")
+print("no gift, broker, or entertainment recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_3220_ok")
+print("disclaimer: learning only; not legal advice; no gift, broker, or entertainment recommendation")

@@ -13,3 +13,43 @@ wash trade -> manipulation: no change in beneficial ownership (15 U.S.C. 78i(a)(
 assertions passed: 7/7
 ASSERT_self_trade_pattern_ok
 disclaimer: synthetic events; flags are review prompts, not legal findings; not legal advice; learning only
+=== D. FINRA 2150: no improper use of a customer's securities or funds, and no guarantee against loss ===
+2150(a): No member or person associated with a member shall make improper use of a customer's securities or funds
+2150(b): No member or person associated with a member shall guarantee a customer against loss in connection with any securities transaction or in any securities account of such customer
+official caption typography is "Customers' Securities or Funds"
+official (c) written-authorization and direct-proportion sharing conditions exist, with official
+  family and Advisers Act Rule 205-3 alternatives; this toy is not a 205-3, settlements, or
+  immediate-family engine
+official SM .01: a "guarantee" that is extended to all holders of a particular security by an
+  issuer as part of that security generally would not be subject to the prohibition against guarantees
+official SM .02: a member, but not an associated person, may determine on an after-the-fact basis
+  to reimburse a customer for transaction losses (subject to applicable reporting) and may correct
+  a bona fide error
+official SM .03: preserve the required written authorization(s) for at least six years after the
+  date the account is closed
+  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2261? False
+  this toy invents that a member may never reimburse a loss? False
+  improper use of a customer's securities or funds, and a guarantee against loss, are prohibited? True
+no broker, product, or guarantee recommendation
+assertions passed: 10/10
+ASSERT_2150_ok
+disclaimer: learning only; not legal advice; no broker, product, or guarantee recommendation
+=== E. FINRA 3220: anything of value, including gratuities, in excess of $300 per individual per year ===
+3220(a): No member or person associated with a member shall, directly or indirectly, give or
+  permit to be given anything of value, including gratuities, in excess of $300 per individual
+  per year to any person, principal, proprietor, employee, agent or representative of another
+  person where such payment or gratuity is in relation to the business of the employer of the
+  recipient of the payment or gratuity. A gift of any kind is considered a gratuity
+official wording is "$300 per individual per year"
+the current official limit is $300, not the pre-amendment $100 cap (SR-FINRA-2025-003 eff. Mar. 30, 2026; already effective)
+official SM .09: This Rule does not apply to gifts from a member to its own associated persons,
+  or to gifts from a member or an associated person to individual retail customers
+official (b)-(d) and official SM .01-.08 exist; official (c) recordkeeping typography is
+  "SEA Rule 17a-4"; this toy is not the valuation / aggregation / exception catalog
+  this is a flatten into already-taught 5230 or 5250? False
+  this toy invents that the $300 limit applies to gifts to individual retail customers? False
+  the current official limit is $300 per individual per year, not $100? True
+no gift, broker, or entertainment recommendation
+assertions passed: 13/13
+ASSERT_3220_ok
+disclaimer: learning only; not legal advice; no gift, broker, or entertainment recommendation

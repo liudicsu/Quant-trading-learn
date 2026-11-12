@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **16.75 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h + FINRA 2265 延长交易时段风险披露 0.25h + FINRA 2266 书面 SIPC 信息 0.25h + FINRA 5330 未成交订单调整 0.25h + FINRA 2264 保证金披露声明 0.25h + FINRA 2267 投资者教育与保护 / BrokerCheck 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **17.50 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h + FINRA 2265 延长交易时段风险披露 0.25h + FINRA 2266 书面 SIPC 信息 0.25h + FINRA 5330 未成交订单调整 0.25h + FINRA 2264 保证金披露声明 0.25h + FINRA 2267 投资者教育与保护 / BrokerCheck 0.25h + FINRA 2261 财务状况披露 / 最近资产负债表 0.25h + FINRA 2231 客户账户结单 0.25h + FINRA 2090 了解你的客户 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -388,6 +388,101 @@ no broker or BrokerCheck recommendation
 assertions passed: 28/28
 ```
 
+
+## FINRA 2261：应任何善意常客要求，提供最近资产负债表供查阅（核实于 2026-11-12）
+
+已经教过的 15c3-3 占有或控制 / 准备金账户教学、已经教过的 SIPC 保障上限，以及已经打包的 2266 / 2267，保持原样。不要改写那些段落，也不要改写已经教过的 Reg T / 15c6-1 / 2264。这一节补上官方的 2261，避免把那些客户保护规则当成“应要求提供资产负债表”义务的替代，或在本规则里发明周期时钟、表格编号或保障金额。没有券商或财务状况建议。
+
+[FINRA Rule 2261](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2261)(a)：“A member shall make available to inspection by any bona fide regular customer, upon request, the information relative to such member's financial condition as disclosed in its most recent balance sheet prepared either in accordance with such member's usual practice or as required by any state or federal securities laws, or any rule or regulation thereunder. In lieu of making such balance sheet available to inspection, a member may deliver the balance sheet to the requesting bona fide regular customer in paper or electronic form; provided that, with respect to electronic delivery, the customer must consent to receive the balance sheet in electronic form.” 官方印刷是 “bona fide regular customer” 和 “most recent balance sheet。” 官方 (b) 是会员对会员的书面请求交付义务：作为未了结交易一方、或保管另一会员现金或证券的会员，应在另一会员书面请求时，以纸质或电子形式交付其最近资产负债表所披露的财务状况说明。点名官方 (b)；不要搭建会员对会员引擎。官方 (c)：“As used in paragraph (a) of this Rule, the term "customer" means any person who, in the regular course of such member's business, has cash or securities in the possession of such member.” 点名官方 (c)；不要搭建 “customer” 引擎。不要发明定期时钟、表格编号或保障金额。不要把 2261 压进已经教过的 15c3-3 或 SIPC，或压进已经打包的 2266 / 2267。
+
+**实验：** 同一脚本的 J 节（A–I 节，包括 **28/28 after I / 2267**，与此前相同；J 节之后为 31/31）：
+
+```text
+=== J. FINRA 2261: most recent balance sheet available to inspection by any bona fide regular customer upon request ===
+2261(a): A member shall make available to inspection by any bona fide regular customer, upon request,
+  the information relative to such member's financial condition as disclosed in its most recent
+  balance sheet prepared either in accordance with such member's usual practice or as required by
+  any state or federal securities laws, or any rule or regulation thereunder
+  In lieu of making such balance sheet available to inspection, a member may deliver the balance
+  sheet to the requesting bona fide regular customer in paper or electronic form; provided that,
+  with respect to electronic delivery, the customer must consent to receive the balance sheet in
+  electronic form
+official typography is "bona fide regular customer" and "most recent balance sheet"
+official (b): member-to-member written-request delivery of the most recent balance sheet exists;
+  this toy is not a member-to-member engine
+official (c): as used in paragraph (a), the term "customer" means any person who, in the regular
+  course of such member's business, has cash or securities in the possession of such member;
+  this toy is not a "customer" engine
+  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2266 / 2267? False
+  this toy invents a periodic clock, form number, or coverage amount? False
+  most recent balance sheet must be made available to inspection by any bona fide regular customer upon request, or delivered in paper or electronic form with the customer's consent for electronic delivery? True
+no broker or financial-condition recommendation
+assertions passed: 31/31
+```
+
+## FINRA 2231：每个日历季度不少于一次发送账户结单（核实于 2026-11-12）
+
+已经教过的 15c3-3 占有或控制 / 准备金教学、已经打包的 10b-16 “at least quarterly” 信用条款报表，以及已经打包的 2264 / 2266 / 2267 年度（或每个日历年）书面通知，保持原样。不要改写那些段落，也不要改写新加入的 2261。这一节补上官方的 2231，避免把那些不同的时钟当成账户结单规则，或搭建官方 (c) 的 DPP / 未上市 REIT 目录。没有券商或产品建议。
+
+[FINRA Rule 2231](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2231)(a)：“Except as otherwise provided by paragraph (b) of this Rule, each general securities member shall, with a frequency of not less than once every calendar quarter, send a statement of account ("account statement") containing a description of any securities positions, money balances, or account activity to each customer whose account had a security position, money balance, or account activity during the period since the last such statement was sent to the customer.” 官方 (a) 还要求提示客户及时报告任何不准确或差异；当介绍经纪商与托管经纪商同时服务该账户时，须同时指向两家公司；任何口头沟通应以书面 “re-confirmed”，包括 SIPA 项下的权利。官方印刷是带连字符的 “re-confirmed。” 官方 (b) 的 DVP/RVP 例外是存在的（官方印刷是 “SEA Rule 17a-4”，SEA 中间没有空格）。官方 (b) 的收尾句：“Nothing in this Rule shall be seen to qualify or condition the obligations of a member under SEA Rule 15c3-3(j)(1) concerning quarterly notices of free credit balances on statements.” 官方印刷是 “SEA Rule 15c3-3(j)(1)。” 只把该官方 (j)(1) 时钟当作对照点名；不要把 15c3-3(j)(1) 当作本条目打包，也不要改写已经教过的 15c3-3 占有或控制 / 准备金教学。官方 (c) 的 DPP / 未上市 REIT 估值目录是存在的；官方 (d)(2) 豁免不托管客户账户、也不持有客户资金或证券的会员。官方 SM 是存在的；官方 SM .02(a)(2) 的用词是 “accounts statements”——不要悄悄改整齐。点名官方 (b)、(c)、(d)(2) 和官方 SM；不要搭建 DVP/RVP、DPP/REIT、标识或汇总结单目录。不要把这一季度时钟压进已经打包的 10b-16 “at least quarterly，” 或压进 15c3-3(j)(1)，或压进已经打包的 2264 / 2266 / 2267。
+
+**实验：** 同一脚本的 K 节（包括 **28/28 after I / 2267** 以及新加入的 2261 节，在加入 2261 后与此前相同；K 节之后为 34/34）：
+
+```text
+=== K. FINRA 2231: a statement of account not less than once every calendar quarter ===
+2231(a): Except as otherwise provided by paragraph (b) of this Rule, each general securities
+  member shall, with a frequency of not less than once every calendar quarter, send a statement
+  of account ("account statement") containing a description of any securities positions, money
+  balances, or account activity to each customer whose account had a security position, money
+  balance, or account activity during the period since the last such statement was sent to the
+  customer
+  the account statement must advise the customer to report promptly any inaccuracy or discrepancy;
+  when an introducing and carrying firm both service the account, the advisory must refer to both
+  firms; any oral communications should be re-confirmed in writing, including rights under SIPA
+official typography is hyphenated "re-confirmed"
+official (b) DVP/RVP exceptions exist (official typography is "SEA Rule 17a-4"); this toy is not
+  that engine
+official closing sentence of (b): Nothing in this Rule shall be seen to qualify or condition the
+  obligations of a member under SEA Rule 15c3-3(j)(1) concerning quarterly notices of free credit
+  balances on statements
+official typography is "SEA Rule 15c3-3(j)(1)" and "SEA Rule 17a-4"
+official (c) DPP / unlisted REIT catalog exists; this toy is not that catalog
+official (d)(2): a member that does not carry customer accounts and does not hold customer funds
+  or securities is exempt from the provisions of this Rule
+official SM exists; official SM .02(a)(2) wording is "accounts statements"; this toy is not the
+  logos / summary-statement / DPP catalog
+  this is a flatten into packed 10b-16 or into 15c3-3(j)(1), or a rewrite of already-taught 15c3-3? False
+  this toy builds the official (c) DPP / unlisted REIT catalog? False
+  a statement of account is required not less than once every calendar quarter? True
+no broker or product recommendation
+assertions passed: 34/34
+```
+
+## FINRA 2090：以合理勤勉了解（并保留）基本事实（核实于 2026-11-12）
+
+已经打包的开户与定期书面通知框（2264 / 2266 / 2267，以及新加入的 2261 / 2231）保持原样。不要改写那些段落。这一节补上官方的 2090，避免把那些披露时钟当成了解你的客户义务，或把本规则压进 FINRA 2111 或 Regulation Best Interest / Form CRS（本课不打包这两项）。这是勤勉与事实义务，不是开户披露时钟。没有券商或产品建议。
+
+[FINRA Rule 2090](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2090)：“Every member shall use reasonable diligence, in regard to the opening and maintenance of every account, to know (and retain) the essential facts concerning every customer and concerning the authority of each person acting on behalf of such customer.” 引用官方括号 “(and retain)。” 官方 SM .01：“For purposes of this Rule, facts "essential" to "knowing the customer" are those required to (a) effectively service the customer's account, (b) act in accordance with any special handling instructions for the account, (c) understand the authority of each person acting on behalf of the customer, and (d) comply with applicable laws, regulations, and rules.” 官方 SM .01 在 "essential" / "knowing the customer" 上使用引号。点名官方 SM .01；不要搭建适当性、Reg BI 或 Form CRS 引擎，也不要把 2090 压进 FINRA 2111 或 § 240.15l-1 / 17a-14。
+
+**实验：** 同一脚本的 L 节（包括 **28/28 after I / 2267** 以及新加入的 2261 / 2231 节，在加入那些节后与此前相同；L 节之后为 37/37）：
+
+```text
+=== L. FINRA 2090: reasonable diligence to know (and retain) the essential facts ===
+2090: Every member shall use reasonable diligence, in regard to the opening and maintenance of
+  every account, to know (and retain) the essential facts concerning every customer and concerning
+  the authority of each person acting on behalf of such customer
+official typography includes the parenthetical "(and retain)"
+official SM .01: For purposes of this Rule, facts "essential" to "knowing the customer" are those
+  required to (a) effectively service the customer's account, (b) act in accordance with any
+  special handling instructions for the account, (c) understand the authority of each person
+  acting on behalf of the customer, and (d) comply with applicable laws, regulations, and rules
+  this is a flatten into FINRA 2111 or Regulation Best Interest / Form CRS, or into packed 2264 / 2266 / 2267 / 2261 / 2231? False
+  this toy treats 2090 as an account-opening disclosure clock? False
+  reasonable diligence, in regard to the opening and maintenance of every account, to know (and retain) the essential facts? True
+no broker or product recommendation
+assertions passed: 37/37
+```
+
 ## 跨市场扫单（ISO）：现行 Rule 611 的例外，不是废除规则（核实于 2026-11-12）
 
 上面的状态框已经说明：SEC 撤销 Rule 611 的提案（S7-2026-20）截至 2026-11-12 仍是**提案**，eCFR 仍列 §242.611。在现行法下，交易中心仍须有合理设计的政策，防止在 NMS 股票上穿越受保护报价（trade-through），**除非**适用例外。
@@ -677,6 +772,9 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 25. 发明每一笔未成交订单在除权日都会被 FINRA 5330 调整；搭建 (a)(1)–(5) 的四舍五入公式目录；把 “SEA Rule 10b-17” 写成 “SE A Rule”，或把 “($0.01)” 写成 “$ 0.01”；悄悄给 “stop limit” 加连字符，或改掉 “good 'til cancelled” 里的直撇号；或把已经教过的 Rule 10b-17 或止损实验改写成 5330。
 26. 发明 FINRA 2264 的规定文本是唯一被允许的文本；悄悄把 “short fall” 改成 “shortfall”，或把 “Web site” 改成一个词；把 “prior to or at the time of opening the account” 或 “not less than once a calendar year” 压进已经打包的 2266 或 2267；搭建规定声明目录或 4512 引擎；或把 2264 压进 Rule 10b-16 或已经教过的 Reg T / 4210。
 27. 发明一般的 FINRA 2267 义务是开户披露；把 “once every calendar year” 压进已经打包的 2266；从页面页脚发明一条 BrokerCheck 热线号码或 Web site 地址；或把已经打包的 2266、已经教过的 SIPC 保障上限改写成 2267。官方印刷是两个词的 “Web site”。
+28. 在 FINRA 2261 下发明定期时钟、表格编号或保障金额；把应要求提供最近资产负债表的义务压进已经教过的 15c3-3 或 SIPC，或压进已经打包的 2266 / 2267；或搭建官方 (b) 会员对会员、官方 (c) “customer” 引擎。
+29. 把 FINRA 2231 的 “not less than once every calendar quarter” 时钟压进已经打包的 10b-16 “at least quarterly，” 或压进 15c3-3(j)(1)；悄悄改写官方 “re-confirmed、” “SEA Rule 15c3-3(j)(1)、” “SEA Rule 17a-4” 或 SM .02(a)(2) 的 “accounts statements”；搭建官方 (c) 的 DPP / 未上市 REIT 目录；或把已经教过的 15c3-3 占有或控制 / 准备金教学改写成 2231。
+30. 把 FINRA 2090 压进 FINRA 2111 或 Regulation Best Interest / Form CRS；把 2090 当成开户披露时钟；丢掉官方括号 “(and retain)”；或悄悄改掉官方 SM .01 在 "essential" / "knowing the customer" 上的引号。
 
 ## 练习（与任务清单 1:1）
 
@@ -704,6 +802,9 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 22. **ex-5330** — 运行 `12_stop_order_toy.py` 的 D 节；说明官方未成交订单是否必须在除权日调整、现金股利低于一美分（$0.01）时是否例外，以及是不是每一笔未成交订单都会被调整；**完成标准**：官方未成交订单应在除权日调整，现金股利或分配低于一美分（$0.01）的除外；官方 “Do Not Reduce” / “Do Not Increase” 标记存在；官方 (e) 例外存在，包括未成交卖出订单和 SEA Rule 10b-17；不是每一笔未成交订单都会被调整，也不是对已经教过的 10b-17 的改写，与输出一致。
 23. **ex-2264** — 运行 `11_freeride_txse_15c33_toy.py` 的 H 节；说明 2264 要求何时提供保证金披露，以及这是不是 10b-16 或已经教过的 Reg T；**完成标准**：须在开户前或开户当时单独以纸质或电子形式提供，并且每个日历年不少于一次；官方 (c) 替代文本存在；这不是 10b-16，也不是已经教过的 Reg T，与输出一致。
 24. **ex-2267** — 运行同一脚本的 I 节；说明 2267 的一般义务是不是开户披露，必须提供哪些信息，以及这是不是对已经打包的 2266 的改写；**完成标准**：一般义务是每个日历年一次以书面（可以是电子）形式提供 FINRA BrokerCheck Hotline Number、FINRA Web site 地址，以及关于投资者手册的声明；官方 (b) 例外存在；本玩具没有发明热线号码；这不是对已经打包的 2266 的改写，与输出一致。
+25. **ex-2261** — 运行同一脚本的 J 节；说明 2261 要求什么，以及这是否发明了时钟，或是否压进已经教过的 15c3-3 / SIPC 或已经打包的 2266 / 2267；**完成标准**：会员的最近资产负债表须应任何善意常客的要求提供查阅，或以纸质或电子形式交付，电子交付须经客户同意；官方 (b) 和 (c) 存在；本玩具没有发明定期时钟、表格编号或保障金额；这不是已经教过的 15c3-3 或 SIPC，也不是已经打包的 2266 / 2267，与输出一致。
+26. **ex-2231** — 运行同一脚本的 K 节；说明账户结单须多久发送一次，以及这是不是已经打包的 10b-16，或是对已经教过的 15c3-3（包括 15c3-3(j)(1)）的改写；**完成标准**：须每个日历季度不少于一次发送账户结单；官方印刷是带连字符的 “re-confirmed” 以及 “SEA Rule 15c3-3(j)(1)” / “SEA Rule 17a-4”；官方 SM .02(a)(2) 的用词是 “accounts statements”；官方 (b)、(c) 和 (d)(2) 存在，本课不搭建这些目录；这不是已经打包的 10b-16，也不是对 15c3-3(j)(1) 的压平，与输出一致。
+27. **ex-2090** — 运行同一脚本的 L 节；说明 2090 要求什么，它是不是开户披露时钟，以及这是不是 FINRA 2111 或 Regulation Best Interest / Form CRS；**完成标准**：每个会员须以合理勤勉，就每个账户的开立与维护，了解（并保留）关于每位客户以及代表该客户行事之人权限的基本事实；官方 SM .01 的四类事实存在；这是勤勉与事实义务，不是开户披露时钟，也不是已经打包的 2264 / 2266 / 2267 / 2261 / 2231，或 FINRA 2111 / Reg BI / Form CRS，与输出一致。
 
 ## 测验
 
@@ -740,6 +841,10 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 <Quiz id="mo-2264" question="根据 FINRA 2264，会员何时必须向非机构客户提供保证金披露声明？规定文本是唯一被允许的文本吗？这条规则是不是 10b-16 或已经教过的 Reg T？" options={["规定文本是唯一被允许的文本，而且只需在网站上发布即可，不必单独提供", "这是对 Rule 10b-16 或已经教过的 Regulation T / FINRA 4210 的改写；开户后口头通知即可", "会员不得为非机构客户开立 Regulation T 保证金账户，除非在开户前或开户当时，已单独以纸质或电子形式、在单独文件（或作为另一文件中的单独一页）向该客户提供规定的保证金披露声明。此后须以每个日历年不少于一次的频率交付。官方印刷是两个词的 “Web site”，官方示范文本里是两个词的 “short fall”。官方 (c) 允许实质相似的替代文本；规定文本不是唯一被允许的文本。官方 (d) 用 Rule 4512(c) 定义非机构客户，仅被点名。这不是 10b-16，也不是已经教过的 Reg T", "书面披露只在开户时需要一次，之后再也不需要"]} answer={2} explanation="FINRA 2264 要求在开户前或开户当时单独提供保证金披露，并且每个日历年不少于一次。官方 (c) 允许实质相似的替代文本。官方印刷是 “Web site” 和 “short fall”。这不是 10b-16，也不是已经教过的 Reg T。" />
 <Quiz id="mo-5330" question="根据 FINRA 5330，会员持有未成交订单时，应在除权日如何处理？是不是每一笔未成交订单都会被调整？" options={["每一笔未成交订单，包括未成交的买入止损单和未成交的卖出订单，都必须在除权日调整", "这是对已经教过的 Rule 10b-17 或止损 / 止损限价教学的改写", "会员持有未成交订单时，应在执行或允许执行之前，在该证券报价为 ex-dividend、ex-rights、ex-distribution 或 ex-interest 当日，调整价格和/或股数，但现金股利或分配低于一美分（$0.01）的除外。官方标记是 “Do Not Reduce” 和 “Do Not Increase”。官方 (d) 把 “open order” 定义为买入订单或未成交的卖出止损单，包括 “good 'til cancelled”、“limit” 或 “stop limit”。官方 (e) 例外包括未成交的买入止损单、未成交的卖出订单，以及未按 SEA Rule 10b-17 报告的情形。不是每一笔未成交订单都会被调整。官方 (b) 反向拆股应取消待成交订单。不要搭建四舍五入公式目录。这不是对已经教过的 10b-17 的改写", "低于一美分的现金股利也必须调整；SEA Rule 中间要加空格"]} answer={2} explanation="FINRA 5330 要求在除权日调整官方未成交订单，现金股利或分配低于一美分（$0.01）的除外。不是每一笔未成交订单都会被调整：官方 (d) 和 (e) 更窄。官方印刷是 “SEA Rule 10b-17”、“good 'til cancelled” 和 “stop limit”。这不是对已经教过的 10b-17 的改写。" />
 <Quiz id="mo-2267" question="根据 FINRA 2267，会员必须向客户提供哪些信息、应在何时提供？一般义务是不是开户披露？这条规则有没有写出热线号码？" options={["一般 2267 义务是开户披露，与已经打包的 2266 时钟相同", "规则文本本身写出了 BrokerCheck 热线号码和 Web site 地址，本课应把页脚号码当作官方规则内容", "除本规则另有规定外，会员应每个日历年一次，以书面形式（可以是电子形式）向每位客户提供：FINRA BrokerCheck Hotline Number、FINRA Web site 地址，以及关于介绍 FINRA BrokerCheck 的投资者手册可供索取的声明。官方印刷是两个词的 “Web site”。规则点名了这些项目，但没有写出号码或网址；不要从页面页脚发明号码。官方 (b) 例外存在，包括有限的介绍经纪商可在客户首次买入时或此前提供，以及无客户或由托管会员遵守 (a) 款的豁免；仅被点名。一般义务不是开户披露。这不是对已经打包的 2266 或已经教过的 SIPC 保障上限的改写", "只要在网站上挂出手册即可，不必向每位客户提供"]} answer={2} explanation="FINRA 2267 的一般义务是每个日历年一次提供书面 BrokerCheck 信息，不是开户披露。官方印刷是 “Web site”。不要发明热线号码。官方 (b) 例外仅被点名。这不是对已经打包的 2266 的改写。" />
+<Quiz id="mo-2261" question="根据 FINRA 2261，会员必须提供什么、向谁提供、应在何时提供？这条规则有没有发明定期时钟或表格编号？它是不是已经教过的 15c3-3 或 SIPC，或已经打包的 2266 / 2267？" options={["2261 要求按固定日历时钟提交带编号的定期财务报表，或重述已经教过的 SIPC 保障上限", "这是对已经教过的 15c3-3 占有或控制 / 准备金教学，或对已经打包的 2266 / 2267 的改写", "会员应任何善意常客的要求，提供其最近资产负债表供查阅，也可以纸质或电子形式交付；电子交付须经客户同意。官方印刷是 “bona fide regular customer” 和 “most recent balance sheet。” 官方 (b) 会员对会员的书面请求交付，以及官方 (c) 就 (a) 款对 \"customer\" 的定义是存在的，仅被点名；本课不搭建这些引擎。不要发明定期时钟、表格编号或保障金额。这不是已经教过的 15c3-3 或 SIPC，也不是已经打包的 2266 / 2267", "只要把资产负债表挂在网站上，即使不按请求提供查阅，也满足 (a) 款"]} answer={2} explanation="FINRA 2261 要求应任何善意常客的请求，提供会员最近资产负债表供查阅，或以纸质或电子形式交付，电子交付须经同意。官方 (b) 和 (c) 仅被点名。不要发明时钟或表格编号。这不是已经教过的 15c3-3 或 SIPC，也不是已经打包的 2266 / 2267。" />
+<Quiz id="mo-2231" question="根据 FINRA 2231，综合证券会员必须多久发送一次账户结单？这是已经打包的 10b-16，或是对已经教过的 15c3-3（包括 15c3-3(j)(1)）的改写吗？" options={["这一季度时钟就是已经打包的 10b-16 “at least quarterly” 信用条款报表，或就是 15c3-3(j)(1)", "每个会员都必须每天发送账户结单，官方印刷是 “SE A Rule” 或不带连字符的 “reconfirmed”", "除 (b) 款另有规定外，每个综合证券会员须以不低于每个日历季度一次的频率，发送账户结单（\"account statement\"）。官方 (a) 还要求提示及时报告任何不准确或差异，在介绍经纪商与托管经纪商同时服务账户时须同时指向两家公司，并且任何口头沟通应以书面 “re-confirmed”，包括 SIPA 项下的权利。官方印刷是带连字符的 “re-confirmed” 以及 “SEA Rule 15c3-3(j)(1)” / “SEA Rule 17a-4。” 官方 SM .02(a)(2) 的用词是 “accounts statements。” 官方 (b) 的 DVP/RVP 例外、官方 (c) 的 DPP / 未上市 REIT 目录和官方 (d)(2) 豁免是存在的，仅被点名；本课不搭建这些引擎。这不是已经打包的 10b-16，也不是对已经教过的 15c3-3 的改写，包括不是对 15c3-3(j)(1) 的压平", "官方 (d)(2) 并不存在，本课搭建官方 (c) 的 DPP / REIT 目录"]} answer={2} explanation="FINRA 2231 要求每个日历季度不少于一次发送账户结单。官方印刷是带连字符的 “re-confirmed” 和 “SEA Rule 15c3-3(j)(1)。” 官方 (b)、(c) 和 (d)(2) 仅被点名。这不是已经打包的 10b-16，也不是对 15c3-3(j)(1) 的压平。" />
+<Quiz id="mo-2090" question="根据 FINRA 2090，会员就每个账户的开立与维护必须做什么？这是开户披露时钟吗？它是不是对 FINRA 2111 或 Regulation Best Interest / Form CRS 的压平？" options={["2090 是开户披露时钟，与已经打包的 2264 / 2266 / 2267 / 2261 / 2231 相同", "2090 就是 FINRA 2111 适当性规则，或就是 Regulation Best Interest / Form CRS", "每个会员须以合理勤勉，就每个账户的开立与维护，了解（并保留）关于每位客户以及代表该客户行事之人权限的基本事实。引用官方括号 “(and retain)。” 官方 SM .01 的四类事实存在，并在 \"essential\" / \"knowing the customer\" 上使用官方引号，仅被点名。这是勤勉与事实义务，不是开户披露时钟。这不是已经打包的 2264 / 2266 / 2267 / 2261 / 2231，也不是 FINRA 2111 或 Regulation Best Interest / Form CRS", "账户一经开立，基本事实就不必再保留"]} answer={2} explanation="FINRA 2090 要求以合理勤勉，就每个账户的开立与维护，了解（并保留）基本事实。官方 SM .01 的四类事实存在。这是勤勉与事实义务，不是开户披露时钟，也不是 FINRA 2111 或 Regulation Best Interest / Form CRS。" />
+
 
 
 ## 完成标准
@@ -754,6 +859,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 enrich28（核实于 2026-11-12）：[FINRA Rule 5220](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5220)（按标明价格报价；官方 .01 报价确定性；NMS 股票的正常交易单位是官方 Rule 600(b) 整手；只点名 Rule 6420）。没有产品、券商或交易场所建议。
 enrich29（核实于 2026-11-12）：[FINRA Rule 2265](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2265)；[FINRA Rule 2266](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2266)。没有产品、券商、交易场所或 SIPC 会员资格建议。
 enrich30（核实于 2026-11-12）：[FINRA Rule 5330](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5330)；[FINRA Rule 2264](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2264)；[FINRA Rule 2267](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2267)。没有产品、券商、订单类型、保证金或 BrokerCheck 建议。
+enrich31（核实于 2026-11-12）：[FINRA Rule 2261](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2261)；[FINRA Rule 2231](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2231)；[FINRA Rule 2090](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2090)。没有券商、产品或财务状况建议。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

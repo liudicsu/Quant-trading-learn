@@ -100,3 +100,64 @@ official (b)(2): a member that does not have customers, or that is a party to a
   the general 2267 duty is once every calendar year, not a general account-opening disclosure? True
 no broker or BrokerCheck recommendation
 assertions passed: 28/28
+=== J. FINRA 2261: most recent balance sheet available to inspection by any bona fide regular customer upon request ===
+2261(a): A member shall make available to inspection by any bona fide regular customer, upon request,
+  the information relative to such member's financial condition as disclosed in its most recent
+  balance sheet prepared either in accordance with such member's usual practice or as required by
+  any state or federal securities laws, or any rule or regulation thereunder
+  In lieu of making such balance sheet available to inspection, a member may deliver the balance
+  sheet to the requesting bona fide regular customer in paper or electronic form; provided that,
+  with respect to electronic delivery, the customer must consent to receive the balance sheet in
+  electronic form
+official typography is "bona fide regular customer" and "most recent balance sheet"
+official (b): member-to-member written-request delivery of the most recent balance sheet exists;
+  this toy is not a member-to-member engine
+official (c): as used in paragraph (a), the term "customer" means any person who, in the regular
+  course of such member's business, has cash or securities in the possession of such member;
+  this toy is not a "customer" engine
+  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2266 / 2267? False
+  this toy invents a periodic clock, form number, or coverage amount? False
+  most recent balance sheet must be made available to inspection by any bona fide regular customer upon request, or delivered in paper or electronic form with the customer's consent for electronic delivery? True
+no broker or financial-condition recommendation
+assertions passed: 31/31
+=== K. FINRA 2231: a statement of account not less than once every calendar quarter ===
+2231(a): Except as otherwise provided by paragraph (b) of this Rule, each general securities
+  member shall, with a frequency of not less than once every calendar quarter, send a statement
+  of account ("account statement") containing a description of any securities positions, money
+  balances, or account activity to each customer whose account had a security position, money
+  balance, or account activity during the period since the last such statement was sent to the
+  customer
+  the account statement must advise the customer to report promptly any inaccuracy or discrepancy;
+  when an introducing and carrying firm both service the account, the advisory must refer to both
+  firms; any oral communications should be re-confirmed in writing, including rights under SIPA
+official typography is hyphenated "re-confirmed"
+official (b) DVP/RVP exceptions exist (official typography is "SEA Rule 17a-4"); this toy is not
+  that engine
+official closing sentence of (b): Nothing in this Rule shall be seen to qualify or condition the
+  obligations of a member under SEA Rule 15c3-3(j)(1) concerning quarterly notices of free credit
+  balances on statements
+official typography is "SEA Rule 15c3-3(j)(1)" and "SEA Rule 17a-4"
+official (c) DPP / unlisted REIT catalog exists; this toy is not that catalog
+official (d)(2): a member that does not carry customer accounts and does not hold customer funds
+  or securities is exempt from the provisions of this Rule
+official SM exists; official SM .02(a)(2) wording is "accounts statements"; this toy is not the
+  logos / summary-statement / DPP catalog
+  this is a flatten into packed 10b-16 or into 15c3-3(j)(1), or a rewrite of already-taught 15c3-3? False
+  this toy builds the official (c) DPP / unlisted REIT catalog? False
+  a statement of account is required not less than once every calendar quarter? True
+no broker or product recommendation
+assertions passed: 34/34
+=== L. FINRA 2090: reasonable diligence to know (and retain) the essential facts ===
+2090: Every member shall use reasonable diligence, in regard to the opening and maintenance of
+  every account, to know (and retain) the essential facts concerning every customer and concerning
+  the authority of each person acting on behalf of such customer
+official typography includes the parenthetical "(and retain)"
+official SM .01: For purposes of this Rule, facts "essential" to "knowing the customer" are those
+  required to (a) effectively service the customer's account, (b) act in accordance with any
+  special handling instructions for the account, (c) understand the authority of each person
+  acting on behalf of the customer, and (d) comply with applicable laws, regulations, and rules
+  this is a flatten into FINRA 2111 or Regulation Best Interest / Form CRS, or into packed 2264 / 2266 / 2267 / 2261 / 2231? False
+  this toy treats 2090 as an account-opening disclosure clock? False
+  reasonable diligence, in regard to the opening and maintenance of every account, to know (and retain) the essential facts? True
+no broker or product recommendation
+assertions passed: 37/37

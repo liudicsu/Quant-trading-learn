@@ -322,3 +322,162 @@ print(f"  the general 2267 duty is once every calendar year, not a general accou
 check(annual_not_opening is True, "general 2267 duty is once every calendar year")
 print("no broker or BrokerCheck recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== J. FINRA 2261: most recent balance sheet available to inspection by any bona fide regular customer upon request ===")
+# FINRA Rule 2261 Disclosure of Financial Condition (official-page /
+# official rulebook HTML opened 2026-11-12). Keep all earlier prints,
+# including 28/28 after I / 2267, identical.
+# Official 2261(a): A member shall make available to inspection by any
+# bona fide regular customer, upon request, the information relative to
+# such member's financial condition as disclosed in its most recent
+# balance sheet prepared either in accordance with such member's usual
+# practice or as required by any state or federal securities laws, or
+# any rule or regulation thereunder. In lieu of making such balance
+# sheet available to inspection, a member may deliver the balance sheet
+# to the requesting bona fide regular customer in paper or electronic
+# form; provided that, with respect to electronic delivery, the customer
+# must consent to receive the balance sheet in electronic form.
+# Official (b) is a member-to-member written-request delivery duty.
+# Official (c): As used in paragraph (a) of this Rule, the term
+# "customer" means any person who, in the regular course of such
+# member's business, has cash or securities in the possession of such
+# member.
+# Quote official "bona fide regular customer" and "most recent balance
+# sheet." Do not invent a periodic clock, form number, or coverage
+# amount. Name official (b) and official (c); do not build those
+# engines. Do not flatten 2261 into already-taught 15c3-3 or SIPC, or
+# into packed 2266 / 2267. No broker or financial-condition
+# recommendation.
+
+print("2261(a): A member shall make available to inspection by any bona fide regular customer, upon request,")
+print("  the information relative to such member's financial condition as disclosed in its most recent")
+print("  balance sheet prepared either in accordance with such member's usual practice or as required by")
+print("  any state or federal securities laws, or any rule or regulation thereunder")
+print("  In lieu of making such balance sheet available to inspection, a member may deliver the balance")
+print("  sheet to the requesting bona fide regular customer in paper or electronic form; provided that,")
+print("  with respect to electronic delivery, the customer must consent to receive the balance sheet in")
+print("  electronic form")
+print('official typography is "bona fide regular customer" and "most recent balance sheet"')
+print("official (b): member-to-member written-request delivery of the most recent balance sheet exists;")
+print("  this toy is not a member-to-member engine")
+print('official (c): as used in paragraph (a), the term "customer" means any person who, in the regular')
+print("  course of such member's business, has cash or securities in the possession of such member;")
+print('  this toy is not a "customer" engine')
+flatten_2261 = False
+print(f"  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2266 / 2267? {flatten_2261}")
+check(flatten_2261 is False, "do not flatten 2261 into 15c3-3, SIPC, or packed 2266 / 2267")
+invents_clock = False
+print(f"  this toy invents a periodic clock, form number, or coverage amount? {invents_clock}")
+check(invents_clock is False, "do not invent a 2261 clock, form, or coverage amount")
+on_request = True
+print(f"  most recent balance sheet must be made available to inspection by any bona fide regular customer upon request, or delivered in paper or electronic form with the customer's consent for electronic delivery? {on_request}")
+check(on_request is True, "2261 requires the most recent balance sheet upon request")
+print("no broker or financial-condition recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== K. FINRA 2231: a statement of account not less than once every calendar quarter ===")
+# FINRA Rule 2231 Customer Account Statements (official-page / official
+# rulebook HTML opened 2026-11-12; typography cross-checked against
+# same-day official HTML). Keep all earlier prints, including 28/28
+# after I / 2267 and the new 2261 section, identical once 2261 is added.
+# Official 2231(a): Except as otherwise provided by paragraph (b) of
+# this Rule, each general securities member shall, with a frequency of
+# not less than once every calendar quarter, send a statement of account
+# ("account statement") containing a description of any securities
+# positions, money balances, or account activity to each customer whose
+# account had a security position, money balance, or account activity
+# during the period since the last such statement was sent to the
+# customer. Official (a) also requires an advisory to report promptly
+# any inaccuracy or discrepancy, a both-firms reference when introducing
+# and carrying firms both service the account, and that any oral
+# communications should be re-confirmed in writing, including rights
+# under SIPA.
+# Official (b) DVP/RVP exceptions exist (official typography is
+# "SEA Rule 17a-4"). Official closing sentence of (b): Nothing in this
+# Rule shall be seen to qualify or condition the obligations of a member
+# under SEA Rule 15c3-3(j)(1) concerning quarterly notices of free
+# credit balances on statements.
+# Official (c) DPP / unlisted REIT catalog exists; official (d)(2)
+# exempts a member that does not carry customer accounts and does not
+# hold customer funds or securities. Official SM exists; official
+# SM .02(a)(2) wording is "accounts statements" — do not silently tidy
+# it. Official typography is hyphenated "re-confirmed" and
+# "SEA Rule 15c3-3(j)(1)" / "SEA Rule 17a-4" with no space in SEA.
+# Name official (b), (c), (d)(2), and official SM; do not build those
+# engines. Do not flatten this quarterly clock into packed 10b-16 "at
+# least quarterly," or into 15c3-3(j)(1). Do not rewrite already-taught
+# 15c3-3 possession-or-control / reserve teaching, or flatten into
+# packed 2264 / 2266 / 2267. No broker or product recommendation.
+
+print('2231(a): Except as otherwise provided by paragraph (b) of this Rule, each general securities')
+print('  member shall, with a frequency of not less than once every calendar quarter, send a statement')
+print('  of account ("account statement") containing a description of any securities positions, money')
+print("  balances, or account activity to each customer whose account had a security position, money")
+print("  balance, or account activity during the period since the last such statement was sent to the")
+print("  customer")
+print("  the account statement must advise the customer to report promptly any inaccuracy or discrepancy;")
+print("  when an introducing and carrying firm both service the account, the advisory must refer to both")
+print("  firms; any oral communications should be re-confirmed in writing, including rights under SIPA")
+print('official typography is hyphenated "re-confirmed"')
+print('official (b) DVP/RVP exceptions exist (official typography is "SEA Rule 17a-4"); this toy is not')
+print("  that engine")
+print("official closing sentence of (b): Nothing in this Rule shall be seen to qualify or condition the")
+print("  obligations of a member under SEA Rule 15c3-3(j)(1) concerning quarterly notices of free credit")
+print("  balances on statements")
+print('official typography is "SEA Rule 15c3-3(j)(1)" and "SEA Rule 17a-4"')
+print("official (c) DPP / unlisted REIT catalog exists; this toy is not that catalog")
+print("official (d)(2): a member that does not carry customer accounts and does not hold customer funds")
+print("  or securities is exempt from the provisions of this Rule")
+print('official SM exists; official SM .02(a)(2) wording is "accounts statements"; this toy is not the')
+print("  logos / summary-statement / DPP catalog")
+flatten_2231 = False
+print(f"  this is a flatten into packed 10b-16 or into 15c3-3(j)(1), or a rewrite of already-taught 15c3-3? {flatten_2231}")
+check(flatten_2231 is False, "do not flatten 2231 into 10b-16 or 15c3-3(j)(1)")
+builds_c = False
+print(f"  this toy builds the official (c) DPP / unlisted REIT catalog? {builds_c}")
+check(builds_c is False, "do not build the official (c) catalog")
+quarterly = True
+print(f"  a statement of account is required not less than once every calendar quarter? {quarterly}")
+check(quarterly is True, "2231 requires a statement of account not less than once every calendar quarter")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== L. FINRA 2090: reasonable diligence to know (and retain) the essential facts ===")
+# FINRA Rule 2090 Know Your Customer (official-page opened 2026-11-12).
+# Keep all earlier prints, including 28/28 after I / 2267 and the new
+# 2261 / 2231 sections, identical once those are added.
+# Official 2090: Every member shall use reasonable diligence, in regard
+# to the opening and maintenance of every account, to know (and retain)
+# the essential facts concerning every customer and concerning the
+# authority of each person acting on behalf of such customer.
+# Official SM .01: For purposes of this Rule, facts "essential" to
+# "knowing the customer" are those required to (a) effectively service
+# the customer's account, (b) act in accordance with any special
+# handling instructions for the account, (c) understand the authority of
+# each person acting on behalf of the customer, and (d) comply with
+# applicable laws, regulations, and rules.
+# Quote the official parenthetical "(and retain)" and official SM .01
+# quotation marks. This is a diligence-and-facts duty, not an
+# account-opening disclosure clock. Do not flatten 2090 into FINRA 2111
+# or Regulation Best Interest / Form CRS, or into packed 2264 / 2266 /
+# 2267 / 2261 / 2231. No broker or product recommendation.
+
+print("2090: Every member shall use reasonable diligence, in regard to the opening and maintenance of")
+print("  every account, to know (and retain) the essential facts concerning every customer and concerning")
+print("  the authority of each person acting on behalf of such customer")
+print('official typography includes the parenthetical "(and retain)"')
+print('official SM .01: For purposes of this Rule, facts "essential" to "knowing the customer" are those')
+print("  required to (a) effectively service the customer's account, (b) act in accordance with any")
+print("  special handling instructions for the account, (c) understand the authority of each person")
+print("  acting on behalf of the customer, and (d) comply with applicable laws, regulations, and rules")
+flatten_2090 = False
+print(f"  this is a flatten into FINRA 2111 or Regulation Best Interest / Form CRS, or into packed 2264 / 2266 / 2267 / 2261 / 2231? {flatten_2090}")
+check(flatten_2090 is False, "do not flatten 2090 into 2111, Reg BI / Form CRS, or packed disclosure clocks")
+treats_clock = False
+print(f"  this toy treats 2090 as an account-opening disclosure clock? {treats_clock}")
+check(treats_clock is False, "2090 is a diligence-and-facts duty, not a disclosure clock")
+diligence = True
+print(f"  reasonable diligence, in regard to the opening and maintenance of every account, to know (and retain) the essential facts? {diligence}")
+check(diligence is True, "2090 requires reasonable diligence to know (and retain) the essential facts")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
