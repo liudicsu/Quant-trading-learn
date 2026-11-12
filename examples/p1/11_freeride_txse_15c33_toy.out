@@ -161,3 +161,46 @@ official SM .01: For purposes of this Rule, facts "essential" to "knowing the cu
   reasonable diligence, in regard to the opening and maintenance of every account, to know (and retain) the essential facts? True
 no broker or product recommendation
 assertions passed: 37/37
+=== M. FINRA 4370: written business continuity plan and customer disclosure ===
+4370(a): Each member must create and maintain a written business continuity plan identifying
+  procedures relating to an emergency or significant business disruption. Such procedures must
+  be reasonably designed to enable the member to meet its existing obligations to customers
+4370(e): Each member must disclose to its customers how its business continuity plan addresses
+  the possibility of a future significant business disruption and how the member plans to
+  respond to events of varying scope. At a minimum, such disclosure must be made in writing
+  to customers at account opening, posted on the member's Web site (if the member maintains a
+  Web site), and mailed to customers upon request
+official typography is "Web site" (two words, capital W)
+official (b) annual review, official (c) ten-element catalog, official (d) senior-management /
+  registered-principal approval, and official (f) emergency-contact reporting exist; official
+  (f)(1) typography includes "e.g., the member's attorney, accountant, or clearing firm
+  contact"; this toy is not those engines
+  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2261 / 2266 / 2267 / 2231 / 2090? False
+  this toy invents that a member without a Web site must still post the disclosure on a website? False
+  a written business continuity plan, reasonably designed to meet existing obligations to customers, and written disclosure at account opening, on the member's Web site if maintained, and mailed upon request? True
+no broker or product recommendation
+assertions passed: 40/40
+=== N. FINRA 4340: callable securities fair-and-impartial allocation and customer notice ===
+4340(a): Each member that has in its possession or under its control any security which, by
+  its terms, may be called or redeemed prior to maturity, shall:
+  (1) establish and make available on the member's website procedures by which it will
+  allocate among its customers, on a fair and impartial basis, the securities to be redeemed
+  or selected as called in the event of a partial redemption or call; and
+  (2) provide written notice (which may be electronic) to new customers at the opening of an
+  account, and all customers at least once every calendar year, of the manner in which they
+  may access the allocation procedures on the member's website and that, upon a customer's
+  request, the member will provide hard copies of the allocation procedures to the customer
+official typography is one-word lowercase "website"
+official (b) favorable redemptions: a member shall not allocate the securities to any account
+  in which it or its associated persons have an interest until all other customers' positions
+  in such securities have been satisfied
+official (c) unfavorable redemptions: a member shall not exclude its positions or those of
+  its associated persons from the pool of the securities eligible to be called
+official SM .02 may include an impartial lottery system, acting on a pro-rata basis, or such
+  other means as will achieve a fair and impartial allocation; official SM .01 and SM .03
+  exist; this toy is not those catalogs
+  this is a flatten into already-taught 15c3-3 possession or control, or into FINRA 2232(b)(2)? False
+  this toy invents that every common stock is callable? False
+  fair-and-impartial allocation procedures on the member's website, and written notice to new customers at account opening and to all customers at least once every calendar year? True
+no broker or product recommendation
+assertions passed: 43/43

@@ -53,3 +53,93 @@ no gift, broker, or entertainment recommendation
 assertions passed: 13/13
 ASSERT_3220_ok
 disclaimer: learning only; not legal advice; no gift, broker, or entertainment recommendation
+=== F. 17 CFR 240.10b-5: Employment of manipulative and deceptive devices ===
+10b-5: It shall be unlawful for any person, directly or indirectly, by the use of any means or
+  instrumentality of interstate commerce, or of the mails or of any facility of any national
+  securities exchange,
+  (a) To employ any device, scheme, or artifice to defraud,
+  (b) To make any untrue statement of a material fact or to omit to state a material fact
+  necessary in order to make the statements made, in the light of the circumstances under
+  which they were made, not misleading, or
+  (c) To engage in any act, practice, or course of business which operates or would operate
+  as a fraud or deceit upon any person,
+  in connection with the purchase or sale of any security
+official caption is "Employment of manipulative and deceptive devices"
+official typography is "in the light of the circumstances under which they were made"
+the closing clause applies to (a), (b), and (c); cite 17 CFR 240.10b-5
+title 17 up_to_date_as_of 2026-11-09
+  this is a flatten into already-taught 10b-18, 10b5-1, 14e-3, 10b-9, or 15 U.S.C. 78i / FINRA 5210? False
+  this toy packs Rule 10b5-2, or builds a scienter, materiality, or judicial-opinion catalog? False
+  unlawful, in connection with the purchase or sale of any security, to employ a device, scheme, or artifice to defraud, to make an untrue statement of a material fact or omit a material fact necessary in the light of the circumstances, or to engage in a fraud or deceit? True
+no investment advice
+assertions passed: 16/16
+ASSERT_10b5_ok
+disclaimer: learning only; not legal advice; no investment advice
+=== G. FINRA 2010: high standards of commercial honor and just and equitable principles of trade ===
+2010: A member, in the conduct of its business, shall observe high standards of commercial honor
+  and just and equitable principles of trade
+official caption typography is "STANDARDS OF COMMERCIAL HONOR AND PRINCIPLES OF TRADE"
+official Cross References exist, including already-taught 2121, 5130, 5210, 5220, 5270, and
+  5320, and named-only 2111; this toy is not that list
+  this is a flatten into already-taught 2121, 5130, 5210, 5220, 5270, or 5320, or into packed 10b-5 / 2150 / 3220? False
+  this toy rewrites the already-shipped 2121 or 5270 SM .05 foil sentences? False
+  a member, in the conduct of its business, shall observe high standards of commercial honor and just and equitable principles of trade? True
+no broker or product recommendation
+assertions passed: 19/19
+ASSERT_2010_ok
+disclaimer: learning only; not legal advice; no broker or product recommendation
+=== H. FINRA 2165: Specified Adult temporary-hold safe harbor ===
+2165(a)(1): the term “Specified Adult” shall mean: (A) a natural person age 65 and older; or
+  (B) a natural person age 18 and older who the member reasonably believes has a mental or
+  physical impairment that renders the individual unable to protect his or her own interests
+2165(b)(1): a member may place a temporary hold on a disbursement of funds or securities from
+  the “Account” of a “Specified Adult”, or a transaction in securities in that “Account”, if the
+  member reasonably believes that financial exploitation of the “Specified Adult” has occurred,
+  is occurring, has been attempted, or will be attempted
+official typography uses typographic quotes around “Specified Adult,” “Account,”
+  “Trusted Contact Person,” and “financial exploitation”
+official SM .01: this Rule provides a safe harbor from FINRA Rules 2010, 2150 and 11870;
+  "This Rule does not require members to place temporary holds"
+official typography in SM .01 has no Oxford comma in "FINRA Rules 2010, 2150 and 11870"
+official (b)(2): the temporary hold will expire not later than 15 business days, unless
+  terminated or extended as officially provided; official (b)(3) / (b)(4) add "no longer
+  than 10 business days" and then "no longer than 30 business days" extension slices; this
+  toy is not that extension engine
+official (b)(1)(B) notification is not later than two business days, orally or in writing,
+  which may be electronic
+official (a)(3) “Trusted Contact Person” is in accordance with Rule 4512; this toy is not a
+  4512 engine
+amended by SR-FINRA-2021-016 eff. March 17, 2022 (already effective; covers transactions as
+  well as disbursements)
+  this is a flatten into packed 2010 or 2150, already-taught 15c3-3 / SIPC, or an ACATS / 11870 engine? False
+  this toy invents that every member must place a hold, or drops the official 18-and-older impairment prong? False
+  a member may place a temporary hold on a disbursement or a transaction in the Account of a Specified Adult, and this Rule does not require members to place temporary holds? True
+no broker or product recommendation
+assertions passed: 22/22
+ASSERT_2165_ok
+disclaimer: learning only; not legal advice; no broker or product recommendation
+=== I. FINRA 3310: written anti-money laundering program, approved in writing by senior management ===
+3310: Each member shall develop and implement a written anti-money laundering program reasonably
+  designed to achieve and monitor the member's compliance with the requirements of the Bank
+  Secrecy Act (31 U.S.C. 5311, et seq.), and the implementing regulations promulgated
+  thereunder by the Department of the Treasury. Each member's anti-money laundering program
+  must be approved, in writing, by a member of senior management
+official typography is hyphenated "anti-money laundering" and official (d) "e-mail address"
+official (c) typography includes "annual (on a calendar-year basis)" and quoted "independent
+  testing"; official example typography is "e.g., engages solely in proprietary trading or
+  conducts business only with other broker-dealers"
+official (a)-(f) minimum elements exist, including official (c) annual independent testing,
+  or every two years if the member does not execute transactions for customers or otherwise
+  hold customer accounts or act as an introducing broker, official (d) designation of an
+  associated person to FINRA, official (e) ongoing training, and official (f) risk-based
+  ongoing customer due diligence; this toy is not a CIP, SAR, beneficial-owner, or 31 CFR
+  1010.230 engine
+official Selected Notices typography includes "17-40 18-19" with no comma between those two numbers
+  this is a flatten into packed 2090, Regulation Best Interest, or Form CRS? False
+  this toy builds a CIP, SAR, beneficial-owner, or 31 CFR 1010.230 engine? False
+  a written anti-money laundering program, approved, in writing, by a member of senior management? True
+learning-only BSA/AML literacy, not a how-to for evading reporting
+no broker or product recommendation
+assertions passed: 25/25
+ASSERT_3310_ok
+disclaimer: learning only; not legal advice; AML literacy only, not a how-to for evading reporting

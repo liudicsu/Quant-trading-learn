@@ -194,3 +194,234 @@ print("no gift, broker, or entertainment recommendation")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_3220_ok")
 print("disclaimer: learning only; not legal advice; no gift, broker, or entertainment recommendation")
+
+print("=== F. 17 CFR 240.10b-5: Employment of manipulative and deceptive devices ===")
+# 17 CFR 240.10b-5 (official eCFR API XML / LII, title 17
+# up_to_date_as_of 2026-11-09; opened 2026-11-12). Official eCFR HTML
+# this turn was the Request Access interstitial, not official rule
+# text; quote the API / LII copies. Add this section AFTER the current
+# last disclaimer line so the tip file remains a strict byte-prefix.
+# Keep 7/7, ASSERT_self_trade_pattern_ok, the first disclaimer, 2150
+# including ASSERT_2150_ok, and 3220 including 13/13, ASSERT_3220_ok,
+# and the last disclaimer, identical.
+# Official caption is "Employment of manipulative and deceptive
+# devices." Official core: It shall be unlawful for any person,
+# directly or indirectly, by the use of any means or instrumentality of
+# interstate commerce, or of the mails or of any facility of any
+# national securities exchange, (a) To employ any device, scheme, or
+# artifice to defraud, (b) To make any untrue statement of a material
+# fact or to omit to state a material fact necessary in order to make
+# the statements made, in the light of the circumstances under which
+# they were made, not misleading, or (c) To engage in any act,
+# practice, or course of business which operates or would operate as a
+# fraud or deceit upon any person, in connection with the purchase or
+# sale of any security.
+# Quote "in the light of the circumstances under which they were made"
+# as written (not "in light of"). The closing "in connection with the
+# purchase or sale of any security" applies to (a), (b), and (c).
+# Do not flatten 10b-5 into already-taught 10b-18, 10b5-1, 14e-3,
+# 10b-9, or 15 U.S.C. 78i / FINRA 5210 / the self-trade wash-trade box.
+# Do not pack Rule 10b5-2 in this batch, and do not build a scienter,
+# materiality, or judicial-opinion catalog. Learning only; no
+# investment advice.
+
+print("10b-5: It shall be unlawful for any person, directly or indirectly, by the use of any means or")
+print("  instrumentality of interstate commerce, or of the mails or of any facility of any national")
+print("  securities exchange,")
+print("  (a) To employ any device, scheme, or artifice to defraud,")
+print("  (b) To make any untrue statement of a material fact or to omit to state a material fact")
+print("  necessary in order to make the statements made, in the light of the circumstances under")
+print("  which they were made, not misleading, or")
+print("  (c) To engage in any act, practice, or course of business which operates or would operate")
+print("  as a fraud or deceit upon any person,")
+print("  in connection with the purchase or sale of any security")
+print('official caption is "Employment of manipulative and deceptive devices"')
+print('official typography is "in the light of the circumstances under which they were made"')
+print("the closing clause applies to (a), (b), and (c); cite 17 CFR 240.10b-5")
+print("title 17 up_to_date_as_of 2026-11-09")
+flatten_10b5 = False
+print(f"  this is a flatten into already-taught 10b-18, 10b5-1, 14e-3, 10b-9, or 15 U.S.C. 78i / FINRA 5210? {flatten_10b5}")
+check(flatten_10b5 is False, "do not flatten 10b-5 into already-taught 10b-18 / 10b5-1 / 14e-3 / 10b-9 / 78i / 5210")
+packs_10b52 = False
+print(f"  this toy packs Rule 10b5-2, or builds a scienter, materiality, or judicial-opinion catalog? {packs_10b52}")
+check(packs_10b52 is False, "do not pack 10b5-2 or build a scienter / materiality / case-law catalog")
+in_connection = True
+print(f"  unlawful, in connection with the purchase or sale of any security, to employ a device, scheme, or artifice to defraud, to make an untrue statement of a material fact or omit a material fact necessary in the light of the circumstances, or to engage in a fraud or deceit? {in_connection}")
+check(in_connection is True, "10b-5 three official prongs, in connection with the purchase or sale of any security")
+print("no investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_10b5_ok")
+print("disclaimer: learning only; not legal advice; no investment advice")
+
+print("=== G. FINRA 2010: high standards of commercial honor and just and equitable principles of trade ===")
+# FINRA Rule 2010 Standards of Commercial Honor and Principles of Trade
+# (official HTML opened 2026-11-12). Keep F identical once 10b-5 is
+# added, and keep 7/7, ASSERT_self_trade_pattern_ok, the first
+# disclaimer, 2150, and 3220 including 13/13, ASSERT_3220_ok, and the
+# last disclaimer, identical.
+# Official core: A member, in the conduct of its business, shall
+# observe high standards of commercial honor and just and equitable
+# principles of trade. Quote the operative sentence in ordinary
+# sentence case as the official rule text does. Official caption
+# typography on the rule page is "STANDARDS OF COMMERCIAL HONOR AND
+# PRINCIPLES OF TRADE." Official Cross References exist, including
+# already-taught 2121, 5130, 5210, 5220, 5270, and 5320, and named-only
+# 2111; name that they exist, do not pack that list into a student
+# engine, and do not flatten 2010 into those rules. Do not rewrite the
+# already-shipped 2121 or 5270 SM .05 foil sentences. Do not treat 2010
+# as a substitute for packed 10b-5 or packed 2150 / 3220. No broker or
+# product recommendation.
+
+print("2010: A member, in the conduct of its business, shall observe high standards of commercial honor")
+print("  and just and equitable principles of trade")
+print('official caption typography is "STANDARDS OF COMMERCIAL HONOR AND PRINCIPLES OF TRADE"')
+print("official Cross References exist, including already-taught 2121, 5130, 5210, 5220, 5270, and")
+print("  5320, and named-only 2111; this toy is not that list")
+flatten_2010 = False
+print(f"  this is a flatten into already-taught 2121, 5130, 5210, 5220, 5270, or 5320, or into packed 10b-5 / 2150 / 3220? {flatten_2010}")
+check(flatten_2010 is False, "do not flatten 2010 into those cross-referenced or packed rules")
+rewrites_foil = False
+print(f"  this toy rewrites the already-shipped 2121 or 5270 SM .05 foil sentences? {rewrites_foil}")
+check(rewrites_foil is False, "do not rewrite the already-shipped 2121 / 5270 SM .05 2010 foils")
+honor = True
+print(f"  a member, in the conduct of its business, shall observe high standards of commercial honor and just and equitable principles of trade? {honor}")
+check(honor is True, "2010 requires high standards of commercial honor and just and equitable principles of trade")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_2010_ok")
+print("disclaimer: learning only; not legal advice; no broker or product recommendation")
+
+print("=== H. FINRA 2165: Specified Adult temporary-hold safe harbor ===")
+# FINRA Rule 2165 Financial Exploitation of Specified Adults (official
+# HTML opened 2026-11-12). Amended by SR-FINRA-2021-016 eff. March 17,
+# 2022 (already effective; covers transactions as well as
+# disbursements). Do not teach a pre-2022 disbursement-only version as
+# current law. Keep F-G identical once those are added.
+# Official typography uses typographic quotes (U+201C / U+201D) around
+# "Specified Adult," "Account," "Trusted Contact Person," and
+# "financial exploitation."
+# Official (a)(1): a natural person age 65 and older, or a natural
+# person age 18 and older who the member reasonably believes has a
+# mental or physical impairment that renders the individual unable to
+# protect his or her own interests.
+# Official (b)(1): a member may place a temporary hold on a
+# disbursement of funds or securities from the Account of a Specified
+# Adult, or a transaction in securities in that Account, if the member
+# reasonably believes that financial exploitation of the Specified
+# Adult has occurred, is occurring, has been attempted, or will be
+# attempted.
+# Official SM .01: this Rule provides a safe harbor from FINRA Rules
+# 2010, 2150 and 11870 (no Oxford comma); "This Rule does not require
+# members to place temporary holds." The hold is permissive ("may"),
+# not a duty to freeze.
+# Official (b)(2): the temporary hold will expire not later than 15
+# business days after the date the member first placed it, unless
+# otherwise terminated or extended by a state regulator or agency of
+# competent jurisdiction or a court of competent jurisdiction, or
+# extended pursuant to official (b)(3). Official (b)(3) / (b)(4) add
+# "no longer than 10 business days" and then "no longer than 30
+# business days" extension slices; name them, do not build that
+# extension engine. Official (b)(1)(B) notification is not later than
+# two business days, orally or in writing, which may be electronic.
+# Official (a)(3) "Trusted Contact Person" is "in accordance with Rule
+# 4512"; name 4512, do not build the 4512 engine. Do not invent a
+# 65-and-older-only definition that drops the official 18-and-older
+# impairment prong. Do not flatten 2165 into packed 2010, packed 2150,
+# already-taught 15c3-3 / SIPC, or dropped ACATS / Rule 11870 (named
+# only in official SM .01). No broker or product recommendation.
+
+print("2165(a)(1): the term “Specified Adult” shall mean: (A) a natural person age 65 and older; or")
+print("  (B) a natural person age 18 and older who the member reasonably believes has a mental or")
+print("  physical impairment that renders the individual unable to protect his or her own interests")
+print("2165(b)(1): a member may place a temporary hold on a disbursement of funds or securities from")
+print("  the “Account” of a “Specified Adult”, or a transaction in securities in that “Account”, if the")
+print("  member reasonably believes that financial exploitation of the “Specified Adult” has occurred,")
+print("  is occurring, has been attempted, or will be attempted")
+print("official typography uses typographic quotes around “Specified Adult,” “Account,”")
+print("  “Trusted Contact Person,” and “financial exploitation”")
+print("official SM .01: this Rule provides a safe harbor from FINRA Rules 2010, 2150 and 11870;")
+print('  "This Rule does not require members to place temporary holds"')
+print("official typography in SM .01 has no Oxford comma in \"FINRA Rules 2010, 2150 and 11870\"")
+print("official (b)(2): the temporary hold will expire not later than 15 business days, unless")
+print('  terminated or extended as officially provided; official (b)(3) / (b)(4) add "no longer')
+print('  than 10 business days" and then "no longer than 30 business days" extension slices; this')
+print("  toy is not that extension engine")
+print("official (b)(1)(B) notification is not later than two business days, orally or in writing,")
+print("  which may be electronic")
+print("official (a)(3) “Trusted Contact Person” is in accordance with Rule 4512; this toy is not a")
+print("  4512 engine")
+print("amended by SR-FINRA-2021-016 eff. March 17, 2022 (already effective; covers transactions as")
+print("  well as disbursements)")
+flatten_2165 = False
+print(f"  this is a flatten into packed 2010 or 2150, already-taught 15c3-3 / SIPC, or an ACATS / 11870 engine? {flatten_2165}")
+check(flatten_2165 is False, "do not flatten 2165 into packed 2010 / 2150, 15c3-3 / SIPC, or 11870")
+must_hold = False
+print(f"  this toy invents that every member must place a hold, or drops the official 18-and-older impairment prong? {must_hold}")
+check(must_hold is False, "2165 is permissive and Specified Adult has both official prongs")
+may_hold = True
+print(f"  a member may place a temporary hold on a disbursement or a transaction in the Account of a Specified Adult, and this Rule does not require members to place temporary holds? {may_hold}")
+check(may_hold is True, "2165 is a permissive temporary-hold safe harbor")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_2165_ok")
+print("disclaimer: learning only; not legal advice; no broker or product recommendation")
+
+print("=== I. FINRA 3310: written anti-money laundering program, approved in writing by senior management ===")
+# FINRA Rule 3310 Anti-Money Laundering Compliance Program (official
+# HTML opened 2026-11-12). Keep F-H identical once those are added.
+# Official core: Each member shall develop and implement a written
+# anti-money laundering program reasonably designed to achieve and
+# monitor the member's compliance with the requirements of the Bank
+# Secrecy Act (31 U.S.C. 5311, et seq.), and the implementing
+# regulations promulgated thereunder by the Department of the Treasury.
+# Each member's anti-money laundering program must be approved, in
+# writing, by a member of senior management.
+# Official typography is hyphenated "anti-money laundering" and
+# "e-mail" (official (d) "e-mail address"). Official (c) typography
+# includes "annual (on a calendar-year basis)" and quoted "independent
+# testing," and the official example typography is "e.g., engages
+# solely in proprietary trading or conducts business only with other
+# broker-dealers." Official Selected Notices line on the rule page is
+# "17-40 18-19" with no comma between those two numbers, if quoted.
+# Official (a)-(f) minimum elements exist, including official (c)
+# annual independent testing, or every two years if the member does not
+# execute transactions for customers or otherwise hold customer
+# accounts or act as an introducing broker, official (d) designation
+# of an associated person to FINRA, official (e) ongoing training, and
+# official (f) risk-based ongoing customer due diligence. Name that
+# catalog; do not build a CIP, SAR, beneficial-owner, or 31 CFR
+# 1010.230 engine. Do not flatten 3310 into packed 2090, Regulation
+# Best Interest, or Form CRS. This is learning-only BSA/AML literacy,
+# not a how-to for evading reporting. No broker or product
+# recommendation.
+
+print("3310: Each member shall develop and implement a written anti-money laundering program reasonably")
+print("  designed to achieve and monitor the member's compliance with the requirements of the Bank")
+print("  Secrecy Act (31 U.S.C. 5311, et seq.), and the implementing regulations promulgated")
+print("  thereunder by the Department of the Treasury. Each member's anti-money laundering program")
+print("  must be approved, in writing, by a member of senior management")
+print('official typography is hyphenated "anti-money laundering" and official (d) "e-mail address"')
+print('official (c) typography includes "annual (on a calendar-year basis)" and quoted "independent')
+print('  testing"; official example typography is "e.g., engages solely in proprietary trading or')
+print('  conducts business only with other broker-dealers"')
+print("official (a)-(f) minimum elements exist, including official (c) annual independent testing,")
+print("  or every two years if the member does not execute transactions for customers or otherwise")
+print("  hold customer accounts or act as an introducing broker, official (d) designation of an")
+print("  associated person to FINRA, official (e) ongoing training, and official (f) risk-based")
+print("  ongoing customer due diligence; this toy is not a CIP, SAR, beneficial-owner, or 31 CFR")
+print("  1010.230 engine")
+print('official Selected Notices typography includes "17-40 18-19" with no comma between those two numbers')
+flatten_3310 = False
+print(f"  this is a flatten into packed 2090, Regulation Best Interest, or Form CRS? {flatten_3310}")
+check(flatten_3310 is False, "do not flatten 3310 into packed 2090 or Reg BI / Form CRS")
+builds_cip = False
+print(f"  this toy builds a CIP, SAR, beneficial-owner, or 31 CFR 1010.230 engine? {builds_cip}")
+check(builds_cip is False, "do not build a CIP / SAR / beneficial-owner engine")
+written_aml = True
+print(f"  a written anti-money laundering program, approved, in writing, by a member of senior management? {written_aml}")
+check(written_aml is True, "3310 requires a written AML program approved, in writing, by senior management")
+print("learning-only BSA/AML literacy, not a how-to for evading reporting")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_3310_ok")
+print("disclaimer: learning only; not legal advice; AML literacy only, not a how-to for evading reporting")

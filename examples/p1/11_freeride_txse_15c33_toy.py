@@ -481,3 +481,123 @@ print(f"  reasonable diligence, in regard to the opening and maintenance of ever
 check(diligence is True, "2090 requires reasonable diligence to know (and retain) the essential facts")
 print("no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== M. FINRA 4370: written business continuity plan and customer disclosure ===")
+# FINRA Rule 4370 Business Continuity Plans and Emergency Contact
+# Information (official HTML opened 2026-11-12). Add this section AFTER
+# the current last line so 37/37 after L / 2090 remains a strict
+# byte-prefix of the tip file.
+# Official 4370(a): Each member must create and maintain a written
+# business continuity plan identifying procedures relating to an
+# emergency or significant business disruption. Such procedures must be
+# reasonably designed to enable the member to meet its existing
+# obligations to customers.
+# Official (e): Each member must disclose to its customers how its
+# business continuity plan addresses the possibility of a future
+# significant business disruption and how the member plans to respond
+# to events of varying scope. At a minimum, such disclosure must be
+# made in writing to customers at account opening, posted on the
+# member's Web site (if the member maintains a Web site), and mailed
+# to customers upon request.
+# Official typography is "Web site" (two words, capital W). Do not tidy
+# it to "website." Official (c) ten-element catalog exists; name it,
+# do not build that catalog. Official (b) annual review, official (d)
+# senior-management / registered-principal approval, and official (f)
+# emergency-contact reporting exist; name them, do not build those
+# engines. Official (f)(1) typography includes "e.g., the member's
+# attorney, accountant, or clearing firm contact" if named (comma after
+# "e.g."). Official (g) defines "Mission critical system" and
+# "Financial and operational assessment"; quote only if named, do not
+# build those definitions. Do not invent a clock other than official
+# account opening / upon request / Web-site posting. Do not invent that
+# a member without a Web site must still post the disclosure on a
+# website. Do not flatten 4370 into already-taught 15c3-3, SIPC, or
+# packed 2261 / 2266 / 2267 / 2231 / 2090. Do not rewrite already-taught
+# SIPC coverage limits. No broker or product recommendation.
+
+print("4370(a): Each member must create and maintain a written business continuity plan identifying")
+print("  procedures relating to an emergency or significant business disruption. Such procedures must")
+print("  be reasonably designed to enable the member to meet its existing obligations to customers")
+print("4370(e): Each member must disclose to its customers how its business continuity plan addresses")
+print("  the possibility of a future significant business disruption and how the member plans to")
+print("  respond to events of varying scope. At a minimum, such disclosure must be made in writing")
+print("  to customers at account opening, posted on the member's Web site (if the member maintains a")
+print("  Web site), and mailed to customers upon request")
+print('official typography is "Web site" (two words, capital W)')
+print("official (b) annual review, official (c) ten-element catalog, official (d) senior-management /")
+print("  registered-principal approval, and official (f) emergency-contact reporting exist; official")
+print('  (f)(1) typography includes "e.g., the member\'s attorney, accountant, or clearing firm')
+print('  contact"; this toy is not those engines')
+flatten_4370 = False
+print(f"  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2261 / 2266 / 2267 / 2231 / 2090? {flatten_4370}")
+check(flatten_4370 is False, "do not flatten 4370 into 15c3-3, SIPC, or packed 2261 / 2266 / 2267 / 2231 / 2090")
+invents_website = False
+print(f"  this toy invents that a member without a Web site must still post the disclosure on a website? {invents_website}")
+check(invents_website is False, "4370(e) posts on the member's Web site only if the member maintains a Web site")
+written_bcp = True
+print(f"  a written business continuity plan, reasonably designed to meet existing obligations to customers, and written disclosure at account opening, on the member's Web site if maintained, and mailed upon request? {written_bcp}")
+check(written_bcp is True, "4370 requires a written BCP and the official (e) customer disclosure")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== N. FINRA 4340: callable securities fair-and-impartial allocation and customer notice ===")
+# FINRA Rule 4340 Callable Securities (official HTML opened 2026-11-12).
+# Keep the new 4370 section identical once 4370 is added, and keep
+# 37/37 after L / 2090 as a strict byte-prefix of the tip file.
+# Official 4340(a): Each member that has in its possession or under its
+# control any security which, by its terms, may be called or redeemed
+# prior to maturity, shall: (1) establish and make available on the
+# member's website procedures by which it will allocate among its
+# customers, on a fair and impartial basis, the securities to be
+# redeemed or selected as called in the event of a partial redemption
+# or call; and (2) provide written notice (which may be electronic) to
+# new customers at the opening of an account, and all customers at
+# least once every calendar year, of the manner in which they may
+# access the allocation procedures on the member's website and that,
+# upon a customer's request, the member will provide hard copies of
+# the allocation procedures to the customer.
+# Official typography is one-word lowercase "website." Do not tidy it
+# into packed 4370's official "Web site," or the reverse.
+# Official (b) favorable redemptions: a member shall not allocate the
+# securities to any account in which it or its associated persons have
+# an interest until all other customers' positions have been satisfied.
+# Official (c) unfavorable redemptions: the member shall not exclude
+# its positions or those of its associated persons from the pool.
+# Official SM .02 may name an impartial lottery system, acting on a
+# pro-rata basis, or such other means as will achieve a fair and
+# impartial allocation; name only. Official SM .01 clerical-and-
+# ministerial and official SM .03 introducing-member catalogs exist;
+# name them, do not build those catalogs. Do not flatten 4340 into
+# already-taught 15c3-3 "possession or control," or into FINRA
+# 2232(b)(2) (2232 is not packed). Do not invent that every common
+# stock is callable. No broker or product recommendation.
+
+print("4340(a): Each member that has in its possession or under its control any security which, by")
+print("  its terms, may be called or redeemed prior to maturity, shall:")
+print("  (1) establish and make available on the member's website procedures by which it will")
+print("  allocate among its customers, on a fair and impartial basis, the securities to be redeemed")
+print("  or selected as called in the event of a partial redemption or call; and")
+print("  (2) provide written notice (which may be electronic) to new customers at the opening of an")
+print("  account, and all customers at least once every calendar year, of the manner in which they")
+print("  may access the allocation procedures on the member's website and that, upon a customer's")
+print("  request, the member will provide hard copies of the allocation procedures to the customer")
+print('official typography is one-word lowercase "website"')
+print("official (b) favorable redemptions: a member shall not allocate the securities to any account")
+print("  in which it or its associated persons have an interest until all other customers' positions")
+print("  in such securities have been satisfied")
+print("official (c) unfavorable redemptions: a member shall not exclude its positions or those of")
+print("  its associated persons from the pool of the securities eligible to be called")
+print("official SM .02 may include an impartial lottery system, acting on a pro-rata basis, or such")
+print("  other means as will achieve a fair and impartial allocation; official SM .01 and SM .03")
+print("  exist; this toy is not those catalogs")
+flatten_4340 = False
+print(f"  this is a flatten into already-taught 15c3-3 possession or control, or into FINRA 2232(b)(2)? {flatten_4340}")
+check(flatten_4340 is False, "do not flatten 4340 into 15c3-3 or into unpacked 2232")
+every_stock = False
+print(f"  this toy invents that every common stock is callable? {every_stock}")
+check(every_stock is False, "4340 applies to a security which, by its terms, may be called or redeemed prior to maturity")
+fair = True
+print(f"  fair-and-impartial allocation procedures on the member's website, and written notice to new customers at account opening and to all customers at least once every calendar year? {fair}")
+check(fair is True, "4340 requires website allocation procedures and the official customer notice")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
