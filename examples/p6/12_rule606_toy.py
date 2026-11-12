@@ -664,3 +664,54 @@ print(f"  written PFOF and routing-policy information is required upon opening a
 check(opening_annual is True, "607 requires written information upon opening and annually thereafter")
 print("no broker, venue, or PFOF recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== O. FINRA 2232(b)(1): NMS settlement-date confirmation disclosure ===")
+# FINRA Rule 2232 Customer Confirmations (official #the-rule HTML typography
+# from earlier 2026-11-12 official body; wording reconfirmed 2026-11-12).
+# Keep 46/46 after N / 607 identical as a strict byte-prefix.
+# Packed slice is official (b)(1) only.
+# Official (b): A confirmation given or sent pursuant to this Rule shall
+# further disclose: (1) with respect to any transaction in any NMS stock,
+# as defined in Rule 600 of SEC Regulation NMS, or any security subject
+# to the reporting requirements of the FINRA Rule 6600 Series, other than
+# direct participation programs as defined in FINRA Rule 6420, the
+# settlement date of the transaction.
+# Official typography is "shall further disclose," "SEA Rule 10b-10,"
+# "NMS stock," "FINRA Rule 6600 Series," and "direct participation
+# programs as defined in FINRA Rule 6420," with no space before the
+# comma after "FINRA Rule 6420". Official typography uses straight
+# quotes around "confirmation" in official (a).
+# Name official (a) ("in conformity with the requirements of SEA Rule
+# 10b-10"); do not pack official (a) as the teaching core (it would
+# flatten into already-taught Rule 10b-10). Name official (b)(2)
+# callable-equity confirmation language; do not flatten packed 4340
+# into it. Name official (c)-(e) debt catalog and official (f)
+# definitions; do not build those catalogs.
+# Do not flatten official (b)(1) into already-taught T+1 / 15c6-1, or
+# into packed 15c6-2. Learning only; no broker or confirmation-vendor
+# recommendation.
+
+print("2232(b)(1): A confirmation given or sent pursuant to this Rule shall further disclose,")
+print("  with respect to any transaction in any NMS stock, as defined in Rule 600 of SEC")
+print("  Regulation NMS, or any security subject to the reporting requirements of the FINRA")
+print("  Rule 6600 Series, other than direct participation programs as defined in FINRA Rule")
+print("  6420, the settlement date of the transaction")
+print("official caption typography is Customer Confirmations.")
+print('official typography is "shall further disclose" and "SEA Rule 10b-10"')
+print("official typography has no space before the comma after FINRA Rule 6420")
+print('official (a) uses straight quotes around "confirmation" and is named only; this toy does')
+print("  not pack official (a) as the teaching core")
+print("official (b)(2) callable-equity confirmation language exists and is named only;")
+print("  official (c)-(e) debt catalog and official (f) definitions exist; this toy is not")
+print("  those catalogs")
+flatten_2232 = False
+print(f"  this is a flatten into already-taught T+1 / 15c6-1, into packed 15c6-2, or into packed 4340 via official (b)(2)? {flatten_2232}")
+check(flatten_2232 is False, "do not flatten 2232(b)(1) into T+1 / 15c6-1, packed 15c6-2, or packed 4340")
+pack_a = False
+print(f"  this toy packs official (a) as the teaching core? {pack_a}")
+check(pack_a is False, "official (a) is named only; the packed slice is official (b)(1) only")
+core_2232 = True
+print(f"  a confirmation given or sent pursuant to this Rule shall further disclose the settlement date of the transaction in any NMS stock or FINRA Rule 6600 Series security, other than direct participation programs as defined in FINRA Rule 6420? {core_2232}")
+check(core_2232 is True, "2232(b)(1) requires settlement-date confirmation disclosure for that official scope")
+print("no broker or confirmation-vendor recommendation")
+print(f"assertions passed: {checks}/{checks}")

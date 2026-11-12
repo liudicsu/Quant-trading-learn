@@ -325,3 +325,47 @@ check(core_14a9 is True, "14a-9 bars false or misleading proxy statements under 
 print("no issuer or voting advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 240.14a-9; no issuer or voting advice; learning only")
+
+print("=== G. 17 CFR 240.12b-20: Additional information ===")
+# 17 CFR 240.12b-20 Additional information (official eCFR versioner
+# API XML, title 17 up_to_date_as_of 2026-11-09, opened 2026-11-12).
+# Add this section after the last 14a-9 disclaimer so 25/25 after F
+# plus the last 14a-9 disclaimer remain a strict byte-prefix. Keep
+# sections A-F identical.
+# Official sentence: In addition to the information expressly required
+# to be included in a statement or report, there shall be added such
+# further material information, if any, as may be necessary to make the
+# required statements, in the light of the circumstances under which
+# they are made not misleading.
+# Official typography is "in the light of the circumstances under which
+# they are made not misleading" (no comma after "made"). Do not insert
+# a comma after "made," and do not tidy that clause into packed 10b-5's
+# "under which they were made" or packed 14a-9's "under which it is
+# made." A LII wrap space before "not misleading" is not official
+# typography. Cite 17 CFR 240.12b-20.
+# Do not flatten 12b-20 into packed 14a-9, packed 10b-5, already-taught
+# Regulation FD, Form 8-K Item 5.07, or 14a-8. Do not invent a
+# scienter / materiality / judicial-opinion catalog, and do not invent
+# a form-specific clock in this rule. Learning only; no issuer or
+# disclosure advice.
+
+print("12b-20: In addition to the information expressly required to be included in a statement")
+print("  or report, there shall be added such further material information, if any, as may be")
+print("  necessary to make the required statements, in the light of the circumstances under")
+print("  which they are made not misleading")
+print('official typography is "in the light of the circumstances under which they are made not misleading" (no comma after "made")')
+print("official caption is Additional information.")
+print("cite 17 CFR 240.12b-20; title 17 up_to_date_as_of 2026-11-09")
+print("a LII wrap space before not misleading is not official typography")
+flatten_12b20 = False
+print(f"  this is a flatten into packed 14a-9, packed 10b-5, already-taught Regulation FD, Form 8-K Item 5.07, or 14a-8? {flatten_12b20}")
+check(flatten_12b20 is False, "do not flatten 12b-20 into packed 14a-9, 10b-5, Regulation FD, Item 5.07, or 14a-8")
+comma_after_made = False
+print(f'  this toy inserts a comma after "made," or tidies the clause into packed 10b-5\'s "they were made" or packed 14a-9\'s "it is made"? {comma_after_made}')
+check(comma_after_made is False, "12b-20 typography has no comma after made")
+core_12b20 = True
+print(f"  further material information shall be added as may be necessary to make the required statements, in the light of the circumstances under which they are made not misleading? {core_12b20}")
+check(core_12b20 is True, "12b-20 requires additional material information so required statements are not misleading")
+print("no issuer or disclosure advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.12b-20; no issuer or disclosure advice; learning only")

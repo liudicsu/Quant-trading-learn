@@ -32,7 +32,7 @@
     "how3Title": "Honest research",
     "how3": "Focus on traps, costs, and out-of-sample thinking before clever strategies.",
     "progressLocal": "Progress is stored only in this browser (localStorage) and is never uploaded.",
-    "placeholderNote": "Curriculum V2: phases from knowledge dependencies. All 28 lessons in P0–P9 are fully written (zh + en). Default scope: US-listed stocks in USD; A-share/HK material is comparison reading. 436.25h full / 416.25h skip-P0."
+    "placeholderNote": "Curriculum V2: phases from knowledge dependencies. All 28 lessons in P0–P9 are fully written (zh + en). Default scope: US-listed stocks in USD; A-share/HK material is comparison reading. 437.75h full / 417.75h skip-P0."
   },
   "lesson": {
     "lesson": "Lesson {n}",

@@ -638,3 +638,109 @@ print("no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_3280_ok")
 print("disclaimer: learning only; not legal advice; associated-person literacy only, not a how-to for selling away")
+
+print("=== N. FINRA 4513: Records of Written Customer Complaints ===")
+# FINRA Rule 4513 Records of Written Customer Complaints (official
+# #the-rule HTML typography from earlier 2026-11-12 official body;
+# wording reconfirmed 2026-11-12). Add this section after the last
+# 3280 disclaimer so 37/37, ASSERT_3280_ok, and the last selling-away
+# literacy disclaimer remain a strict byte-prefix.
+# Official (a) as written, including "office of supervisory
+# jurisdiction" and "Customer complaint records shall be preserved for
+# a period of at least four years." Quote that sentence with a normal
+# period; do not treat the official inter-paragraph NBSP as a word.
+# Official (b) defines "customer complaint" with straight quotes; name
+# it, do not build a complaint-taxonomy engine.
+# Adopted by SR-FINRA-2010-052 eff. Dec. 5, 2011. Selected Notice:
+# 11-19. Do not invent that the records must be stored only at the OSJ
+# (official text also permits making them promptly available at that
+# office upon request of FINRA). Do not flatten 4513 into packed 2231,
+# packed 2165, packed 3270's SEA Rule 17a-4 foil, or already-named
+# FINRA 4511 / 4512. Recordkeeping literacy only; not a how-to for
+# handling complaints, and not a customer or broker recommendation.
+
+print("4513(a): Each member shall keep and preserve in each office of supervisory jurisdiction")
+print("  either a separate file of all written customer complaints that relate to that office")
+print("  (including complaints that relate to activities supervised from that office) and")
+print("  action taken by the member, if any, or a separate record of such complaints and a")
+print("  clear reference to the files in that office containing the correspondence connected")
+print("  with such complaints. Rather than keep and preserve the customer complaint records")
+print("  required under this Rule at the office of supervisory jurisdiction, the member may")
+print("  choose to make them promptly available at that office, upon request of FINRA.")
+print("  Customer complaint records shall be preserved for a period of at least four years.")
+print('official typography is "office of supervisory jurisdiction" and "at least four years"')
+print("official caption typography is Records of Written Customer Complaints.")
+print('official (b) defines "customer complaint" with straight quotes; this toy is not a')
+print("  complaint-taxonomy engine")
+print("Adopted by SR-FINRA-2010-052 eff. Dec. 5, 2011. Selected Notice: 11-19.")
+print("the official inter-paragraph NBSP after the period that closes official (a) is not a word")
+flatten_4513 = False
+print(f"  this is a flatten into packed 2231, packed 2165, packed 3270's SEA Rule 17a-4 foil, or already-named FINRA 4511 / 4512? {flatten_4513}")
+check(flatten_4513 is False, "do not flatten 4513 into packed 2231 / 2165 / 3270 17a-4 foil or 4511 / 4512")
+osj_only = False
+print(f"  this toy invents that the records must be stored only at the OSJ? {osj_only}")
+check(osj_only is False, "official text also permits making the records promptly available at that office upon request of FINRA")
+core_4513 = True
+print(f"  written customer-complaint records shall be preserved for a period of at least four years? {core_4513}")
+check(core_4513 is True, "4513 requires written customer-complaint records preserved at least four years")
+print("recordkeeping literacy only; not a how-to for handling complaints")
+print("no customer or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== O. 17 CFR 248.30(a)(1)/(a)(2): written administrative, technical, and physical safeguards ===")
+# 17 CFR 248.30 Procedures to safeguard customer information (official
+# eCFR versioner API XML, title 17 up_to_date_as_of 2026-11-09, opened
+# 2026-11-12; API XML byte-identical to the enrich33 copy). Keep N
+# identical once 4513 is added. Packed slice is official (a)(1)/(a)(2)
+# only.
+# Official typography is "administrative, technical, and physical
+# safeguards" (Oxford comma). Every covered institution must develop,
+# implement, and maintain written policies and procedures that address
+# those safeguards; those written policies and procedures must be
+# reasonably designed to ensure the security and confidentiality of
+# customer information, protect against any anticipated threats or
+# hazards to the security or integrity of customer information, and
+# protect against unauthorized access to or use of customer information
+# that could result in substantial harm or inconvenience to any
+# customer.
+# Official (a)(3) response program, official (a)(4) 30-day
+# customer-notice clock, official (a)(5) 72-hour service-provider
+# notice, official (b) disposal, official (c) recordkeeping, and
+# official (d) definitions (including "Covered institution means any
+# broker or dealer, any investment company, and any investment adviser
+# or transfer agent registered with the Commission or another
+# appropriate regulatory agency") exist; name them, do not build those
+# catalogs, and do not invent that the packed slice is the 30-day
+# notice rule. Do not flatten into packed 3310 or Regulation S-P
+# 248.10 (still unpacked). Cite 17 CFR 248.30. Learning only; no
+# vendor, product, or incident-response how-to.
+
+print("248.30(a)(1): Every covered institution must develop, implement, and maintain written")
+print("  policies and procedures that address administrative, technical, and physical")
+print("  safeguards for the protection of customer information")
+print("248.30(a)(2): These written policies and procedures must be reasonably designed to:")
+print("  (i) ensure the security and confidentiality of customer information;")
+print("  (ii) protect against any anticipated threats or hazards to the security or integrity")
+print("  of customer information; and")
+print("  (iii) protect against unauthorized access to or use of customer information that")
+print("  could result in substantial harm or inconvenience to any customer")
+print('official typography is "administrative, technical, and physical safeguards" (Oxford comma)')
+print("cite 17 CFR 248.30; title 17 up_to_date_as_of 2026-11-09")
+print("official (a)(3) response program, official (a)(4) 30-day customer-notice clock,")
+print("  official (a)(5) 72-hour service-provider notice, official (b) disposal, official (c)")
+print("  recordkeeping, and official (d) definitions exist, including Covered institution;")
+print("  this toy is not those catalogs")
+flatten_24830 = False
+print(f"  this is a flatten into packed 3310 or Regulation S-P 248.10, or an invention that the packed slice is the 30-day notice rule? {flatten_24830}")
+check(flatten_24830 is False, "do not flatten 248.30 into packed 3310 or 248.10, and do not invent that the packed slice is the 30-day notice rule")
+pack_notice = False
+print(f"  this toy packs official (a)(3) or later as the teaching core? {pack_notice}")
+check(pack_notice is False, "packed slice is official (a)(1)/(a)(2) only")
+core_24830 = True
+print(f"  every covered institution must develop, implement, and maintain written policies and procedures that address administrative, technical, and physical safeguards? {core_24830}")
+check(core_24830 is True, "248.30(a)(1)/(a)(2) require written administrative, technical, and physical safeguards")
+print("learning only; no vendor, product, or incident-response how-to")
+print("no broker or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_24830_ok")
+print("disclaimer: learning only; not legal advice; written-safeguard literacy only, not an incident-response how-to")

@@ -234,3 +234,22 @@ official (b) Commission exemptions exist; this toy is not an exemptions engine
   written PFOF and routing-policy information is required upon opening a new account and on an annual basis thereafter? True
 no broker, venue, or PFOF recommendation
 assertions passed: 46/46
+=== O. FINRA 2232(b)(1): NMS settlement-date confirmation disclosure ===
+2232(b)(1): A confirmation given or sent pursuant to this Rule shall further disclose,
+  with respect to any transaction in any NMS stock, as defined in Rule 600 of SEC
+  Regulation NMS, or any security subject to the reporting requirements of the FINRA
+  Rule 6600 Series, other than direct participation programs as defined in FINRA Rule
+  6420, the settlement date of the transaction
+official caption typography is Customer Confirmations.
+official typography is "shall further disclose" and "SEA Rule 10b-10"
+official typography has no space before the comma after FINRA Rule 6420
+official (a) uses straight quotes around "confirmation" and is named only; this toy does
+  not pack official (a) as the teaching core
+official (b)(2) callable-equity confirmation language exists and is named only;
+  official (c)-(e) debt catalog and official (f) definitions exist; this toy is not
+  those catalogs
+  this is a flatten into already-taught T+1 / 15c6-1, into packed 15c6-2, or into packed 4340 via official (b)(2)? False
+  this toy packs official (a) as the teaching core? False
+  a confirmation given or sent pursuant to this Rule shall further disclose the settlement date of the transaction in any NMS stock or FINRA Rule 6600 Series security, other than direct participation programs as defined in FINRA Rule 6420? True
+no broker or confirmation-vendor recommendation
+assertions passed: 49/49

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **19.00 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **19.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h + FINRA 2232(b)(1) NMS 交收日确认披露 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -551,6 +551,36 @@ no broker, venue, or PFOF recommendation
 assertions passed: 46/46
 ```
 
+## FINRA 2232(b)(1)：NMS 股票确认须进一步披露交收日（核实于 2026-11-12）
+
+已经教过的 Rule 10b-10 书面确认，以及上面打包的 17 CFR 242.607，保持原样。不要改写那些已经上线的框。这一节只打包官方 (b)(1)，避免把已经教过的 T+1 / 15c6-1，或已经打包的 15c6-2 过程义务，当成确认上对交收日的增量披露，或把官方 (a) 当成教学核心（那会压进已经教过的 Rule 10b-10）。没有券商或确认服务商建议。
+
+[FINRA Rule 2232](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2232)(b)(1)：“A confirmation given or sent pursuant to this Rule shall further disclose, with respect to any transaction in any NMS stock, as defined in Rule 600 of SEC Regulation NMS, or any security subject to the reporting requirements of the FINRA Rule 6600 Series, other than direct participation programs as defined in FINRA Rule 6420, the settlement date of the transaction.” 官方标题印刷是 “Customer Confirmations。” 官方印刷是 “shall further disclose、” “SEA Rule 10b-10、” “NMS stock、” “FINRA Rule 6600 Series，” 以及 “direct participation programs as defined in FINRA Rule 6420”；官方印刷在 “FINRA Rule 6420” 后面的逗号前没有空格。官方 (a) 使用直引号写出 "confirmation"，并要求书面通知 “in conformity with the requirements of SEA Rule 10b-10”；点名官方 (a)，不要把它当成教学核心。官方 (b)(2) 的可赎回权益证券确认用语是存在的，只点名；不要把已经打包的 4340 压进官方 (b)(2)。官方 (c)–(e) 的公司债 / 机构债加价与 TRACE 链接目录，以及官方 (f) 的定义是存在的；点名它们，不要搭建那些目录。不要把官方 (b)(1) 压进已经教过的 T+1 / 15c6-1，或压进已经打包的 15c6-2（15c6-2 是成交当日分配 / 确认 / 申明的过程义务；2232(b)(1) 是确认上对交收日的增量披露）。不要发明 2232(b)(1) 只是在重述 T+1 缺省规则，或它在没有官方 NMS 股票 / FINRA 6600 Series 范围和官方 DPP 排除的情况下适用于每一种证券。
+
+**实验：** `examples/p6/12_rule606_toy.py` 的 O 节（包括 **46/46 after N / 607**，与此前相同；O 节之后为 49/49）：
+
+```text
+=== O. FINRA 2232(b)(1): NMS settlement-date confirmation disclosure ===
+2232(b)(1): A confirmation given or sent pursuant to this Rule shall further disclose,
+  with respect to any transaction in any NMS stock, as defined in Rule 600 of SEC
+  Regulation NMS, or any security subject to the reporting requirements of the FINRA
+  Rule 6600 Series, other than direct participation programs as defined in FINRA Rule
+  6420, the settlement date of the transaction
+official caption typography is Customer Confirmations.
+official typography is "shall further disclose" and "SEA Rule 10b-10"
+official typography has no space before the comma after FINRA Rule 6420
+official (a) uses straight quotes around "confirmation" and is named only; this toy does
+  not pack official (a) as the teaching core
+official (b)(2) callable-equity confirmation language exists and is named only;
+  official (c)-(e) debt catalog and official (f) definitions exist; this toy is not
+  those catalogs
+  this is a flatten into already-taught T+1 / 15c6-1, into packed 15c6-2, or into packed 4340 via official (b)(2)? False
+  this toy packs official (a) as the teaching core? False
+  a confirmation given or sent pursuant to this Rule shall further disclose the settlement date of the transaction in any NMS stock or FINRA Rule 6600 Series security, other than direct participation programs as defined in FINRA Rule 6420? True
+no broker or confirmation-vendor recommendation
+assertions passed: 49/49
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -577,6 +607,7 @@ assertions passed: 46/46
 22. 在 FINRA 2122 之下发明一条硬性的 5% 上限，或把服务收费压进已经打包的 2121；漏掉官方的 “monies” 或带连字符的 “safe-keeping”；或把已经教过的 10b-10、2262、2269、5290 或 2121 改写成 2122。
 23. 把 “net” 自营成交只当成又一次 2121 加价，或当成已经教过的 Rule 10b-10；发明非机构客户不必提供书面、逐笔同意；在 “e.g. an investment adviser” 里悄悄加上逗号；或搭建官方 (c) 的机构同意引擎。
 24. 把 17 CFR 242.607 压进已经教过的 Rule 606 季度路由报告或已经教过的 Rule 10b-10 / 10b-10(d)(8) 对 PFOF 的定义，或压进已经打包的 2121 / 2122 / 2124 或 2266 / 2267 / 2231 时钟；在被引用的句子里悄悄把 “national best bid and national best offer” 换成 “NBBO”；或漏掉官方 (a)(1)–(2) 或官方 (b)。
+25. 把 FINRA 2232(b)(1) 压进已经教过的 T+1 / 15c6-1，或压进已经打包的 15c6-2；把官方 (a) 当成教学核心；把已经打包的 4340 压进官方 (b)(2)；在 “FINRA Rule 6420” 后的逗号前插入空格；或搭建官方 (c)–(e) 的债务目录。
 
 
 ## 练习（1:1）
@@ -603,6 +634,7 @@ assertions passed: 46/46
 19. **ex-2122** — 运行同一脚本的 L 节；说明对已提供服务收取的费用（如有）必须满足什么要求，5% 是不是硬性上限，以及这是不是对已经打包的 2121 的压平；**完成标准**：费用（如有）应当合理，且不得在客户之间不公平地歧视；官方印刷是 “monies” 和 “safe-keeping”；不要发明硬性的 5% 上限；这不是对已经打包的 2121 的压平，与输出一致。
 20. **ex-2124** — 运行同一脚本的 M 节；说明在按 “net” 基础执行之前必须满足什么要求，非机构客户的同意必须是什么形式，以及这是不是对已经打包的 2121 / 2122 或已经教过的 10b-10 的压平；**完成标准**：必须先披露并取得同意；非机构客户必须提供书面、逐笔同意；官方 (e)(2) 定义了 “net” 交易；官方印刷是 “e.g. an investment adviser”；这不是对已经打包的 2121 / 2122 或已经教过的 10b-10 的压平，与输出一致。
 21. **ex-607** — 运行同一脚本的 N 节；说明书面 PFOF 与路由政策信息须在何时提供，官方 (a)(2) 对优于 national best bid and national best offer 的价格有何要求，以及这是不是已经教过的 606 或 10b-10；**完成标准**：须在开立新账户时以及此后每年一次提供书面信息，包括官方 (a)(2) 优于 national best bid and national best offer 的价格；官方印刷包括 “broker's or dealer's”；官方 (b) 存在；这不是已经教过的 606 或 10b-10，与输出一致。
+22. **ex-2232** — 运行同一脚本的 O 节；说明 2232(b)(1) 要求确认进一步披露什么，打包的是不是官方 (a)，以及这是不是已经教过的 T+1 / 15c6-1 或已经打包的 15c6-2；**完成标准：** 就任何 NMS 股票或受 FINRA Rule 6600 Series 报告要求约束的证券（FINRA Rule 6420 所定义的直接参与计划除外）的交易，确认须进一步披露该笔交易的交收日；官方印刷是 “shall further disclose”，并且在 “FINRA Rule 6420” 后的逗号前没有空格；官方 (a) 和官方 (b)(2) 只点名；这不是已经教过的 T+1 / 15c6-1，也不是已经打包的 15c6-2，并与输出一致。
 
 ## 测验
 
@@ -636,6 +668,7 @@ assertions passed: 46/46
 <Quiz id="es-2122" question="根据 FINRA 2122，对已提供服务收取的费用（如有）必须满足什么要求？5% 是硬性上限吗？可以把这条规则压进已经打包的 2121 吗？" options={["5% 是硬性上限：对收款、转账、鉴定或保管等杂项服务，收费不得超过 5%", "这是对已经打包的 2121，或对已经教过的 Rule 10b-10、FINRA 2262、2269 或 5290 的改写", "官方 2122：对已提供服务收取的费用（如有），包括但不限于代收本金、股息或利息等 monies，证券的交换或过户，鉴定，以及证券的 safe-keeping 或保管等其他服务，应当合理，且不得在客户之间不公平地歧视。官方印刷是 “monies” 和带连字符的 “safe-keeping”。不要发明硬性的 5% 上限。这不是对已经打包的 2121 的压平，也不是对已经教过的 10b-10、2262、2269 或 5290 的改写", "只要收费低于 5%，就一定合理；保管费不受本规则约束"]} answer={2} explanation="FINRA 2122 要求对已提供服务收取的费用（如有）应当合理，且不得在客户之间不公平地歧视。官方印刷是 “monies” 和 “safe-keeping”。不要发明硬性的 5% 上限，也不要把 2122 压进已经打包的 2121。这不是对已经教过的 10b-10、2262、2269 或 5290 的改写。" />
 <Quiz id="es-2124" question="根据 FINRA 2124，在按 “net” 基础为客户或与客户执行交易之前必须满足什么要求？非机构客户的同意必须是什么形式？" options={["“net” 自营成交只是又一次 2121 加价，10b-10 确认就是唯一需要的客户披露", "非机构客户可以只做一次口头、总括同意；官方印刷在 “e.g.” 后面有逗号", "在按 “net” 基础执行之前，会员必须披露并取得同意。对非机构客户，该同意必须是书面的，且按每笔订单做出，并证明客户理解订单的条款和条件。官方 (e)(2) 定义了 “net” 交易。官方印刷是 “e.g. an investment adviser”（“e.g.” 后面没有逗号）。官方 (c) 机构同意方式和官方 (d) 向受信人取得同意是存在的，仅被点名；本课不搭建这些引擎。这不是对已经打包的 2121 / 2122 或已经教过的 Rule 10b-10 的压平", "只要成交价格更优，就可以不经同意按 “net” 基础执行"]} answer={2} explanation="FINRA 2124 要求在 “net” 交易之前披露并取得同意。非机构客户必须提供书面、逐笔同意。官方印刷是 “e.g. an investment adviser”，不要悄悄加逗号。这不是对已经打包的 2121 / 2122 或已经教过的 10b-10 的压平。" />
 <Quiz id="es-607" question="根据 17 CFR 242.607，作为客户代理人的经纪商或自营商，须在何时以书面形式告知客户订单流付款与路由政策？官方 (a)(2) 必须描述什么？这是已经教过的 Rule 606 或 Rule 10b-10 吗？" options={["季度 Rule 606 公开报告，或 10b-10 确认，就是客户在开户时及此后每年一次的书面 PFOF 通知", "官方 (a)(2) 可以被引用为要求优于 “NBBO” 的价格，而且官方 (b) 并不存在", "作为客户代理人的经纪商或自营商，不得执行、诱使或指示 NMS 股票（或获准在官方第 17B 条自动交易商间报价系统上报价的证券）的订单，除非它在开立新账户时以及此后每年一次，以书面形式告知客户官方 (a)(1) 订单流付款政策与官方 (a)(2) 路由政策，包括对订单可在何种程度上以优于 national best bid and national best offer 的价格成交的说明。引用 § 242.607。按原文引用 “upon opening a new account and on an annual basis thereafter” 和 “national best bid and national best offer”；不要在被引用的句子里悄悄把官方用语换成 “NBBO”。官方印刷包括 “broker's or dealer's。” 官方 (b) 的委员会豁免是存在的，仅被点名；本课不搭建豁免引擎。这不是已经教过的 Rule 606 或 Rule 10b-10，也不是对已经打包的 2121 / 2122 / 2124 或 2266 / 2267 / 2231 时钟的压平", "书面通知只需在开户时提供一次，此后不必再提供"]} answer={2} explanation="§ 242.607 要求在开立新账户时以及此后每年一次，以书面形式提供 PFOF 与路由政策信息，包括官方 (a)(2) 优于 national best bid and national best offer 的价格。不要在被引用的句子里把该官方用语换成 “NBBO”。官方 (b) 存在。这不是已经教过的 606 或 10b-10。" />
+<Quiz id="es-2232" question="根据 FINRA 2232(b)(1)，确认须进一步披露什么？打包的是不是官方 (a)？这是已经教过的 T+1 / 15c6-1，或已经打包的 15c6-2 吗？" options={["这就是已经教过的 T+1 / 15c6-1 缺省交收周期，或就是已经打包的 15c6-2 过程义务", "教学核心是官方 (a) 的 “in conformity with the requirements of SEA Rule 10b-10，” 而且官方 (b)(2) 被压进已经打包的 4340", "A confirmation given or sent pursuant to this Rule shall further disclose, with respect to any transaction in any NMS stock, as defined in Rule 600 of SEC Regulation NMS, or any security subject to the reporting requirements of the FINRA Rule 6600 Series, other than direct participation programs as defined in FINRA Rule 6420, the settlement date of the transaction. 官方标题印刷是 “Customer Confirmations。” 官方印刷是 “shall further disclose” 和 “SEA Rule 10b-10，” 并且在 “FINRA Rule 6420” 后面的逗号前没有空格。官方 (a) 使用直引号写出 \"confirmation，\" 只点名，不当成教学核心。官方 (b)(2) 以及官方 (c)–(f) 是存在的，只点名。这不是已经教过的 T+1 / 15c6-1，也不是已经打包的 15c6-2", "该披露适用于每一种证券，没有官方的 NMS 股票 / FINRA 6600 Series 范围，也没有 DPP 排除"]} answer={2} explanation="FINRA 2232(b)(1) 要求确认进一步披露该笔 NMS 股票或 FINRA Rule 6600 Series 证券交易的交收日，但 FINRA Rule 6420 所定义的直接参与计划除外。官方印刷是 “shall further disclose。” 官方 (a) 只点名，不是教学核心。这不是已经教过的 T+1 / 15c6-1，也不是已经打包的 15c6-2。" />
 
 
 
@@ -649,6 +682,7 @@ enrich28（核实于 2026-11-12）：[FINRA Rule 5290](https://www.finra.org/rul
 enrich29（核实于 2026-11-12）：[FINRA Rule 2121](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2121)。没有产品、券商或定价建议。
 enrich30（核实于 2026-11-12）：[FINRA Rule 2122](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2122)；[FINRA Rule 2124](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2124)。没有产品、券商或定价建议。
 enrich31（核实于 2026-11-12）：[17 CFR 242.607](https://www.ecfr.gov/current/title-17/section-242.607)（Title 17 `up_to_date_as_of` 2026-11-09）。没有券商、交易场所或 PFOF 建议。
+enrich34（核实于 2026-11-12）：[FINRA Rule 2232](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2232)（本课只打包官方 (b)(1)）。没有券商或确认服务商建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

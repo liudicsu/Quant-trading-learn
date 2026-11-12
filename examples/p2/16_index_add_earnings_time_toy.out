@@ -83,3 +83,18 @@ official (b), official (c), and the Note exist; this toy is not official (c) or 
 no issuer or voting advice
 assertions passed: 25/25
 disclaimer: official 17 CFR 240.14a-9; no issuer or voting advice; learning only
+=== G. 17 CFR 240.12b-20: Additional information ===
+12b-20: In addition to the information expressly required to be included in a statement
+  or report, there shall be added such further material information, if any, as may be
+  necessary to make the required statements, in the light of the circumstances under
+  which they are made not misleading
+official typography is "in the light of the circumstances under which they are made not misleading" (no comma after "made")
+official caption is Additional information.
+cite 17 CFR 240.12b-20; title 17 up_to_date_as_of 2026-11-09
+a LII wrap space before not misleading is not official typography
+  this is a flatten into packed 14a-9, packed 10b-5, already-taught Regulation FD, Form 8-K Item 5.07, or 14a-8? False
+  this toy inserts a comma after "made," or tidies the clause into packed 10b-5's "they were made" or packed 14a-9's "it is made"? False
+  further material information shall be added as may be necessary to make the required statements, in the light of the circumstances under which they are made not misleading? True
+no issuer or disclosure advice
+assertions passed: 28/28
+disclaimer: official 17 CFR 240.12b-20; no issuer or disclosure advice; learning only

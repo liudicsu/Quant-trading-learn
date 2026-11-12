@@ -656,3 +656,95 @@ print(f"  no interference with a customer's request to transfer his or her accou
 check(core_2140 is True, "2140 prohibits interference with that official account-transfer request")
 print("no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== P. 17 CFR 240.15c6-2: Same-day allocation, confirmation, and affirmation ===")
+# 17 CFR 240.15c6-2 Same-day allocation, confirmation, and affirmation
+# (official eCFR versioner API XML, title 17 up_to_date_as_of 2026-11-09,
+# opened 2026-11-12). Add this section after the last line so 46/46 after
+# O / 2140 remains a strict byte-prefix of the tip file.
+# Official (a) is a shall with a written-agreement or written-policies
+# disjunction, and applies only to a transaction that is subject to
+# § 240.15c6-1(a). Official typography is "as soon as technologically
+# practicable and no later than the end of the day on trade date" (no
+# "the" before "trade date"). Official caption typography is "Same-day
+# allocation, confirmation, and affirmation" (Oxford comma). Cite 17 CFR
+# 240.15c6-2. Name official (b); do not build that procedures catalog.
+# Do not flatten 15c6-2 into already-taught Rule 15c6-1 / T+1 / FINRA
+# 11320, and do not invent that settlement itself is T+0. Official text
+# is the allocation, confirmation, affirmation, or any combination
+# thereof, in such form as necessary to achieve settlement. Learning
+# only; no broker or settlement-vendor recommendation.
+
+print("15c6-2(a): Any broker or dealer engaging in the allocation, confirmation, or affirmation")
+print("  process with another party or parties to achieve settlement of a securities transaction")
+print("  that is subject to the requirements of § 240.15c6-1(a) shall:")
+print("  (1) enter into a written agreement with the relevant parties to ensure completion of the")
+print("  allocation, confirmation, affirmation, or any combination thereof, for the transaction")
+print("  as soon as technologically practicable and no later than the end of the day on trade date")
+print("  in such form as necessary to achieve settlement of the transaction; or")
+print("  (2) establish, maintain, and enforce written policies and procedures reasonably designed")
+print("  to ensure completion of the allocation, confirmation, affirmation, or any combination")
+print("  thereof, for the transaction as soon as technologically practicable and no later than")
+print("  the end of the day on trade date in such form as necessary to achieve settlement of the")
+print("  transaction")
+print("official caption typography is Same-day allocation, confirmation, and affirmation (Oxford comma)")
+print('official typography is "as soon as technologically practicable and no later than the end of the day on trade date" (no "the" before "trade date")')
+print("cite 17 CFR 240.15c6-2; title 17 up_to_date_as_of 2026-11-09")
+print("official (a) is a written-agreement or written-policies disjunction")
+print("official (b) exists; this toy is not that procedures catalog")
+flatten_15c62 = False
+print(f"  this is a flatten into already-taught Rule 15c6-1 / T+1 / FINRA 11320, or an invention that settlement itself is T+0? {flatten_15c62}")
+check(flatten_15c62 is False, "do not flatten 15c6-2 into 15c6-1 / T+1 / 11320, and do not invent that settlement itself is T+0")
+combo = True
+print(f"  official text is the allocation, confirmation, affirmation, or any combination thereof, in such form as necessary to achieve settlement? {combo}")
+check(combo is True, "15c6-2 is allocation, confirmation, affirmation, or any combination thereof")
+core_15c62 = True
+print(f"  completion as soon as technologically practicable and no later than the end of the day on trade date, by written agreement or written policies and procedures reasonably designed? {core_15c62}")
+check(core_15c62 is True, "15c6-2 requires same-day allocation, confirmation, and affirmation by written agreement or reasonably designed written policies")
+print("no broker or settlement-vendor recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== Q. FINRA 4330(a): written authorization before lending a customer's margin securities ===")
+# FINRA Rule 4330 Customer Protection — Permissible Use of Customers'
+# Securities (official <h1> typography uses an em dash U+2014; official
+# HTML opened earlier on 2026-11-12, wording reconfirmed 2026-11-12).
+# Keep P identical once 15c6-2 is added.
+# Official (a): No member shall lend securities that are held on margin
+# for a customer and that are eligible to be pledged or loaned, unless
+# such member shall first have obtained a written authorization from
+# such customer permitting the lending of such securities.
+# Official SM .02: members may use a single customer account
+# agreement/margin agreement/loan consent with clear and prominent
+# disclosure in lieu of a separate written authorization; name it; do
+# not invent that a separate writing is always required.
+# Official (b) fully-paid / excess-margin borrow catalog exists,
+# including official (b)(1)(A) "SEA Rule 15c3-3"; name official (b)
+# and official SM .01 / .03-.06, do not build that catalog.
+# Do not flatten 4330(a) into already-taught 15c3-3 or SIPC, or into
+# packed 2264. Customer-protection literacy only; no securities-lending
+# product recommendation.
+
+print("4330(a): No member shall lend securities that are held on margin for a customer and that")
+print("  are eligible to be pledged or loaned, unless such member shall first have obtained a")
+print("  written authorization from such customer permitting the lending of such securities")
+print("official caption typography is Customer Protection \u2014 Permissible Use of Customers' Securities")
+print("  (em dash U+2014, not a hyphen or an en dash; apostrophe in Customers')")
+print("official (a) heading typography is Authorization to Lend Customers' Margin Securities")
+print("official SM .02: members may use a single customer account agreement/margin agreement/loan")
+print("  consent signed by a customer as written authorization in lieu of a separate written")
+print("  authorization, provided it includes clear and prominent disclosure that the firm may")
+print("  lend either to itself or others any securities held by the customer in its margin account")
+print('official typography is "SEA Rule 15c3-3" and "in writing (which may be electronic)"')
+print("official (b) and official SM .01 / .03-.06 exist; this toy is not that fully-paid /")
+print("  excess-margin borrow, SIPC-notice, or appropriateness catalog")
+flatten_4330 = False
+print(f"  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2264? {flatten_4330}")
+check(flatten_4330 is False, "do not flatten 4330(a) into already-taught 15c3-3 or SIPC, or into packed 2264")
+separate_always = False
+print(f"  this toy invents that a separate writing is always required? {separate_always}")
+check(separate_always is False, "official SM .02 permits a single customer account agreement/margin agreement/loan consent with the official disclosure")
+core_4330 = True
+print(f"  written authorization is required before lending a customer's eligible margin securities? {core_4330}")
+check(core_4330 is True, "4330(a) requires written authorization before lending a customer's eligible margin securities")
+print("customer-protection literacy only; no securities-lending product recommendation")
+print(f"assertions passed: {checks}/{checks}")

@@ -223,3 +223,45 @@ Rule 11870 is named only; this toy is not a street-name / ACATS / CNS primer or 
   no interference with a customer's request to transfer his or her account in connection with the change in employment of the customer's registered representative, where the account is not subject to any lien for monies owed by the customer or other bona fide claim? True
 no broker or product recommendation
 assertions passed: 46/46
+=== P. 17 CFR 240.15c6-2: Same-day allocation, confirmation, and affirmation ===
+15c6-2(a): Any broker or dealer engaging in the allocation, confirmation, or affirmation
+  process with another party or parties to achieve settlement of a securities transaction
+  that is subject to the requirements of § 240.15c6-1(a) shall:
+  (1) enter into a written agreement with the relevant parties to ensure completion of the
+  allocation, confirmation, affirmation, or any combination thereof, for the transaction
+  as soon as technologically practicable and no later than the end of the day on trade date
+  in such form as necessary to achieve settlement of the transaction; or
+  (2) establish, maintain, and enforce written policies and procedures reasonably designed
+  to ensure completion of the allocation, confirmation, affirmation, or any combination
+  thereof, for the transaction as soon as technologically practicable and no later than
+  the end of the day on trade date in such form as necessary to achieve settlement of the
+  transaction
+official caption typography is Same-day allocation, confirmation, and affirmation (Oxford comma)
+official typography is "as soon as technologically practicable and no later than the end of the day on trade date" (no "the" before "trade date")
+cite 17 CFR 240.15c6-2; title 17 up_to_date_as_of 2026-11-09
+official (a) is a written-agreement or written-policies disjunction
+official (b) exists; this toy is not that procedures catalog
+  this is a flatten into already-taught Rule 15c6-1 / T+1 / FINRA 11320, or an invention that settlement itself is T+0? False
+  official text is the allocation, confirmation, affirmation, or any combination thereof, in such form as necessary to achieve settlement? True
+  completion as soon as technologically practicable and no later than the end of the day on trade date, by written agreement or written policies and procedures reasonably designed? True
+no broker or settlement-vendor recommendation
+assertions passed: 49/49
+=== Q. FINRA 4330(a): written authorization before lending a customer's margin securities ===
+4330(a): No member shall lend securities that are held on margin for a customer and that
+  are eligible to be pledged or loaned, unless such member shall first have obtained a
+  written authorization from such customer permitting the lending of such securities
+official caption typography is Customer Protection — Permissible Use of Customers' Securities
+  (em dash U+2014, not a hyphen or an en dash; apostrophe in Customers')
+official (a) heading typography is Authorization to Lend Customers' Margin Securities
+official SM .02: members may use a single customer account agreement/margin agreement/loan
+  consent signed by a customer as written authorization in lieu of a separate written
+  authorization, provided it includes clear and prominent disclosure that the firm may
+  lend either to itself or others any securities held by the customer in its margin account
+official typography is "SEA Rule 15c3-3" and "in writing (which may be electronic)"
+official (b) and official SM .01 / .03-.06 exist; this toy is not that fully-paid /
+  excess-margin borrow, SIPC-notice, or appropriateness catalog
+  this is a flatten into already-taught 15c3-3 or SIPC, or into packed 2264? False
+  this toy invents that a separate writing is always required? False
+  written authorization is required before lending a customer's eligible margin securities? True
+customer-protection literacy only; no securities-lending product recommendation
+assertions passed: 52/52
