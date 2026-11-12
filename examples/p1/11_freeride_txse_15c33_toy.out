@@ -53,3 +53,50 @@ official (a)-(b) exceptions exist; this toy is not a SIPA-exclusion engine
   written information is required at account opening and at least once each year? True
 no broker or SIPC-membership recommendation
 assertions passed: 22/22
+=== H. FINRA 2264: margin disclosure prior to or at the time of opening, and not less than once a calendar year ===
+2264(a): No member shall open a margin account, as specified in Regulation T of the
+  Board of Governors of the Federal Reserve System, for or on behalf of a
+  non-institutional customer, unless, prior to or at the time of opening the account,
+  the member has furnished to the customer, individually, in paper or electronic form,
+  and in a separate document (or contained by itself on a separate page as part of
+  another document), the margin disclosure statement specified in this paragraph (a)
+  if the member permits non-institutional customers to open accounts online or to
+  engage in transactions in securities online, the statement must be posted on the
+  member's Web site in a clear and conspicuous manner
+2264(b): Members shall, with a frequency of not less than once a calendar year,
+  deliver individually, in paper or electronic form, the disclosure statement
+  described in paragraph (a) or the following bolded disclosures to all
+  non-institutional customers with margin accounts
+  the annual disclosure may be delivered within or as part of other account
+  documentation, and is not required to be provided in a separate document or on a
+  separate page
+official typography is "Web site" as two words; official model text includes "short fall" as two words
+official (c) substantially similar alternative exists; this toy is not the prescribed-statement catalog
+official (d): "non-institutional customer" means a customer that does not qualify
+  as an "institutional account" under Rule 4512(c); this toy is not a 4512 engine
+  this is a flatten into Rule 10b-16 or already-taught Reg T? False
+  this toy invents that the prescribed statement is the only permitted text? False
+  furnished prior to or at the time of opening, and not less than once a calendar year? True
+no product, broker, or margin recommendation
+assertions passed: 25/25
+=== I. FINRA 2267: written BrokerCheck information once every calendar year ===
+2267(a): Except as otherwise provided in this Rule, each member shall once every
+  calendar year provide in writing (which may be electronic) to each customer the
+  following items of information:
+  (1) FINRA BrokerCheck Hotline Number;
+  (2) FINRA Web site address; and
+  (3) A statement as to the availability to the customer of an investor brochure
+  that includes information describing FINRA BrokerCheck
+official typography is "Web site" as two words
+this toy invents no BrokerCheck hotline number and no FINRA Web site address
+official (b)(1): a limited introducing-firm alternative may furnish the information
+  at or prior to the time of the customer's initial purchase, in lieu of once every
+  calendar year
+official (b)(2): a member that does not have customers, or that is a party to a
+  carrying agreement where the carrying firm member complies with paragraph (a),
+  is exempt; this toy is not an introducing-firm / carrying-agreement engine
+  this is a rewrite of packed 2266? False
+  this toy invents a BrokerCheck hotline number or a FINRA Web site address? False
+  the general 2267 duty is once every calendar year, not a general account-opening disclosure? True
+no broker or BrokerCheck recommendation
+assertions passed: 28/28

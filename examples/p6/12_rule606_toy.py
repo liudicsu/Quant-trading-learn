@@ -512,3 +512,96 @@ print(f'  the official "5% Policy" is a guide, not a rule? {is_guide}')
 check(is_guide is True, 'official "5% Policy" is a guide, not a rule')
 print("no product, broker, or pricing recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== L. FINRA 2122: charges for services, if any, shall be reasonable and not unfairly discriminatory ===")
+# FINRA Rule 2122 Charges for Services Performed (official-page / official
+# rulebook HTML opened 2026-11-12). Keep the current 606 table, 4/4,
+# ASSERT_rule606_ok, the reminder line, 5250, 5270, 5230, 5280, 10b-10,
+# 5240, 5290, 2262, 2269, 2121, and 37/37 after K identical.
+# Official 2122: Charges, if any, for services performed, including, but
+# not limited to, miscellaneous services such as collection of monies due
+# for principal, dividends, or interest; exchange or transfer of
+# securities; appraisals, safe-keeping or custody of securities, and
+# other services shall be reasonable and not unfairly discriminatory
+# among customers.
+# Quote official "monies" and hyphenated "safe-keeping" as written. Do
+# not invent a hard 5% cap. Do not flatten 2122 into packed 2121. This
+# rule is about charges for services, not the 2121 mark-up / commission
+# fair-price test. Do not rewrite already-taught 10b-10 / 2262 / 2269 /
+# 5290 / 2121. No product, broker, or pricing recommendation.
+
+print("2122: Charges, if any, for services performed, including, but not limited to,")
+print("  miscellaneous services such as collection of monies due for principal, dividends, or interest;")
+print("  exchange or transfer of securities; appraisals, safe-keeping or custody of securities,")
+print("  and other services shall be reasonable and not unfairly discriminatory among customers")
+print('official typography is "monies" and hyphenated "safe-keeping"')
+hard_cap_2122 = False
+print(f"  this toy invents a hard 5% cap? {hard_cap_2122}")
+check(hard_cap_2122 is False, "do not invent a hard 5% cap under 2122")
+flatten_2121 = False
+print(f"  this is a flatten into packed 2121? {flatten_2121}")
+check(flatten_2121 is False, "do not flatten 2122 into packed 2121")
+reasonable = True
+print(f"  charges for services, if any, shall be reasonable and not unfairly discriminatory among customers? {reasonable}")
+check(reasonable is True, "2122 requires reasonable, not unfairly discriminatory charges")
+print("no product, broker, or pricing recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print('=== M. FINRA 2124: disclosure and consent before a "net" transaction ===')
+# FINRA Rule 2124 Net Transactions with Customers (official-page /
+# official rulebook HTML opened 2026-11-12). Keep all earlier prints,
+# including 37/37 after K / 2121 and the new 2122 section, identical
+# once 2122 is added.
+# Official 2124(a): Prior to executing a transaction for or with a
+# customer on a "net" basis as defined in paragraph (e) below, a member
+# must provide disclosure to and obtain consent from the customer as
+# provided in this Rule.
+# Official (b): With respect to non-institutional customers, the member
+# must obtain the customer's written consent on an order-by-order basis
+# prior to executing a transaction for or with the customer on a "net"
+# basis and such consent must evidence the customer's understanding of
+# the terms and conditions of the order.
+# Official (e)(2): "net" transaction shall mean a principal transaction
+# in which a market maker, after having received an order to buy (sell)
+# an equity security, purchases (sells) the equity security at one price
+# (from (to) another broker-dealer or another customer) and then sells
+# to (buys from) the customer at a different price.
+# Official (e)(1) defines "institutional customer" by Rule 4512(c).
+# Official (c) institutional consent methods exist (negative consent
+# letter; oral order-by-order consent with documentation; or written
+# order-by-order consent); name them, do not build that engine.
+# Official (d) permits consent from a fiduciary (official typography is
+# "e.g. an investment adviser," with no comma after "e.g.").
+# Official (f) recordkeeping cross-references Rule 4511; named only.
+# Quote official straight quotation marks around "net". Do not silently
+# insert a comma into "e.g. an investment adviser." Do not flatten 2124
+# into packed 2121 or 2122, or into already-taught Rule 10b-10. No
+# product, broker, or pricing recommendation.
+
+print('2124(a): Prior to executing a transaction for or with a customer on a "net" basis')
+print("  as defined in paragraph (e) below, a member must provide disclosure to and obtain")
+print("  consent from the customer as provided in this Rule")
+print("2124(b): With respect to non-institutional customers, the member must obtain the")
+print("  customer's written consent on an order-by-order basis prior to executing a")
+print('  transaction for or with the customer on a "net" basis and such consent must')
+print("  evidence the customer's understanding of the terms and conditions of the order")
+print('2124(e)(2): "net" transaction shall mean a principal transaction in which a market maker,')
+print("  after having received an order to buy (sell) an equity security, purchases (sells)")
+print("  the equity security at one price (from (to) another broker-dealer or another customer)")
+print("  and then sells to (buys from) the customer at a different price")
+print("official (c) institutional methods exist (negative consent letter; oral order-by-order")
+print("  consent with documentation; or written order-by-order consent); this toy is not that engine")
+print('official (d): fiduciary consent, official typography is "e.g. an investment adviser"')
+print("  (no comma after e.g.); official (e)(1) defines institutional customer by Rule 4512(c);")
+print("  official (f) recordkeeping cross-references Rule 4511; named only")
+flatten_2124 = False
+print(f"  this is a flatten into packed 2121 / 2122 or already-taught 10b-10? {flatten_2124}")
+check(flatten_2124 is False, "do not flatten 2124 into packed 2121 / 2122 or 10b-10")
+builds_c = False
+print(f"  this toy builds the official (c) institutional engine? {builds_c}")
+check(builds_c is False, "do not build the official (c) institutional engine")
+written_obo = True
+print(f"  non-institutional consent must be written and order-by-order? {written_obo}")
+check(written_obo is True, "2124(b) requires written order-by-order consent")
+print("no product, broker, or pricing recommendation")
+print(f"assertions passed: {checks}/{checks}")

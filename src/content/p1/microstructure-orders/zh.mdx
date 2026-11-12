@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **16.00 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h + FINRA 2265 延长交易时段风险披露 0.25h + FINRA 2266 书面 SIPC 信息 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
+本课（约 **16.75 学时**：概念 3h + 练习 3h + 测验 1h + 美股交易机制（T+1 / 现金与保证金 / NBBO·SIP·IEX / 交易时段 / 最佳执行）2h + 隔夜交易与隔夜价格带 0.5h + Rule 612/610(c) 版本陷阱 0.25h + 港股 T+1 计划对照 0.25h + 官方收盘价、收盘竞价与 MOC 截止 0.5h + 官方开盘价、开盘竞价与 MOO 截止 0.25h + 分档整手与碎股报价 0.5h + SIPC 账户保护 0.25h + 代币化股票场所（TSV）数据分开处理 0.25h + 提前收盘日 MOC 截止与 Nasdaq/NYSE 收盘截止差别 0.5h + 现金账户免费乘车（Reg T 付款期与 90 日冻结）0.25h + Rule 15c3-3 客户保护（占有或控制与准备金账户）0.25h + 德州证券交易所（TXSE）开业与时段 0.25h + 跨市场扫单（ISO，现行 Rule 611 例外）0.25h + 止损 / 止损限价 / 跟踪止损 0.25h + Rule 610(e) 锁定或交叉受保护报价（现行规则；S7-2026-20 提案也会废止它）0.25h + SIP 成交条件 M / Q / T（以及 6 与 M 的区别）0.5h + Rule 611(b) 在 ISO 之外的例外目录 0.25h + Rule 15c6-1 / FINRA 11320 交收日期类型 0.25h + FINRA 6380A 场外成交 10 秒申报 0.25h + Rule 602 确定报价 0.25h + FINRA 5220 按标明价格报价 0.25h + FINRA 2265 延长交易时段风险披露 0.25h + FINRA 2266 书面 SIPC 信息 0.25h + FINRA 5330 未成交订单调整 0.25h + FINRA 2264 保证金披露声明 0.25h + FINRA 2267 投资者教育与保护 / BrokerCheck 0.25h）建立微观结构直觉：价差、**mid**、市价/限价、滑点；理解「同 bar 零成本」过乐观。前置：`markets-language`。
 
 **课内目标：** 手算 mid 与市价买 bps；写成交成本假设一页；对比收盘 vs 次日开盘（及 shift）叙事。
 
@@ -120,6 +120,47 @@ trigger convention (last-sale vs quotation) differs by firm; check with the brok
 availability of stop, stop-limit and trailing-stop orders is firm-specific
 assertions passed: 5/5
 disclaimer: staff bulletin, not a Commission rule; learning only; no order-type recommendation
+```
+
+## FINRA 5330：在除权日调整官方未成交订单，现金股利低于一美分（$0.01）的除外（核实于 2026-11-12）
+
+已经教过的止损 / 止损限价 / 跟踪止损，以及已经教过的 Rule 10b-17，保持原样。不要改写上面的实验框，也不要改写 10b-17 的段落。这一节补上官方的 5330，避免把每一笔未成交订单都留在除权日不调整，或发明每一笔未成交订单都会被调整，或搭建四舍五入公式引擎。没有产品、券商或订单类型建议。
+
+[FINRA Rule 5330](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5330)(a)：“A member holding an open order from a customer or another broker-dealer shall, prior to executing or permitting the order to be executed, reduce, increase, or adjust the price and/or number of shares of such order by an amount equal to the dividend, payment, or distribution on the day that the security is quoted ex-dividend, ex-rights, ex-distribution, or ex-interest, except where a cash dividend or distribution is less than one cent ($0.01), as follows:” 官方 (a)(1) 现金股利，除非标有 “Do Not Reduce”；官方 (a)(2) 股票股利和拆股，除非标有 “Do Not Increase”。官方 HTML 使用直引号。官方 (b)：“When a pending order involves a security that is the subject of a reverse split, the order (buy or sell) shall be cancelled.” 官方 (c) 要求：若待成交订单涉及拆股、但本规则并不另外要求调整，会员应迅速通知客户。官方 (d) 把 “open order” 定义为买入订单或未成交的卖出止损单，包括但不限于 “good 'til cancelled”、“limit” 或 “stop limit” 订单。官方印刷是 straight apostrophe 的 “good 'til cancelled”，以及两个词的 “stop limit”。官方 (e) 例外包括：受全国性证券交易所规则管辖的订单、未成交的买入止损单、未成交的卖出订单，以及发行人未按 SEA Rule 10b-17 报告股利、付款或分配的订单。官方 HTML 给 SEA 中的 A 加了下划线；引用时写成 **SEA Rule 10b-17**，中间不要加空格。只点名官方 (a)(1)–(5)、(b)、(c)、(d) 和 (e)；不搭建四舍五入公式目录或反向拆股数量引擎。不要发明每一笔未成交订单都会被调整。
+
+**实验：** 同一脚本 `examples/p1/12_stop_order_toy.py` 的 D 节（A–C 节，包括 **5/5** 和工作人员简报免责声明，与此前相同；D 节后为 8/8）：
+
+```text
+=== D. FINRA 5330: adjust an official open order on the ex-date, except less than one cent ($0.01) ===
+5330(a): A member holding an open order from a customer or another broker-dealer shall,
+  prior to executing or permitting the order to be executed, reduce, increase, or adjust
+  the price and/or number of shares of such order by an amount equal to the dividend,
+  payment, or distribution on the day that the security is quoted ex-dividend, ex-rights,
+  ex-distribution, or ex-interest, except where a cash dividend or distribution is less
+  than one cent ($0.01), as follows:
+  (a)(1) Cash Dividends: Unless marked "Do Not Reduce," open order prices shall be first
+  reduced by the dollar amount of the dividend
+  (a)(2) Stock Dividends and Stock Splits: Unless marked "Do Not Increase," the size of
+  the order shall be increased as officially provided
+  official (a)(1)-(5) exist, including combined cash and stock and indeterminate value;
+  this toy is not the rounding-formula catalog
+5330(b): When a pending order involves a security that is the subject of a reverse split,
+  the order (buy or sell) shall be cancelled
+5330(c): When a pending order involves a security that is the subject of a stock split
+  but is not otherwise required to be adjusted under this Rule, a member shall promptly
+  notify the customer of the stock split
+5330(d): The term "open order" means an order to buy or an open stop order to sell,
+  including but not limited to "good 'til cancelled," "limit" or "stop limit" orders
+  which remain in effect for a definite or indefinite period until executed, cancelled
+  or expired
+5330(e) exceptions include orders governed by the rules of a registered national
+  securities exchange, open stop orders to buy, open sell orders, and orders where the
+  issuer has not reported a dividend, payment, or distribution pursuant to SEA Rule 10b-17
+  this toy invents that every open order is adjusted? False
+  this is a rewrite of already-taught Rule 10b-17, or the rounding-formula catalog? False
+  official open orders are adjusted on the ex-date, except where a cash dividend or distribution is less than one cent ($0.01)? True
+no product, broker, or order-type recommendation
+assertions passed: 8/8
 ```
 
 
@@ -276,6 +317,75 @@ official (a)-(b) exceptions exist; this toy is not a SIPA-exclusion engine
   written information is required at account opening and at least once each year? True
 no broker or SIPC-membership recommendation
 assertions passed: 22/22
+```
+
+## FINRA 2264：开立 Reg T 保证金账户前或开户当时提供保证金披露，并且每个日历年不少于一次（核实于 2026-11-12）
+
+已经教过的 Regulation T / FINRA 4210，以及上面打包的 2266，保持原样。不要改写那些段落，也不要改写已经教过的免费乘车 / 15c3-3 / 15c6-1。这一节补上官方的 2264，避免把保证金机制当成无需披露，发明规定文本是唯一被允许的文本，或把这条规则压进 Rule 10b-16。没有产品、券商或保证金建议。
+
+[FINRA Rule 2264](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2264)(a)：“No member shall open a margin account, as specified in Regulation T of the Board of Governors of the Federal Reserve System, for or on behalf of a non-institutional customer, unless, prior to or at the time of opening the account, the member has furnished to the customer, individually, in paper or electronic form, and in a separate document (or contained by itself on a separate page as part of another document), the margin disclosure statement specified in this paragraph (a).” 若会员允许非机构客户在网上开户或在网上进行证券交易，官方 (a) 还要求把该声明以清晰、醒目的方式发布在会员的 Web site 上。官方 (b)：“Members shall, with a frequency of not less than once a calendar year, deliver individually, in paper or electronic form, the disclosure statement described in paragraph (a) or the following bolded disclosures to all non-institutional customers with margin accounts.” 官方 (b) 还写明：年度披露可以放在其他账户文件之内或作为其一部分交付，不必单独成份文件或单独成页。官方 (c) 允许实质相似的替代文本。官方 (d) 把 “non-institutional customer” 定义为不符合 Rule 4512(c) 下 “institutional account” 的客户；只点名 4512(c)，不搭建 4512 引擎。官方印刷是两个词的 “Web site”，官方示范文本里是两个词的 “short fall”。不要发明规定文本是唯一被允许的文本，也不要搭建规定声明目录。不要把这些时钟压进已经打包的 2266（“at least once each year”）或下面的 2267（“once every calendar year”）。
+
+**实验：** `examples/p1/11_freeride_txse_15c33_toy.py` 的 H 节（A–G 节与此前相同，包括 15c3-3 的 “this is separate from SIPC” 一行、E 节后的 **14/14**、15c6-1 / 11320、F 节后的 **19/19**、2266，以及 G 节后的 **22/22**；H 节后为 25/25）：
+
+```text
+=== H. FINRA 2264: margin disclosure prior to or at the time of opening, and not less than once a calendar year ===
+2264(a): No member shall open a margin account, as specified in Regulation T of the
+  Board of Governors of the Federal Reserve System, for or on behalf of a
+  non-institutional customer, unless, prior to or at the time of opening the account,
+  the member has furnished to the customer, individually, in paper or electronic form,
+  and in a separate document (or contained by itself on a separate page as part of
+  another document), the margin disclosure statement specified in this paragraph (a)
+  if the member permits non-institutional customers to open accounts online or to
+  engage in transactions in securities online, the statement must be posted on the
+  member's Web site in a clear and conspicuous manner
+2264(b): Members shall, with a frequency of not less than once a calendar year,
+  deliver individually, in paper or electronic form, the disclosure statement
+  described in paragraph (a) or the following bolded disclosures to all
+  non-institutional customers with margin accounts
+  the annual disclosure may be delivered within or as part of other account
+  documentation, and is not required to be provided in a separate document or on a
+  separate page
+official typography is "Web site" as two words; official model text includes "short fall" as two words
+official (c) substantially similar alternative exists; this toy is not the prescribed-statement catalog
+official (d): "non-institutional customer" means a customer that does not qualify
+  as an "institutional account" under Rule 4512(c); this toy is not a 4512 engine
+  this is a flatten into Rule 10b-16 or already-taught Reg T? False
+  this toy invents that the prescribed statement is the only permitted text? False
+  furnished prior to or at the time of opening, and not less than once a calendar year? True
+no product, broker, or margin recommendation
+assertions passed: 25/25
+```
+
+## FINRA 2267：每个日历年一次以书面形式提供 BrokerCheck 信息（核实于 2026-11-12）
+
+已经打包的 2266 书面 SIPC 信息，以及已经教过的 SIPC 保障上限，保持原样。不要改写那些段落。这一节补上官方的 2267，避免把已经打包的 2266 当成唯一的年度书面通知，发明一般 2267 义务是开户披露，或从页面页脚发明一条热线号码。没有券商或 BrokerCheck 建议。
+
+[FINRA Rule 2267](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2267)(a)：“Except as otherwise provided in this Rule, each member shall once every calendar year provide in writing (which may be electronic) to each customer the following items of information: (1) FINRA BrokerCheck Hotline Number; (2) FINRA Web site address; and (3) A statement as to the availability to the customer of an investor brochure that includes information describing FINRA BrokerCheck.” 官方印刷是两个词的 “Web site”。规则点名了这些项目，但**没有写出**热线号码或网址；不要从页面页脚发明号码或地址。官方 (b)(1)：若会员与客户的接触仅限于把客户账户介绍到一家非 FINRA 会员的实体直接持有，并且此后不托管客户账户、也不持有客户资金和证券，则可以在客户首次买入时或此前提供这些信息，以代替每个日历年一次。官方 (b)(2)：没有客户的会员，或作为托管协议一方、且由托管会员遵守 (a) 款的会员，豁免本规则。只点名官方 (b) 例外，不搭建介绍经纪商 / 托管协议引擎。不要发明一般 2267 义务是开户披露（那是已经打包的 2266 对 SIPC 的要求），也不要把 “once every calendar year” 压进已经打包的 2266（“at least once each year”）。
+
+**实验：** 同一脚本的 I 节（A–G 节，包括 **22/22 after G / 2266**，以及新的 2264 一节，一经加入后保持相同；I 节后为 28/28）：
+
+```text
+=== I. FINRA 2267: written BrokerCheck information once every calendar year ===
+2267(a): Except as otherwise provided in this Rule, each member shall once every
+  calendar year provide in writing (which may be electronic) to each customer the
+  following items of information:
+  (1) FINRA BrokerCheck Hotline Number;
+  (2) FINRA Web site address; and
+  (3) A statement as to the availability to the customer of an investor brochure
+  that includes information describing FINRA BrokerCheck
+official typography is "Web site" as two words
+this toy invents no BrokerCheck hotline number and no FINRA Web site address
+official (b)(1): a limited introducing-firm alternative may furnish the information
+  at or prior to the time of the customer's initial purchase, in lieu of once every
+  calendar year
+official (b)(2): a member that does not have customers, or that is a party to a
+  carrying agreement where the carrying firm member complies with paragraph (a),
+  is exempt; this toy is not an introducing-firm / carrying-agreement engine
+  this is a rewrite of packed 2266? False
+  this toy invents a BrokerCheck hotline number or a FINRA Web site address? False
+  the general 2267 duty is once every calendar year, not a general account-opening disclosure? True
+no broker or BrokerCheck recommendation
+assertions passed: 28/28
 ```
 
 ## 跨市场扫单（ISO）：现行 Rule 611 的例外，不是废除规则（核实于 2026-11-12）
@@ -564,6 +674,9 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 22. 把 FINRA 5220 当成已经教过的 Rule 602；发明一个 100 股的 “normal unit of trading”，而不用官方 Rule 600(b) 整手；漏掉官方的 “not firm / firm for less than a normal unit” 标明，或正在完成交易时的修订数量条款；或搭建 Rule 6420 引擎。
 23. 把延长时段接入当成 FINRA 2265 下无需披露；发明示范文本是唯一被允许的文本；悄悄把官方 “Eastern Standard Time” 改成 ET 或 EDT，或在 “upon the opening the next morning” 里插入 “of”；或把 2265 压进已经教过的 ETH 成交条件 T、隔夜 LULD 价格带、23/5 时段事实、6380A 或 5220。
 24. 把已经教过的 SIPC 保障上限当成唯一的 SIPC 教学内容；发明 FINRA 2266 并未写出的保障金额、表格或时钟；漏掉官方 (a)–(b) 例外；或把已经教过的 SIPC 保障上限、15c3-3、Regulation T 或 15c6-1 改写成 2266。官方印刷是两个词的 “Web site”。
+25. 发明每一笔未成交订单在除权日都会被 FINRA 5330 调整；搭建 (a)(1)–(5) 的四舍五入公式目录；把 “SEA Rule 10b-17” 写成 “SE A Rule”，或把 “($0.01)” 写成 “$ 0.01”；悄悄给 “stop limit” 加连字符，或改掉 “good 'til cancelled” 里的直撇号；或把已经教过的 Rule 10b-17 或止损实验改写成 5330。
+26. 发明 FINRA 2264 的规定文本是唯一被允许的文本；悄悄把 “short fall” 改成 “shortfall”，或把 “Web site” 改成一个词；把 “prior to or at the time of opening the account” 或 “not less than once a calendar year” 压进已经打包的 2266 或 2267；搭建规定声明目录或 4512 引擎；或把 2264 压进 Rule 10b-16 或已经教过的 Reg T / 4210。
+27. 发明一般的 FINRA 2267 义务是开户披露；把 “once every calendar year” 压进已经打包的 2266；从页面页脚发明一条 BrokerCheck 热线号码或 Web site 地址；或把已经打包的 2266、已经教过的 SIPC 保障上限改写成 2267。官方印刷是两个词的 “Web site”。
 
 ## 练习（与任务清单 1:1）
 
@@ -588,6 +701,9 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 19. **ex-5220** — 运行 `05_us_market_mechanics.py` 的 E 节；说明 5220 是不是已经教过的 Rule 602，会员在按标明价格报价前必须准备做什么，NMS 股票的 “normal unit of trading” 是什么，以及本玩具有没有发明 100 股单位；**完成标准**：这是不同的确定报价规则；会员不得按标明价格报价，除非已准备按该价格并在所述条件下买入或卖出；NMS 股票的正常交易单位是官方 600(b) 整手，不是发明的 100 股单位，与输出一致。
 20. **ex-2265** — 运行 `13_sale_condition_toy.py` 的 F 节；说明会员可否在没有风险披露的情况下允许延长时段交易，官方如何描述常规交易时段，以及示范文本是不是唯一被允许的文本；**完成标准**：必须先单独以纸质或电子形式提供披露，会员才可允许延长时段交易；官方常规交易时段一般是上午 9:30 至下午 4:00 Eastern Standard Time，按原文引用；官方 (b) 替代文本存在，且这不是对已经教过的 ETH 成交条件 T 或 6380A 的改写，与输出一致。
 21. **ex-2266** — 运行 `11_freeride_txse_15c33_toy.py` 的 G 节；说明书面 SIPC 信息应在何时提供，是否必须包括官方 Web site 地址和电话号码，以及这是不是对已经教过的 SIPC 保障上限的改写；**完成标准**：必须在开户时以及至少每年一次提供书面信息，包括官方 Web site 地址和电话号码；官方 (a)–(b) 例外存在；这不是对已经教过的 SIPC 保障上限的改写，与输出一致。
+22. **ex-5330** — 运行 `12_stop_order_toy.py` 的 D 节；说明官方未成交订单是否必须在除权日调整、现金股利低于一美分（$0.01）时是否例外，以及是不是每一笔未成交订单都会被调整；**完成标准**：官方未成交订单应在除权日调整，现金股利或分配低于一美分（$0.01）的除外；官方 “Do Not Reduce” / “Do Not Increase” 标记存在；官方 (e) 例外存在，包括未成交卖出订单和 SEA Rule 10b-17；不是每一笔未成交订单都会被调整，也不是对已经教过的 10b-17 的改写，与输出一致。
+23. **ex-2264** — 运行 `11_freeride_txse_15c33_toy.py` 的 H 节；说明 2264 要求何时提供保证金披露，以及这是不是 10b-16 或已经教过的 Reg T；**完成标准**：须在开户前或开户当时单独以纸质或电子形式提供，并且每个日历年不少于一次；官方 (c) 替代文本存在；这不是 10b-16，也不是已经教过的 Reg T，与输出一致。
+24. **ex-2267** — 运行同一脚本的 I 节；说明 2267 的一般义务是不是开户披露，必须提供哪些信息，以及这是不是对已经打包的 2266 的改写；**完成标准**：一般义务是每个日历年一次以书面（可以是电子）形式提供 FINRA BrokerCheck Hotline Number、FINRA Web site 地址，以及关于投资者手册的声明；官方 (b) 例外存在；本玩具没有发明热线号码；这不是对已经打包的 2266 的改写，与输出一致。
 
 ## 测验
 
@@ -621,6 +737,9 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
 <Quiz id="mo-5220" question="FINRA 5220 要求什么？它和已经教过的 Rule 602，以及 “normal unit of trading”，是什么关系？" options={["每一笔已公布报价都是不会撤回的证明，NMS 股票的正常交易单位永远是 100 股；这就是已经教过的 Rule 602", "官方 .01 没有 “not firm / firm for less than a normal unit” 的标明，也没有正在完成交易时的修订数量条款", "FINRA 5220 是与已经教过的 Rule 602 不同的确定报价规则。会员不得按标明价格向任何人买入或卖出任何证券，除非已准备按该价格并在报价时所称的条件下买入或卖出。官方 .01：在正常情况下，做 “firm trading market” 的会员，至少应按其当时通行报价买入或卖出正常交易单位，除非已清楚标明不是确定报价，或只对少于正常交易单位确定。如果在订单提交时该会员正在完成一笔交易，并在结束后立即传达修订后的报价数量，则没有义务按大于该修订数量买入或卖出。对 NMS 股票而言，“normal unit of trading” 是官方 Rule 600(b) 整手，不是发明的 100 股单位。只点名 Rule 6420，本课不搭建该引擎", "Rule 5220 是对已经教过的 Rule 602、600(b)(93)、610(e)、611 或 6380A 的改写"]} answer={2} explanation="FINRA 5220 是与已经教过的 Rule 602 不同的确定报价规则。会员不得按标明价格报价，除非已准备按该价格并在所述条件下买入或卖出。NMS 股票的 “normal unit of trading” 是官方 Rule 600(b) 整手，不是发明的 100 股单位。官方 .01 点名了 “not firm / less than a normal unit” 标明，以及正在完成交易时的修订数量条款。" />
 <Quiz id="mo-2265" question="根据 FINRA 2265，会员在允许客户进行延长时段交易之前必须提供什么？示范文本是唯一被允许的文本吗？" options={["延长时段接入无需披露，或示范文本是唯一被允许的文本", "这是对已经教过的 ETH 成交条件 T、隔夜 LULD 价格带或 FINRA 6380A 的改写；官方常规交易时段用的是 ET 或 EDT", "会员不得允许客户进行延长时段交易，除非已单独以纸质或电子形式向该客户提供突出延长时段特有风险的披露声明。官方常规交易时段一般指上午 9:30 至下午 4:00 Eastern Standard Time，按原文引用。官方示范用语包括 “upon the opening the next morning”。官方印刷包括 “on-line” 和 “Web site”。官方 (b) 允许使用实质相似的替代文本，至少涵盖官方六项风险（Lower Liquidity、Higher Volatility、Changing Prices、Unlinked Markets、News Announcements、Wider Spreads）。官方 (c) 要求会员视必要考虑额外披露。示范文本不是唯一被允许的文本。这不是对已经教过的 ETH 成交条件 T 或 6380A 的改写", "只需在网站上发布，不必单独向客户提供，即可满足 (a)"]} answer={2} explanation="FINRA 2265(a) 要求在允许延长时段交易之前，单独以纸质或电子形式向客户提供风险披露。官方常规交易时段一般是上午 9:30 至下午 4:00 Eastern Standard Time，按原文引用。官方 (b) 允许实质相似的替代文本；不要发明示范文本是唯一被允许的文本。这不是对已经教过的 ETH 成交条件 T 或 6380A 的改写。" />
 <Quiz id="mo-2266" question="根据 FINRA 2266，会员必须提供哪些 SIPC 信息、应在何时提供？这条规则是不是在重述已经教过的保障上限？" options={["这条规则重述了已经教过的 $500,000 / $250,000 SIPC 保障上限，或发明了一个保障金额", "事后口头通知即可，Web site 地址是可选的", "会员（连同官方 (a)–(b) 例外）应在开户时以书面形式告知所有新客户，可通过联系 SIPC 获取有关 SIPC 的信息，包括 SIPC 手册，并且还应提供 SIPC 的 Web site 地址和电话号码；同样的书面信息必须至少每年提供一次。官方印刷是两个词的 “Web site”。介绍经纪商和清算经纪商可以把这些要求分配给其中一家。官方 (a)–(b) 例外是存在的；本课不搭建 SIPA 排除引擎。这不是对已经教过的 SIPC 保障上限的改写，本规则也没有写出保障金额", "书面信息只在开户时需要一次，之后再也不需要"]} answer={2} explanation="FINRA 2266 要求在开户时以及至少每年一次提供书面 SIPC 信息，包括官方 Web site 地址和电话号码。官方印刷是两个词的 “Web site”。官方 (a)–(b) 例外存在，仅被点名。这不是对已经教过的 SIPC 保障上限的改写，本规则也没有写出保障金额。" />
+<Quiz id="mo-2264" question="根据 FINRA 2264，会员何时必须向非机构客户提供保证金披露声明？规定文本是唯一被允许的文本吗？这条规则是不是 10b-16 或已经教过的 Reg T？" options={["规定文本是唯一被允许的文本，而且只需在网站上发布即可，不必单独提供", "这是对 Rule 10b-16 或已经教过的 Regulation T / FINRA 4210 的改写；开户后口头通知即可", "会员不得为非机构客户开立 Regulation T 保证金账户，除非在开户前或开户当时，已单独以纸质或电子形式、在单独文件（或作为另一文件中的单独一页）向该客户提供规定的保证金披露声明。此后须以每个日历年不少于一次的频率交付。官方印刷是两个词的 “Web site”，官方示范文本里是两个词的 “short fall”。官方 (c) 允许实质相似的替代文本；规定文本不是唯一被允许的文本。官方 (d) 用 Rule 4512(c) 定义非机构客户，仅被点名。这不是 10b-16，也不是已经教过的 Reg T", "书面披露只在开户时需要一次，之后再也不需要"]} answer={2} explanation="FINRA 2264 要求在开户前或开户当时单独提供保证金披露，并且每个日历年不少于一次。官方 (c) 允许实质相似的替代文本。官方印刷是 “Web site” 和 “short fall”。这不是 10b-16，也不是已经教过的 Reg T。" />
+<Quiz id="mo-5330" question="根据 FINRA 5330，会员持有未成交订单时，应在除权日如何处理？是不是每一笔未成交订单都会被调整？" options={["每一笔未成交订单，包括未成交的买入止损单和未成交的卖出订单，都必须在除权日调整", "这是对已经教过的 Rule 10b-17 或止损 / 止损限价教学的改写", "会员持有未成交订单时，应在执行或允许执行之前，在该证券报价为 ex-dividend、ex-rights、ex-distribution 或 ex-interest 当日，调整价格和/或股数，但现金股利或分配低于一美分（$0.01）的除外。官方标记是 “Do Not Reduce” 和 “Do Not Increase”。官方 (d) 把 “open order” 定义为买入订单或未成交的卖出止损单，包括 “good 'til cancelled”、“limit” 或 “stop limit”。官方 (e) 例外包括未成交的买入止损单、未成交的卖出订单，以及未按 SEA Rule 10b-17 报告的情形。不是每一笔未成交订单都会被调整。官方 (b) 反向拆股应取消待成交订单。不要搭建四舍五入公式目录。这不是对已经教过的 10b-17 的改写", "低于一美分的现金股利也必须调整；SEA Rule 中间要加空格"]} answer={2} explanation="FINRA 5330 要求在除权日调整官方未成交订单，现金股利或分配低于一美分（$0.01）的除外。不是每一笔未成交订单都会被调整：官方 (d) 和 (e) 更窄。官方印刷是 “SEA Rule 10b-17”、“good 'til cancelled” 和 “stop limit”。这不是对已经教过的 10b-17 的改写。" />
+<Quiz id="mo-2267" question="根据 FINRA 2267，会员必须向客户提供哪些信息、应在何时提供？一般义务是不是开户披露？这条规则有没有写出热线号码？" options={["一般 2267 义务是开户披露，与已经打包的 2266 时钟相同", "规则文本本身写出了 BrokerCheck 热线号码和 Web site 地址，本课应把页脚号码当作官方规则内容", "除本规则另有规定外，会员应每个日历年一次，以书面形式（可以是电子形式）向每位客户提供：FINRA BrokerCheck Hotline Number、FINRA Web site 地址，以及关于介绍 FINRA BrokerCheck 的投资者手册可供索取的声明。官方印刷是两个词的 “Web site”。规则点名了这些项目，但没有写出号码或网址；不要从页面页脚发明号码。官方 (b) 例外存在，包括有限的介绍经纪商可在客户首次买入时或此前提供，以及无客户或由托管会员遵守 (a) 款的豁免；仅被点名。一般义务不是开户披露。这不是对已经打包的 2266 或已经教过的 SIPC 保障上限的改写", "只要在网站上挂出手册即可，不必向每位客户提供"]} answer={2} explanation="FINRA 2267 的一般义务是每个日历年一次提供书面 BrokerCheck 信息，不是开户披露。官方印刷是 “Web site”。不要发明热线号码。官方 (b) 例外仅被点名。这不是对已经打包的 2266 的改写。" />
 
 
 ## 完成标准
@@ -634,6 +753,7 @@ signal ready 15:58 ET -> NYSE free MOC/LOC: False; Nasdaq new MOC: False; Nasdaq
  enrich22（核实于 2026-11-12）：[17 CFR 242.602](https://www.ecfr.gov/current/title-17/section-242.602)（确定报价义务，碎股除外；(b)(3) 修订例外；(a)(3) 异常市场救济）；[FINRA Rule 6380A](https://www.finra.org/rules-guidance/rulebooks/finra-rules/6380A)（现行选中版本 “Mar 30, 2026 - Dec 05, 2026”）；[SR-FINRA-2026-015](https://www.finra.org/rules-guidance/rule-filings/sr-finra-2026-015) / [SEC 34-105922](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-finra-2026-015) / [91 FR 45299](https://www.govinfo.gov/content/pkg/FR-2026-07-20/pdf/2026-14528.pdf)（实施日为 SIP 修订实施日，预计 2026-12-06，可能延后）；FINRA 2026-05-22 与 2026-07-10 技术通知（ADF 时段目前不调整）。
 enrich28（核实于 2026-11-12）：[FINRA Rule 5220](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5220)（按标明价格报价；官方 .01 报价确定性；NMS 股票的正常交易单位是官方 Rule 600(b) 整手；只点名 Rule 6420）。没有产品、券商或交易场所建议。
 enrich29（核实于 2026-11-12）：[FINRA Rule 2265](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2265)；[FINRA Rule 2266](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2266)。没有产品、券商、交易场所或 SIPC 会员资格建议。
+enrich30（核实于 2026-11-12）：[FINRA Rule 5330](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5330)；[FINRA Rule 2264](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2264)；[FINRA Rule 2267](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2267)。没有产品、券商、订单类型、保证金或 BrokerCheck 建议。
 
 <Summary>
 **要点**：mid、市价买 bps、诚实成交时点、成本一页。  

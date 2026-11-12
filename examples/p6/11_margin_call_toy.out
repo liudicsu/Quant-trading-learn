@@ -30,3 +30,29 @@ disclaimer: intrinsic-value toy, not a broker's PM model; eligibility rules appl
 assertions passed: 4/4
 ASSERT_short_margin_ok
 disclaimer: strategy-based short-margin toy; house rates may be stricter; learning only
+=== F. Rule 10b-16: written credit-term statements at opening, at least quarterly, and generally thirty (30) days notice of changes ===
+10b-16(a): It shall be unlawful for any broker or dealer to extend credit, directly or
+  indirectly, to any customer in connection with any securities transaction unless such
+  broker or dealer has established procedures to assure that each customer:
+  (a)(1) is given or sent at the time of opening the account, a written statement or
+  statements disclosing the official (i)-(vii) items
+  official (a)(1) telephone proviso exists: the account may be opened by telephone if
+  the information is orally communicated at that time and the required written
+  statement or statements are sent immediately thereafter; this is not a claim that
+  there is never a written statement when an account is opened by telephone
+  official (a)(1)(i)-(vii) exist; this toy is not that catalog
+  (a)(2) is given or sent a written statement or statements, at least quarterly, for
+  each account in which credit was extended
+10b-16(b): the customer shall have been given not less than thirty (30) days written
+  notice of such changes, except that no such prior notice shall be necessary where
+  such changes are required by law
+  if a change results in a lower interest charge, notice may be given within a
+  reasonable time after the effective date of the change
+official typographic quotation marks appear around “equity funding programs”; this toy is not that engine
+cite § 240.10b-16; this toy invents no form number
+  this is a flatten into 2264 or already-taught Reg T? False
+  this toy builds the (a)(1)(i)-(vii) catalog, or invents a form number? False
+  generally not less than thirty (30) days written notice of changes, with official exceptions? True
+no product, broker, or credit recommendation
+assertions passed: 3/3
+disclaimer: learning only; not a credit-term engine; no product, broker, or credit recommendation

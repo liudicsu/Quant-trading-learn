@@ -15,3 +15,33 @@ trigger convention (last-sale vs quotation) differs by firm; check with the brok
 availability of stop, stop-limit and trailing-stop orders is firm-specific
 assertions passed: 5/5
 disclaimer: staff bulletin, not a Commission rule; learning only; no order-type recommendation
+=== D. FINRA 5330: adjust an official open order on the ex-date, except less than one cent ($0.01) ===
+5330(a): A member holding an open order from a customer or another broker-dealer shall,
+  prior to executing or permitting the order to be executed, reduce, increase, or adjust
+  the price and/or number of shares of such order by an amount equal to the dividend,
+  payment, or distribution on the day that the security is quoted ex-dividend, ex-rights,
+  ex-distribution, or ex-interest, except where a cash dividend or distribution is less
+  than one cent ($0.01), as follows:
+  (a)(1) Cash Dividends: Unless marked "Do Not Reduce," open order prices shall be first
+  reduced by the dollar amount of the dividend
+  (a)(2) Stock Dividends and Stock Splits: Unless marked "Do Not Increase," the size of
+  the order shall be increased as officially provided
+  official (a)(1)-(5) exist, including combined cash and stock and indeterminate value;
+  this toy is not the rounding-formula catalog
+5330(b): When a pending order involves a security that is the subject of a reverse split,
+  the order (buy or sell) shall be cancelled
+5330(c): When a pending order involves a security that is the subject of a stock split
+  but is not otherwise required to be adjusted under this Rule, a member shall promptly
+  notify the customer of the stock split
+5330(d): The term "open order" means an order to buy or an open stop order to sell,
+  including but not limited to "good 'til cancelled," "limit" or "stop limit" orders
+  which remain in effect for a definite or indefinite period until executed, cancelled
+  or expired
+5330(e) exceptions include orders governed by the rules of a registered national
+  securities exchange, open stop orders to buy, open sell orders, and orders where the
+  issuer has not reported a dividend, payment, or distribution pursuant to SEA Rule 10b-17
+  this toy invents that every open order is adjusted? False
+  this is a rewrite of already-taught Rule 10b-17, or the rounding-formula catalog? False
+  official open orders are adjusted on the ex-date, except where a cash dividend or distribution is less than one cent ($0.01)? True
+no product, broker, or order-type recommendation
+assertions passed: 8/8

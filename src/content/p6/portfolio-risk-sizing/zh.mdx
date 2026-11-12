@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **24 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h + 保证金账户（Reg T / FINRA 4210）0.5h + 组合保证金（FINRA 4210(g)）0.25h + 卖空保证金（Reg T 150% / FINRA 4210(c)(2)–(3)）0.25h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
+本课（约 **24.25 学时**：概念 5h + 实验 13h（含 HRP + Brandt 无交易区 + alpha 衰减带宽）+ 写作 4h + 权重漂移实验 1h + 保证金账户（Reg T / FINRA 4210）0.5h + 组合保证金（FINRA 4210(g)）0.25h + 卖空保证金（Reg T 150% / FINRA 4210(c)(2)–(3)）0.25h + Rule 10b-16 保证金信用条款披露 0.25h — 重课）建立**仓位层**：Kelly / 分数 Kelly、波动目标、风险平价（逆波动 + ERC）、均值方差 vs 1/N，以及协方差收缩。前置：`returns-vol-corr`、`strategy-compare-lab`。
 
 **课内目标：** 对照三种仓位层；用破产模拟解释满 Kelly 危险；说明估计误差如何使朴素 MV 在样本外脆弱。
 
@@ -219,6 +219,43 @@ ASSERT_short_margin_ok
 disclaimer: strategy-based short-margin toy; house rates may be stricter; learning only
 ```
 
+### Rule 10b-16：开户时的书面信用条款、至少每季一次的书面报表，以及通常不少于 thirty (30) days 的变更书面通知（核实于 2026-11-12）
+
+已经教过的 Reg T / FINRA 4210 多头、组合保证金和卖空保证金，保持原样。不要改写那些段落。这一节补上官方的 17 CFR 240.10b-16，避免把相邻的 2264 当成唯一的保证金披露规则，发明一条没有官方例外的单纯 30 天时钟，或搭建 (a)(1)(i)–(vii) 目录。没有产品、券商或信贷建议。
+
+[17 CFR 240.10b-16](https://www.ecfr.gov/current/title-17/section-240.10b-16)(a)：“It shall be unlawful for any broker or dealer to extend credit, directly or indirectly, to any customer in connection with any securities transaction unless such broker or dealer has established procedures to assure that each customer:” 官方 (a)(1) 在开户时给予或寄送书面声明，披露官方 (i)–(vii) 各项，并有电话开户但书（当时口头告知，并随即寄送所需书面声明）；官方 (a)(2) 对已延期信用的每个账户，至少每季给予或寄送书面报表。官方 (b)：“unless the customer shall have been given not less than thirty (30) days written notice of such changes, except that no such prior notice shall be necessary where such changes are required by law”，并且若变更使利息费用更低，可在生效日后的合理时间内通知。只点名官方 (a)(1)(i)–(vii) 和电话但书，不搭建该目录；也不要发明电话开户就永远没有书面声明。若点名官方 “equity funding programs” 但书，按原文使用印刷引号，不搭建该引擎。引用 § 240.10b-16。不要发明表格编号。不要把 10b-16 压进 2264 或已经教过的 Reg T / 4210。
+
+**实验：** 同一脚本 `examples/p6/11_margin_call_toy.py` 的 F 节（A–E 节，包括多头追保打印、组合保证金打印、卖空保证金打印、`ASSERT_short_margin_ok` 以及 E 节免责声明，与此前相同；F 节后为 3/3）：
+
+```text
+=== F. Rule 10b-16: written credit-term statements at opening, at least quarterly, and generally thirty (30) days notice of changes ===
+10b-16(a): It shall be unlawful for any broker or dealer to extend credit, directly or
+  indirectly, to any customer in connection with any securities transaction unless such
+  broker or dealer has established procedures to assure that each customer:
+  (a)(1) is given or sent at the time of opening the account, a written statement or
+  statements disclosing the official (i)-(vii) items
+  official (a)(1) telephone proviso exists: the account may be opened by telephone if
+  the information is orally communicated at that time and the required written
+  statement or statements are sent immediately thereafter; this is not a claim that
+  there is never a written statement when an account is opened by telephone
+  official (a)(1)(i)-(vii) exist; this toy is not that catalog
+  (a)(2) is given or sent a written statement or statements, at least quarterly, for
+  each account in which credit was extended
+10b-16(b): the customer shall have been given not less than thirty (30) days written
+  notice of such changes, except that no such prior notice shall be necessary where
+  such changes are required by law
+  if a change results in a lower interest charge, notice may be given within a
+  reasonable time after the effective date of the change
+official typographic quotation marks appear around “equity funding programs”; this toy is not that engine
+cite § 240.10b-16; this toy invents no form number
+  this is a flatten into 2264 or already-taught Reg T? False
+  this toy builds the (a)(1)(i)-(vii) catalog, or invents a form number? False
+  generally not less than thirty (30) days written notice of changes, with official exceptions? True
+no product, broker, or credit recommendation
+assertions passed: 3/3
+disclaimer: learning only; not a credit-term engine; no product, broker, or credit recommendation
+```
+
 ## 常见错误 / 陷阱
 
 - 忽略 alpha 衰减，有成本仍天天满仓再平衡到目标。
@@ -235,6 +272,7 @@ disclaimer: strategy-based short-margin toy; house rates may be stricter; learni
 9. 杠杆回测（波动目标权重超过 100%）不模拟追保、被动平仓和融资利息；默认券商维持比例就是 25%，而常见的券商标准是 30%–40%。
 10. 以为所有账户都按 50%/25%，或把组合保证金当成免费杠杆；回测用了更低的保证金要求，却不写清假设的是哪种保证金制度和开户条件。
 11. 把多头的 50%/25% 套到卖空上；自造“客户必须在卖空所得之外再交 150% 现金”；漏掉可转换证券按 100% 的例外；只看 2.50 美元或 5 美元的下限，忽略 100% / 30% 的测试。
+12. 把 Rule 10b-16 压进 2264 或已经教过的 Reg T；发明一条没有官方例外的单纯 30 天时钟；搭建 (a)(1)(i)–(vii) 目录，或发明电话开户就永远没有书面声明；发明 10b-16 的表格编号。
 
 
 ## 练习（1:1）
@@ -248,6 +286,7 @@ disclaimer: strategy-based short-margin toy; house rates may be stricter; learni
 7. **ex6** — 跑 `05_weight_drift.py`；**完成标准**：打印可行/不可行两行、A 漂移后 0.3462 且违反上限、单边换手 0.0476。
 8. **ex-pm**（可选）— 在 `11_margin_call_toy.py` 的 D 节把看跌期权行权价改成 90；**完成标准**：打印新的最大亏损，并说明为什么行权价越低保护越少。
 9. **ex-shortmargin** — 运行 `11_margin_call_toy.py` 的 E 节；写出 50 美元空头的 Reg T 初始保证金，以及 50 美元和 4 美元时的 FINRA 维持保证金；**完成标准**：7,500 美元（CMV 的 150%）、1,500 美元和 400 美元，与输出一致。
+10. **ex-10b16** — 运行同一脚本的 F 节；说明 10b-16 要求哪些书面声明、变更通知的一般时钟是什么，以及这是不是 2264 或已经教过的 Reg T；**完成标准**：开户时要有书面声明，至少每季一次书面报表，变更一般须有不少于 thirty (30) days 的书面通知，并有官方例外；官方 (a)(1) 电话但书存在；这不是 (a)(1)(i)–(vii) 目录，也不是 2264 或已经教过的 Reg T，与输出一致。
 
 
 ## 测验
@@ -267,12 +306,13 @@ disclaimer: strategy-based short-margin toy; house rates may be stricter; learni
 <Quiz id="prs-margin-call" question="按 SEC 公告的例子：持仓市值 $12,000，借款 $8,000，券商维持比例 40%。结果是？" options={["没问题，权益 $4,000 高于 $3,000", "要追加 $800", "要追加 $4,800", "维持比例只看初始买入价，不用重算"]} answer={1} explanation="40% × $12,000 = $4,800；权益 $4,000，差 $800。“没问题，权益 $4,000 高于 $3,000”是 25% 维持比例的情况。" />
 <Quiz id="prs-portmargin" question="按 FINRA 4210(g)，组合保证金账户里，单只股票及其期权的保证金主要怎么定？" options={["固定为市值的 50%", "在上下 15% 的价格情景下重估，取最大理论亏损（另有每张合约的最低要求）", "由客户自己选择", "只看前一天的收盘价"]} answer={1} explanation="4210(g) 是按策略保证金之外的另一种做法：个股在 ±15% 范围内取 10 个估值点，取最大理论亏损，每张上市期权至少 $.375 × 乘数。" />
 <Quiz id="prs-shortmargin" question="非豁免股票卖空的保证金要求是什么？股价 50 美元和 4 美元时，FINRA 维持保证金分别怎么算？" options={["和已经讲过的多头一样，仍是初始 50%、维持 25%", "客户必须在卖空所得之外再交 150% 的现金", "Reg T 初始保证金是当前市值的 150%（若持有符合条件的可转换证券则为 100%）；FINRA 维持保证金在不低于 5 美元时取 5 美元与 30% 的较高者，低于 5 美元时取 2.50 美元与 100% 的较高者", "低于 5 美元时，维持保证金永远是每股 2.50 美元，即使它低于当前市值的 100%"]} answer={2} explanation="12 CFR 220.12(c) 是当前市值的 150%，持有符合条件的可转换证券时为 100%。FINRA 4210(c)(2)–(3)：低于 5 美元时取 2.50 美元与 100% 的较高者；不低于 5 美元时取 5 美元与 30% 的较高者。50 美元时 30% 是 1,500 美元；4 美元时 100% 是 400 美元。" />
+<Quiz id="prs-10b16" question="根据 Rule 10b-16，对与证券交易相关的延期信用，券商必须有哪些程序？变更通知的一般时钟是什么？这条规则是不是 2264 或已经教过的 Reg T？" options={["这是对 FINRA 2264 或已经教过的 Regulation T / FINRA 4210 的改写", "变更必须提前整整 30 天书面通知，没有任何官方例外；电话开户就永远不必再给书面声明", "券商或自营商在与证券交易相关地延期信用时，必须有程序确保：开户时给予或寄送书面声明或声明，对已延期信用的账户至少每季给予或寄送书面报表，并且对信用收费条款的变更，一般须给予不少于 thirty (30) days 的书面通知。法律要求的变更不必事先通知；若变更使利息费用更低，可在生效日后的合理时间内通知。官方 (a)(1) 电话但书存在（当时口头告知，并随即寄送所需书面声明）；不要发明电话开户就永远没有书面声明。只点名官方 (a)(1)(i)–(vii)，不搭建该目录。引用 § 240.10b-16。不要发明表格编号。这不是 2264，也不是已经教过的 Reg T", "只要账户已经开立，就不必再给任何书面信用条款"]} answer={2} explanation="17 CFR 240.10b-16 要求开户时的书面声明、至少每季一次的书面报表，以及一般不少于 thirty (30) days 的变更书面通知，并有官方例外。官方 (a)(1) 电话但书存在。不要发明表格编号，也不要把 10b-16 压进 2264 或已经教过的 Reg T。" />
 
 ## 完成标准
 
 仓位对照表（Kelly / 波动目标 / RP / MV–LW–1/N）+ 一页风险偏好，写明为何把仓位压在满 Kelly 之下。
 
-**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。；权重漂移/约束一致性为本站合成小实验（`examples/p6/05_weight_drift.py`）。；组合保证金（2026-11-10 核实）：[FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。卖空保证金（2026-11-12 核实）：[12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12)、[FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。
+**来源（已阅读并写入正文）：** Kelly 1956 BSTJ 35(4)；Thorp Kelly 手册章节（约 2006）；Markowitz 1952 JOF；Michaud 1989 FAJ；DeMiguel, Garlappi & Uppal 2009 RFS 22(5)；Ledoit & Wolf 2004 JPM 30(4) “Honey…”；Ledoit & Wolf 2004 JMVA 88(2)；sklearn `LedoitWolf`；QuantStart / 芝大 FINM 风险笔记；Canvas m11；López de Prado 2016 JPM 42(4) HRP（标题是历史表述，不是实盘业绩承诺）；AFML 第16章。；权重漂移/约束一致性为本站合成小实验（`examples/p6/05_weight_drift.py`）。；组合保证金（2026-11-10 核实）：[FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。卖空保证金（2026-11-12 核实）：[12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12)、[FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210)。enrich30（核实于 2026-11-12）：[17 CFR 240.10b-16](https://www.ecfr.gov/current/title-17/section-240.10b-16)（Title 17 截至 2026-11-09 的官方 eCFR versioner API 文本；对照 [LII](https://www.law.cornell.edu/cfr/text/17/240.10b-16)）。没有产品、券商或信贷建议。
 
 <Summary>
 **要点**：实务半 Kelly &gt; 满 Kelly；风险估计一律滞后；ERC ≠ 逆波动；HRP 在树上配置且不反演 Σ；MV 需要收缩并以 1/N 作诚实对照。  

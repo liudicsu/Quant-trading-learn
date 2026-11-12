@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**24 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab + 0.5h margin accounts (Reg T / FINRA 4210) + 0.25h portfolio margin (FINRA 4210(g)) + 0.25h short-sale margin (Reg T 150% / FINRA 4210(c)(2)–(3)) — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
+This lesson (~**24.25 hours**: 5h concepts + 13h labs (incl. HRP + Brandt no-trade + alpha-decay band) + 4h writing + 1h weight-drift lab + 0.5h margin accounts (Reg T / FINRA 4210) + 0.25h portfolio margin (FINRA 4210(g)) + 0.25h short-sale margin (Reg T 150% / FINRA 4210(c)(2)–(3)) + 0.25h Rule 10b-16 disclosure of credit terms in margin transactions — HEAVY) builds the **sizing layer**: Kelly / fractional Kelly, volatility targeting, risk parity (inverse-vol + ERC), mean-variance vs 1/N, and covariance shrinkage. Prereqs: `returns-vol-corr`, `strategy-compare-lab`.
 
 **Goals:** compare three sizing layers; explain full-Kelly danger with a ruin simulation; state why estimation error makes naive MV fragile OOS.
 
@@ -219,6 +219,43 @@ ASSERT_short_margin_ok
 disclaimer: strategy-based short-margin toy; house rates may be stricter; learning only
 ```
 
+### Rule 10b-16: written credit-term statements at account opening, at least quarterly, and generally not less than thirty (30) days written notice of changes (checked 2026-11-12)
+
+Already-taught Reg T / FINRA 4210 long, portfolio-margin, and short-sale margin stay as written. Do not rewrite those paragraphs. This section adds official 17 CFR 240.10b-16 so a student does not treat packed / adjacent 2264 as the only margin-disclosure rule, invent a bare 30-day clock without the official exceptions, or build the (a)(1)(i)–(vii) catalog. No product, broker, or credit recommendation.
+
+[17 CFR 240.10b-16](https://www.ecfr.gov/current/title-17/section-240.10b-16)(a): “It shall be unlawful for any broker or dealer to extend credit, directly or indirectly, to any customer in connection with any securities transaction unless such broker or dealer has established procedures to assure that each customer:” official (a)(1) is given or sent at the time of opening the account a written statement or statements disclosing the official (i)–(vii) items, with an official telephone proviso (oral communication at that time and the required written statement or statements sent immediately thereafter); official (a)(2) is given or sent a written statement or statements, at least quarterly, for each account in which credit was extended. Official (b): “unless the customer shall have been given not less than thirty (30) days written notice of such changes, except that no such prior notice shall be necessary where such changes are required by law,” and if a change results in a lower interest charge, notice may be given within a reasonable time after the effective date. Name official (a)(1)(i)–(vii) and the telephone proviso; do not build that catalog, and do not invent that there is never a written statement when an account is opened by telephone. Official typographic quotation marks appear around “equity funding programs” if that official proviso is named; do not build that engine. Cite § 240.10b-16. Do not invent a form number. Do not flatten 10b-16 into 2264 or already-taught Reg T / 4210.
+
+**Lab:** section F of the same script `examples/p6/11_margin_call_toy.py` (sections A–E, including the long-only call prints, portfolio-margin prints, short-sale margin prints, `ASSERT_short_margin_ok`, and the section-E disclaimer, as before; 3/3 after F):
+
+```text
+=== F. Rule 10b-16: written credit-term statements at opening, at least quarterly, and generally thirty (30) days notice of changes ===
+10b-16(a): It shall be unlawful for any broker or dealer to extend credit, directly or
+  indirectly, to any customer in connection with any securities transaction unless such
+  broker or dealer has established procedures to assure that each customer:
+  (a)(1) is given or sent at the time of opening the account, a written statement or
+  statements disclosing the official (i)-(vii) items
+  official (a)(1) telephone proviso exists: the account may be opened by telephone if
+  the information is orally communicated at that time and the required written
+  statement or statements are sent immediately thereafter; this is not a claim that
+  there is never a written statement when an account is opened by telephone
+  official (a)(1)(i)-(vii) exist; this toy is not that catalog
+  (a)(2) is given or sent a written statement or statements, at least quarterly, for
+  each account in which credit was extended
+10b-16(b): the customer shall have been given not less than thirty (30) days written
+  notice of such changes, except that no such prior notice shall be necessary where
+  such changes are required by law
+  if a change results in a lower interest charge, notice may be given within a
+  reasonable time after the effective date of the change
+official typographic quotation marks appear around “equity funding programs”; this toy is not that engine
+cite § 240.10b-16; this toy invents no form number
+  this is a flatten into 2264 or already-taught Reg T? False
+  this toy builds the (a)(1)(i)-(vii) catalog, or invents a form number? False
+  generally not less than thirty (30) days written notice of changes, with official exceptions? True
+no product, broker, or credit recommendation
+assertions passed: 3/3
+disclaimer: learning only; not a credit-term engine; no product, broker, or credit recommendation
+```
+
 ## Common mistakes / pitfalls
 
 - Ignoring alpha decay and always full-rebalancing to target under costs.
@@ -235,6 +272,7 @@ disclaimer: strategy-based short-margin toy; house rates may be stricter; learni
 9. Running a leveraged backtest (vol-target weight above 100%) without margin-call checks, forced selling or financing interest; assuming 25% is your broker's level when house levels are often 30%–40%.
 10. Assuming every account uses 50%/25%, or treating portfolio margin as free leverage; backtesting with a lower requirement without saying which margin regime and eligibility you assume.
 11. Reusing long 50%/25% figures for a short sale; inventing “the customer must deposit 150% cash on top of the short proceeds”; skipping the convertible 100% exception; using only the $2.50 or $5 floor and ignoring the 100% / 30% tests.
+12. Flattening Rule 10b-16 into 2264 or already-taught Reg T; inventing a bare 30-day clock without the official exceptions; building the (a)(1)(i)–(vii) catalog, or inventing that there is never a written statement when an account is opened by telephone; inventing a 10b-16 form number.
 
 
 ## Practice (1:1)
@@ -248,6 +286,7 @@ disclaimer: strategy-based short-margin toy; house rates may be stricter; learni
 7. **ex6** — run `05_weight_drift.py`; **done when**: the feasible/infeasible lines, A drifted to 0.3462 breaching the cap, and one-way turnover 0.0476 print.
 8. **ex-pm** (optional) — in section D of `11_margin_call_toy.py`, change the put strike to 90; **done when**: you print the new largest loss and explain why a lower strike protects less.
 9. **ex-shortmargin** — Run section E of `11_margin_call_toy.py`; state the Reg T initial requirement for a $50 short, and the FINRA maintenance at $50 and at $4; **done when**: $7,500 (150% of CMV), $1,500, and $400, matching the output.
+10. **ex-10b16** — Run section F of the same script; state which written statements 10b-16 requires, what the general change-notice clock is, and whether this is 2264 or already-taught Reg T; **done when:** a written statement is required at account opening, written statements at least quarterly, and generally not less than thirty (30) days written notice of changes, with official exceptions; official (a)(1) telephone proviso exists; this is not the (a)(1)(i)–(vii) catalog and is not 2264 or already-taught Reg T, matching the output.
 
 
 ## Quiz
@@ -267,12 +306,13 @@ disclaimer: strategy-based short-margin toy; house rates may be stricter; learni
 <Quiz id="prs-margin-call" question="SEC bulletin example: position $12,000, loan $8,000, house maintenance 40%. What happens?" options={["Fine, $4,000 equity beats $3,000", "$800 margin call", "$4,800 margin call", "Maintenance is checked only against the purchase price"]} answer={1} explanation="40% × $12,000 = $4,800 required; equity is $4,000, so $800 short. “Fine, $4,000 equity beats $3,000” is the 25% case." />
 <Quiz id="prs-portmargin" question="Under FINRA 4210(g), how is margin mainly set for a single stock and its options in a portfolio margin account?" options={["A fixed 50% of market value", "Revalue under price moves of up to ±15% and take the largest theoretical loss (with a per-contract minimum)", "The customer chooses", "Only the prior close matters"]} answer={1} explanation="4210(g) is an alternative to strategy-based margin: ten valuation points across ±15% for an equity security, the largest theoretical loss, and at least $.375 × multiplier per listed option." />
 <Quiz id="prs-shortmargin" question="What is the required margin for a short sale of a nonexempted equity security, and what is FINRA maintenance for a short stock at $50 versus $4?" options={["The same 50% initial and 25% maintenance already taught for longs", "The customer must deposit 150% in cash on top of the short proceeds", "Reg T initial is 150% of current market value (100% if a qualifying convertible is held); FINRA maintenance is the greater of $5 or 30% at or above $5, and the greater of $2.50 or 100% below $5", "Below $5, maintenance is always $2.50 per share, even if that is less than 100% of current market value"]} answer={2} explanation="12 CFR 220.12(c) is 150% of CMV, or 100% with a qualifying convertible. FINRA 4210(c)(2)–(3): below $5, $2.50 or 100%, whichever greater; at or above $5, $5 or 30%, whichever greater. At $50, 30% is $1,500; at $4, 100% is $400." />
+<Quiz id="prs-10b16" question="Under Rule 10b-16, what procedures must a broker or dealer have when extending credit in connection with a securities transaction? What is the general change-notice clock? Is this 2264 or already-taught Reg T?" options={["This is a rewrite of FINRA 2264 or already-taught Regulation T / FINRA 4210", "Changes always require a full 30 days of prior written notice, with no official exceptions, and an account opened by telephone never needs a written statement", "A broker or dealer that extends credit in connection with a securities transaction must have procedures assuring a written statement or statements at the time of opening the account, written statements at least quarterly for each account in which credit was extended, and generally not less than thirty (30) days written notice of changes in the terms and conditions under which credit charges will be made. No such prior notice is necessary where changes are required by law; if a change results in a lower interest charge, notice may be given within a reasonable time after the effective date. Official (a)(1) telephone proviso exists (oral communication at that time and the required written statement or statements sent immediately thereafter); do not invent that there is never a written statement when an account is opened by telephone. Official (a)(1)(i)–(vii) are named only; this lesson does not build that catalog. Cite § 240.10b-16. Do not invent a form number. This is not 2264 and is not already-taught Reg T", "Once the account is open, no further written credit-term statements are required"]} answer={2} explanation="17 CFR 240.10b-16 requires a written statement at account opening, written statements at least quarterly, and generally not less than thirty (30) days written notice of changes, with official exceptions. Official (a)(1) telephone proviso exists. Do not invent a form number, and do not flatten 10b-16 into 2264 or already-taught Reg T." />
 
 ## Done when
 
 Sizing comparison table (Kelly / vol-target / RP / MV–LW–1/N) plus a risk-preference page stating why you cap below full Kelly.
 
-**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11; [arXiv:2502.04284](https://arxiv.org/abs/2502.04284) Ma & Smith alpha decay + costs; [Brandt–Santa-Clara–Valkanov RFS 2009](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695); optional [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) NAME-ONLY.; weight-drift / constraint-consistency is an in-house synthetic mini-lab (`examples/p6/05_weight_drift.py`).; portfolio margin (checked 2026-11-10): [FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210). short-sale margin (checked 2026-11-12): [12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12), [FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210).
+**Sources (read and used above):** Kelly 1956 BSTJ 35(4); Thorp Kelly handbook chapter (~2006); Markowitz 1952 JOF; Michaud 1989 FAJ; DeMiguel, Garlappi & Uppal 2009 RFS 22(5); Ledoit & Wolf 2004 JPM 30(4) “Honey…”; Ledoit & Wolf 2004 JMVA 88(2); López de Prado 2016 JPM 42(4) HRP (title is historical, not a live performance promise); AFML ch.16; sklearn `LedoitWolf`; QuantStart / UChicago FINM risk notes; Canvas m11; [arXiv:2502.04284](https://arxiv.org/abs/2502.04284) Ma & Smith alpha decay + costs; [Brandt–Santa-Clara–Valkanov RFS 2009](https://academic.oup.com/rfs/article-abstract/22/9/3411/1572695); optional [arXiv:2411.07949](https://arxiv.org/abs/2411.07949) NAME-ONLY.; weight-drift / constraint-consistency is an in-house synthetic mini-lab (`examples/p6/05_weight_drift.py`).; portfolio margin (checked 2026-11-10): [FINRA Rule 4210(g)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210). short-sale margin (checked 2026-11-12): [12 CFR 220.12(c)](https://www.law.cornell.edu/cfr/text/12/220.12), [FINRA Rule 4210(c)(2)–(3)](https://www.finra.org/rules-guidance/rulebooks/finra-rules/4210). enrich30 (checked 2026-11-12): [17 CFR 240.10b-16](https://www.ecfr.gov/current/title-17/section-240.10b-16) (official eCFR versioner API text for Title 17 as of 2026-11-09; matching [LII](https://www.law.cornell.edu/cfr/text/17/240.10b-16)). No product, broker, or credit recommendation.
 
 <Summary>
 **Takeaways**: half-Kelly &gt; full Kelly in practice; lag all risk estimates; ERC ≠ inverse-vol; HRP allocates on a tree without inverting Σ; MV needs shrinkage and an honest 1/N foil.  

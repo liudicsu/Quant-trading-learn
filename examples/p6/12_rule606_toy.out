@@ -175,3 +175,36 @@ official .01(d): the Mark-Up Policy is not applicable to the sale of securities 
   the official "5% Policy" is a guide, not a rule? True
 no product, broker, or pricing recommendation
 assertions passed: 37/37
+=== L. FINRA 2122: charges for services, if any, shall be reasonable and not unfairly discriminatory ===
+2122: Charges, if any, for services performed, including, but not limited to,
+  miscellaneous services such as collection of monies due for principal, dividends, or interest;
+  exchange or transfer of securities; appraisals, safe-keeping or custody of securities,
+  and other services shall be reasonable and not unfairly discriminatory among customers
+official typography is "monies" and hyphenated "safe-keeping"
+  this toy invents a hard 5% cap? False
+  this is a flatten into packed 2121? False
+  charges for services, if any, shall be reasonable and not unfairly discriminatory among customers? True
+no product, broker, or pricing recommendation
+assertions passed: 40/40
+=== M. FINRA 2124: disclosure and consent before a "net" transaction ===
+2124(a): Prior to executing a transaction for or with a customer on a "net" basis
+  as defined in paragraph (e) below, a member must provide disclosure to and obtain
+  consent from the customer as provided in this Rule
+2124(b): With respect to non-institutional customers, the member must obtain the
+  customer's written consent on an order-by-order basis prior to executing a
+  transaction for or with the customer on a "net" basis and such consent must
+  evidence the customer's understanding of the terms and conditions of the order
+2124(e)(2): "net" transaction shall mean a principal transaction in which a market maker,
+  after having received an order to buy (sell) an equity security, purchases (sells)
+  the equity security at one price (from (to) another broker-dealer or another customer)
+  and then sells to (buys from) the customer at a different price
+official (c) institutional methods exist (negative consent letter; oral order-by-order
+  consent with documentation; or written order-by-order consent); this toy is not that engine
+official (d): fiduciary consent, official typography is "e.g. an investment adviser"
+  (no comma after e.g.); official (e)(1) defines institutional customer by Rule 4512(c);
+  official (f) recordkeeping cross-references Rule 4511; named only
+  this is a flatten into packed 2121 / 2122 or already-taught 10b-10? False
+  this toy builds the official (c) institutional engine? False
+  non-institutional consent must be written and order-by-order? True
+no product, broker, or pricing recommendation
+assertions passed: 43/43

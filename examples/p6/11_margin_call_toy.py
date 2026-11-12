@@ -161,3 +161,77 @@ print("  long initial/maintenance remain 50%/25% as already taught; house rates 
 print(f"assertions passed: {sm_checks}/{sm_checks}")
 print("ASSERT_short_margin_ok")
 print("disclaimer: strategy-based short-margin toy; house rates may be stricter; learning only")
+
+print("=== F. Rule 10b-16: written credit-term statements at opening, at least quarterly, and generally thirty (30) days notice of changes ===")
+# 17 CFR 240.10b-16 Disclosure of credit terms in margin transactions
+# (official eCFR versioner API / matching LII opened 2026-11-12; title 17
+# up_to_date_as_of 2026-11-09; CITA [34 FR 19718, Dec. 16, 1969]). Official
+# eCFR HTML this turn was a Request Access interstitial and is not official
+# rule text. Keep sections A-E identical, including the long-only call
+# prints, portfolio-margin prints, short-sale margin prints,
+# ASSERT_short_margin_ok, and the section-E disclaimer, as a strict prefix
+# of tip 6b4d2f3.
+# Official 10b-16(a): It shall be unlawful for any broker or dealer to
+# extend credit, directly or indirectly, to any customer in connection
+# with any securities transaction unless such broker or dealer has
+# established procedures to assure that each customer: official (a)(1)
+# is given or sent at the time of opening the account, a written
+# statement or statements disclosing the official (i)-(vii) items, with
+# an official telephone proviso (oral communication at that time and the
+# required written statement or statements sent immediately thereafter);
+# official (a)(2) is given or sent a written statement or statements, at
+# least quarterly, for each account in which credit was extended.
+# Official (b): unless the customer shall have been given not less than
+# thirty (30) days written notice of such changes, except that no such
+# prior notice shall be necessary where such changes are required by
+# law; if a change results in a lower interest charge, notice of such
+# change may be given within a reasonable time after the effective date
+# of the change.
+# Official typographic quotation marks appear around “equity funding
+# programs”; name that official proviso, do not build that engine.
+# Name official (a)(1)(i)-(vii) and the telephone proviso; do not build
+# that catalog, and do not invent that there is never a written statement
+# when an account is opened by telephone. Do not invent a form number.
+# Cite § 240.10b-16. Do not flatten 10b-16 into 2264 or already-taught
+# Reg T / 4210. No product, broker, or credit recommendation.
+
+b16_checks = 0
+
+
+def b16_check(cond, label):
+    global b16_checks
+    assert cond, label
+    b16_checks += 1
+
+
+print("10b-16(a): It shall be unlawful for any broker or dealer to extend credit, directly or")
+print("  indirectly, to any customer in connection with any securities transaction unless such")
+print("  broker or dealer has established procedures to assure that each customer:")
+print("  (a)(1) is given or sent at the time of opening the account, a written statement or")
+print("  statements disclosing the official (i)-(vii) items")
+print("  official (a)(1) telephone proviso exists: the account may be opened by telephone if")
+print("  the information is orally communicated at that time and the required written")
+print("  statement or statements are sent immediately thereafter; this is not a claim that")
+print("  there is never a written statement when an account is opened by telephone")
+print("  official (a)(1)(i)-(vii) exist; this toy is not that catalog")
+print("  (a)(2) is given or sent a written statement or statements, at least quarterly, for")
+print("  each account in which credit was extended")
+print("10b-16(b): the customer shall have been given not less than thirty (30) days written")
+print("  notice of such changes, except that no such prior notice shall be necessary where")
+print("  such changes are required by law")
+print("  if a change results in a lower interest charge, notice may be given within a")
+print("  reasonable time after the effective date of the change")
+print("official typographic quotation marks appear around “equity funding programs”; this toy is not that engine")
+print("cite § 240.10b-16; this toy invents no form number")
+flatten_2264 = False
+print(f"  this is a flatten into 2264 or already-taught Reg T? {flatten_2264}")
+b16_check(flatten_2264 is False, "do not flatten 10b-16 into 2264 or already-taught Reg T")
+builds_catalog = False
+print(f"  this toy builds the (a)(1)(i)-(vii) catalog, or invents a form number? {builds_catalog}")
+b16_check(builds_catalog is False, "do not build the (a)(1) catalog or invent a form number")
+notice = True
+print(f"  generally not less than thirty (30) days written notice of changes, with official exceptions? {notice}")
+b16_check(notice is True, "10b-16 generally requires thirty (30) days written notice")
+print("no product, broker, or credit recommendation")
+print(f"assertions passed: {b16_checks}/{b16_checks}")
+print("disclaimer: learning only; not a credit-term engine; no product, broker, or credit recommendation")

@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **18.25 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **18.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -464,6 +464,57 @@ no product, broker, or pricing recommendation
 assertions passed: 37/37
 ```
 
+**FINRA 2122：对已提供服务收取的费用（如有）应当合理，且不得在客户之间不公平地歧视（核实于 2026-11-12）。** 已经教过的 Rule 10b-10、FINRA 2262 / 2269、5290，以及上面打包的 2121，保持原样。不要改写那些段落。这一节补上官方的 2122，避免发明一条硬性的 5% 上限，或把服务费压进已经打包的 2121 的 “5% Policy”。本规则讲的是服务收费，不是 2121 的加价 / 佣金公平价格测试。没有产品、券商或定价建议。
+
+[FINRA Rule 2122](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2122)：“Charges, if any, for services performed, including, but not limited to, miscellaneous services such as collection of monies due for principal, dividends, or interest; exchange or transfer of securities; appraisals, safe-keeping or custody of securities, and other services shall be reasonable and not unfairly discriminatory among customers.” 按原文引用 “monies” 和带连字符的 “safe-keeping”。不要发明硬性的 5% 上限，也不要把 2122 压进已经打包的 2121。
+
+**实验：** 同一脚本的 L 节（现有的 606 表、**4/4**、`ASSERT_rule606_ok`、提醒行、5250、5270、5230、5280、10b-10、5240、5290、2262、2269、2121，以及 K 节后的 **37/37** 与此前相同；L 节后为 40/40）：
+
+```text
+=== L. FINRA 2122: charges for services, if any, shall be reasonable and not unfairly discriminatory ===
+2122: Charges, if any, for services performed, including, but not limited to,
+  miscellaneous services such as collection of monies due for principal, dividends, or interest;
+  exchange or transfer of securities; appraisals, safe-keeping or custody of securities,
+  and other services shall be reasonable and not unfairly discriminatory among customers
+official typography is "monies" and hyphenated "safe-keeping"
+  this toy invents a hard 5% cap? False
+  this is a flatten into packed 2121? False
+  charges for services, if any, shall be reasonable and not unfairly discriminatory among customers? True
+no product, broker, or pricing recommendation
+assertions passed: 40/40
+```
+
+**FINRA 2124：在按 “net” 基础为客户或与客户执行交易之前，必须披露并取得同意；对非机构客户，该同意必须是书面的，且按每笔订单做出（核实于 2026-11-12）。** 已经教过的 Rule 10b-10，以及已经打包的 2121 / 刚加入的 2122，保持原样。不要改写那些段落。这一节补上官方的 2124，避免把 “net” 的自营成交只当成又一次 2121 加价，或发明 10b-10 确认是唯一的客户披露。没有产品、券商或定价建议。
+
+[FINRA Rule 2124](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2124)(a)：“Prior to executing a transaction for or with a customer on a "net" basis as defined in paragraph (e) below, a member must provide disclosure to and obtain consent from the customer as provided in this Rule.” 官方 (b)：“With respect to non-institutional customers, the member must obtain the customer's written consent on an order-by-order basis prior to executing a transaction for or with the customer on a "net" basis and such consent must evidence the customer's understanding of the terms and conditions of the order.” 官方 (e)(2) 把 “net” 交易定义为：做市商在收到买入（卖出）某只股票的订单后，按一个价格向另一经纪交易商或另一客户买入（卖出）该股票，再按不同价格卖给（向）该客户买入。官方 (e)(1) 用 Rule 4512(c) 定义 “institutional customer”。官方 (c) 列出机构客户的同意方式（否定同意函；有记录的口头逐笔同意；或书面逐笔同意）；只点名它们，不搭建该引擎。官方 (d) 允许向受信人取得同意，官方印刷是 “e.g. an investment adviser”（“e.g.” 后面没有逗号）。官方 (f) 的记录保存交叉引用 Rule 4511，仅被点名。按原文引用 “net” 四周的直引号。不要在 “e.g. an investment adviser” 里悄悄插入逗号。不要把 2124 压进已经打包的 2121 或 2122，或压进已经教过的 Rule 10b-10。
+
+**实验：** 同一脚本的 M 节（包括 K 节后的 **37/37 after K / 2121** 以及新的 2122 一节，一经加入后保持相同；M 节后为 43/43）：
+
+```text
+=== M. FINRA 2124: disclosure and consent before a "net" transaction ===
+2124(a): Prior to executing a transaction for or with a customer on a "net" basis
+  as defined in paragraph (e) below, a member must provide disclosure to and obtain
+  consent from the customer as provided in this Rule
+2124(b): With respect to non-institutional customers, the member must obtain the
+  customer's written consent on an order-by-order basis prior to executing a
+  transaction for or with the customer on a "net" basis and such consent must
+  evidence the customer's understanding of the terms and conditions of the order
+2124(e)(2): "net" transaction shall mean a principal transaction in which a market maker,
+  after having received an order to buy (sell) an equity security, purchases (sells)
+  the equity security at one price (from (to) another broker-dealer or another customer)
+  and then sells to (buys from) the customer at a different price
+official (c) institutional methods exist (negative consent letter; oral order-by-order
+  consent with documentation; or written order-by-order consent); this toy is not that engine
+official (d): fiduciary consent, official typography is "e.g. an investment adviser"
+  (no comma after e.g.); official (e)(1) defines institutional customer by Rule 4512(c);
+  official (f) recordkeeping cross-references Rule 4511; named only
+  this is a flatten into packed 2121 / 2122 or already-taught 10b-10? False
+  this toy builds the official (c) institutional engine? False
+  non-institutional consent must be written and order-by-order? True
+no product, broker, or pricing recommendation
+assertions passed: 43/43
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -487,6 +538,8 @@ assertions passed: 37/37
 19. 发明 FINRA 2262 的第一次披露必须是书面的；把 2262 压进已经教过的 10b-10，包括 (c) 的请求时钟或 (d)(8) PFOF；或把 2262 当成与 2269 同一条规则。
 20. 把 FINRA 2269 当成 2262 的第一次披露规则，或当成对已经教过的 10b-10 的改写；发明书面通知是可选的；或发明比官方经纪商 / 顾问型自营商类别更宽的范围。
 21. 在 FINRA 2121 之下发明一条硬性的 5% 上限，或把每一个低于 5% 的加价都当成自动公平；搭建补充材料 .01(b) 的相关因素目录或 .02 的额外债务加价政策；或把已经教过的 10b-10、2262、2269 或 5290 改写成 2121。
+22. 在 FINRA 2122 之下发明一条硬性的 5% 上限，或把服务收费压进已经打包的 2121；漏掉官方的 “monies” 或带连字符的 “safe-keeping”；或把已经教过的 10b-10、2262、2269、5290 或 2121 改写成 2122。
+23. 把 “net” 自营成交只当成又一次 2121 加价，或当成已经教过的 Rule 10b-10；发明非机构客户不必提供书面、逐笔同意；在 “e.g. an investment adviser” 里悄悄加上逗号；或搭建官方 (c) 的机构同意引擎。
 
 
 ## 练习（1:1）
@@ -510,6 +563,8 @@ assertions passed: 37/37
 16. **ex-2262** — 运行同一脚本的 I 节；说明控制关系披露应在何时做出，第一次披露是否必须是书面的，以及这是不是已经教过的 10b-10；**完成标准**：必须在订立客户合同之前披露；若第一次披露不是书面的，则应在完成时或完成前给予或寄送书面披露；第一次披露不必是书面的，也不是已经教过的 10b-10，与输出一致。
 17. **ex-2269** — 运行同一脚本的 J 节；说明 2269 是否要求书面通知、应在何时发出，以及这是不是 2262 或已经教过的 10b-10；**完成标准**：必须在完成时或完成前，就一级或二级分销中的参与或利害关系发出书面通知，范围限于官方经纪商 / 顾问型自营商类别；这不是 2262，2262 的第一次披露不必是书面的，也不是已经教过的 10b-10，与输出一致。
 18. **ex-2121** — 运行同一脚本的 K 节；说明官方 “5% Policy” 是不是硬性上限，5% 或更低的加价模式是否仍可能被认定为不公平或不合理，以及这是不是对已经教过的 10b-10、2262、2269 或 5290 的改写；**完成标准**：官方 “5% Policy” 是指南，不是规则；即使 5% 或更低的加价模式也可能被认定为不公平或不合理；仅点名官方 Rule 2010，官方 .01(d) 存在，且这不是对这些已教规则的改写，与输出一致。
+19. **ex-2122** — 运行同一脚本的 L 节；说明对已提供服务收取的费用（如有）必须满足什么要求，5% 是不是硬性上限，以及这是不是对已经打包的 2121 的压平；**完成标准**：费用（如有）应当合理，且不得在客户之间不公平地歧视；官方印刷是 “monies” 和 “safe-keeping”；不要发明硬性的 5% 上限；这不是对已经打包的 2121 的压平，与输出一致。
+20. **ex-2124** — 运行同一脚本的 M 节；说明在按 “net” 基础执行之前必须满足什么要求，非机构客户的同意必须是什么形式，以及这是不是对已经打包的 2121 / 2122 或已经教过的 10b-10 的压平；**完成标准**：必须先披露并取得同意；非机构客户必须提供书面、逐笔同意；官方 (e)(2) 定义了 “net” 交易；官方印刷是 “e.g. an investment adviser”；这不是对已经打包的 2121 / 2122 或已经教过的 10b-10 的压平，与输出一致。
 
 ## 测验
 
@@ -540,6 +595,8 @@ assertions passed: 37/37
 <Quiz id="es-2262" question="按 FINRA 2262，会员应在何时披露与发行人的控制关系？第一次披露必须是书面的吗？" options={["第一次披露必须是书面的", "这是对已经教过的 Rule 10b-10 的改写，或与 FINRA 2269 是同一条规则", "受发行人控制、控制发行人或与发行人处于共同控制之下的会员，应在订立代客户买卖该证券的任何合同之前，向该客户披露该控制关系的存在；若第一次披露不是书面的，则应在完成时或完成前补充给予或寄送书面披露。第一次披露并非官方要求必须是书面的。这不是已经教过的 10b-10，也不是 FINRA 2269", "只有在完成之后，且仅在客户书面要求时，才需要披露"]} answer={2} explanation="FINRA 2262 要求在订立客户合同之前披露控制关系。若第一次披露不是书面的，则应在完成时或完成前给予或寄送书面披露。第一次披露并不被官方要求必须是书面的。这不是已经教过的 10b-10，也不是 2269。" />
 <Quiz id="es-2269" question="FINRA 2269 要求怎样的书面通知？它和 2262 有何不同？" options={["与 2262 的第一次披露一样，书面通知是可选的", "这是对已经教过的 Rule 10b-10 的改写，或与 2262 的第一次披露规则相同；该规则适用于每一名会员、每一只证券", "作为客户经纪商（或同时作为该客户与另一人的经纪商），或作为向客户就证券提供建议并收取或已获承诺将收取费用的自营商的会员，应在完成时或完成前，就该会员参与或在金钱上利害相关的该证券的一级或二级分销，向客户发出书面通知，告知该参与或利害关系的存在。与 2262 的第一次披露不同，2269 要求书面通知。官方范围是这些经纪商 / 顾问型自营商类别。这不是已经教过的 10b-10，也不是 2262", "书面通知可以在完成后的任何时间发出"]} answer={2} explanation="FINRA 2269 要求在完成时或完成前，就一级或二级分销中的参与或利害关系发出书面通知，范围限于官方经纪商 / 顾问型自营商类别。与 2262 的第一次披露不同，2269 要求书面通知。这不是已经教过的 10b-10，也不是 2262。" />
 <Quiz id="es-2121" question="FINRA 2121 下官方的 “5% Policy” 是什么？5% 是硬性上限吗？" options={["官方 “5% Policy” 是硬性上限：5% 或更低的加价一律公平", "这是对已经教过的 Rule 10b-10、FINRA 2262、2269 或 5290 的改写", "官方 2121 要求会员为自己的账户与客户买卖时价格公平，作为代理人时佣金或服务费公平，并考虑所有相关情形。官方补充材料 .01：“5% Policy” 是指南，不是规则；即使 5% 或更低的加价模式，也可能被认定为不公平或不合理。公平必须基于全部相关因素，加价百分比只是其中之一。与客户达成与当前市价没有合理关系的交易，或收取不合理的佣金，是对 Rule 2010 和 Rule 2121 的违反。仅点名官方 Rule 2010 和官方 .01(d)；本课不搭建这些引擎。这不是已经教过的 10b-10、2262、2269 或 5290", "只有超过 5% 的加价才可能不公平；佣金不在规则范围内"]} answer={2} explanation="FINRA 2121 要求公平的价格或公平的佣金，并考虑所有相关情形。官方补充材料 .01 写明 “5% Policy” 是指南，不是规则；即使 5% 或更低的加价模式也可能被认定为不公平或不合理。不要发明硬性的 5% 上限。这不是对已经教过的 10b-10、2262、2269 或 5290 的改写。" />
+<Quiz id="es-2122" question="根据 FINRA 2122，对已提供服务收取的费用（如有）必须满足什么要求？5% 是硬性上限吗？可以把这条规则压进已经打包的 2121 吗？" options={["5% 是硬性上限：对收款、转账、鉴定或保管等杂项服务，收费不得超过 5%", "这是对已经打包的 2121，或对已经教过的 Rule 10b-10、FINRA 2262、2269 或 5290 的改写", "官方 2122：对已提供服务收取的费用（如有），包括但不限于代收本金、股息或利息等 monies，证券的交换或过户，鉴定，以及证券的 safe-keeping 或保管等其他服务，应当合理，且不得在客户之间不公平地歧视。官方印刷是 “monies” 和带连字符的 “safe-keeping”。不要发明硬性的 5% 上限。这不是对已经打包的 2121 的压平，也不是对已经教过的 10b-10、2262、2269 或 5290 的改写", "只要收费低于 5%，就一定合理；保管费不受本规则约束"]} answer={2} explanation="FINRA 2122 要求对已提供服务收取的费用（如有）应当合理，且不得在客户之间不公平地歧视。官方印刷是 “monies” 和 “safe-keeping”。不要发明硬性的 5% 上限，也不要把 2122 压进已经打包的 2121。这不是对已经教过的 10b-10、2262、2269 或 5290 的改写。" />
+<Quiz id="es-2124" question="根据 FINRA 2124，在按 “net” 基础为客户或与客户执行交易之前必须满足什么要求？非机构客户的同意必须是什么形式？" options={["“net” 自营成交只是又一次 2121 加价，10b-10 确认就是唯一需要的客户披露", "非机构客户可以只做一次口头、总括同意；官方印刷在 “e.g.” 后面有逗号", "在按 “net” 基础执行之前，会员必须披露并取得同意。对非机构客户，该同意必须是书面的，且按每笔订单做出，并证明客户理解订单的条款和条件。官方 (e)(2) 定义了 “net” 交易。官方印刷是 “e.g. an investment adviser”（“e.g.” 后面没有逗号）。官方 (c) 机构同意方式和官方 (d) 向受信人取得同意是存在的，仅被点名；本课不搭建这些引擎。这不是对已经打包的 2121 / 2122 或已经教过的 Rule 10b-10 的压平", "只要成交价格更优，就可以不经同意按 “net” 基础执行"]} answer={2} explanation="FINRA 2124 要求在 “net” 交易之前披露并取得同意。非机构客户必须提供书面、逐笔同意。官方印刷是 “e.g. an investment adviser”，不要悄悄加逗号。这不是对已经打包的 2121 / 2122 或已经教过的 10b-10 的压平。" />
 
 
 ## 完成标准
@@ -550,6 +607,7 @@ assertions passed: 37/37
 enrich27（核实于 2026-11-12）：[17 CFR 240.10b-10](https://www.ecfr.gov/current/title-17/section-240.10b-10)；[FINRA Rule 5240](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5240)。没有产品、券商或交易场所建议。
 enrich28（核实于 2026-11-12）：[FINRA Rule 5290](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5290)；[FINRA Rule 2262](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2262)；[FINRA Rule 2269](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2269)。没有产品、券商、发行人或发行建议。
 enrich29（核实于 2026-11-12）：[FINRA Rule 2121](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2121)。没有产品、券商或定价建议。
+enrich30（核实于 2026-11-12）：[FINRA Rule 2122](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2122)；[FINRA Rule 2124](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2124)。没有产品、券商或定价建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

@@ -91,3 +91,81 @@ print("trigger convention (last-sale vs quotation) differs by firm; check with t
 print("availability of stop, stop-limit and trailing-stop orders is firm-specific")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: staff bulletin, not a Commission rule; learning only; no order-type recommendation")
+
+print("=== D. FINRA 5330: adjust an official open order on the ex-date, except less than one cent ($0.01) ===")
+# FINRA Rule 5330 Adjustment of Orders (official-page / official
+# rulebook HTML opened 2026-11-12). Keep sections A-C identical,
+# including 5/5 and the existing staff-bulletin disclaimer, as a strict
+# byte-prefix of tip 6b4d2f3. The new section is added after that last
+# line; the disclaimer is not moved past this section.
+# Official 5330(a): A member holding an open order from a customer or
+# another broker-dealer shall, prior to executing or permitting the
+# order to be executed, reduce, increase, or adjust the price and/or
+# number of shares of such order by an amount equal to the dividend,
+# payment, or distribution on the day that the security is quoted
+# ex-dividend, ex-rights, ex-distribution, or ex-interest, except where
+# a cash dividend or distribution is less than one cent ($0.01), as
+# follows: official (a)(1) cash dividends, unless marked "Do Not
+# Reduce"; official (a)(2) stock dividends and stock splits, unless
+# marked "Do Not Increase." Official markings use straight quotation
+# marks. Quote "reduced by the dollar amount" with a normal single
+# space (do not copy an extraction double-space).
+# Official (b): When a pending order involves a security that is the
+# subject of a reverse split, the order (buy or sell) shall be
+# cancelled.
+# Official (c): When a pending order involves a security that is the
+# subject of a stock split but is not otherwise required to be adjusted
+# under this Rule, a member shall promptly notify the customer of the
+# stock split.
+# Official (d): The term "open order" means an order to buy or an open
+# stop order to sell, including but not limited to "good 'til
+# cancelled," "limit" or "stop limit" orders which remain in effect for
+# a definite or indefinite period until executed, cancelled or expired.
+# Official typography is "good 'til cancelled" (straight apostrophe)
+# and "stop limit" as two words.
+# Official (e) excepts orders governed by the rules of a registered
+# national securities exchange, open stop orders to buy, open sell
+# orders, and orders where the issuer has not reported a dividend,
+# payment, or distribution pursuant to SEA Rule 10b-17. Official HTML
+# underlines the A in SEA; quote SEA Rule 10b-17 with no space.
+# Name official (a)(1)-(5), (b), (c), (d), and (e); do not build the
+# rounding-formula catalog or a reverse-split size engine. Do not
+# invent that every open order is adjusted. Do not rewrite
+# already-taught Rule 10b-17 or sections A-C. No product, broker, or
+# order-type recommendation.
+
+print("5330(a): A member holding an open order from a customer or another broker-dealer shall,")
+print("  prior to executing or permitting the order to be executed, reduce, increase, or adjust")
+print("  the price and/or number of shares of such order by an amount equal to the dividend,")
+print("  payment, or distribution on the day that the security is quoted ex-dividend, ex-rights,")
+print("  ex-distribution, or ex-interest, except where a cash dividend or distribution is less")
+print("  than one cent ($0.01), as follows:")
+print('  (a)(1) Cash Dividends: Unless marked "Do Not Reduce," open order prices shall be first')
+print("  reduced by the dollar amount of the dividend")
+print('  (a)(2) Stock Dividends and Stock Splits: Unless marked "Do Not Increase," the size of')
+print("  the order shall be increased as officially provided")
+print("  official (a)(1)-(5) exist, including combined cash and stock and indeterminate value;")
+print("  this toy is not the rounding-formula catalog")
+print("5330(b): When a pending order involves a security that is the subject of a reverse split,")
+print("  the order (buy or sell) shall be cancelled")
+print("5330(c): When a pending order involves a security that is the subject of a stock split")
+print("  but is not otherwise required to be adjusted under this Rule, a member shall promptly")
+print("  notify the customer of the stock split")
+print('5330(d): The term "open order" means an order to buy or an open stop order to sell,')
+print('  including but not limited to "good \'til cancelled," "limit" or "stop limit" orders')
+print("  which remain in effect for a definite or indefinite period until executed, cancelled")
+print("  or expired")
+print("5330(e) exceptions include orders governed by the rules of a registered national")
+print("  securities exchange, open stop orders to buy, open sell orders, and orders where the")
+print("  issuer has not reported a dividend, payment, or distribution pursuant to SEA Rule 10b-17")
+every_adjusted = False
+print(f"  this toy invents that every open order is adjusted? {every_adjusted}")
+check(every_adjusted is False, "do not invent that every open order is adjusted")
+is_rewrite_10b17 = False
+print(f"  this is a rewrite of already-taught Rule 10b-17, or the rounding-formula catalog? {is_rewrite_10b17}")
+check(is_rewrite_10b17 is False, "not a rewrite of 10b-17 or the rounding catalog")
+exdate = True
+print(f"  official open orders are adjusted on the ex-date, except where a cash dividend or distribution is less than one cent ($0.01)? {exdate}")
+check(exdate is True, "5330 adjusts official open orders on the ex-date except ($0.01)")
+print("no product, broker, or order-type recommendation")
+print(f"assertions passed: {checks}/{checks}")

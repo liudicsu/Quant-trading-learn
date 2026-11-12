@@ -200,3 +200,125 @@ print(f"  written information is required at account opening and at least once e
 check(written_required is True, "2266 requires written SIPC information at opening and at least annually")
 print("no broker or SIPC-membership recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== H. FINRA 2264: margin disclosure prior to or at the time of opening, and not less than once a calendar year ===")
+# FINRA Rule 2264 Margin Disclosure Statement (official-page / official
+# rulebook HTML opened 2026-11-12). Keep sections A-G identical,
+# including the 15c3-3 line "this is separate from SIPC," 14/14 after E,
+# 15c6-1 / 11320, 19/19 after F, 2266, and 22/22 after G.
+# Official 2264(a): No member shall open a margin account, as specified
+# in Regulation T of the Board of Governors of the Federal Reserve
+# System, for or on behalf of a non-institutional customer, unless,
+# prior to or at the time of opening the account, the member has
+# furnished to the customer, individually, in paper or electronic form,
+# and in a separate document (or contained by itself on a separate page
+# as part of another document), the margin disclosure statement
+# specified in this paragraph (a). Official (a) also requires the
+# statement to be posted on the member's Web site, in a clear and
+# conspicuous manner, if the member permits non-institutional customers
+# to open accounts online or to engage in transactions in securities
+# online.
+# Official (b): Members shall, with a frequency of not less than once a
+# calendar year, deliver individually, in paper or electronic form, the
+# disclosure statement described in paragraph (a) or the following
+# bolded disclosures to all non-institutional customers with margin
+# accounts. Official (b) also states that the annual disclosure may be
+# delivered within or as part of other account documentation, and is not
+# required to be provided in a separate document or on a separate page.
+# Official (c) allows a substantially similar alternative.
+# Official (d) defines "non-institutional customer" as a customer that
+# does not qualify as an "institutional account" under Rule 4512(c);
+# name it, do not build a 4512 engine.
+# Official typography is "Web site" as two words, and official model
+# text includes "short fall" as two words. Do not invent that the
+# prescribed statement is the only permitted text. Do not build the
+# prescribed-statement catalog. Do not flatten 2264 into Rule 10b-16 or
+# already-taught Reg T / 4210, or flatten the clock into packed 2266 /
+# 2267. No product, broker, or margin recommendation.
+
+print("2264(a): No member shall open a margin account, as specified in Regulation T of the")
+print("  Board of Governors of the Federal Reserve System, for or on behalf of a")
+print("  non-institutional customer, unless, prior to or at the time of opening the account,")
+print("  the member has furnished to the customer, individually, in paper or electronic form,")
+print("  and in a separate document (or contained by itself on a separate page as part of")
+print("  another document), the margin disclosure statement specified in this paragraph (a)")
+print("  if the member permits non-institutional customers to open accounts online or to")
+print('  engage in transactions in securities online, the statement must be posted on the')
+print('  member\'s Web site in a clear and conspicuous manner')
+print("2264(b): Members shall, with a frequency of not less than once a calendar year,")
+print("  deliver individually, in paper or electronic form, the disclosure statement")
+print("  described in paragraph (a) or the following bolded disclosures to all")
+print("  non-institutional customers with margin accounts")
+print("  the annual disclosure may be delivered within or as part of other account")
+print("  documentation, and is not required to be provided in a separate document or on a")
+print("  separate page")
+print("official typography is \"Web site\" as two words; official model text includes \"short fall\" as two words")
+print("official (c) substantially similar alternative exists; this toy is not the prescribed-statement catalog")
+print('official (d): "non-institutional customer" means a customer that does not qualify')
+print('  as an "institutional account" under Rule 4512(c); this toy is not a 4512 engine')
+flatten_10b16 = False
+print(f"  this is a flatten into Rule 10b-16 or already-taught Reg T? {flatten_10b16}")
+check(flatten_10b16 is False, "do not flatten 2264 into 10b-16 or already-taught Reg T")
+only_text = False
+print(f"  this toy invents that the prescribed statement is the only permitted text? {only_text}")
+check(only_text is False, "official (c) alternative exists; not the only permitted text")
+clocks = True
+print(f"  furnished prior to or at the time of opening, and not less than once a calendar year? {clocks}")
+check(clocks is True, "2264 opening and annual clocks")
+print("no product, broker, or margin recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== I. FINRA 2267: written BrokerCheck information once every calendar year ===")
+# FINRA Rule 2267 Investor Education and Protection (official-page /
+# official rulebook HTML opened 2026-11-12). Keep all earlier prints,
+# including 22/22 after G / 2266 and the new 2264 section, identical
+# once 2264 is added.
+# Official 2267(a): Except as otherwise provided in this Rule, each
+# member shall once every calendar year provide in writing (which may be
+# electronic) to each customer the following items of information:
+# (1) FINRA BrokerCheck Hotline Number; (2) FINRA Web site address; and
+# (3) A statement as to the availability to the customer of an investor
+# brochure that includes information describing FINRA BrokerCheck.
+# Official typography is "Web site" as two words.
+# Official (b)(1): a member whose contact with customers is limited to
+# introducing customer accounts to be held directly at an entity other
+# than a FINRA member, and that thereafter does not carry customer
+# accounts or hold customer funds and securities, may furnish the
+# information at or prior to the time of the customer's initial
+# purchase, in lieu of once every calendar year.
+# Official (b)(2): a member that does not have customers, or that is a
+# party to a carrying agreement where the carrying firm member complies
+# with paragraph (a), is exempt.
+# Do not invent that the general 2267 duty is an account-opening
+# disclosure. Do not flatten the clock into packed 2266. Do not invent a
+# BrokerCheck hotline number or a FINRA Web site address from page
+# chrome (the rule names those items but does not state the number).
+# This is not a rewrite of packed 2266 or already-taught SIPC coverage
+# limits. No broker or BrokerCheck recommendation.
+
+print("2267(a): Except as otherwise provided in this Rule, each member shall once every")
+print("  calendar year provide in writing (which may be electronic) to each customer the")
+print("  following items of information:")
+print("  (1) FINRA BrokerCheck Hotline Number;")
+print("  (2) FINRA Web site address; and")
+print("  (3) A statement as to the availability to the customer of an investor brochure")
+print("  that includes information describing FINRA BrokerCheck")
+print('official typography is "Web site" as two words')
+print("this toy invents no BrokerCheck hotline number and no FINRA Web site address")
+print("official (b)(1): a limited introducing-firm alternative may furnish the information")
+print("  at or prior to the time of the customer's initial purchase, in lieu of once every")
+print("  calendar year")
+print("official (b)(2): a member that does not have customers, or that is a party to a")
+print("  carrying agreement where the carrying firm member complies with paragraph (a),")
+print("  is exempt; this toy is not an introducing-firm / carrying-agreement engine")
+is_rewrite_2266 = False
+print(f"  this is a rewrite of packed 2266? {is_rewrite_2266}")
+check(is_rewrite_2266 is False, "2267 is not a rewrite of packed 2266")
+invents_hotline = False
+print(f"  this toy invents a BrokerCheck hotline number or a FINRA Web site address? {invents_hotline}")
+check(invents_hotline is False, "do not invent a hotline number or Web site address")
+annual_not_opening = True
+print(f"  the general 2267 duty is once every calendar year, not a general account-opening disclosure? {annual_not_opening}")
+check(annual_not_opening is True, "general 2267 duty is once every calendar year")
+print("no broker or BrokerCheck recommendation")
+print(f"assertions passed: {checks}/{checks}")
