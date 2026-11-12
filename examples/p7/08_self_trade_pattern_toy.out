@@ -262,3 +262,69 @@ no broker or product recommendation
 assertions passed: 43/43
 ASSERT_24830_ok
 disclaimer: learning only; not legal advice; written-safeguard literacy only, not an incident-response how-to
+=== P. FINRA 4514: Authorization Records for Negotiable Instruments Drawn From a Customer's Account ===
+4514: No member or person associated with a member shall obtain from a customer or
+  submit for payment a check, draft or other form of negotiable paper drawn on a
+  customer's checking, savings, share or similar account, without that person's
+  express written authorization, which may include the customer's signature on the
+  negotiable instrument. Where the written authorization is separate from the
+  negotiable instrument, the member shall preserve the authorization for a period of
+  three years following the date the authorization expires. This provision shall not,
+  however, require members to preserve copies of negotiable instruments signed by
+  customers.
+official typography is "check, draft or other form" and "checking, savings, share or similar account" (no Oxford comma)
+official typography is "three years following the date the authorization expires"
+official caption typography is Authorization Records for Negotiable Instruments Drawn From a Customer's Account
+  (straight apostrophe U+0027 in Customer's)
+Adopted by SR-FINRA-2010-052 eff. Dec. 5, 2011. Selected Notice: 11-19.
+  this is a flatten into packed 2150, packed 4330(a), packed 4513, or already-named FINRA 4511 / 4512? False
+  this toy invents that signed negotiable instruments themselves must be preserved? False
+  express written authorization is required, and a separate written authorization shall be preserved for three years following the date the authorization expires? True
+recordkeeping literacy only; not a procedure guide for drawing on a customer account
+no customer or broker recommendation
+assertions passed: 46/46
+=== Q. FINRA 1122: Filing of Misleading Information as to Membership or Registration ===
+1122: No member or person associated with a member shall file with FINRA information
+  with respect to membership or registration which is incomplete or inaccurate so as
+  to be misleading, or which could in any way tend to mislead, or fail to correct such
+  filing after notice thereof.
+official typography is "which is incomplete or inaccurate so as to be misleading"
+official typography is "or fail to correct such filing after notice thereof"
+official caption typography is Filing of Misleading Information as to Membership or Registration.
+Amended by SR-FINRA-2009-009 eff. Aug. 17, 2009. Selected Notice: 09-33.
+  this is a flatten into packed 10b-5, packed 2010, packed 3210, or packed 3280? False
+  this toy invents a form number or a numbered clock? False
+  a member or associated person may not file with FINRA membership or registration information which is incomplete or inaccurate so as to be misleading, or fail to correct such filing after notice thereof? True
+learning only; not a procedure guide for membership or Form U4 filings
+no associated-person or broker recommendation
+assertions passed: 49/49
+=== R. FINRA 8210(a)/(c): Provision of Information and Testimony and Inspection and Copying of Books ===
+8210(a): For the purpose of an investigation, complaint, examination, or proceeding
+  authorized by the FINRA By-Laws or rules, an Adjudicator or FINRA staff shall have
+  the right to:
+  (1) require a member, person associated with a member, or any other person subject to
+  FINRA's jurisdiction to provide information orally, in writing, or electronically
+  (if the requested information is, or is required to be, maintained in electronic form)
+  and to testify at a location specified by FINRA staff, under oath or affirmation
+  administered by a court reporter or a notary public if requested, with respect to any
+  matter involved in the investigation, complaint, examination, or proceeding; and
+  (2) inspect and copy the books, records, and accounts of such member or person with
+  respect to any matter involved in the investigation, complaint, examination, or
+  proceeding that is in such member's or person's possession, custody or control
+8210(c): No member or person shall fail to provide information or testimony or to
+  permit an inspection and copying of books, records, or accounts pursuant to this Rule.
+official typography is "investigation, complaint, examination, or proceeding" (Oxford comma)
+official typography is "orally, in writing, or electronically" (Oxford comma)
+official (a)(2) typography is "books, records, and accounts" (Oxford comma, "and") and "possession, custody or control" (no Oxford comma)
+official (c) typography is "books, records, or accounts" (Oxford comma, "or")
+official (b) and official (d)-(g) exist, including official Rule 9134(a)(1) in official (d);
+  this toy is not those catalogs or a 9134 engine
+Amended by SR-FINRA-2009-060 eff. Feb 25, 2013 (no period after Feb).
+  this is a flatten into packed 4513, packed 3310, or packed 2010? False
+  this toy packs official (b) or official (d)-(g) as the teaching core, or invents an investigation-procedure how-to? False
+  no member or person shall fail to provide information or testimony or to permit an inspection and copying of books, records, or accounts pursuant to this Rule? True
+literacy only; not a procedure guide for responding to an investigation
+no customer, associated-person, or broker recommendation
+assertions passed: 52/52
+ASSERT_8210_ok
+disclaimer: learning only; not legal advice; literacy only, not an investigation-procedure how-to

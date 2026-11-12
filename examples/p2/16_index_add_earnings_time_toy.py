@@ -369,3 +369,110 @@ check(core_12b20 is True, "12b-20 requires additional material information so re
 print("no issuer or disclosure advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 240.12b-20; no issuer or disclosure advice; learning only")
+
+print("=== H. 17 CFR 240.13a-14(a)/(c): Certification of disclosure in annual and quarterly reports ===")
+# 17 CFR 240.13a-14 Certification of disclosure in annual and quarterly
+# reports (official eCFR versioner API XML, title 17 up_to_date_as_of
+# 2026-11-09, opened 2026-11-12). Add this section after the last
+# 12b-20 disclaimer so 28/28 after G / 12b-20 plus that disclaimer
+# remain a strict byte-prefix. Keep sections A-G identical.
+# Official typography is "Form 10-Q, Form 10-K, Form 20-F or Form 40-F"
+# (no Oxford comma). Official (c): a person required to provide a
+# certification specified in paragraph (a), (b) or (d) may not have the
+# certification signed on his or her behalf pursuant to a power of
+# attorney or other form of confirming authority. Cite 17 CFR
+# 240.13a-14.
+# Official (b) 18 U.S.C. 1350 furnished-certification duty, official
+# (d)/(e) asset-backed catalog, official (f) Interactive Data File
+# exception, and the official (a) ICFR phase-in language that names
+# § 240.13a-15 or § 240.15d-15, exist; name them, do not build those
+# catalogs, and do not pack official (b) or 13a-15 as the teaching
+# core. 17 CFR 240.15d-14 (same official caption; the Section 15(d)
+# companion) is named only; do not pack 15d-14 as a second teaching
+# core. Do not flatten 13a-14 into already-taught Form 10-K / 10-Q
+# clocks, packed 12b-20, already-taught Form 20-F four-month / Form 6-K
+# promptly clocks, or Form 8-K Item 4.02. Do not invent a certification
+# form number or a filing clock in this rule. Learning only; no issuer
+# or disclosure advice.
+
+print("13a-14(a): Each report, including transition reports, filed on Form 10-Q, Form 10-K,")
+print("  Form 20-F or Form 40-F under Section 13(a) of the Act, other than a report filed by")
+print("  an Asset-Backed Issuer or a report on Form 20-F filed under § 240.13a-19, must")
+print("  include certifications in the form specified in the applicable exhibit filing")
+print("  requirements of such report and such certifications must be filed as an exhibit to")
+print("  such report. Each principal executive and principal financial officer of the issuer,")
+print("  or persons performing similar functions, at the time of filing of the report must")
+print("  sign a certification.")
+print("13a-14(c): A person required to provide a certification specified in paragraph (a),")
+print("  (b) or (d) of this section may not have the certification signed on his or her behalf")
+print("  pursuant to a power of attorney or other form of confirming authority.")
+print('official typography is "Form 10-Q, Form 10-K, Form 20-F or Form 40-F" (no Oxford comma)')
+print("official caption is Certification of disclosure in annual and quarterly reports.")
+print("cite 17 CFR 240.13a-14; title 17 up_to_date_as_of 2026-11-09")
+print("official (b) 18 U.S.C. 1350 furnished certifications, official (d)/(e) ABS, official (f)")
+print("  Interactive Data File, and § 240.13a-15 / § 240.15d-15 exist; 17 CFR 240.15d-14 is")
+print("  named only; this toy is not those catalogs, and does not pack official (b) or 15d-14")
+print("  as the teaching core")
+flatten_13a14 = False
+print(f"  this is a flatten into already-taught Form 10-K / 10-Q clocks, packed 12b-20, already-taught Form 20-F / Form 6-K clocks, or Form 8-K Item 4.02? {flatten_13a14}")
+check(flatten_13a14 is False, "do not flatten 13a-14 into already-taught 10-K / 10-Q clocks, packed 12b-20, 20-F / 6-K, or Item 4.02")
+poa_ok = False
+print(f"  this toy invents that a required certification may be signed on his or her behalf pursuant to a power of attorney? {poa_ok}")
+check(poa_ok is False, "official (c) bars a power of attorney or other form of confirming authority")
+core_13a14 = True
+print(f"  each principal executive and principal financial officer must sign a certification that is filed as an exhibit, and may not have it signed on his or her behalf pursuant to a power of attorney? {core_13a14}")
+check(core_13a14 is True, "13a-14(a)/(c) require a filed, personally signed certification")
+print("no issuer or disclosure advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.13a-14; no issuer or disclosure advice; learning only")
+
+print("=== I. 17 CFR 240.10D-1(b)(1): recover reasonably promptly the amount of erroneously awarded incentive-based compensation ===")
+# 17 CFR 240.10D-1 Listing standards relating to recovery of erroneously
+# awarded compensation (official eCFR versioner API XML, title 17
+# up_to_date_as_of 2026-11-09, opened 2026-11-12). Keep H identical
+# once 13a-14 is added. Packed slice is official (b)(1)'s opening
+# written-policy sentence only, including "recover reasonably promptly."
+# Official (a) listing-standard / 2023 transition machinery, official
+# (b)(1)(i)-(v) lookback / restatement-date / recovery-amount /
+# impracticability / no-indemnification catalog (including official
+# (b)(1)(i)(D) "An issuer's obligation to recover erroneously awarded
+# compensation is not dependent on if or when the restated financial
+# statements are filed," and official (b)(1)(iv)(C) typography "the
+# requirements of26 U.S.C. 401(a)(13)" with no space after "of"),
+# official (c) exemptions, and official (d) definitions exist; name
+# them, do not build those catalogs, do not invent a numeric clock for
+# "reasonably promptly," and do not silently insert a space into
+# official "of26." A LII U.S.C. link wrap is not official typography
+# that adds a space. Cite 17 CFR 240.10D-1.
+# Do not flatten 10D-1 into already-taught Form 8-K Item 4.02, packed
+# 12b-20, packed 13a-14, or already-taught 10-K / 10-Q clocks. Learning
+# only; no issuer, compensation, or disclosure advice.
+
+print("10D-1(b)(1): The issuer must adopt and comply with a written policy providing that the")
+print("  issuer will recover reasonably promptly the amount of erroneously awarded")
+print("  incentive-based compensation in the event that the issuer is required to prepare an")
+print("  accounting restatement due to the material noncompliance of the issuer with any")
+print("  financial reporting requirement under the securities laws, including any required")
+print("  accounting restatement to correct an error in previously issued financial statements")
+print("  that is material to the previously issued financial statements, or that would result")
+print("  in a material misstatement if the error were corrected in the current period or left")
+print("  uncorrected in the current period.")
+print('official typography is "recover reasonably promptly"')
+print("official caption is Listing standards relating to recovery of erroneously awarded compensation.")
+print("cite 17 CFR 240.10D-1; title 17 up_to_date_as_of 2026-11-09")
+print("official (a) 2023 transition machinery, official (b)(1)(i)-(v) including not dependent on")
+print("  if or when the restated financial statements are filed, official (c) exemptions, and")
+print("  official (d) definitions exist; this toy is not those catalogs")
+print('official (b)(1)(iv)(C) typography is "the requirements of26 U.S.C. 401(a)(13)" (no space after "of")')
+flatten_10d1 = False
+print(f"  this is a flatten into already-taught Form 8-K Item 4.02, packed 12b-20, packed 13a-14, or already-taught 10-K / 10-Q clocks? {flatten_10d1}")
+check(flatten_10d1 is False, "do not flatten 10D-1 into Item 4.02, packed 12b-20, packed 13a-14, or already-taught 10-K / 10-Q clocks")
+numeric_clock = False
+print(f"  this toy invents a numeric clock for reasonably promptly, or silently inserts a space into official of26? {numeric_clock}")
+check(numeric_clock is False, "do not invent a numeric clock for reasonably promptly, and do not insert a space into of26")
+core_10d1 = True
+print(f"  the issuer must adopt and comply with a written policy providing that the issuer will recover reasonably promptly the amount of erroneously awarded incentive-based compensation? {core_10d1}")
+check(core_10d1 is True, "10D-1(b)(1) requires a written policy to recover reasonably promptly")
+print("no issuer, compensation, or disclosure advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.10D-1; no issuer, compensation, or disclosure advice; learning only")

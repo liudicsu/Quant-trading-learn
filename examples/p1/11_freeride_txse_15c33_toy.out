@@ -265,3 +265,33 @@ official (b) and official SM .01 / .03-.06 exist; this toy is not that fully-pai
   written authorization is required before lending a customer's eligible margin securities? True
 customer-protection literacy only; no securities-lending product recommendation
 assertions passed: 52/52
+=== R. FINRA 3150: Holding of Customer Mail ===
+3150(a): A member may hold mail for a customer who will not be receiving mail at his or
+  her usual address, provided that:
+  (1) the member receives written instructions from the customer that include the time
+  period during which the member is requested to hold the customer's mail. If the
+  requested time period included in the instructions is longer than three consecutive
+  months (including any aggregation of time periods from prior requests), the customer's
+  instructions must include an acceptable reason for the request (e.g., safety or
+  security concerns). Convenience is not an acceptable reason for holding mail longer
+  than three months;
+  (2) the member informs the customer in writing of any alternate methods, such as email
+  or access through the member's website, that the customer may use to receive or
+  monitor account activity and information, and obtains the customer's confirmation of
+  the receipt of such information; and
+  (3) the member verifies at reasonable intervals that the customer's instructions still
+  apply
+official typography is "his or her usual address" and one-word lowercase "website"
+official (a) is permissive (may hold mail), not a duty to hold mail
+official (b): during the time that a member is holding mail for a customer, the member
+  must be able to communicate with the customer in a timely manner to provide important
+  account information (e.g., privacy notices, the SIPC information disclosures required
+  by Rule 2266), as necessary; this toy is not a rewrite of packed 2266
+official (c) reasonably designed actions against tampering, holding without consent, or
+  associated-person misuse exist; this toy is not a mail-handling procedure guide
+Adopted by SR-FINRA-2013-025 eff. Dec. 1, 2014. Selected Notice: 14-10.
+  this is a flatten into packed 2266, packed 2231, packed 2267, or already-taught SIPC coverage limits? False
+  this toy invents that convenience is an acceptable reason for holding mail longer than three months? False
+  a member may hold mail for a customer who will not be receiving mail at his or her usual address, subject to written instructions, alternate-method notice, and reasonable-interval verification? True
+learning only; no broker or product recommendation
+assertions passed: 55/55

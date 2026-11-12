@@ -744,3 +744,154 @@ print("no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_24830_ok")
 print("disclaimer: learning only; not legal advice; written-safeguard literacy only, not an incident-response how-to")
+
+print("=== P. FINRA 4514: Authorization Records for Negotiable Instruments Drawn From a Customer's Account ===")
+# FINRA Rule 4514 Authorization Records for Negotiable Instruments
+# Drawn From a Customer's Account (official <h1> typography uses a
+# straight apostrophe U+0027 in "Customer's"; official #the-rule HTML
+# typography, opened 2026-11-12). Add this section after the last
+# 248.30 disclaimer so 43/43 after O / 248.30, ASSERT_24830_ok, and
+# the last written-safeguard literacy disclaimer remain a strict
+# byte-prefix of the tip file. Lesson heading order places 4514 after
+# packed 4513 and before packed 248.30; the lab add-on still goes
+# after the current last 248.30 disclaimer so the tip file remains a
+# prefix.
+# Official typography is "check, draft or other form" and "checking,
+# savings, share or similar account" (no Oxford comma), and "three
+# years following the date the authorization expires." Do not invent
+# that signed negotiable instruments themselves must be preserved
+# (official last sentence says this provision shall not require
+# members to preserve copies of negotiable instruments signed by
+# customers). Do not flatten 4514 into packed 2150, packed 4330(a),
+# packed 4513, or already-named FINRA 4511 / 4512. Adopted by
+# SR-FINRA-2010-052 eff. Dec. 5, 2011. Selected Notice: 11-19.
+# Customer-protection / recordkeeping literacy only; not a procedure
+# guide for drawing on a customer account, and not a customer or
+# broker recommendation.
+
+print("4514: No member or person associated with a member shall obtain from a customer or")
+print("  submit for payment a check, draft or other form of negotiable paper drawn on a")
+print("  customer's checking, savings, share or similar account, without that person's")
+print("  express written authorization, which may include the customer's signature on the")
+print("  negotiable instrument. Where the written authorization is separate from the")
+print("  negotiable instrument, the member shall preserve the authorization for a period of")
+print("  three years following the date the authorization expires. This provision shall not,")
+print("  however, require members to preserve copies of negotiable instruments signed by")
+print("  customers.")
+print('official typography is "check, draft or other form" and "checking, savings, share or similar account" (no Oxford comma)')
+print('official typography is "three years following the date the authorization expires"')
+print("official caption typography is Authorization Records for Negotiable Instruments Drawn From a Customer's Account")
+print("  (straight apostrophe U+0027 in Customer's)")
+print("Adopted by SR-FINRA-2010-052 eff. Dec. 5, 2011. Selected Notice: 11-19.")
+flatten_4514 = False
+print(f"  this is a flatten into packed 2150, packed 4330(a), packed 4513, or already-named FINRA 4511 / 4512? {flatten_4514}")
+check(flatten_4514 is False, "do not flatten 4514 into packed 2150 / 4330(a) / 4513 or already-named 4511 / 4512")
+preserve_signed = False
+print(f"  this toy invents that signed negotiable instruments themselves must be preserved? {preserve_signed}")
+check(preserve_signed is False, "this provision shall not require members to preserve copies of negotiable instruments signed by customers")
+core_4514 = True
+print(f"  express written authorization is required, and a separate written authorization shall be preserved for three years following the date the authorization expires? {core_4514}")
+check(core_4514 is True, "4514 requires express written authorization and a three-year clock for a separate authorization")
+print("recordkeeping literacy only; not a procedure guide for drawing on a customer account")
+print("no customer or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== Q. FINRA 1122: Filing of Misleading Information as to Membership or Registration ===")
+# FINRA Rule 1122 Filing of Misleading Information as to Membership or
+# Registration (official #the-rule / <h1> HTML typography, opened
+# 2026-11-12). Keep P identical once 4514 is added. The official core
+# is one sentence. Official typography is "which is incomplete or
+# inaccurate so as to be misleading" ("which," not "that"; "so as to
+# be misleading," not "and misleading"), and "or fail to correct such
+# filing after notice thereof." This is a membership-or-registration
+# filing duty owed to FINRA, not a purchase-or-sale antifraud rule.
+# Do not flatten 1122 into packed 10b-5, packed 2010, packed 3210, or
+# packed 3280, and do not rewrite those already-shipped boxes. Do not
+# invent a form number or a numbered clock (official text is "after
+# notice thereof"). Amended by SR-FINRA-2009-009 eff. Aug. 17, 2009.
+# Selected Notice: 09-33. Learning only; not a procedure guide for
+# membership or Form U4 filings, and not an associated-person or
+# broker recommendation.
+
+print("1122: No member or person associated with a member shall file with FINRA information")
+print("  with respect to membership or registration which is incomplete or inaccurate so as")
+print("  to be misleading, or which could in any way tend to mislead, or fail to correct such")
+print("  filing after notice thereof.")
+print('official typography is "which is incomplete or inaccurate so as to be misleading"')
+print('official typography is "or fail to correct such filing after notice thereof"')
+print("official caption typography is Filing of Misleading Information as to Membership or Registration.")
+print("Amended by SR-FINRA-2009-009 eff. Aug. 17, 2009. Selected Notice: 09-33.")
+flatten_1122 = False
+print(f"  this is a flatten into packed 10b-5, packed 2010, packed 3210, or packed 3280? {flatten_1122}")
+check(flatten_1122 is False, "do not flatten 1122 into packed 10b-5 / 2010 / 3210 / 3280")
+invented_clock = False
+print(f"  this toy invents a form number or a numbered clock? {invented_clock}")
+check(invented_clock is False, "official text is after notice thereof, not a numbered day count")
+core_1122 = True
+print(f"  a member or associated person may not file with FINRA membership or registration information which is incomplete or inaccurate so as to be misleading, or fail to correct such filing after notice thereof? {core_1122}")
+check(core_1122 is True, "1122 bars misleading membership or registration filings and requires correction after notice")
+print("learning only; not a procedure guide for membership or Form U4 filings")
+print("no associated-person or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== R. FINRA 8210(a)/(c): Provision of Information and Testimony and Inspection and Copying of Books ===")
+# FINRA Rule 8210 Provision of Information and Testimony and Inspection
+# and Copying of Books (official #the-rule / <h1> HTML typography,
+# opened 2026-11-12). Keep Q identical once 1122 is added. Packed
+# slice is official (a) and official (c) only.
+# Official typography is "investigation, complaint, examination, or
+# proceeding" (Oxford comma); "orally, in writing, or electronically"
+# (Oxford comma); official (a)(2) "books, records, and accounts"
+# (Oxford comma, "and"); official (a)(2) "possession, custody or
+# control" (no Oxford comma); official (c) "books, records, or
+# accounts" (Oxford comma, "or"). Do not tidy official (a)(2)'s "and"
+# into official (c)'s "or," or insert an Oxford comma into
+# "possession, custody or control." Official amendment-line typography
+# is "Amended by SR-FINRA-2009-060 eff. Feb 25, 2013" (no period after
+# "Feb"). Official (b) other-SRO / regulator information-sharing,
+# official (d) notice / Central Registration Depository address
+# (official (d) names Rule 9134(a)(1)), official (e) electronic
+# interface, official (f) witness transcript inspection, and official
+# (g) encryption of information provided on a portable media device
+# exist; name official (b) and official (d)-(g), including official
+# Rule 9134(a)(1); do not build those catalogs, and do not invent a
+# 9134 engine. Literacy only, not a procedure guide for responding to
+# an investigation, examination, or complaint, and not a customer,
+# associated-person, or broker recommendation. Do not flatten 8210
+# into packed 4513, packed 3310, or packed 2010.
+
+print("8210(a): For the purpose of an investigation, complaint, examination, or proceeding")
+print("  authorized by the FINRA By-Laws or rules, an Adjudicator or FINRA staff shall have")
+print("  the right to:")
+print("  (1) require a member, person associated with a member, or any other person subject to")
+print("  FINRA's jurisdiction to provide information orally, in writing, or electronically")
+print("  (if the requested information is, or is required to be, maintained in electronic form)")
+print("  and to testify at a location specified by FINRA staff, under oath or affirmation")
+print("  administered by a court reporter or a notary public if requested, with respect to any")
+print("  matter involved in the investigation, complaint, examination, or proceeding; and")
+print("  (2) inspect and copy the books, records, and accounts of such member or person with")
+print("  respect to any matter involved in the investigation, complaint, examination, or")
+print("  proceeding that is in such member's or person's possession, custody or control")
+print("8210(c): No member or person shall fail to provide information or testimony or to")
+print("  permit an inspection and copying of books, records, or accounts pursuant to this Rule.")
+print('official typography is "investigation, complaint, examination, or proceeding" (Oxford comma)')
+print('official typography is "orally, in writing, or electronically" (Oxford comma)')
+print('official (a)(2) typography is "books, records, and accounts" (Oxford comma, "and") and "possession, custody or control" (no Oxford comma)')
+print('official (c) typography is "books, records, or accounts" (Oxford comma, "or")')
+print("official (b) and official (d)-(g) exist, including official Rule 9134(a)(1) in official (d);")
+print("  this toy is not those catalogs or a 9134 engine")
+print("Amended by SR-FINRA-2009-060 eff. Feb 25, 2013 (no period after Feb).")
+flatten_8210 = False
+print(f"  this is a flatten into packed 4513, packed 3310, or packed 2010? {flatten_8210}")
+check(flatten_8210 is False, "do not flatten 8210 into packed 4513 / 3310 / 2010")
+pack_catalog = False
+print(f"  this toy packs official (b) or official (d)-(g) as the teaching core, or invents an investigation-procedure how-to? {pack_catalog}")
+check(pack_catalog is False, "packed slice is official (a) and official (c) only; literacy only")
+core_8210 = True
+print(f"  no member or person shall fail to provide information or testimony or to permit an inspection and copying of books, records, or accounts pursuant to this Rule? {core_8210}")
+check(core_8210 is True, "8210(c) requires provision of information or testimony and inspection and copying of books, records, or accounts")
+print("literacy only; not a procedure guide for responding to an investigation")
+print("no customer, associated-person, or broker recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_8210_ok")
+print("disclaimer: learning only; not legal advice; literacy only, not an investigation-procedure how-to")

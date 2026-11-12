@@ -569,7 +569,8 @@ print("=== N. FINRA 4340: callable securities fair-and-impartial allocation and 
 # ministerial and official SM .03 introducing-member catalogs exist;
 # name them, do not build those catalogs. Do not flatten 4340 into
 # already-taught 15c3-3 "possession or control," or into FINRA
-# 2232(b)(2) (2232 is not packed). Do not invent that every common
+# official 2232(b)(2) (official 2232(b)(1) is packed in the execution
+# lesson). Do not invent that every common
 # stock is callable. No broker or product recommendation.
 
 print("4340(a): Each member that has in its possession or under its control any security which, by")
@@ -592,7 +593,7 @@ print("  other means as will achieve a fair and impartial allocation; official S
 print("  exist; this toy is not those catalogs")
 flatten_4340 = False
 print(f"  this is a flatten into already-taught 15c3-3 possession or control, or into FINRA 2232(b)(2)? {flatten_4340}")
-check(flatten_4340 is False, "do not flatten 4340 into 15c3-3 or into unpacked 2232")
+check(flatten_4340 is False, "do not flatten 4340 into 15c3-3 or into official 2232(b)(2)")
 every_stock = False
 print(f"  this toy invents that every common stock is callable? {every_stock}")
 check(every_stock is False, "4340 applies to a security which, by its terms, may be called or redeemed prior to maturity")
@@ -747,4 +748,63 @@ core_4330 = True
 print(f"  written authorization is required before lending a customer's eligible margin securities? {core_4330}")
 check(core_4330 is True, "4330(a) requires written authorization before lending a customer's eligible margin securities")
 print("customer-protection literacy only; no securities-lending product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+
+print("=== R. FINRA 3150: Holding of Customer Mail ===")
+# FINRA Rule 3150 Holding of Customer Mail (official #the-rule / <h1>
+# HTML typography, opened 2026-11-12). Add this section after the last
+# line so 52/52 after Q / 4330 remains a strict byte-prefix of the tip
+# file.
+# Official (a) is permissive ("may hold mail"), not a duty to hold mail.
+# Official typography is "his or her usual address" and one-word
+# lowercase "website." Do not tidy 3150's "website" into packed 4370 /
+# packed 2264 "Web site." If the requested time period is longer than
+# three consecutive months (including any aggregation of time periods
+# from prior requests), the customer's instructions must include an
+# acceptable reason (e.g., safety or security concerns). "Convenience is
+# not an acceptable reason for holding mail longer than three months."
+# Official (b) names packed Rule 2266 as an example of important account
+# information that the member must still be able to communicate in a
+# timely manner; name official (b), do not flatten 3150 into packed
+# 2266, and do not rewrite the already-shipped 2266 box. Official (c)
+# reasonably designed actions against tampering / holding without
+# consent / associated-person misuse exist; name official (c), do not
+# build a mail-handling procedure guide. Adopted by SR-FINRA-2013-025
+# eff. Dec. 1, 2014. Selected Notice: 14-10. Learning only; no broker or
+# product recommendation.
+
+print("3150(a): A member may hold mail for a customer who will not be receiving mail at his or")
+print("  her usual address, provided that:")
+print("  (1) the member receives written instructions from the customer that include the time")
+print("  period during which the member is requested to hold the customer's mail. If the")
+print("  requested time period included in the instructions is longer than three consecutive")
+print("  months (including any aggregation of time periods from prior requests), the customer's")
+print("  instructions must include an acceptable reason for the request (e.g., safety or")
+print("  security concerns). Convenience is not an acceptable reason for holding mail longer")
+print("  than three months;")
+print("  (2) the member informs the customer in writing of any alternate methods, such as email")
+print("  or access through the member's website, that the customer may use to receive or")
+print("  monitor account activity and information, and obtains the customer's confirmation of")
+print("  the receipt of such information; and")
+print("  (3) the member verifies at reasonable intervals that the customer's instructions still")
+print("  apply")
+print('official typography is "his or her usual address" and one-word lowercase "website"')
+print("official (a) is permissive (may hold mail), not a duty to hold mail")
+print("official (b): during the time that a member is holding mail for a customer, the member")
+print("  must be able to communicate with the customer in a timely manner to provide important")
+print("  account information (e.g., privacy notices, the SIPC information disclosures required")
+print("  by Rule 2266), as necessary; this toy is not a rewrite of packed 2266")
+print("official (c) reasonably designed actions against tampering, holding without consent, or")
+print("  associated-person misuse exist; this toy is not a mail-handling procedure guide")
+print("Adopted by SR-FINRA-2013-025 eff. Dec. 1, 2014. Selected Notice: 14-10.")
+flatten_3150 = False
+print(f"  this is a flatten into packed 2266, packed 2231, packed 2267, or already-taught SIPC coverage limits? {flatten_3150}")
+check(flatten_3150 is False, "do not flatten 3150 into packed 2266 / 2231 / 2267 or already-taught SIPC coverage limits")
+convenience_ok = False
+print(f"  this toy invents that convenience is an acceptable reason for holding mail longer than three months? {convenience_ok}")
+check(convenience_ok is False, "Convenience is not an acceptable reason for holding mail longer than three months")
+core_3150 = True
+print(f"  a member may hold mail for a customer who will not be receiving mail at his or her usual address, subject to written instructions, alternate-method notice, and reasonable-interval verification? {core_3150}")
+check(core_3150 is True, "3150(a) is a permissive hold-mail rule with written instructions and the official conditions")
+print("learning only; no broker or product recommendation")
 print(f"assertions passed: {checks}/{checks}")
