@@ -309,3 +309,125 @@ already-taught 10b-9 (all-or-none representations) and Regulation M Rule 105 exi
 literacy only; not a firm-commitment how-to or an escrow-agreement catalog
 no broker, underwriter, or escrow-bank recommendation
 assertions passed: 55/55
+=== R. FINRA 5310: Best Execution and Interpositioning ===
+official caption typography is 5310. Best Execution and Interpositioning (no
+  period at the end of the caption)
+5310(a)(1): In any transaction for or with a customer or a customer of another
+  broker-dealer, a member and persons associated with a member shall use
+  reasonable diligence to ascertain the best market for the subject security and
+  buy or sell in such market so that the resultant price to the customer is as
+  favorable as possible under prevailing market conditions. Among the factors
+  that will be considered in determining whether a member has used "reasonable
+  diligence" are:
+  (A) the character of the market for the security (e.g., price, volatility,
+  relative liquidity, and pressure on available communications);
+  (B) the size and type of transaction;
+  (C) the number of markets checked;
+  (D) accessibility of the quotation; and
+  (E) the terms and conditions of the order which result in the transaction, as
+  communicated to the member and persons associated with the member.
+5310(a)(2): In any transaction for or with a customer or a customer of another
+  broker-dealer, no member or person associated with a member shall interject a
+  third party between the member and the best market for the subject security in
+  a manner inconsistent with paragraph (a)(1) of this Rule.
+official (a) uses straight ASCII quotes (U+0022) around "reasonable diligence";
+  official SM later uses typographic quotes around “reasonable diligence,”
+  “market,” “markets,” and “quotation”; this toy does not copy those
+  typographic quotes onto official (a)
+official (A) typography is "e.g., price, volatility, relative liquidity, and
+  pressure on available communications" (Oxford comma)
+official (b) broker's-broker burden, official (c)-(d), official (e) (the
+  agency-or-principal sentence, and the official cross-reference "Rule 2121 and
+  its Supplementary Material" — 2121 is already packed), and official SM .01-.09
+  exist and are named only, including SM .01 "fully and promptly" (no numeric
+  clock), SM .09 regular-and-rigorous review, and official SM .07 heading
+  typography 07. Orders Involving Foreign Securities. (a leading 07. without the
+  leading dot used in official .01-.06 and .08-.09); this toy does not tidy 07.
+  to ".07"
+if the official SM header is quoted, typography is • • • Supplementary Material: --------------
+  (U+2022, U+00A0 NBSP, 14 ASCII hyphens); the same typography as official 3130,
+  not official 4590's ordinary-space header, and not packed 2273's
+  ordinary-space / 15-hyphen header
+Notice 21-23 is not the official rule text; packing official 5310(a) is a later
+  separate item, not a second core of the already-printed 21-23 pointers
+  this is a flatten into packed 605 / 606 / 5320 / 2121, packed 15c2-4, or packed 10b-10, or an invention that best execution is solely about price? False
+  this toy invents a numeric clock for SM .01 "fully and promptly", treats official (b)-(e) or the SM catalog as the packed slice, or tidies official SM .07 heading typography to ".07"? False
+  in any transaction for or with a customer or a customer of another broker-dealer, a member and persons associated with a member shall use reasonable diligence to ascertain the best market for the subject security and buy or sell in such market so that the resultant price to the customer is as favorable as possible under prevailing market conditions, considering official (A)-(E), and no member or person associated with a member shall interject a third party between the member and the best market for the subject security in a manner inconsistent with paragraph (a)(1)? True
+literacy only; not a routing or best-execution-policy how-to, and not legal advice
+no broker, venue, or product recommendation
+assertions passed: 58/58
+=== S. 17 CFR 240.15c1-5: Disclosure of control ===
+official caption typography is Disclosure of control.
+15c1-5: The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c)(1) of the Act, is hereby defined to
+  include any act of any broker, dealer or municipal securities dealer controlled
+  by, controlling, or under common control with, the issuer of any security,
+  designed to effect with or for the account of a customer any transaction in, or
+  to induce the purchase or sale by such customer of, such security unless such
+  broker, dealer or municipal securities dealer, before entering into any
+  contract with or for such customer for the purchase or sale of such security,
+  discloses to such customer the existence of such control, and unless such
+  disclosure, if not made in writing, is supplemented by the giving or sending of
+  written disclosure at or before the completion of the transaction.
+official typography italicizes the defined term, including the trailing comma,
+  and does not put quotation marks around it: The term <I>manipulative,
+  deceptive, or other fraudulent device or contrivance,</I> as used in section
+  15(c)(1) of the Act; this toy does not invent quotes, and does not copy packed
+  15c2-4 typographic quotes onto this rule
+official typography is "broker, dealer or municipal securities dealer" (no
+  Oxford comma in that trio); "controlled by, controlling, or under common
+  control with, the issuer" (comma after "with"); and "at or before the
+  completion of the transaction."
+cite 17 CFR 240.15c1-5; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22825, June 7, 1976].
+packed 2262 stays as written earlier in this lesson; packing 15c1-5 as a second
+  core of the 2262 box remains wrong; this is a later separate item, the SEC
+  companion, not a second core of the 2262 box
+packed 2262, already-taught 10b-10, 17 CFR 240.15c1-1 (official definition of
+  "the completion of the transaction"), and leftover 15c1-2 / 10b-3 exist and
+  are named only as foils; this toy is not those rules
+  this is a flatten into packed 2262, packed 2269, packed 10b-10, or 15c1-6, or a claim that 15c1-5 and packed 2262 are the same rule? False
+  this toy invents that the first disclosure must be in writing, or invents a numeric clock for "completion of the transaction"? False
+  a broker, dealer or municipal securities dealer controlled by, controlling, or under common control with, the issuer, must disclose that control before entering into any contract with or for a customer for the purchase or sale of such security, and if that first disclosure is not made in writing, it must be supplemented by the giving or sending of written disclosure at or before the completion of the transaction? True
+literacy only; not a disclosure-form how-to, and not legal advice
+no broker, dealer, or issuer recommendation
+assertions passed: 61/61
+=== T. 17 CFR 240.15c1-6: Disclosure of interest in distribution ===
+official caption typography is Disclosure of interest in distribution.
+15c1-6: The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c)(1) of the Act, is hereby defined to
+  include any act of any broker who is acting for a customer or for both such
+  customer and some other person, or of any dealer or municipal securities dealer
+  who receives or has promise of receiving a fee from a customer for advising
+  such customer with respect to securities, designed to effect with or for the
+  account of such customer any transaction in, or to induce the purchase or sale
+  by such customer of, any security in the primary or secondary distribution of
+  which such broker, dealer or municipal securities dealer is participating or is
+  otherwise financially interested unless such broker, dealer or municipal
+  securities dealer, at or before the completion of each such transaction gives
+  or sends to such customer written notification of the existence of such
+  participation or interest.
+official typography italicizes the defined term, including the trailing comma,
+  and does not put quotation marks around it: The term <I>manipulative,
+  deceptive, or other fraudulent device or contrivance,</I> as used in section
+  15(c)(1) of the Act; this toy does not invent quotes, and does not copy packed
+  15c2-4 typographic quotes onto this rule
+official typography is "at or before the completion of each such transaction
+  gives or sends" — no comma after "transaction"; official "each such
+  transaction" (not packed 2269's "any transaction"); official "gives or sends"
+  (packed 2269 is "give such customer written notification"); and "broker,
+  dealer or municipal securities dealer"
+cite 17 CFR 240.15c1-6; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22826, June 7, 1976].
+packed 2269 stays as written earlier in this lesson; packing 15c1-6 as a second
+  core of the 2269 box remains wrong; this is a later separate item, the SEC
+  companion, not a second core of the 2269 box
+packed 2269, packed 15c1-5 / 2262, 17 CFR 240.15c1-1, and leftover 15c1-8
+  (official typographic quotes around “at the market”) exist and are named only;
+  this toy is not those rules
+  this is a flatten into packed 2269, packed 2262, packed 15c2-4, already-taught 10b-10, or already-taught Rule 105, or a claim that 15c1-6 and packed 2269 are the same rule? False
+  this toy inserts a comma after "at or before the completion of each such transaction", or treats this written-notification duty as 15c1-5's optional-first-disclosure structure? False
+  a broker acting for a customer or for both such customer and some other person, or a dealer or municipal securities dealer who receives or has promise of receiving a fee from a customer for advising such customer with respect to securities, at or before the completion of each such transaction gives or sends to such customer written notification of the existence of a participation or financial interest in the primary or secondary distribution of that security? True
+literacy only; not a notification-form how-to, and not legal advice
+no broker, dealer, underwriter, or issuer recommendation
+assertions passed: 64/64

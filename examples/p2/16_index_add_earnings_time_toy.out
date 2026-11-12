@@ -215,3 +215,31 @@ learning only; the annual report to security holders is not the same filing as t
 no issuer, proxy, or investment advice
 assertions passed: 40/40
 disclaimer: official 17 CFR 240.14a-3(b); no issuer, disclosure, or investment advice; learning only
+=== L. 17 CFR 240.14c-3(a): annual report to security holders accompanying or preceding the information statement ===
+official caption typography is Annual report to be furnished security holders.
+14c-3(a) opening: If the information statement relates to an annual (or special
+  meeting in lieu of the annual) meeting, or written consent in lieu of such
+  meeting, of security holders at which directors of the registrant, other than
+  an investment company registered under the Investment Company Act of 1940, are
+  to be elected, it shall be accompanied or preceded by an annual report to
+  security holders:
+official typography is "Annual report to be furnished security holders." — no
+  "to" before "security holders," and a period after "holders."; official
+  two-word "security holders" and "accompanied or preceded"
+official (a) word order is not identical to packed 14a-3(b); this toy does not
+  paste the 14a-3(b) sentence over this one
+official (a)(1) (the financial-statement catalog that cross-references
+  14a-3(b)(1) through (b)(11)), official (a)(2) [Reserved], official (b) (the
+  electronic-format submission / typographic quotes around “filed”), official
+  (c) householding (already named under packed 14b-1 as 14a-3(e)(1) / 14c-3(c)),
+  official (d) (names 14a-16), 17 CFR 240.14c-2, and 17 CFR 240.14c-5 exist and
+  are named only; this toy is not those catalogs, and packing 14c-3(c)
+  householding as a new core remains wrong
+cite 17 CFR 240.14c-3; title 17 up_to_date_as_of 2026-11-09
+  this is a flatten into packed 14a-3(b), packed 14a-9, packed 12b-20, already-taught 14a-8, Form 8-K Item 5.07, already-taught 10-K / 10-Q clocks, packed 13a-14, or packed 244.100, a claim that 14c-3(a) and packed 14a-3(b) are the same rule, or a claim that the annual report to security holders is the same filing as the Form 10-K? False
+  this toy invents that every information statement requires an annual report, or packs 14c-3(c) householding as a new core? False
+  if the information statement relates to an annual (or special meeting in lieu of the annual) meeting, or written consent in lieu of such meeting, of security holders at which directors of the registrant, other than an investment company registered under the Investment Company Act of 1940, are to be elected, it shall be accompanied or preceded by an annual report to security holders:? True
+learning only; the annual report to security holders is not the same filing as the Form 10-K
+no issuer, information-statement, or investment advice
+assertions passed: 43/43
+disclaimer: official 17 CFR 240.14c-3(a); no issuer, disclosure, or investment advice; learning only

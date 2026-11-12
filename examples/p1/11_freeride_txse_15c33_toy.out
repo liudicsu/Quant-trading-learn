@@ -377,3 +377,50 @@ if official (f) is quoted, typography there uses hyphenated "pre-dispute" inside
 literacy only; not a how-to for writing an arbitration clause, and not legal advice
 no broker or product recommendation
 assertions passed: 61/61
+=== U. FINRA 4590: Synchronization of Member Business Clocks ===
+official caption typography is 4590. Synchronization of Member Business Clocks
+  (no period at the end of the caption)
+4590(a): Each member shall synchronize its business clocks, including computer
+  system clocks and mechanical time stamping devices, that are used for purposes
+  of recording the date and time of any event that must be recorded pursuant to
+  the FINRA By-Laws or other FINRA rules, with reference to a time source as
+  designated by FINRA, and shall maintain the synchronization of such business
+  clocks in conformity with such procedures as are prescribed by FINRA.
+4590(b): Business clocks, including computer system clocks and manual time stamp
+  machines, must record time in hours, minutes and seconds and must be
+  synchronized to a source that is synchronized to within a one second tolerance
+  of the National Institute of Standards' (NIST) atomic clock, except that
+  computer system clocks that are used to record events in NMS securities,
+  including standardized options, and OTC Equity Securities as that term is
+  defined in FINRA Rule 6420, must be synchronized within a 50-millisecond
+  tolerance of the NIST clock. This tolerance includes all of the following:
+  (1) The difference between the NIST standard and a time provider's clock;
+  (2) Transmission delay from the source; and
+  (3) The amount of drift of the member's clock.
+4590(c): Computer system and mechanical clocks must be synchronized every
+  business day before market open to ensure that recorded event timestamps are
+  accurate. To maintain clock synchronization, clocks must be checked against
+  the standard clock and re-synchronized, as necessary, throughout the day.
+official typography is "mechanical time stamping devices" in official (a),
+  "manual time stamp machines" in official (b), and "Computer system and
+  mechanical clocks" in official (c); this toy does not tidy those three
+  official phrasings into one another
+official typography is "one second tolerance" (no hyphen) versus
+  "50-millisecond tolerance" (hyphen); "hours, minutes and seconds" (no Oxford
+  comma); a straight apostrophe in "Standards'" / "provider's" / "member's";
+  and official "re-synchronized"
+official "every business day before market open" has no numeric clock and no
+  time zone
+official SM .01 (log of synchronizations; SEC Rule 17a-4(b) and SEC Rule
+  17a-4(f) typography) and FINRA 6420 (the official OTC Equity Securities
+  cross-reference) exist and are named only; this toy is not those catalogs
+if the official SM header is quoted, typography is • • • Supplementary Material: --------------
+  (U+2022, ordinary U+0020 spaces, 14 ASCII hyphens); this toy does not copy
+  official 3130 / 5310 NBSP, or packed 2273's ordinary-space / 15-hyphen SM
+  header, onto 4590
+  this is a flatten into packed 6380A, already-taught CAT / Rule 613, or leftover 6730, or a clock-sync how-to? False
+  this toy invents that the 50-millisecond tolerance applies to every business clock, or invents a numeric clock or time zone for "before market open"? False
+  each member shall synchronize its business clocks, including computer system clocks and mechanical time stamping devices, used to record any event that must be recorded pursuant to the FINRA By-Laws or other FINRA rules, with reference to a time source as designated by FINRA, and shall maintain that synchronization; business clocks, including computer system clocks and manual time stamp machines, must record time in hours, minutes and seconds and must be synchronized to a source synchronized to within a one second tolerance of the NIST atomic clock, except that computer system clocks used to record events in NMS securities, including standardized options, and OTC Equity Securities as defined in FINRA Rule 6420, must be synchronized within a 50-millisecond tolerance of the NIST clock, including the official (b)(1)-(3) differences; and computer system and mechanical clocks must be synchronized every business day before market open and re-synchronized, as necessary, throughout the day? True
+literacy only; not a clock-sync how-to, and not legal advice
+no broker, clock-vendor, or product recommendation
+assertions passed: 64/64

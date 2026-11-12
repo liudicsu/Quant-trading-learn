@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **19.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h + FINRA 2232(b)(1) NMS 交收日确认披露 0.25h + FINRA 2232(b)(2) 可赎回权益证券确认披露 0.25h + 17 CFR 240.15c2-4 与承销相关的收款的转交或保管（firm-commitment 承销除外）0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **20.50 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h + FINRA 2232(b)(1) NMS 交收日确认披露 0.25h + FINRA 2232(b)(2) 可赎回权益证券确认披露 0.25h + 17 CFR 240.15c2-4 与承销相关的收款的转交或保管（firm-commitment 承销除外）0.25h + FINRA 5310 最佳执行与中间介入 0.25h + 17 CFR 240.15c1-5 控制关系披露 0.25h + 17 CFR 240.15c1-6 分销利害关系披露 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -667,6 +667,171 @@ no broker, underwriter, or escrow-bank recommendation
 assertions passed: 55/55
 ```
 
+## FINRA 5310：最佳执行与中间介入（核实于 2026-11-12）
+
+上面打包的 15c2-4 框保持原样。不要改写已经印出的 O / 2232(b)(1)、P / 2232(b)(2) 或 Q / 15c2-4 实验摘录。这一节只打包官方 5310(a)——包括 (A)–(E) 的官方 (a)(1)，以及官方 (a)(2)——避免发明最佳执行只看价格，或把本规则压进已经打包的 605 / 606 / 5320 / 2121、已经打包的 15c2-4，或已经打包的 10b-10。本课里已经印出的 21-23 指向，以及微观结构课里已经印出的 21-23 条目，保持原样：把官方 5310(a) 作为稍后的单独条目打包，并不是那些指向的第二个核心。Notice 21-23 不是官方规则正文。仅供学习；这不是路由或最佳执行政策操作指南，也不是法律意见。没有券商、交易场所或产品建议。
+
+[FINRA Rule 5310](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5310) 只打包官方 (a)。官方标题印刷是 “5310. Best Execution and Interpositioning”（标题末尾没有句点）。
+
+官方 (a)(1)：“In any transaction for or with a customer or a customer of another broker-dealer, a member and persons associated with a member shall use reasonable diligence to ascertain the best market for the subject security and buy or sell in such market so that the resultant price to the customer is as favorable as possible under prevailing market conditions. Among the factors that will be considered in determining whether a member has used "reasonable diligence" are:” 官方 (A) 是该证券的市场性质（例如价格、波动性、相对流动性，以及对可用通信的压力）；官方 (B) 是交易的规模和类型；官方 (C) 是核过的市场数量；官方 (D) 是报价的可及性；官方 (E) 是导致该笔交易的订单条款和条件，以传达给该会员及与该会员关联的人士者为准。官方 (a) 在 "reasonable diligence" 两侧使用**直** ASCII 引号（U+0022）。官方 SM 后来在 “reasonable diligence、” “market、” “markets” 和 “quotation” 两侧使用弯引号；不要把那些弯引号抄到官方 (a) 上。官方 (A) 有牛津逗号。
+
+官方 (a)(2)：“In any transaction for or with a customer or a customer of another broker-dealer, no member or person associated with a member shall interject a third party between the member and the best market for the subject security in a manner inconsistent with paragraph (a)(1) of this Rule.”
+
+官方 (b) 的 broker's broker 举证责任、官方 (c)–(d)、官方 (e)（代理或本人那一句，以及官方交叉引用 “Rule 2121 and its Supplementary Material”——2121 已经打包），以及官方 SM .01–.09 是存在的，只点名，包括 SM .01 的 “fully and promptly”（没有数字时钟）、SM .09 的定期严格审查，以及官方 SM .07 标题印刷 `07. Orders Involving Foreign Securities.`——开头是 “07.”，**没有**官方 `.01`–`.06` 和 `.08`–`.09` 使用的那个前导点。那是官方印刷，不是转换错误。若引用，不要改整齐成 “.07。” 若引用官方 SM 标题，印刷是 `• • • Supplementary Material: --------------`（U+2022、U+00A0 不换行空格、14 个 ASCII 连字符）——与官方 3130 相同，**不是**官方 4590 的普通空格标题，也不是已经打包的 2273 的普通空格 / 15 个连字符标题。
+
+**实验：** `examples/p6/12_rule606_toy.py` 的 R 节（包括此前的 **Q / 15c2-4 之后 55/55**；R 节之后为 58/58）：
+
+```text
+=== R. FINRA 5310: Best Execution and Interpositioning ===
+official caption typography is 5310. Best Execution and Interpositioning (no
+  period at the end of the caption)
+5310(a)(1): In any transaction for or with a customer or a customer of another
+  broker-dealer, a member and persons associated with a member shall use
+  reasonable diligence to ascertain the best market for the subject security and
+  buy or sell in such market so that the resultant price to the customer is as
+  favorable as possible under prevailing market conditions. Among the factors
+  that will be considered in determining whether a member has used "reasonable
+  diligence" are:
+  (A) the character of the market for the security (e.g., price, volatility,
+  relative liquidity, and pressure on available communications);
+  (B) the size and type of transaction;
+  (C) the number of markets checked;
+  (D) accessibility of the quotation; and
+  (E) the terms and conditions of the order which result in the transaction, as
+  communicated to the member and persons associated with the member.
+5310(a)(2): In any transaction for or with a customer or a customer of another
+  broker-dealer, no member or person associated with a member shall interject a
+  third party between the member and the best market for the subject security in
+  a manner inconsistent with paragraph (a)(1) of this Rule.
+official (a) uses straight ASCII quotes (U+0022) around "reasonable diligence";
+  official SM later uses typographic quotes around “reasonable diligence,”
+  “market,” “markets,” and “quotation”; this toy does not copy those
+  typographic quotes onto official (a)
+official (A) typography is "e.g., price, volatility, relative liquidity, and
+  pressure on available communications" (Oxford comma)
+official (b) broker's-broker burden, official (c)-(d), official (e) (the
+  agency-or-principal sentence, and the official cross-reference "Rule 2121 and
+  its Supplementary Material" — 2121 is already packed), and official SM .01-.09
+  exist and are named only, including SM .01 "fully and promptly" (no numeric
+  clock), SM .09 regular-and-rigorous review, and official SM .07 heading
+  typography 07. Orders Involving Foreign Securities. (a leading 07. without the
+  leading dot used in official .01-.06 and .08-.09); this toy does not tidy 07.
+  to ".07"
+if the official SM header is quoted, typography is • • • Supplementary Material: --------------
+  (U+2022, U+00A0 NBSP, 14 ASCII hyphens); the same typography as official 3130,
+  not official 4590's ordinary-space header, and not packed 2273's
+  ordinary-space / 15-hyphen header
+Notice 21-23 is not the official rule text; packing official 5310(a) is a later
+  separate item, not a second core of the already-printed 21-23 pointers
+  this is a flatten into packed 605 / 606 / 5320 / 2121, packed 15c2-4, or packed 10b-10, or an invention that best execution is solely about price? False
+  this toy invents a numeric clock for SM .01 "fully and promptly", treats official (b)-(e) or the SM catalog as the packed slice, or tidies official SM .07 heading typography to ".07"? False
+  in any transaction for or with a customer or a customer of another broker-dealer, a member and persons associated with a member shall use reasonable diligence to ascertain the best market for the subject security and buy or sell in such market so that the resultant price to the customer is as favorable as possible under prevailing market conditions, considering official (A)-(E), and no member or person associated with a member shall interject a third party between the member and the best market for the subject security in a manner inconsistent with paragraph (a)(1)? True
+literacy only; not a routing or best-execution-policy how-to, and not legal advice
+no broker, venue, or product recommendation
+assertions passed: 58/58
+```
+
+## 17 CFR 240.15c1-5：控制关系披露（核实于 2026-11-12）
+
+本课前面打包的 2262 保持原样。这个框是 SEC 的配套规则，不是 2262 框的第二个核心。把 15c1-5 当成 2262 框的第二个核心来打包仍然是错的；15c1-5 在这里作为稍后的单独条目打包。不要发明第一次披露必须是书面的（官方结构与已经打包的 2262 相同：第一次披露在订立合同之前；若第一次披露不是书面的，书面披露是补充）。不要为 “completion of the transaction” 发明数字时钟。不要把本规则压进已经打包的 2262、已经打包的 2269、已经打包的 10b-10，或 15c1-6。仅供学习；没有券商、交易商或发行人建议。
+
+[17 CFR 240.15c1-5](https://www.ecfr.gov/current/title-17/section-240.15c1-5)：“The term <em>manipulative, deceptive, or other fraudulent device or contrivance,</em> as used in section 15(c)(1) of the Act, is hereby defined to include any act of any broker, dealer or municipal securities dealer controlled by, controlling, or under common control with, the issuer of any security, designed to effect with or for the account of a customer any transaction in, or to induce the purchase or sale by such customer of, such security unless such broker, dealer or municipal securities dealer, before entering into any contract with or for such customer for the purchase or sale of such security, discloses to such customer the existence of such control, and unless such disclosure, if not made in writing, is supplemented by the giving or sending of written disclosure at or before the completion of the transaction.” 官方标题印刷是 “Disclosure of control。” 官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且**不**给它加上引号。不要发明引号，也不要把已经打包的 15c2-4 的弯引号抄到本规则上。官方印刷是 “broker, dealer or municipal securities dealer”（这一组没有牛津逗号）；“controlled by, controlling, or under common control with, the issuer”（“with” 后面有逗号）；以及 “at or before the completion of the transaction。” 官方出处行是 “[41 FR 22825, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。
+
+已经打包的 2262 和已经教过的 10b-10 只作为对照点名。17 CFR 240.15c1-1（官方对 “the completion of the transaction” 的定义）以及仍作遗留的 17 CFR 240.15c1-2 / 10b-3 是存在的，只点名。
+
+**实验：** 同一脚本的 S 节（包括此前的 **R / 5310 之后 58/58**；S 节之后为 61/61）：
+
+```text
+=== S. 17 CFR 240.15c1-5: Disclosure of control ===
+official caption typography is Disclosure of control.
+15c1-5: The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c)(1) of the Act, is hereby defined to
+  include any act of any broker, dealer or municipal securities dealer controlled
+  by, controlling, or under common control with, the issuer of any security,
+  designed to effect with or for the account of a customer any transaction in, or
+  to induce the purchase or sale by such customer of, such security unless such
+  broker, dealer or municipal securities dealer, before entering into any
+  contract with or for such customer for the purchase or sale of such security,
+  discloses to such customer the existence of such control, and unless such
+  disclosure, if not made in writing, is supplemented by the giving or sending of
+  written disclosure at or before the completion of the transaction.
+official typography italicizes the defined term, including the trailing comma,
+  and does not put quotation marks around it: The term <I>manipulative,
+  deceptive, or other fraudulent device or contrivance,</I> as used in section
+  15(c)(1) of the Act; this toy does not invent quotes, and does not copy packed
+  15c2-4 typographic quotes onto this rule
+official typography is "broker, dealer or municipal securities dealer" (no
+  Oxford comma in that trio); "controlled by, controlling, or under common
+  control with, the issuer" (comma after "with"); and "at or before the
+  completion of the transaction."
+cite 17 CFR 240.15c1-5; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22825, June 7, 1976].
+packed 2262 stays as written earlier in this lesson; packing 15c1-5 as a second
+  core of the 2262 box remains wrong; this is a later separate item, the SEC
+  companion, not a second core of the 2262 box
+packed 2262, already-taught 10b-10, 17 CFR 240.15c1-1 (official definition of
+  "the completion of the transaction"), and leftover 15c1-2 / 10b-3 exist and
+  are named only as foils; this toy is not those rules
+  this is a flatten into packed 2262, packed 2269, packed 10b-10, or 15c1-6, or a claim that 15c1-5 and packed 2262 are the same rule? False
+  this toy invents that the first disclosure must be in writing, or invents a numeric clock for "completion of the transaction"? False
+  a broker, dealer or municipal securities dealer controlled by, controlling, or under common control with, the issuer, must disclose that control before entering into any contract with or for a customer for the purchase or sale of such security, and if that first disclosure is not made in writing, it must be supplemented by the giving or sending of written disclosure at or before the completion of the transaction? True
+literacy only; not a disclosure-form how-to, and not legal advice
+no broker, dealer, or issuer recommendation
+assertions passed: 61/61
+```
+
+## 17 CFR 240.15c1-6：分销利害关系披露（核实于 2026-11-12）
+
+本课前面打包的 2269 保持原样。这个框是 SEC 的配套规则，不是 2269 框的第二个核心。把 15c1-6 当成 2269 框的第二个核心来打包仍然是错的；15c1-6 在这里作为稍后的单独条目打包。不要发明这项书面通知义务就是 15c1-5“第一次披露不必是书面的”那种结构。不要把本规则压进已经打包的 2269、已经打包的 2262、已经打包的 15c2-4、已经教过的 10b-10，或已经教过的 Regulation M Rule 105。仅供学习；没有券商、交易商、承销商或发行人建议。
+
+[17 CFR 240.15c1-6](https://www.ecfr.gov/current/title-17/section-240.15c1-6)：“The term <em>manipulative, deceptive, or other fraudulent device or contrivance,</em> as used in section 15(c)(1) of the Act, is hereby defined to include any act of any broker who is acting for a customer or for both such customer and some other person, or of any dealer or municipal securities dealer who receives or has promise of receiving a fee from a customer for advising such customer with respect to securities, designed to effect with or for the account of such customer any transaction in, or to induce the purchase or sale by such customer of, any security in the primary or secondary distribution of which such broker, dealer or municipal securities dealer is participating or is otherwise financially interested unless such broker, dealer or municipal securities dealer, at or before the completion of each such transaction gives or sends to such customer written notification of the existence of such participation or interest.” 官方标题印刷是 “Disclosure of interest in distribution。” 官方印刷同样把这个被定义的用语标成斜体，包括后面的逗号，并且**不**给它加上引号。官方印刷是 “at or before the completion of each such transaction gives or sends”——“transaction” 后面**没有逗号**；官方 “each such transaction”（不是已经打包的 2269 的 “any transaction”）；官方 “gives or sends”（已经打包的 2269 是 “give such customer written notification”）；以及 “broker, dealer or municipal securities dealer。” 官方出处行是 “[41 FR 22826, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。
+
+已经打包的 2269 以及已经打包的 15c1-5 / 2262 只作为对照点名。17 CFR 240.15c1-1 以及仍作遗留的 17 CFR 240.15c1-8（“at the market” 陈述——官方印刷在 “at the market” 两侧使用弯引号）是存在的，只点名。
+
+**实验：** 同一脚本的 T 节（包括此前的 **S / 15c1-5 之后 61/61**；T 节之后为 64/64）：
+
+```text
+=== T. 17 CFR 240.15c1-6: Disclosure of interest in distribution ===
+official caption typography is Disclosure of interest in distribution.
+15c1-6: The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c)(1) of the Act, is hereby defined to
+  include any act of any broker who is acting for a customer or for both such
+  customer and some other person, or of any dealer or municipal securities dealer
+  who receives or has promise of receiving a fee from a customer for advising
+  such customer with respect to securities, designed to effect with or for the
+  account of such customer any transaction in, or to induce the purchase or sale
+  by such customer of, any security in the primary or secondary distribution of
+  which such broker, dealer or municipal securities dealer is participating or is
+  otherwise financially interested unless such broker, dealer or municipal
+  securities dealer, at or before the completion of each such transaction gives
+  or sends to such customer written notification of the existence of such
+  participation or interest.
+official typography italicizes the defined term, including the trailing comma,
+  and does not put quotation marks around it: The term <I>manipulative,
+  deceptive, or other fraudulent device or contrivance,</I> as used in section
+  15(c)(1) of the Act; this toy does not invent quotes, and does not copy packed
+  15c2-4 typographic quotes onto this rule
+official typography is "at or before the completion of each such transaction
+  gives or sends" — no comma after "transaction"; official "each such
+  transaction" (not packed 2269's "any transaction"); official "gives or sends"
+  (packed 2269 is "give such customer written notification"); and "broker,
+  dealer or municipal securities dealer"
+cite 17 CFR 240.15c1-6; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22826, June 7, 1976].
+packed 2269 stays as written earlier in this lesson; packing 15c1-6 as a second
+  core of the 2269 box remains wrong; this is a later separate item, the SEC
+  companion, not a second core of the 2269 box
+packed 2269, packed 15c1-5 / 2262, 17 CFR 240.15c1-1, and leftover 15c1-8
+  (official typographic quotes around “at the market”) exist and are named only;
+  this toy is not those rules
+  this is a flatten into packed 2269, packed 2262, packed 15c2-4, already-taught 10b-10, or already-taught Rule 105, or a claim that 15c1-6 and packed 2269 are the same rule? False
+  this toy inserts a comma after "at or before the completion of each such transaction", or treats this written-notification duty as 15c1-5's optional-first-disclosure structure? False
+  a broker acting for a customer or for both such customer and some other person, or a dealer or municipal securities dealer who receives or has promise of receiving a fee from a customer for advising such customer with respect to securities, at or before the completion of each such transaction gives or sends to such customer written notification of the existence of a participation or financial interest in the primary or secondary distribution of that security? True
+literacy only; not a notification-form how-to, and not legal advice
+no broker, dealer, underwriter, or issuer recommendation
+assertions passed: 64/64
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -696,6 +861,9 @@ assertions passed: 55/55
 25. 把 FINRA 2232(b)(1) 压进已经教过的 T+1 / 15c6-1，或压进已经打包的 15c6-2；把官方 (a) 当成教学核心；把已经打包的 4340 压进官方 (b)(1) 或官方 (b)(2)（官方 (b)(2) 在本课后面另行打包）；在 “FINRA Rule 6420” 后的逗号前插入空格；或搭建官方 (c)–(e) 的债务目录。
 26. 把 FINRA 2232(b)(2) 压进已经打包的 4340 或已经打包的 2232(b)(1)；把官方 (a) 当成教学核心（压进已经打包的 10b-10）；发明每一只普通股都可以被提前赎回；为 SR-FINRA-2019-008 发明生效日；或搭建官方 (c)–(f) 目录。
 27. 把 17 CFR 240.15c2-4 压进已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105；为官方 “promptly” 发明 T+1 或其他数字时钟；把本规则写成适用于 firm-commitment 承销；或丢掉 “fraudulent, deceptive, or manipulative act or practice” 或 “all-or-none” 两侧的官方弯引号。
+28. 把 FINRA 5310 压进已经打包的 605 / 606 / 5320 / 2121、已经打包的 15c2-4，或已经打包的 10b-10；发明最佳执行只看价格；把官方 SM 的弯引号抄到官方 (a) 上；把官方 SM .07 标题印刷 `07.` 改整齐成 “.07”；为 SM .01 的 “fully and promptly” 发明数字时钟；或把官方 (b)–(e) 或 SM 目录当成打包切片。
+29. 把 17 CFR 240.15c1-5 压进已经打包的 2262、已经打包的 2269、已经打包的 10b-10 或 15c1-6；把 15c1-5 当成 2262 框的第二个核心来打包；发明第一次披露必须是书面的；为 “completion of the transaction” 发明数字时钟；或把已经打包的 15c2-4 的弯引号抄到被定义的用语上，或给它发明引号。
+30. 把 17 CFR 240.15c1-6 压进已经打包的 2269、已经打包的 2262、已经打包的 15c2-4、已经教过的 10b-10，或已经教过的 Rule 105；把 15c1-6 当成 2269 框的第二个核心来打包；在官方 “at or before the completion of each such transaction” 后面插入逗号；或给被定义的用语发明引号。
 
 
 ## 练习（1:1）
@@ -725,6 +893,9 @@ assertions passed: 55/55
 22. **ex-2232** — 运行同一脚本的 O 节；说明 2232(b)(1) 要求确认进一步披露什么，打包的是不是官方 (a)，以及这是不是已经教过的 T+1 / 15c6-1 或已经打包的 15c6-2；**完成标准：** 就任何 NMS 股票或受 FINRA Rule 6600 Series 报告要求约束的证券（FINRA Rule 6420 所定义的直接参与计划除外）的交易，确认须进一步披露该笔交易的交收日；官方印刷是 “shall further disclose”，并且在 “FINRA Rule 6420” 后的逗号前没有空格；官方 (a) 只点名；官方 (b)(2) 在本课后面另行打包；这不是已经教过的 T+1 / 15c6-1，也不是已经打包的 15c6-2，并与输出一致。
 23. **ex-2232b2** — 运行同一脚本的 P 节；说明官方 2232(b)(2) 要求确认进一步披露什么，官方 (a) 是否被打包，以及是不是每一只普通股都可以被提前赎回；**完成标准：** 官方 (b) 开句印刷是 “shall further disclose”；官方 (b)(2) 要求就任何可赎回权益证券的交易披露 (A) 该证券是可赎回权益证券；以及 (B) 客户可以联系该会员以获取有关该证券的更多信息；官方 (a) 和官方 (c)–(f) 只点名；本课不发明每一只普通股都可以被提前赎回，也不为 SR-FINRA-2019-008 发明生效日；官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包，这不是把已经打包的 4340 压进那些确认披露，并与输出一致。
 24. **ex-15c24** — 运行同一脚本的 Q 节；说明在 firm-commitment 承销以外的分销里 15c2-4 要求什么，官方 “promptly” 有没有数字时钟，以及这是不是已经打包的 10b-5 或已经教过的 10b-9；**完成标准：** 官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号，并且是带连字符的 “firm-commitment”；官方 “promptly” 没有数字时钟；官方来源行是 “[41 FR 22826, June 7, 1976]。”；这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105，并与输出一致。
+25. **ex-5310** — 运行同一脚本的 R 节；说明包括 (A)–(E) 的官方 (a)(1) 和官方 (a)(2)，官方 (a) 是否在 "reasonable diligence" 两侧使用直引号，以及最佳执行是不是只看价格；**完成标准：** 官方印刷在 "reasonable diligence" 两侧使用直 ASCII 引号；官方 (A) 有牛津逗号；官方 (b)–(e) 和官方 SM .01–.09 只点名，包括 SM .01 的 “fully and promptly”（没有数字时钟）以及官方 SM .07 标题印刷 `07.`；这不是已经打包的 605 / 606 / 5320 / 2121、已经打包的 15c2-4 或已经打包的 10b-10，并且最佳执行不只看价格，与输出一致。
+26. **ex-15c15** — 运行同一脚本的 S 节；说明控制关系应在何时披露，第一次披露是否必须是书面的，以及官方印刷有没有给被定义的用语加上引号；**完成标准：** 官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；第一次披露并不被官方要求必须是书面的；把 15c1-5 当成 2262 框的第二个核心来打包仍然是错的；官方出处行是 “[41 FR 22825, June 7, 1976]。”；这不是已经打包的 2262 / 2269 / 10b-10，与输出一致。
+27. **ex-15c16** — 运行同一脚本的 T 节；说明书面通知义务、“transaction” 后面有没有逗号，以及这是不是已经打包的 2269；**完成标准：** 官方印刷是 “at or before the completion of each such transaction gives or sends”，“transaction” 后面没有逗号；官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；把 15c1-6 当成 2269 框的第二个核心来打包仍然是错的；官方出处行是 “[41 FR 22826, June 7, 1976]。”；这不是已经打包的 2269 / 2262 / 15c2-4 / 10b-10 / Rule 105，与输出一致。
 
 ## 测验
 
@@ -752,8 +923,8 @@ assertions passed: 55/55
 <Quiz id="es-10b10" question="根据 Rule 10b-10，券商应在何时向客户发出书面确认？客户要求额外信息时的官方时钟是什么？" options={["官方时钟是 T+1，或必须在交易日结束前发出确认；这只是已经教过的 10b-10(d)(8) PFOF 的改写", "书面确认可以在完成后任何时候发出；客户要求的信息没有期限", "券商应在完成时或完成前向客户发出书面通知。根据本规则被要求的信息，一般应在收到要求后五个营业日内发出或送达；如果该笔交易已超过 30 天，则为十五个营业日。不要发明 T+1 或交易日确认时钟。这不是已经教过的 10b-10(d)(8) PFOF。官方 10b-10(a) 目录、(b) 和 (e) 例外是存在的；本课不搭建这些引擎。15c1-1 被 (d)(2) 点名为“完成”的定义，本课不搭建该定义引擎", "只要交易最终结算了，书面确认就不是必须的"]} answer={2} explanation="17 CFR 240.10b-10(a) 要求在完成时或完成前发出书面通知。(c) 把客户要求的额外信息定在五个营业日（交易已超过 30 天则为十五个营业日）。不要发明 T+1 或交易日确认时钟。这不是已经教过的 10b-10(d)(8) PFOF。" />
 <Quiz id="es-5240" question="FINRA 5240 禁止什么？它和已经教过的 5230、5250、5270、5280 或 5320 是同一条规则吗？是否禁止每一笔单边报价？" options={["5240 就是已经教过的 5230、5250、5270、5280 或 5320 的改写", "5240 禁止每一笔单边报价，包括官方 (b) 例外里的单边行为", "5240 是不同的禁止：会员不得协调价格、交易或成交报告，不得指示或请求其他会员更改价格（包括报价），也不得威胁、骚扰、强迫、恐吓或以其他方式试图不正当影响另一会员或市场参与者。官方 (b) 单边例外是存在的；这不是对每一笔单边报价的禁止。本课不搭建 (b)(1)–(7) 目录引擎", "只要没有书面协议，协调价格就是允许的"]} answer={2} explanation="FINRA 5240(a) 禁止协调价格、交易或成交报告，指示其他会员更改价格，以及恐吓或不当影响。这不是已经教过的 5230、5250、5270、5280 或 5320。官方 (b) 单边例外存在；不要把它写成禁止每一笔单边报价。" />
 <Quiz id="es-5290" question="FINRA 5290 禁止什么？它是否禁止每一次 TWAP / VWAP 切片？" options={["每一次拆单，包括普通的 TWAP / VWAP 切片，都被禁止", "这是对已经教过的 Rule 606 / PFOF、FINRA 5270 或 5320 的改写", "FINRA 5290：会员或关联人士不得从事具有如下意图或效果的行为：把订单拆成多笔更小的订单来成交，或把一笔成交拆成多笔更小的成交来申报，且其主要目的是最大化因此获得的金钱或实物对价。“monetary or in-kind amount” 包括但不限于积分、佣金、馈赠、对费用的支付或回扣，或其他有价给付。这不是对每一次 TWAP / VWAP 切片的禁止。这不是对已经教过的 606 / PFOF、5270 或 5320 的改写", "只覆盖现金回扣；佣金和馈赠不在规则范围内"]} answer={2} explanation="FINRA 5290 用的是主要目的标准：为最大化金钱或实物对价（积分、佣金、馈赠、费用回扣或其他有价给付）而拆单或拆分成交申报。它不是对每一次 TWAP / VWAP 切片的禁止，也不是对已经教过的 606 / PFOF、5270 或 5320 的改写。" />
-<Quiz id="es-2262" question="按 FINRA 2262，会员应在何时披露与发行人的控制关系？第一次披露必须是书面的吗？" options={["第一次披露必须是书面的", "这是对已经教过的 Rule 10b-10 的改写，或与 FINRA 2269 是同一条规则", "受发行人控制、控制发行人或与发行人处于共同控制之下的会员，应在订立代客户买卖该证券的任何合同之前，向该客户披露该控制关系的存在；若第一次披露不是书面的，则应在完成时或完成前补充给予或寄送书面披露。第一次披露并非官方要求必须是书面的。这不是已经教过的 10b-10，也不是 FINRA 2269", "只有在完成之后，且仅在客户书面要求时，才需要披露"]} answer={2} explanation="FINRA 2262 要求在订立客户合同之前披露控制关系。若第一次披露不是书面的，则应在完成时或完成前给予或寄送书面披露。第一次披露并不被官方要求必须是书面的。这不是已经教过的 10b-10，也不是 2269。" />
-<Quiz id="es-2269" question="FINRA 2269 要求怎样的书面通知？它和 2262 有何不同？" options={["与 2262 的第一次披露一样，书面通知是可选的", "这是对已经教过的 Rule 10b-10 的改写，或与 2262 的第一次披露规则相同；该规则适用于每一名会员、每一只证券", "作为客户经纪商（或同时作为该客户与另一人的经纪商），或作为向客户就证券提供建议并收取或已获承诺将收取费用的自营商的会员，应在完成时或完成前，就该会员参与或在金钱上利害相关的该证券的一级或二级分销，向客户发出书面通知，告知该参与或利害关系的存在。与 2262 的第一次披露不同，2269 要求书面通知。官方范围是这些经纪商 / 顾问型自营商类别。这不是已经教过的 10b-10，也不是 2262", "书面通知可以在完成后的任何时间发出"]} answer={2} explanation="FINRA 2269 要求在完成时或完成前，就一级或二级分销中的参与或利害关系发出书面通知，范围限于官方经纪商 / 顾问型自营商类别。与 2262 的第一次披露不同，2269 要求书面通知。这不是已经教过的 10b-10，也不是 2262。" />
+<Quiz id="es-2262" question="按 FINRA 2262，会员应在何时披露与发行人的控制关系？第一次披露必须是书面的吗？" options={["第一次披露必须是书面的", "这是对已经教过的 Rule 10b-10 的改写，或与 FINRA 2269 是同一条规则", "受发行人控制、控制发行人或与发行人处于共同控制之下的会员，应在订立代客户买卖该证券的任何合同之前，向该客户披露该控制关系的存在；若第一次披露不是书面的，则应在完成时或完成前补充给予或寄送书面披露。第一次披露并非官方要求必须是书面的。这不是已经教过的 10b-10，也不是 FINRA 2269。把 17 CFR 240.15c1-5 当成这个 2262 框的第二个核心来打包仍然是错的；15c1-5 在本课稍后作为单独条目打包", "只有在完成之后，且仅在客户书面要求时，才需要披露"]} answer={2} explanation="FINRA 2262 要求在订立客户合同之前披露控制关系。若第一次披露不是书面的，则应在完成时或完成前给予或寄送书面披露。第一次披露并不被官方要求必须是书面的。这不是已经教过的 10b-10，也不是 2269。把 17 CFR 240.15c1-5 当成这个 2262 框的第二个核心来打包仍然是错的；15c1-5 在本课稍后作为单独条目打包。" />
+<Quiz id="es-2269" question="FINRA 2269 要求怎样的书面通知？它和 2262 有何不同？" options={["与 2262 的第一次披露一样，书面通知是可选的", "这是对已经教过的 Rule 10b-10 的改写，或与 2262 的第一次披露规则相同；该规则适用于每一名会员、每一只证券", "作为客户经纪商（或同时作为该客户与另一人的经纪商），或作为向客户就证券提供建议并收取或已获承诺将收取费用的自营商的会员，应在完成时或完成前，就该会员参与或在金钱上利害相关的该证券的一级或二级分销，向客户发出书面通知，告知该参与或利害关系的存在。与 2262 的第一次披露不同，2269 要求书面通知。官方范围是这些经纪商 / 顾问型自营商类别。这不是已经教过的 10b-10，也不是 2262。把 17 CFR 240.15c1-6 当成这个 2269 框的第二个核心来打包仍然是错的；15c1-6 在本课稍后作为单独条目打包", "书面通知可以在完成后的任何时间发出"]} answer={2} explanation="FINRA 2269 要求在完成时或完成前，就一级或二级分销中的参与或利害关系发出书面通知，范围限于官方经纪商 / 顾问型自营商类别。与 2262 的第一次披露不同，2269 要求书面通知。这不是已经教过的 10b-10，也不是 2262。把 17 CFR 240.15c1-6 当成这个 2269 框的第二个核心来打包仍然是错的；15c1-6 在本课稍后作为单独条目打包。" />
 <Quiz id="es-2121" question="FINRA 2121 下官方的 “5% Policy” 是什么？5% 是硬性上限吗？" options={["官方 “5% Policy” 是硬性上限：5% 或更低的加价一律公平", "这是对已经教过的 Rule 10b-10、FINRA 2262、2269 或 5290 的改写", "官方 2121 要求会员为自己的账户与客户买卖时价格公平，作为代理人时佣金或服务费公平，并考虑所有相关情形。官方补充材料 .01：“5% Policy” 是指南，不是规则；即使 5% 或更低的加价模式，也可能被认定为不公平或不合理。公平必须基于全部相关因素，加价百分比只是其中之一。与客户达成与当前市价没有合理关系的交易，或收取不合理的佣金，是对 Rule 2010 和 Rule 2121 的违反。仅点名官方 Rule 2010 和官方 .01(d)；本课不搭建这些引擎。这不是已经教过的 10b-10、2262、2269 或 5290", "只有超过 5% 的加价才可能不公平；佣金不在规则范围内"]} answer={2} explanation="FINRA 2121 要求公平的价格或公平的佣金，并考虑所有相关情形。官方补充材料 .01 写明 “5% Policy” 是指南，不是规则；即使 5% 或更低的加价模式也可能被认定为不公平或不合理。不要发明硬性的 5% 上限。这不是对已经教过的 10b-10、2262、2269 或 5290 的改写。" />
 <Quiz id="es-2122" question="根据 FINRA 2122，对已提供服务收取的费用（如有）必须满足什么要求？5% 是硬性上限吗？可以把这条规则压进已经打包的 2121 吗？" options={["5% 是硬性上限：对收款、转账、鉴定或保管等杂项服务，收费不得超过 5%", "这是对已经打包的 2121，或对已经教过的 Rule 10b-10、FINRA 2262、2269 或 5290 的改写", "官方 2122：对已提供服务收取的费用（如有），包括但不限于代收本金、股息或利息等 monies，证券的交换或过户，鉴定，以及证券的 safe-keeping 或保管等其他服务，应当合理，且不得在客户之间不公平地歧视。官方印刷是 “monies” 和带连字符的 “safe-keeping”。不要发明硬性的 5% 上限。这不是对已经打包的 2121 的压平，也不是对已经教过的 10b-10、2262、2269 或 5290 的改写", "只要收费低于 5%，就一定合理；保管费不受本规则约束"]} answer={2} explanation="FINRA 2122 要求对已提供服务收取的费用（如有）应当合理，且不得在客户之间不公平地歧视。官方印刷是 “monies” 和 “safe-keeping”。不要发明硬性的 5% 上限，也不要把 2122 压进已经打包的 2121。这不是对已经教过的 10b-10、2262、2269 或 5290 的改写。" />
 <Quiz id="es-2124" question="根据 FINRA 2124，在按 “net” 基础为客户或与客户执行交易之前必须满足什么要求？非机构客户的同意必须是什么形式？" options={["“net” 自营成交只是又一次 2121 加价，10b-10 确认就是唯一需要的客户披露", "非机构客户可以只做一次口头、总括同意；官方印刷在 “e.g.” 后面有逗号", "在按 “net” 基础执行之前，会员必须披露并取得同意。对非机构客户，该同意必须是书面的，且按每笔订单做出，并证明客户理解订单的条款和条件。官方 (e)(2) 定义了 “net” 交易。官方印刷是 “e.g. an investment adviser”（“e.g.” 后面没有逗号）。官方 (c) 机构同意方式和官方 (d) 向受信人取得同意是存在的，仅被点名；本课不搭建这些引擎。这不是对已经打包的 2121 / 2122 或已经教过的 Rule 10b-10 的压平", "只要成交价格更优，就可以不经同意按 “net” 基础执行"]} answer={2} explanation="FINRA 2124 要求在 “net” 交易之前披露并取得同意。非机构客户必须提供书面、逐笔同意。官方印刷是 “e.g. an investment adviser”，不要悄悄加逗号。这不是对已经打包的 2121 / 2122 或已经教过的 10b-10 的压平。" />
@@ -763,6 +934,12 @@ assertions passed: 55/55
 <Quiz id="es-2232b2" question="根据 FINRA 2232(b)(2)，就一笔可赎回权益证券交易，确认须进一步披露什么？打包的是不是官方 (a)？是不是每一只普通股都可以被提前赎回？这是把已经打包的 4340 压进来吗？" options={["每一只普通股都可以被提前赎回，而且本课为 SR-FINRA-2019-008 发明了生效日", "教学核心是官方 (a)（压进已经打包的 10b-10），或这是把已经打包的 4340 压进官方 2232(b)(2)", "A confirmation given or sent pursuant to this Rule shall further disclose, with respect to any transaction in a callable equity security, that: (A) the security is a callable equity security; and (B) a customer may contact the member for more information concerning the security. 官方 (b) 开句印刷是 “shall further disclose。” 官方标题印刷是 “Customer Confirmations。” 官方 (a) 只点名，不当成教学核心。官方 (c)–(f) 是存在的，只点名。本课不发明每一只普通股都可以被提前赎回，也不为 SR-FINRA-2019-008 发明生效日。官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包；这不是把已经打包的 4340 压进那些确认披露", "确认只需说明该证券可能被提前赎回，不必有官方 (b)(2)(B) 的联系披露"]} answer={2} explanation="FINRA 2232(b)(2) 要求确认进一步披露该证券是可赎回权益证券，以及客户可以联系该会员以获取有关该证券的更多信息。官方印刷是 “shall further disclose。” 官方 (a) 只点名。本课不发明每一只普通股都可以被提前赎回，也不为 SR-FINRA-2019-008 发明生效日。官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包；不要把已经打包的 4340 压进那些确认披露。" />
 
 <Quiz id="es-15c24" question="根据 17 CFR 240.15c2-4，在 firm-commitment 承销以外的分销里，经纪商、交易商或市政证券交易商何时可以接受任何部分售价？官方 “promptly” 有没有数字时钟？" options={["本规则适用于 firm-commitment 承销，而且 “promptly” 就是 T+1", "这是对已经打包的 10b-5、已经教过的 10b-9 或已经教过的 Regulation M Rule 105 的压入，或官方印刷丢掉了 “all-or-none” 两侧的弯引号", "It shall constitute a “fraudulent, deceptive, or manipulative act or practice” as used in section 15(c)(2) of the Act, for any broker, dealer or municipal securities dealer participating in any distribution of securities, other than a firm-commitment underwriting, to accept any part of the sale price of any security being distributed unless：官方 (a) 收到的款项或其他对价 promptly transmitted to the persons entitled thereto，或官方 (b) 在 “all-or-none” 或任何其他须待进一步事件或条件发生才向被分销一方付款的基础上，款项被 promptly deposited 在单独的银行账户中作为 agent or trustee，或 promptly transmitted 给已书面同意以 escrow 持有的银行，直到该事件或条件发生，然后再 promptly transmitted or returned。官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号，并且是带连字符的 “firm-commitment。” 官方 “promptly” 没有数字时钟。官方来源行：“[41 FR 22826, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105", "官方 (a) 是撰写托管协议的操作指南，而且官方 (b) 只是重述已经教过的 10b-9 陈述"]} answer={2} explanation="17 CFR 240.15c2-4 打包官方开句和官方 (a)/(b)。官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号。官方 “promptly” 没有数字时钟。本规则不适用于 firm-commitment 承销。这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Rule 105。" />
+
+<Quiz id="es-5310" question="按 FINRA 5310，官方 (a) 要求什么？官方 (a) 在 reasonable diligence 两侧使用哪种引号？最佳执行只看价格吗？官方 (b)–(e) 或 SM 目录是本批打包的切片吗？" options={["最佳执行只看价格，并且官方 (a) 在 “reasonable diligence” 两侧使用弯引号", "这是对已经打包的 605 / 606 / 5320 / 2121、已经打包的 15c2-4，或已经打包的 10b-10 的压入，或把官方 (b)–(e) 和官方 SM .01–.09 当成打包切片", "官方标题印刷是 “5310. Best Execution and Interpositioning”（标题末尾没有句点）。官方 (a)(1)：在为客户或另一经纪交易商之客户进行的任何交易中，会员及与会员关联的人士应使用 reasonable diligence，以查明标的证券的最佳市场，并在该市场买卖，使客户得到的价格在当时市场条件下尽可能有利。判断会员是否使用了 \"reasonable diligence\" 时，将考虑官方 (A) 该证券的市场性质（例如价格、波动性、相对流动性，以及对可用通信的压力）、官方 (B) 交易的规模和类型、官方 (C) 核过的市场数量、官方 (D) 报价的可及性，以及官方 (E) 导致该笔交易的订单条款和条件。官方 (a) 在 \"reasonable diligence\" 两侧使用直 ASCII 引号（U+0022）。不要把官方 SM 的弯引号抄到官方 (a) 上。官方 (A) 有牛津逗号。官方 (a)(2)：任何会员或与会员关联的人士，不得以与本规则 (a)(1) 不一致的方式，在该会员与标的证券的最佳市场之间插入第三方。官方 (b)–(e) 和官方 SM .01–.09 只点名，包括 SM .01 的 “fully and promptly”（没有数字时钟）、SM .09，以及官方 SM .07 标题印刷 `07. Orders Involving Foreign Securities.`（没有前导点）。若引用官方 SM 标题，印刷是 U+2022 + NBSP + 14 个连字符，与官方 3130 相同，不是官方 4590 的普通空格标题，也不是已经打包的 2273。Notice 21-23 不是官方规则正文。把官方 5310(a) 作为稍后的单独条目打包，并不是已经印出的 21-23 指向的第二个核心。这不是已经打包的 605 / 606 / 5320 / 2121、已经打包的 15c2-4 或已经打包的 10b-10，并且最佳执行不只看价格", "官方 SM .01 的 “fully and promptly” 是数字时钟，并且可以把官方 SM .07 改整齐成 “.07”"]} answer={2} explanation="FINRA 5310 只打包官方 (a)：包括 (A)–(E) 的官方 (a)(1)，以及官方 (a)(2)。官方 (a) 在 “reasonable diligence” 两侧使用直 ASCII 引号。官方 (b)–(e) 和官方 SM .01–.09 只点名。官方 SM .07 标题印刷是没有前导点的 `07.`。最佳执行不只看价格。Notice 21-23 不是官方规则正文。" />
+
+<Quiz id="es-15c15" question="按 17 CFR 240.15c1-5，经纪商、交易商或市政证券交易商应在何时披露与发行人的控制关系？第一次披露必须是书面的吗？官方印刷有没有给被定义的用语加上引号？" options={["第一次披露必须是书面的，并且官方印刷像已经打包的 15c2-4 那样，在被定义的用语两侧使用弯引号", "这是对已经打包的 2262、已经打包的 2269、已经打包的 10b-10 或 15c1-6 的压入，或把 15c1-5 当成 2262 框的第二个核心来打包", "The term manipulative, deceptive, or other fraudulent device or contrivance, as used in section 15(c)(1) of the Act, is hereby defined to include any act of any broker, dealer or municipal securities dealer controlled by, controlling, or under common control with, the issuer of any security, designed to effect with or for the account of a customer any transaction in, or to induce the purchase or sale by such customer of, such security unless such broker, dealer or municipal securities dealer, before entering into any contract with or for such customer for the purchase or sale of such security, discloses to such customer the existence of such control, and unless such disclosure, if not made in writing, is supplemented by the giving or sending of written disclosure at or before the completion of the transaction. 官方标题印刷是 “Disclosure of control。” 官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。官方印刷是 “broker, dealer or municipal securities dealer”（没有牛津逗号）、“controlled by, controlling, or under common control with, the issuer”（“with” 后面有逗号），以及 “at or before the completion of the transaction。” 官方出处行是 “[41 FR 22825, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。第一次披露并不被官方要求必须是书面的。“completion of the transaction” 没有数字时钟。已经打包的 2262 保持原样；把 15c1-5 当成 2262 框的第二个核心来打包仍然是错的；15c1-5 作为稍后的单独条目打包。已经打包的 2262、已经教过的 10b-10、15c1-1 以及仍作遗留的 15c1-2 / 10b-3 只点名", "只有在完成之后，且仅在客户书面要求时，才需要披露"]} answer={2} explanation="17 CFR 240.15c1-5 打包整条现行规则。官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。第一次披露并不被官方要求必须是书面的；若第一次披露不是书面的，书面披露是补充。把 15c1-5 当成 2262 框的第二个核心来打包仍然是错的。Title 17 截至 2026-11-09。" />
+
+<Quiz id="es-15c16" question="按 17 CFR 240.15c1-6，必须发出怎样的书面通知，应在何时发出？“at or before the completion of each such transaction” 后面有逗号吗？这和已经打包的 2269 是同一条规则吗？" options={["这和已经打包的 2269 是同一条规则，并且官方印刷在 “transaction” 后面加了逗号", "这是对已经打包的 2269、已经打包的 2262、已经打包的 15c2-4、已经教过的 10b-10，或已经教过的 Rule 105 的压入，或把 15c1-6 当成 2269 框的第二个核心来打包", "The term manipulative, deceptive, or other fraudulent device or contrivance, as used in section 15(c)(1) of the Act, is hereby defined to include any act of any broker who is acting for a customer or for both such customer and some other person, or of any dealer or municipal securities dealer who receives or has promise of receiving a fee from a customer for advising such customer with respect to securities, designed to effect with or for the account of such customer any transaction in, or to induce the purchase or sale by such customer of, any security in the primary or secondary distribution of which such broker, dealer or municipal securities dealer is participating or is otherwise financially interested unless such broker, dealer or municipal securities dealer, at or before the completion of each such transaction gives or sends to such customer written notification of the existence of such participation or interest. 官方标题印刷是 “Disclosure of interest in distribution。” 官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。官方印刷是 “at or before the completion of each such transaction gives or sends”——“transaction” 后面没有逗号；官方 “each such transaction”；以及官方 “gives or sends。” 官方出处行是 “[41 FR 22826, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。已经打包的 2269 保持原样；把 15c1-6 当成 2269 框的第二个核心来打包仍然是错的；15c1-6 作为稍后的单独条目打包。已经打包的 2269、已经打包的 15c1-5 / 2262、15c1-1 以及仍作遗留的 15c1-8 只点名", "书面通知可以在完成后的任何时间发出，并且官方印刷在被定义的用语两侧使用弯引号"]} answer={2} explanation="17 CFR 240.15c1-6 打包整条现行规则。官方印刷在 “at or before the completion of each such transaction” 后面没有逗号。官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。把 15c1-6 当成 2269 框的第二个核心来打包仍然是错的。Title 17 截至 2026-11-09。" />
 
 
 
@@ -779,6 +956,7 @@ enrich31（核实于 2026-11-12）：[17 CFR 242.607](https://www.ecfr.gov/curre
 enrich34（核实于 2026-11-12）：[FINRA Rule 2232](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2232)（本课只打包官方 (b)(1)）。没有券商或确认服务商建议。
 enrich36（核实于 2026-11-12）：[FINRA Rule 2232](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2232)（本课现在也打包官方 (b)(2)；官方 (b) 开句印刷是 “shall further disclose”；官方 (a) 和官方 (c)–(f) 只点名；官方修订行印刷是 “Amended by SR-FINRA-2019-008.”，没有发明生效日）。官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包；不要把已经打包的 4340 压进那些确认披露。没有券商或确认服务商建议。
 enrich37（核实于 2026-11-12）：[17 CFR 240.15c2-4](https://www.ecfr.gov/current/title-17/section-240.15c2-4)（本课打包官方开句和官方 (a)/(b)；官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号，并且是带连字符的 “firm-commitment”；官方 “promptly” 没有数字时钟；官方来源行是 “[41 FR 22826, June 7, 1976]。”；Title 17 截至 2026-11-09；这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105）。仅供学习；不是 firm-commitment 操作指南或托管协议目录。没有券商、承销商或托管银行建议。
+enrich38（核实于 2026-11-12）：[FINRA Rule 5310](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5310)（本课只打包官方 (a)；官方 (a) 在 "reasonable diligence" 两侧使用直 ASCII 引号；不要把官方 SM 的弯引号抄到官方 (a) 上；官方 SM .07 标题印刷是 `07. Orders Involving Foreign Securities.`）；[17 CFR 240.15c1-5](https://www.ecfr.gov/current/title-17/section-240.15c1-5)（本课打包整条现行规则；官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；官方出处行 “[41 FR 22825, June 7, 1976]。”；Title 17 `up_to_date_as_of` 2026-11-09）；[17 CFR 240.15c1-6](https://www.ecfr.gov/current/title-17/section-240.15c1-6)（本课打包整条现行规则；官方印刷在 “at or before the completion of each such transaction” 后面没有逗号；官方出处行 “[41 FR 22826, June 7, 1976]。”；Title 17 `up_to_date_as_of` 2026-11-09）。没有券商、交易场所、承销商或产品建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

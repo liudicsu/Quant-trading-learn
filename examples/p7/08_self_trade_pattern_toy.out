@@ -506,3 +506,51 @@ no broker, day-trading firm, or product recommendation
 assertions passed: 67/67
 ASSERT_3130_2270_ok
 disclaimer: official FINRA 3130 and 2270; learning only; not legal advice; literacy only, not a certification or day-trading how-to
+=== X. 17 CFR 240.15c1-7: Discretionary accounts ===
+official caption typography is Discretionary accounts.
+15c1-7(a): The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c) of the Act, is hereby defined to include
+  any act of any broker, dealer or municipal securities dealer designed to effect
+  with or for any customer's account in respect to which such broker, dealer or
+  municipal securities dealer or his agent or employee is vested with any
+  discretionary power any transactions or purchase or sale which are excessive in
+  size or frequency in view of the financial resources and character of such
+  account.
+15c1-7(b): The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c)(1) of the Act, is hereby defined to
+  include any act of any broker, dealer or municipal securities dealer designed
+  to effect with or for any customer's account in respect to which such broker,
+  dealer or municipal securities dealer or his agent or employee is vested with
+  any discretionary power any transaction of purchase or sale unless immediately
+  after effecting such transaction such broker, dealer or municipal securities
+  dealer makes a record of such transaction which record includes the name of
+  such customer, the name, amount and price of the security, and the date and
+  time when such transaction took place.
+official typography italicizes the defined term, including the trailing comma,
+  and does not put quotation marks around it: The term <I>manipulative,
+  deceptive, or other fraudulent device or contrivance,</I> as used in official
+  (a) and official (b); this toy does not invent quotes, and does not copy
+  packed 15c2-4 typographic quotes
+  onto this rule
+official (a) cites "section 15(c) of the Act" without "(1)", while official (b)
+  cites "section 15(c)(1) of the Act"; this toy does not tidy official (a) by
+  inserting "(1)"
+official (a) typography is "any transactions or purchase or sale which are
+  excessive" (official grammar; this toy does not tidy it) and "or his agent or
+  employee"
+official (b) typography is "the name, amount and price of the security" (no
+  Oxford comma) and "immediately after effecting such transaction" (no numeric
+  clock); a straight apostrophe in "customer's account."
+cite 17 CFR 240.15c1-7; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22826, June 7, 1976].
+packed 2270 / 2130 (named only under 2270), packed 2150, packed 4513 /
+  already-named 4511 / 4512, and 17 CFR 240.15c1-1 exist and are named only;
+  this toy is not those rules
+  this is a flatten into packed 2270, packed 2150, packed 4513, packed 10b-5, or packed 2010, or a discretionary-trading how-to? False
+  this toy tidies official (a) by inserting "(1)" into "section 15(c) of the Act", or invents a numeric clock for "immediately"? False
+  official (a) is the excessive-trading prong (any transactions or purchase or sale which are excessive in size or frequency in view of the financial resources and character of such account, where the broker, dealer or municipal securities dealer or his agent or employee is vested with any discretionary power), and official (b) requires a record immediately after effecting such transaction, including the name of such customer, the name, amount and price of the security, and the date and time when such transaction took place? True
+literacy only; not a discretionary-trading how-to, and not legal advice
+no broker, dealer, or product recommendation
+assertions passed: 70/70
+ASSERT_15c17_ok
+disclaimer: official 17 CFR 240.15c1-7; learning only; not legal advice; literacy only, not a discretionary-trading how-to
