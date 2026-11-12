@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **20.50 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h + FINRA 2232(b)(1) NMS 交收日确认披露 0.25h + FINRA 2232(b)(2) 可赎回权益证券确认披露 0.25h + 17 CFR 240.15c2-4 与承销相关的收款的转交或保管（firm-commitment 承销除外）0.25h + FINRA 5310 最佳执行与中间介入 0.25h + 17 CFR 240.15c1-5 控制关系披露 0.25h + 17 CFR 240.15c1-6 分销利害关系披露 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
+本课（约 **20.75 学时**：概念 5h（含 √/Gatheral + 公开盘口元订单冲击）+ 实验 6.5h + 测验 1.5h + feed 感知 TCA 1h + Rule 605 与 FINRA 21-23 0.25h + Rule 606 路由与 PFOF 0.5h + NMS 股票 ATS 与 Form ATS-N 0.5h + Rule 604 客户限价展示 0.25h + FINRA 5320 不得抢先客户股票订单 0.25h + FINRA 5250 不得接受做市付款 0.25h + FINRA 5270 不得抢先大宗交易 0.25h + FINRA 5230 不得为影响市价的出版物付款 0.25h + FINRA 5280 不得抢先研究报告 0.25h + Rule 10b-10 书面确认 0.25h + FINRA 5240 反胁迫 / 协调 0.25h + FINRA 5290 不得为最大化积分或回扣而拆单 0.25h + FINRA 2262 控制关系披露 0.25h + FINRA 2269 分销参与书面通知 0.25h + FINRA 2121 公平价格与佣金 / 官方 “5% Policy” 0.25h + FINRA 2122 已提供服务的收费 0.25h + FINRA 2124 “net” 交易的披露与同意 0.25h + 17 CFR 242.607 开户时及此后每年一次的 PFOF 与路由政策书面通知 0.25h + FINRA 2232(b)(1) NMS 交收日确认披露 0.25h + FINRA 2232(b)(2) 可赎回权益证券确认披露 0.25h + 17 CFR 240.15c2-4 与承销相关的收款的转交或保管（firm-commitment 承销除外）0.25h + FINRA 5310 最佳执行与中间介入 0.25h + 17 CFR 240.15c1-5 控制关系披露 0.25h + 17 CFR 240.15c1-6 分销利害关系披露 0.25h + 17 CFR 240.15c1-3 关于注册的不实陈述 0.25h）把**执行当作策略的一部分**：TWAP/VWAP 日程、Almgren–Chriss 最优清仓、实施缺口、限价 vs 市价，以及到达价 TCA。前置：`costs-in-backtest`、`portfolio-risk-sizing`。
 
 **课内目标：** 加入参与率 / 日程纪律；写一页与共用成本模型挂钩的执行说明书。
 
@@ -832,6 +832,54 @@ no broker, dealer, underwriter, or issuer recommendation
 assertions passed: 64/64
 ```
 
+## 17 CFR 240.15c1-3：关于注册的不实陈述（核实于 2026-11-12）
+
+本课前面打包的 15c1-5 / 15c1-6 保持原样。这个框是另一项 15c1 关于注册的不实陈述义务，不是那些框的第二个核心。不要发明 SEC 注册，或委员会未拒绝或撤销该注册，就是对财务状况、业务、行为，或对任何证券或其任何交易的实质批准。不要把本规则压进已经打包的 15c1-5 / 15c1-6 / 15c1-7、已经打包的 10b-5，或已经打包的 1122。官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且**不**给它加上引号；不要把已经打包的 15c2-4 的弯引号抄到本规则上。仅供学习；没有券商、交易商、市政证券交易商或产品建议。
+
+[17 CFR 240.15c1-3](https://www.ecfr.gov/current/title-17/section-240.15c1-3)：“The term <em>manipulative, deceptive, or other fraudulent device or contrivance,</em> as used in section 15(c)(1) of the Act, is hereby defined to include any representation by a broker, dealer or municipal securities dealer that the registration of a broker or dealer, pursuant to section 15(b) of the Act, or the registration of a municipal securities dealer pursuant to section 15B(a) of the Act, or the failure of the Commission to deny or revoke such registration, indicates in any way that the Commission has passed upon or approved the financial standing, business, or conduct of such registered broker, dealer or municipal securities dealer or the merits of any security or any transaction or transactions therein.” 官方标题印刷是 “Misrepresentation by brokers, dealers and municipal securities dealers as to registration。” 官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且**不**给它加上引号。官方印刷是 “broker, dealer or municipal securities dealer”（该三人称没有牛津逗号）以及 “financial standing, business, or conduct”（“business” 后面有牛津逗号）。官方标题印刷是 “brokers, dealers and municipal securities dealers”（该三人称没有牛津逗号）。官方印刷是 “any security or any transaction or transactions therein.” 官方出处行是 “[41 FR 22825, June 7, 1976].” Title 17 `up_to_date_as_of` 2026-11-09。
+
+已经打包的 15c1-5 / 15c1-6 / 15c1-7、已经打包的 10b-5、已经打包的 FINRA 1122、仍作遗留的 15c1-2 / 10b-3、仍作遗留的 15c1-8，以及 17 CFR 240.15c1-1 是存在的，只点名。
+
+**实验：** 同一脚本的 U 节（包括此前的 **T / 15c1-6 之后 64/64**；U 节之后为 67/67）：
+
+```text
+=== U. 17 CFR 240.15c1-3: Misrepresentation by brokers, dealers and municipal securities dealers as to registration ===
+official caption typography is Misrepresentation by brokers, dealers and
+  municipal securities dealers as to registration.
+15c1-3: The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c)(1) of the Act, is hereby defined to
+  include any representation by a broker, dealer or municipal securities dealer
+  that the registration of a broker or dealer, pursuant to section 15(b) of the
+  Act, or the registration of a municipal securities dealer pursuant to section
+  15B(a) of the Act, or the failure of the Commission to deny or revoke such
+  registration, indicates in any way that the Commission has passed upon or
+  approved the financial standing, business, or conduct of such registered
+  broker, dealer or municipal securities dealer or the merits of any security
+  or any transaction or transactions therein.
+official typography italicizes the defined term, including the trailing comma,
+  and does not put quotation marks around it: The term <I>manipulative,
+  deceptive, or other fraudulent device or contrivance,</I> as used in section
+  15(c)(1) of the Act; this toy does not invent quotes, and does not copy packed
+  15c2-4 typographic quotes onto this rule
+official caption typography is "brokers, dealers and municipal securities
+  dealers" (no Oxford comma in that trio)
+official typography is "broker, dealer or municipal securities dealer" (no
+  Oxford comma in that trio) and "financial standing, business, or conduct"
+  (Oxford comma after "business")
+official typography is "any security or any transaction or transactions therein."
+cite 17 CFR 240.15c1-3; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22825, June 7, 1976].
+packed 15c1-5 / 15c1-6 / 15c1-7, packed 10b-5, packed FINRA 1122, leftover
+  15c1-2 / 10b-3, leftover 15c1-8, and 17 CFR 240.15c1-1 exist and are named
+  only; this toy is not those rules
+  this is a flatten into packed 15c1-5 / 15c1-6 / 15c1-7, packed 10b-5, or packed 1122, or a claim that SEC registration, or the Commission's failure to deny or revoke it, is an approval of financial standing, business, conduct, or the merits of a security or transaction? False
+  this toy invents quotation marks around the defined term, or copies packed 15c2-4 typographic quotes onto this rule? False
+  a representation by a broker, dealer or municipal securities dealer that the registration of a broker or dealer pursuant to section 15(b), or the registration of a municipal securities dealer pursuant to section 15B(a), or the failure of the Commission to deny or revoke such registration, indicates in any way that the Commission has passed upon or approved the financial standing, business, or conduct of such registered broker, dealer or municipal securities dealer or the merits of any security or any transaction or transactions therein, is a manipulative, deceptive, or other fraudulent device or contrivance as used in section 15(c)(1) of the Act? True
+literacy only; not a registration-form how-to, and not legal advice
+no broker, dealer, municipal securities dealer, or product recommendation
+assertions passed: 67/67
+```
+
 ## 常见错误 / 陷阱
 
 1. 回测以中间价成交且无日程/冲击。
@@ -864,6 +912,7 @@ assertions passed: 64/64
 28. 把 FINRA 5310 压进已经打包的 605 / 606 / 5320 / 2121、已经打包的 15c2-4，或已经打包的 10b-10；发明最佳执行只看价格；把官方 SM 的弯引号抄到官方 (a) 上；把官方 SM .07 标题印刷 `07.` 改整齐成 “.07”；为 SM .01 的 “fully and promptly” 发明数字时钟；或把官方 (b)–(e) 或 SM 目录当成打包切片。
 29. 把 17 CFR 240.15c1-5 压进已经打包的 2262、已经打包的 2269、已经打包的 10b-10 或 15c1-6；把 15c1-5 当成 2262 框的第二个核心来打包；发明第一次披露必须是书面的；为 “completion of the transaction” 发明数字时钟；或把已经打包的 15c2-4 的弯引号抄到被定义的用语上，或给它发明引号。
 30. 把 17 CFR 240.15c1-6 压进已经打包的 2269、已经打包的 2262、已经打包的 15c2-4、已经教过的 10b-10，或已经教过的 Rule 105；把 15c1-6 当成 2269 框的第二个核心来打包；在官方 “at or before the completion of each such transaction” 后面插入逗号；或给被定义的用语发明引号。
+31. 把 17 CFR 240.15c1-3 压进已经打包的 15c1-5 / 15c1-6 / 15c1-7、已经打包的 10b-5，或已经打包的 1122；发明 SEC 注册，或委员会未拒绝或撤销该注册，就是对财务状况、业务、行为，或对任何证券或其任何交易的实质批准；给被定义的用语发明引号，或把已经打包的 15c2-4 的弯引号抄到本规则上；或在官方 “brokers, dealers and municipal securities dealers” 里发明牛津逗号，或丢掉官方在 “business” 后面的牛津逗号。
 
 
 ## 练习（1:1）
@@ -896,6 +945,7 @@ assertions passed: 64/64
 25. **ex-5310** — 运行同一脚本的 R 节；说明包括 (A)–(E) 的官方 (a)(1) 和官方 (a)(2)，官方 (a) 是否在 "reasonable diligence" 两侧使用直引号，以及最佳执行是不是只看价格；**完成标准：** 官方印刷在 "reasonable diligence" 两侧使用直 ASCII 引号；官方 (A) 有牛津逗号；官方 (b)–(e) 和官方 SM .01–.09 只点名，包括 SM .01 的 “fully and promptly”（没有数字时钟）以及官方 SM .07 标题印刷 `07.`；这不是已经打包的 605 / 606 / 5320 / 2121、已经打包的 15c2-4 或已经打包的 10b-10，并且最佳执行不只看价格，与输出一致。
 26. **ex-15c15** — 运行同一脚本的 S 节；说明控制关系应在何时披露，第一次披露是否必须是书面的，以及官方印刷有没有给被定义的用语加上引号；**完成标准：** 官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；第一次披露并不被官方要求必须是书面的；把 15c1-5 当成 2262 框的第二个核心来打包仍然是错的；官方出处行是 “[41 FR 22825, June 7, 1976]。”；这不是已经打包的 2262 / 2269 / 10b-10，与输出一致。
 27. **ex-15c16** — 运行同一脚本的 T 节；说明书面通知义务、“transaction” 后面有没有逗号，以及这是不是已经打包的 2269；**完成标准：** 官方印刷是 “at or before the completion of each such transaction gives or sends”，“transaction” 后面没有逗号；官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；把 15c1-6 当成 2269 框的第二个核心来打包仍然是错的；官方出处行是 “[41 FR 22826, June 7, 1976]。”；这不是已经打包的 2269 / 2262 / 15c2-4 / 10b-10 / Rule 105，与输出一致。
+28. **ex-15c13** — 运行同一脚本的 U 节；说明关于注册的不实陈述义务、官方印刷是否把被定义的用语（包括后面的逗号）标成斜体，以及官方标题三人称里有没有牛津逗号；**完成标准：** 官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；官方印刷是 “broker, dealer or municipal securities dealer”（没有牛津逗号）以及 “financial standing, business, or conduct”（有牛津逗号）；官方标题印刷是 “brokers, dealers and municipal securities dealers”（没有牛津逗号）；官方出处行是 “[41 FR 22825, June 7, 1976]。”；SEC 注册不是对实质或财务状况的批准；这不是已经打包的 15c1-5 / 15c1-6 / 15c1-7 / 10b-5 / 1122，与输出一致。
 
 ## 测验
 
@@ -940,6 +990,7 @@ assertions passed: 64/64
 <Quiz id="es-15c15" question="按 17 CFR 240.15c1-5，经纪商、交易商或市政证券交易商应在何时披露与发行人的控制关系？第一次披露必须是书面的吗？官方印刷有没有给被定义的用语加上引号？" options={["第一次披露必须是书面的，并且官方印刷像已经打包的 15c2-4 那样，在被定义的用语两侧使用弯引号", "这是对已经打包的 2262、已经打包的 2269、已经打包的 10b-10 或 15c1-6 的压入，或把 15c1-5 当成 2262 框的第二个核心来打包", "The term manipulative, deceptive, or other fraudulent device or contrivance, as used in section 15(c)(1) of the Act, is hereby defined to include any act of any broker, dealer or municipal securities dealer controlled by, controlling, or under common control with, the issuer of any security, designed to effect with or for the account of a customer any transaction in, or to induce the purchase or sale by such customer of, such security unless such broker, dealer or municipal securities dealer, before entering into any contract with or for such customer for the purchase or sale of such security, discloses to such customer the existence of such control, and unless such disclosure, if not made in writing, is supplemented by the giving or sending of written disclosure at or before the completion of the transaction. 官方标题印刷是 “Disclosure of control。” 官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。官方印刷是 “broker, dealer or municipal securities dealer”（没有牛津逗号）、“controlled by, controlling, or under common control with, the issuer”（“with” 后面有逗号），以及 “at or before the completion of the transaction。” 官方出处行是 “[41 FR 22825, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。第一次披露并不被官方要求必须是书面的。“completion of the transaction” 没有数字时钟。已经打包的 2262 保持原样；把 15c1-5 当成 2262 框的第二个核心来打包仍然是错的；15c1-5 作为稍后的单独条目打包。已经打包的 2262、已经教过的 10b-10、15c1-1 以及仍作遗留的 15c1-2 / 10b-3 只点名", "只有在完成之后，且仅在客户书面要求时，才需要披露"]} answer={2} explanation="17 CFR 240.15c1-5 打包整条现行规则。官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。第一次披露并不被官方要求必须是书面的；若第一次披露不是书面的，书面披露是补充。把 15c1-5 当成 2262 框的第二个核心来打包仍然是错的。Title 17 截至 2026-11-09。" />
 
 <Quiz id="es-15c16" question="按 17 CFR 240.15c1-6，必须发出怎样的书面通知，应在何时发出？“at or before the completion of each such transaction” 后面有逗号吗？这和已经打包的 2269 是同一条规则吗？" options={["这和已经打包的 2269 是同一条规则，并且官方印刷在 “transaction” 后面加了逗号", "这是对已经打包的 2269、已经打包的 2262、已经打包的 15c2-4、已经教过的 10b-10，或已经教过的 Rule 105 的压入，或把 15c1-6 当成 2269 框的第二个核心来打包", "The term manipulative, deceptive, or other fraudulent device or contrivance, as used in section 15(c)(1) of the Act, is hereby defined to include any act of any broker who is acting for a customer or for both such customer and some other person, or of any dealer or municipal securities dealer who receives or has promise of receiving a fee from a customer for advising such customer with respect to securities, designed to effect with or for the account of such customer any transaction in, or to induce the purchase or sale by such customer of, any security in the primary or secondary distribution of which such broker, dealer or municipal securities dealer is participating or is otherwise financially interested unless such broker, dealer or municipal securities dealer, at or before the completion of each such transaction gives or sends to such customer written notification of the existence of such participation or interest. 官方标题印刷是 “Disclosure of interest in distribution。” 官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。官方印刷是 “at or before the completion of each such transaction gives or sends”——“transaction” 后面没有逗号；官方 “each such transaction”；以及官方 “gives or sends。” 官方出处行是 “[41 FR 22826, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。已经打包的 2269 保持原样；把 15c1-6 当成 2269 框的第二个核心来打包仍然是错的；15c1-6 作为稍后的单独条目打包。已经打包的 2269、已经打包的 15c1-5 / 2262、15c1-1 以及仍作遗留的 15c1-8 只点名", "书面通知可以在完成后的任何时间发出，并且官方印刷在被定义的用语两侧使用弯引号"]} answer={2} explanation="17 CFR 240.15c1-6 打包整条现行规则。官方印刷在 “at or before the completion of each such transaction” 后面没有逗号。官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。把 15c1-6 当成 2269 框的第二个核心来打包仍然是错的。Title 17 截至 2026-11-09。" />
+<Quiz id="es-15c13" question="按 17 CFR 240.15c1-3，怎样的陈述被定义为 manipulative, deceptive, or other fraudulent device or contrivance？官方印刷有没有给被定义的用语加上引号？官方印刷在 “brokers, dealers and municipal securities dealers” 里有没有牛津逗号？" options={["SEC 注册，或委员会未拒绝或撤销该注册，就是对财务状况、业务、行为，或对任何证券或其任何交易的实质批准，并且官方印刷像已经打包的 15c2-4 一样给被定义的用语加上弯引号", "这是对已经打包的 15c1-5 / 15c1-6 / 15c1-7、已经打包的 10b-5，或已经打包的 1122 的压入，或把 15c1-3 当成那些框的第二个核心来打包", "The term manipulative, deceptive, or other fraudulent device or contrivance, as used in section 15(c)(1) of the Act, is hereby defined to include any representation by a broker, dealer or municipal securities dealer that the registration of a broker or dealer, pursuant to section 15(b) of the Act, or the registration of a municipal securities dealer pursuant to section 15B(a) of the Act, or the failure of the Commission to deny or revoke such registration, indicates in any way that the Commission has passed upon or approved the financial standing, business, or conduct of such registered broker, dealer or municipal securities dealer or the merits of any security or any transaction or transactions therein. 官方标题印刷是 “Misrepresentation by brokers, dealers and municipal securities dealers as to registration。” 官方印刷把这个被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。官方印刷是 “broker, dealer or municipal securities dealer”（没有牛津逗号）以及 “financial standing, business, or conduct”（“business” 后面有牛津逗号）。官方标题印刷是 “brokers, dealers and municipal securities dealers”（没有牛津逗号）。官方出处行是 “[41 FR 22825, June 7, 1976]。” Title 17 `up_to_date_as_of` 2026-11-09。已经打包的 15c1-5 / 15c1-6 / 15c1-7、已经打包的 10b-5、已经打包的 1122、仍作遗留的 15c1-2 / 10b-3、仍作遗留的 15c1-8，以及 15c1-1 只点名", "官方印刷在 “business” 后面丢掉了牛津逗号，并且官方标题印刷在 “and municipal securities dealers” 前面使用了牛津逗号"]} answer={2} explanation="17 CFR 240.15c1-3 打包整条现行规则。官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号。官方印刷是没有牛津逗号的 “broker, dealer or municipal securities dealer，” 以及带牛津逗号的 “financial standing, business, or conduct。” SEC 注册不是对实质或财务状况的批准。Title 17 截至 2026-11-09。" />
 
 
 
@@ -957,6 +1008,7 @@ enrich34（核实于 2026-11-12）：[FINRA Rule 2232](https://www.finra.org/rul
 enrich36（核实于 2026-11-12）：[FINRA Rule 2232](https://www.finra.org/rules-guidance/rulebooks/finra-rules/2232)（本课现在也打包官方 (b)(2)；官方 (b) 开句印刷是 “shall further disclose”；官方 (a) 和官方 (c)–(f) 只点名；官方修订行印刷是 “Amended by SR-FINRA-2019-008.”，没有发明生效日）。官方 2232(b)(1) 和官方 2232(b)(2) 均在本课打包；不要把已经打包的 4340 压进那些确认披露。没有券商或确认服务商建议。
 enrich37（核实于 2026-11-12）：[17 CFR 240.15c2-4](https://www.ecfr.gov/current/title-17/section-240.15c2-4)（本课打包官方开句和官方 (a)/(b)；官方印刷在 “fraudulent, deceptive, or manipulative act or practice” 和 “all-or-none” 两侧使用弯引号，并且是带连字符的 “firm-commitment”；官方 “promptly” 没有数字时钟；官方来源行是 “[41 FR 22826, June 7, 1976]。”；Title 17 截至 2026-11-09；这不是已经打包的 10b-5、已经教过的 10b-9，或已经教过的 Regulation M Rule 105）。仅供学习；不是 firm-commitment 操作指南或托管协议目录。没有券商、承销商或托管银行建议。
 enrich38（核实于 2026-11-12）：[FINRA Rule 5310](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5310)（本课只打包官方 (a)；官方 (a) 在 "reasonable diligence" 两侧使用直 ASCII 引号；不要把官方 SM 的弯引号抄到官方 (a) 上；官方 SM .07 标题印刷是 `07. Orders Involving Foreign Securities.`）；[17 CFR 240.15c1-5](https://www.ecfr.gov/current/title-17/section-240.15c1-5)（本课打包整条现行规则；官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；官方出处行 “[41 FR 22825, June 7, 1976]。”；Title 17 `up_to_date_as_of` 2026-11-09）；[17 CFR 240.15c1-6](https://www.ecfr.gov/current/title-17/section-240.15c1-6)（本课打包整条现行规则；官方印刷在 “at or before the completion of each such transaction” 后面没有逗号；官方出处行 “[41 FR 22826, June 7, 1976]。”；Title 17 `up_to_date_as_of` 2026-11-09）。没有券商、交易场所、承销商或产品建议。
+enrich39（核实于 2026-11-12）：[17 CFR 240.15c1-3](https://www.ecfr.gov/current/title-17/section-240.15c1-3)（本课打包整条现行规则；官方印刷把被定义的用语标成斜体，包括后面的逗号，并且不给它加上引号；官方标题印刷是没有牛津逗号的 “brokers, dealers and municipal securities dealers”；官方印刷是带牛津逗号的 “financial standing, business, or conduct”；官方出处行 “[41 FR 22825, June 7, 1976]。”；Title 17 `up_to_date_as_of` 2026-11-09）。没有券商、交易商、市政证券交易商或产品建议。
 
 <Summary>
 **要点**：有意识地排程；AC 给出成本–风险前沿；用到达价量 IS；限价不是免费的。  

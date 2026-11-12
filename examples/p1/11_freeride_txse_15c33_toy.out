@@ -424,3 +424,36 @@ if the official SM header is quoted, typography is • • • Supplementary Mat
 literacy only; not a clock-sync how-to, and not legal advice
 no broker, clock-vendor, or product recommendation
 assertions passed: 64/64
+=== V. FINRA 6130: Transactions Related to Initial Public Offerings ===
+official caption typography is 6130. Transactions Related to Initial Public
+  Offerings (no period at the end of the caption)
+6130(a): No member or person associated with a member shall execute or cause
+  to be executed, directly or indirectly, a transaction otherwise than on an
+  exchange in a security subject to an initial public offering until such
+  security has first opened for trading on the national securities exchange
+  listing the security, as indicated by the dissemination of an opening
+  transaction in the security by the listing exchange.
+6130(b): A security is subject to an "initial public offering" for purposes
+  of paragraph (a) of this Rule if:
+  (1) the offering of the security is registered under the Securities Act; and
+  (2) the issuer of the security, immediately prior to filing the registration
+  statement with respect to such offering, was not subject to the reporting
+  requirements of Section 13 or 15(d) of the Exchange Act.
+official (b) uses straight ASCII quotes (U+0022) around "initial public offering"
+  in this official (b) text; this toy does not copy typographic quotes onto
+  official (b)
+official typography is "otherwise than on an exchange" (this toy does not tidy
+  that into "off-exchange" as if it were the official phrase)
+official opening-transaction dissemination has no numeric clock and no time zone
+official (b)(2) typography is "Section 13 or 15(d) of the Exchange Act."
+packed FINRA 5130 / 5131, already-taught IPO data traps in backtest-traps
+  (offering price vs fill), packed official open / MOO cutoffs / SIP sale
+  condition Q, packed 6380A, and leftover 6121 exist and are named only;
+  this toy is not those boxes, and does not invent that this rule governs
+  on-exchange IPO prints
+  this is a flatten into packed 5130 / 5131, already-taught IPO data traps in backtest-traps, packed official open / MOO, packed 6380A, or leftover 6121, a claim that this rule governs on-exchange IPO prints, or an IPO-allocation / first-print how-to? False
+  this toy tidies official "otherwise than on an exchange" into "off-exchange" as if it were the official phrase, invents a numeric clock or time zone for opening-transaction dissemination, or copies typographic quotes onto official (b)? False
+  no member or person associated with a member shall execute or cause to be executed, directly or indirectly, a transaction otherwise than on an exchange in a security subject to an "initial public offering" until such security has first opened for trading on the national securities exchange listing the security, as indicated by the dissemination of an opening transaction in the security by the listing exchange; a security is subject to an "initial public offering" for purposes of paragraph (a) if the offering is registered under the Securities Act and the issuer, immediately prior to filing the registration statement with respect to such offering, was not subject to the reporting requirements of Section 13 or 15(d) of the Exchange Act? True
+literacy only; not an IPO-allocation or first-print how-to, and not legal advice
+no broker, exchange, or product recommendation
+assertions passed: 67/67

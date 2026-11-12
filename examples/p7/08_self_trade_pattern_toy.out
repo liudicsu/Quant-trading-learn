@@ -554,3 +554,36 @@ no broker, dealer, or product recommendation
 assertions passed: 70/70
 ASSERT_15c17_ok
 disclaimer: official 17 CFR 240.15c1-7; learning only; not legal advice; literacy only, not a discretionary-trading how-to
+=== Y. FINRA 3250: Designation of Accounts ===
+official caption typography is 3250. Designation of Accounts
+  (no period at the end of the caption)
+3250: No member shall carry an account on its books in the name of a person
+  other than that of the customer, except that an account may be designated by
+  a number or symbol, provided the member has on file a written statement
+  signed by the customer attesting the ownership of such account.
+official typography is "No member shall carry" with one ordinary U+0020 space;
+  official #the-rule HTML inserts an empty <span class="us"></span> between
+  "member" and "shall"; that empty span is markup, not official typography that
+  adds a space, and this toy does not quote a double space
+the later word "member" is wrapped in <span class="us">member</span> in the
+  official HTML; this toy does not invent emphasis from the CSS class
+official typography is "attesting the ownership of such account."
+numbered or symbol accounts are allowed if the signed written ownership
+  statement is on file; this toy does not invent that numbered or symbol
+  accounts are banned
+packed 2231 / 2090 (in microstructure-orders), packed 4513 / already-named
+  4511 / 4512, packed 15c1-7, and leftover FINRA 3260 (official (a) overlaps
+  packed 15c1-7(a); official (b)-(d) are a written-authorization /
+  time-and-price-discretion exception catalog — name only next to packed
+  15c1-7; this toy does not pack 3260 as a second core) exist and are named
+  only; this toy is not those rules
+a footer telephone number or Securities Helpline for Seniors is not official
+  rule text
+  this is a flatten into packed 2231, packed 2090, packed 4513, leftover 4511 / 4512, packed 15c1-7, or leftover 3260, or a how-to for opening numbered accounts? False
+  this toy quotes official wording as a double space in "No member  shall carry", invents emphasis from <span class="us">member</span>, or invents that numbered or symbol accounts are banned? False
+  no member shall carry an account on its books in the name of a person other than that of the customer, except that an account may be designated by a number or symbol, provided the member has on file a written statement signed by the customer attesting the ownership of such account? True
+literacy only; not a how-to for opening numbered accounts, and not legal advice
+no broker or product recommendation
+assertions passed: 73/73
+ASSERT_3250_ok
+disclaimer: official FINRA 3250; learning only; not legal advice; literacy only, not a how-to for opening numbered accounts

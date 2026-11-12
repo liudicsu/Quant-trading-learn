@@ -431,3 +431,38 @@ packed 2269, packed 15c1-5 / 2262, 17 CFR 240.15c1-1, and leftover 15c1-8
 literacy only; not a notification-form how-to, and not legal advice
 no broker, dealer, underwriter, or issuer recommendation
 assertions passed: 64/64
+=== U. 17 CFR 240.15c1-3: Misrepresentation by brokers, dealers and municipal securities dealers as to registration ===
+official caption typography is Misrepresentation by brokers, dealers and
+  municipal securities dealers as to registration.
+15c1-3: The term manipulative, deceptive, or other fraudulent device or
+  contrivance, as used in section 15(c)(1) of the Act, is hereby defined to
+  include any representation by a broker, dealer or municipal securities dealer
+  that the registration of a broker or dealer, pursuant to section 15(b) of the
+  Act, or the registration of a municipal securities dealer pursuant to section
+  15B(a) of the Act, or the failure of the Commission to deny or revoke such
+  registration, indicates in any way that the Commission has passed upon or
+  approved the financial standing, business, or conduct of such registered
+  broker, dealer or municipal securities dealer or the merits of any security
+  or any transaction or transactions therein.
+official typography italicizes the defined term, including the trailing comma,
+  and does not put quotation marks around it: The term <I>manipulative,
+  deceptive, or other fraudulent device or contrivance,</I> as used in section
+  15(c)(1) of the Act; this toy does not invent quotes, and does not copy packed
+  15c2-4 typographic quotes onto this rule
+official caption typography is "brokers, dealers and municipal securities
+  dealers" (no Oxford comma in that trio)
+official typography is "broker, dealer or municipal securities dealer" (no
+  Oxford comma in that trio) and "financial standing, business, or conduct"
+  (Oxford comma after "business")
+official typography is "any security or any transaction or transactions therein."
+cite 17 CFR 240.15c1-3; title 17 up_to_date_as_of 2026-11-09
+[41 FR 22825, June 7, 1976].
+packed 15c1-5 / 15c1-6 / 15c1-7, packed 10b-5, packed FINRA 1122, leftover
+  15c1-2 / 10b-3, leftover 15c1-8, and 17 CFR 240.15c1-1 exist and are named
+  only; this toy is not those rules
+  this is a flatten into packed 15c1-5 / 15c1-6 / 15c1-7, packed 10b-5, or packed 1122, or a claim that SEC registration, or the Commission's failure to deny or revoke it, is an approval of financial standing, business, conduct, or the merits of a security or transaction? False
+  this toy invents quotation marks around the defined term, or copies packed 15c2-4 typographic quotes onto this rule? False
+  a representation by a broker, dealer or municipal securities dealer that the registration of a broker or dealer pursuant to section 15(b), or the registration of a municipal securities dealer pursuant to section 15B(a), or the failure of the Commission to deny or revoke such registration, indicates in any way that the Commission has passed upon or approved the financial standing, business, or conduct of such registered broker, dealer or municipal securities dealer or the merits of any security or any transaction or transactions therein, is a manipulative, deceptive, or other fraudulent device or contrivance as used in section 15(c)(1) of the Act? True
+literacy only; not a registration-form how-to, and not legal advice
+no broker, dealer, municipal securities dealer, or product recommendation
+assertions passed: 67/67
