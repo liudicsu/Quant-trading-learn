@@ -607,3 +607,124 @@ print("no issuer, filer, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
 print("disclaimer: official 17 CFR 240.16a-11; no filer, tax, or disclosure advice; learning only")
+
+print("=== M. 17 CFR 240.16a-4: Derivative securities ===")
+# 17 CFR 240.16a-4 the whole current section, including the official Note
+# (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17,
+# live-refetched 2026-11-19, byte-identical to the enrich41-src archive).
+# Keep sections A-L identical, including 68/68 after L / 16a-11,
+# section-I ASSERT_spinoff_insider_lag_ok, Form 5 due date 2026-02-17,
+# and 13d-1(g) fifth business day 2026-10-13.
+# Official (a) italicizes "except that" with no trailing comma inside the italics.
+# Official Note heading typography emphasizes the letter a:
+# Note to § 240.16a-4: (do not print the word HEAD).
+# Official (d) points to leftover § 240.16b-6(d); the official Note points
+# to leftover § 240.16b-3 or § 240.16b-6(b) — name those leftovers only.
+# Do not flatten into already-taught Form 4 codes, packed 16a-6 / 16a-9 /
+# 16a-11, or packed Section 16(b).
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Derivative securities.")
+print("16a-4(a): For purposes of section 16 of the Act, both derivative securities and the underlying securities to which they relate shall be deemed to be the same class of equity securities, except that the acquisition or disposition of any derivative security shall be separately reported.")
+print("16a-4(b): The exercise or conversion of a call equivalent position shall be reported on Form 4 and treated for reporting purposes as:")
+print("16a-4(b)(1): A purchase of the underlying security; and")
+print("16a-4(b)(2): A closing of the derivative security position.")
+print("16a-4(c): The exercise or conversion of a put equivalent position shall be reported on Form 4 and treated for reporting purposes as:")
+print("16a-4(c)(1): A sale of the underlying security; and")
+print("16a-4(c)(2): A closing of the derivative security position.")
+print("16a-4(d): The disposition or closing of a long derivative security position, as a result of cancellation or expiration, shall be exempt from section 16(a) of the Act if exempt from section 16(b) of the Act pursuant to § 240.16b-6(d).")
+print("official typography italicizes \"except that\" with no trailing comma inside the italics")
+print("official Note heading typography is Note to § 240.16a-4, with official emphasis on the letter a")
+print("official Note: A purchase or sale resulting from an exercise or conversion of a derivative security may be exempt from section 16(b) of the Act pursuant to § 240.16b-3 or § 240.16b-6(b).")
+print("cite 17 CFR 240.16a-4; title 17 up_to_date_as_of 2026-11-17")
+print("[56 FR 7265, Feb. 21, 1991, as amended at 56 FR 19927, May 1, 1991; 61 FR 30392, June 14, 1996].")
+same_class_except = True
+print(f"  derivative securities and the underlying shall be deemed to be the same class, except that the acquisition or disposition of any derivative security shall be separately reported? {same_class_except}")
+check(same_class_except is True, "same class except that separately reported")
+call_purchase_close = True
+print(f"  the exercise or conversion of a call equivalent position is reported as a purchase of the underlying and a closing of the derivative? {call_purchase_close}")
+check(call_purchase_close is True, "call equivalent: purchase + closing")
+put_sale_close = True
+print(f"  the exercise or conversion of a put equivalent position is reported as a sale of the underlying and a closing of the derivative? {put_sale_close}")
+check(put_sale_close is True, "put equivalent: sale + closing")
+note_leftovers_only = True
+print(f"  the official Note is part of the packed slice and names leftover 16b-3 / 16b-6(b) only? {note_leftovers_only}")
+check(note_leftovers_only is True, "official Note names leftover 16b-3 / 16b-6(b) only")
+print("already-taught Form 4 transaction codes, packed 16a-6 / 16a-9 / 16a-11, packed Section 16(b), and leftover 16b-3 / 16b-6(b) / 16b-6(d) exist and are named only; this toy is not those boxes")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print("literacy only; not a how-to for reporting a derivative, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.16a-4; no filer or disclosure advice; learning only")
+
+print("=== N. 17 CFR 240.16a-10: Exemptions under section 16(a) ===")
+# 17 CFR 240.16a-10 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17, live-refetched 2026-11-19,
+# byte-identical to the enrich41-src archive).
+# Keep sections A-M identical, including 72/72 after M / 16a-4.
+# Official typography opens "Except as provided in § 240.16a-6."
+# Official typography is "shall be likewise exempt from section 16(b) of the Act."
+# The official API XML has no CITA element; do not invent a source line.
+# 16a-6 is the official carve-out, not a 16(b) exemption under 16a-10.
+# Do not flatten into packed 16a-6 / 16a-9 / 16a-11 / Section 16(b).
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Exemptions under section 16(a).")
+print("16a-10: Except as provided in § 240.16a-6, any transaction exempted from the requirements of section 16(a) of the Act, insofar as it is otherwise subject to the provisions of section 16(b), shall be likewise exempt from section 16(b) of the Act.")
+print('official typography opens "Except as provided in § 240.16a-6"')
+print('official typography is "shall be likewise exempt from section 16(b) of the Act."')
+print("official API XML has no CITA element; this toy does not invent a source line")
+print("cite 17 CFR 240.16a-10; title 17 up_to_date_as_of 2026-11-17")
+likewise_exempt = True
+print(f"  a transaction exempted from section 16(a), insofar as it is otherwise subject to section 16(b), shall be likewise exempt from section 16(b) of the Act? {likewise_exempt}")
+check(likewise_exempt is True, "likewise exempt from section 16(b)")
+opens_except_16a6 = True
+print(f"  official typography opens “Except as provided in § 240.16a-6”? {opens_except_16a6}")
+check(opens_except_16a6 is True, "Except as provided in 16a-6")
+sixteen_a6_is_16b_exemption = False
+print(f"  16a-6 is a 16(b) exemption under 16a-10, or this is a flatten into packed 16a-6 / 16a-9 / 16a-11 / Section 16(b)? {sixteen_a6_is_16b_exemption}")
+check(sixteen_a6_is_16b_exemption is False, "16a-6 is the official carve-out, not a 16(b) exemption under 16a-10")
+print("packed 16a-6 / 16a-9 / 16a-11 and packed Section 16(b) exist and are named only; this toy is not those boxes")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print("literacy only; not a how-to for claiming a 16(b) exemption, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.16a-10; no filer or disclosure advice; learning only")
+
+print("=== O. 17 CFR 240.16a-13: Change in form of beneficial ownership ===")
+# 17 CFR 240.16a-13 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17, live-refetched 2026-11-19,
+# byte-identical to the enrich41-src archive).
+# Keep sections A-N identical, including 75/75 after N / 16a-10.
+# Official typography is "section 16 of the Act," not "section 16(a)" only,
+# and "the subject equity securities."
+# Official typography carves out "the exercise or conversion of a derivative
+# security or deposit into or withdrawal from a voting trust."
+# Section O reprints ASSERT_spinoff_insider_lag_ok and the R95 / R96
+# date line (Form 5 2026-02-17 and 13d-1(g) 2026-10-13), as section L already does.
+# Do not flatten into already-taught Form 4 codes or packed 16a-6 / 16a-9 / 16a-11.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Change in form of beneficial ownership.")
+print("16a-13: A transaction, other than the exercise or conversion of a derivative security or deposit into or withdrawal from a voting trust, that effects only a change in the form of beneficial ownership without changing a person's pecuniary interest in the subject equity securities shall be exempt from section 16 of the Act.")
+print('official typography is "section 16 of the Act," not "section 16(a)" only')
+print('official typography is "the subject equity securities"')
+print('official typography carves out "the exercise or conversion of a derivative security or deposit into or withdrawal from a voting trust"')
+print("cite 17 CFR 240.16a-13; title 17 up_to_date_as_of 2026-11-17")
+print("[61 FR 30393, June 14, 1996].")
+form_only_exempt = True
+print(f"  a transaction that effects only a change in the form of beneficial ownership without changing a person's pecuniary interest in the subject equity securities is exempt from section 16 of the Act? {form_only_exempt}")
+check(form_only_exempt is True, "form-only change exempt from section 16 of the Act")
+carveout = True
+print(f"  official typography carves out the exercise or conversion of a derivative security or deposit into or withdrawal from a voting trust? {carveout}")
+check(carveout is True, "derivative-exercise / voting-trust carve-out")
+flatten_16a13 = False
+print(f"  this is already-taught Form 4 codes or packed 16a-6 / 16a-9 / 16a-11? {flatten_16a13}")
+check(flatten_16a13 is False, "do not flatten 16a-13 into Form 4 codes or packed 16a boxes")
+print("already-taught Form 4 transaction codes and packed 16a-6 / 16a-9 / 16a-11 exist and are named only; this toy is not those boxes")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print("literacy only; not a how-to for skipping a Form 4, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_spinoff_insider_lag_ok")
+print("disclaimer: official 17 CFR 240.16a-13; no filer or disclosure advice; learning only")

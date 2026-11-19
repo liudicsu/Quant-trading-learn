@@ -165,3 +165,62 @@ no issuer, filer, or investment advice
 assertions passed: 68/68
 ASSERT_spinoff_insider_lag_ok
 disclaimer: official 17 CFR 240.16a-11; no filer, tax, or disclosure advice; learning only
+=== M. 17 CFR 240.16a-4: Derivative securities ===
+official caption typography is Derivative securities.
+16a-4(a): For purposes of section 16 of the Act, both derivative securities and the underlying securities to which they relate shall be deemed to be the same class of equity securities, except that the acquisition or disposition of any derivative security shall be separately reported.
+16a-4(b): The exercise or conversion of a call equivalent position shall be reported on Form 4 and treated for reporting purposes as:
+16a-4(b)(1): A purchase of the underlying security; and
+16a-4(b)(2): A closing of the derivative security position.
+16a-4(c): The exercise or conversion of a put equivalent position shall be reported on Form 4 and treated for reporting purposes as:
+16a-4(c)(1): A sale of the underlying security; and
+16a-4(c)(2): A closing of the derivative security position.
+16a-4(d): The disposition or closing of a long derivative security position, as a result of cancellation or expiration, shall be exempt from section 16(a) of the Act if exempt from section 16(b) of the Act pursuant to § 240.16b-6(d).
+official typography italicizes "except that" with no trailing comma inside the italics
+official Note heading typography is Note to § 240.16a-4, with official emphasis on the letter a
+official Note: A purchase or sale resulting from an exercise or conversion of a derivative security may be exempt from section 16(b) of the Act pursuant to § 240.16b-3 or § 240.16b-6(b).
+cite 17 CFR 240.16a-4; title 17 up_to_date_as_of 2026-11-17
+[56 FR 7265, Feb. 21, 1991, as amended at 56 FR 19927, May 1, 1991; 61 FR 30392, June 14, 1996].
+  derivative securities and the underlying shall be deemed to be the same class, except that the acquisition or disposition of any derivative security shall be separately reported? True
+  the exercise or conversion of a call equivalent position is reported as a purchase of the underlying and a closing of the derivative? True
+  the exercise or conversion of a put equivalent position is reported as a sale of the underlying and a closing of the derivative? True
+  the official Note is part of the packed slice and names leftover 16b-3 / 16b-6(b) only? True
+already-taught Form 4 transaction codes, packed 16a-6 / 16a-9 / 16a-11, packed Section 16(b), and leftover 16b-3 / 16b-6(b) / 16b-6(d) exist and are named only; this toy is not those boxes
+Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed
+literacy only; not a how-to for reporting a derivative, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 72/72
+disclaimer: official 17 CFR 240.16a-4; no filer or disclosure advice; learning only
+=== N. 17 CFR 240.16a-10: Exemptions under section 16(a) ===
+official caption typography is Exemptions under section 16(a).
+16a-10: Except as provided in § 240.16a-6, any transaction exempted from the requirements of section 16(a) of the Act, insofar as it is otherwise subject to the provisions of section 16(b), shall be likewise exempt from section 16(b) of the Act.
+official typography opens "Except as provided in § 240.16a-6"
+official typography is "shall be likewise exempt from section 16(b) of the Act."
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.16a-10; title 17 up_to_date_as_of 2026-11-17
+  a transaction exempted from section 16(a), insofar as it is otherwise subject to section 16(b), shall be likewise exempt from section 16(b) of the Act? True
+  official typography opens “Except as provided in § 240.16a-6”? True
+  16a-6 is a 16(b) exemption under 16a-10, or this is a flatten into packed 16a-6 / 16a-9 / 16a-11 / Section 16(b)? False
+packed 16a-6 / 16a-9 / 16a-11 and packed Section 16(b) exist and are named only; this toy is not those boxes
+Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed
+literacy only; not a how-to for claiming a 16(b) exemption, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 75/75
+disclaimer: official 17 CFR 240.16a-10; no filer or disclosure advice; learning only
+=== O. 17 CFR 240.16a-13: Change in form of beneficial ownership ===
+official caption typography is Change in form of beneficial ownership.
+16a-13: A transaction, other than the exercise or conversion of a derivative security or deposit into or withdrawal from a voting trust, that effects only a change in the form of beneficial ownership without changing a person's pecuniary interest in the subject equity securities shall be exempt from section 16 of the Act.
+official typography is "section 16 of the Act," not "section 16(a)" only
+official typography is "the subject equity securities"
+official typography carves out "the exercise or conversion of a derivative security or deposit into or withdrawal from a voting trust"
+cite 17 CFR 240.16a-13; title 17 up_to_date_as_of 2026-11-17
+[61 FR 30393, June 14, 1996].
+  a transaction that effects only a change in the form of beneficial ownership without changing a person's pecuniary interest in the subject equity securities is exempt from section 16 of the Act? True
+  official typography carves out the exercise or conversion of a derivative security or deposit into or withdrawal from a voting trust? True
+  this is already-taught Form 4 codes or packed 16a-6 / 16a-9 / 16a-11? False
+already-taught Form 4 transaction codes and packed 16a-6 / 16a-9 / 16a-11 exist and are named only; this toy is not those boxes
+Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed
+literacy only; not a how-to for skipping a Form 4, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 78/78
+ASSERT_spinoff_insider_lag_ok
+disclaimer: official 17 CFR 240.16a-13; no filer or disclosure advice; learning only

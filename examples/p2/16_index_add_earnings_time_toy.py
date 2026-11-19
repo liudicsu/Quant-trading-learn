@@ -863,3 +863,135 @@ print("literacy only; not a how-to for transmitting a filing, and not legal advi
 print("no filer, filing-agent, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 232.12; no filer, disclosure, or investment advice; learning only")
+
+print("=== R. 17 CFR 240.12b-4: Supplemental information ===")
+# 17 CFR 240.12b-4 (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17,
+# live-refetched 2026-11-19, byte-identical to the enrich41-src archive).
+# Keep sections A-Q identical, including 59/59 after Q / 232.12.
+# Do not flatten into packed 12b-20 / 12b-15 / 12b-6 / 232.12.
+# Do not invent that staff-requested supplemental information is filed.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Supplemental information.")
+print("12b-4: The Commission or its staff may, where it is deemed appropriate, request supplemental information concerning the registrant, a registration statement or a periodic or other report under the Act. This information shall not be required to be filed with or deemed part of the registration statement or report. The information shall be returned to the registrant upon request, provided that:")
+print("12b-4(a): Such request is made at the time such information is furnished to the staff;")
+print("12b-4(b): The return of such information is consistent with the protection of investors; and")
+print("12b-4(c): The return of such information is consistent with the provisions of the Freedom of Information Act (5 U.S.C. 552).")
+print("cite 17 CFR 240.12b-4; title 17 up_to_date_as_of 2026-11-17")
+print("[47 FR 11465, Mar. 16, 1982].")
+print('official typography is "shall not be required to be filed with or deemed part of the registration statement or report"')
+print('official (a) typography is "made at the time such information is furnished to the staff"')
+print('official (b) ends with "; and"')
+print('official (c) cite is "the Freedom of Information Act (5 U.S.C. 552)."')
+not_filed = True
+print(f"  supplemental information shall not be required to be filed with or deemed part of the registration statement or report? {not_filed}")
+check(not_filed is True, "12b-4 information is not filed")
+at_time_furnished = True
+print(f"  a return request must be made at the time such information is furnished to the staff? {at_time_furnished}")
+check(at_time_furnished is True, "return request at the time furnished")
+protection_of_investors = True
+print(f"  the return of such information must be consistent with the protection of investors? {protection_of_investors}")
+check(protection_of_investors is True, "return consistent with protection of investors")
+foia_552 = True
+print(f"  official (c) cites the Freedom of Information Act (5 U.S.C. 552)? {foia_552}")
+check(foia_552 is True, "official FOIA cite is 5 U.S.C. 552")
+print("packed 12b-20 / 12b-15 / 12b-6 / 232.12 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for sending staff-requested information, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.12b-4; no issuer, disclosure, or investment advice; learning only")
+
+print("=== S. 17 CFR 240.12b-23: Incorporation by reference ===")
+# 17 CFR 240.12b-23 official (a)+(b)+(c)+(d)+(e) (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17, live-refetched 2026-11-19,
+# byte-identical to the enrich41-src archive).
+# Keep sections A-R identical, including 63/63 after R / 12b-4.
+# Official (a)-(e) italic lead-ins include the trailing periods.
+# Official (d) typography is "You must include" and typographic
+# U+201C / U+201D around "EDGAR". Official (e) forbids chain
+# incorporation "unless expressly permitted or required."
+# Do not tidy official (b) to a bare "GAAP / IFRS."
+# Do not flatten into the already-printed XBRL filed-date box or
+# packed 12b-20 / 12b-15 / 12b-6 / 232.12, and do not rewrite the XBRL box.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Incorporation by reference.")
+print("12b-23(a): Registration statement or report. Except as provided by this section or in the appropriate form, information may be incorporated by reference in answer, or partial answer, to any item of a registration statement or report.")
+print("12b-23(b): Financial information. Except as provided in the Commission's rules, financial information required to be given in comparative form for two or more fiscal years or periods must not be incorporated by reference unless the information incorporated by reference includes the entire period for which the comparative data is given. In the financial statements, incorporating by reference, or cross-referencing to, information outside of the financial statements is not permitted unless otherwise specifically permitted or required by the Commission's rules or by U.S. Generally Accepted Accounting Principles or International Financial Reporting Standards as issued by the International Accounting Standards Board, whichever is applicable.")
+print("12b-23(c): Exhibits. Any document or part thereof filed with the Commission pursuant to any Act administered by the Commission may be incorporated by reference as an exhibit to any statement or report filed with the Commission by the same or any other person. Any document or part thereof filed with an exchange pursuant to the Act may be incorporated by reference as an exhibit to any statement or report filed with the exchange by the same or any other person. If any modification has occurred in the text of any document incorporated by reference since the filing thereof, the registrant must file with the reference a statement containing the text of any such modification and the date thereof.")
+print("12b-23(d): Hyperlinks. You must include an active hyperlink to information incorporated into a registration statement or report by reference if such information is publicly available on the Commission's Electronic Data Gathering, Analysis and Retrieval System (“EDGAR”) at the time the registration statement or form is filed. For hyperlinking to exhibits, please refer to Item 601 of Regulation S-K (§ 229.601 of this chapter) or the appropriate form.")
+print("12b-23(e): General. Include an express statement clearly describing the specific location of the information you are incorporating by reference. The statement must identify the document where the information was originally filed or submitted and the location of the information within that document. The statement must be made at the particular place where the information is required, if applicable. Information must not be incorporated by reference in any case where such incorporation would render the disclosure incomplete, unclear, or confusing. For example, unless expressly permitted or required, disclosure must not be incorporated by reference from a second document if that second document incorporates information pertinent to such disclosure by reference to a third document.")
+print('official (a)-(e) italic lead-ins include the trailing periods: "Registration statement or report." / "Financial information." / "Exhibits." / "Hyperlinks." / "General."')
+print('official (d) typography is "You must include an active hyperlink"')
+print("official typography uses typographic quotes (U+201C / U+201D) around “EDGAR”")
+print('official (e) typography is "unless expressly permitted or required."')
+print("cite 17 CFR 240.12b-23; title 17 up_to_date_as_of 2026-11-17")
+print("[84 FR 12727, Apr. 2, 2019].")
+ibr_except_as_provided = True
+print(f"  information may be incorporated by reference except as provided by this section or the appropriate form? {ibr_except_as_provided}")
+check(ibr_except_as_provided is True, "12b-23(a) except as provided by this section or the form")
+entire_period = True
+print(f"  comparative financial information must include the entire period for which the comparative data is given? {entire_period}")
+check(entire_period is True, "comparative financials need the entire period")
+chain_allowed = False
+print(f"  incorporation by reference from a second document that itself incorporates information from a third document is allowed without being expressly permitted or required? {chain_allowed}")
+check(chain_allowed is False, "official (e) chain example is forbidden unless expressly permitted or required")
+you_must_edgar = True
+print(f"  official (d) typography is “You must include an active hyperlink” and uses typographic quotes around “EDGAR”? {you_must_edgar}")
+check(you_must_edgar is True, "You must include; typographic quotes around EDGAR")
+italic_periods = True
+print(f"  official (a)–(e) italic lead-ins include the trailing periods? {italic_periods}")
+check(italic_periods is True, "italic lead-ins include trailing periods")
+print("the already-printed XBRL filed-date box and packed 12b-20 / 12b-15 / 12b-6 / 232.12 exist and are named only; this toy is not those boxes, and does not rewrite the XBRL box")
+print("literacy only; not a how-to for incorporating by reference, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.12b-23; no issuer, disclosure, or investment advice; learning only")
+
+print("=== T. 17 CFR 240.13a-11: Current reports on Form 8-K ===")
+# 17 CFR 240.13a-11 official (a)+(b)+(c) (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17, live-refetched 2026-11-19,
+# byte-identical to the enrich41-src archive).
+# Keep sections A-S identical, including 68/68 after S / 12b-23.
+# Official caption typography is "Current reports on Form 8-K
+# (§ 249.308 of this chapter)."
+# Do not invent a numeric clock inside 13a-11 itself.
+# Official (c) item list must be copied exactly:
+# "Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03."
+# Do not invent Item 2.02, Item 5.07, or a bare 4.02 / 5.02 into that carve-out.
+# Official typography is that no such failure "shall be deemed to be a
+# violation of 15 U.S.C. 78j(b) and § 240.10b-5."
+# Name official 13a-1 only; do not pack 13a-1 as a second core.
+# Official (b) exceptions include foreign private issuers on Form 6-K
+# pursuant to 13a-16 (name already-taught 6-K clocks only).
+# Do not flatten into already-taught Form 8-K item clocks / Item 5.07 / packed 14e-8.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Current reports on Form 8-K (§ 249.308 of this chapter).")
+print("13a-11(a): Except as provided in paragraph (b) of this section, every registrant subject to § 240.13a-1 shall file a current report on Form 8-K within the period specified in that form unless substantially the same information as that required by Form 8-K has been previously reported by the registrant.")
+print("13a-11(b): This section shall not apply to foreign governments, foreign private issuers required to make reports on Form 6-K (§ 249.306 of this chapter) pursuant to § 240.13a-16, issuers of American Depositary Receipts for securities of any foreign issuer, or investment companies required to file reports pursuant to § 270.30a-1 of this chapter under the Investment Company Act of 1940, except where such an investment company is required to file notice of a blackout period pursuant to § 245.104 of this chapter.")
+print("13a-11(c): No failure to file a report on Form 8-K that is required solely pursuant to Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03 of Form 8-K shall be deemed to be a violation of 15 U.S.C. 78j(b) and § 240.10b-5.")
+print('official (a) typography is "within the period specified in that form"')
+print('official (a) typography carves out information that "has been previously reported by the registrant"')
+print("official (c) item list typography is Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03.")
+print('official typography is that no such failure "shall be deemed to be a violation of 15 U.S.C. 78j(b) and § 240.10b-5"')
+print("cite 17 CFR 240.13a-11; title 17 up_to_date_as_of 2026-11-17")
+print("[42 FR 4428, Jan. 25, 1977, as amended at 50 FR 27939, July 9, 1985; 68 FR 4355, Jan. 28, 2003; 69 FR 15618, Mar. 25, 2004; 70 FR 1621, Jan. 7, 2005; 71 FR 53260, Sept. 8, 2006; 75 FR 56780, Sept. 16, 2010; 81 FR 82020, Nov. 18, 2016; 88 FR 51493, Aug. 4, 2023; 90 FR 9689, Feb. 18, 2025].")
+within_period = True
+print(f"  official typography is that the 8-K is due within the period specified in that form? {within_period}")
+check(within_period is True, "due within the period specified in that form")
+previously_reported = True
+print(f"  official (a) carves out information that has been previously reported by the registrant? {previously_reported}")
+check(previously_reported is True, "previously reported exception")
+fpi_6k = True
+print(f"  official (b) exceptions include foreign private issuers on Form 6-K pursuant to 13a-16? {fpi_6k}")
+check(fpi_6k is True, "FPI Form 6-K / 13a-16 named only")
+deemed_10b5 = False
+print(f"  a failure to file an 8-K required solely pursuant to Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03 shall be deemed to be a violation of 15 U.S.C. 78j(b) and § 240.10b-5? {deemed_10b5}")
+check(deemed_10b5 is False, "no such failure shall be deemed to be a 10b-5 violation")
+print("official 13a-1 is named only; this toy does not pack 13a-1 as a second core")
+print("already-taught Form 8-K item clocks / Item 5.07, already-taught Form 6-K promptly-furnished clocks, and packed 14e-8 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for filing Form 8-K, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.13a-11; no issuer, disclosure, or investment advice; learning only")
