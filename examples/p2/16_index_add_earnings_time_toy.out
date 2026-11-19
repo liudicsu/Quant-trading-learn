@@ -373,3 +373,42 @@ literacy only; not a how-to for preparing an amendment, and not legal advice
 no issuer, filing-agent, or investment advice
 assertions passed: 52/52
 disclaimer: official 17 CFR 240.12b-15; no issuer, disclosure, or investment advice; learning only
+=== P. 17 CFR 240.12b-6: When securities are deemed to be registered ===
+official caption typography is When securities are deemed to be registered.
+12b-6: A class of securities with respect to which a registration statement has been filed pursuant to section 12 of the act shall be deemed to be registered for the purposes of sections 13, 14, 15(d) and 16 of the act and the rules and regulations thereunder only when such statement has become effective as provided in section 12, and securities of said class shall not be subject to sections 13, 14 and 16 of the act until such statement has become effective as provided in section 12.
+official typography is "section 12 of the act" (lowercase act)
+official typography is "sections 13, 14, 15(d) and 16 of the act" (no Oxford comma before "and 16")
+official typography is "sections 13, 14 and 16 of the act" in the second clause (no 15(d); no Oxford comma)
+cite 17 CFR 240.12b-6; title 17 up_to_date_as_of 2026-11-17
+[30 FR 482, Jan. 14, 1965].
+official authority typography is 15 U.S.C. 78c, 78n, 78p, 78l (italic letter-L)
+  a class is deemed registered for sections 13, 14, 15(d) and 16 when the section 12 statement is filed, before it becomes effective? False
+  official typography puts 15(d) in the second list (sections 13, 14 and 16)? False
+  securities of the class are not subject to sections 13, 14 and 16 until the statement has become effective as provided in section 12? True
+  this is a flatten into packed 12b-15, already-taught Form 10-K / 10-Q clocks, leftover 12g-1 / 12g-4, packed Section 16(b), or already-taught Form 4 clocks? False
+packed 12b-15, already-taught Form 10-K / 10-Q clocks, leftover 12g-1 / 12g-4, packed Section 16(b), and already-taught Form 4 clocks exist and are named only; this toy is not those boxes
+literacy only; not a how-to for registering a class, and not legal advice
+no issuer, filing-agent, or investment advice
+assertions passed: 56/56
+disclaimer: official 17 CFR 240.12b-6; no issuer, disclosure, or investment advice; learning only
+=== Q. 17 CFR 232.12: Business hours of the Commission ===
+official caption typography is Business hours of the Commission.
+232.12(a): The principal office of the Commission, at 100 F Street, NE., Washington, DC 20549, is open each day, except Saturdays, Sundays, and federal holidays, from 9 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect, provided that hours for the filing of documents pursuant to the Acts or the rules and regulations thereunder are as set forth in paragraphs (b) and (c) of this section.
+232.12(b): Filers may submit paper documents filed with or otherwise furnished to the Commission each day, except Saturdays, Sundays and federal holidays, from 8 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.
+232.12(c): Electronic filings and other documents may be submitted to the Commission each day, except Saturdays, Sundays, and Federal holidays, from 6 a.m. to 10 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.
+official typography italicizes "General." / "Submissions made in paper." / "Submissions by direct transmission." / "provided that", including the trailing period on those three lead-ins
+official typography is "Eastern Daylight Saving Time" (not Savings)
+official (a) typography is "Saturdays, Sundays, and federal holidays" (Oxford comma; lowercase federal)
+official (b) typography is "Saturdays, Sundays and federal holidays" (no Oxford comma; lowercase federal)
+official (c) typography is "Saturdays, Sundays, and Federal holidays" (Oxford comma; capital Federal)
+official address typography is "100 F Street, NE., Washington, DC 20549"
+cite 17 CFR 232.12; title 17 up_to_date_as_of 2026-11-17
+[58 FR 14670, Mar. 18, 1993; 58 FR 21349, Apr. 21, 1993, as amended at 59 FR 67761, Dec. 30, 1994; 65 FR 24800, Apr. 27, 2000; 65 FR 24800, Apr. 27, 2000; 68 FR 25799, May 13, 2003; 73 FR 32227, June 5, 2008; 86 FR 7972, Feb. 3, 2021; 88 FR 12209, Feb. 27, 2023].
+  the official electronic transmission window in 232.12(c) ends at 5:30 p.m.? False
+  232.12 is the already-taught 232.13 / Rule 13 5:30 p.m. filing-date cutoff? False
+  232.12 says every electronic filing submitted by 10 p.m. is deemed filed that same business day? False
+already-taught Regulation S-T Rule 13 / 17 CFR 232.13 (5:30 p.m. filing-date cutoff, with official (a)(3) / (a)(4) 10 p.m. same-day exceptions for specified forms) exists and is named only; this toy is not that box, and does not rewrite it
+literacy only; not a how-to for transmitting a filing, and not legal advice
+no filer, filing-agent, or investment advice
+assertions passed: 59/59
+disclaimer: official 17 CFR 232.12; no filer, disclosure, or investment advice; learning only

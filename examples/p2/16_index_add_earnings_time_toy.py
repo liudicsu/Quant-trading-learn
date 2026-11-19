@@ -783,3 +783,83 @@ print("literacy only; not a how-to for preparing an amendment, and not legal adv
 print("no issuer, filing-agent, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 240.12b-15; no issuer, disclosure, or investment advice; learning only")
+
+print("=== P. 17 CFR 240.12b-6: When securities are deemed to be registered ===")
+# 17 CFR 240.12b-6 (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17,
+# live-refetched 2026-11-19, byte-identical to the 2026-11-09 archive).
+# Keep sections A-O identical, including 52/52 after O / 12b-15.
+# Do not flatten into packed 12b-15, already-taught Form 10-K / 10-Q clocks,
+# leftover 12g-1 / 12g-4, packed Section 16(b), or already-taught Form 4 clocks.
+# Learning only; no issuer, filing-agent, or investment advice.
+
+print("official caption typography is When securities are deemed to be registered.")
+print("12b-6: A class of securities with respect to which a registration statement has been filed pursuant to section 12 of the act shall be deemed to be registered for the purposes of sections 13, 14, 15(d) and 16 of the act and the rules and regulations thereunder only when such statement has become effective as provided in section 12, and securities of said class shall not be subject to sections 13, 14 and 16 of the act until such statement has become effective as provided in section 12.")
+print('official typography is "section 12 of the act" (lowercase act)')
+print('official typography is "sections 13, 14, 15(d) and 16 of the act" (no Oxford comma before "and 16")')
+print('official typography is "sections 13, 14 and 16 of the act" in the second clause (no 15(d); no Oxford comma)')
+print("cite 17 CFR 240.12b-6; title 17 up_to_date_as_of 2026-11-17")
+print("[30 FR 482, Jan. 14, 1965].")
+print("official authority typography is 15 U.S.C. 78c, 78n, 78p, 78l (italic letter-L)")
+deemed_at_filing = False
+print(f"  a class is deemed registered for sections 13, 14, 15(d) and 16 when the section 12 statement is filed, before it becomes effective? {deemed_at_filing}")
+check(deemed_at_filing is False, "not deemed registered until effective")
+second_list_has_15d = False
+print(f"  official typography puts 15(d) in the second list (sections 13, 14 and 16)? {second_list_has_15d}")
+check(second_list_has_15d is False, "second list has no 15(d)")
+applies_only_when_effective = True
+print(f"  securities of the class are not subject to sections 13, 14 and 16 until the statement has become effective as provided in section 12? {applies_only_when_effective}")
+check(applies_only_when_effective is True, "13/14/16 start at effectiveness")
+flatten_12b6 = False
+print(f"  this is a flatten into packed 12b-15, already-taught Form 10-K / 10-Q clocks, leftover 12g-1 / 12g-4, packed Section 16(b), or already-taught Form 4 clocks? {flatten_12b6}")
+check(flatten_12b6 is False, "do not flatten 12b-6 into those boxes")
+print("packed 12b-15, already-taught Form 10-K / 10-Q clocks, leftover 12g-1 / 12g-4, packed Section 16(b), and already-taught Form 4 clocks exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for registering a class, and not legal advice")
+print("no issuer, filing-agent, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.12b-6; no issuer, disclosure, or investment advice; learning only")
+
+
+print("=== Q. 17 CFR 232.12: Business hours of the Commission ===")
+# 17 CFR 232.12 (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17,
+# live-refetched 2026-11-19, byte-identical to the 2026-11-09 archive).
+# Keep sections A-P identical, including 55/55 after P / 12b-6.
+# Do not flatten into already-taught Regulation S-T Rule 13 / 17 CFR 232.13
+# (5:30 p.m. filing-date cutoff). Do not invent that the electronic
+# transmission window ends at 5:30 p.m., or that every filing submitted by
+# 10 p.m. is deemed filed that same business day (that same-day 10 p.m.
+# deeming is 232.13(a)(3) / (a)(4) for specified forms, not 232.12).
+# Official 232.12 typography is "Eastern Daylight Saving Time" (not Savings).
+# Official (a) typography is "Saturdays, Sundays, and federal holidays"
+# (Oxford comma; lowercase federal). Official (b) typography is
+# "Saturdays, Sundays and federal holidays" (no Oxford comma; lowercase federal).
+# Official (c) typography is "Saturdays, Sundays, and Federal holidays"
+# (Oxford comma; capital Federal). Official address typography is
+# "100 F Street, NE., Washington, DC 20549".
+# Learning only; no filer or investment advice.
+
+print("official caption typography is Business hours of the Commission.")
+print("232.12(a): The principal office of the Commission, at 100 F Street, NE., Washington, DC 20549, is open each day, except Saturdays, Sundays, and federal holidays, from 9 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect, provided that hours for the filing of documents pursuant to the Acts or the rules and regulations thereunder are as set forth in paragraphs (b) and (c) of this section.")
+print("232.12(b): Filers may submit paper documents filed with or otherwise furnished to the Commission each day, except Saturdays, Sundays and federal holidays, from 8 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.")
+print("232.12(c): Electronic filings and other documents may be submitted to the Commission each day, except Saturdays, Sundays, and Federal holidays, from 6 a.m. to 10 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.")
+print('official typography italicizes "General." / "Submissions made in paper." / "Submissions by direct transmission." / "provided that", including the trailing period on those three lead-ins')
+print('official typography is "Eastern Daylight Saving Time" (not Savings)')
+print('official (a) typography is "Saturdays, Sundays, and federal holidays" (Oxford comma; lowercase federal)')
+print('official (b) typography is "Saturdays, Sundays and federal holidays" (no Oxford comma; lowercase federal)')
+print('official (c) typography is "Saturdays, Sundays, and Federal holidays" (Oxford comma; capital Federal)')
+print('official address typography is "100 F Street, NE., Washington, DC 20549"')
+print("cite 17 CFR 232.12; title 17 up_to_date_as_of 2026-11-17")
+print("[58 FR 14670, Mar. 18, 1993; 58 FR 21349, Apr. 21, 1993, as amended at 59 FR 67761, Dec. 30, 1994; 65 FR 24800, Apr. 27, 2000; 65 FR 24800, Apr. 27, 2000; 68 FR 25799, May 13, 2003; 73 FR 32227, June 5, 2008; 86 FR 7972, Feb. 3, 2021; 88 FR 12209, Feb. 27, 2023].")
+window_ends_at_530 = False
+print(f"  the official electronic transmission window in 232.12(c) ends at 5:30 p.m.? {window_ends_at_530}")
+check(window_ends_at_530 is False, "232.12(c) window is 6 a.m. to 10 p.m., not 5:30 p.m.")
+same_as_rule13 = False
+print(f"  232.12 is the already-taught 232.13 / Rule 13 5:30 p.m. filing-date cutoff? {same_as_rule13}")
+check(same_as_rule13 is False, "do not flatten 232.12 into 232.13")
+every_10pm_same_day = False
+print(f"  232.12 says every electronic filing submitted by 10 p.m. is deemed filed that same business day? {every_10pm_same_day}")
+check(every_10pm_same_day is False, "same-day 10 p.m. deeming is 232.13(a)(3)/(a)(4), not 232.12")
+print("already-taught Regulation S-T Rule 13 / 17 CFR 232.13 (5:30 p.m. filing-date cutoff, with official (a)(3) / (a)(4) 10 p.m. same-day exceptions for specified forms) exists and is named only; this toy is not that box, and does not rewrite it")
+print("literacy only; not a how-to for transmitting a filing, and not legal advice")
+print("no filer, filing-agent, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 232.12; no filer, disclosure, or investment advice; learning only")

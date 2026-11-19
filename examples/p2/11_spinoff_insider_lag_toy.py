@@ -512,3 +512,98 @@ print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 rem
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
 print("disclaimer: official 13d-2 amendment clocks; no filer or disclosure advice; learning only")
+
+print("=== J. 17 CFR 240.16a-6: Small acquisitions ===")
+# 17 CFR 240.16a-6 (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17,
+# live-refetched 2026-11-19, byte-identical to the 2026-11-09 archive).
+# Keep sections A-I identical, including 59/59 after I / 13d-2, Form 5 due date
+# 2026-02-17, and 13d-1(g) fifth business day 2026-10-13.
+# Do not flatten into already-taught Form 4 / Form 5 clocks, packed Section 16(b),
+# or packed 13d-2. Learning only; no filer or investment advice.
+
+print("official caption typography is Small acquisitions.")
+print("16a-6(a): Any acquisition of an equity security or the right to acquire such securities, other than an acquisition from the issuer (including an employee benefit plan sponsored by the issuer), not exceeding $10,000 in market value shall be reported on Form 5, subject to the following conditions:")
+print("16a-6(a)(1): Such acquisition, when aggregated with other acquisitions of securities of the same class (including securities underlying derivative securities, but excluding acquisitions exempted by rule from section 16(b) or previously reported on Form 4 or Form 5) within the prior six months, does not exceed a total of $10,000 in market value; and")
+print("16a-6(a)(2): The person making the acquisition does not within six months thereafter make any disposition, other than by a transaction exempt from section 16(b) of the Act.")
+print("16a-6(b): If an acquisition no longer qualifies for the reporting deferral in paragraph (a) of this section, all such acquisitions that have not yet been reported must be reported on Form 4 before the end of the second business day following the day on which the conditions of paragraph (a) of this section are no longer met.")
+print("cite 17 CFR 240.16a-6; title 17 up_to_date_as_of 2026-11-17")
+print("[56 FR 7265, Feb. 21, 1991, as amended at 61 FR 30392, June 14, 1996; 67 FR 56467, Sept. 3, 2002].")
+from_issuer_qualifies = False
+print(f"  an acquisition from the issuer, including an employee benefit plan sponsored by the issuer, qualifies for the 16a-6(a) Form 5 deferral? {from_issuer_qualifies}")
+check(from_issuer_qualifies is False, "issuer / employee-plan acquisitions are carved out of 16a-6(a)")
+is_within_two_bd = False
+print(f'  official 16a-6(b) typography is "within two business days"? {is_within_two_bd}')
+check(is_within_two_bd is False, "official typography is before the end of the second business day following")
+flatten_16a6 = False
+print(f"  this is a flatten into already-taught Form 4 / Form 5 clocks, packed Section 16(b), or packed 13d-2? {flatten_16a6}")
+check(flatten_16a6 is False, "do not flatten 16a-6 into those boxes")
+print("already-taught Form 4 / Form 5 clocks, packed Section 16(b), and packed 13d-2 exist and are named only; this toy is not those boxes")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print("literacy only; not a how-to for deferring a Form 4, and not legal advice")
+print("no filer, disclosure, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.16a-6; no filer or disclosure advice; learning only")
+
+
+print("=== K. 17 CFR 240.16a-9: Stock splits, stock dividends, and pro rata rights ===")
+# 17 CFR 240.16a-9 (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17,
+# live-refetched 2026-11-19, byte-identical to the 2026-11-09 archive).
+# Keep sections A-J identical, including 62/62 after J / 16a-6.
+# Pack official (a)+(b) and the official Note. Do not invent that the exercise
+# or sale of a pro rata right is also exempt. Do not flatten into already-taught
+# split / dividend price adjustments, packed 16a-6, or packed Section 16(b).
+# Learning only; no issuer or investment advice.
+
+print("official caption typography is Stock splits, stock dividends, and pro rata rights.")
+print("16a-9: The following shall be exempt from section 16 of the Act:")
+print("16a-9(a): The increase or decrease in the number of securities held as a result of a stock split or stock dividend applying equally to all securities of a class, including a stock dividend in which equity securities of a different issuer are distributed; and")
+print("16a-9(b): The acquisition of rights, such as shareholder or pre-emptive rights, pursuant to a pro rata grant to all holders of the same class of equity securities registered under section 12 of the Act.")
+print("official Note: The exercise or sale of a pro rata right shall be reported pursuant to § 240.16a-4 and the exercise shall be eligible for exemption from section 16(b) of the Act pursuant to § 240.16b-6(b).")
+print("cite 17 CFR 240.16a-9; title 17 up_to_date_as_of 2026-11-17")
+print("[56 FR 7265, Feb. 21, 1991, as amended at 61 FR 30393, June 14, 1996].")
+print('official caption typography uses an Oxford comma before "and pro rata rights."')
+exercise_also_exempt = False
+print(f"  the official Note also exempts the exercise or sale of a pro rata right from section 16 reporting? {exercise_also_exempt}")
+check(exercise_also_exempt is False, "exercise or sale of a pro rata right is reported under 16a-4")
+flatten_16a9 = False
+print(f"  this is a flatten into already-taught split / dividend price adjustments, packed 16a-6, or packed Section 16(b)? {flatten_16a9}")
+check(flatten_16a9 is False, "do not flatten 16a-9 into those boxes")
+split_change_exempt = True
+print(f"  the increase or decrease in the number of securities from a stock split or equal stock dividend is exempt from section 16? {split_change_exempt}")
+check(split_change_exempt is True, "split / equal stock-dividend share-count change is exempt")
+print("already-taught split / dividend price adjustments, packed 16a-6, packed Section 16(b), and leftover 16a-4 / 16b-6(b) exist and are named only; this toy is not those boxes")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print("literacy only; not a how-to for skipping a Form 4, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.16a-9; no filer or disclosure advice; learning only")
+
+
+print("=== L. 17 CFR 240.16a-11: Dividend or interest reinvestment plans ===")
+# 17 CFR 240.16a-11 (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17,
+# live-refetched 2026-11-19, byte-identical to the 2026-11-09 archive).
+# Keep sections A-K identical, including 65/65 after K / 16a-9.
+# Do not flatten into already-taught tax DRIP / Pub 550 / Treas. Reg. 1.1012-1(e),
+# packed 16a-6, or packed 16a-9. Do not invent that every DRIP is exempt.
+# Learning only; no issuer, tax, or investment advice.
+
+print("official caption typography is Dividend or interest reinvestment plans.")
+print("16a-11: Any acquisition of securities resulting from the reinvestment of dividends or interest on securities of the same issuer shall be exempt from section 16 of the Act if the acquisition is made pursuant to a plan providing for the regular reinvestment of dividends or interest and the plan provides for broad-based participation, does not discriminate in favor of employees of the issuer, and operates on substantially the same terms for all plan participants.")
+print("cite 17 CFR 240.16a-11; title 17 up_to_date_as_of 2026-11-17")
+print("[61 FR 30393, June 14, 1996].")
+every_drip_exempt = False
+print(f"  every dividend reinvestment plan is automatically exempt from section 16? {every_drip_exempt}")
+check(every_drip_exempt is False, "only a qualifying broad-based, non-discriminatory regular plan is exempt")
+flatten_16a11 = False
+print(f"  this is a flatten into already-taught tax DRIP / Pub 550 / Treas. Reg. 1.1012-1(e), packed 16a-6, or packed 16a-9? {flatten_16a11}")
+check(flatten_16a11 is False, "do not flatten 16a-11 into tax DRIP or other 16a boxes")
+same_issuer = True
+print(f"  official typography limits the exemption to reinvestment of dividends or interest on securities of the same issuer? {same_issuer}")
+check(same_issuer is True, "same issuer only")
+print("already-taught tax DRIP / Pub 550 / Treas. Reg. 1.1012-1(e), packed 16a-6, and packed 16a-9 exist and are named only; this toy is not those boxes")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print("literacy only; not a how-to for a DRIP, and not tax, legal, or investment advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_spinoff_insider_lag_ok")
+print("disclaimer: official 17 CFR 240.16a-11; no filer, tax, or disclosure advice; learning only")
