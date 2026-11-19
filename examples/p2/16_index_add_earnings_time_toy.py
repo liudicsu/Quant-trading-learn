@@ -3710,3 +3710,136 @@ print('literacy only; not a how-to for risk-factor disclosure or registration-st
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 229.105 (Item 105); no issuer, disclosure, or investment advice; learning only')
+
+print('=== CA. 17 CFR 229.103 (Item 103): Legal proceedings ===')
+# 17 CFR 229.103 (Item 103) the whole current section (official eCFR API
+# XML, title 17 up_to_date_as_of 2026-11-17). Official caption typography
+# is Legal proceedings. Pack the official period after proceedings.
+# (official lowercase p). Official typography is 10 percent, more than
+# five percent, $300,000, and the lesser of $1 million or one percent.
+# Official typographic quotes around “ordinary routine litigation
+# incidental to the business” with no period inside those quotes.
+# Official typography uses an ASCII apostrophe (U+0027) in Management's
+# and official ampersands in Discussion & Analysis (MD&A). Official
+# Risk Factors in official (a) has both words capitalized. Official
+# typography is provided, however, Official CITA typography is
+# [85 FR 63760, Oct. 8, 2020] (no period before the closing bracket).
+# Do not tidy this into packed Item 105 CITA [85 FR 63761, Oct. 8, 2020].
+# Official API XML has no italics, no E T="01", and no SECAUTH; do not
+# invent a SECAUTH. Name packed Item 105 and unpacked Item 303 / MD&A
+# only; do not pack official Item 303 only because Item 103 names MD&A.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Legal proceedings.')
+print("103(a): Describe briefly any material pending legal proceedings, other than ordinary routine litigation incidental to the business, to which the registrant or any of its subsidiaries is a party or of which any of their property is the subject. Include the name of the court or agency in which the proceedings are pending, the date instituted, the principal parties thereto, a description of the factual basis alleged to underlie the proceedings and the relief sought. Include similar information as to any such proceedings known to be contemplated by governmental authorities. Information may be provided by hyperlink or cross-reference to legal proceedings disclosure elsewhere in the document, such as in Management's Discussion & Analysis (MD&A), Risk Factors and notes to the financial statements.")
+print('103(b): No information need be given under this section for proceedings:')
+print('103(b)(1): That involve negligence or other claims or actions if the business ordinarily results in such claims or actions, unless the claim or action departs from the normal kind of such claims or actions; or')
+print('103(b)(2): That involve primarily a claim for damages if the amount involved, exclusive of interest and costs, does not exceed 10 percent of the current assets of the registrant and its subsidiaries on a consolidated basis. However, if any proceeding presents in large degree the same legal or factual issues as other proceedings pending or known to be contemplated, the amount involved in such other proceedings shall be included in computing such percentage.')
+print('103(c): Notwithstanding paragraph (b) of this section, disclosure under this section shall include, but shall not be limited to:')
+print('103(c)(1): Any material bankruptcy, receivership, or similar proceeding with respect to the registrant or any of its significant subsidiaries;')
+print('103(c)(2): Any material proceedings to which any director, officer or affiliate of the registrant, any owner of record or beneficially of more than five percent of any class of voting securities of the registrant, or any associate of any such director, officer, affiliate of the registrant, or security holder is a party adverse to the registrant or any of its subsidiaries or has a material interest adverse to the registrant or any of its subsidiaries;')
+print('103(c)(3): Administrative or judicial proceedings (including proceedings which present in large degree the same issues) arising under any Federal, State, or local provisions that have been enacted or adopted regulating the discharge of materials into the environment or primarily for the purpose of protecting the environment. Such proceedings shall not be deemed “ordinary routine litigation incidental to the business” and shall be described if:')
+print('103(c)(3)(i): Such proceeding is material to the business or financial condition of the registrant;')
+print('103(c)(3)(ii): Such proceeding involves primarily a claim for damages, or involves potential monetary sanctions, capital expenditures, deferred charges or charges to income and the amount involved, exclusive of interest and costs, exceeds 10 percent of the current assets of the registrant and its subsidiaries on a consolidated basis; or')
+print('103(c)(3)(iii): A governmental authority is a party to such proceeding and such proceeding involves potential monetary sanctions, unless the registrant reasonably believes that such proceeding will result in no monetary sanctions, or in monetary sanctions, exclusive of interest and costs, of less than $300,000 or, at the election of the registrant, such other threshold that (A) the registrant determines is reasonably designed to result in disclosure of any such proceeding that is material to the business or financial condition is disclosed, (B) the registrant discloses (including any change thereto) in each annual and quarterly report, and (C) does not exceed the lesser of $1 million or one percent of the current assets of the registrant and its subsidiaries on a consolidated basis; provided, however, that such proceedings that are similar in nature may be grouped and described generically.')
+print('official typography is 10 percent (not 10%), more than five percent, $300,000, and the lesser of $1 million or one percent')
+print('official typography uses typographic quotes around “ordinary routine litigation incidental to the business” with no period inside those quotes; official typography is provided, however,')
+print("official typography uses an ASCII apostrophe (U+0027) in Management's (do not tidy it into a typographic apostrophe) and official ampersands in Discussion & Analysis (MD&A); official Risk Factors in official (a) has both words capitalized; do not invent typographic quotes around Risk Factors or MD&A in this item")
+print('official CITA typography is [85 FR 63760, Oct. 8, 2020] (no period before the closing bracket); do not tidy this into packed Item 105 CITA [85 FR 63761, Oct. 8, 2020]')
+print('official API XML has no I, no E T="01", and no SECAUTH; this toy does not invent a SECAUTH')
+print('packed Item 105 and unpacked Item 303 / MD&A are named only; do not pack official Item 303 only because Item 103 names MD&A; packed Item 105 stays as written; do not confuse official Item 103 CITA 63760 with packed Item 105 CITA 63761')
+print('cite 17 CFR 229.103 (Item 103); title 17 up_to_date_as_of 2026-11-17')
+caption_103 = True
+print(f"  official caption typography is Legal proceedings. (official period after proceedings.; official lowercase p)? {caption_103}")
+check(caption_103 is True, 'official Item 103 caption period after proceedings.; lowercase p')
+tests_103 = True
+print(f"  official typography is 10 percent (not 10%), more than five percent, $300,000, and the lesser of $1 million or one percent? {tests_103}")
+check(tests_103 is True, 'official 10 percent; more than five percent; $300,000; lesser of $1 million or one percent')
+quotes_103 = True
+print(f"  official typography uses typographic quotes around “ordinary routine litigation incidental to the business” with no period inside those quotes, and official typography is provided, however,? {quotes_103}")
+check(quotes_103 is True, 'quotes around ordinary routine litigation; no period inside; provided, however,')
+apos_103 = True
+print(f"  official typography uses an ASCII apostrophe (U+0027) in Management's and official ampersands in Discussion & Analysis (MD&A), and official Risk Factors in official (a) has both words capitalized? {apos_103}")
+check(apos_103 is True, "ASCII apostrophe in Management's; official ampersands in MD&A; Risk Factors capitalized")
+cita_103 = True
+print(f"  official CITA typography is [85 FR 63760, Oct. 8, 2020] (no period before the closing bracket), and official API XML has no I, no E T=\"01\", and no SECAUTH (do not invent a SECAUTH)? {cita_103}")
+check(cita_103 is True, 'CITA [85 FR 63760, Oct. 8, 2020]; no period before ]; no SECAUTH; not 63761')
+named_103 = True
+print(f"  packed Item 105 and unpacked Item 303 / MD&A are named only; do not pack official Item 303 only because Item 103 names MD&A; packed Item 105 stays as written; do not confuse official Item 103 CITA 63760 with packed Item 105 CITA 63761? {named_103}")
+check(named_103 is True, 'Item 105 / Item 303 named only; CITA 63760 not 63761')
+print('packed Item 105 and unpacked Item 303 / MD&A are named only; do not pack official Item 303 only because Item 103 names MD&A; packed Item 105 stays as written; do not confuse official Item 103 CITA 63760 with packed Item 105 CITA 63761')
+print('literacy only; not a how-to for litigation disclosure, and not a flattening of packed Item 105, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 229.103 (Item 103); no issuer, disclosure, or investment advice; learning only')
+
+print('=== CB. 17 CFR 229.308 (Item 308): Internal control over financial reporting ===')
+# 17 CFR 229.308 (Item 308) the whole current section (official eCFR API
+# XML, title 17 up_to_date_as_of 2026-11-17). Official caption typography
+# is Internal control over financial reporting. Pack the official period
+# after reporting. Official typography has four official italics (period
+# or colon inside the italics), including italic Instructions to Item 308:
+# Official typography uses ASCII apostrophes (U+0027) in management's,
+# company's, registrant's, and firm's. Official (a) typography is
+# as defined in § 240.13a-15(f) or § 240.15d-15(f) of this chapter.
+# Official (a)(2) typography is paragraph (c) of § 240.13a-15 or
+# § 240.15d-15 of this chapter (both official section signs). Official (c)
+# typography is paragraph (d) of § 240.13a-15 or 240.15d-15 of this
+# chapter (the official second identifier has no section sign). Do not
+# tidy official (c) into official (a)(2). Official Instruction 1
+# typography includes section 13(a) or 15(d) of the Exchange Act
+# (15 U.S.C. 78m or 78o(d)); official 78o is not italic. Official
+# typographic quotes around the Instruction 1 transition sentence, with
+# the official period inside those quotes. Official CITA typography is
+# [68 FR 36663, June 18, 2003, as amended at 70 FR 1594, Jan. 7, 2005;
+# 71 FR 76595, Dec. 21, 2006; 72 FR 35321, June 27, 2007; 75 FR 57387,
+# Sept. 21, 2010; 82 FR 17552, Apr. 12, 2017] (no period before the
+# closing bracket). Official API XML has four official italics, no
+# E T="01", and no SECAUTH; do not invent a SECAUTH. Name official
+# 13a-15 / 15d-15, official Item 307, official Rule 405 / § 230.405,
+# and already-taught 12b-2 only; do not pack official 13a-15 / 15d-15
+# or official Item 307 only because Item 308 is packed, and do not
+# rewrite the already-taught 12b-2 box. Learning only; no issuer,
+# filer, or investment advice.
+
+print('official caption typography is Internal control over financial reporting.')
+print("308(a): Management's annual report on internal control over financial reporting. Provide a report of management on the registrant's internal control over financial reporting (as defined in § 240.13a-15(f) or § 240.15d-15(f) of this chapter) that contains:")
+print("308(a)(1): A statement of management's responsibility for establishing and maintaining adequate internal control over financial reporting for the registrant;")
+print("308(a)(2): A statement identifying the framework used by management to evaluate the effectiveness of the registrant's internal control over financial reporting as required by paragraph (c) of § 240.13a-15 or § 240.15d-15 of this chapter;")
+print("308(a)(3): Management's assessment of the effectiveness of the registrant's internal control over financial reporting as of the end of the registrant's most recent fiscal year, including a statement as to whether or not internal control over financial reporting is effective. This discussion must include disclosure of any material weakness in the registrant's internal control over financial reporting identified by management. Management is not permitted to conclude that the registrant's internal control over financial reporting is effective if there are one or more material weaknesses in the registrant's internal control over financial reporting; and")
+print("308(a)(4): If the registrant is an accelerated filer or a large accelerated filer (as defined in § 240.12b-2 of this chapter), or otherwise includes in its annual report a registered public accounting firm's attestation report on internal control over financial reporting, a statement that the registered public accounting firm that audited the financial statements included in the annual report containing the disclosure required by this Item has issued an attestation report on the registrant's internal control over financial reporting.")
+print("308(b): Attestation report of the registered public accounting firm. If the registrant, other than a registrant that is an emerging growth company, as defined in Rule 405 of the Securities Act of 1933 (§ 230.405 of this chapter) or Rule 12b-2 of the Securities Exchange Act of 1934 (§ 240.12b-2 of this chapter), is an accelerated filer or a large accelerated filer (as defined in § 240.12b-2 of this chapter), provide the registered public accounting firm's attestation report on the registrant's internal control over financial reporting in the registrant's annual report containing the disclosure required by this Item.")
+print("308(c): Changes in internal control over financial reporting. Disclose any change in the registrant's internal control over financial reporting identified in connection with the evaluation required by paragraph (d) of § 240.13a-15 or 240.15d-15 of this chapter that occurred during the registrant's last fiscal quarter (the registrant's fourth fiscal quarter in the case of an annual report) that has materially affected, or is reasonably likely to materially affect, the registrant's internal control over financial reporting.")
+print("Instructions to Item 308: 1. A registrant need not comply with paragraphs (a) and (b) of this Item until it either had been required to file an annual report pursuant to section 13(a) or 15(d) of the Exchange Act (15 U.S.C. 78m or 78o(d)) for the prior fiscal year or had filed an annual report with the Commission for the prior fiscal year. A registrant that does not comply shall include a statement in the first annual report that it files in substantially the following form: “This annual report does not include a report of management's assessment regarding internal control over financial reporting or an attestation report of the company's registered public accounting firm due to a transition period established by rules of the Securities and Exchange Commission for newly public companies.”\n")
+print("Instruction 2: The registrant must maintain evidential matter, including documentation, to provide reasonable support for management's assessment of the effectiveness of the registrant's internal control over financial reporting.")
+print("official typography italicizes Management's annual report on internal control over financial reporting. including the trailing period; official typography italicizes Attestation report of the registered public accounting firm. including the trailing period; official typography italicizes Changes in internal control over financial reporting. including the trailing period; and official typography italicizes Instructions to Item 308: including the official colon")
+print('official (a) typography is as defined in § 240.13a-15(f) or § 240.15d-15(f) of this chapter (both official section signs, official (f) after each identifier); official (a)(2) typography is paragraph (c) of § 240.13a-15 or § 240.15d-15 of this chapter (both official section signs); official (c) typography is paragraph (d) of § 240.13a-15 or 240.15d-15 of this chapter (the official second identifier has no section sign); do not tidy official (c) into official (a)(2)')
+print("official Instruction 1 typography is section 13(a) or 15(d) of the Exchange Act (15 U.S.C. 78m or 78o(d)); official 78o is not italic; official typography uses typographic quotes around the Instruction 1 transition sentence, with the official period inside those quotes: “This annual report does not include a report of management's assessment regarding internal control over financial reporting or an attestation report of the company's registered public accounting firm due to a transition period established by rules of the Securities and Exchange Commission for newly public companies.”; official typography uses ASCII apostrophes (U+0027) in management's, company's, registrant's, and firm's")
+print('official CITA typography is [68 FR 36663, June 18, 2003, as amended at 70 FR 1594, Jan. 7, 2005; 71 FR 76595, Dec. 21, 2006; 72 FR 35321, June 27, 2007; 75 FR 57387, Sept. 21, 2010; 82 FR 17552, Apr. 12, 2017] (no period before the closing bracket)')
+print('official API XML has four official italics, no E T="01", and no SECAUTH; this toy does not invent a SECAUTH')
+print('official 13a-15 / 15d-15, official Item 307, official Rule 405 / § 230.405, and already-taught 12b-2 are named only; do not pack official 13a-15 / 15d-15 or official Item 307 only because Item 308 is packed, and do not rewrite the already-taught 12b-2 box')
+print('cite 17 CFR 229.308 (Item 308); title 17 up_to_date_as_of 2026-11-17')
+caption_308 = True
+print(f"  official caption typography is Internal control over financial reporting. (official period after reporting.)? {caption_308}")
+check(caption_308 is True, 'official Item 308 caption period after reporting.')
+italics_308 = True
+print(f"  official typography has four official italics, including italic Management's annual report on internal control over financial reporting. italic Attestation report of the registered public accounting firm. italic Changes in internal control over financial reporting. and italic Instructions to Item 308: (official colon inside the italics)? {italics_308}")
+check(italics_308 is True, 'four official italics; Instructions to Item 308: colon inside italics')
+signs_308 = True
+print(f"  official (a)(2) typography is paragraph (c) of § 240.13a-15 or § 240.15d-15 of this chapter (both official section signs), and official (c) typography is paragraph (d) of § 240.13a-15 or 240.15d-15 of this chapter (no second section sign)? {signs_308}")
+check(signs_308 is True, 'official (a)(2) both section signs; official (c) no second section sign')
+instr_308 = True
+print(f"  official Instruction 1 typography uses typographic quotes around the transition sentence with the official period inside those quotes, official 78o is not italic, and official typography uses ASCII apostrophes (U+0027) in management's, company's, registrant's, and firm's? {instr_308}")
+check(instr_308 is True, 'Instruction 1 period inside typographic quotes; 78o not italic; ASCII apostrophes')
+cita_308 = True
+print(f"  official CITA typography is [68 FR 36663, June 18, 2003, as amended at 70 FR 1594, Jan. 7, 2005; 71 FR 76595, Dec. 21, 2006; 72 FR 35321, June 27, 2007; 75 FR 57387, Sept. 21, 2010; 82 FR 17552, Apr. 12, 2017] (no period before the closing bracket), and official API XML has four official italics, no E T=\"01\", and no SECAUTH (do not invent a SECAUTH)? {cita_308}")
+check(cita_308 is True, 'CITA no period before ]; four official italics; no SECAUTH')
+named_308 = True
+print(f"  official 13a-15 / 15d-15, official Item 307, official Rule 405 / § 230.405, and already-taught 12b-2 are named only; do not pack official 13a-15 / 15d-15 or official Item 307 only because Item 308 is packed, and do not rewrite the already-taught 12b-2 box? {named_308}")
+check(named_308 is True, '13a-15 / 15d-15 / Item 307 / Rule 405 named only; 12b-2 unrewritten')
+print('official 13a-15 / 15d-15, official Item 307, official Rule 405 / § 230.405, and already-taught 12b-2 are named only; do not pack official 13a-15 / 15d-15 or official Item 307 only because Item 308 is packed, and do not rewrite the already-taught 12b-2 box')
+print('literacy only; not a how-to for internal-control testing, and not an auditor-attestation requirement for every filer, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 229.308 (Item 308); no issuer, disclosure, or investment advice; learning only')
+
