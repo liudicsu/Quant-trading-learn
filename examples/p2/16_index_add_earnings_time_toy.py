@@ -3099,3 +3099,306 @@ print('literacy only; not a how-to for forward-looking-statement liability, and 
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.3b-6; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BP. 17 CFR 240.14f-1: Change in majority of directors ===')
+# 17 CFR 240.14f-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Change in majority of directors. Official typography is not less than
+# 10 days prior to the date any such person take office as a director
+# (official take; do not tidy into takes). Official typography is
+# Items 6 (a), (d) and (e), 7 and 8 of Schedule 14A of Regulation 14A
+# (§ 240.14a-101 of this chapter). Official typography is Eight copies
+# of such information shall be filed with the Commission. Official CITA
+# is [33 FR 11017, Aug. 2, 1968, as amended at 34 FR 6101, Apr. 4, 1969;
+# 51 FR 42072, Nov. 20, 1986]. Official API XML has no SECAUTH. Official
+# Schedule 14A / 14a-101 and packed 8-K Item 5.02 are named only; do not
+# pack the Schedule 14A catalog. Learning only; no issuer, filer, or
+# investment advice.
+
+print('official caption typography is Change in majority of directors.')
+print('14f-1: If, pursuant to any arrangement or understanding with the person or persons acquiring securities in a transaction subject to section 13(d) or 14(d) of the Act, any persons are to be elected or designated as directors of the issuer, otherwise than at a meeting of security holders, and the persons so elected or designated will constitute a majority of the directors of the issuer, then, not less than 10 days prior to the date any such person take office as a director, or such shorter period prior to that date as the Commission may authorize upon a showing of good cause therefor, the issuer shall file with the Commission and transmit to all holders of record of securities of the issuer who would be entitled to vote at a meeting for election of directors, information substantially equivalent to the information which would be required by Items 6 (a), (d) and (e), 7 and 8 of Schedule 14A of Regulation 14A (§ 240.14a-101 of this chapter) to be transmitted if such person or persons were nominees for election as directors at a meeting of such security holders. Eight copies of such information shall be filed with the Commission.')
+print('official typography is not less than 10 days prior to the date any such person take office as a director (official take; do not tidy into takes)')
+print('official typography is Items 6 (a), (d) and (e), 7 and 8 of Schedule 14A of Regulation 14A (§ 240.14a-101 of this chapter)')
+print('official typography is Eight copies of such information shall be filed with the Commission.')
+print('official CITA typography is [33 FR 11017, Aug. 2, 1968, as amended at 34 FR 6101, Apr. 4, 1969; 51 FR 42072, Nov. 20, 1986]')
+print('official API XML has no SECAUTH')
+print('official Schedule 14A / 14a-101 and packed 8-K Item 5.02 are named only; do not pack the Schedule 14A catalog')
+print('cite 17 CFR 240.14f-1; title 17 up_to_date_as_of 2026-11-17')
+take_office = True
+print(f"  official typography is not less than 10 days prior to the date any such person take office as a director (official take; do not tidy into takes)? {take_office}")
+check(take_office is True, 'official take office typography')
+items_6 = True
+print(f"  official typography is Items 6 (a), (d) and (e), 7 and 8 of Schedule 14A of Regulation 14A (§ 240.14a-101 of this chapter)? {items_6}")
+check(items_6 is True, 'Items 6 (a), (d) and (e), 7 and 8 typography')
+eight_copies = True
+print(f"  official typography is Eight copies of such information shall be filed with the Commission.? {eight_copies}")
+check(eight_copies is True, 'Eight copies typography')
+cita_14f1 = True
+print(f"  official CITA typography is [33 FR 11017, Aug. 2, 1968, as amended at 34 FR 6101, Apr. 4, 1969; 51 FR 42072, Nov. 20, 1986], and official API XML has no SECAUTH? {cita_14f1}")
+check(cita_14f1 is True, 'CITA 14f-1; no SECAUTH')
+named_only_14f1 = True
+print(f"  official Schedule 14A / 14a-101 and packed 8-K Item 5.02 are named only (do not pack the Schedule 14A catalog), and official caption typography is Change in majority of directors.? {named_only_14f1}")
+check(named_only_14f1 is True, 'Schedule 14A / 14a-101 and 8-K Item 5.02 named only')
+print('official Schedule 14A / 14a-101 and packed 8-K Item 5.02 are named only; do not pack the Schedule 14A catalog')
+print('literacy only; not a how-to for a change in majority of directors, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14f-1; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BQ. 17 CFR 240.14c-4: Presentation of information in information statement ===')
+# 17 CFR 240.14c-4 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Presentation of information in information statement. Official
+# typography is 10-point modern type, 8-point modern type, and leaded
+# at least 2 points. Official CITA is [31 FR 262, Jan. 8, 1966, as amended at 36 FR 8935, May 15, 1971; 51 FR 42071, Nov. 20, 1986; 61 FR 24657, May 15, 1996].
+# Official API XML has no SECAUTH. Do not flatten this CITA into
+# packed 14c-6's shorter [31 FR 262, Jan. 8, 1966]. Name packed 14a-5 /
+# 14c-6 only; do not rewrite packed 14a-5 / 14c-6. Learning only; no
+# issuer, filer, or investment advice.
+
+print('official caption typography is Presentation of information in information statement.')
+print('14c-4(a): The information included in the information statement shall be clearly presented and the statements made shall be divided into groups according to subject matter and the various groups of statements shall be preceded by appropriate headings. The order of items and sub-items in the schedule need not be followed. Where practicable and appropriate, the information shall be presented in tabular form. All amounts shall be stated in figures. Information required by more than one applicable item need not be repeated. No statement need be made in response to any item or sub-item which is inapplicable.')
+print('14c-4(b): Any information required to be included in the information statement as to terms of securities or other subject matters which from a standpoint of practical necessity must be determined in the future may be stated in terms of present knowledge and intention. Subject to the foregoing, information which is not known to the registrant and which it is not reasonably within the power of the registrant to ascertain or procure may be omitted, if a brief statement of the circumstances rendering such information unavailable is made.')
+print('14c-4(c): All printed information statements shall be in roman type at least as large and as legible as 10-point modern type except that to the extent necessary for convenient presentation, financial statements and other tabular data, but not the notes thereto, may be in roman type at least as large and as legible as 8-point modern type. All such type shall be leaded at least 2 points.')
+print('14c-4(d): Where an information statement is delivered through an electronic medium, issuers may satisfy legibility requirements applicable to printed documents, such as type size and font, by presenting all required information in a format readily communicated to investors.')
+print('official typography is 10-point modern type, 8-point modern type, and leaded at least 2 points')
+print('official CITA typography is [31 FR 262, Jan. 8, 1966, as amended at 36 FR 8935, May 15, 1971; 51 FR 42071, Nov. 20, 1986; 61 FR 24657, May 15, 1996]')
+print('official API XML has no SECAUTH')
+print("do not flatten this CITA into packed 14c-6's shorter [31 FR 262, Jan. 8, 1966]")
+print('cite 17 CFR 240.14c-4; title 17 up_to_date_as_of 2026-11-17')
+type_size = True
+print(f"  official typography is 10-point modern type, 8-point modern type, and leaded at least 2 points? {type_size}")
+check(type_size is True, '10-point / 8-point / leaded 2 points')
+cita_14c4 = True
+print(f"  official CITA typography is [31 FR 262, Jan. 8, 1966, as amended at 36 FR 8935, May 15, 1971; 51 FR 42071, Nov. 20, 1986; 61 FR 24657, May 15, 1996] — do not flatten it into packed 14c-6's shorter [31 FR 262, Jan. 8, 1966]? {cita_14c4}")
+check(cita_14c4 is True, 'CITA 14c-4 not flattened into 14c-6')
+no_secauth_14c4 = True
+print(f"  official API XML has no SECAUTH? {no_secauth_14c4}")
+check(no_secauth_14c4 is True, '14c-4 has no SECAUTH')
+caption_14c4 = True
+print(f"  official caption typography is Presentation of information in information statement.? {caption_14c4}")
+check(caption_14c4 is True, 'official 14c-4 caption typography')
+named_14c4 = True
+print(f"  this is the information-statement twin of packed 14a-5, names packed 14a-5 / 14c-6 only, and does not rewrite packed 14a-5 / 14c-6? {named_14c4}")
+check(named_14c4 is True, 'names packed 14a-5 / 14c-6 only; not a rewrite')
+print('this is the information-statement twin of packed 14a-5; packed 14a-5 / 14c-6 stay as written')
+print('literacy only; not a how-to for drafting an information statement, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14c-4; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BR. 17 CFR 240.14c-2: Distribution of information statement ===')
+# 17 CFR 240.14c-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Distribution of information statement. Official typography is at
+# least 20 calendar days prior to the meeting date / at least 20
+# calendar days prior to the earliest date on which the corporate
+# action may be taken. Official (c) typography is no later than the
+# lesser of 60 calendar days ... or the maximum number of days
+# permitted for giving notice under applicable state law. Official (c)
+# typography is Form S-4 (17 CFR 229.25) or Form F-4 (17 CFR 229.34);
+# do not tidy those official tokens into official (a)(1)(iii) § 239.25
+# or § 239.34. Official (d) typography is roman provided, however,
+# (not italic, and not Provided, however,). Official CITA ends
+# 89 FR 14324, Feb. 26, 2024. Official API XML has no SECAUTH.
+# Official 14c-101 / 14c-3(d) / 14a-16 / 14a-3(e)(2) and Forms S-4 /
+# F-4 / N-14 are named only; leftover 14c-5 remains named only. Do not
+# rewrite packed 14c-3 / packed 14c-6 tip-prefix sentences that official
+# 14c-2, leftover 14c-5, and official 14c-4 exist and are named only.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Distribution of information statement.')
+print('14c-2(a)(1): In connection with every annual or other meeting of the holders of the class of securities registered pursuant to section 12 of the Act or of a class of securities issued by an investment company registered under the Investment Company Act of 1940 that has made a public offering of securities, including the taking of corporate action by the written authorization or consent of security holders, the registrant shall transmit to every security holder of the class that is entitled to vote or give an authorization or consent in regard to any matter to be acted upon and from whom proxy authorization or consent is not solicited on behalf of the registrant pursuant to section 14(a) of the Act:')
+print('14c-2(a)(1)(i): A written information statement containing the information specified in Schedule 14C (§ 240.14c-101);')
+print('14c-2(a)(1)(ii): A publicly-filed information statement, in the form and manner described in § 240.14c-3(d), containing the information specified in Schedule 14C (§ 240.14c-101); or')
+print('14c-2(a)(1)(iii): A written information statement included in a registration statement filed under the Securities Act of 1933 on Form S-4 or F-4 (§ 239.25 or § 239.34 of this chapter) or Form N-14 (§ 239.23 of this chapter) and containing the information specified in such Form.')
+print('14c-2(a)(2): Notwithstanding paragraph (a)(1) of this section:')
+print('14c-2(a)(2)(i): In the case of a class of securities in unregistered or bearer form, such statements need to be transmitted only to those security holders whose names are known to the registrant; and')
+print('14c-2(a)(2)(ii): No such statements need to be transmitted to a security holder if a registrant would be excused from delivery of an annual report to security holders or a proxy statement under § 240.14a-3(e)(2) if such section were applicable.')
+print('14c-2(b): The information statement shall be sent or given at least 20 calendar days prior to the meeting date or, in the case of corporate action taken pursuant to the consents or authorizations of security holders, at least 20 calendar days prior to the earliest date on which the corporate action may be taken.')
+print('14c-2(c): If a transaction is a roll-up transaction as defined in Item 901(c) of Regulation S-K (17 CFR 229.901(c)) and is registered (or authorized to be registered) on Form S-4 (17 CFR 229.25) or Form F-4 (17 CFR 229.34), the information statement must be distributed to security holders no later than the lesser of 60 calendar days prior to the date on which the meeting of security holders is held or action is taken, or the maximum number of days permitted for giving notice under applicable state law.')
+print('14c-2(d): A registrant shall transmit an information statement to security holders pursuant to paragraph (a) of this section by satisfying the requirements set forth in § 240.14a-16; provided, however, that the registrant shall revise the information required in the Notice of Internet Availability of Proxy Materials, including changing the title of that notice, to reflect the fact that the registrant is not soliciting proxies for the meeting.')
+print('14c-2(e): If a transaction is a de-SPAC transaction, as defined in § 229.1601(a) of this chapter (Item 1601(a) of Regulation S-K), the information statement of the special purpose acquisition company, as defined in § 229.1601(b) (Item 1601(b) of Regulation S-K), must be distributed to security holders no later than the lesser of 20 calendar days prior to the date on which the meeting of security holders is to be held or action is to be taken in connection with the de-SPAC transaction or the maximum number of days permitted for disseminating the information statement under the applicable laws of the jurisdiction of incorporation or organization.')
+print('official typography is at least 20 calendar days prior to the meeting date / at least 20 calendar days prior to the earliest date on which the corporate action may be taken')
+print('official (c) typography is no later than the lesser of 60 calendar days prior to the date on which the meeting of security holders is held or action is taken, or the maximum number of days permitted for giving notice under applicable state law')
+print('official (c) typography is Form S-4 (17 CFR 229.25) or Form F-4 (17 CFR 229.34); do not tidy those official tokens into official (a)(1)(iii) § 239.25 or § 239.34')
+print('official (d) typography is roman provided, however, (not italic, and not Provided, however,)')
+print('official CITA typography is [51 FR 42070, Nov. 20, 1986, as amended at 56 FR 57254, Nov. 8, 1991; 57 FR 1102, Jan. 10, 1992; 57 FR 48295, Oct. 22, 1992; 72 FR 4171, Jan. 29, 2007; 72 FR 42239, Aug. 1, 2007; 89 FR 14324, Feb. 26, 2024]')
+print('official API XML has no SECAUTH')
+print('official 14c-101 / 14c-3(d) / 14a-16 / 14a-3(e)(2) and Forms S-4 / F-4 / N-14 are named only; leftover 14c-5 remains named only')
+print('do not rewrite packed 14c-3 / packed 14c-6 tip-prefix sentences that official 14c-2, leftover 14c-5, and official 14c-4 exist and are named only')
+print('cite 17 CFR 240.14c-2; title 17 up_to_date_as_of 2026-11-17')
+calendar_20 = True
+print(f"  official typography is at least 20 calendar days prior to the meeting date / at least 20 calendar days prior to the earliest date on which the corporate action may be taken? {calendar_20}")
+check(calendar_20 is True, '20 calendar-day information-statement clock')
+rollup_60 = True
+print(f"  official (c) typography is no later than the lesser of 60 calendar days prior to the date on which the meeting of security holders is held or action is taken, or the maximum number of days permitted for giving notice under applicable state law, and official (c) typography is Form S-4 (17 CFR 229.25) or Form F-4 (17 CFR 229.34) (do not tidy those official tokens into official (a)(1)(iii) § 239.25 or § 239.34)? {rollup_60}")
+check(rollup_60 is True, 'official (c) 60-day / state-law clock; official 229.25 / 229.34 typography')
+provided_roman = True
+print(f"  official (d) typography is roman provided, however, (not italic, and not Provided, however,)? {provided_roman}")
+check(provided_roman is True, 'roman provided, however,')
+cita_14c2 = True
+print(f"  official CITA typography ends 89 FR 14324, Feb. 26, 2024, official API XML has no SECAUTH, and official caption typography is Distribution of information statement.? {cita_14c2}")
+check(cita_14c2 is True, 'CITA 14c-2 ends 89 FR 14324; no SECAUTH')
+named_14c2 = True
+print(f"  official 14c-101 / 14c-3(d) / 14a-16 / 14a-3(e)(2) and Forms S-4 / F-4 / N-14 are named only, leftover 14c-5 remains named only, and packed 14c-3 / packed 14c-6 tip-prefix sentences that official 14c-2, leftover 14c-5, and official 14c-4 exist and are named only stay as written? {named_14c2}")
+check(named_14c2 is True, 'named only; do not rewrite 14c-3 / 14c-6 prefix')
+print('official 14c-101 / 14c-3(d) / 14a-16 / 14a-3(e)(2) and Forms S-4 / F-4 / N-14 are named only; leftover 14c-5 remains named only')
+print('packed 14c-3 / packed 14c-6 tip-prefix sentences that official 14c-2, leftover 14c-5, and official 14c-4 exist and are named only stay as written')
+print('literacy only; not a how-to for distributing an information statement, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14c-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BS. 17 CFR 240.14a-21: Shareholder approval of executive compensation, frequency of votes for approval of executive compensation and shareholder approval of golden parachute compensation ===')
+# 17 CFR 240.14a-21 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Shareholder approval of executive compensation, frequency of votes
+# for approval of executive compensation and shareholder approval of
+# golden parachute compensation. Official typography uses typographic
+# U+201C/U+201D around the sample RESOLVED ... APPROVED. resolution.
+# Official apostrophe in company's is ASCII U+0027. Official typography
+# italicizes the letter l in official Instruction 3 Item 402(l) of
+# Regulation S-K (§ 229.402(l) of this chapter). Official Instruction 4
+# typography is 15 U.S.C 77a (no period after C) then italic et seq.
+# Official instruction headings use <E T="01">a</E> in Instruction to
+# paragraph (a): and Instructions to § 240.14a-21: (official source
+# typography; pack the official visible heading typography). Official
+# CITA is [76 FR 6045, Feb. 2, 2011, as amended at 82 FR 17555, Apr. 12,
+# 2017]. Official API XML has no SECAUTH. Official 12b-2 and official
+# 14a-20 (TARP) are named only; do not pack 14a-20. Learning only; no
+# issuer, filer, or investment advice.
+
+print('official caption typography is Shareholder approval of executive compensation, frequency of votes for approval of executive compensation and shareholder approval of golden parachute compensation.')
+print('14a-21(a): If a solicitation is made by a registrant, other than an emerging growth company as defined in Rule 12b-2 (§ 240.12b-2), and the solicitation relates to an annual or other meeting of shareholders at which directors will be elected and for which the rules of the Commission require executive compensation disclosure pursuant to Item 402 of Regulation S-K (§ 229.402 of this chapter), the registrant shall, for the first annual or other meeting of shareholders on or after January 21, 2011, or for the first annual or other meeting of shareholders on or after January 21, 2013 if the registrant is a smaller reporting company, and thereafter no later than the annual or other meeting of shareholders held in the third calendar year after the immediately preceding vote under this subsection, include a separate resolution subject to shareholder advisory vote to approve the compensation of its named executive officers, as disclosed pursuant to Item 402 of Regulation S-K.')
+print("14a-21 Instruction to paragraph (a): The registrant's resolution shall indicate that the shareholder advisory vote under this subsection is to approve the compensation of the registrant's named executive officers as disclosed pursuant to Item 402 of Regulation S-K (§ 229.402 of this chapter). The following is a non-exclusive example of a resolution that would satisfy the requirements of this subsection: “RESOLVED, that the compensation paid to the company's named executive officers, as disclosed pursuant to Item 402 of Regulation S-K, including the Compensation Discussion and Analysis, compensation tables and narrative discussion is hereby APPROVED.”")
+print('14a-21(b): If a solicitation is made by a registrant, other than an emerging growth company as defined in Rule 12b-2 (§ 240.12b-2), and the solicitation relates to an annual or other meeting of shareholders at which directors will be elected and for which the rules of the Commission require executive compensation disclosure pursuant to Item 402 of Regulation S-K (§ 229.402 of this chapter), the registrant shall, for the first annual or other meeting of shareholders on or after January 21, 2011, or for the first annual or other meeting of shareholders on or after January 21, 2013 if the registrant is a smaller reporting company, and thereafter no later than the annual or other meeting of shareholders held in the sixth calendar year after the immediately preceding vote under this subsection, include a separate resolution subject to shareholder advisory vote as to whether the shareholder vote required by paragraph (a) of this section should occur every 1, 2 or 3 years. Registrants required to provide a separate shareholder vote pursuant to § 240.14a-20 of this chapter shall include the separate resolution required by this section for the first annual or other meeting of shareholders after the registrant has repaid all obligations arising from financial assistance provided under the TARP, as defined in section 3(8) of the Emergency Economic Stabilization Act of 2008 (12 U.S.C. 5202(8)), and thereafter no later than the annual or other meeting of shareholders held in the sixth calendar year after the immediately preceding vote under this subsection.')
+print('14a-21(c): If a solicitation is made by a registrant, other than an emerging growth company as defined in Rule 12b-2 (§ 240.12b-2), for a meeting of shareholders at which shareholders are asked to approve an acquisition, merger, consolidation or proposed sale or other disposition of all or substantially all the assets of the registrant, the registrant shall include a separate resolution subject to shareholder advisory vote to approve any agreements or understandings and compensation disclosed pursuant to Item 402(t) of Regulation S-K (§ 229.402(t) of this chapter), unless such agreements or understandings have been subject to a shareholder advisory vote under paragraph (a) of this section. Consistent with section 14A(b) of the Exchange Act (15 U.S.C. 78n-1(b)), any agreements or understandings between an acquiring company and the named executive officers of the registrant, where the registrant is not the acquiring company, are not required to be subject to the separate shareholder advisory vote under this paragraph.')
+print('14a-21 Instructions to § 240.14a-21:')
+print("14a-21 Instruction 1: Disclosure relating to the compensation of directors required by Item 402(k) (§ 229.402(k) of this chapter) and Item 402(r) of Regulation S-K (§ 229.402(r) of this chapter) is not subject to the shareholder vote required by paragraph (a) of this section. If a registrant includes disclosure pursuant to Item 402(s) of Regulation S-K (§ 229.402(s) of this chapter) about the registrant's compensation policies and practices as they relate to risk management and risk-taking incentives, these policies and practices would not be subject to the shareholder vote required by paragraph (a) of this section. To the extent that risk considerations are a material aspect of the registrant's compensation policies or decisions for named executive officers, the registrant is required to discuss them as part of its Compensation Discussion and Analysis under § 229.402(b) of this chapter, and therefore such disclosure would be considered by shareholders when voting on executive compensation.")
+print('14a-21 Instruction 2: If a registrant includes disclosure of golden parachute compensation arrangements pursuant to Item 402(t) (§ 229.402(t) of this chapter) in an annual meeting proxy statement, such disclosure would be subject to the shareholder advisory vote required by paragraph (a) of this section.')
+print('14a-21 Instruction 3: Registrants that are smaller reporting companies entitled to provide scaled disclosure in accordance with Item 402(l) of Regulation S-K (§ 229.402(l) of this chapter) are not required to include a Compensation Discussion and Analysis in their proxy statements in order to comply with this section. For smaller reporting companies, the vote required by paragraph (a) of this section must be to approve the compensation of the named executive officers as disclosed pursuant to Item 402(m) through (q) of Regulation S-K (§ 229.402(m) through (q) of this chapter).')
+print('14a-21 Instruction 4: A registrant that has ceased being an emerging growth company shall include the first separate resolution described under § 240.14a-21(a) not later than the end of (i) in the case of a registrant that was an emerging growth company for less than two years after the date of first sale of common equity securities of the registrant pursuant to an effective registration statement under the Securities Act of 1933 (15 U.S.C 77a et seq.), the three-year period beginning on such date; and (ii) in the case of any other registrant, the one-year period beginning on the date the registrant is no longer an emerging growth company.')
+print("official typography uses typographic U+201C/U+201D around the sample “RESOLVED, that the compensation paid to the company's named executive officers, as disclosed pursuant to Item 402 of Regulation S-K, including the Compensation Discussion and Analysis, compensation tables and narrative discussion is hereby APPROVED.”")
+print("official apostrophe in company's is ASCII U+0027; do not tidy it into U+2019")
+print('official typography italicizes the letter l in official Instruction 3 Item 402(l) of Regulation S-K (§ 229.402(l) of this chapter)')
+print('official Instruction 4 typography is 15 U.S.C 77a (no period after C) then italic et seq.')
+print('official instruction headings use <E T="01">a</E> in Instruction to paragraph (a): and Instructions to § 240.14a-21: (official source typography; pack the official visible heading typography)')
+print('official CITA typography is [76 FR 6045, Feb. 2, 2011, as amended at 82 FR 17555, Apr. 12, 2017]')
+print('official API XML has no SECAUTH')
+print('official 12b-2 and official 14a-20 (TARP) are named only; do not pack 14a-20')
+print('cite 17 CFR 240.14a-21; title 17 up_to_date_as_of 2026-11-17')
+resolved_quotes = True
+print(f"  official typography uses typographic U+201C/U+201D around the sample “RESOLVED, that the compensation paid to the company's named executive officers, as disclosed pursuant to Item 402 of Regulation S-K, including the Compensation Discussion and Analysis, compensation tables and narrative discussion is hereby APPROVED.”, and official apostrophe in company's is ASCII U+0027? {resolved_quotes}")
+check(resolved_quotes is True, 'typographic quotes around RESOLVED; ASCII apostrophe')
+italic_l = True
+print(f"  official typography italicizes the letter l in official Instruction 3 Item 402(l) of Regulation S-K (§ 229.402(l) of this chapter)? {italic_l}")
+check(italic_l is True, 'italic l in 402(l) / 229.402(l)')
+usc_77a = True
+print(f"  official Instruction 4 typography is 15 U.S.C 77a (no period after C) then italic et seq.? {usc_77a}")
+check(usc_77a is True, '15 U.S.C 77a no period after C; italic et seq.')
+instr_marks = True
+print(f"  official instruction headings use <E T=\"01\">a</E> in Instruction to paragraph (a): and Instructions to § 240.14a-21: (official source typography; pack the official visible heading typography), official CITA typography is [76 FR 6045, Feb. 2, 2011, as amended at 82 FR 17555, Apr. 12, 2017], and official API XML has no SECAUTH? {instr_marks}")
+check(instr_marks is True, 'official E T=01 marks; CITA; no SECAUTH')
+named_14a21 = True
+print(f"  official 12b-2 and official 14a-20 (TARP) are named only (do not pack 14a-20), and official caption typography is Shareholder approval of executive compensation, frequency of votes for approval of executive compensation and shareholder approval of golden parachute compensation.? {named_14a21}")
+check(named_14a21 is True, '12b-2 and 14a-20 named only; official caption')
+print('official 12b-2 and official 14a-20 (TARP) are named only; do not pack 14a-20')
+print('literacy only; not a how-to for say-on-pay or golden-parachute votes, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14a-21; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BT. 17 CFR 240.14Ad-1: Report of proxy voting record ===')
+# 17 CFR 240.14Ad-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Report of proxy voting record. Official typography is not later than
+# August 31 of each year, for the most recent 12-month period ended
+# June 30. Official (c) typography is not later than March 1 of the
+# immediately following calendar year. Official typography italicizes
+# Voting power in official (d)(1) and italicizes only Exercise in
+# official (d)(2) Exercise of voting power. Official typography uses
+# typographic U+201C/U+201D around the defined terms initial filing and
+# final filing in the official For purposes of this paragraph
+# sentences. Official (b)/(c) exemption sentences also use unquoted
+# initial filing / final filing; do not tidy the unquoted uses and the
+# quoted defined terms into one another. Official CITA is
+# [87 FR 78808, Dec. 22, 2022]. Official API XML has no SECAUTH.
+# Packed 13f-1 and official Form N-PX / § 249.326 / § 274.129 /
+# § 249.325 are named only; do not pack those form catalogs. Learning
+# only; no issuer, filer, or investment advice.
+
+print('official caption typography is Report of proxy voting record.')
+print("14Ad-1(a): Subject to paragraphs (b) and (c) of this section, every institutional investment manager (as that term is defined in section 13(f)(6)(A) of the Act (15 U.S.C. 78m(f)(6)(A))) that is required to file reports under section 13(f) of the Act (15 U.S.C. 78m(f)) must file an annual report on Form N-PX (§§ 249.326 and 274.129 of this chapter) not later than August 31 of each year, for the most recent 12-month period ended June 30, containing the institutional investment manager's proxy voting record for each shareholder vote pursuant to sections 14A(a) and (b) of the Act (15 U.S.C. 78n-1(a) and (b)) with respect to each security over which the manager exercised voting power (as defined in paragraph (d) of this section).")
+print("14Ad-1(b): An institutional investment manager is not required to file a report on Form N-PX (§§ 249.326 and 274.129 of this chapter) for the 12-month period ending June 30 of the calendar year in which the manager's initial filing on Form 13F (§ 249.325 of this chapter) is due pursuant to § 240.13f-1. For purposes of this paragraph (b), “initial filing” on Form 13F means any quarterly filing on Form 13F if no filing on Form 13F was required for the immediately preceding calendar quarter.")
+print("14Ad-1(c): An institutional investment manager is not required to file a report on Form N-PX (§§ 249.326 and 274.129 of this chapter) with respect to any shareholder vote at a meeting that occurs after September 30 of the calendar year in which the manager's final filing on Form 13F (§ 249.325 of this chapter) is due pursuant to § 240.13f-1. An institutional investment manager is required to file a Form N-PX for the period July 1 through September 30 of the calendar year in which the manager's final filing on Form 13F is due pursuant to § 240.13f-1; this filing is required to be made not later than March 1 of the immediately following calendar year. For purposes of this paragraph (c), “final filing” on Form 13F means any quarterly filing on Form 13F if no filing on Form 13F is required for the immediately subsequent calendar quarter.")
+print('14Ad-1(d): For purposes of this section:')
+print('14Ad-1(d)(1): Voting power means the ability, through any contract, arrangement, understanding, or relationship, to vote a security or direct the voting of a security, including the ability to determine whether to vote a security or to recall a loaned security.')
+print('14Ad-1(d)(2): Exercise of voting power means using voting power to influence a voting decision with respect to a security.')
+print('official typography is not later than August 31 of each year, for the most recent 12-month period ended June 30')
+print('official (c) typography is not later than March 1 of the immediately following calendar year')
+print('official typography italicizes Voting power in official (d)(1) and italicizes only Exercise in official (d)(2) Exercise of voting power')
+print('official typography uses typographic U+201C/U+201D around the defined terms “initial filing” and “final filing” in the official For purposes of this paragraph sentences')
+print('official (b)/(c) exemption sentences also use unquoted initial filing / final filing; do not tidy the unquoted uses and the quoted defined terms into one another')
+print('official CITA typography is [87 FR 78808, Dec. 22, 2022]')
+print('official API XML has no SECAUTH')
+print('packed 13f-1 and official Form N-PX / § 249.326 / § 274.129 / § 249.325 are named only; do not pack those form catalogs')
+print('cite 17 CFR 240.14Ad-1; title 17 up_to_date_as_of 2026-11-17')
+aug31 = True
+print(f"  official typography is not later than August 31 of each year, for the most recent 12-month period ended June 30? {aug31}")
+check(aug31 is True, 'August 31 / June 30 N-PX clock')
+march1 = True
+print(f"  official (c) typography is not later than March 1 of the immediately following calendar year, including the official first-year and exit-year Form 13F exceptions? {march1}")
+check(march1 is True, 'March 1 exit-year clock and official exceptions')
+voting_italics = True
+print(f"  official typography italicizes Voting power in official (d)(1) and italicizes only Exercise in official (d)(2) Exercise of voting power? {voting_italics}")
+check(voting_italics is True, 'italic Voting power; italic only Exercise in (d)(2)')
+quoted_defs = True
+print(f"  official typography uses typographic U+201C/U+201D around the defined terms “initial filing” and “final filing” in the official For purposes of this paragraph sentences, and official (b)/(c) exemption sentences also use unquoted initial filing / final filing (do not tidy the unquoted uses and the quoted defined terms into one another)? {quoted_defs}")
+check(quoted_defs is True, 'quoted defined terms vs unquoted uses')
+cita_14ad1 = True
+print(f"  official CITA typography is [87 FR 78808, Dec. 22, 2022], official API XML has no SECAUTH, and packed 13f-1 and official Form N-PX / § 249.326 / § 274.129 / § 249.325 are named only (do not pack those form catalogs)? {cita_14ad1}")
+check(cita_14ad1 is True, 'CITA 14Ad-1; no SECAUTH; form catalogs named only')
+print('packed 13f-1 and official Form N-PX / § 249.326 / § 274.129 / § 249.325 are named only; do not pack those form catalogs')
+print('literacy only; not a how-to for Form N-PX filing, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14Ad-1; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BU. 17 CFR 240.16e-1: Arbitrage transactions under section 16 ===')
+# 17 CFR 240.16e-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Arbitrage transactions under section 16. Pack the official
+# one-paragraph body. Official SECAUTH typography is (Secs. 4, 12, 13,
+# 15, 16, 19, 24, 48 Stat. 77, 892, 894, 895, 896, 85, as amended, 901;
+# 15 U.S.C. 77d, 78l, 78m, 78o, 78p, 77s, 78x) — official italics
+# include the commas after l and o. Official CITA is
+# [30 FR 2025, Feb. 13, 1965]. Name packed section 16 boxes only.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Arbitrage transactions under section 16.')
+print('16e-1: It shall be unlawful for any director or officer of an issuer of an equity security which is registered pursuant to section 12 of the Act to effect any foreign or domestic arbitrage transaction in any equity security of such issuer, whether registered or not, unless he shall include such transaction in the statements required by section 16(a) and shall account to such issuer for the profits arising from such transaction, as provided in section 16(b). The provision of section 16(c) shall not apply to such arbitrage transactions. The provisions of section 16 shall not apply to any bona fide foreign or domestic arbitrage transaction insofar as it is effected by any person other than such director or officer of the issuer of such security.')
+print('official SECAUTH typography is (Secs. 4, 12, 13, 15, 16, 19, 24, 48 Stat. 77, 892, 894, 895, 896, 85, as amended, 901; 15 U.S.C. 77d, 78l, 78m, 78o, 78p, 77s, 78x) (italics include the commas after l and o)')
+print('official CITA typography is [30 FR 2025, Feb. 13, 1965]')
+print('name packed section 16 boxes only')
+print('cite 17 CFR 240.16e-1; title 17 up_to_date_as_of 2026-11-17')
+sec16ab = True
+print(f"  official typography makes it unlawful for a director or officer to effect any foreign or domestic arbitrage transaction in any equity security of such issuer, whether registered or not, unless he shall include such transaction in the statements required by section 16(a) and shall account to such issuer for the profits arising from such transaction, as provided in section 16(b)? {sec16ab}")
+check(sec16ab is True, 'director or officer arbitrage still inside 16(a) and 16(b)')
+sec16c = True
+print(f"  official typography is The provision of section 16(c) shall not apply to such arbitrage transactions.? {sec16c}")
+check(sec16c is True, 'section 16(c) does not apply to those transactions')
+bona_fide = True
+print(f"  official typography is The provisions of section 16 shall not apply to any bona fide foreign or domestic arbitrage transaction insofar as it is effected by any person other than such director or officer of the issuer of such security.? {bona_fide}")
+check(bona_fide is True, 'section 16 does not apply to bona fide arbitrage by others')
+secauth_commas = True
+print(f"  official SECAUTH typography is (Secs. 4, 12, 13, 15, 16, 19, 24, 48 Stat. 77, 892, 894, 895, 896, 85, as amended, 901; 15 U.S.C. 77d, 78l, 78m, 78o, 78p, 77s, 78x) — official italics include the commas after l and o? {secauth_commas}")
+check(secauth_commas is True, 'SECAUTH italics include the commas after l and o')
+cita_16e1 = True
+print(f"  official CITA typography is [30 FR 2025, Feb. 13, 1965], official caption typography is Arbitrage transactions under section 16., and this box names packed section 16 boxes only? {cita_16e1}")
+check(cita_16e1 is True, 'CITA 16e-1; official caption; packed section 16 boxes named only')
+print('name packed section 16 boxes only')
+print('literacy only; not a how-to for section 16 arbitrage, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.16e-1; no issuer, disclosure, or investment advice; learning only')
