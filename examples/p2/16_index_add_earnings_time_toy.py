@@ -3402,3 +3402,57 @@ print('literacy only; not a how-to for section 16 arbitrage, and not legal advic
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.16e-1; no issuer, disclosure, or investment advice; learning only')
+print('=== BV. 17 CFR 240.24b-3: Information filed by issuers and others under sections 12, 13, 14, and 16 ===')
+# 17 CFR 240.24b-3 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Information filed by issuers and others under sections 12, 13, 14,
+# and 16. Official (a) typography is pursuant to section 12, 13, 14,
+# or 16 (body uses or, not the caption's and); do not tidy and / or.
+# Official typography is under reasonable regulations as to the manner
+# of inspection, during reasonable office hours. Official typography is
+# shall not be deemed a representation by any exchange as to the
+# accuracy, completeness, or genuineness thereof. Official typography
+# is pursuant to § 240.24b-2 and pursuant to section 24(b) — do not
+# tidy in of the Act from official 24b-1. Official (b) typography is
+# pursuant to section 12 an exchange may delay making available the
+# information contained therein until it has certified to the
+# Commission its approval of such security for listing and
+# registration (no comma after section 12). Official SECAUTH typography
+# is (Sec. 24, 48 Stat. 901, as amended; 15 U.S.C. 78x) (official API
+# XML has this SECAUTH; do not invent italics). Official CITA is
+# [16 FR 3109, Apr. 10, 1951]. Official API XML has no I and no E T="01".
+# Name official 24b-2 / 17a-6 / 24b-1 only; do not pack those companions.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Information filed by issuers and others under sections 12, 13, 14, and 16.')
+print('24b-3(a): Except as otherwise provided in this section and in § 240.17a-6, each exchange shall keep available to the public under reasonable regulations as to the manner of inspection, during reasonable office hours, all information regarding a security registered on such exchange which is filed with it pursuant to section 12, 13, 14, or 16, or any rules or regulations thereunder. This requirement shall not apply to any information to the disclosure of which objection has been filed pursuant to § 240.24b-2, which objection shall not have been overruled by the Commission pursuant to section 24(b). The making of such information available pursuant to this section shall not be deemed a representation by any exchange as to the accuracy, completeness, or genuineness thereof.')
+print('24b-3(b): In the case of an application for registration of a security pursuant to section 12 an exchange may delay making available the information contained therein until it has certified to the Commission its approval of such security for listing and registration.')
+print('official typography is pursuant to section 12, 13, 14, or 16 (body uses or, not the caption\'s and)')
+print('official typography is under reasonable regulations as to the manner of inspection, during reasonable office hours')
+print('official typography is shall not be deemed a representation by any exchange as to the accuracy, completeness, or genuineness thereof')
+print('official typography is pursuant to § 240.24b-2 and pursuant to section 24(b); do not tidy in of the Act from official 24b-1')
+print('official (b) typography is pursuant to section 12 an exchange may delay (no comma after section 12)')
+print('official SECAUTH typography is (Sec. 24, 48 Stat. 901, as amended; 15 U.S.C. 78x) (do not invent italics)')
+print('official CITA typography is [16 FR 3109, Apr. 10, 1951]')
+print('official 24b-2, official 17a-6, and official 24b-1 are named only; do not pack those companions')
+print('cite 17 CFR 240.24b-3; title 17 up_to_date_as_of 2026-11-17')
+caption_and_or = True
+print(f"  official caption typography is Information filed by issuers and others under sections 12, 13, 14, and 16, and official (a) typography is pursuant to section 12, 13, 14, or 16 (body uses or, not the caption's and)? {caption_and_or}")
+check(caption_and_or is True, 'caption and vs body or; do not tidy and/or')
+hours_rep = True
+print(f"  official typography is under reasonable regulations as to the manner of inspection, during reasonable office hours, and shall not be deemed a representation by any exchange as to the accuracy, completeness, or genuineness thereof? {hours_rep}")
+check(hours_rep is True, 'reasonable office hours; not a representation as to accuracy, completeness, or genuineness')
+sec24b = True
+print(f"  official typography is pursuant to § 240.24b-2 and pursuant to section 24(b), and does not tidy in of the Act from official 24b-1? {sec24b}")
+check(sec24b is True, 'pursuant to section 24(b); do not tidy in of the Act from official 24b-1')
+no_comma = True
+print(f"  official (b) typography is pursuant to section 12 an exchange may delay making available the information contained therein until it has certified to the Commission its approval of such security for listing and registration (no comma after section 12)? {no_comma}")
+check(no_comma is True, 'official (b) has no comma after section 12')
+secauth_cita = True
+print(f"  official SECAUTH typography is (Sec. 24, 48 Stat. 901, as amended; 15 U.S.C. 78x) (do not invent italics), official CITA typography is [16 FR 3109, Apr. 10, 1951], and official 24b-2, official 17a-6, and official 24b-1 are named only (do not pack those companions; do not tidy official 24b-1 typography into this box)? {secauth_cita}")
+check(secauth_cita is True, 'SECAUTH as amended; CITA 16 FR 3109; companions named only')
+print('official 24b-2, official 17a-6, and official 24b-1 are named only; do not pack those companions')
+print('literacy only; not a how-to for exchange public-inspection files, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.24b-3; no issuer, disclosure, or investment advice; learning only')

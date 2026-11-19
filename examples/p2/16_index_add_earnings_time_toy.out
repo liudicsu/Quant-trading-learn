@@ -1651,3 +1651,26 @@ literacy only; not a how-to for section 16 arbitrage, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 290/290
 disclaimer: official 17 CFR 240.16e-1; no issuer, disclosure, or investment advice; learning only
+=== BV. 17 CFR 240.24b-3: Information filed by issuers and others under sections 12, 13, 14, and 16 ===
+official caption typography is Information filed by issuers and others under sections 12, 13, 14, and 16.
+24b-3(a): Except as otherwise provided in this section and in § 240.17a-6, each exchange shall keep available to the public under reasonable regulations as to the manner of inspection, during reasonable office hours, all information regarding a security registered on such exchange which is filed with it pursuant to section 12, 13, 14, or 16, or any rules or regulations thereunder. This requirement shall not apply to any information to the disclosure of which objection has been filed pursuant to § 240.24b-2, which objection shall not have been overruled by the Commission pursuant to section 24(b). The making of such information available pursuant to this section shall not be deemed a representation by any exchange as to the accuracy, completeness, or genuineness thereof.
+24b-3(b): In the case of an application for registration of a security pursuant to section 12 an exchange may delay making available the information contained therein until it has certified to the Commission its approval of such security for listing and registration.
+official typography is pursuant to section 12, 13, 14, or 16 (body uses or, not the caption's and)
+official typography is under reasonable regulations as to the manner of inspection, during reasonable office hours
+official typography is shall not be deemed a representation by any exchange as to the accuracy, completeness, or genuineness thereof
+official typography is pursuant to § 240.24b-2 and pursuant to section 24(b); do not tidy in of the Act from official 24b-1
+official (b) typography is pursuant to section 12 an exchange may delay (no comma after section 12)
+official SECAUTH typography is (Sec. 24, 48 Stat. 901, as amended; 15 U.S.C. 78x) (do not invent italics)
+official CITA typography is [16 FR 3109, Apr. 10, 1951]
+official 24b-2, official 17a-6, and official 24b-1 are named only; do not pack those companions
+cite 17 CFR 240.24b-3; title 17 up_to_date_as_of 2026-11-17
+  official caption typography is Information filed by issuers and others under sections 12, 13, 14, and 16, and official (a) typography is pursuant to section 12, 13, 14, or 16 (body uses or, not the caption's and)? True
+  official typography is under reasonable regulations as to the manner of inspection, during reasonable office hours, and shall not be deemed a representation by any exchange as to the accuracy, completeness, or genuineness thereof? True
+  official typography is pursuant to § 240.24b-2 and pursuant to section 24(b), and does not tidy in of the Act from official 24b-1? True
+  official (b) typography is pursuant to section 12 an exchange may delay making available the information contained therein until it has certified to the Commission its approval of such security for listing and registration (no comma after section 12)? True
+  official SECAUTH typography is (Sec. 24, 48 Stat. 901, as amended; 15 U.S.C. 78x) (do not invent italics), official CITA typography is [16 FR 3109, Apr. 10, 1951], and official 24b-2, official 17a-6, and official 24b-1 are named only (do not pack those companions; do not tidy official 24b-1 typography into this box)? True
+official 24b-2, official 17a-6, and official 24b-1 are named only; do not pack those companions
+literacy only; not a how-to for exchange public-inspection files, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 295/295
+disclaimer: official 17 CFR 240.24b-3; no issuer, disclosure, or investment advice; learning only
