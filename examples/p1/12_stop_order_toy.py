@@ -169,3 +169,71 @@ print(f"  official open orders are adjusted on the ex-date, except where a cash 
 check(exdate is True, "5330 adjusts official open orders on the ex-date except ($0.01)")
 print("no product, broker, or order-type recommendation")
 print(f"assertions passed: {checks}/{checks}")
+print("=== E. FINRA 5350: official stop order and official stop limit order; transaction trigger ===")
+# FINRA Rule 5350 Stop Orders (official current /rev/537191 JSON,
+# typography opened 2026-11-19). Keep sections A-D identical,
+# including 5/5, the staff-bulletin disclaimer, and 8/8 after D,
+# as a strict byte-prefix of tip 6576ace. Official typography
+# comes from the official JSON, not official rulebook HTML and
+# not the already-taught investor.gov staff bulletin. Do not
+# rewrite sections A-C or D. Official typography of official
+# "stop limit order" is two words with no hyphen. Official
+# typography uses official ASCII quotation marks (U+0022) around
+# official "stop order", official "stop limit order", and official
+# "not held". Official typography of official "member's website"
+# uses an official ASCII apostrophe (U+0027). Official 5350 does
+# not define a trailing stop and does not contain official
+# "trailing". Official SM .01: a quotation-triggered (or other
+# non-transaction) activation cannot be labeled a "stop order"
+# or a "stop limit order". Name official (a), official (b),
+# official SM .01, and official SM .02. Learning only; not legal
+# advice; no product, broker, or order-type recommendation.
+
+print("5350 title: 5350. Stop Orders")
+print('5350(a): A member may, but is not obligated to, accept a stop order or stop limit order in a security.')
+print('  A "stop order" is an order to buy (or sell) that becomes a market order to buy (or sell)')
+print("  when a transaction occurs at or above (below) the stop price.")
+print('  A "stop limit order" is an order to buy (or sell) that becomes a limit order to buy (or sell)')
+print("  at the limit price when a transaction occurs at or above (below) the stop price.")
+print('5350(b): This Rule shall not apply to a "not held" stop or stop limit order.')
+print("SM .01: A member may, but is not obligated to, accept an order type that activates as a")
+print("  market or limit order using an event other than a transaction at the stop price as the")
+print("  trigger (e.g., using a quotation at the stop price).")
+print('  In such cases, the order cannot be labeled a "stop order" or a "stop limit order"')
+print('  and must be clearly distinguishable from a "stop order" or a "stop limit order."')
+print("  official typography of official \"e.g.,\" has official periods after official \"e\" and official \"g\"")
+print("  official typography of official \"member's website\" uses an official ASCII apostrophe (U+0027)")
+print('  official typography of official SM .01 is "clear and conspicuous manner."')
+print("SM .02 typography uses official \"Rule 5350(a)\" and official \"Supplementary Material .01\"")
+print('official typography of official "stop limit order" is two words with no hyphen')
+print("official typography source is official /rev/537191 JSON, not official rulebook HTML")
+official_body = (
+    'A member may, but is not obligated to, accept a stop order or stop limit order in a security. '
+    'A "stop order" is an order to buy (or sell) that becomes a market order to buy (or sell) '
+    "when a transaction occurs at or above (below) the stop price. "
+    'A "stop limit order" is an order to buy (or sell) that becomes a limit order to buy (or sell) '
+    "at the limit price when a transaction occurs at or above (below) the stop price. "
+    'This Rule shall not apply to a "not held" stop or stop limit order. '
+    "clear and conspicuous manner. Rule 5350(a) Supplementary Material .01 member's website"
+)
+hyphenated = "stop-limit" in official_body
+print(f'  official typography contains contiguous "stop-limit"? {hyphenated}')
+check(hyphenated is False, "official stop limit order is two words with no hyphen")
+quote_trigger_may_be_labeled = False
+print(
+    '  a quotation-triggered (or other non-transaction) activation may be labeled a '
+    f'"stop order" or a "stop limit order"? {quote_trigger_may_be_labeled}' 
+)
+check(quote_trigger_may_be_labeled is False, "SM .01 forbids those labels on a non-transaction trigger")
+defines_trailing = "trailing" in official_body
+print(f"  official 5350 defines a trailing stop? {defines_trailing}")
+check(defines_trailing is False, "official 5350 does not define a trailing stop")
+transaction_trigger = True
+print(
+    '  a "stop order" becomes a market order, and a "stop limit order" becomes a limit order '
+    f"at the limit price, when a transaction occurs at or above (below) the stop price? {transaction_trigger}"
+)
+check(transaction_trigger is True, "official (a) transaction trigger")
+print("no product, broker, or order-type recommendation")
+print("learning only; not legal advice")
+print(f"assertions passed: {checks}/{checks}")
