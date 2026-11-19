@@ -1227,3 +1227,253 @@ print("literacy only; not a how-to for withholding a public disclosure, and not 
 print("no issuer, filer, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 243.102; no issuer, disclosure, or investment advice; learning only")
+
+print("=== Z. 17 CFR 232.14: Paper filings not accepted without exemption ===")
+# 17 CFR 232.14 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17, live-refetched 2026-11-19,
+# byte-identical to the enrich43-src archive).
+# Keep sections A-Y identical, including 90/90 after Y / 243.102.
+# Official typography: "§§ 232.100 and 232.101 respectively" and
+# "§§ 232.201 or 232.202 respectively" — the second pair uses "or,"
+# not "and."
+# Name 232.100 / 232.101 / 232.201 / 232.202 only; do not pack those
+# catalogs, and do not invent a hardship-exemption engine.
+# Learning only; no filer, filing-agent, or investment advice.
+
+print("official caption typography is Paper filings not accepted without exemption.")
+print("232.14: The Commission will not accept in paper format any filing required to be submitted electronically under Rules 100 and 101 of Regulation S-T (§§ 232.100 and 232.101 respectively), unless the filing satisfies the requirements for a temporary or continuing hardship exemption under Rule 201 or 202 of Regulation S-T (§§ 232.201 or 232.202 respectively).")
+print('official typography is "§§ 232.100 and 232.101 respectively"')
+print('official typography is "§§ 232.201 or 232.202 respectively" — the second pair uses "or," not "and"')
+print("cite 17 CFR 232.14; title 17 up_to_date_as_of 2026-11-17")
+print("[62 FR 58649, Oct. 30, 1997].")
+paper_not_accepted = True
+print(f"  the Commission will not accept in paper format any filing required to be submitted electronically under Rules 100 and 101 of Regulation S-T (§§ 232.100 and 232.101 respectively), unless the filing satisfies the requirements for a temporary or continuing hardship exemption under Rule 201 or 202 of Regulation S-T (§§ 232.201 or 232.202 respectively)? {paper_not_accepted}")
+check(paper_not_accepted is True, "paper filings not accepted without 201 or 202 exemption")
+or_not_and = True
+print(f"  official typography is §§ 232.100 and 232.101 respectively, and §§ 232.201 or 232.202 respectively, with or in the second pair? {or_not_and}")
+check(or_not_and is True, "second pair uses or, not and")
+packs_catalogs = False
+print(f"  this toy packs the 232.100 / 232.101 / 232.201 / 232.202 catalogs, or tidies the second pair into and? {packs_catalogs}")
+check(packs_catalogs is False, "named only; second pair not tidied into and")
+print("232.100 / 232.101 / 232.201 / 232.202 are named only; this toy does not pack those catalogs")
+print("packed 232.12 and already-taught Regulation S-T Rule 13 / 17 CFR 232.13 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for a hardship exemption, and not legal advice")
+print("no filer, filing-agent, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 232.14; no filer, disclosure, or investment advice; learning only")
+
+print("=== AA. 17 CFR 243.103: No effect on Exchange Act reporting status ===")
+# 17 CFR 243.103 the whole current section, official opening plus official
+# (a)+(b) (official eCFR API XML, title 17 up_to_date_as_of 2026-11-17).
+# Do not invert "shall not affect." Official typography is "239.16b,"
+# not "239.16." Official typography italicizes "et seq." Official
+# typography is "or where applicable, has made those filings in a timely
+# manner" — keep the comma after "applicable." Official (b) is Rule 144(c)
+# / § 230.144(c). Name the forms and Rule 144(c) only.
+# Do not flatten into packed 243.102, already-taught Regulation FD clocks
+# in backtest-traps, packed 10b-5, or named 244.102, and do not rewrite
+# the FD box.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is No effect on Exchange Act reporting status.")
+print("243.103: A failure to make a public disclosure required solely by § 243.100 shall not affect whether:")
+print("243.103(a): For purposes of Forms S-3 (17 CFR 239.13), S-8 (17 CFR 239.16b) and SF-3 (17 CFR 239.45) under the Securities Act of 1933 (15 U.S.C. 77a et seq.), or Form N-2 (17 CFR 239.14 and 274.11a-1) under the Securities Act of 1933 (15 U.S.C. 77a et seq.) and the Investment Company Act of 1940 (15 U.S.C. 80a-1 et seq.), an issuer is deemed to have filed all the material required to be filed pursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934 (15 U.S.C. 78m or 78o(d)) or where applicable, has made those filings in a timely manner; or")
+print("243.103(b): There is adequate current public information about the issuer for purposes of § 230.144(c) of this chapter (Rule 144(c)).")
+print('official typography is "shall not affect"')
+print('official typography is "239.16b," not "239.16"')
+print('official typography italicizes "et seq."')
+print('official typography is "or where applicable, has made those filings in a timely manner" — keep the comma after "applicable"')
+print('official (b) typography is "adequate current public information about the issuer for purposes of § 230.144(c) of this chapter (Rule 144(c))."')
+print("cite 17 CFR 243.103; title 17 up_to_date_as_of 2026-11-17")
+print("[65 FR 51738, Aug. 24, 2000, as amended at 79 FR 57344, Sept. 24, 2014; 85 FR 33360, June 1, 2020].")
+shall_not_affect = True
+print(f"  a failure to make a public disclosure required solely by § 243.100 shall not affect whether an issuer is deemed to have filed all the material required to be filed pursuant to Section 13 or 15(d), or where applicable, has made those filings in a timely manner, or whether there is adequate current public information about the issuer for purposes of Rule 144(c)? {shall_not_affect}")
+check(shall_not_affect is True, "shall not affect reporting status or Rule 144(c)")
+sixteen_b_et_seq_comma = True
+print(f"  official typography is 239.16b, not 239.16, italicizes et seq., and keeps the comma after applicable? {sixteen_b_et_seq_comma}")
+check(sixteen_b_et_seq_comma is True, "239.16b; italic et seq.; comma after applicable")
+rule144c = True
+print(f"  official (b) typography is adequate current public information about the issuer for purposes of § 230.144(c) of this chapter (Rule 144(c))? {rule144c}")
+check(rule144c is True, "official (b) Rule 144(c)")
+invert_or_flatten_243103 = False
+print(f"  official 243.103 inverts shall not affect, or this is packed 243.102, already-taught Regulation FD clocks, packed 10b-5, or named 244.102? {invert_or_flatten_243103}")
+check(invert_or_flatten_243103 is False, "do not invert; not 243.102 / FD / 10b-5 / 244.102")
+print("the forms and Rule 144(c) are named only; this toy does not pack those form engines")
+print("packed 243.102, already-taught Regulation FD clocks in backtest-traps (243.100-101), packed 10b-5, and named 244.102 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for withholding a public disclosure, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 243.103; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AB. 17 CFR 240.15d-1: Requirement of annual reports ===")
+# 17 CFR 240.15d-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# singular "Requirement of annual reports." Official typography is
+# "therefor" and "within the period specified in the appropriate report
+# form" (not packed 13a-1's "the appropriate form," and no invented
+# numeric clock). Do not rewrite the packed 13a-1 box or tidy captions /
+# CITA into 13a-1.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Requirement of annual reports.")
+print("15d-1: Every registrant under the Securities Act of 1933 shall file an annual report, on the appropriate form authorized or prescribed therefor, for the fiscal year in which the registration statement under the Securities Act of 1933 became effective and for each fiscal year thereafter, unless the registrant is exempt from such filing by section 15(d) of the Act or rules thereunder. Annual reports shall be filed within the period specified in the appropriate report form.")
+print('official typography is "therefor"')
+print('official typography is "Annual reports shall be filed within the period specified in the appropriate report form."')
+print("cite 17 CFR 240.15d-1; title 17 up_to_date_as_of 2026-11-17")
+print("[47 FR 17052, Apr. 21, 1982, as amended at 61 FR 49960, Sept. 24, 1996].")
+sa_annual = True
+print(f"  every registrant under the Securities Act of 1933 shall file an annual report, on the appropriate form authorized or prescribed therefor, for the fiscal year in which the registration statement under the Securities Act of 1933 became effective and for each fiscal year thereafter, unless the registrant is exempt from such filing by section 15(d) of the Act or rules thereunder? {sa_annual}")
+check(sa_annual is True, "Securities Act registrant annual report; therefor")
+report_form_clock = True
+print(f"  official typography is that annual reports shall be filed within the period specified in the appropriate report form? {report_form_clock}")
+check(report_form_clock is True, "the appropriate report form, not 13a-1's the appropriate form")
+invent_or_rewrite_13a1 = False
+print(f"  15d-1 itself states a numeric clock, tidies therefor into therefore, or rewrites the packed 13a-1 box? {invent_or_rewrite_13a1}")
+check(invent_or_rewrite_13a1 is False, "no invented numeric clock; not packed 13a-1")
+print("packed 13a-1 exists and is named only; this toy does not rewrite it")
+print("literacy only; not a how-to for filing an annual report, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.15d-1; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AC. 17 CFR 240.15d-11: Current reports on Form 8-K ===")
+# 17 CFR 240.15d-11 official (a)+(b)+(c) (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official (a) typography is
+# "every registrant subject to § 240.15d-1 shall file a current report
+# on Form 8-K within the period specified in that form." Official (b)
+# names § 240.15d-16 and Form 6-K (§ 249.306), not 13a-16. Official (c)
+# item list and 10b-5 negation packed verbatim, not inverted. Do not
+# tidy the official CITA into packed 13a-11.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Current reports on Form 8-K (§ 249.308 of this chapter).")
+print("15d-11(a): Except as provided in paragraph (b) of this section, every registrant subject to § 240.15d-1 shall file a current report on Form 8-K within the period specified in that form unless substantially the same information as that required by Form 8-K has been previously reported by the registrant.")
+print("15d-11(b): This section shall not apply to foreign governments, foreign private issuers required to make reports on Form 6-K (§ 249.306 of this chapter) pursuant to § 240.15d-16, issuers of American Depositary Receipts for securities of any foreign issuer, or investment companies required to file reports pursuant to § 270.30a-1 of this chapter under the Investment Company Act of 1940, except where such an investment company is required to file notice of a blackout period pursuant to § 245.104 of this chapter.")
+print("15d-11(c): No failure to file a report on Form 8-K that is required solely pursuant to Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03 of Form 8-K shall be deemed to be a violation of 15 U.S.C. 78j(b) and § 240.10b-5.")
+print('official (a) typography is "every registrant subject to § 240.15d-1"')
+print('official (a) typography is "within the period specified in that form"')
+print('official (b) typography names § 240.15d-16 and Form 6-K (§ 249.306 of this chapter), not 13a-16')
+print("official (c) item list typography is Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03.")
+print('official typography is that no such failure "shall be deemed to be a violation of 15 U.S.C. 78j(b) and § 240.10b-5"')
+print("cite 17 CFR 240.15d-11; title 17 up_to_date_as_of 2026-11-17")
+print("[42 FR 4429, Jan. 25, 1977, as amended at 50 FR 27939, July 9, 1985; 68 FR 4355, Jan. 28, 2002; 69 FR 15618, Mar. 25, 2004; 70 FR 1622, Jan. 7, 2005; 71 FR 53263, Sept. 8, 2006; 75 FR 56792, Sept. 16, 2010; 81 FR 82020, Nov. 18, 2016; 88 FR 51943, Aug. 4, 2023; 90 FR 9690, Feb. 18, 2025].")
+subject_to_15d1 = True
+print(f"  official typography is that every registrant subject to § 240.15d-1 shall file a current report on Form 8-K within the period specified in that form? {subject_to_15d1}")
+check(subject_to_15d1 is True, "subject to 15d-1; period specified in that form")
+b_names_15d16 = True
+print(f"  official (b) names § 240.15d-16 and Form 6-K (§ 249.306 of this chapter), not 13a-16? {b_names_15d16}")
+check(b_names_15d16 is True, "15d-16 / 249.306, not 13a-16")
+c_item_list = True
+print(f"  official (c) item list typography is Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03? {c_item_list}")
+check(c_item_list is True, "official (c) item list verbatim")
+deemed_violation = False
+print(f"  a failure to file an 8-K required solely pursuant to Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03 shall be deemed to be a violation of 15 U.S.C. 78j(b) and § 240.10b-5? {deemed_violation}")
+check(deemed_violation is False, "do not invert official (c) 10b-5 negation")
+print("packed 13a-11 exists and is named only; this toy does not tidy the official CITA into packed 13a-11")
+print("literacy only; not a how-to for filing Form 8-K, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.15d-11; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AD. 17 CFR 240.15d-13: Quarterly reports on Form 10-Q ===")
+# 17 CFR 240.15d-13 official (a)+(b)+(c)+(d)+(e) (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official Form 10-Q cite is
+# § 249.308, not packed 13a-13's 249.308a. Official typography is
+# "within the period specified in General Instruction A.1 to that form"
+# with no trailing period after "A.1." Official typography is "had been
+# required," not packed 13a-13's "has been required." Official (b) names
+# 15d-16 / 15d-17. Official (d) typography is lowercase "section 18."
+# Official (d) and official (e) use typographic U+201C / U+201D around
+# "filed." Pack official (e) verbatim; do not drop (e), and do not invent
+# that official (d) authorizes a substitute filing. Official typography
+# between 54 FR 10319 and 61 FR 30403 is a comma, not a semicolon.
+# Do not invent a fourth-quarter 10-Q, and do not tidy this CITA or form
+# cite into packed 13a-13.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Quarterly reports on Form 10-Q (§ 249.308 of this chapter).")
+print("15d-13(a): Except as provided in paragraphs (b) and (c) of this section, every issuer that has securities registered pursuant to the Securities Act and is required to file annual reports pursuant to section 15(d) of the Act on Form 10-K (§ 249.310 of this chapter) shall file a quarterly report on Form 10-Q (§ 249.308 of this chapter) within the period specified in General Instruction A.1 to that form for each of the first three quarters of each fiscal year of the issuer, commencing with the first fiscal quarter following the most recent fiscal year for which full financial statements were included in the registration statement, or, if the registration statement included financial statements for an interim period after the most recent fiscal year end meeting the requirements of Article 10 of Regulation S-X, or Rule 8-03 of Regulation S-X for smaller reporting companies, for the first fiscal quarter after the quarter reported upon in the registration statement. The first quarterly report of the issuer shall be filed either within 45 days after the effective date of the registration statement or on or before the date on which such report would have been required to be filed if the issuer had been required to file reports on Form 10-Q as of its last fiscal quarter, whichever is later.")
+print("15d-13(b): The provisions of this rule shall not apply to the following issuers:")
+print("15d-13(b)(1): Investment companies required to file reports pursuant to § 270.30a-1;")
+print("15d-13(b)(2): Foreign private issuers required to file reports pursuant to § 240.15d-16; and")
+print("15d-13(b)(3): Asset-backed issuers required to file reports pursuant to § 240.15d-17.")
+print("15d-13(c): Part I of the quarterly reports on Form 10-Q need not be filed by:")
+print("15d-13(c)(1): Mutual life insurance companies; or")
+print("15d-13(c)(2): Mining companies not in the production stage but engaged primarily in the exploration for the development of mineral deposits other than oil, gas or coal, if all of the following conditions are met:")
+print("15d-13(c)(2)(i): The registrant has not been in production during the current fiscal year or the two years immediately prior thereto; except that being in production for an aggregate period of not more than eight months over the three-year period shall not be a violation of this condition.")
+print("15d-13(c)(2)(ii): Receipts from the sale of mineral products or from the operations of mineral producing properties by the registrant and its subsidiaries combined have not exceeded $500,000 in any of the most recent six years and have not aggregated more than $1,500,000 in the most recent six fiscal years.")
+print("15d-13(d): Notwithstanding the foregoing provisions of this section, the financial information required by Part I of Form 10-Q shall not be deemed to be “filed” for the purpose of section 18 of the Act or otherwise subject to the liabilities of that section of the Act, but shall be subject to all other provisions of the Act.")
+print("15d-13(e): Notwithstanding the foregoing provisions of this section, the financial information required by Part I of Form 10-Q, or financial information submitted in lieu thereof pursuant to paragraph (d) of this section, shall not be deemed to be “filed” for the purpose of section 18 of the Act or otherwise subject to the liabilities of that section of the Act, but shall be subject to all other provisions of the Act.")
+print('official (a) typography is "within the period specified in General Instruction A.1 to that form"')
+print('official typography is "each of the first three quarters of each fiscal year of the issuer"')
+print('official first-report typography is "had been required," not "has been required"')
+print("official (b)(2) ends with \"; and\"")
+print('official (d) typography is lowercase "section 18"')
+print('official (d) and official (e) use typographic U+201C / U+201D around "filed"')
+print('official (e) typography includes "or financial information submitted in lieu thereof pursuant to paragraph (d) of this section"')
+print("cite 17 CFR 240.15d-13; title 17 up_to_date_as_of 2026-11-17")
+print("[42 FR 24065, May 12, 1977, as amended at 46 FR 63255, Dec. 31, 1981; 50 FR 27939, July 9, 1985; 54 FR 10319, Mar. 13, 1989, 61 FR 30403, June 14, 1996; 70 FR 1622, Jan. 7, 2005; 73 FR 978, Jan. 4, 2008; 81 FR 82020, Nov. 18, 2016].")
+three_quarters_A1_15d = True
+print(f"  a Form 10-Q is due within the period specified in General Instruction A.1 to that form for each of the first three quarters of each fiscal year of the issuer? {three_quarters_A1_15d}")
+check(three_quarters_A1_15d is True, "A.1 clock for the first three quarters; no trailing period after A.1")
+first_report_had_been = True
+print(f"  the first quarterly report shall be filed either within 45 days after the effective date of the registration statement or on or before the date on which such report would have been required to be filed if the issuer had been required to file reports on Form 10-Q as of its last fiscal quarter, whichever is later? {first_report_had_been}")
+check(first_report_had_been is True, "first-report 45-day alternative; had been required")
+b_exceptions_15d = True
+print(f"  official (b) exceptions include investment companies required to file pursuant to § 270.30a-1, foreign private issuers pursuant to § 240.15d-16, and asset-backed issuers pursuant to § 240.15d-17? {b_exceptions_15d}")
+check(b_exceptions_15d is True, "official (b) 30a-1 / 15d-16 / 15d-17 exceptions")
+part_i_section_18 = True
+print(f"  official (d) typography is that Part I financial information shall not be deemed to be “filed” for the purpose of section 18 of the Act or otherwise subject to the liabilities of that section of the Act, but shall be subject to all other provisions of the Act? {part_i_section_18}")
+check(part_i_section_18 is True, "Part I not deemed filed for section 18")
+official_e_packed = True
+print(f"  official (e) typography is that the financial information required by Part I of Form 10-Q, or financial information submitted in lieu thereof pursuant to paragraph (d) of this section, shall not be deemed to be “filed” for the purpose of section 18 of the Act? {official_e_packed}")
+check(official_e_packed is True, "official (e) packed verbatim")
+four_quarters_or_tidy = False
+print(f"  15d-13 requires a Form 10-Q for all four fiscal quarters, tidies the official Form 10-Q cite § 249.308 into § 249.308a, drops official (e), invents that official (d) authorizes a substitute filing, or tidies the official CITA comma between 54 FR 10319 and 61 FR 30403 into a semicolon? {four_quarters_or_tidy}")
+check(four_quarters_or_tidy is False, "no fourth-quarter 10-Q; no 249.308a tidy; (e) kept; CITA comma kept")
+print("packed 13a-13 exists and is named only; this toy does not tidy the official CITA or form cite into packed 13a-13")
+print("literacy only; not a how-to for filing Form 10-Q, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.15d-13; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AE. 17 CFR 240.15d-6: Suspension of duty to file reports ===")
+# 17 CFR 240.15d-6 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official typography is "within
+# 30 days after the beginning of the first fiscal year," "file a notice
+# on Form 15 informing the Commission of such suspension," and "unless
+# Form 15 has already been filed pursuant to Rule 12h-3." Official
+# successor typography is "the issuer's merger into, or consolidation
+# with, another issuer or issuers." Official SECAUTH typography
+# italicizes the letter l in 15 U.S.C. 78l(g)(4) and 78l(h). Official
+# 12h-3 caption typography is "Suspension of duty to file reports under
+# section 15(d)."; name 12h-3 only, and do not pack that catalog.
+# This box is the Form 15 notice clock, not the statutory section 15(d)
+# suspension test, and not packed 12g-4.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Suspension of duty to file reports.")
+print("15d-6: If the duty of an issuer to file reports pursuant to section 15(d) of the Act as to any fiscal year is suspended as provided in section 15(d) of the Act, such issuer shall, within 30 days after the beginning of the first fiscal year, file a notice on Form 15 informing the Commission of such suspension unless Form 15 has already been filed pursuant to Rule 12h-3. If the suspension resulted from the issuer's merger into, or consolidation with, another issuer or issuers, the notice shall be filed by the successor issuer.")
+print('official typography is "within 30 days after the beginning of the first fiscal year"')
+print('official typography is "file a notice on Form 15 informing the Commission of such suspension"')
+print('official typography is "unless Form 15 has already been filed pursuant to Rule 12h-3"')
+print("official successor typography is \"the issuer's merger into, or consolidation with, another issuer or issuers\"")
+print("official typography italicizes the letter l in 15 U.S.C. 78l(g)(4) and 78l(h)")
+print('official 12h-3 caption typography is "Suspension of duty to file reports under section 15(d)."')
+print("cite 17 CFR 240.15d-6; title 17 up_to_date_as_of 2026-11-17")
+print("[49 FR 12690, Mar. 30, 1984].")
+form15_clock = True
+print(f"  if the duty of an issuer to file reports pursuant to section 15(d) of the Act as to any fiscal year is suspended as provided in section 15(d) of the Act, such issuer shall, within 30 days after the beginning of the first fiscal year, file a notice on Form 15 informing the Commission of such suspension unless Form 15 has already been filed pursuant to Rule 12h-3? {form15_clock}")
+check(form15_clock is True, "Form 15 notice clock; unless already filed under 12h-3")
+successor_and_caption = True
+print(f"  official typography is the issuer's merger into, or consolidation with, another issuer or issuers, and official caption typography is Suspension of duty to file reports.? {successor_and_caption}")
+check(successor_and_caption is True, "successor typography; 15d-6 caption not tidied into 12h-3")
+packs_12h3_or_12g4 = False
+print(f"  this toy packs Rule 12h-3 as a second core, flattens 15d-6 into packed 12g-4, or is the statutory section 15(d) suspension test? {packs_12h3_or_12g4}")
+check(packs_12h3_or_12g4 is False, "12h-3 named only; not 12g-4; not the statutory test")
+print("official 12h-3 is named only; this toy does not pack that catalog")
+print("packed 12g-4 exists and is named only; this toy is the Form 15 notice clock, not the statutory section 15(d) suspension test")
+print("literacy only; not a how-to for suspending reporting, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.15d-6; no issuer, disclosure, or investment advice; learning only")
