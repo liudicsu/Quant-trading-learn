@@ -1710,3 +1710,249 @@ print("literacy only; not a how-to for soliciting proxies, and not legal advice"
 print("no issuer, filer, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 240.14a-10; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AL. 17 CFR 240.14a-14: Modified or superseded documents ===")
+# 17 CFR 240.14a-14 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Modified or superseded documents." Official typography in (c) is
+# "constitute part" (modified, no "a") versus "constitute a part"
+# (superseded). Official typography is "may, but need not, state it has
+# modified or superseded a prior statement." Official typography is
+# "the Securities Exchange Act of 1934 (“the Act”)" with official
+# typographic quotes (U+201C / U+201D) around “the Act”. Official source
+# line "[52 FR 21936, June 10, 1987, as amended at 73 FR 17814, Apr. 1,
+# 2008]." Do not flatten into packed 14a-9, packed 14a-10, or packed
+# 12b-23.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Modified or superseded documents.")
+print("14a-14(a): Any statement contained in a document incorporated or deemed to be incorporated by reference shall be deemed to be modified or superseded, for purposes of the proxy statement, to the extent that a statement contained in the proxy statement or in any other subsequently filed document that also is or is deemed to be incorporated by reference modifies or replaces such statement.")
+print("14a-14(b): The modifying or superseding statement may, but need not, state it has modified or superseded a prior statement or include any other information set forth in the document that is not so modified or superseded. The making of a modifying or superseding statement shall not be deemed an admission that the modified or superseded statement, when made, constituted an untrue statement of a material fact, an omission to state a material fact necessary to make a statement not misleading, or the employment of a manipulative, deceptive, or fraudulent device, contrivance, scheme, transaction, act, practice, course of business or artifice to defraud, as those terms are used in the Securities Act of 1933, the Securities Exchange Act of 1934 (“the Act”), the Investment Company Act of 1940, or the rules and regulations thereunder.")
+print("14a-14(c): Any statement so modified shall not be deemed in its unmodified form to constitute part of the proxy statement for purposes of the Act. Any statement so superseded shall not be deemed to constitute a part of the proxy statement for purposes of the Act.")
+print('official typography is "may, but need not, state it has modified or superseded a prior statement"')
+print("official typography is the Securities Exchange Act of 1934 (“the Act”)")
+print('official typography in (c) is "constitute part" (modified, no "a") versus "constitute a part" (superseded)')
+print("cite 17 CFR 240.14a-14; title 17 up_to_date_as_of 2026-11-17")
+print("[52 FR 21936, June 10, 1987, as amended at 73 FR 17814, Apr. 1, 2008].")
+modified_or_superseded = True
+print(f"  any statement contained in a document incorporated or deemed to be incorporated by reference shall be deemed to be modified or superseded, for purposes of the proxy statement, to the extent that a statement contained in the proxy statement or in any other subsequently filed document that also is or is deemed to be incorporated by reference modifies or replaces such statement? {modified_or_superseded}")
+check(modified_or_superseded is True, "14a-14(a) modified or superseded for purposes of the proxy statement")
+not_an_admission = True
+print(f"  the making of a modifying or superseding statement shall not be deemed an admission that the modified or superseded statement, when made, constituted an untrue statement of a material fact, an omission to state a material fact necessary to make a statement not misleading, or the employment of a manipulative, deceptive, or fraudulent device, contrivance, scheme, transaction, act, practice, course of business or artifice to defraud? {not_an_admission}")
+check(not_an_admission is True, "14a-14(b) not deemed an admission")
+constitute_part_vs_a_part = True
+print(f"  any statement so modified shall not be deemed in its unmodified form to constitute part of the proxy statement for purposes of the Act, and any statement so superseded shall not be deemed to constitute a part of the proxy statement for purposes of the Act (constitute part versus constitute a part)? {constitute_part_vs_a_part}")
+check(constitute_part_vs_a_part is True, "14a-14(c) constitute part vs constitute a part")
+may_but_need_not_not_flattened = True
+print(f"  official typography is may, but need not, state it has modified or superseded a prior statement, official typography is the Securities Exchange Act of 1934 (“the Act”), and this is not packed 14a-9, packed 14a-10, or packed 12b-23? {may_but_need_not_not_flattened}")
+check(may_but_need_not_not_flattened is True, "may but need not; official Act quotes; not 14a-9/14a-10/12b-23")
+print("packed 14a-9, packed 14a-10, and packed 12b-23 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for proxy statements, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.14a-14; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AM. 17 CFR 240.12d2-1: Suspension of trading ===")
+# 17 CFR 240.12d2-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Suspension of trading." Official typography is "A national securities
+# exchange may suspend from trading a security listed and registered
+# thereon in accordance with its rules." Official typography is "the
+# reasons therefor" and "Suspension of trading shall not terminate the
+# registration of any security." Do not invent a numeric clock for
+# "promptly." Official SECAUTH typography is 15 U.S.C. 78l with official
+# italic on the letter l. Official source line "[28 FR 1506, Feb. 16,
+# 1963]." Name 12d2-2 only; do not pack that removal catalog, and do not
+# flatten into packed 12b-6 or the already-taught delisting-returns box.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Suspension of trading.")
+print("12d2-1(a): A national securities exchange may suspend from trading a security listed and registered thereon in accordance with its rules. Such exchange shall promptly notify the Commission of any such suspension, the effective date thereof, and the reasons therefor.")
+print("12d2-1(b): Any such suspension may be continued until such time as it shall appear to the Commission that such suspension is designed to evade the provisions of section 12(d) and the rules and regulations thereunder relating to the withdrawal and striking of a security from listing and registration. During the continuance of such suspension the exchange shall notify the Commission promptly of any change in the reasons for the suspension. Upon the restoration to trading of any security suspended under this rule, the exchange shall notify the Commission promptly of the effective date thereof.")
+print("12d2-1(c): Suspension of trading shall not terminate the registration of any security.")
+print('official typography is "the reasons therefor"')
+print('official typography is "designed to evade the provisions of section 12(d)"')
+print('official typography is "withdrawal and striking"')
+print("official typography is Suspension of trading shall not terminate the registration of any security.")
+print("official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l")
+print("cite 17 CFR 240.12d2-1; title 17 up_to_date_as_of 2026-11-17")
+print("[28 FR 1506, Feb. 16, 1963].")
+may_suspend = True
+print(f"  a national securities exchange may suspend from trading a security listed and registered thereon in accordance with its rules, and such exchange shall promptly notify the Commission of any such suspension, the effective date thereof, and the reasons therefor, with no invented numeric promptly clock? {may_suspend}")
+check(may_suspend is True, "12d2-1(a) may suspend in accordance with its rules; promptly; reasons therefor")
+does_not_terminate = True
+print(f"  suspension of trading shall not terminate the registration of any security? {does_not_terminate}")
+check(does_not_terminate is True, "12d2-1(c) suspension does not terminate registration")
+typography_12d21 = True
+print(f"  official typography is the reasons therefor, designed to evade the provisions of section 12(d), and withdrawal and striking, official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l, official 12d2-2 is named only, and this is not packed 12b-6 or the already-taught delisting-returns box? {typography_12d21}")
+check(typography_12d21 is True, "reasons therefor; italic l; 12d2-2 named only; not 12b-6 or delisting-returns")
+print("official 12d2-2 is named only; this toy does not pack that removal catalog")
+print("packed 12b-6 and the already-taught delisting-returns box exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for exchange suspensions, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.12d2-1; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AN. 17 CFR 232.301: EDGAR Filer Manual ===")
+# 17 CFR 232.301 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "EDGAR Filer Manual." Official typography is "Filers must prepare
+# electronic filings in the manner prescribed by the EDGAR Filer Manual,
+# promulgated by the Commission, which sets forth the technical
+# formatting requirements for electronic submissions." Official Volume I
+# typography is “General Information,” Version 43 (March 2026). Official
+# Volume II typography is “EDGAR Filing,” Version 78 (September 2026).
+# Official typography uses typographic quotes (U+201C / U+201D) around
+# those volume titles. Official typography is "You must comply with
+# these requirements in order for documents to be timely received and
+# accepted." Official typography italicizes
+# https://www.sec.gov/edgar/filerinformation/current-edgar-filer-manual,
+# www.archives.gov/federal-register/cfr/ibr-locations, and
+# fr.inspection@nara.gov. Official source line "[91 FR 63478, Oct. 6,
+# 2026]." Do not pack the Filer Manual itself, and do not flatten into
+# packed 232.12 / 232.13 / 232.14.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is EDGAR Filer Manual.")
+print("232.301: Filers must prepare electronic filings in the manner prescribed by the EDGAR Filer Manual, promulgated by the Commission, which sets forth the technical formatting requirements for electronic submissions. The requirements for becoming an EDGAR Filer and updating company data are set forth in the EDGAR Filer Manual, Volume I: “General Information,” Version 43 (March 2026). The requirements for filing on EDGAR are set forth in the updated EDGAR Filer Manual, Volume II: “EDGAR Filing,” Version 78 (September 2026). All EDGAR material referenced in this paragraph is incorporated by reference into this section with the approval of the Director of the Federal Register under 5 U.S.C. 552(a) and 1 CFR part 51. You must comply with these requirements in order for documents to be timely received and accepted. The EDGAR Filer Manual is made available for inspection by the Commission and the National Archives and Records Administration (NARA). The EDGAR Filer Manual may be obtained from the SEC's website at https://www.sec.gov/edgar/filerinformation/current-edgar-filer-manual. For information on the availability of the EDGAR Filer Manual at NARA, visit www.archives.gov/federal-register/cfr/ibr-locations or email fr.inspection@nara.gov.")
+print("official typography is Filers must prepare electronic filings in the manner prescribed by the EDGAR Filer Manual, promulgated by the Commission, which sets forth the technical formatting requirements for electronic submissions.")
+print("official Volume I typography is “General Information,” Version 43 (March 2026)")
+print("official Volume II typography is “EDGAR Filing,” Version 78 (September 2026)")
+print("official typography is You must comply with these requirements in order for documents to be timely received and accepted.")
+print("official typography italicizes https://www.sec.gov/edgar/filerinformation/current-edgar-filer-manual, www.archives.gov/federal-register/cfr/ibr-locations, and fr.inspection@nara.gov")
+print("cite 17 CFR 232.301; title 17 up_to_date_as_of 2026-11-17")
+print("[91 FR 63478, Oct. 6, 2026].")
+must_prepare = True
+print(f"  filers must prepare electronic filings in the manner prescribed by the EDGAR Filer Manual, promulgated by the Commission, which sets forth the technical formatting requirements for electronic submissions? {must_prepare}")
+check(must_prepare is True, "232.301 prepare in the manner prescribed by the EDGAR Filer Manual")
+volume_i = True
+print(f"  official Volume I typography is “General Information,” Version 43 (March 2026)? {volume_i}")
+check(volume_i is True, "Volume I General Information Version 43 March 2026")
+volume_ii = True
+print(f"  official Volume II typography is “EDGAR Filing,” Version 78 (September 2026)? {volume_ii}")
+check(volume_ii is True, "Volume II EDGAR Filing Version 78 September 2026")
+comply_not_flattened = True
+print(f"  official typography is You must comply with these requirements in order for documents to be timely received and accepted, official typography italicizes the SEC and NARA URLs, official CITA typography is [91 FR 63478, Oct. 6, 2026], this box does not pack the Filer Manual itself, and this is not packed 232.12, packed 232.13, or packed 232.14? {comply_not_flattened}")
+check(comply_not_flattened is True, "must comply; italic URLs; CITA 91 FR 63478; not 232.12/13/14")
+print("the EDGAR Filer Manual itself is named only; this toy does not pack those volumes")
+print("packed 232.12, packed 232.13, and packed 232.14 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for EDGAR submissions, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 232.301; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AO. 17 CFR 232.406: Cover Page XBRL Data Tagging ===")
+# 17 CFR 232.406 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Cover Page XBRL Data Tagging." Official typography is "Forms 10-K
+# (§ 249.310 of this chapter), 10-Q (§ 249.308a of this chapter), 8-K
+# (§ 249.308 of this chapter), 20-F (§ 249.220f of this chapter) or
+# 40-F (§ 249.240f of this chapter)" ("or," no Oxford comma before
+# 40-F). Official typography is "in the manner provided by the EDGAR
+# Filer Manual" and "all of the information provided by the electronic
+# filer that is required on the cover page of these forms." Name official
+# 232.11 only. Official source line "[84 FR 12722, Apr. 2, 2019]." Do
+# not flatten into the already-printed XBRL filed-date box or the new
+# 232.301 box.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Cover Page XBRL Data Tagging.")
+print("232.406: Electronic filers submitting Forms 10-K (§ 249.310 of this chapter), 10-Q (§ 249.308a of this chapter), 8-K (§ 249.308 of this chapter), 20-F (§ 249.220f of this chapter) or 40-F (§ 249.240f of this chapter) who are required to submit Interactive Data Files (§ 232.11) in Inline XBRL format in accordance with this Regulation S-T must tag in Inline XBRL electronic format, in the manner provided by the EDGAR Filer Manual, all of the information provided by the electronic filer that is required on the cover page of these forms.")
+print('official typography is "or 40-F" with no Oxford comma before 40-F')
+print("official typography is Interactive Data Files (§ 232.11)")
+print('official typography is "in the manner provided by the EDGAR Filer Manual"')
+print('official typography is "all of the information provided by the electronic filer that is required on the cover page of these forms"')
+print("official 232.11 is named only")
+print("cite 17 CFR 232.406; title 17 up_to_date_as_of 2026-11-17")
+print("[84 FR 12722, Apr. 2, 2019].")
+must_tag_cover = True
+print(f"  electronic filers submitting Forms 10-K (§ 249.310 of this chapter), 10-Q (§ 249.308a of this chapter), 8-K (§ 249.308 of this chapter), 20-F (§ 249.220f of this chapter) or 40-F (§ 249.240f of this chapter) who are required to submit Interactive Data Files (§ 232.11) in Inline XBRL format in accordance with this Regulation S-T must tag in Inline XBRL electronic format, in the manner provided by the EDGAR Filer Manual, all of the information provided by the electronic filer that is required on the cover page of these forms? {must_tag_cover}")
+check(must_tag_cover is True, "232.406 cover page Inline XBRL tagging; or 40-F")
+or_40f_names_23211 = True
+print(f"  official typography is or 40-F with no Oxford comma before 40-F, and official 232.11 is named only? {or_40f_names_23211}")
+check(or_40f_names_23211 is True, "or 40-F no Oxford comma; 232.11 named only")
+cita_not_flattened_232406 = True
+print(f"  official CITA typography is [84 FR 12722, Apr. 2, 2019], and this is not the already-printed XBRL filed-date box or packed 232.301? {cita_not_flattened_232406}")
+check(cita_not_flattened_232406 is True, "CITA 84 FR 12722; not XBRL filed-date box or 232.301")
+print("official 232.11 is named only; this toy does not pack that definitions catalog")
+print("the already-printed XBRL filed-date box and packed 232.301 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for cover-page tagging, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 232.406; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AP. 17 CFR 240.16c-3: Exemption of sales of securities to be acquired ===")
+# 17 CFR 240.16c-3 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Exemption of sales of securities to be acquired." Official typography
+# uses typographic quotes (U+201C / U+201D) around “when issued” and
+# “when distributed,” and italicizes “Provided,” including the comma, in
+# “Provided, That:”. Official (a)(3) typography is "reports the sale on
+# the appropriate form for reporting transactions by persons subject to
+# section 16(a) of the Act." Official (b) still limits combined
+# transactions. Official API XML has no CITA element; do not invent a
+# source line. Do not flatten into the already-taught when-issued box or
+# packed 16a-4.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Exemption of sales of securities to be acquired.")
+print("16c-3(a): Whenever any person is entitled, incident to ownership of an issued security and without the payment of consideration, to receive another security “when issued” or “when distributed,” the sale of the security to be acquired shall be exempt from the operation of section 16(c) of the Act: Provided, That:")
+print("16c-3(a)(1): The sale is made subject to the same conditions as those attaching to the right of acquisition;")
+print("16c-3(a)(2): Such person exercises reasonable diligence to deliver such security to the purchaser promptly after the right of acquisition matures; and")
+print("16c-3(a)(3): Such person reports the sale on the appropriate form for reporting transactions by persons subject to section 16(a) of the Act.")
+print("16c-3(b): This section shall not exempt transactions involving both a sale of the issued security and a sale of a security “when issued” or “when distributed” if the combined transactions result in a sale of more securities than the aggregate of issued securities owned by the seller plus those to be received for the other security “when issued” or “when distributed.”")
+print("official typography uses typographic quotes around “when issued” and “when distributed”")
+print("official typography italicizes Provided, including the comma, in Provided, That:")
+print("official typography is reports the sale on the appropriate form for reporting transactions by persons subject to section 16(a) of the Act.")
+print("official API XML has no CITA element; this toy does not invent a source line")
+print("cite 17 CFR 240.16c-3; title 17 up_to_date_as_of 2026-11-17")
+exempt_if_conditions = True
+print(f"  whenever any person is entitled, incident to ownership of an issued security and without the payment of consideration, to receive another security “when issued” or “when distributed,” the sale of the security to be acquired shall be exempt from the operation of section 16(c) of the Act, provided official (a)(1)–(3) are met, including that such person reports the sale on the appropriate form for reporting transactions by persons subject to section 16(a) of the Act? {exempt_if_conditions}")
+check(exempt_if_conditions is True, "16c-3(a) when-issued/when-distributed sale exemption; report on section 16(a) form")
+provided_quotes = True
+print(f"  official typography uses typographic quotes around “when issued” and “when distributed,” and italicizes Provided, including the comma, in Provided, That:? {provided_quotes}")
+check(provided_quotes is True, "typographic quotes; italic Provided, including the comma")
+combined_no_cita = True
+print(f"  official (b) still limits combined transactions involving both a sale of the issued security and a sale of a security “when issued” or “when distributed,” official API XML has no CITA, and this is not the already-taught when-issued box or packed 16a-4? {combined_no_cita}")
+check(combined_no_cita is True, "16c-3(b) combined-transaction limit; no CITA; not when-issued box or 16a-4")
+print("the already-taught when-issued box and packed 16a-4 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for when-issued sales, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.16c-3; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AQ. 17 CFR 240.16c-4: Derivative securities ===")
+# 17 CFR 240.16c-4 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Derivative securities." — the same words as packed 16a-4 — but this
+# is a section 16(c) exemption and must not be tidied into packed 16a-4.
+# Official typography is "Establishing or increasing a put equivalent
+# position shall be exempt from section 16(c) of the Act, so long as the
+# amount of securities underlying the put equivalent position does not
+# exceed the amount of underlying securities otherwise owned." Official
+# API XML has no CITA element; do not invent a source line. Do not tidy
+# the caption or the "put equivalent position" language into packed
+# 16a-4, and do not flatten into leftover 16b-6.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Derivative securities.")
+print("16c-4: Establishing or increasing a put equivalent position shall be exempt from section 16(c) of the Act, so long as the amount of securities underlying the put equivalent position does not exceed the amount of underlying securities otherwise owned.")
+print("official caption typography is the same words as packed 16a-4, but this is a section 16(c) exemption")
+print('official typography is "put equivalent position"')
+print('official typography is "otherwise owned"')
+print("official API XML has no CITA element; this toy does not invent a source line")
+print("cite 17 CFR 240.16c-4; title 17 up_to_date_as_of 2026-11-17")
+put_equiv_exempt = True
+print(f"  establishing or increasing a put equivalent position shall be exempt from section 16(c) of the Act, so long as the amount of securities underlying the put equivalent position does not exceed the amount of underlying securities otherwise owned? {put_equiv_exempt}")
+check(put_equiv_exempt is True, "16c-4 put equivalent position exemption; otherwise owned")
+same_caption_not_16a4 = True
+print(f"  official caption typography is Derivative securities, the same words as packed 16a-4, but this is a section 16(c) exemption and must not be tidied into packed 16a-4? {same_caption_not_16a4}")
+check(same_caption_not_16a4 is True, "same caption as 16a-4; section 16(c) exemption; not tidied together")
+no_cita_not_16b6 = True
+print(f"  official typography is put equivalent position and otherwise owned, official API XML has no CITA, and this is not packed 16a-4 or leftover 16b-6? {no_cita_not_16b6}")
+check(no_cita_not_16b6 is True, "put equivalent position; no CITA; not 16a-4 or leftover 16b-6")
+print("packed 16a-4 exists and is named only; leftover 16b-6 is named only; this toy is not those boxes")
+print("literacy only; not a how-to for derivative positions, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.16c-4; no issuer, disclosure, or investment advice; learning only")

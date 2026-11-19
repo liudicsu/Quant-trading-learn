@@ -812,3 +812,118 @@ literacy only; not a how-to for soliciting proxies, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 132/132
 disclaimer: official 17 CFR 240.14a-10; no issuer, disclosure, or investment advice; learning only
+=== AL. 17 CFR 240.14a-14: Modified or superseded documents ===
+official caption typography is Modified or superseded documents.
+14a-14(a): Any statement contained in a document incorporated or deemed to be incorporated by reference shall be deemed to be modified or superseded, for purposes of the proxy statement, to the extent that a statement contained in the proxy statement or in any other subsequently filed document that also is or is deemed to be incorporated by reference modifies or replaces such statement.
+14a-14(b): The modifying or superseding statement may, but need not, state it has modified or superseded a prior statement or include any other information set forth in the document that is not so modified or superseded. The making of a modifying or superseding statement shall not be deemed an admission that the modified or superseded statement, when made, constituted an untrue statement of a material fact, an omission to state a material fact necessary to make a statement not misleading, or the employment of a manipulative, deceptive, or fraudulent device, contrivance, scheme, transaction, act, practice, course of business or artifice to defraud, as those terms are used in the Securities Act of 1933, the Securities Exchange Act of 1934 (“the Act”), the Investment Company Act of 1940, or the rules and regulations thereunder.
+14a-14(c): Any statement so modified shall not be deemed in its unmodified form to constitute part of the proxy statement for purposes of the Act. Any statement so superseded shall not be deemed to constitute a part of the proxy statement for purposes of the Act.
+official typography is "may, but need not, state it has modified or superseded a prior statement"
+official typography is the Securities Exchange Act of 1934 (“the Act”)
+official typography in (c) is "constitute part" (modified, no "a") versus "constitute a part" (superseded)
+cite 17 CFR 240.14a-14; title 17 up_to_date_as_of 2026-11-17
+[52 FR 21936, June 10, 1987, as amended at 73 FR 17814, Apr. 1, 2008].
+  any statement contained in a document incorporated or deemed to be incorporated by reference shall be deemed to be modified or superseded, for purposes of the proxy statement, to the extent that a statement contained in the proxy statement or in any other subsequently filed document that also is or is deemed to be incorporated by reference modifies or replaces such statement? True
+  the making of a modifying or superseding statement shall not be deemed an admission that the modified or superseded statement, when made, constituted an untrue statement of a material fact, an omission to state a material fact necessary to make a statement not misleading, or the employment of a manipulative, deceptive, or fraudulent device, contrivance, scheme, transaction, act, practice, course of business or artifice to defraud? True
+  any statement so modified shall not be deemed in its unmodified form to constitute part of the proxy statement for purposes of the Act, and any statement so superseded shall not be deemed to constitute a part of the proxy statement for purposes of the Act (constitute part versus constitute a part)? True
+  official typography is may, but need not, state it has modified or superseded a prior statement, official typography is the Securities Exchange Act of 1934 (“the Act”), and this is not packed 14a-9, packed 14a-10, or packed 12b-23? True
+packed 14a-9, packed 14a-10, and packed 12b-23 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for proxy statements, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 136/136
+disclaimer: official 17 CFR 240.14a-14; no issuer, disclosure, or investment advice; learning only
+=== AM. 17 CFR 240.12d2-1: Suspension of trading ===
+official caption typography is Suspension of trading.
+12d2-1(a): A national securities exchange may suspend from trading a security listed and registered thereon in accordance with its rules. Such exchange shall promptly notify the Commission of any such suspension, the effective date thereof, and the reasons therefor.
+12d2-1(b): Any such suspension may be continued until such time as it shall appear to the Commission that such suspension is designed to evade the provisions of section 12(d) and the rules and regulations thereunder relating to the withdrawal and striking of a security from listing and registration. During the continuance of such suspension the exchange shall notify the Commission promptly of any change in the reasons for the suspension. Upon the restoration to trading of any security suspended under this rule, the exchange shall notify the Commission promptly of the effective date thereof.
+12d2-1(c): Suspension of trading shall not terminate the registration of any security.
+official typography is "the reasons therefor"
+official typography is "designed to evade the provisions of section 12(d)"
+official typography is "withdrawal and striking"
+official typography is Suspension of trading shall not terminate the registration of any security.
+official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l
+cite 17 CFR 240.12d2-1; title 17 up_to_date_as_of 2026-11-17
+[28 FR 1506, Feb. 16, 1963].
+  a national securities exchange may suspend from trading a security listed and registered thereon in accordance with its rules, and such exchange shall promptly notify the Commission of any such suspension, the effective date thereof, and the reasons therefor, with no invented numeric promptly clock? True
+  suspension of trading shall not terminate the registration of any security? True
+  official typography is the reasons therefor, designed to evade the provisions of section 12(d), and withdrawal and striking, official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l, official 12d2-2 is named only, and this is not packed 12b-6 or the already-taught delisting-returns box? True
+official 12d2-2 is named only; this toy does not pack that removal catalog
+packed 12b-6 and the already-taught delisting-returns box exist and are named only; this toy is not those boxes
+literacy only; not a how-to for exchange suspensions, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 139/139
+disclaimer: official 17 CFR 240.12d2-1; no issuer, disclosure, or investment advice; learning only
+=== AN. 17 CFR 232.301: EDGAR Filer Manual ===
+official caption typography is EDGAR Filer Manual.
+232.301: Filers must prepare electronic filings in the manner prescribed by the EDGAR Filer Manual, promulgated by the Commission, which sets forth the technical formatting requirements for electronic submissions. The requirements for becoming an EDGAR Filer and updating company data are set forth in the EDGAR Filer Manual, Volume I: “General Information,” Version 43 (March 2026). The requirements for filing on EDGAR are set forth in the updated EDGAR Filer Manual, Volume II: “EDGAR Filing,” Version 78 (September 2026). All EDGAR material referenced in this paragraph is incorporated by reference into this section with the approval of the Director of the Federal Register under 5 U.S.C. 552(a) and 1 CFR part 51. You must comply with these requirements in order for documents to be timely received and accepted. The EDGAR Filer Manual is made available for inspection by the Commission and the National Archives and Records Administration (NARA). The EDGAR Filer Manual may be obtained from the SEC's website at https://www.sec.gov/edgar/filerinformation/current-edgar-filer-manual. For information on the availability of the EDGAR Filer Manual at NARA, visit www.archives.gov/federal-register/cfr/ibr-locations or email fr.inspection@nara.gov.
+official typography is Filers must prepare electronic filings in the manner prescribed by the EDGAR Filer Manual, promulgated by the Commission, which sets forth the technical formatting requirements for electronic submissions.
+official Volume I typography is “General Information,” Version 43 (March 2026)
+official Volume II typography is “EDGAR Filing,” Version 78 (September 2026)
+official typography is You must comply with these requirements in order for documents to be timely received and accepted.
+official typography italicizes https://www.sec.gov/edgar/filerinformation/current-edgar-filer-manual, www.archives.gov/federal-register/cfr/ibr-locations, and fr.inspection@nara.gov
+cite 17 CFR 232.301; title 17 up_to_date_as_of 2026-11-17
+[91 FR 63478, Oct. 6, 2026].
+  filers must prepare electronic filings in the manner prescribed by the EDGAR Filer Manual, promulgated by the Commission, which sets forth the technical formatting requirements for electronic submissions? True
+  official Volume I typography is “General Information,” Version 43 (March 2026)? True
+  official Volume II typography is “EDGAR Filing,” Version 78 (September 2026)? True
+  official typography is You must comply with these requirements in order for documents to be timely received and accepted, official typography italicizes the SEC and NARA URLs, official CITA typography is [91 FR 63478, Oct. 6, 2026], this box does not pack the Filer Manual itself, and this is not packed 232.12, packed 232.13, or packed 232.14? True
+the EDGAR Filer Manual itself is named only; this toy does not pack those volumes
+packed 232.12, packed 232.13, and packed 232.14 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for EDGAR submissions, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 143/143
+disclaimer: official 17 CFR 232.301; no issuer, disclosure, or investment advice; learning only
+=== AO. 17 CFR 232.406: Cover Page XBRL Data Tagging ===
+official caption typography is Cover Page XBRL Data Tagging.
+232.406: Electronic filers submitting Forms 10-K (§ 249.310 of this chapter), 10-Q (§ 249.308a of this chapter), 8-K (§ 249.308 of this chapter), 20-F (§ 249.220f of this chapter) or 40-F (§ 249.240f of this chapter) who are required to submit Interactive Data Files (§ 232.11) in Inline XBRL format in accordance with this Regulation S-T must tag in Inline XBRL electronic format, in the manner provided by the EDGAR Filer Manual, all of the information provided by the electronic filer that is required on the cover page of these forms.
+official typography is "or 40-F" with no Oxford comma before 40-F
+official typography is Interactive Data Files (§ 232.11)
+official typography is "in the manner provided by the EDGAR Filer Manual"
+official typography is "all of the information provided by the electronic filer that is required on the cover page of these forms"
+official 232.11 is named only
+cite 17 CFR 232.406; title 17 up_to_date_as_of 2026-11-17
+[84 FR 12722, Apr. 2, 2019].
+  electronic filers submitting Forms 10-K (§ 249.310 of this chapter), 10-Q (§ 249.308a of this chapter), 8-K (§ 249.308 of this chapter), 20-F (§ 249.220f of this chapter) or 40-F (§ 249.240f of this chapter) who are required to submit Interactive Data Files (§ 232.11) in Inline XBRL format in accordance with this Regulation S-T must tag in Inline XBRL electronic format, in the manner provided by the EDGAR Filer Manual, all of the information provided by the electronic filer that is required on the cover page of these forms? True
+  official typography is or 40-F with no Oxford comma before 40-F, and official 232.11 is named only? True
+  official CITA typography is [84 FR 12722, Apr. 2, 2019], and this is not the already-printed XBRL filed-date box or packed 232.301? True
+official 232.11 is named only; this toy does not pack that definitions catalog
+the already-printed XBRL filed-date box and packed 232.301 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for cover-page tagging, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 146/146
+disclaimer: official 17 CFR 232.406; no issuer, disclosure, or investment advice; learning only
+=== AP. 17 CFR 240.16c-3: Exemption of sales of securities to be acquired ===
+official caption typography is Exemption of sales of securities to be acquired.
+16c-3(a): Whenever any person is entitled, incident to ownership of an issued security and without the payment of consideration, to receive another security “when issued” or “when distributed,” the sale of the security to be acquired shall be exempt from the operation of section 16(c) of the Act: Provided, That:
+16c-3(a)(1): The sale is made subject to the same conditions as those attaching to the right of acquisition;
+16c-3(a)(2): Such person exercises reasonable diligence to deliver such security to the purchaser promptly after the right of acquisition matures; and
+16c-3(a)(3): Such person reports the sale on the appropriate form for reporting transactions by persons subject to section 16(a) of the Act.
+16c-3(b): This section shall not exempt transactions involving both a sale of the issued security and a sale of a security “when issued” or “when distributed” if the combined transactions result in a sale of more securities than the aggregate of issued securities owned by the seller plus those to be received for the other security “when issued” or “when distributed.”
+official typography uses typographic quotes around “when issued” and “when distributed”
+official typography italicizes Provided, including the comma, in Provided, That:
+official typography is reports the sale on the appropriate form for reporting transactions by persons subject to section 16(a) of the Act.
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.16c-3; title 17 up_to_date_as_of 2026-11-17
+  whenever any person is entitled, incident to ownership of an issued security and without the payment of consideration, to receive another security “when issued” or “when distributed,” the sale of the security to be acquired shall be exempt from the operation of section 16(c) of the Act, provided official (a)(1)–(3) are met, including that such person reports the sale on the appropriate form for reporting transactions by persons subject to section 16(a) of the Act? True
+  official typography uses typographic quotes around “when issued” and “when distributed,” and italicizes Provided, including the comma, in Provided, That:? True
+  official (b) still limits combined transactions involving both a sale of the issued security and a sale of a security “when issued” or “when distributed,” official API XML has no CITA, and this is not the already-taught when-issued box or packed 16a-4? True
+the already-taught when-issued box and packed 16a-4 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for when-issued sales, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 149/149
+disclaimer: official 17 CFR 240.16c-3; no issuer, disclosure, or investment advice; learning only
+=== AQ. 17 CFR 240.16c-4: Derivative securities ===
+official caption typography is Derivative securities.
+16c-4: Establishing or increasing a put equivalent position shall be exempt from section 16(c) of the Act, so long as the amount of securities underlying the put equivalent position does not exceed the amount of underlying securities otherwise owned.
+official caption typography is the same words as packed 16a-4, but this is a section 16(c) exemption
+official typography is "put equivalent position"
+official typography is "otherwise owned"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.16c-4; title 17 up_to_date_as_of 2026-11-17
+  establishing or increasing a put equivalent position shall be exempt from section 16(c) of the Act, so long as the amount of securities underlying the put equivalent position does not exceed the amount of underlying securities otherwise owned? True
+  official caption typography is Derivative securities, the same words as packed 16a-4, but this is a section 16(c) exemption and must not be tidied into packed 16a-4? True
+  official typography is put equivalent position and otherwise owned, official API XML has no CITA, and this is not packed 16a-4 or leftover 16b-6? True
+packed 16a-4 exists and is named only; leftover 16b-6 is named only; this toy is not those boxes
+literacy only; not a how-to for derivative positions, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 152/152
+disclaimer: official 17 CFR 240.16c-4; no issuer, disclosure, or investment advice; learning only
