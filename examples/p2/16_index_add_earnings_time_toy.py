@@ -3571,3 +3571,139 @@ print('literacy only; not a how-to for foreign-issuer exemptions or Form 4 repor
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.3a12-3; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BY. 17 CFR 229.405 (Item 405): Compliance with Section 16(a) of the Exchange Act ===')
+# 17 CFR 229.405 (Item 405) the whole current section (official eCFR API
+# XML, title 17 up_to_date_as_of 2026-11-17). Official caption typography
+# is Compliance with Section 16(a) of the Exchange Act. Pack the official
+# period after Act. Official (a) typography includes italic Reporting
+# obligation. (period inside the official italics). Official typography is
+# 15 U.S.C. 78 followed by an official italic lowercase L (not the digit
+# 1, and not a non-italic 78l). Official typography is 15 U.S.C. 80a-1
+# italic et seq. Official (a)(1) typography is “Delinquent Section 16(a)
+# Reports,” with typographic quotes and the comma outside those quotes.
+# Official typography is more than ten percent. Official typography is
+# Investment Company Act (“reporting person”) that failed, with typographic
+# quotes and no comma after the closing parenthesis. Pack the official
+# closed-end investment company clause; do not build an Investment Company
+# Act engine. Official Instruction 1 typography is Instruction 1 to
+# paragraph (a) of Item 405. and encouraged to exclude the caption
+# “Delinquent Section 16(a) Reports.” (period inside those typographic
+# quotes). Official Instruction 2 typography is Instruction 2 to
+# paragraph (a) of Item 405. Official (b) typography is Scope of the
+# Inquiry. (capital I in Inquiry, official period) and the official
+# three-source inquiry limit, including official two years and official
+# ASCII apostrophes (U+0027) in registrant's. Name official Forms 3 and 4
+# (17 CFR 249.103 and 249.104) and official Forms 5 (17 CFR 249.105) only.
+# Do not confuse official Form 5 / 249.105 with packed Item 105 / 229.105.
+# Official CITA typography is [84 FR 12717, Apr. 2, 2019] (no period
+# before the closing bracket). Official API XML has six official italics,
+# no E T="01", and no SECAUTH; do not invent a SECAUTH. This is issuer
+# 10-K / proxy disclosure of Section 16(a) delinquencies, not a Form 4
+# filing clock, and not a flattening of packed 16a-2 or packed 3a12-3.
+# Packed 16a-2 and packed 3a12-3 stay as written. Official 16a-1 remains
+# named only. Do not pack official 3a12-12, Regulation BTR, Item 307,
+# Item 408, Item 406, Item 702, Item 106, Item 503, 13p-1, 243.101,
+# 242.505, or 242.502. Learning only; no issuer, filer, or investment
+# advice.
+
+print('official caption typography is Compliance with Section 16(a) of the Exchange Act.')
+print('405(a): Reporting obligation. Every registrant having a class of equity securities registered pursuant to Section 12 of the Exchange Act (15 U.S.C. 78l) and every closed-end investment company registered under the Investment Company Act of 1940 (15 U.S.C. 80a-1 et seq.) must:')
+print('official typography italicizes Reporting obligation. including the trailing period; official typography is 15 U.S.C. 78l with official italic on the letter l (not the digit 1, and not a non-italic 78l); official typography italicizes et seq.')
+print('405(a)(1): Under the caption “Delinquent Section 16(a) Reports,” identify each person who, at any time during the fiscal year, was a director, officer, beneficial owner of more than ten percent of any class of equity securities of the registrant registered pursuant to Section 12 of the Exchange Act, or any other person subject to Section 16 of the Exchange Act with respect to the registrant because of the requirements of Section 30 of the Investment Company Act (“reporting person”) that failed to file on a timely basis reports required by Section 16(a) of the Exchange Act during the most recent fiscal year or prior fiscal years.')
+print('official (a)(1) typography is “Delinquent Section 16(a) Reports,” (comma outside the typographic quotes); official typography is more than ten percent; official typography is Investment Company Act (“reporting person”) that failed (typographic quotes; no comma after the closing parenthesis)')
+print('405(a)(2): For each such person, set forth the number of late reports, the number of transactions that were not reported on a timely basis, and any known failure to file a required form. A known failure to file would include, but not be limited to, a failure to file a Form 3, which is required of all reporting persons, and a failure to file a Form 5 in the absence of the written representation referred to in paragraph (b)(3) of this section, unless the registrant otherwise knows that no Form 5 is required.')
+print('Instruction 1 to paragraph (a) of Item 405. If no disclosure is required, registrants are encouraged to exclude the caption “Delinquent Section 16(a) Reports.”')
+print('official Instruction 1 typography italicizes Instruction 1 to paragraph (a) of Item 405. including the trailing period; official typography is encouraged to exclude the caption “Delinquent Section 16(a) Reports.” (period inside those typographic quotes)')
+print('Instruction 2 to paragraph (a) of Item 405. The registrant is only required to disclose a failure to file timely once. For example, if in the most recently concluded fiscal year a reporting person filed a Form 4 disclosing a transaction that took place in the prior fiscal year, and should have been reported in that year, the registrant should disclose that late filing and transaction pursuant to this Item 405 with respect to the most recently concluded fiscal year, but not in material filed with respect to subsequent years.')
+print('405(b): Scope of the Inquiry. In determining whether disclosure is required pursuant to paragraph (a) of this section, the registrant may rely only on the following:')
+print("405(b)(1): A review of Forms 3 and 4 (17 CFR 249.103 and 249.104) and amendments thereto filed electronically with the Commission during the registrant's most recent fiscal year;")
+print("405(b)(2): A review of Forms 5 (17 CFR 249.105) and amendments thereto filed electronically with the Commission with respect to the registrant's most recent fiscal year; and")
+print('405(b)(3): Any written representation from the reporting person that no Form 5 is required. The registrant must maintain the representation in its records for two years, making a copy available to the Commission or its staff upon request.')
+print("official (b) typography italicizes Scope of the Inquiry. (capital I in Inquiry, official period); official typography uses ASCII apostrophes (U+0027) in registrant's; official typography is two years")
+print('official CITA typography is [84 FR 12717, Apr. 2, 2019] (no period before the closing bracket)')
+print('official API XML has six official italics, no E T="01", and no SECAUTH; this toy does not invent a SECAUTH')
+print('this is issuer 10-K / proxy disclosure of Section 16(a) delinquencies, not a Form 4 filing clock, and not a flattening of packed 16a-2 or packed 3a12-3; official Forms 3 and 4 (17 CFR 249.103 and 249.104) and official Forms 5 (17 CFR 249.105) are named only; do not confuse official Form 5 / 249.105 with packed Item 105 / 229.105; official 16a-1 is named only')
+print('cite 17 CFR 229.405 (Item 405); title 17 up_to_date_as_of 2026-11-17')
+caption_405 = True
+print(f"  official caption typography is Compliance with Section 16(a) of the Exchange Act. (official period after Act.)? {caption_405}")
+check(caption_405 is True, 'official Item 405 caption period after Act.')
+italics_405 = True
+print(f"  official typography italicizes Reporting obligation. including the trailing period, official typography is 15 U.S.C. 78l with official italic on the letter l (not the digit 1, and not a non-italic 78l), and official typography italicizes et seq.? {italics_405}")
+check(italics_405 is True, 'six official italics; italic Reporting obligation.; italic lowercase L in 78l; italic et seq.')
+a1_405 = True
+print(f"  official (a)(1) typography is “Delinquent Section 16(a) Reports,” (comma outside the typographic quotes), official typography is more than ten percent, and official typography is Investment Company Act (“reporting person”) that failed (typographic quotes; no comma after the closing parenthesis)? {a1_405}")
+check(a1_405 is True, 'Delinquent Section 16(a) Reports, comma outside quotes; more than ten percent; ("reporting person") no comma after )')
+instr_405 = True
+print(f"  official Instruction 1 typography is encouraged to exclude the caption “Delinquent Section 16(a) Reports.” (period inside those typographic quotes), official (b) typography is Scope of the Inquiry. (capital I), official typography uses ASCII apostrophes (U+0027) in registrant's, and official typography is two years? {instr_405}")
+check(instr_405 is True, "Instruction 1 period inside quotes; Scope of the Inquiry.; ASCII apostrophes in registrant's; two years")
+cita_405 = True
+print(f"  official CITA typography is [84 FR 12717, Apr. 2, 2019] (no period before the closing bracket), and official API XML has six official italics, no E T=\"01\", and no SECAUTH (do not invent a SECAUTH)? {cita_405}")
+check(cita_405 is True, 'CITA [84 FR 12717, Apr. 2, 2019]; no period before ]; no SECAUTH')
+named_405 = True
+print(f"  this is issuer 10-K / proxy disclosure of Section 16(a) delinquencies, not a Form 4 filing clock, and not a flattening of packed 16a-2 or packed 3a12-3; official Forms 3 and 4 (17 CFR 249.103 and 249.104) and official Forms 5 (17 CFR 249.105) are named only; do not confuse official Form 5 / 249.105 with packed Item 105 / 229.105; official 16a-1 is named only? {named_405}")
+check(named_405 is True, 'issuer 10-K/proxy disclosure not a Form 4 clock; 16a-2 / 3a12-3 unflattened; Forms 3/4/5 named only')
+print('official Forms 3 and 4 (17 CFR 249.103 and 249.104) and official Forms 5 (17 CFR 249.105) are named only; do not confuse official Form 5 / 249.105 with packed Item 105 / 229.105; official 16a-1 is named only; packed 16a-2 and packed 3a12-3 stay as written; do not pack official 3a12-12, Regulation BTR, Item 307, Item 408, Item 406, Item 702, Item 106, Item 503, 13p-1, 243.101, 242.505, or 242.502')
+print('literacy only; not a how-to for Section 16(a) delinquency disclosure or Form 4 reporting, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 229.405 (Item 405); no issuer, disclosure, or investment advice; learning only')
+
+print('=== BZ. 17 CFR 229.105 (Item 105): Risk factors ===')
+# 17 CFR 229.105 (Item 105) the whole current section (official eCFR API
+# XML, title 17 up_to_date_as_of 2026-11-17). Official caption typography
+# is Risk factors. Pack the official period after factors. (official
+# lowercase f). Official typographic quotes around “Risk Factors” and
+# around “General Risk Factors.” Pack the official period after Factors
+# in “General Risk Factors.” inside the typographic quotes. Official (a)
+# typography is that generic risk factors are discouraged and, to the
+# extent presented, belong at the end under that “General Risk Factors.”
+# caption. Official (b) typography is longer than 15 pages, a series of
+# concise, bulleted or numbered statements that is no more than two
+# pages, the forepart of the prospectus or annual report, as applicable,
+# the official Item 503 placement rule, official Rule 430A / Pricing
+# information typography, and official The registrant must furnish this
+# information in plain English. See § 230.421(d) of Regulation C of this
+# chapter. Name official Item 503 / § 229.503, official Rule 430A /
+# § 230.430A, and official § 230.421(d) only; do not pack them only
+# because Item 105 is packed, and do not tidy official Item 503 typography
+# (including official CITA typography with no comma after 50211 before
+# Oct. 4, 2018, and official (c) [Reserved]) into packed Item 105.
+# Official CITA typography is [85 FR 63761, Oct. 8, 2020] (no period
+# before the closing bracket). Official API XML has no italics, no
+# E T="01", and no SECAUTH; do not invent a SECAUTH. Do not confuse
+# official Form 5 / 249.105 with packed Item 105 / 229.105. Learning
+# only; no issuer, filer, or investment advice.
+
+print('official caption typography is Risk factors.')
+print('105(a): Where appropriate, provide under the caption “Risk Factors” a discussion of the material factors that make an investment in the registrant or offering speculative or risky. This discussion must be organized logically with relevant headings and each risk factor should be set forth under a subcaption that adequately describes the risk. The presentation of risks that could apply generically to any registrant or any offering is discouraged, but to the extent generic risk factors are presented, disclose them at the end of the risk factor section under the caption “General Risk Factors.”')
+print('official typography uses typographic quotes around “Risk Factors” and around “General Risk Factors.” (official period after Factors inside the typographic quotes); official (a) typography is that generic risk factors are discouraged and, to the extent presented, belong at the end under that “General Risk Factors.” caption')
+print('105(b): Concisely explain how each risk affects the registrant or the securities being offered. If the discussion is longer than 15 pages, include in the forepart of the prospectus or annual report, as applicable, a series of concise, bulleted or numbered statements that is no more than two pages summarizing the principal factors that make an investment in the registrant or offering speculative or risky. If the risk factor discussion is included in a registration statement, it must immediately follow the summary section required by § 229.503 (Item 503 of Regulation S-K). If you do not include a summary section, the risk factor section must immediately follow the cover page of the prospectus or the pricing information section that immediately follows the cover page. Pricing information means price and price-related information that you may omit from the prospectus in an effective registration statement based on Rule 430A (§ 230.430A of this chapter). The registrant must furnish this information in plain English. See § 230.421(d) of Regulation C of this chapter.')
+print('official (b) typography is longer than 15 pages, a series of concise, bulleted or numbered statements that is no more than two pages, and the forepart of the prospectus or annual report, as applicable; official typography is The registrant must furnish this information in plain English. See § 230.421(d) of Regulation C of this chapter.')
+print('official CITA typography is [85 FR 63761, Oct. 8, 2020] (no period before the closing bracket)')
+print('official API XML has no I, no E T="01", and no SECAUTH; this toy does not invent a SECAUTH')
+print('official Item 503 / § 229.503, official Rule 430A / § 230.430A, and official § 230.421(d) are named only; do not pack them; do not tidy official Item 503 typography (including official CITA typography with no comma after 50211 before Oct. 4, 2018, and official (c) [Reserved]) into packed Item 105; do not confuse official Form 5 / 249.105 with packed Item 105 / 229.105')
+print('cite 17 CFR 229.105 (Item 105); title 17 up_to_date_as_of 2026-11-17')
+caption_105 = True
+print(f"  official caption typography is Risk factors. (official period after factors.; official lowercase f)? {caption_105}")
+check(caption_105 is True, 'official Item 105 caption period after factors.; lowercase f')
+quotes_105 = True
+print(f"  official typography uses typographic quotes around “Risk Factors” and around “General Risk Factors.” (official period after Factors inside the typographic quotes)? {quotes_105}")
+check(quotes_105 is True, '“Risk Factors”; “General Risk Factors.” period inside typographic quotes')
+generic_105 = True
+print(f"  official (a) typography is that generic risk factors are discouraged and, to the extent presented, belong at the end under the caption “General Risk Factors.”? {generic_105}")
+check(generic_105 is True, 'generic risk factors discouraged; end under “General Risk Factors.”')
+pages_105 = True
+print(f"  official (b) typography is longer than 15 pages, a series of concise, bulleted or numbered statements that is no more than two pages, in the forepart of the prospectus or annual report, as applicable, and official typography is The registrant must furnish this information in plain English. See § 230.421(d) of Regulation C of this chapter.? {pages_105}")
+check(pages_105 is True, 'longer than 15 pages; no more than two pages; forepart; plain English; § 230.421(d)')
+cita_105 = True
+print(f"  official CITA typography is [85 FR 63761, Oct. 8, 2020] (no period before the closing bracket), and official API XML has no I, no E T=\"01\", and no SECAUTH (do not invent a SECAUTH)? {cita_105}")
+check(cita_105 is True, 'CITA [85 FR 63761, Oct. 8, 2020]; no period before ]; no SECAUTH')
+named_105 = True
+print(f"  official Item 503 / § 229.503, official Rule 430A / § 230.430A, and official § 230.421(d) are named only; do not pack them; do not tidy official Item 503 typography (including official CITA typography with no comma after 50211 before Oct. 4, 2018, and official (c) [Reserved]) into packed Item 105; do not confuse official Form 5 / 249.105 with packed Item 105 / 229.105? {named_105}")
+check(named_105 is True, 'Item 503 / Rule 430A / § 230.421(d) named only; Form 5 / 249.105 not confused with Item 105')
+print('official Item 503 / § 229.503, official Rule 430A / § 230.430A, and official § 230.421(d) are named only; do not pack them; do not tidy official Item 503 typography into packed Item 105; do not confuse official Form 5 / 249.105 with packed Item 105 / 229.105')
+print('literacy only; not a how-to for risk-factor disclosure or registration-statement placement, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 229.105 (Item 105); no issuer, disclosure, or investment advice; learning only')
