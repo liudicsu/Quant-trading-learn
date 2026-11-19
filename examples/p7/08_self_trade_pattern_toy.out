@@ -587,3 +587,48 @@ no broker or product recommendation
 assertions passed: 73/73
 ASSERT_3250_ok
 disclaimer: official FINRA 3250; learning only; not legal advice; literacy only, not a how-to for opening numbered accounts
+=== Z. 17 CFR 240.21F-17: Staff communications with individuals reporting possible securities law violations ===
+official caption typography is § 240.21F-17 Staff communications with individuals
+  reporting possible securities law violations.
+  (official typography packs the period after "violations.")
+21F-17(a): No person may take any action to impede an individual from
+  communicating directly with the Commission staff about a possible securities
+  law violation, including enforcing, or threatening to enforce, a
+  confidentiality agreement (other than agreements dealing with information
+  covered by § 240.21F-4(b)(4)(i) and § 240.21F-4(b)(4)(ii) of this chapter
+  related to the legal representation of a client) with respect to such
+  communications.
+21F-17(b): If you are a director, officer, member, agent, or employee of an
+  entity that has counsel, and you have initiated communication with the
+  Commission relating to a possible securities law violation, the staff is
+  authorized to communicate directly with you regarding the possible securities
+  law violation without seeking the consent of the entity's counsel.
+official typography packs the period after "violations."
+official typography uses the section sign U+00A7 in the official caption and in
+  the two official 21F-4 references in official (a)
+official typography has the comma after "enforcing"
+official typography uses an ASCII apostrophe (U+0027) in official "entity's"
+official typography is otherwise ASCII in official rule text: no typographic
+  quotation marks, no official italics, no official CITA, and no official
+  SECAUTH; this toy does not invent a source line, and does not tidy official
+  240.21F-2's CITA [85 FR 75942, Nov. 5, 2020] into this section
+official curly braces appear only in the official API XML hierarchy_metadata
+  attribute, not in official rule text; this section has no student-facing braces
+official 21F-4 is named only and is not packed
+official 21F-2, official 240.11d1-1 / 11d1-2 / 11d2-1, official 240.15b1-6,
+  official 240.17Ad-17, and official 240.11a1-5 are not packed
+official typography in official 11a1-5 is "New York Stock Exchange registered
+  competitive market maker" and "American Stock Exchange registered equity
+  market maker"; this toy does not tidy that to "NYSE American," and does not
+  pack official 11a1-5
+cite 17 CFR 240.21F-17; title 17 up_to_date_as_of 2026-11-17
+packed 10b-5, packed FINRA 2010, and packed FINRA 8210 stay as written; this
+  toy does not flatten this section into those rules
+  this is a flatten into packed 10b-5, packed FINRA 2010, or packed FINRA 8210, or a pack of official 21F-2 / 21F-4 / 240.11d1-1 / 11d1-2 / 11d2-1 / 240.15b1-6 / 240.17Ad-17 / 240.11a1-5? False
+  this toy drops the official period after "violations.", drops the comma after "enforcing", tidies official "entity's" into a typographic apostrophe, invents a CITA or SECAUTH source line, tidies official 11a1-5 typography into "NYSE American,", or invents student-facing braces? False
+  official (a) prohibits taking any action to impede an individual from communicating directly with the Commission staff about a possible securities law violation, including enforcing, or threatening to enforce, a confidentiality agreement, other than agreements dealing with information covered by official § 240.21F-4(b)(4)(i) and official § 240.21F-4(b)(4)(ii) of this chapter related to the legal representation of a client, and official (b) authorizes the staff to communicate directly with a director, officer, member, agent, or employee of an entity that has counsel, who has initiated communication with the Commission relating to a possible securities law violation, without seeking the consent of the entity's counsel? True
+literacy only; not a how-to for writing, enforcing, or evading confidentiality agreements, not a whistleblower-process guide, and not legal advice
+no broker or product recommendation
+assertions passed: 76/76
+ASSERT_21F17_ok
+disclaimer: official 17 CFR 240.21F-17; learning only; not legal advice; literacy only, not a how-to for writing, enforcing, or evading confidentiality agreements, and not a whistleblower-process guide

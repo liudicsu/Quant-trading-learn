@@ -53,7 +53,9 @@ console.log(`curriculum.ts: lessons=${lessons.length} full=${full} P0=${p0} skip
 for (const l of lessons) { const s = sumTop(l.basis); if (s !== l.hours) fail(`hourBasis ${l.slug}: ${s} != ${l.hours}`); }
 ok("hourBasis sub-items checked for all lessons");
 const range = cur.match(/hoursRangeLabel: \{\s*zh: "([^"]+)",\s*en: "([^"]+)"/);
-for (const s of [range[1], range[2]]) (s.includes(`${full}h`) && s.includes(`${full - p0}h`) ? ok : fail)(`hoursRangeLabel: ${s.slice(0, 40)}…`);
+const hourForms = (n) => new Set([`${n}h`, `${Number(n).toFixed(2)}h`]);
+const hasHour = (s, n) => [...hourForms(n)].some((h) => s.includes(h));
+for (const s of [range[1], range[2]]) (hasHour(s, full) && hasHour(s, full - p0) ? ok : fail)(`hoursRangeLabel: ${s.slice(0, 40)}…`);
 
 const totalsIn = (name, s) => (s.includes(String(full)) && s.includes(String(full - p0)) ? ok : fail)(`${name} mentions ${full}/${full - p0}`);
 totalsIn("README.md", rd("README.md").match(/\*\*Hours:\*\*.*/)[0]);
