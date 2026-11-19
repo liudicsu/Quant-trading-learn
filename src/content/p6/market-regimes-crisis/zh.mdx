@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **18.25 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h + LULD 计划第 VII 节复牌时钟 0.25h + Cboe Rule 5.1(e)(3) 提前收盘日 Curb 0.25h + Nasdaq 停牌代码 T1 / H10 / LUDP / MWC1–3 0.25h + FINRA 5260 停牌期间不得交易或报价 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **18.50 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + FINRA Rule 6121.02(c)(2) 已提交、尚未实施的 23/5 Level 3 otherwise-than-on-an-exchange 恢复时钟 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h + LULD 计划第 VII 节复牌时钟 0.25h + Cboe Rule 5.1(e)(3) 提前收盘日 Curb 0.25h + Nasdaq 停牌代码 T1 / H10 / LUDP / MWC1–3 0.25h + FINRA 5260 停牌期间不得交易或报价 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -509,6 +509,34 @@ order at 2026-12-13 20:00 ET (Sunday) -> rejected (MWCB L3 halt)
 assertions passed: 5/5
 ```
 
+## FINRA Rule 6121.02(c)(2)：已提交、尚未实施的 23/5 Level 3 otherwise-than-on-an-exchange 恢复时钟（核实于 2026-11-19）
+
+上面已经教过的「23/5 交易下的 MWCB Level 3」框保持原样，不要改写那里已经讲过的交易所时钟。这一节不是把 Rule 6121 整条打包，也不是打包 6121.01，更不是把未来表述教成现行法律。
+
+FINRA 已于 2026-11-04 提交 SR-FINRA-2026-025。官方 SEC Release 34-106879 通知日期印刷是 November 12, 2026。官方《联邦公报》印刷是 Release No. 34–106879；File No. SR–FINRA–2026–025；Vol. 91, No. 220 / Tuesday, November 17, 2026 / Notices，第 73851 页。该修订按 Section 19(b)(3)(A)(iii) 和 Rule 19b-4(f)(6) 提交即生效，但官方实施日期印刷是 “the implementation date of the proposed rule change will be December 6, 2026.” 官方《联邦公报》征求意见截止印刷是 “should be submitted on or before December 8, 2026.” 征求意见截止不是实施日期。
+
+现行官方印刷仍写在现行 FINRA 规则书上：如果交易日中任何时点出现 Level 3 Market Decline，“If a Level 3 Market Decline occurs at any time during the trading day, FINRA shall halt trading otherwise than on an exchange in all NMS stocks for the remainder of the trading day.” 不要把未来表述教成现行法律。官方未来印刷（来自官方 SEC / FR / FINRA PDF）是：“FINRA shall halt trading otherwise than on an exchange in all NMS stocks until 4:00 a.m. Eastern Time or later on the following trading day.” 官方印刷是 “otherwise than on an exchange”；不要改整齐成 “off-exchange.” 这仍然守着已经教过的 04:00 ET 恢复时点，并不是允许当天晚上 21:00 ET 就恢复 otherwise-than-on-an-exchange 交易。
+
+官方发布稿还写，FINRA “understands that the other SROs have filed or will also be filing” / “have filed or intend to file.” 不要写成所有交易场所都已提交。截至 2026-11-10 并非所有交易场所都已提交（FINRA、Nasdaq BX、NYSE Chicago、24X 这一事实保持原样）；本批没有重新独立核实 Nasdaq BX / NYSE Chicago / 24X。不要把本框压进已经打包的 FINRA 5260、11892 或隔夜 LULD 价格带。仅供学习；没有交易场所、会员或投资建议。
+
+**实验：** `examples/p6/10_mwcb_overnight_resume_toy.py` 在原有 5/5 前缀和 `ASSERT_mwcb_resume_ok` 之后追加一节（追加后为 6/6）：
+
+```text
+=== N7. FINRA Rule 6121.02(c)(2): filed, not-yet-implemented 23/5 Level 3 otherwise-than-on-an-exchange clock ===
+FINRA has filed SR-FINRA-2026-025 / 34-106879
+official implementation typography is the implementation date of the proposed rule change will be December 6, 2026
+official FR comment-deadline typography is should be submitted on or before December 8, 2026
+the comment period is not the implementation date
+official current typography is still: If a Level 3 Market Decline occurs at any time during the trading day, FINRA shall halt trading otherwise than on an exchange in all NMS stocks for the remainder of the trading day.
+official future typography is: FINRA shall halt trading otherwise than on an exchange in all NMS stocks until 4:00 a.m. Eastern Time or later on the following trading day.
+official typography is otherwise than on an exchange; do not tidy into off-exchange
+do not teach the future text as current law; do not claim all venues have filed
+  FINRA has filed SR-FINRA-2026-025 / 34-106879, official implementation typography is the implementation date of the proposed rule change will be December 6, 2026, official current typography is still for the remainder of the trading day, official future typography is until 4:00 a.m. Eastern Time or later on the following trading day, official typography is otherwise than on an exchange, and this is not current law and not a claim that all venues have filed? True
+assertions passed: 6/6
+ASSERT_finra_612102_filed_ok
+disclaimer: official SR-FINRA-2026-025 / 34-106879; filed, not-yet-implemented; not all venues have filed; learning only
+```
+
 ## SEC 暂停交易与交易所停牌的区别（2026-11-11 核实）
 
 上面三层刹车都是**交易所或 NMS 计划的机制**：价格动得太猛时暂停交易。另一种工具属于 SEC 自己。
@@ -635,6 +663,7 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
 17. **ex-earlycurb** — 运行 `15_soq_occ_adj_toy.py` 的 D 节；写出缩短常规时段日里，符合 Curb 条件的期权的 Curb 何时开始、持续多久，以及上午结算最后交易日的变更是否已经生效；**完成标准**：从缩短后的常规时段结束时开始，持续 15 分钟（官方例子 1:00–1:15），且仍是 Effective TBD，与输出一致，并写一句这不是股票 12:50 的 MOC 截止。
 18. **ex-haltcodes** — 运行 `06_luld_halt_toy.py` 的第 5 节；写出 T1、H10、LUDP 和 MWC3 分别对应哪一类已经讲过的停牌，并说明官方表里的 T5 句子应如何阅读；**完成标准**：新闻待发、SEC 暂停交易、波动暂停、市场范围熔断第 3 档，与输出一致，并写一句 T5“五分钟内 10%”不是现行 LULD。
 19. **ex-5260** — 运行同一脚本的第 6 节；说明停牌仍然有效时会员可否交易或发布报价，仅适用于 FINRA 的 6120(a)(3) 收盘会不会让其他市场停牌，以及这是不是已经教过的停牌代码或 LULD 时钟的改写；**完成标准**：除 LULD 计划允许的情形外，不得交易或发布报价、买价征询、卖价征询或成交意向；仅适用于 FINRA 的 6120(a)(3) 收盘并不构成其他市场的停牌；这不是已经教过的停牌代码、LULD、市场范围熔断或 SEC 暂停交易，也不要把 T5“五分钟内 10%”当成现行 LULD，与输出一致。
+20. **ex-612102** — 运行 `10_mwcb_overnight_resume_toy.py` 追加的 N7 节；说明现行官方 6121.02(c)(2) 印刷、官方未来印刷、官方实施日期，以及这是不是现行法律；**完成标准**：你能指出 “for the remainder of the trading day、” “until 4:00 a.m. Eastern Time or later on the following trading day、” “otherwise than on an exchange、” “the implementation date of the proposed rule change will be December 6, 2026，” 并且不把征求意见截止当成实施日期，也不写所有交易场所都已提交。
 
 
 ## 测验
@@ -650,7 +679,7 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
 <Quiz id="rc-ovb" question="第一阶段隔夜价格带被触及时会发生什么？" options={["自动暂停 5 分钟", "交易中心阻止带外成交；无自动暂停，主上市交易所可宣布监管停牌", "保证按带价成交", "全市场熔断"]} answer={1} explanation="SEC 34-106042：隔夜无自动 Trading Pause，可由主上市交易所宣布 Regulatory Halt。" />
 <Quiz id="rc-optunit" question="一只美股期权报价权利金 4 美元，一张合约要付多少钱（不含费用）？" options={["4 美元", "400 美元", "40 美元", "4,000 美元"]} answer={1} explanation="OCC ODD：多数股票期权的交易单位是 100 股，每股 4 美元就是每张 400 美元。" />
 <Quiz id="rc-bsm" question="看涨期权的 BSM 模型价低于市场价，在本课中意味着？" options={["期权错价，是 alpha 信号", "模型假设（恒定波动率、无摩擦）和市场不符；它是参照，不是信号", "看跌看涨平价被打破", "交易所出错了"]} answer={1} explanation="BSM 只是参照模型；模型价和市场价的差不是 alpha。" />
-<Quiz id="rc-mwcb3" question="按 NYSE SR-NYSE-2026-43，13:00 ET 触发 Level 3 熔断后，最早何时可以恢复交易？" options={["当晚 21:00 ET", "下一交易日 04:00 ET 或更晚", "15 分钟后", "必须等 SEC 下令"]} answer={1} explanation="条文现为「直到下一交易日 04:00 ET 或更晚」；Nasdaq、Cboe 等也做了同样修改，但截至 2026-11-10 并非所有交易场所都已提交。" />
+<Quiz id="rc-mwcb3" question="按 NYSE SR-NYSE-2026-43，13:00 ET 触发 Level 3 熔断后，最早何时可以恢复交易？" options={["当晚 21:00 ET", "下一交易日 04:00 ET 或更晚", "15 分钟后", "必须等 SEC 下令"]} answer={1} explanation="条文现为「直到下一交易日 04:00 ET 或更晚」；Nasdaq、Cboe 等也做了同样修改，但截至 2026-11-10 并非所有交易场所都已提交。FINRA 已提交 SR-FINRA-2026-025 / 34-106879，实施日期为 2026-12-06。" />
 <Quiz id="rc-suspend" question="SEC 暂停交易和交易所的 LULD 暂停有什么不同？" options={["是同一件事的两个名字", "SEC 暂停交易最多 15 分钟", "标普 500 跌 7% 时会自动触发 SEC 暂停交易", "SEC 为保护投资者以命令决定，最长可达 10 个营业日；LULD 暂停是自动的价格带机制"]} answer={3} explanation="《证券交易法》第 12(k)(1)(A) 条允许 SEC 即时暂停某只证券的交易，期限不超过 10 个营业日。LULD 暂停是 NMS 计划的价格带机制；标普 500 跌 7% 是 MWCB 第一级的触发条件。" />
 <Quiz id="rc-exbyex" question="到期时，OCC 的例外行权会做什么？" options={["它会自动行权客户所有价内期权，任何人不能反对", "它让每张股票期权都到期作废，所以回测可以忽略股票头寸", "它是 Cboe 的规则，把合约单位从 100 股改成 1 股", "对至少价内 0.01 美元的到期期权，OCC 会行权，除非清算会员给出相反指示；这是 OCC 和清算会员之间的程序，不是对客户的强制要求；一张标准股票期权被指派后，会产生 100 股股票头寸，按 T+1 交收"]} answer={3} explanation="OIC 常见问题引用 OCC Rule 805 及解释 .02，门槛是 0.01 美元。券商可以对客户使用不同门槛；回测如果把所有到期期权都当成作废，就会漏掉由此产生的股票头寸。" />
 <Quiz id="rc-ceprint" question="常规交易时段里，一笔普通的、受 LULD 计划约束的 NMS 股票成交，一般能不能按明显错误成交来复核？" options={["可以，一律套用旧的 10%/5%/3% 百分比表", "一般不可复核，除非适用条文列出的例外；旧百分比表不是这类股票在常规时段的检验标准", "只要偏离最后成交超过 3% 就自动作废", "FINRA 已经修改 11892，全市场已经有统一的隔夜明显错误规则"]} answer={1} explanation="FINRA 11892(b)(1)：常规时段内，除非适用列出的例外，否则不可按明显错误复核。隔夜延伸要到计划于 2026-12-06 开始的 23/5 启动时才生效；2026-11-12 检索到的 FINRA 11892 仍无隔夜保护时段条款。" />
@@ -662,6 +691,8 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
 <Quiz id="rc-haltcodes" question="官方 Nasdaq 停牌代码 T1、H10、LUDP 和 MWC1–3 分别对应什么？官方表里的 T5 应如何阅读？" options={["官方表把 T5 写成“五分钟内涨跌 10% 或以上”，这就是现行 LULD 规则，应覆盖计划里的价格带和 15 秒 Limit State", "T1 是新闻待发停牌，H10 是 SEC 暂停交易，LUDP / LUDS 是波动暂停（含跨立条件），MWC1–3 是市场范围熔断第 1 / 2 / 3 档。把这些字母映射到已经讲过的停牌类型即可。同一张官方表仍把 T5 写成五分钟内 10% 或以上的价格变动；那句话不是已经讲过的 LULD 计划的现行法表述，不要用它覆盖计划文本", "每一行 “Space / Reason Not Available” 都表示没有停牌", "T1 就是 SEC 暂停交易，H10 就是 LULD 暂停"]} answer={1} explanation="官方目录把 T1、H10、LUDP / LUDS 和 MWC1–3 对应到已经讲过的新闻待发、SEC 暂停交易、波动暂停和市场范围熔断。T5 那句“五分钟内 10%”仍印在官方表上，但不是现行 LULD 计划（计划价格带、15 秒 Limit State、五分钟暂停、第 VII 节复牌时钟）。不要把 Space / Reason Not Available 当成“没有停牌”。" />
 <Quiz id="rc-5260" question="FINRA 5260 在停牌期间禁止什么？仅适用于 FINRA 的 6120(a)(3) 收盘，会不会让其他市场也停牌？" options={["5260 就是已经教过的停牌代码、LULD 时钟、市场范围熔断或 SEC 暂停交易的改写；官方表里 T5“五分钟内 10%”就是现行 LULD", "仅适用于 FINRA 的 6120(a) 第 (3) 款收盘，也会让其他市场停牌", "除了 LULD 计划允许的情形，会员不得在停牌仍然有效时，对相关证券进行交易，或发布报价、买价征询、卖价征询或成交意向。仅适用于 FINRA 的 6120(a) 第 (3) 款收盘，并不构成其他市场的停牌。这不是已经教过的停牌代码、LULD 时钟、市场范围熔断或 SEC 暂停交易。不要把官方表里 T5“五分钟内 10%”当成现行 LULD。官方 (b) 的期货与 6120 交叉是存在的；本课不搭建这些引擎", "停牌期间仍可发布报价，只要不实际成交"]} answer={2} explanation="FINRA 5260(a) 禁止在停牌仍然有效时交易或发布报价、买价征询、卖价征询或成交意向，LULD 计划允许的情形除外。仅适用于 FINRA 的 6120(a)(3) 收盘并不构成其他市场的停牌。这不是已经教过的停牌代码、LULD、市场范围熔断或 SEC 暂停交易的改写。不要把 T5“五分钟内 10%”当成现行 LULD。" />
 
+<Quiz id="rc-612102" question="FINRA 已提交的 SR-FINRA-2026-025 / 34-106879，对 Rule 6121.02(c)(2) 的现行法律和未来印刷分别是什么？实施日期是哪一天？" options={["未来表述 “until 4:00 a.m. Eastern Time or later on the following trading day” 现在已经是现行法律，实施日期就是征求意见截止日 2026-12-08。", "官方把 “otherwise than on an exchange” 改整齐成了 “off-exchange，” 而且所有交易场所都已提交。", "现行官方印刷仍是：If a Level 3 Market Decline occurs at any time during the trading day, FINRA shall halt trading otherwise than on an exchange in all NMS stocks for the remainder of the trading day。官方未来印刷是：FINRA shall halt trading otherwise than on an exchange in all NMS stocks until 4:00 a.m. Eastern Time or later on the following trading day。官方印刷是 “otherwise than on an exchange。” 官方实施日期印刷是 “the implementation date of the proposed rule change will be December 6, 2026。” 征求意见截止 “should be submitted on or before December 8, 2026” 不是实施日期。不要把未来表述教成现行法律，也不要写成所有交易场所都已提交。截至 2026-11-10 并非所有交易场所都已提交。", "这条修订允许当天晚上 21:00 ET 就恢复 otherwise-than-on-an-exchange 交易，而且本框把 Rule 6121 整条打包了。"]} answer={2} explanation="FINRA 已提交 SR-FINRA-2026-025 / 34-106879，但官方实施日期印刷是 “the implementation date of the proposed rule change will be December 6, 2026。” 现行官方印刷仍是 “for the remainder of the trading day。” 官方未来印刷是 “until 4:00 a.m. Eastern Time or later on the following trading day。” 官方印刷是 “otherwise than on an exchange。” 不要把未来表述教成现行法律。截至 2026-11-10 并非所有交易场所都已提交。" />
+
 
 ## 完成标准
 
@@ -672,6 +703,7 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
  enrich21（核实于 2026-11-12）：[91 FR 64960](https://www.federalregister.gov/documents/2026/10/13/2026-20795/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-and-immediate-effectiveness-of-a) / [govinfo PDF](https://www.govinfo.gov/content/pkg/FR-2026-10-13/pdf/2026-20795.pdf)（SR-CBOE-2026-078 / 34-106620；Rule 5.1(e)(3) 符合 Curb 条件的期权在提前收盘日的 Curb，持续 15 分钟，例如下午 1:00 至 1:15；指定在提交时即开始实施）；[SEC SR-CBOE-2026-078](https://www.sec.gov/rules-regulations/self-regulatory-organization-rulemaking/sr-cboe-2026-078)（评论截止 2026-11-03）；Cboe 24/5 常见问题和 FIX 假期时段页仍印有“(effective 11/16/26)” / “(Effective 11/16/26)”；最后交易日变更仍是 Effective TBD。
  enrich22（核实于 2026-11-12）：[Nasdaq Trade Halt Codes](https://www.nasdaqtrader.com/Trader.aspx?id=TradeHaltCodes)（T1 新闻待发；H10 SEC 暂停交易；LUDP / LUDS 波动暂停；MWC1–3 市场范围熔断；MWC0 前一日结转；T5 官方表句子不是现行 LULD）。
 enrich27（核实于 2026-11-12）：[FINRA Rule 5260](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5260)。没有产品、券商或交易场所建议。
+enrich46（核实于 2026-11-19）：[SR-FINRA-2026-025](https://www.finra.org/sites/default/files/2026-11/SR-FINRA-2026-025.pdf) / [SEC 34-106879](https://www.sec.gov/files/rules/sro/finra/2026/34-106879.pdf) / [91 FR 73851](https://www.govinfo.gov/content/pkg/FR-2026-11-17/pdf/2026-23339.pdf)（已提交、尚未实施的 Rule 6121.02(c)(2) 23/5 Level 3 otherwise-than-on-an-exchange 恢复时钟；官方实施日期印刷是 December 6, 2026；现行官方印刷仍是 “for the remainder of the trading day”）。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

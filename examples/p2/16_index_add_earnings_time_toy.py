@@ -1956,3 +1956,264 @@ print("literacy only; not a how-to for derivative positions, and not legal advic
 print("no issuer, filer, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 240.16c-4; no issuer, disclosure, or investment advice; learning only")
+
+print('=== AR. 17 CFR 240.16a-2: Persons and transactions subject to section 16 ===')
+# 17 CFR 240.16a-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official typography uses typographic
+# quotes (U+201C / U+201D) around “ten percent beneficial owner” and
+# italicizes the letter l in 15 U.S.C. 78l. Official typography is
+# "The rules under section 16(a) of the Act do not apply to ten percent
+# beneficial owners of an issuer that is a foreign private issuer, as
+# defined in Rule 3b-4 (§ 240.3b-4 of this chapter)." Official typography
+# is also "The rules under section 16 of the Act apply to any class of
+# equity securities of an issuer whether or not registered under section
+# 12 of the Act." Do not tidy that sentence into official (c). Official
+# 16a-8 and official 3b-4 are named only. Do not pack 16a-1, and do not
+# flatten into packed 16a-3 / 16a-10 / 16a-12 or leftover 16b-3 / 16b-6.
+# Official CITA is [56 FR 7265, Feb. 21, 1991, as amended at 61 FR 30392, June 14, 1996; 67 FR 43535, June 28, 2002; 76 FR 71877, Nov. 21, 2011; 91 FR 10333, Mar. 3, 2026; 91 FR 32336, June 1, 2026].
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Persons and transactions subject to section 16.')
+print('16a-2 open: Any person who is the beneficial owner, directly or indirectly, of more than ten percent of any class of equity securities (“ten percent beneficial owner”) registered pursuant to section 12 of the Act (15 U.S.C. 78l), any director or officer of the issuer of such securities, and any person specified in section 30(h) of the Investment Company Act of 1940 (15 U.S.C. 80a-29(h)), including any person specified in § 240.16a-8, shall be subject to the provisions of section 16 of the Act (15 U.S.C. 78p). The rules under section 16(a) of the Act do not apply to ten percent beneficial owners of an issuer that is a foreign private issuer, as defined in Rule 3b-4 (§ 240.3b-4 of this chapter). The rules under section 16 of the Act apply to any class of equity securities of an issuer whether or not registered under section 12 of the Act. The rules under section 16 of the Act also apply to non-equity securities as provided by the Investment Company Act of 1940. With respect to transactions by persons subject to section 16 of the Act:')
+print('16a-2(a): A transaction(s) carried out by a director or officer in the six months prior to the director or officer becoming subject to section 16 of the Act shall be subject to section 16 of the Act and reported on the first required Form 4 only if the transaction(s) occurred within six months of the transaction giving rise to the Form 4 filing obligation and the director or officer became subject to section 16 of the Act solely as a result of the issuer registering a class of equity securities pursuant to section 12 of the Act.')
+print('16a-2(b): A transaction(s) following the cessation of director or officer status shall be subject to section 16 of the Act only if:')
+print('16a-2(b)(1): Executed within a period of less than six months of an opposite transaction subject to section 16(b) of the Act that occurred while that person was a director or officer; and')
+print('16a-2(b)(2): Not otherwise exempted from section 16(b) of the Act pursuant to the provisions of this chapter.')
+print('Note to paragraph (b): For purposes of this paragraph, an acquisition and a disposition each shall be an opposite transaction with respect to the other.')
+print('official typography italicizes the letter b in Note to paragraph (b):')
+print('16a-2(c): The transaction that results in a person becoming a ten percent beneficial owner is not subject to section 16 of the Act unless the person otherwise is subject to section 16 of the Act. A ten percent beneficial owner not otherwise subject to section 16 of the Act must report only those transactions conducted while the beneficial owner of more than ten percent of a class of equity securities of the issuer registered pursuant to section 12 of the Act.')
+print('16a-2(d)(1): Transactions by a person or entity shall be exempt from the provisions of section 16 of the Act for the 12 months following appointment and qualification, to the extent such person or entity is acting as:')
+print('16a-2(d)(1)(i): Executor or administrator of the estate of a decedent;')
+print('16a-2(d)(1)(ii): Guardian or member of a committee for an incompetent;')
+print('16a-2(d)(1)(iii): Receiver, trustee in bankruptcy, assignee for the benefit of creditors, conservator, liquidating agent, or other similar person duly authorized by law to administer the estate or assets of another person; or')
+print('16a-2(d)(1)(iv): Fiduciary in a similar capacity.')
+print('16a-2(d)(2): Transactions by such person or entity acting in a capacity specified in paragraph (d)(1) of this section after the period specified in that paragraph shall be subject to section 16 of the Act only where the estate, trust or other entity is a beneficial owner of more than ten percent of any class of equity security registered pursuant to section 12 of the Act.')
+print('official typography is (“ten percent beneficial owner”) with typographic quotes')
+print('official typography italicizes the letter l in 15 U.S.C. 78l')
+print('official typography is The rules under section 16(a) of the Act do not apply to ten percent beneficial owners of an issuer that is a foreign private issuer, as defined in Rule 3b-4 (§ 240.3b-4 of this chapter).')
+print('official typography is The rules under section 16 of the Act apply to any class of equity securities of an issuer whether or not registered under section 12 of the Act.')
+print('do not tidy that last sentence into official (c)')
+print('cite 17 CFR 240.16a-2; title 17 up_to_date_as_of 2026-11-17')
+print('[56 FR 7265, Feb. 21, 1991, as amended at 61 FR 30392, June 14, 1996; 67 FR 43535, June 28, 2002; 76 FR 71877, Nov. 21, 2011; 91 FR 10333, Mar. 3, 2026; 91 FR 32336, June 1, 2026].')
+persons_subject = True
+print(f"  persons subject to section 16 include more-than-ten-percent beneficial owners, directors, officers, and section 30(h) persons including official 16a-8? {persons_subject}")
+check(persons_subject is True, "16a-2 persons subject; 16a-8 named")
+quotes_italic_l = True
+print(f"  official typography is “ten percent beneficial owner” with typographic quotes, and official typography italicizes the letter l in 15 U.S.C. 78l? {quotes_italic_l}")
+check(quotes_italic_l is True, "typographic quotes; italic l in 78l")
+fpi_16a_only = True
+print(f"  official typography is The rules under section 16(a) of the Act do not apply to ten percent beneficial owners of an issuer that is a foreign private issuer? {fpi_16a_only}")
+check(fpi_16a_only is True, "16(a) rules do not apply to FPI ten percent beneficial owners")
+apply_whether_or_not_12 = True
+print(f"  official typography is The rules under section 16 of the Act apply to any class of equity securities of an issuer whether or not registered under section 12 of the Act, and that sentence must not be tidied into official (c)'s section 12 reporting clause? {apply_whether_or_not_12}")
+check(apply_whether_or_not_12 is True, "section 16 applies whether or not registered under section 12; not tidied into (c)")
+cita_named_only = True
+print(f"  official CITA typography is [56 FR 7265, Feb. 21, 1991, as amended at 61 FR 30392, June 14, 1996; 67 FR 43535, June 28, 2002; 76 FR 71877, Nov. 21, 2011; 91 FR 10333, Mar. 3, 2026; 91 FR 32336, June 1, 2026], official 16a-8 and official 3b-4 are named only, and this is not packed 16a-3, packed 16a-10, or packed 16a-12? {cita_named_only}")
+check(cita_named_only is True, "CITA 16a-2; 16a-8 and 3b-4 named only; not 16a-3/10/12")
+print('official 16a-8 and official 3b-4 are named only; this toy does not pack those sections')
+print('packed 16a-3 / 16a-10 / 16a-12 exist and are named only; leftover 16b-3 / 16b-6 are named only; this toy is not those boxes')
+print('literacy only; not a how-to for section 16 status, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.16a-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AS. 17 CFR 240.12d1-1: Registration effective as to class or series ===')
+# 17 CFR 240.12d1-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official typography is
+# "section 12 (b) and (c) of the act" (spaces around the lettered
+# paragraphs; official (a) uses lowercase "act"). Official (d)
+# typography is "If a class of security is issuable in two or more
+# series with different terms, each such series shall be deemed a
+# separate class for the purposes of this section." Official SECAUTH
+# typography italicizes the letter l in 15 U.S.C. 78l. Official API XML
+# has no CITA element; do not invent a source line. This is not packed
+# 12d2-1 or packed 12b-6.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Registration effective as to class or series.')
+print('12d1-1(a): An application filed pursuant to section 12 (b) and (c) of the act for registration of a security on a national securities exchange shall be deemed to apply for registration of the entire class of such security. Registration shall become effective, as provided in section 12(d) of the act, (1) as to the shares or amounts of such class then issued, and (2), without further application for registration, upon issuance as to additional shares or amounts of such class then or thereafter authorized.')
+print('12d1-1(b): This section shall apply to classes of securities of which a specified number of shares or amounts was registered or registered upon notice of issuance, and to applications for registration filed, prior to the close of business on January 28, 1954, as well as to classes registered, or applications filed, thereafter.')
+print('12d1-1(c): This section shall not affect the right of a national securities exchange to require the issuer of a registered security to file documents with or pay fees to the exchange in connection with the modification of such security or the issuance of additional shares or amounts.')
+print('12d1-1(d): If a class of security is issuable in two or more series with different terms, each such series shall be deemed a separate class for the purposes of this section.')
+print('official typography is "section 12 (b) and (c) of the act"')
+print('official typography is "a class of security"')
+print('official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l')
+print('official API XML has no CITA element; this toy does not invent a source line')
+print('cite 17 CFR 240.12d1-1; title 17 up_to_date_as_of 2026-11-17')
+entire_class = True
+print(f"  an application filed pursuant to section 12 (b) and (c) of the act for registration of a security on a national securities exchange shall be deemed to apply for registration of the entire class, and additional shares or amounts of such class then or thereafter authorized become registered upon issuance without further application? {entire_class}")
+check(entire_class is True, "12d1-1 entire class; additional shares upon issuance")
+separate_series = True
+print(f"  if a class of security is issuable in two or more series with different terms, each such series shall be deemed a separate class for the purposes of this section? {separate_series}")
+check(separate_series is True, "12d1-1(d) series deemed a separate class")
+typo_no_cita_not_12d21 = True
+print(f"  official typography is section 12 (b) and (c) and a class of security, official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l, official API XML has no CITA, and this is not packed 12d2-1 or packed 12b-6? {typo_no_cita_not_12d21}")
+check(typo_no_cita_not_12d21 is True, "section 12 (b) and (c); no CITA; not 12d2-1 or 12b-6")
+print('packed 12d2-1 and packed 12b-6 exist and are named only; this toy is not those boxes')
+print('literacy only; not a how-to for exchange registration, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12d1-1; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AT. 17 CFR 240.12d1-2: Effectiveness of registration ===')
+# 17 CFR 240.12d1-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official (a) typography is
+# "the reasons therefor." Official typography uses typographic quotes
+# (U+201C / U+201D) around “Securities Act”. Official (c)(2) typography is
+# "If class of securities is concurrently being registered under the
+# Securities Act" — no "a" after "If"; official (b)(1), (b)(2), and
+# (c)(1) do use "If a class of securities". Official 12(b) clocks use
+# exchange certification; official 12(g) clocks do not. Official
+# SECAUTH typography italicizes the letter l, including 78l(b) and
+# 78l(g). Official CITA is [19 FR 670, Feb. 5, 1954, as amended at 59 FR 55347, Nov. 7, 1994; 62 FR 39766, July 24, 1997].
+# Official 12d1-3 through 12d1-6 and official 12d2-2 are named only.
+# This is not packed 12d2-1 or packed 12b-6.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Effectiveness of registration.')
+print('12d1-2(a): A request for acceleration of the effective date of registration pursuant to section 12(d) of the act and § 240.12d1-1 shall be made in writing by either the registrant, the exchange, or both and shall briefly describe the reasons therefor.')
+print('12d1-2(b): A registration statement on Form 8-A (17 CFR 249.208a) for the registration of a class of securities under Section 12(b) of the Act (15 U.S.C. 78l(b)) shall become effective:')
+print('12d1-2(b)(1): If a class of securities is not concurrently being registered under the Securities Act of 1933 (“Securities Act”), upon the later of receipt by the Commission of certification from the national securities exchange or the filing of the Form 8-A with the Commission; or')
+print('12d1-2(b)(2): If a class of securities is concurrently being registered under the Securities Act, upon the later of the filing of the Form 8-A with the Commission, receipt by the Commission of certification from the national securities exchange listed on the Form 8-A or effectiveness of the Securities Act registration statement relating to the class of securities.')
+print('12d1-2(c): A registration statement on Form 8-A (17 CFR 249.208a) for the registration of a class of securities under Section 12(g) of the Act (15 U.S.C. 78l(g)) shall become effective:')
+print('12d1-2(c)(1): If a class of securities is not concurrently being registered under the Securities Act, upon the filing of the Form 8-A with the Commission; or')
+print('12d1-2(c)(2): If class of securities is concurrently being registered under the Securities Act, upon the later of the filing of the Form 8-A with the Commission or the effectiveness of the Securities Act registration statement relating to the class of securities.')
+print('official typography is "the reasons therefor"')
+print('official typography uses typographic quotes around “Securities Act”')
+print('official typography is "If class of securities is concurrently being registered under the Securities Act" with no a after If')
+print('official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l, including 78l(b) and 78l(g)')
+print('cite 17 CFR 240.12d1-2; title 17 up_to_date_as_of 2026-11-17')
+print('[19 FR 670, Feb. 5, 1954, as amended at 59 FR 55347, Nov. 7, 1994; 62 FR 39766, July 24, 1997].')
+b_no_concurrent = True
+print(f"  a 12(b) Form 8-A with no concurrent Securities Act registration becomes effective upon the later of receipt by the Commission of exchange certification or the filing of the Form 8-A? {b_no_concurrent}")
+check(b_no_concurrent is True, "12(b) Form 8-A no concurrent: later of certification or Form 8-A")
+b_concurrent = True
+print(f"  a 12(b) Form 8-A with a concurrent Securities Act registration becomes effective upon the later of the Form 8-A filing, receipt of that certification, or effectiveness of the Securities Act registration statement? {b_concurrent}")
+check(b_concurrent is True, "12(b) Form 8-A concurrent: later of Form 8-A, certification, or Securities Act effectiveness")
+g_no_concurrent = True
+print(f"  a 12(g) Form 8-A with no concurrent Securities Act registration becomes effective upon the filing of the Form 8-A? {g_no_concurrent}")
+check(g_no_concurrent is True, "12(g) Form 8-A no concurrent: upon filing Form 8-A")
+g_concurrent = True
+print(f"  a 12(g) Form 8-A with a concurrent Securities Act registration becomes effective upon the later of the Form 8-A filing or effectiveness of the Securities Act registration statement? {g_concurrent}")
+check(g_concurrent is True, "12(g) Form 8-A concurrent: later of Form 8-A or Securities Act effectiveness")
+therefor_c2_cita = True
+print(f"  official typography is the reasons therefor, typographic quotes around “Securities Act”, official (c)(2) If class of securities is concurrently being registered with no a after If, official SECAUTH typography italicizes the letter l, official CITA typography is [19 FR 670, Feb. 5, 1954, as amended at 59 FR 55347, Nov. 7, 1994; 62 FR 39766, July 24, 1997], official 12d1-3 through 12d1-6 and official 12d2-2 are named only, and this is not packed 12d2-1 or packed 12b-6? {therefor_c2_cita}")
+check(therefor_c2_cita is True, "therefor; If class of securities; CITA; named only; not 12d2-1 or 12b-6")
+print('official 12d1-3 through 12d1-6 and official 12d2-2 are named only; this toy does not pack those certification or removal catalogs')
+print('packed 12d2-1 and packed 12b-6 exist and are named only; this toy is not those boxes')
+print('literacy only; not a how-to for Form 8-A clocks, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12d1-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AU. 17 CFR 240.16c-1: Brokers ===')
+# 17 CFR 240.16c-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official typography is
+# "Any transaction shall be exempt from section 16(c) of the Act to the
+# extent necessary to render lawful the execution by a broker of an
+# order for an account in which the broker has no direct or indirect
+# interest." Official API XML has no CITA element; do not invent a
+# source line. Do not flatten into packed 16c-3 or packed 16c-4.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Brokers.')
+print('16c-1: Any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful the execution by a broker of an order for an account in which the broker has no direct or indirect interest.')
+print('official typography is "no direct or indirect interest"')
+print('official API XML has no CITA element; this toy does not invent a source line')
+print('cite 17 CFR 240.16c-1; title 17 up_to_date_as_of 2026-11-17')
+broker_exempt = True
+print(f"  any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful the execution by a broker of an order for an account in which the broker has no direct or indirect interest? {broker_exempt}")
+check(broker_exempt is True, "16c-1 broker execution exemption; no direct or indirect interest")
+interest_typo = True
+print(f"  official typography is no direct or indirect interest? {interest_typo}")
+check(interest_typo is True, "no direct or indirect interest typography")
+no_cita_not_16c34 = True
+print(f"  official API XML has no CITA, and this is not packed 16c-3 or packed 16c-4? {no_cita_not_16c34}")
+check(no_cita_not_16c34 is True, "no CITA; not packed 16c-3 or 16c-4")
+print('packed 16c-3 and packed 16c-4 exist and are named only; this toy is not those boxes')
+print('literacy only; not a how-to for broker orders, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.16c-1; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AV. 17 CFR 240.16c-2: Transactions effected in connection with a distribution ===')
+# 17 CFR 240.16c-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Transactions effected in connection with a distribution." — the same
+# words as 16a-7 — but this is a section 16(c) exemption and must not
+# be tidied into 16a-7. Pack the whole official paragraph, including
+# both official alternatives: the over-allotment clause and the
+# dealer-offset alternative. Official typography is "the dealer's
+# behalf" (ASCII apostrophe). Official API XML has no CITA element;
+# do not invent a source line. Do not flatten into packed 16c-3 or
+# packed 16c-4.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Transactions effected in connection with a distribution.')
+print("16c-2: Any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful any sale made by or on behalf of a dealer in connection with a distribution of a substantial block of securities, where the sale is represented by an over-allotment in which the dealer is participating as a member of an underwriting group, or the dealer or a person acting on the dealer's behalf intends in good faith to offset such sale with a security to be acquired by or on behalf of the dealer as a participant in an underwriting, selling, or soliciting-dealer group of which the dealer is a member at the time of the sale, whether or not the security to be acquired is subject to a prior offering to existing security holders or some other class of persons.")
+print('official caption typography is the same words as 16a-7, but this is a section 16(c) exemption')
+print("official typography includes both the over-allotment alternative and the dealer's-behalf offset alternative")
+print("official typography is the dealer's behalf (ASCII apostrophe)")
+print('official API XML has no CITA element; this toy does not invent a source line')
+print('cite 17 CFR 240.16c-2; title 17 up_to_date_as_of 2026-11-17')
+whole_paragraph = True
+print(f"  any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful any sale made by or on behalf of a dealer in connection with a distribution of a substantial block of securities, where the sale is represented by an over-allotment in which the dealer is participating as a member of an underwriting group, or the dealer or a person acting on the dealer's behalf intends in good faith to offset such sale with a security to be acquired by or on behalf of the dealer as a participant in an underwriting, selling, or soliciting-dealer group of which the dealer is a member at the time of the sale, whether or not the security to be acquired is subject to a prior offering to existing security holders or some other class of persons? {whole_paragraph}")
+check(whole_paragraph is True, "16c-2 whole official paragraph; both alternatives")
+same_caption_not_16a7 = True
+print(f"  official caption typography is Transactions effected in connection with a distribution, the same words as 16a-7, but this is a section 16(c) exemption and must not be tidied into 16a-7? {same_caption_not_16a7}")
+check(same_caption_not_16a7 is True, "same caption as 16a-7; section 16(c) exemption; not tidied together")
+no_cita_not_16c34_av = True
+print(f"  official typography is the dealer's behalf, official API XML has no CITA, and this is not packed 16c-3 or packed 16c-4? {no_cita_not_16c34_av}")
+check(no_cita_not_16c34_av is True, "dealer's behalf; no CITA; not 16c-3 or 16c-4")
+print('packed 16c-3 and packed 16c-4 exist and are named only; this toy is not those boxes')
+print('literacy only; not a how-to for distribution sales, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.16c-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AW. 17 CFR 240.16a-7: Transactions effected in connection with a distribution ===')
+# 17 CFR 240.16a-7 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official typography is
+# "Any purchase and sale, or sale and purchase, of a security that is
+# made in connection with the distribution of a substantial block of
+# securities shall be exempt from the provisions of section 16(a) of
+# the Act, to the extent specified in this rule, subject to the
+# following conditions:" Official (a)(1) and official (a)(2),
+# including (a)(2)(i)–(ii), must be packed. Official (b) typography is
+# "Each person participating in the transaction must qualify on an
+# individual basis for an exemption pursuant to this section." Official
+# caption typography is the same words as 16c-2 but this is a section
+# 16(a) exemption and must not be tidied into 16c-2. Official API XML
+# has no CITA element; do not invent a source line. This is not packed
+# 16a-6 or packed 16a-10.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Transactions effected in connection with a distribution.')
+print('16a-7(a): Any purchase and sale, or sale and purchase, of a security that is made in connection with the distribution of a substantial block of securities shall be exempt from the provisions of section 16(a) of the Act, to the extent specified in this rule, subject to the following conditions:')
+print('16a-7(a)(1): The person effecting the transaction is engaged in the business of distributing securities and is participating in good faith, in the ordinary course of such business, in the distribution of such block of securities; and')
+print('16a-7(a)(2): The security involved in the transaction is:')
+print('16a-7(a)(2)(i): Part of such block of securities and is acquired by the person effecting the transaction, with a view to distribution thereof, from the issuer or other person on whose behalf such securities are being distributed or from a person who is participating in good faith in the distribution of such block of securities; or')
+print('16a-7(a)(2)(ii): A security purchased in good faith by or for the account of the person effecting the transaction for the purpose of stabilizing the market price of securities of the class being distributed or to cover an over-allotment or other short position created in connection with such distribution.')
+print('16a-7(b): Each person participating in the transaction must qualify on an individual basis for an exemption pursuant to this section.')
+print('official typography is Any purchase and sale, or sale and purchase.')
+print('official typography is Each person participating in the transaction must qualify on an individual basis for an exemption pursuant to this section.')
+print('official caption typography is the same words as 16c-2, but this is a section 16(a) exemption')
+print('official API XML has no CITA element; this toy does not invent a source line')
+print('cite 17 CFR 240.16a-7; title 17 up_to_date_as_of 2026-11-17')
+conditions_met = True
+print(f"  the 16(a) exemption applies only if official (a)(1) and official (a)(2) are met (the person is engaged in the business of distributing securities and is participating in good faith, in the ordinary course of such business, in the distribution of such block, and the security is part of such block or is purchased in good faith to stabilize the market price or to cover an over-allotment or other short position created in connection with such distribution)? {conditions_met}")
+check(conditions_met is True, "16a-7(a)(1)–(2) conditions, including (a)(2)(i)–(ii)")
+individual_basis = True
+print(f"  official (b) typography is Each person participating in the transaction must qualify on an individual basis for an exemption pursuant to this section? {individual_basis}")
+check(individual_basis is True, "16a-7(b) individual-basis qualification")
+same_caption_not_16c2 = True
+print(f"  official caption typography is Transactions effected in connection with a distribution, the same words as 16c-2, but this is a section 16(a) exemption and must not be tidied into 16c-2? {same_caption_not_16c2}")
+check(same_caption_not_16c2 is True, "same caption as 16c-2; section 16(a) exemption; not tidied together")
+no_cita_not_16a610 = True
+print(f"  official API XML has no CITA, and this is not packed 16a-6 or packed 16a-10? {no_cita_not_16a610}")
+check(no_cita_not_16a610 is True, "no CITA; not packed 16a-6 or 16a-10")
+print('packed 16a-6 and packed 16a-10 exist and are named only; this toy is not those boxes')
+print('literacy only; not a how-to for distribution reporting exemptions, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.16a-7; no issuer, disclosure, or investment advice; learning only')

@@ -927,3 +927,134 @@ literacy only; not a how-to for derivative positions, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 152/152
 disclaimer: official 17 CFR 240.16c-4; no issuer, disclosure, or investment advice; learning only
+=== AR. 17 CFR 240.16a-2: Persons and transactions subject to section 16 ===
+official caption typography is Persons and transactions subject to section 16.
+16a-2 open: Any person who is the beneficial owner, directly or indirectly, of more than ten percent of any class of equity securities (“ten percent beneficial owner”) registered pursuant to section 12 of the Act (15 U.S.C. 78l), any director or officer of the issuer of such securities, and any person specified in section 30(h) of the Investment Company Act of 1940 (15 U.S.C. 80a-29(h)), including any person specified in § 240.16a-8, shall be subject to the provisions of section 16 of the Act (15 U.S.C. 78p). The rules under section 16(a) of the Act do not apply to ten percent beneficial owners of an issuer that is a foreign private issuer, as defined in Rule 3b-4 (§ 240.3b-4 of this chapter). The rules under section 16 of the Act apply to any class of equity securities of an issuer whether or not registered under section 12 of the Act. The rules under section 16 of the Act also apply to non-equity securities as provided by the Investment Company Act of 1940. With respect to transactions by persons subject to section 16 of the Act:
+16a-2(a): A transaction(s) carried out by a director or officer in the six months prior to the director or officer becoming subject to section 16 of the Act shall be subject to section 16 of the Act and reported on the first required Form 4 only if the transaction(s) occurred within six months of the transaction giving rise to the Form 4 filing obligation and the director or officer became subject to section 16 of the Act solely as a result of the issuer registering a class of equity securities pursuant to section 12 of the Act.
+16a-2(b): A transaction(s) following the cessation of director or officer status shall be subject to section 16 of the Act only if:
+16a-2(b)(1): Executed within a period of less than six months of an opposite transaction subject to section 16(b) of the Act that occurred while that person was a director or officer; and
+16a-2(b)(2): Not otherwise exempted from section 16(b) of the Act pursuant to the provisions of this chapter.
+Note to paragraph (b): For purposes of this paragraph, an acquisition and a disposition each shall be an opposite transaction with respect to the other.
+official typography italicizes the letter b in Note to paragraph (b):
+16a-2(c): The transaction that results in a person becoming a ten percent beneficial owner is not subject to section 16 of the Act unless the person otherwise is subject to section 16 of the Act. A ten percent beneficial owner not otherwise subject to section 16 of the Act must report only those transactions conducted while the beneficial owner of more than ten percent of a class of equity securities of the issuer registered pursuant to section 12 of the Act.
+16a-2(d)(1): Transactions by a person or entity shall be exempt from the provisions of section 16 of the Act for the 12 months following appointment and qualification, to the extent such person or entity is acting as:
+16a-2(d)(1)(i): Executor or administrator of the estate of a decedent;
+16a-2(d)(1)(ii): Guardian or member of a committee for an incompetent;
+16a-2(d)(1)(iii): Receiver, trustee in bankruptcy, assignee for the benefit of creditors, conservator, liquidating agent, or other similar person duly authorized by law to administer the estate or assets of another person; or
+16a-2(d)(1)(iv): Fiduciary in a similar capacity.
+16a-2(d)(2): Transactions by such person or entity acting in a capacity specified in paragraph (d)(1) of this section after the period specified in that paragraph shall be subject to section 16 of the Act only where the estate, trust or other entity is a beneficial owner of more than ten percent of any class of equity security registered pursuant to section 12 of the Act.
+official typography is (“ten percent beneficial owner”) with typographic quotes
+official typography italicizes the letter l in 15 U.S.C. 78l
+official typography is The rules under section 16(a) of the Act do not apply to ten percent beneficial owners of an issuer that is a foreign private issuer, as defined in Rule 3b-4 (§ 240.3b-4 of this chapter).
+official typography is The rules under section 16 of the Act apply to any class of equity securities of an issuer whether or not registered under section 12 of the Act.
+do not tidy that last sentence into official (c)
+cite 17 CFR 240.16a-2; title 17 up_to_date_as_of 2026-11-17
+[56 FR 7265, Feb. 21, 1991, as amended at 61 FR 30392, June 14, 1996; 67 FR 43535, June 28, 2002; 76 FR 71877, Nov. 21, 2011; 91 FR 10333, Mar. 3, 2026; 91 FR 32336, June 1, 2026].
+  persons subject to section 16 include more-than-ten-percent beneficial owners, directors, officers, and section 30(h) persons including official 16a-8? True
+  official typography is “ten percent beneficial owner” with typographic quotes, and official typography italicizes the letter l in 15 U.S.C. 78l? True
+  official typography is The rules under section 16(a) of the Act do not apply to ten percent beneficial owners of an issuer that is a foreign private issuer? True
+  official typography is The rules under section 16 of the Act apply to any class of equity securities of an issuer whether or not registered under section 12 of the Act, and that sentence must not be tidied into official (c)'s section 12 reporting clause? True
+  official CITA typography is [56 FR 7265, Feb. 21, 1991, as amended at 61 FR 30392, June 14, 1996; 67 FR 43535, June 28, 2002; 76 FR 71877, Nov. 21, 2011; 91 FR 10333, Mar. 3, 2026; 91 FR 32336, June 1, 2026], official 16a-8 and official 3b-4 are named only, and this is not packed 16a-3, packed 16a-10, or packed 16a-12? True
+official 16a-8 and official 3b-4 are named only; this toy does not pack those sections
+packed 16a-3 / 16a-10 / 16a-12 exist and are named only; leftover 16b-3 / 16b-6 are named only; this toy is not those boxes
+literacy only; not a how-to for section 16 status, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 157/157
+disclaimer: official 17 CFR 240.16a-2; no issuer, disclosure, or investment advice; learning only
+=== AS. 17 CFR 240.12d1-1: Registration effective as to class or series ===
+official caption typography is Registration effective as to class or series.
+12d1-1(a): An application filed pursuant to section 12 (b) and (c) of the act for registration of a security on a national securities exchange shall be deemed to apply for registration of the entire class of such security. Registration shall become effective, as provided in section 12(d) of the act, (1) as to the shares or amounts of such class then issued, and (2), without further application for registration, upon issuance as to additional shares or amounts of such class then or thereafter authorized.
+12d1-1(b): This section shall apply to classes of securities of which a specified number of shares or amounts was registered or registered upon notice of issuance, and to applications for registration filed, prior to the close of business on January 28, 1954, as well as to classes registered, or applications filed, thereafter.
+12d1-1(c): This section shall not affect the right of a national securities exchange to require the issuer of a registered security to file documents with or pay fees to the exchange in connection with the modification of such security or the issuance of additional shares or amounts.
+12d1-1(d): If a class of security is issuable in two or more series with different terms, each such series shall be deemed a separate class for the purposes of this section.
+official typography is "section 12 (b) and (c) of the act"
+official typography is "a class of security"
+official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.12d1-1; title 17 up_to_date_as_of 2026-11-17
+  an application filed pursuant to section 12 (b) and (c) of the act for registration of a security on a national securities exchange shall be deemed to apply for registration of the entire class, and additional shares or amounts of such class then or thereafter authorized become registered upon issuance without further application? True
+  if a class of security is issuable in two or more series with different terms, each such series shall be deemed a separate class for the purposes of this section? True
+  official typography is section 12 (b) and (c) and a class of security, official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l, official API XML has no CITA, and this is not packed 12d2-1 or packed 12b-6? True
+packed 12d2-1 and packed 12b-6 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for exchange registration, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 160/160
+disclaimer: official 17 CFR 240.12d1-1; no issuer, disclosure, or investment advice; learning only
+=== AT. 17 CFR 240.12d1-2: Effectiveness of registration ===
+official caption typography is Effectiveness of registration.
+12d1-2(a): A request for acceleration of the effective date of registration pursuant to section 12(d) of the act and § 240.12d1-1 shall be made in writing by either the registrant, the exchange, or both and shall briefly describe the reasons therefor.
+12d1-2(b): A registration statement on Form 8-A (17 CFR 249.208a) for the registration of a class of securities under Section 12(b) of the Act (15 U.S.C. 78l(b)) shall become effective:
+12d1-2(b)(1): If a class of securities is not concurrently being registered under the Securities Act of 1933 (“Securities Act”), upon the later of receipt by the Commission of certification from the national securities exchange or the filing of the Form 8-A with the Commission; or
+12d1-2(b)(2): If a class of securities is concurrently being registered under the Securities Act, upon the later of the filing of the Form 8-A with the Commission, receipt by the Commission of certification from the national securities exchange listed on the Form 8-A or effectiveness of the Securities Act registration statement relating to the class of securities.
+12d1-2(c): A registration statement on Form 8-A (17 CFR 249.208a) for the registration of a class of securities under Section 12(g) of the Act (15 U.S.C. 78l(g)) shall become effective:
+12d1-2(c)(1): If a class of securities is not concurrently being registered under the Securities Act, upon the filing of the Form 8-A with the Commission; or
+12d1-2(c)(2): If class of securities is concurrently being registered under the Securities Act, upon the later of the filing of the Form 8-A with the Commission or the effectiveness of the Securities Act registration statement relating to the class of securities.
+official typography is "the reasons therefor"
+official typography uses typographic quotes around “Securities Act”
+official typography is "If class of securities is concurrently being registered under the Securities Act" with no a after If
+official SECAUTH typography is 15 U.S.C. 78l with official italic on the letter l, including 78l(b) and 78l(g)
+cite 17 CFR 240.12d1-2; title 17 up_to_date_as_of 2026-11-17
+[19 FR 670, Feb. 5, 1954, as amended at 59 FR 55347, Nov. 7, 1994; 62 FR 39766, July 24, 1997].
+  a 12(b) Form 8-A with no concurrent Securities Act registration becomes effective upon the later of receipt by the Commission of exchange certification or the filing of the Form 8-A? True
+  a 12(b) Form 8-A with a concurrent Securities Act registration becomes effective upon the later of the Form 8-A filing, receipt of that certification, or effectiveness of the Securities Act registration statement? True
+  a 12(g) Form 8-A with no concurrent Securities Act registration becomes effective upon the filing of the Form 8-A? True
+  a 12(g) Form 8-A with a concurrent Securities Act registration becomes effective upon the later of the Form 8-A filing or effectiveness of the Securities Act registration statement? True
+  official typography is the reasons therefor, typographic quotes around “Securities Act”, official (c)(2) If class of securities is concurrently being registered with no a after If, official SECAUTH typography italicizes the letter l, official CITA typography is [19 FR 670, Feb. 5, 1954, as amended at 59 FR 55347, Nov. 7, 1994; 62 FR 39766, July 24, 1997], official 12d1-3 through 12d1-6 and official 12d2-2 are named only, and this is not packed 12d2-1 or packed 12b-6? True
+official 12d1-3 through 12d1-6 and official 12d2-2 are named only; this toy does not pack those certification or removal catalogs
+packed 12d2-1 and packed 12b-6 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for Form 8-A clocks, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 165/165
+disclaimer: official 17 CFR 240.12d1-2; no issuer, disclosure, or investment advice; learning only
+=== AU. 17 CFR 240.16c-1: Brokers ===
+official caption typography is Brokers.
+16c-1: Any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful the execution by a broker of an order for an account in which the broker has no direct or indirect interest.
+official typography is "no direct or indirect interest"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.16c-1; title 17 up_to_date_as_of 2026-11-17
+  any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful the execution by a broker of an order for an account in which the broker has no direct or indirect interest? True
+  official typography is no direct or indirect interest? True
+  official API XML has no CITA, and this is not packed 16c-3 or packed 16c-4? True
+packed 16c-3 and packed 16c-4 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for broker orders, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 168/168
+disclaimer: official 17 CFR 240.16c-1; no issuer, disclosure, or investment advice; learning only
+=== AV. 17 CFR 240.16c-2: Transactions effected in connection with a distribution ===
+official caption typography is Transactions effected in connection with a distribution.
+16c-2: Any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful any sale made by or on behalf of a dealer in connection with a distribution of a substantial block of securities, where the sale is represented by an over-allotment in which the dealer is participating as a member of an underwriting group, or the dealer or a person acting on the dealer's behalf intends in good faith to offset such sale with a security to be acquired by or on behalf of the dealer as a participant in an underwriting, selling, or soliciting-dealer group of which the dealer is a member at the time of the sale, whether or not the security to be acquired is subject to a prior offering to existing security holders or some other class of persons.
+official caption typography is the same words as 16a-7, but this is a section 16(c) exemption
+official typography includes both the over-allotment alternative and the dealer's-behalf offset alternative
+official typography is the dealer's behalf (ASCII apostrophe)
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.16c-2; title 17 up_to_date_as_of 2026-11-17
+  any transaction shall be exempt from section 16(c) of the Act to the extent necessary to render lawful any sale made by or on behalf of a dealer in connection with a distribution of a substantial block of securities, where the sale is represented by an over-allotment in which the dealer is participating as a member of an underwriting group, or the dealer or a person acting on the dealer's behalf intends in good faith to offset such sale with a security to be acquired by or on behalf of the dealer as a participant in an underwriting, selling, or soliciting-dealer group of which the dealer is a member at the time of the sale, whether or not the security to be acquired is subject to a prior offering to existing security holders or some other class of persons? True
+  official caption typography is Transactions effected in connection with a distribution, the same words as 16a-7, but this is a section 16(c) exemption and must not be tidied into 16a-7? True
+  official typography is the dealer's behalf, official API XML has no CITA, and this is not packed 16c-3 or packed 16c-4? True
+packed 16c-3 and packed 16c-4 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for distribution sales, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 171/171
+disclaimer: official 17 CFR 240.16c-2; no issuer, disclosure, or investment advice; learning only
+=== AW. 17 CFR 240.16a-7: Transactions effected in connection with a distribution ===
+official caption typography is Transactions effected in connection with a distribution.
+16a-7(a): Any purchase and sale, or sale and purchase, of a security that is made in connection with the distribution of a substantial block of securities shall be exempt from the provisions of section 16(a) of the Act, to the extent specified in this rule, subject to the following conditions:
+16a-7(a)(1): The person effecting the transaction is engaged in the business of distributing securities and is participating in good faith, in the ordinary course of such business, in the distribution of such block of securities; and
+16a-7(a)(2): The security involved in the transaction is:
+16a-7(a)(2)(i): Part of such block of securities and is acquired by the person effecting the transaction, with a view to distribution thereof, from the issuer or other person on whose behalf such securities are being distributed or from a person who is participating in good faith in the distribution of such block of securities; or
+16a-7(a)(2)(ii): A security purchased in good faith by or for the account of the person effecting the transaction for the purpose of stabilizing the market price of securities of the class being distributed or to cover an over-allotment or other short position created in connection with such distribution.
+16a-7(b): Each person participating in the transaction must qualify on an individual basis for an exemption pursuant to this section.
+official typography is Any purchase and sale, or sale and purchase.
+official typography is Each person participating in the transaction must qualify on an individual basis for an exemption pursuant to this section.
+official caption typography is the same words as 16c-2, but this is a section 16(a) exemption
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.16a-7; title 17 up_to_date_as_of 2026-11-17
+  the 16(a) exemption applies only if official (a)(1) and official (a)(2) are met (the person is engaged in the business of distributing securities and is participating in good faith, in the ordinary course of such business, in the distribution of such block, and the security is part of such block or is purchased in good faith to stabilize the market price or to cover an over-allotment or other short position created in connection with such distribution)? True
+  official (b) typography is Each person participating in the transaction must qualify on an individual basis for an exemption pursuant to this section? True
+  official caption typography is Transactions effected in connection with a distribution, the same words as 16c-2, but this is a section 16(a) exemption and must not be tidied into 16c-2? True
+  official API XML has no CITA, and this is not packed 16a-6 or packed 16a-10? True
+packed 16a-6 and packed 16a-10 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for distribution reporting exemptions, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 175/175
+disclaimer: official 17 CFR 240.16a-7; no issuer, disclosure, or investment advice; learning only

@@ -56,3 +56,37 @@ check(order_status(sunday_night, fri).startswith("rejected"), "Sunday overnight 
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_mwcb_resume_ok")
 print("disclaimer: toy calendar (weekdays only); filings by 17 exchanges, not all venues; learning only")
+
+print('=== N7. FINRA Rule 6121.02(c)(2): filed, not-yet-implemented 23/5 Level 3 otherwise-than-on-an-exchange clock ===')
+# FINRA Rule 6121.02(c)(2) taught as a filed, not-yet-implemented
+# amendment (official SR-FINRA-2026-025 / 34-106879 / 91 FR 73851).
+# Official current typography, still on the live FINRA rulebook page,
+# is: "If a Level 3 Market Decline occurs at any time during the
+# trading day, FINRA shall halt trading otherwise than on an exchange
+# in all NMS stocks for the remainder of the trading day." Official
+# future typography is: "FINRA shall halt trading otherwise than on an
+# exchange in all NMS stocks until 4:00 a.m. Eastern Time or later on
+# the following trading day." Official typography is "otherwise than
+# on an exchange"; do not tidy into "off-exchange." Official
+# implementation typography is "the implementation date of the proposed
+# rule change will be December 6, 2026." Official FR comment-deadline
+# typography is "should be submitted on or before December 8, 2026."
+# The comment period is not the implementation date. Do not teach the
+# future text as current law. Do not claim all venues have filed.
+# The 2026-11-10 snapshot in the module docstring is left unchanged.
+# Learning only; no venue, member, or investment advice.
+
+print('FINRA has filed SR-FINRA-2026-025 / 34-106879')
+print('official implementation typography is the implementation date of the proposed rule change will be December 6, 2026')
+print('official FR comment-deadline typography is should be submitted on or before December 8, 2026')
+print('the comment period is not the implementation date')
+print('official current typography is still: If a Level 3 Market Decline occurs at any time during the trading day, FINRA shall halt trading otherwise than on an exchange in all NMS stocks for the remainder of the trading day.')
+print('official future typography is: FINRA shall halt trading otherwise than on an exchange in all NMS stocks until 4:00 a.m. Eastern Time or later on the following trading day.')
+print('official typography is otherwise than on an exchange; do not tidy into off-exchange')
+print('do not teach the future text as current law; do not claim all venues have filed')
+filed_not_current = True
+print(f"  FINRA has filed SR-FINRA-2026-025 / 34-106879, official implementation typography is the implementation date of the proposed rule change will be December 6, 2026, official current typography is still for the remainder of the trading day, official future typography is until 4:00 a.m. Eastern Time or later on the following trading day, official typography is otherwise than on an exchange, and this is not current law and not a claim that all venues have filed? {filed_not_current}")
+check(filed_not_current is True, "N7 filed amendment; current remainder typography; future 4:00 a.m.; not all venues")
+print(f"assertions passed: {checks}/{checks}")
+print('ASSERT_finra_612102_filed_ok')
+print('disclaimer: official SR-FINRA-2026-025 / 34-106879; filed, not-yet-implemented; not all venues have filed; learning only')

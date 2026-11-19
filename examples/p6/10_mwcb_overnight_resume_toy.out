@@ -7,3 +7,16 @@ order at 2026-12-13 20:00 ET (Sunday) -> rejected (MWCB L3 halt)
 assertions passed: 5/5
 ASSERT_mwcb_resume_ok
 disclaimer: toy calendar (weekdays only); filings by 17 exchanges, not all venues; learning only
+=== N7. FINRA Rule 6121.02(c)(2): filed, not-yet-implemented 23/5 Level 3 otherwise-than-on-an-exchange clock ===
+FINRA has filed SR-FINRA-2026-025 / 34-106879
+official implementation typography is the implementation date of the proposed rule change will be December 6, 2026
+official FR comment-deadline typography is should be submitted on or before December 8, 2026
+the comment period is not the implementation date
+official current typography is still: If a Level 3 Market Decline occurs at any time during the trading day, FINRA shall halt trading otherwise than on an exchange in all NMS stocks for the remainder of the trading day.
+official future typography is: FINRA shall halt trading otherwise than on an exchange in all NMS stocks until 4:00 a.m. Eastern Time or later on the following trading day.
+official typography is otherwise than on an exchange; do not tidy into off-exchange
+do not teach the future text as current law; do not claim all venues have filed
+  FINRA has filed SR-FINRA-2026-025 / 34-106879, official implementation typography is the implementation date of the proposed rule change will be December 6, 2026, official current typography is still for the remainder of the trading day, official future typography is until 4:00 a.m. Eastern Time or later on the following trading day, official typography is otherwise than on an exchange, and this is not current law and not a claim that all venues have filed? True
+assertions passed: 6/6
+ASSERT_finra_612102_filed_ok
+disclaimer: official SR-FINRA-2026-025 / 34-106879; filed, not-yet-implemented; not all venues have filed; learning only
