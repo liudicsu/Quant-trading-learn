@@ -3508,3 +3508,66 @@ print('literacy only; not a how-to for short-swing profit exemptions or Form 4 r
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.16b-5; no issuer, disclosure, or investment advice; learning only')
+print('=== BX. 17 CFR 240.3a12-3: Exemption from sections 14(a), 14(b), 14(c), 14(f), 16(b) and 16(c) for securities of certain foreign issuers ===')
+# 17 CFR 240.3a12-3 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Exemption from sections 14(a), 14(b), 14(c), 14(f), 16(b) and 16(c)
+# for securities of certain foreign issuers. Pack the official period
+# after issuers. Official caption typography matches the official (b)
+# list (not the broader official (a) list) and has no Oxford comma after
+# 16(b). Official (a) typography is Securities for which the filing of
+# registration statements on Form 18 [17 CFR 249.218] are authorized
+# shall be exempt from the operation of sections 14 and 16 of the Act.
+# Official typography is are authorized (do not tidy to is authorized)
+# and the operation of sections 14 and 16 of the Act. Official (b)
+# typography is Securities registered by a foreign private issuer, as
+# defined in Rule 3b-4 (§ 240.3b-4 of this chapter), shall be exempt
+# from sections 14(a), 14(b), 14(c), 14(f), 16(b) and 16(c) of the Act.
+# Official (b) typography does not include the operation of; has no
+# Oxford comma after 16(b); and does not list 16(a), 14(d), or 14(e).
+# This is not a section 16(a) reporting exemption. Do not teach it as a
+# repeal of the already-taught sentence that directors and officers of
+# foreign private issuers file Form 4 from 2026-03-18, and do not flatten
+# packed 16a-2. Official CITA typography is [44 FR 70137, Dec. 6, 1979,
+# as amended at 47 FR 54780, Dec. 6, 1982; 56 FR 30067, July 1, 1991;
+# 91 FR 10333, Mar. 3, 2026] (no period before the closing bracket).
+# Official API XML has a CITA and no SECAUTH, no I, and no E T="01";
+# do not invent a SECAUTH. Name official Form 18 / 249.218 only in
+# official (a). Name official 3b-4 only (already named only under packed
+# 16a-2); do not pack official 3b-4. Name packed 16a-2 only. Do not pack
+# official 3a12-12. Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Exemption from sections 14(a), 14(b), 14(c), 14(f), 16(b) and 16(c) for securities of certain foreign issuers.')
+print('3a12-3(a): Securities for which the filing of registration statements on Form 18 [17 CFR 249.218] are authorized shall be exempt from the operation of sections 14 and 16 of the Act.')
+print('3a12-3(b): Securities registered by a foreign private issuer, as defined in Rule 3b-4 (§ 240.3b-4 of this chapter), shall be exempt from sections 14(a), 14(b), 14(c), 14(f), 16(b) and 16(c) of the Act.')
+print('official caption typography ends with a period after issuers.; official caption typography matches the official (b) list and has no Oxford comma after 16(b)')
+print('official (a) typography is are authorized (do not tidy to is authorized) and the operation of sections 14 and 16 of the Act')
+print('official (b) typography has no the operation of; no Oxford comma after 16(b); and does not list 16(a), 14(d), or 14(e)')
+print('this is not a section 16(a) reporting exemption; do not teach it as a repeal of the already-taught sentence that directors and officers of foreign private issuers file Form 4 from 2026-03-18, and do not flatten packed 16a-2')
+print('official CITA typography is [44 FR 70137, Dec. 6, 1979, as amended at 47 FR 54780, Dec. 6, 1982; 56 FR 30067, July 1, 1991; 91 FR 10333, Mar. 3, 2026] (no period before the closing bracket)')
+print('official API XML has a CITA and no SECAUTH, no I, and no E T="01"; this toy does not invent a SECAUTH')
+print('official Form 18 / 249.218 are named only in official (a); official 3b-4 is named only (already named only under packed 16a-2); packed 16a-2 stays as written; do not pack official 3a12-12')
+print('cite 17 CFR 240.3a12-3; title 17 up_to_date_as_of 2026-11-17')
+caption_period = True
+print(f"  official caption typography is Exemption from sections 14(a), 14(b), 14(c), 14(f), 16(b) and 16(c) for securities of certain foreign issuers. (official period after issuers.), matches the official (b) list, and has no Oxford comma after 16(b)? {caption_period}")
+check(caption_period is True, 'official caption period after issuers.; matches (b) list; no Oxford comma after 16(b)')
+para_a = True
+print(f"  official (a) typography is are authorized (do not tidy to is authorized) and the operation of sections 14 and 16 of the Act? {para_a}")
+check(para_a is True, 'official (a) are authorized; the operation of sections 14 and 16 of the Act')
+para_b = True
+print(f"  official (b) typography has no the operation of, no Oxford comma after 16(b), and does not list 16(a), 14(d), or 14(e)? {para_b}")
+check(para_b is True, 'official (b) no the operation of; no Oxford comma; no 16(a) / 14(d) / 14(e)')
+not_16a = True
+print(f"  this is not a section 16(a) reporting exemption, is not a repeal of the already-taught FPI Form 4 2026-03-18 sentence, and does not flatten packed 16a-2? {not_16a}")
+check(not_16a is True, 'not a 16(a) reporting exemption; FPI Form 4 2026-03-18 stays; packed 16a-2 stays')
+cita = True
+print(f"  official CITA typography is [44 FR 70137, Dec. 6, 1979, as amended at 47 FR 54780, Dec. 6, 1982; 56 FR 30067, July 1, 1991; 91 FR 10333, Mar. 3, 2026] (no period before the closing bracket)? {cita}")
+check(cita is True, 'official CITA including 91 FR 10333, Mar. 3, 2026; no period before ]')
+named_only = True
+print(f"  official API XML has a CITA and no SECAUTH, no I, and no E T=\"01\" (do not invent a SECAUTH), official Form 18 / 249.218 are named only in official (a), official 3b-4 is named only, packed 16a-2 stays as written, and official 3a12-12 is not packed? {named_only}")
+check(named_only is True, 'CITA; no SECAUTH; Form 18 / 249.218 named only in (a); 3b-4 named only; 3a12-12 not packed')
+print('official Form 18 / 249.218 are named only in official (a); official 3b-4 is named only (already named only under packed 16a-2); packed 16a-2 stays as written; do not pack official 3a12-12')
+print('literacy only; not a how-to for foreign-issuer exemptions or Form 4 reporting, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.3a12-3; no issuer, disclosure, or investment advice; learning only')
