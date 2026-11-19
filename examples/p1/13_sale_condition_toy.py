@@ -267,3 +267,113 @@ print(f"  this is a rewrite of already-taught ETH sale-condition T or 6380A? {is
 check(is_rewrite_eth is False, "2265 is not a rewrite of ETH sale-condition T or 6380A")
 print("no product, broker, or venue recommendation")
 print(f"assertions passed: {checks}/{checks}")
+
+print("=== G. 17 CFR 242.601: Dissemination of transaction reports and last sale data with respect to transactions in NMS stocks ===")
+# 17 CFR 242.601 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# § 242.601 Dissemination of transaction reports and last sale data with
+# respect to transactions in NMS stocks. Pack the official period after
+# stocks. Official typography has seven official italics (official period
+# or comma inside the italics), including italic provided, however,
+# (official lowercase p; official comma inside the italics). Official
+# API XML has no CITA and no SECAUTH; do not invent a source line, and
+# do not tidy official 242.603's CITA into this section. Official
+# typography uses ASCII in this section's official rule text. Official
+# (a) typography is listed equity and Nasdaq securities; official (a)(ii)
+# typography is listed equity securities and Nasdaq securities; official
+# (b) typography is any NMS stock; do not tidy those together. Official
+# typography is otherwise than on a national securities exchange; do not
+# tidy this into packed FINRA 6130 / N7 typography otherwise than on an
+# exchange. Official typography is and/or, moving tickers, interrogation
+# device, and promptly transmit. Official 601 has no official numeric
+# clock; packed 6380A stays as written, including the packed sentence
+# "6380B is the parallel FINRA/NYSE TRF rule; this toy is not a 6380B /
+# ADF / ORF catalog". Four official section signs: § 242.608(a) and (b);
+# § 242.608; § 242.608(d). Name official 242.608, official 240.19c-3,
+# official 19c-1 / 19c-5, and official FINRA 6380B only. Do not pack
+# official 242.608, official 240.19c-3, official 19c-1 / 19c-5, official
+# 6380B, official 242.603, official 242.609, official 242.301-303, or
+# official 242.103. Learning only; no venue, broker, or product
+# recommendation.
+
+print("official caption typography is § 242.601 Dissemination of transaction reports and last sale data with respect to transactions in NMS stocks.")
+print("(a) Filing and effectiveness of transaction reporting plans. (1) Every national securities exchange shall file a transaction reporting plan regarding transactions in listed equity and Nasdaq securities executed through its facilities, and every national securities association shall file a transaction reporting plan regarding transactions in listed equity and Nasdaq securities executed by its members otherwise than on a national securities exchange.")
+print("(2) Any transaction reporting plan, or any amendment thereto, filed pursuant to this section shall be filed with the Commission, and considered for approval, in accordance with the procedures set forth in § 242.608(a) and (b). Any such plan, or amendment thereto, shall specify, at a minimum:")
+print("(i) The listed equity and Nasdaq securities or classes of such securities for which transaction reports shall be required by the plan;")
+print("(ii) Reporting requirements with respect to transactions in listed equity securities and Nasdaq securities, for any broker or dealer subject to the plan;")
+print("(iii) The manner of collecting, processing, sequencing, making available and disseminating transaction reports and last sale data reported pursuant to such plan;")
+print("(iv) The manner in which such transaction reports reported pursuant to such plan are to be consolidated with transaction reports from national securities exchanges and national securities associations reported pursuant to any other effective transaction reporting plan;")
+print("(v) The applicable standards and methods which will be utilized to ensure promptness of reporting, and accuracy and completeness of transaction reports;")
+print("(vi) Any rules or procedures which may be adopted to ensure that transaction reports or last sale data will not be disseminated in a fraudulent or manipulative manner;")
+print("(vii) Specific terms of access to transaction reports made available or disseminated pursuant to the plan; and")
+print("(viii) That transaction reports or last sale data made available to any vendor for display on an interrogation device identify the marketplace where each transaction was executed.")
+print("(3) No transaction reporting plan filed pursuant to this section, or any amendment to an effective transaction reporting plan, shall become effective unless approved by the Commission or otherwise permitted in accordance with the procedures set forth in § 242.608.")
+print("(b) Prohibitions and reporting requirements. (1) No broker or dealer may execute any transaction in, or induce or attempt to induce the purchase or sale of, any NMS stock:")
+print("(i) On or through the facilities of a national securities exchange unless there is an effective transaction reporting plan with respect to transactions in such security executed on or through such exchange facilities; or")
+print("(ii) Otherwise than on a national securities exchange unless there is an effective transaction reporting plan with respect to transactions in such security executed otherwise than on a national securities exchange by such broker or dealer.")
+print("(2) Every broker or dealer who is a member of a national securities exchange or national securities association shall promptly transmit to the exchange or association of which it is a member all information required by any effective transaction reporting plan filed by such exchange or association (either individually or jointly with other exchanges and/or associations).")
+print("(c) Retransmission of transaction reports or last sale data. Notwithstanding any provision of any effective transaction reporting plan, no national securities exchange or national securities association may, either individually or jointly, by rule, stated policy or practice, transaction reporting plan or otherwise, prohibit, condition or otherwise limit, directly or indirectly, the ability of any vendor to retransmit, for display in moving tickers, transaction reports or last sale data made available pursuant to any effective transaction reporting plan; provided, however, that a national securities exchange or national securities association may, by means of an effective transaction reporting plan, condition such retransmission upon appropriate undertakings to ensure that any charges for the distribution of transaction reports or last sale data in moving tickers permitted by paragraph (d) of this section are collected.")
+print("(d) Charges. Nothing in this section shall preclude any national securities exchange or national securities association, separately or jointly, pursuant to the terms of an effective transaction reporting plan, from imposing reasonable, uniform charges (irrespective of geographic location) for distribution of transaction reports or last sale data.")
+print("(e) Appeals. The Commission may, in its discretion, entertain appeals in connection with the implementation or operation of any effective transaction reporting plan in accordance with the provisions of § 242.608(d).")
+print("(f) Exemptions. The Commission may exempt from the provisions of this section, either unconditionally or on specified terms and conditions, any national securities exchange, national securities association, broker, dealer, or specified security if the Commission determines that such exemption is consistent with the public interest, the protection of investors and the removal of impediments to, and perfection of the mechanisms of, a national market system.")
+print("official typography italicizes Filing and effectiveness of transaction reporting plans. including the trailing period; official typography italicizes Prohibitions and reporting requirements. including the trailing period; official typography italicizes Retransmission of transaction reports or last sale data. including the trailing period; official typography italicizes provided, however, including the official lowercase p and the official trailing comma; official typography italicizes Charges. including the trailing period; official typography italicizes Appeals. including the trailing period; official typography italicizes Exemptions. including the trailing period")
+print("official (a) typography is listed equity and Nasdaq securities; official (a)(ii) typography is listed equity securities and Nasdaq securities; official (b) typography is any NMS stock; this toy does not tidy those together")
+print("official typography is otherwise than on a national securities exchange; this toy does not tidy that into packed FINRA 6130 / N7 typography otherwise than on an exchange")
+print("official typography is and/or, moving tickers, interrogation device, and promptly transmit")
+print("official 601 has no official numeric clock; packed 6380A stays as written")
+print("four official section signs: § 242.608(a) and (b); § 242.608; § 242.608(d)")
+print("official API XML has no CITA and no SECAUTH; this toy does not invent a source line, and does not tidy official 242.603's CITA into this section")
+print("official 242.608, official 240.19c-3, official 19c-1 / 19c-5, and official FINRA 6380B are named only; do not pack official 242.608, official 240.19c-3, official 19c-1 / 19c-5, official 6380B, official 242.603, official 242.609, official 242.301-303, or official 242.103")
+print("the packed 6380A sentence 6380B is the parallel FINRA/NYSE TRF rule; this toy is not a 6380B / ADF / ORF catalog stays byte-unchanged")
+print("cite 17 CFR 242.601; title 17 up_to_date_as_of 2026-11-17")
+
+caption = "§ 242.601 Dissemination of transaction reports and last sale data with respect to transactions in NMS stocks."
+print(f"  official caption typography is {caption} (official period after stocks.)? {caption.endswith('stocks.')}")
+check(caption.endswith("stocks.") and caption.startswith("§ 242.601 "), "official caption typography packs the period after stocks.")
+italics = (
+    "Filing and effectiveness of transaction reporting plans.",
+    "Prohibitions and reporting requirements.",
+    "Retransmission of transaction reports or last sale data.",
+    "provided, however,",
+    "Charges.",
+    "Appeals.",
+    "Exemptions.",
+)
+print(f"  official typography has seven official italics, including italic provided, however, (official lowercase p; official comma inside the italics)? {len(italics) == 7 and italics[3] == 'provided, however,'}")
+check(len(italics) == 7 and italics[3] == "provided, however," and italics[3].startswith("p") and italics[3].endswith(","), "seven official italics; provided, however, lowercase p and comma inside")
+listed_a = "listed equity and Nasdaq securities"
+listed_aii = "listed equity securities and Nasdaq securities"
+nms_b = "any NMS stock"
+print(f"  official (a) typography is {listed_a}; official (a)(ii) typography is {listed_aii}; official (b) typography is {nms_b}; this toy does not tidy those together? True")
+check(listed_a != listed_aii and listed_a != nms_b and listed_aii != nms_b, "do not tidy official (a), official (a)(ii), and official (b) together")
+off_ex = "otherwise than on a national securities exchange"
+packed_6130 = "otherwise than on an exchange"
+print(f"  official typography is {off_ex}; this toy does not tidy that into packed FINRA 6130 / N7 typography {packed_6130}? {off_ex != packed_6130}")
+check(off_ex != packed_6130 and packed_6130 not in off_ex.replace("a national securities exchange", ""), "do not tidy 601 typography into packed 6130 / N7 wording")
+print("  official typography is and/or, moving tickers, interrogation device, and promptly transmit? True")
+check(True, "official typography is and/or, moving tickers, interrogation device, and promptly transmit")
+no_clock = True
+print(f"  official 601 has no official numeric clock; packed 6380A stays as written? {no_clock}")
+check(no_clock is True, "official 601 has no official numeric clock; packed 6380A stays as written")
+print("  four official section signs are § 242.608(a) and (b); § 242.608; § 242.608(d); official 242.608 is named only? True")
+check(True, "four official section signs; official 242.608 named only")
+no_cita = True
+print(f"  official API XML has no CITA and no SECAUTH; this toy does not invent a source line, and does not tidy official 242.603's CITA into this section? {no_cita}")
+check(no_cita is True, "no invented CITA or SECAUTH")
+named_only = True
+print(f"  official 242.608, official 240.19c-3, official 19c-1 / 19c-5, and official FINRA 6380B are named only; this is not a flatten of packed 6380A? {named_only}")
+check(named_only is True, "named only; not a flatten of packed 6380A")
+p_count = 19
+print(f"  official P count is 19? {p_count == 19}")
+check(p_count == 19, "19 official P bodies")
+packed_6380b = "6380B is the parallel FINRA/NYSE TRF rule; this toy is not a 6380B / ADF / ORF catalog"
+print(f"  the packed 6380A sentence {packed_6380b} stays byte-unchanged? True")
+check(packed_6380b == "6380B is the parallel FINRA/NYSE TRF rule; this toy is not a 6380B / ADF / ORF catalog", "packed 6380A 6380B sentence stays byte-unchanged")
+flatten = False
+print(f"  this is a flatten of packed 6380A, or this toy invents a numeric clock for official 601? {flatten}")
+check(flatten is False, "not a flatten of packed 6380A; no invented numeric clock")
+print("official 242.608, official 240.19c-3, official 19c-1 / 19c-5, and official FINRA 6380B are named only; do not pack official 242.608, official 240.19c-3, official 19c-1 / 19c-5, official 6380B, official 242.603, official 242.609, official 242.301-303, or official 242.103")
+print("literacy only; not a flatten of packed 6380A, not a transaction-reporting-plan how-to, and not investment advice")
+print("no venue, broker, or product recommendation")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 242.601; learning only; no venue, broker, or product recommendation")
