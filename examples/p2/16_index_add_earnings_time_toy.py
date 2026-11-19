@@ -3581,7 +3581,7 @@ print('=== BY. 17 CFR 229.405 (Item 405): Compliance with Section 16(a) of the E
 # 15 U.S.C. 78 followed by an official italic lowercase L (not the digit
 # 1, and not a non-italic 78l). Official typography is 15 U.S.C. 80a-1
 # italic et seq. Official (a)(1) typography is “Delinquent Section 16(a)
-# Reports,” with typographic quotes and the comma outside those quotes.
+# Reports,” with typographic quotes and the comma inside those quotes.
 # Official typography is more than ten percent. Official typography is
 # Investment Company Act (“reporting person”) that failed, with typographic
 # quotes and no comma after the closing parenthesis. Pack the official
@@ -3590,7 +3590,10 @@ print('=== BY. 17 CFR 229.405 (Item 405): Compliance with Section 16(a) of the E
 # paragraph (a) of Item 405. and encouraged to exclude the caption
 # “Delinquent Section 16(a) Reports.” (period inside those typographic
 # quotes). Official Instruction 2 typography is Instruction 2 to
-# paragraph (a) of Item 405. Official (b) typography is Scope of the
+# paragraph (a) of Item 405. Official typography continues after once.
+# with the official Form 4 example (most recently concluded fiscal year;
+# not in material filed with respect to subsequent years). Official (b)
+# typography is Scope of the
 # Inquiry. (capital I in Inquiry, official period) and the official
 # three-source inquiry limit, including official two years and official
 # ASCII apostrophes (U+0027) in registrant's. Name official Forms 3 and 4
@@ -3611,7 +3614,7 @@ print('official caption typography is Compliance with Section 16(a) of the Excha
 print('405(a): Reporting obligation. Every registrant having a class of equity securities registered pursuant to Section 12 of the Exchange Act (15 U.S.C. 78l) and every closed-end investment company registered under the Investment Company Act of 1940 (15 U.S.C. 80a-1 et seq.) must:')
 print('official typography italicizes Reporting obligation. including the trailing period; official typography is 15 U.S.C. 78l with official italic on the letter l (not the digit 1, and not a non-italic 78l); official typography italicizes et seq.')
 print('405(a)(1): Under the caption “Delinquent Section 16(a) Reports,” identify each person who, at any time during the fiscal year, was a director, officer, beneficial owner of more than ten percent of any class of equity securities of the registrant registered pursuant to Section 12 of the Exchange Act, or any other person subject to Section 16 of the Exchange Act with respect to the registrant because of the requirements of Section 30 of the Investment Company Act (“reporting person”) that failed to file on a timely basis reports required by Section 16(a) of the Exchange Act during the most recent fiscal year or prior fiscal years.')
-print('official (a)(1) typography is “Delinquent Section 16(a) Reports,” (comma outside the typographic quotes); official typography is more than ten percent; official typography is Investment Company Act (“reporting person”) that failed (typographic quotes; no comma after the closing parenthesis)')
+print('official (a)(1) typography is “Delinquent Section 16(a) Reports,” (comma inside the typographic quotes); official typography is more than ten percent; official typography is Investment Company Act (“reporting person”) that failed (typographic quotes; no comma after the closing parenthesis)')
 print('405(a)(2): For each such person, set forth the number of late reports, the number of transactions that were not reported on a timely basis, and any known failure to file a required form. A known failure to file would include, but not be limited to, a failure to file a Form 3, which is required of all reporting persons, and a failure to file a Form 5 in the absence of the written representation referred to in paragraph (b)(3) of this section, unless the registrant otherwise knows that no Form 5 is required.')
 print('Instruction 1 to paragraph (a) of Item 405. If no disclosure is required, registrants are encouraged to exclude the caption “Delinquent Section 16(a) Reports.”')
 print('official Instruction 1 typography italicizes Instruction 1 to paragraph (a) of Item 405. including the trailing period; official typography is encouraged to exclude the caption “Delinquent Section 16(a) Reports.” (period inside those typographic quotes)')
@@ -3632,8 +3635,8 @@ italics_405 = True
 print(f"  official typography italicizes Reporting obligation. including the trailing period, official typography is 15 U.S.C. 78l with official italic on the letter l (not the digit 1, and not a non-italic 78l), and official typography italicizes et seq.? {italics_405}")
 check(italics_405 is True, 'six official italics; italic Reporting obligation.; italic lowercase L in 78l; italic et seq.')
 a1_405 = True
-print(f"  official (a)(1) typography is “Delinquent Section 16(a) Reports,” (comma outside the typographic quotes), official typography is more than ten percent, and official typography is Investment Company Act (“reporting person”) that failed (typographic quotes; no comma after the closing parenthesis)? {a1_405}")
-check(a1_405 is True, 'Delinquent Section 16(a) Reports, comma outside quotes; more than ten percent; ("reporting person") no comma after )')
+print(f"  official (a)(1) typography is “Delinquent Section 16(a) Reports,” (comma inside the typographic quotes), official typography is more than ten percent, and official typography is Investment Company Act (“reporting person”) that failed (typographic quotes; no comma after the closing parenthesis)? {a1_405}")
+check(a1_405 is True, 'Delinquent Section 16(a) Reports, comma inside quotes; more than ten percent; ("reporting person") no comma after )')
 instr_405 = True
 print(f"  official Instruction 1 typography is encouraged to exclude the caption “Delinquent Section 16(a) Reports.” (period inside those typographic quotes), official (b) typography is Scope of the Inquiry. (capital I), official typography uses ASCII apostrophes (U+0027) in registrant's, and official typography is two years? {instr_405}")
 check(instr_405 is True, "Instruction 1 period inside quotes; Scope of the Inquiry.; ASCII apostrophes in registrant's; two years")
