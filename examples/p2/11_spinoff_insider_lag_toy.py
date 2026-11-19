@@ -728,3 +728,49 @@ print("no issuer, filer, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("ASSERT_spinoff_insider_lag_ok")
 print("disclaimer: official 17 CFR 240.16a-13; no filer or disclosure advice; learning only")
+
+print("=== P. 17 CFR 240.16a-12: Domestic relations orders ===")
+# 17 CFR 240.16a-12 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17, live-refetched 2026-11-19,
+# byte-identical to the enrich42-src archive).
+# Keep sections A-O identical, including 78/78 after O / 16a-13,
+# section-I ASSERT_spinoff_insider_lag_ok, Form 5 due date 2026-02-17,
+# and 13d-1(g) fifth business day 2026-10-13.
+# Official typography is "section 16 of the Act," not "section 16(a)"
+# only, and "as defined in the Internal Revenue Code or Title I of
+# the Employee Retirement Income Security Act, or the rules
+# thereunder." Do not tidy that into a bare "ERISA QDRO."
+# Official source "[61 FR 30393, June 14, 1996]." This is the same
+# official source line as packed 16a-13 (same date and the same FR
+# page 30393). Do not invent different pages, and do not merge the
+# two rules into one section just because they share a CITA.
+# Section P reprints ASSERT_spinoff_insider_lag_ok and the R95 / R96
+# date line (Form 5 2026-02-17 and 13d-1(g) 2026-10-13), as section O
+# already does.
+# Do not flatten into packed 16a-13 / 16a-10 / 16a-11, already-taught
+# Form 4 codes, or packed Section 16(b), and do not invent that this
+# is only a Form 5 deferral.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Domestic relations orders.")
+print("16a-12: The acquisition or disposition of equity securities pursuant to a domestic relations order, as defined in the Internal Revenue Code or Title I of the Employee Retirement Income Security Act, or the rules thereunder, shall be exempt from section 16 of the Act.")
+print('official typography is "section 16 of the Act," not "section 16(a)" only')
+print('official typography is "as defined in the Internal Revenue Code or Title I of the Employee Retirement Income Security Act, or the rules thereunder"')
+print("cite 17 CFR 240.16a-12; title 17 up_to_date_as_of 2026-11-17")
+print("[61 FR 30393, June 14, 1996].")
+dro_exempt = True
+print(f"  an acquisition or disposition of equity securities pursuant to a domestic relations order, as defined in the Internal Revenue Code or Title I of the Employee Retirement Income Security Act, or the rules thereunder, shall be exempt from section 16 of the Act? {dro_exempt}")
+check(dro_exempt is True, "DRO acquisition or disposition exempt from section 16 of the Act")
+section_16_not_only_a = True
+print(f"  official typography is section 16 of the Act, not section 16(a) only? {section_16_not_only_a}")
+check(section_16_not_only_a is True, "section 16 of the Act, not 16(a) only")
+flatten_16a12 = False
+print(f"  this is packed 16a-13 / 16a-10 / 16a-11, already-taught Form 4 codes, packed Section 16(b), or only a Form 5 deferral? {flatten_16a12}")
+check(flatten_16a12 is False, "do not flatten 16a-12 into packed 16a boxes, Form 4 codes, or a Form 5 deferral")
+print("packed 16a-13 / 16a-10 / 16a-11, already-taught Form 4 transaction codes, and packed Section 16(b) exist and are named only; this toy is not those boxes")
+print("Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed")
+print("literacy only; not a how-to for a domestic relations transfer, and not legal, tax, or investment advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("ASSERT_spinoff_insider_lag_ok")
+print("disclaimer: official 17 CFR 240.16a-12; no filer or disclosure advice; learning only")

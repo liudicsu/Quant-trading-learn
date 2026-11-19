@@ -224,3 +224,20 @@ no issuer, filer, or investment advice
 assertions passed: 78/78
 ASSERT_spinoff_insider_lag_ok
 disclaimer: official 17 CFR 240.16a-13; no filer or disclosure advice; learning only
+=== P. 17 CFR 240.16a-12: Domestic relations orders ===
+official caption typography is Domestic relations orders.
+16a-12: The acquisition or disposition of equity securities pursuant to a domestic relations order, as defined in the Internal Revenue Code or Title I of the Employee Retirement Income Security Act, or the rules thereunder, shall be exempt from section 16 of the Act.
+official typography is "section 16 of the Act," not "section 16(a)" only
+official typography is "as defined in the Internal Revenue Code or Title I of the Employee Retirement Income Security Act, or the rules thereunder"
+cite 17 CFR 240.16a-12; title 17 up_to_date_as_of 2026-11-17
+[61 FR 30393, June 14, 1996].
+  an acquisition or disposition of equity securities pursuant to a domestic relations order, as defined in the Internal Revenue Code or Title I of the Employee Retirement Income Security Act, or the rules thereunder, shall be exempt from section 16 of the Act? True
+  official typography is section 16 of the Act, not section 16(a) only? True
+  this is packed 16a-13 / 16a-10 / 16a-11, already-taught Form 4 codes, packed Section 16(b), or only a Form 5 deferral? False
+packed 16a-13 / 16a-10 / 16a-11, already-taught Form 4 transaction codes, and packed Section 16(b) exist and are named only; this toy is not those boxes
+Form 5 due date 2026-02-17 and 13d-1(g) fifth business day 2026-10-13 remain as already printed
+literacy only; not a how-to for a domestic relations transfer, and not legal, tax, or investment advice
+no issuer, filer, or investment advice
+assertions passed: 81/81
+ASSERT_spinoff_insider_lag_ok
+disclaimer: official 17 CFR 240.16a-12; no filer or disclosure advice; learning only

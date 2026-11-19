@@ -477,3 +477,102 @@ literacy only; not a how-to for filing Form 8-K, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 72/72
 disclaimer: official 17 CFR 240.13a-11; no issuer, disclosure, or investment advice; learning only
+=== U. 17 CFR 240.12b-10: Requirements as to proper form ===
+official caption typography is Requirements as to proper form.
+12b-10: Every statement or report shall be on the form prescribed therefor by the Commission, as in effect on the date of filing. Any statement or report shall be deemed to be filed on the proper form unless objection to the form is made by the Commission within thirty days after the date of filing.
+official typography is "the form prescribed therefor by the Commission, as in effect on the date of filing"
+official typography is "unless objection to the form is made by the Commission within thirty days after the date of filing"
+official typography is "therefor" and "thirty days," not "therefore" or "30 days"
+cite 17 CFR 240.12b-10; title 17 up_to_date_as_of 2026-11-17
+[30 FR 2022, Feb. 13, 1965].
+  every statement or report shall be on the form prescribed therefor by the Commission, as in effect on the date of filing? True
+  any statement or report shall be deemed to be filed on the proper form unless objection to the form is made by the Commission within thirty days after the date of filing? True
+  official typography was tidied to therefore / 30 days, or this is packed 12b-15 / 12b-25 / 12b-4 / 12b-23? False
+packed 12b-15 / 12b-25 / 12b-4 / 12b-23 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for choosing a form, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 75/75
+disclaimer: official 17 CFR 240.12b-10; no issuer, disclosure, or investment advice; learning only
+=== V. 17 CFR 240.12b-21: Information unknown or not available ===
+official caption typography is Information unknown or not available.
+12b-21: Information required need be given only insofar as it is known or reasonably available to the registrant. If any required information is unknown and not reasonably available to the registrant, either because the obtaining thereof would involve unreasonable effort or expense, or because it rests peculiarly within the knowledge of another person not affiliated with the registrant, the information may be omitted, subject to the following conditions.
+12b-21(a): The registrant shall give such information on the subject as it possesses or can acquire without unreasonable effort or expense, together with the sources thereof.
+12b-21(b): The registrant shall include a statement either showing that unreasonable effort or expense would be involved or indicating the absence of any affiliation with the person within whose knowledge the information rests and stating the result of a request made to such person for the information.
+official opening typography is "Information required need be given only insofar as it is known or reasonably available to the registrant."
+official caption typography does not say "reasonably"
+official (a) typography is "together with the sources thereof"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.12b-21; title 17 up_to_date_as_of 2026-11-17
+  information required need be given only insofar as it is known or reasonably available to the registrant? True
+  official caption typography is Information unknown or not available, and the caption does not say reasonably? True
+  official (a) requires such information as the registrant possesses or can acquire without unreasonable effort or expense, together with the sources thereof, and official (b) requires a statement either showing that unreasonable effort or expense would be involved or indicating the absence of affiliation and the result of a request made to such person for the information? True
+  official API XML has no CITA, and this is not packed 12b-20 / 12b-23 / 12b-4? True
+packed 12b-20 / 12b-23 / 12b-4 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for omitting required information, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 79/79
+disclaimer: official 17 CFR 240.12b-21; no issuer, disclosure, or investment advice; learning only
+=== W. 17 CFR 240.13a-1: Requirements of annual reports ===
+official caption typography is Requirements of annual reports.
+13a-1: Every issuer having securities registered pursuant to section 12 of the Act (15 U.S.C. 78l) shall file an annual report on the appropriate form authorized or prescribed therefor for each fiscal year after the last full fiscal year for which financial statements were filed in its registration statement. Annual reports shall be filed within the period specified in the appropriate form.
+official typography is 15 U.S.C. 78l with official italic on the letter l
+official typography is "Annual reports shall be filed within the period specified in the appropriate form."
+official 15d-1 is named only; official 15d-1 caption typography is Requirement of annual reports.
+cite 17 CFR 240.13a-1; title 17 up_to_date_as_of 2026-11-17
+[62 FR 39767, July 24, 1997].
+  every issuer having securities registered pursuant to section 12 of the Act shall file an annual report for each fiscal year after the last full fiscal year for which financial statements were filed in its registration statement? True
+  official typography is that annual reports shall be filed within the period specified in the appropriate form? True
+  official cite typography is 15 U.S.C. 78l with an italic letter l, official 15d-1 is named only, and this is not already-taught Form 10-K clocks, packed 13a-11, or packed 13a-14? True
+official 15d-1 is named only; this toy does not pack 15d-1 as a second core
+already-taught Form 10-K clocks, packed 13a-11, and packed 13a-14 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for filing an annual report, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 82/82
+disclaimer: official 17 CFR 240.13a-1; no issuer, disclosure, or investment advice; learning only
+=== X. 17 CFR 240.13a-13: Quarterly reports on Form 10-Q ===
+official caption typography is Quarterly reports on Form 10-Q (§ 249.308a of this chapter).
+13a-13(a): Except as provided in paragraphs (b) and (c) of this section, every issuer that has securities registered pursuant to section 12 of the Act and is required to file annual reports pursuant to section 13 of the Act, and has filed or intends to file such reports on Form 10-K (§ 249.310 of this chapter), shall file a quarterly report on Form 10-Q (§ 249.308a of this chapter) within the period specified in General Instruction A.1. to that form for each of the first three quarters of each fiscal year of the issuer, commencing with the first fiscal quarter following the most recent fiscal year for which full financial statements were included in the registration statement, or, if the registration statement included financial statements for an interim period subsequent to the most recent fiscal year end meeting the requirements of Article 10 of Regulation S-X and Rule 8-03 of Regulation S-X for smaller reporting companies, for the first fiscal quarter subsequent to the quarter reported upon in the registration statement. The first quarterly report of the issuer shall be filed either within 45 days after the effective date of the registration statement or on or before the date on which such report would have been required to be filed if the issuer has been required to file reports on Form 10-Q as of its last fiscal quarter, whichever is later.
+13a-13(b): The provisions of this rule shall not apply to the following issuers:
+13a-13(b)(1): Investment companies required to file reports pursuant to § 270.30a-1;
+13a-13(b)(2): Foreign private issuers required to file reports pursuant to § 240.13a-16; and
+13a-13(b)(3): Asset-backed issuers required to file reports pursuant to § 240.13a-17.
+13a-13(c): Part I of the quarterly reports on Form 10-Q need not be filed by:
+13a-13(c)(1): Mutual life insurance companies; or
+13a-13(c)(2): Mining companies not in the production stage but engaged primarily in the exploration for the development of mineral deposits other than oil, gas or coal, if all of the following conditions are met:
+13a-13(c)(2)(i): The registrant has not been in production during the current fiscal year or the two years immediately prior thereto; except that being in production for an aggregate period of not more than eight months over the three-year period shall not be a violation of this condition.
+13a-13(c)(2)(ii): Receipts from the sale of mineral products or from the operations of mineral producing properties by the registrant and its subsidiaries combined have not exceeded $500,000 in any of the most recent six years and have not aggregated more than $1,500,000 in the most recent six fiscal years.
+13a-13(d): Notwithstanding the foregoing provisions of this section, the financial information required by Part I of Form 10-Q shall not be deemed to be “filed” for the purpose of Section 18 of the Act or otherwise subject to the liabilities of that section of the Act, but shall be subject to all other provisions of the Act.
+official (a) typography is "within the period specified in General Instruction A.1. to that form"
+official typography is "each of the first three quarters of each fiscal year of the issuer"
+official first-report typography is "has been required," not "had been required"
+official (b)(2) ends with "; and"
+official (d) uses typographic U+201C / U+201D around "filed"
+cite 17 CFR 240.13a-13; title 17 up_to_date_as_of 2026-11-17
+[42 FR 24064, May 12, 1977, as amended at 48 FR 19877, May 3, 1983; 50 FR 27939, July 9, 1985; 54 FR 10317, Mar. 13, 1989; 57 FR 10615, Mar. 27, 1992; 61 FR 30403, June 14, 1996; 70 FR 1621, Jan. 7, 2005; 73 FR 975, Jan. 4, 2008; 81 FR 82020, Nov. 18, 2016].
+  a Form 10-Q is due within the period specified in General Instruction A.1. to that form for each of the first three quarters of each fiscal year of the issuer? True
+  the first quarterly report shall be filed either within 45 days after the effective date of the registration statement or on or before the date on which such report would have been required to be filed if the issuer has been required to file reports on Form 10-Q as of its last fiscal quarter, whichever is later? True
+  official (b) exceptions include investment companies required to file pursuant to § 270.30a-1, foreign private issuers pursuant to § 240.13a-16, and asset-backed issuers pursuant to § 240.13a-17? True
+  official (d) typography is that Part I financial information shall not be deemed to be “filed” for the purpose of Section 18 of the Act or otherwise subject to the liabilities of that section of the Act, but shall be subject to all other provisions of the Act? True
+  13a-13 requires a Form 10-Q for all four fiscal quarters, or invents a numeric general clock inside 13a-13 other than the official first-report 45-day alternative? False
+official 15d-13 / 13a-17 are named only; this toy does not pack them as second cores
+already-taught Form 10-Q clocks, packed 13a-11, the new 13a-1 box, and already-taught Form 6-K promptly-furnished clocks exist and are named only; this toy is not those boxes
+literacy only; not a how-to for filing Form 10-Q, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 87/87
+disclaimer: official 17 CFR 240.13a-13; no issuer, disclosure, or investment advice; learning only
+=== Y. 17 CFR 243.102: No effect on antifraud liability ===
+official caption typography is No effect on antifraud liability.
+243.102: No failure to make a public disclosure required solely by § 243.100 shall be deemed to be a violation of Rule 10b-5 (17 CFR 240.10b-5) under the Securities Exchange Act.
+official typography is "required solely by § 243.100"
+official typography names both "Rule 10b-5" and "17 CFR 240.10b-5"
+official typography is "under the Securities Exchange Act" and does not say "of 1934"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 243.102; title 17 up_to_date_as_of 2026-11-17
+  no failure to make a public disclosure required solely by § 243.100 shall be deemed to be a violation of Rule 10b-5 (17 CFR 240.10b-5) under the Securities Exchange Act? True
+  official typography is required solely by § 243.100, and names both Rule 10b-5 and 17 CFR 240.10b-5? True
+  official API XML has no CITA, and this is not already-taught Regulation FD clocks, packed 10b-5, packed 13a-11(c), or named 244.102? True
+already-taught Regulation FD clocks in backtest-traps (243.100-101), packed 10b-5, packed 13a-11(c), and named 244.102 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for withholding a public disclosure, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 90/90
+disclaimer: official 17 CFR 243.102; no issuer, disclosure, or investment advice; learning only
