@@ -1058,3 +1058,131 @@ literacy only; not a how-to for distribution reporting exemptions, and not legal
 no issuer, filer, or investment advice
 assertions passed: 175/175
 disclaimer: official 17 CFR 240.16a-7; no issuer, disclosure, or investment advice; learning only
+=== AX. 17 CFR 240.13d-4: Disclaimer of beneficial ownership ===
+official caption typography is Disclaimer of beneficial ownership.
+13d-4: Any person may expressly declare in any statement filed that the filing of such statement shall not be construed as an admission that such person is, for the purposes of sections 13(d) or 13(g) of the Act, the beneficial owner of any securities covered by the statement.
+official typography is "sections 13(d) or 13(g) of the Act" ("or," not "and")
+a 13d-4 disclaimer is not a finding of no beneficial ownership
+official API XML has no CITA element; this toy does not invent a source line
+official SECAUTH typography is 15 U.S.C. 78c(b), 78m(d)(1), 89m(d)(2), 78m(d)(5), 78m(d)(6), 78n(d)(1), 78w
+official SECAUTH typography includes 89m(d)(2) and must not be tidied into 78m(d)(2)
+cite 17 CFR 240.13d-4; title 17 up_to_date_as_of 2026-11-17
+  an express disclaimer in a filed statement shall not be construed as an admission that such person is, for the purposes of sections 13(d) or 13(g) of the Act, the beneficial owner of any securities covered by the statement, and a 13d-4 disclaimer is not a finding of no beneficial ownership? True
+  official typography is sections 13(d) or 13(g) of the Act (or, not and)? True
+  official API XML has no CITA, and official SECAUTH typography includes 89m(d)(2) and must not be tidied into 78m(d)(2)? True
+  this is not packed 13d-1 / 13d-2 / 13d-3 or packed 12b-22 (12b-22 is the control-disclaimer analog only)? True
+packed 13d-1 / 13d-2 / 13d-3 and packed 12b-22 exist and are named only; 12b-22 is the control-disclaimer analog only; this toy is not those boxes
+literacy only; not a how-to for beneficial-ownership disclaimers, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 179/179
+disclaimer: official 17 CFR 240.13d-4; no issuer, disclosure, or investment advice; learning only
+=== AY. 17 CFR 240.13d-5: Acquisition of beneficial ownership ===
+official caption typography is Acquisition of beneficial ownership.
+13d-5(a): A person who becomes a beneficial owner of securities shall be deemed to have acquired such beneficial ownership for purposes of section 13(d)(1) of the Act, whether such acquisition was through purchase or otherwise. However, executors or administrators of a decedent's estate generally will be presumed not to have acquired the beneficial ownership held by the decedent's estate until such time as such executors or administrators are qualified under local law to perform their duties.
+13d-5(b)(1)(i): When two or more persons agree to act together for the purpose of acquiring, holding, voting or disposing of equity securities of an issuer, the group formed thereby shall be deemed to have acquired beneficial ownership, for purposes of sections 13(d) and (g) of the Act, as of the date of such agreement, of all equity securities of that issuer beneficially owned by any such persons.
+13d-5(b)(1)(ii): A group regulated as a person pursuant to section 13(d)(3) of the Act shall be deemed to have acquired beneficial ownership, as determined under paragraph (a) of this section and for purposes of sections 13(d)(1) and (2) of the Act, if any member of the group becomes the beneficial owner of additional equity securities in the same class beneficially owned by the group after the group's formation. The beneficial ownership so acquired shall be reported as being held by the group through the earlier of {x} the date of the group's dissolution or {y} the date of that member's withdrawal from the group.
+13d-5(b)(1)(iii): Notwithstanding paragraph (b)(1)(ii) of this section, a group regulated under section 13(d)(3) of the Act shall not be deemed to have acquired beneficial ownership, as determined under paragraph (a) of this section, if, after the group's formation, a member of the group becomes the beneficial owner of additional equity securities in the same class beneficially owned by the group through a sale by or transfer from another member of the group.
+13d-5(b)(2)(i): A group regulated as a person pursuant to section 13(g)(3) of the Act shall be deemed to have become the beneficial owner, for purposes of sections 13(g)(1) and (2) of the Act, if any member of the group becomes a beneficial owner of additional equity securities in the same class held by the group after the group's formation and through the earlier of {x} the date of the group's dissolution or {y} the date of that member's withdrawal from the group.
+13d-5(b)(2)(ii): Notwithstanding paragraph (b)(2)(i) of this section, a group regulated under section 13(g)(3) of the Act shall not be deemed to have become the beneficial owner of additional equity securities in the same class beneficially owned by the group if, after the group's formation, a member of the group becomes the beneficial owner of additional equity securities in the same class beneficially owned by the group through a sale by or transfer from another member of the group.
+official typography is "whether such acquisition was through purchase or otherwise"
+official typography is "sections 13(d) and (g) of the Act"
+official typography is decedent's estate (ASCII apostrophe)
+official typography is through the earlier of {x} the date of the group's dissolution or {y} the date of that member's withdrawal from the group
+official typography packs ASCII curly braces {x} / {y}; do not tidy into (x) / (y)
+official CITA typography is [88 FR 76983, Nov. 7, 2023]
+cite 17 CFR 240.13d-5; title 17 up_to_date_as_of 2026-11-17
+  a person who becomes a beneficial owner is deemed to have acquired that beneficial ownership for purposes of section 13(d)(1) whether such acquisition was through purchase or otherwise? True
+  executors or administrators of a decedent's estate generally will be presumed not to have acquired that beneficial ownership until qualified under local law to perform their duties? True
+  a group formed by an agreement to act together is deemed to have acquired, as of the date of such agreement, all equity securities of that issuer beneficially owned by any such persons, for purposes of sections 13(d) and (g) of the Act? True
+  official typography is {x} and {y} (ASCII curly braces, not (x) / (y)), and intra-group sales or transfers are excepted by official (b)(1)(iii) / (b)(2)(ii)? True
+  official CITA typography is [88 FR 76983, Nov. 7, 2023], and this is not packed 13d-3 or packed 13d-1 / 13d-2? True
+packed 13d-3 and packed 13d-1 / 13d-2 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for beneficial-ownership acquisitions or groups, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 184/184
+disclaimer: official 17 CFR 240.13d-5; no issuer, disclosure, or investment advice; learning only
+=== AZ. 17 CFR 240.13d-6: Exemption of certain acquisitions ===
+official caption typography is Exemption of certain acquisitions.
+13d-6(a): The acquisition of securities of an issuer by a person who, prior to such acquisition, was a beneficial owner of more than five percent of the outstanding securities of the same class as those acquired shall be exempt from section 13(d) of the Act; provided, that:
+13d-6(a)(1): The acquisition is made pursuant to preemptive subscription rights in an offering made to all holders of securities of the class to which the preemptive subscription rights pertain;
+13d-6(a)(2): Such person does not acquire additional securities except through the exercise of such person's pro rata share of the preemptive subscription rights; and
+13d-6(a)(3): The acquisition is duly reported, if required, pursuant to section 16(a) of the Act and the rules and regulations thereunder in this part.
+13d-6(b): A group shall be deemed not to have acquired any equity securities beneficially owned by the other members of the group solely by virtue of their concerted actions relating to the purchase of equity securities directly from an issuer in a transaction not involving a public offering; provided, that:
+13d-6(b)(1): All the members of the group are persons specified in § 240.13d-1(b)(1)(ii);
+13d-6(b)(2): The purchase is in the ordinary course of each member's business and not with the purpose nor with the effect of changing or influencing control of the issuer, nor in connection with or as a participant in any transaction having such purpose or effect, including any transaction subject to § 240.13d-3(b);
+13d-6(b)(3): There is no agreement among or between any members of the group to act together with respect to the issuer or its securities except for the purpose of facilitating the specific purchase involved; and
+13d-6(b)(4): The only actions among or between any members of the group with respect to the issuer or its securities subsequent to the closing date of the non-public offering are those which are necessary to conclude ministerial matters directly related to the completion of the offer or sale of the securities.
+official typography is "more than five percent"
+official typography is "preemptive subscription rights"
+official typography is such person's pro rata share
+official typography is "duly reported, if required, pursuant to section 16(a) of the Act"
+official (b)(1) typography is "persons specified in § 240.13d-1(b)(1)(ii)"
+official CITA typography is [88 FR 76984, Nov. 7, 2023]
+cite 17 CFR 240.13d-6; title 17 up_to_date_as_of 2026-11-17
+  official (a) applies only if the person was already a beneficial owner of more than five percent of the same class and the acquisition is made pursuant to preemptive subscription rights in an offering made to all holders of that class? True
+  the person must not acquire additional securities except through the exercise of such person's pro rata share of those rights? True
+  the acquisition must be duly reported, if required, pursuant to section 16(a) of the Act? True
+  official (b) is a separate group exemption and requires all four official (b)(1)-(4) conditions (official 13d-1(b)(1)(ii) and official 13d-3(b) are named only)? True
+  official CITA typography is [88 FR 76984, Nov. 7, 2023], not 13d-5's 76983, and this is not packed 13d-5 or packed 13d-1? True
+packed 13d-5 and packed 13d-1 exist and are named only; official 13d-1(b)(1)(ii) and official 13d-3(b) are named only; this toy is not those boxes
+literacy only; not a how-to for acquisition exemptions, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 189/189
+disclaimer: official 17 CFR 240.13d-6; no issuer, disclosure, or investment advice; learning only
+=== BA. 17 CFR 240.3b-2: Definition of “officer” ===
+official caption typography is Definition of “officer”.
+3b-2: The term officer means a president, vice president, secretary, treasury or principal financial officer, comptroller or principal accounting officer, and any person routinely performing corresponding functions with respect to any organization whether incorporated or unincorporated.
+official typography italicizes officer
+official typography is "treasury or principal financial officer" (not "treasurer")
+official typography is "comptroller" (not "controller")
+official CITA typography is [47 FR 11464, Mar. 16, 1982; 47 FR 11819, Mar. 19, 1982]
+cite 17 CFR 240.3b-2; title 17 up_to_date_as_of 2026-11-17
+  official typography is treasury or principal financial officer (not treasurer) and comptroller (not controller)? True
+  official caption typography uses typographic quotes around “officer,” and the body italicizes officer? True
+  the definition also includes any person routinely performing corresponding functions, whether incorporated or unincorporated? True
+  official CITA typography is [47 FR 11464, Mar. 16, 1982; 47 FR 11819, Mar. 19, 1982], this is not packed 3b-7, and official 16a-1 is named only (do not pack it, and do not tidy this typography into official 16a-1(f))? True
+official 16a-1 is named only; packed 3b-7 is a different definition and is not this box; do not tidy 3b-2 typography into official 16a-1(f)
+literacy only; not a how-to for officer status, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 193/193
+disclaimer: official 17 CFR 240.3b-2; no issuer, disclosure, or investment advice; learning only
+=== BB. 17 CFR 240.3b-7: Definition of “executive officer” ===
+official caption typography is Definition of “executive officer”.
+3b-7: The term executive officer, when used with reference to a registrant, means its president, any vice president of the registrant in charge of a principal business unit, division or function (such as sales, administration or finance), any other officer who performs a policy making function or any other person who performs similar policy making functions for the registrant. Executive officers of subsidiaries may be deemed executive officers of the registrant if they perform such policy making functions for the registrant.
+official typography italicizes executive officer, including the comma
+official typography is "policy making" (two words, no hyphen)
+official typography is "vice president" (two words, no hyphen)
+official CITA typography is [47 FR 11464, Mar. 16, 1982, as amended at 56 FR 7265, Feb. 21, 1991]
+cite 17 CFR 240.3b-7; title 17 up_to_date_as_of 2026-11-17
+  a vice president counts only if in charge of a principal business unit, division or function (such as sales, administration or finance), or if the person otherwise performs a policy making function? True
+  official typography is policy making (two words, no hyphen) and vice president (two words, no hyphen), and official italics include the comma in executive officer,? True
+  executive officers of subsidiaries may be deemed executive officers of the registrant if they perform such policy making functions for the registrant? True
+  official caption typography uses typographic quotes around “executive officer,” official CITA typography is [47 FR 11464, Mar. 16, 1982, as amended at 56 FR 7265, Feb. 21, 1991], this is not packed 3b-2, and official 16a-1 is named only (do not tidy this typography into official 16a-1(f))? True
+official 16a-1 is named only; packed 3b-2 is a different definition and is not this box; do not tidy 3b-7 typography into official 16a-1(f), which uses policy-making, vice-president, and controller
+literacy only; not a how-to for executive-officer status, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 197/197
+disclaimer: official 17 CFR 240.3b-7; no issuer, disclosure, or investment advice; learning only
+=== BC. 17 CFR 240.12g-2: Securities deemed to be registered pursuant to section 12(g)(1) upon termination of exemption pursuant to section 12(g)(2)(A) or (B) ===
+official caption typography is Securities deemed to be registered pursuant to section 12(g)(1) upon termination of exemption pursuant to section 12(g)(2)(A) or (B).
+12g-2: Any class of securities that would have been required to be registered pursuant to section 12(g)(1) of the Act (15 U.S.C. 78l(g)(1)) except for the fact that it was exempt from such registration by section 12(g)(2)(A) of the Act (15 U.S.C. 78l(g)(2)(A)) because it was listed and registered on a national securities exchange, or by section 12(g)(2)(B) of the Act (15 U.S.C. 78l(g)(2)(B)) because it was issued by an investment company registered pursuant to section 8 of the Investment Company Act of 1940 (15 U.S.C. 80a-8), shall upon the termination of the listing and registration of such class or the termination of the registration of such company and without the filing of an additional registration statement be deemed to be registered pursuant to section 12(g)(1) of the Act if at the time of such termination:
+12g-2(a): The issuer of such class of securities has elected to be regulated as a business development company pursuant to sections 55 through 65 of the Investment Company Act of 1940 (15 U.S.C. 80a-54 through 64) and such election has not been withdrawn; or
+12g-2(b): Securities of the class are not exempt from such registration pursuant to section 12 of the Act (15 U.S.C. 78l) or rules thereunder and all securities of such class are held of record by 300 or more persons, or 1,200 or more persons in the case of a bank; a savings and loan holding company, as such term is defined in section 10 of the Home Owners' Loan Act (12 U.S.C. 1461); or a bank holding company, as such term is defined in section 2 of the Bank Holding Company Act of 1956 (12 U.S.C. 1841).
+official typography is "without the filing of an additional registration statement"
+official typography is "15 U.S.C. 80a-54 through 64"
+official typography is "1,200 or more persons"
+official typography is Home Owners' Loan Act (ASCII apostrophe)
+official typography italicizes the letter l in 15 U.S.C. 78l
+official CITA typography is [81 FR 28705, May 10, 2016]
+official API XML has no SECAUTH element; this toy does not invent one
+cite 17 CFR 240.12g-2; title 17 up_to_date_as_of 2026-11-17
+  upon termination of the 12(g)(2)(A) exchange listing and registration, or of the 12(g)(2)(B) registered-investment-company registration, the class is deemed registered pursuant to section 12(g)(1) without the filing of an additional registration statement, but only if at the time of such termination official (a) or official (b) is met? True
+  official (a) typography is an unwithdrawn election to be regulated as a business development company pursuant to sections 55 through 65, with official U.S.C. typography 15 U.S.C. 80a-54 through 64? True
+  official (b) typography is 300 or more persons, or 1,200 or more persons in the case of a bank, a savings and loan holding company as defined in section 10 of the Home Owners' Loan Act, or a bank holding company as defined in section 2 of the Bank Holding Company Act of 1956? True
+  official typography italicizes the letter l in 15 U.S.C. 78l? True
+  official CITA typography is [81 FR 28705, May 10, 2016], official API XML has no SECAUTH, and this is not packed 12g-1 / packed 12g-4 / packed 12d2-1 / packed 12b-6 (locked 12g5-1 is named only)? True
+packed 12g-1 / 12g-4 / 12d2-1 / 12b-6 exist and are named only; locked 12g5-1 is named only; this toy is not those boxes
+literacy only; not a how-to for section 12(g) registration, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 202/202
+disclaimer: official 17 CFR 240.12g-2; no issuer, disclosure, or investment advice; learning only

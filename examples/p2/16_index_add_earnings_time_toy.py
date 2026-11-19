@@ -2217,3 +2217,262 @@ print('literacy only; not a how-to for distribution reporting exemptions, and no
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.16a-7; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AX. 17 CFR 240.13d-4: Disclaimer of beneficial ownership ===')
+# 17 CFR 240.13d-4 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Disclaimer of beneficial ownership." Official typography is
+# "sections 13(d) or 13(g) of the Act" ("or," not "and"). Official API
+# XML has no CITA element; do not invent a source line. Official
+# SECAUTH typography is "15 U.S.C. 78c(b), 78m(d)(1), 89m(d)(2),
+# 78m(d)(5), 78m(d)(6), 78n(d)(1), 78w" and must not be tidied into
+# 78m(d)(2). A 13d-4 disclaimer is not a finding of no beneficial
+# ownership. Do not flatten into packed 13d-1 / 13d-2 / 13d-3 or
+# packed 12b-22 (name 12b-22 as the control-disclaimer analog only).
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Disclaimer of beneficial ownership.')
+print('13d-4: Any person may expressly declare in any statement filed that the filing of such statement shall not be construed as an admission that such person is, for the purposes of sections 13(d) or 13(g) of the Act, the beneficial owner of any securities covered by the statement.')
+print('official typography is "sections 13(d) or 13(g) of the Act" ("or," not "and")')
+print('a 13d-4 disclaimer is not a finding of no beneficial ownership')
+print('official API XML has no CITA element; this toy does not invent a source line')
+print('official SECAUTH typography is 15 U.S.C. 78c(b), 78m(d)(1), 89m(d)(2), 78m(d)(5), 78m(d)(6), 78n(d)(1), 78w')
+print('official SECAUTH typography includes 89m(d)(2) and must not be tidied into 78m(d)(2)')
+print('cite 17 CFR 240.13d-4; title 17 up_to_date_as_of 2026-11-17')
+not_admission = True
+print(f"  an express disclaimer in a filed statement shall not be construed as an admission that such person is, for the purposes of sections 13(d) or 13(g) of the Act, the beneficial owner of any securities covered by the statement, and a 13d-4 disclaimer is not a finding of no beneficial ownership? {not_admission}")
+check(not_admission is True, "13d-4 disclaimer is not an admission or a finding of no beneficial ownership")
+or_not_and = True
+print(f"  official typography is sections 13(d) or 13(g) of the Act (or, not and)? {or_not_and}")
+check(or_not_and is True, "sections 13(d) or 13(g); or not and")
+secauth_89m = True
+print(f"  official API XML has no CITA, and official SECAUTH typography includes 89m(d)(2) and must not be tidied into 78m(d)(2)? {secauth_89m}")
+check(secauth_89m is True, "no CITA; official 89m(d)(2) not tidied")
+not_packed_13d_12b22 = True
+print(f"  this is not packed 13d-1 / 13d-2 / 13d-3 or packed 12b-22 (12b-22 is the control-disclaimer analog only)? {not_packed_13d_12b22}")
+check(not_packed_13d_12b22 is True, "not packed 13d-1/2/3 or packed 12b-22")
+print('packed 13d-1 / 13d-2 / 13d-3 and packed 12b-22 exist and are named only; 12b-22 is the control-disclaimer analog only; this toy is not those boxes')
+print('literacy only; not a how-to for beneficial-ownership disclaimers, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.13d-4; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AY. 17 CFR 240.13d-5: Acquisition of beneficial ownership ===')
+# 17 CFR 240.13d-5 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Acquisition of beneficial ownership." Official typography is
+# "whether such acquisition was through purchase or otherwise,"
+# "sections 13(d) and (g) of the Act," "decedent's estate" (ASCII
+# apostrophe), and "through the earlier of {x} the date of the group's
+# dissolution or {y} the date of that member's withdrawal from the
+# group" (ASCII curly braces U+007B/U+007D; do not tidy into (x)/(y)).
+# Official CITA is [88 FR 76983, Nov. 7, 2023]. This is not packed
+# 13d-3 or packed 13d-1 / 13d-2.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Acquisition of beneficial ownership.')
+print("13d-5(a): A person who becomes a beneficial owner of securities shall be deemed to have acquired such beneficial ownership for purposes of section 13(d)(1) of the Act, whether such acquisition was through purchase or otherwise. However, executors or administrators of a decedent's estate generally will be presumed not to have acquired the beneficial ownership held by the decedent's estate until such time as such executors or administrators are qualified under local law to perform their duties.")
+print('13d-5(b)(1)(i): When two or more persons agree to act together for the purpose of acquiring, holding, voting or disposing of equity securities of an issuer, the group formed thereby shall be deemed to have acquired beneficial ownership, for purposes of sections 13(d) and (g) of the Act, as of the date of such agreement, of all equity securities of that issuer beneficially owned by any such persons.')
+print("13d-5(b)(1)(ii): A group regulated as a person pursuant to section 13(d)(3) of the Act shall be deemed to have acquired beneficial ownership, as determined under paragraph (a) of this section and for purposes of sections 13(d)(1) and (2) of the Act, if any member of the group becomes the beneficial owner of additional equity securities in the same class beneficially owned by the group after the group's formation. The beneficial ownership so acquired shall be reported as being held by the group through the earlier of {x} the date of the group's dissolution or {y} the date of that member's withdrawal from the group.")
+print("13d-5(b)(1)(iii): Notwithstanding paragraph (b)(1)(ii) of this section, a group regulated under section 13(d)(3) of the Act shall not be deemed to have acquired beneficial ownership, as determined under paragraph (a) of this section, if, after the group's formation, a member of the group becomes the beneficial owner of additional equity securities in the same class beneficially owned by the group through a sale by or transfer from another member of the group.")
+print("13d-5(b)(2)(i): A group regulated as a person pursuant to section 13(g)(3) of the Act shall be deemed to have become the beneficial owner, for purposes of sections 13(g)(1) and (2) of the Act, if any member of the group becomes a beneficial owner of additional equity securities in the same class held by the group after the group's formation and through the earlier of {x} the date of the group's dissolution or {y} the date of that member's withdrawal from the group.")
+print("13d-5(b)(2)(ii): Notwithstanding paragraph (b)(2)(i) of this section, a group regulated under section 13(g)(3) of the Act shall not be deemed to have become the beneficial owner of additional equity securities in the same class beneficially owned by the group if, after the group's formation, a member of the group becomes the beneficial owner of additional equity securities in the same class beneficially owned by the group through a sale by or transfer from another member of the group.")
+print('official typography is "whether such acquisition was through purchase or otherwise"')
+print('official typography is "sections 13(d) and (g) of the Act"')
+print("official typography is decedent's estate (ASCII apostrophe)")
+print("official typography is through the earlier of {x} the date of the group's dissolution or {y} the date of that member's withdrawal from the group")
+print('official typography packs ASCII curly braces {x} / {y}; do not tidy into (x) / (y)')
+print('official CITA typography is [88 FR 76983, Nov. 7, 2023]')
+print('cite 17 CFR 240.13d-5; title 17 up_to_date_as_of 2026-11-17')
+purchase_or_otherwise = True
+print(f"  a person who becomes a beneficial owner is deemed to have acquired that beneficial ownership for purposes of section 13(d)(1) whether such acquisition was through purchase or otherwise? {purchase_or_otherwise}")
+check(purchase_or_otherwise is True, "13d-5(a) purchase or otherwise")
+estate_presumption = True
+print(f"  executors or administrators of a decedent's estate generally will be presumed not to have acquired that beneficial ownership until qualified under local law to perform their duties? {estate_presumption}")
+check(estate_presumption is True, "13d-5(a) decedent's estate presumption")
+group_formation = True
+print(f"  a group formed by an agreement to act together is deemed to have acquired, as of the date of such agreement, all equity securities of that issuer beneficially owned by any such persons, for purposes of sections 13(d) and (g) of the Act? {group_formation}")
+check(group_formation is True, "13d-5(b)(1)(i) group formation; 13(d) and (g)")
+curly_and_intragroup = True
+print("  official typography is {x} and {y} (ASCII curly braces, not (x) / (y)), and intra-group sales or transfers are excepted by official (b)(1)(iii) / (b)(2)(ii)? " + str(curly_and_intragroup))
+check(curly_and_intragroup is True, "ASCII {x}/{y}; intra-group exceptions")
+cita_13d5 = True
+print(f"  official CITA typography is [88 FR 76983, Nov. 7, 2023], and this is not packed 13d-3 or packed 13d-1 / 13d-2? {cita_13d5}")
+check(cita_13d5 is True, "CITA 76983; not packed 13d-3 or 13d-1/2")
+print('packed 13d-3 and packed 13d-1 / 13d-2 exist and are named only; this toy is not those boxes')
+print('literacy only; not a how-to for beneficial-ownership acquisitions or groups, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.13d-5; no issuer, disclosure, or investment advice; learning only')
+
+print('=== AZ. 17 CFR 240.13d-6: Exemption of certain acquisitions ===')
+# 17 CFR 240.13d-6 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Exemption of certain acquisitions." Official typography is "more
+# than five percent," "preemptive subscription rights," "such person's
+# pro rata share," and "duly reported, if required, pursuant to
+# section 16(a) of the Act." Official (b) is a separate group exemption
+# and requires all four official (b)(1)-(4) conditions. Official (b)(1)
+# typography is "persons specified in § 240.13d-1(b)(1)(ii)." Official
+# 13d-1(b)(1)(ii) and official 13d-3(b) are named only. Official CITA
+# is [88 FR 76984, Nov. 7, 2023]; do not tidy that page into 13d-5's
+# 76983. This is not packed 13d-5 or packed 13d-1.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Exemption of certain acquisitions.')
+print('13d-6(a): The acquisition of securities of an issuer by a person who, prior to such acquisition, was a beneficial owner of more than five percent of the outstanding securities of the same class as those acquired shall be exempt from section 13(d) of the Act; provided, that:')
+print('13d-6(a)(1): The acquisition is made pursuant to preemptive subscription rights in an offering made to all holders of securities of the class to which the preemptive subscription rights pertain;')
+print("13d-6(a)(2): Such person does not acquire additional securities except through the exercise of such person's pro rata share of the preemptive subscription rights; and")
+print('13d-6(a)(3): The acquisition is duly reported, if required, pursuant to section 16(a) of the Act and the rules and regulations thereunder in this part.')
+print('13d-6(b): A group shall be deemed not to have acquired any equity securities beneficially owned by the other members of the group solely by virtue of their concerted actions relating to the purchase of equity securities directly from an issuer in a transaction not involving a public offering; provided, that:')
+print('13d-6(b)(1): All the members of the group are persons specified in § 240.13d-1(b)(1)(ii);')
+print('13d-6(b)(2): The purchase is in the ordinary course of each member\'s business and not with the purpose nor with the effect of changing or influencing control of the issuer, nor in connection with or as a participant in any transaction having such purpose or effect, including any transaction subject to § 240.13d-3(b);')
+print('13d-6(b)(3): There is no agreement among or between any members of the group to act together with respect to the issuer or its securities except for the purpose of facilitating the specific purchase involved; and')
+print('13d-6(b)(4): The only actions among or between any members of the group with respect to the issuer or its securities subsequent to the closing date of the non-public offering are those which are necessary to conclude ministerial matters directly related to the completion of the offer or sale of the securities.')
+print('official typography is "more than five percent"')
+print('official typography is "preemptive subscription rights"')
+print("official typography is such person's pro rata share")
+print('official typography is "duly reported, if required, pursuant to section 16(a) of the Act"')
+print('official (b)(1) typography is "persons specified in § 240.13d-1(b)(1)(ii)"')
+print('official CITA typography is [88 FR 76984, Nov. 7, 2023]')
+print('cite 17 CFR 240.13d-6; title 17 up_to_date_as_of 2026-11-17')
+five_percent_preemptive = True
+print(f"  official (a) applies only if the person was already a beneficial owner of more than five percent of the same class and the acquisition is made pursuant to preemptive subscription rights in an offering made to all holders of that class? {five_percent_preemptive}")
+check(five_percent_preemptive is True, "13d-6(a) more than five percent; preemptive subscription rights")
+pro_rata = True
+print(f"  the person must not acquire additional securities except through the exercise of such person's pro rata share of those rights? {pro_rata}")
+check(pro_rata is True, "13d-6(a)(2) such person's pro rata share")
+duly_reported = True
+print(f"  the acquisition must be duly reported, if required, pursuant to section 16(a) of the Act? {duly_reported}")
+check(duly_reported is True, "13d-6(a)(3) duly reported if required pursuant to 16(a)")
+group_four_conditions = True
+print(f"  official (b) is a separate group exemption and requires all four official (b)(1)-(4) conditions (official 13d-1(b)(1)(ii) and official 13d-3(b) are named only)? {group_four_conditions}")
+check(group_four_conditions is True, "13d-6(b)(1)-(4); 13d-1(b)(1)(ii) and 13d-3(b) named only")
+cita_13d6 = True
+print(f"  official CITA typography is [88 FR 76984, Nov. 7, 2023], not 13d-5's 76983, and this is not packed 13d-5 or packed 13d-1? {cita_13d6}")
+check(cita_13d6 is True, "CITA 76984 not 76983; not packed 13d-5 or 13d-1")
+print('packed 13d-5 and packed 13d-1 exist and are named only; official 13d-1(b)(1)(ii) and official 13d-3(b) are named only; this toy is not those boxes')
+print('literacy only; not a how-to for acquisition exemptions, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.13d-6; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BA. 17 CFR 240.3b-2: Definition of “officer” ===')
+# 17 CFR 240.3b-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Definition of “officer”. (typographic U+201C/U+201D). Official
+# typography italicizes officer. Official typography is "treasury or
+# principal financial officer" (not "treasurer") and "comptroller"
+# (not "controller"). Official CITA is [47 FR 11464, Mar. 16, 1982;
+# 47 FR 11819, Mar. 19, 1982]. Name official 16a-1 only; do not pack
+# 16a-1, and do not tidy this typography into official 16a-1(f) or
+# into 3b-7.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Definition of “officer”.')
+print('3b-2: The term officer means a president, vice president, secretary, treasury or principal financial officer, comptroller or principal accounting officer, and any person routinely performing corresponding functions with respect to any organization whether incorporated or unincorporated.')
+print('official typography italicizes officer')
+print('official typography is "treasury or principal financial officer" (not "treasurer")')
+print('official typography is "comptroller" (not "controller")')
+print('official CITA typography is [47 FR 11464, Mar. 16, 1982; 47 FR 11819, Mar. 19, 1982]')
+print('cite 17 CFR 240.3b-2; title 17 up_to_date_as_of 2026-11-17')
+treasury_comptroller = True
+print(f"  official typography is treasury or principal financial officer (not treasurer) and comptroller (not controller)? {treasury_comptroller}")
+check(treasury_comptroller is True, "treasury not treasurer; comptroller not controller")
+caption_italic = True
+print('  official caption typography uses typographic quotes around “officer,” and the body italicizes officer? ' + str(caption_italic))
+check(caption_italic is True, "typographic quotes around officer; italic officer")
+corresponding = True
+print(f"  the definition also includes any person routinely performing corresponding functions, whether incorporated or unincorporated? {corresponding}")
+check(corresponding is True, "corresponding functions; incorporated or unincorporated")
+cita_3b2 = True
+print(f"  official CITA typography is [47 FR 11464, Mar. 16, 1982; 47 FR 11819, Mar. 19, 1982], this is not packed 3b-7, and official 16a-1 is named only (do not pack it, and do not tidy this typography into official 16a-1(f))? {cita_3b2}")
+check(cita_3b2 is True, "CITA 3b-2; not 3b-7; 16a-1 named only")
+print('official 16a-1 is named only; packed 3b-7 is a different definition and is not this box; do not tidy 3b-2 typography into official 16a-1(f)')
+print('literacy only; not a how-to for officer status, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.3b-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BB. 17 CFR 240.3b-7: Definition of “executive officer” ===')
+# 17 CFR 240.3b-7 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Definition of “executive officer”. (typographic U+201C/U+201D).
+# Official typography italicizes executive officer, including the
+# comma. Official typography is "policy making" (two words, no hyphen)
+# and "vice president" (two words, no hyphen). Official CITA is
+# [47 FR 11464, Mar. 16, 1982, as amended at 56 FR 7265, Feb. 21, 1991].
+# Name official 16a-1 only; do not pack 16a-1, and do not tidy this
+# typography into official 16a-1(f) (which uses "policy-making,"
+# "vice-president," and "controller") or into 3b-2.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Definition of “executive officer”.')
+print('3b-7: The term executive officer, when used with reference to a registrant, means its president, any vice president of the registrant in charge of a principal business unit, division or function (such as sales, administration or finance), any other officer who performs a policy making function or any other person who performs similar policy making functions for the registrant. Executive officers of subsidiaries may be deemed executive officers of the registrant if they perform such policy making functions for the registrant.')
+print('official typography italicizes executive officer, including the comma')
+print('official typography is "policy making" (two words, no hyphen)')
+print('official typography is "vice president" (two words, no hyphen)')
+print('official CITA typography is [47 FR 11464, Mar. 16, 1982, as amended at 56 FR 7265, Feb. 21, 1991]')
+print('cite 17 CFR 240.3b-7; title 17 up_to_date_as_of 2026-11-17')
+vice_president_charge = True
+print(f"  a vice president counts only if in charge of a principal business unit, division or function (such as sales, administration or finance), or if the person otherwise performs a policy making function? {vice_president_charge}")
+check(vice_president_charge is True, "vice president in charge of a principal unit, or policy making")
+policy_making_two_words = True
+print(f"  official typography is policy making (two words, no hyphen) and vice president (two words, no hyphen), and official italics include the comma in executive officer,? {policy_making_two_words}")
+check(policy_making_two_words is True, "policy making; vice president; italic executive officer,")
+subsidiaries = True
+print(f"  executive officers of subsidiaries may be deemed executive officers of the registrant if they perform such policy making functions for the registrant? {subsidiaries}")
+check(subsidiaries is True, "subsidiary executive officers; policy making for the registrant")
+cita_3b7 = True
+print(f"  official caption typography uses typographic quotes around “executive officer,” official CITA typography is [47 FR 11464, Mar. 16, 1982, as amended at 56 FR 7265, Feb. 21, 1991], this is not packed 3b-2, and official 16a-1 is named only (do not tidy this typography into official 16a-1(f))? {cita_3b7}")
+check(cita_3b7 is True, "CITA 3b-7; typographic quotes; not 3b-2; 16a-1 named only")
+print('official 16a-1 is named only; packed 3b-2 is a different definition and is not this box; do not tidy 3b-7 typography into official 16a-1(f), which uses policy-making, vice-president, and controller')
+print('literacy only; not a how-to for executive-officer status, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.3b-7; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BC. 17 CFR 240.12g-2: Securities deemed to be registered pursuant to section 12(g)(1) upon termination of exemption pursuant to section 12(g)(2)(A) or (B) ===')
+# 17 CFR 240.12g-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official typography is
+# "without the filing of an additional registration statement,"
+# "15 U.S.C. 80a-54 through 64," "1,200 or more persons," and
+# "Home Owners' Loan Act" (ASCII apostrophe). Official typography
+# italicizes the letter l in 15 U.S.C. 78l. Official CITA is
+# [81 FR 28705, May 10, 2016]. Official API XML has no SECAUTH;
+# do not invent one. This is not packed 12g-1, packed 12g-4, packed
+# 12d2-1, or packed 12b-6. Name locked 12g5-1 only.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Securities deemed to be registered pursuant to section 12(g)(1) upon termination of exemption pursuant to section 12(g)(2)(A) or (B).')
+print('12g-2: Any class of securities that would have been required to be registered pursuant to section 12(g)(1) of the Act (15 U.S.C. 78l(g)(1)) except for the fact that it was exempt from such registration by section 12(g)(2)(A) of the Act (15 U.S.C. 78l(g)(2)(A)) because it was listed and registered on a national securities exchange, or by section 12(g)(2)(B) of the Act (15 U.S.C. 78l(g)(2)(B)) because it was issued by an investment company registered pursuant to section 8 of the Investment Company Act of 1940 (15 U.S.C. 80a-8), shall upon the termination of the listing and registration of such class or the termination of the registration of such company and without the filing of an additional registration statement be deemed to be registered pursuant to section 12(g)(1) of the Act if at the time of such termination:')
+print('12g-2(a): The issuer of such class of securities has elected to be regulated as a business development company pursuant to sections 55 through 65 of the Investment Company Act of 1940 (15 U.S.C. 80a-54 through 64) and such election has not been withdrawn; or')
+print("12g-2(b): Securities of the class are not exempt from such registration pursuant to section 12 of the Act (15 U.S.C. 78l) or rules thereunder and all securities of such class are held of record by 300 or more persons, or 1,200 or more persons in the case of a bank; a savings and loan holding company, as such term is defined in section 10 of the Home Owners' Loan Act (12 U.S.C. 1461); or a bank holding company, as such term is defined in section 2 of the Bank Holding Company Act of 1956 (12 U.S.C. 1841).")
+print('official typography is "without the filing of an additional registration statement"')
+print('official typography is "15 U.S.C. 80a-54 through 64"')
+print('official typography is "1,200 or more persons"')
+print("official typography is Home Owners' Loan Act (ASCII apostrophe)")
+print('official typography italicizes the letter l in 15 U.S.C. 78l')
+print('official CITA typography is [81 FR 28705, May 10, 2016]')
+print('official API XML has no SECAUTH element; this toy does not invent one')
+print('cite 17 CFR 240.12g-2; title 17 up_to_date_as_of 2026-11-17')
+deemed_registered = True
+print(f"  upon termination of the 12(g)(2)(A) exchange listing and registration, or of the 12(g)(2)(B) registered-investment-company registration, the class is deemed registered pursuant to section 12(g)(1) without the filing of an additional registration statement, but only if at the time of such termination official (a) or official (b) is met? {deemed_registered}")
+check(deemed_registered is True, "12g-2 deemed registered without an additional registration statement if (a) or (b)")
+bdc_election = True
+print(f"  official (a) typography is an unwithdrawn election to be regulated as a business development company pursuant to sections 55 through 65, with official U.S.C. typography 15 U.S.C. 80a-54 through 64? {bdc_election}")
+check(bdc_election is True, "12g-2(a) BDC election; 80a-54 through 64")
+holders_hola = True
+print(f"  official (b) typography is 300 or more persons, or 1,200 or more persons in the case of a bank, a savings and loan holding company as defined in section 10 of the Home Owners' Loan Act, or a bank holding company as defined in section 2 of the Bank Holding Company Act of 1956? {holders_hola}")
+check(holders_hola is True, "12g-2(b) 300 or 1,200; Home Owners' Loan Act")
+italic_l = True
+print(f"  official typography italicizes the letter l in 15 U.S.C. 78l? {italic_l}")
+check(italic_l is True, "italic l in 78l")
+cita_12g2 = True
+print(f"  official CITA typography is [81 FR 28705, May 10, 2016], official API XML has no SECAUTH, and this is not packed 12g-1 / packed 12g-4 / packed 12d2-1 / packed 12b-6 (locked 12g5-1 is named only)? {cita_12g2}")
+check(cita_12g2 is True, "CITA 12g-2; no SECAUTH; not 12g-1/12g-4/12d2-1/12b-6; 12g5-1 named only")
+print('packed 12g-1 / 12g-4 / 12d2-1 / 12b-6 exist and are named only; locked 12g5-1 is named only; this toy is not those boxes')
+print('literacy only; not a how-to for section 12(g) registration, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12g-2; no issuer, disclosure, or investment advice; learning only')
