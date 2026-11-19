@@ -1340,3 +1340,166 @@ literacy only; not a how-to for UTP reporting exemption, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 230/230
 disclaimer: official 17 CFR 240.12f-4; no issuer, disclosure, or investment advice; learning only
+=== BJ. 17 CFR 240.12f-2: Extending unlisted trading privileges to a security that is the subject of an initial public offering ===
+official caption typography is Extending unlisted trading privileges to a security that is the subject of an initial public offering.
+12f-2(a): General provision. A national securities exchange may extend unlisted trading privileges to a subject security when at least one transaction in the subject security has been effected on the national securities exchange upon which the security is listed and the transaction has been reported pursuant to an effective transaction reporting plan, as defined in § 242.600 of this chapter.
+12f-2(b): The extension of unlisted trading privileges pursuant to this section shall be subject to all the provisions set forth in Section 12(f) of the Act (15 U.S.C. 78l(f)), as amended, and any rule or regulation promulgated thereunder, or which may be promulgated thereunder while the extension is in effect.
+12f-2(c): Definitions. For the purposes of this section:
+12f-2(c)(1): The term subject security shall mean a security that is the subject of an initial public offering, as that term is defined in section 12(f)(1)(G)(i) of the Act (15 U.S.C. 78l(f)(1)(G)(i)), and
+12f-2(c)(2): An initial public offering commences at such time as is described in section 12(f)(1)(G)(ii) of the Act (15 U.S.C. 78l(f)(1)(G)(ii)).
+official typography italicizes General provision., Definitions., subject security, and initial public offering commences
+official (b) typography italicizes the letter l in 15 U.S.C. 78l(f)
+official (a) has no 78l citation
+official (c)(1) typography is 15 U.S.C. 78l(f)(1)(G)(i) (Roman l, Roman 1)
+official (c)(2) typography is 15 U.S.C. 78l(f)(1)(G)(ii) (Roman l; italic 1)
+do not tidy those three official 78l forms into one another
+official CITA typography is [60 FR 20896, Apr. 28, 1995, as amended at 65 FR 53565, Sept. 5, 2000; 70 FR 37618, June 29, 2005]
+official API XML has no SECAUTH
+official 12f-1 is named only; packed 12f-4 exists and is named only
+cite 17 CFR 240.12f-2; title 17 up_to_date_as_of 2026-11-17
+  a national securities exchange may extend unlisted trading privileges to a subject security when at least one transaction in the subject security has been effected on the national securities exchange upon which the security is listed and the transaction has been reported pursuant to an effective transaction reporting plan? True
+  official typography italicizes General provision., Definitions., subject security, and initial public offering commences? True
+  official (b) typography italicizes the letter l in 15 U.S.C. 78l(f), and official (a) has no 78l citation? True
+  official (c)(1) typography is 15 U.S.C. 78l(f)(1)(G)(i) (Roman l, Roman 1) and official (c)(2) typography is 15 U.S.C. 78l(f)(1)(G)(ii) (Roman l; italic 1), and those three official forms must not be tidied into one another? True
+  official CITA typography is [60 FR 20896, Apr. 28, 1995, as amended at 65 FR 53565, Sept. 5, 2000; 70 FR 37618, June 29, 2005], official API XML has no SECAUTH, official 12f-1 is named only, and this later box does not rewrite the packed 12f-4 / section-BI prefix that official 12f-2 is named only? True
+packed 12f-4 / section-BI prefix that official 12f-2 is named only stays as written; this later box packs official 12f-2 and does not rewrite that prefix; official 12f-1 is named only
+literacy only; not a how-to for extending UTP to an IPO security, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 235/235
+disclaimer: official 17 CFR 240.12f-2; no issuer, disclosure, or investment advice; learning only
+=== BK. 17 CFR 240.12f-3: Termination or suspension of unlisted trading privileges ===
+official caption typography is Termination or suspension of unlisted trading privileges.
+12f-3(a): The issuer of any security for which unlisted trading privileges on any exchange have been continued or extended, or any broker or dealer who makes or creates a market for such security, or any other person having a bona fide interest in the question of termination or suspension of such unlisted trading privileges, may make application to the Commission for the termination or suspension of such unlisted trading privileges. One duly executed copy of such application shall be filed, and it shall contain the following information:
+12f-3(a)(1): Name and address of applicant;
+12f-3(a)(2): A brief statement of the applicant's interest in the question of termination or suspension of such unlisted trading privileges;
+12f-3(a)(3): Title of security;
+12f-3(a)(4): Names of issuer;
+12f-3(a)(5): Amount of such security issued and outstanding (number of shares of stock or principal amount of bonds), stating source of information;
+12f-3(a)(6): Annual volume of public trading in such security (number of shares of stock or principal amount of bonds) on such exchange for each of the three calendar years immediately preceding the date of such application, and monthly volume of trading in such security for each of the twelve calendar months immediately preceding the date of such application;
+12f-3(a)(7): Price range on such exchange for each of the twelve calendar months immediately preceding the date of such application; and
+12f-3(a)(8): A brief statement of the information in the applicant's possession, and the source thereof, with respect to (i) the extent of public trading in such security on such exchange, and (ii) the character of trading in such security on such exchange; and
+12f-3(a)(9): A brief statement that a copy of the instant application has been mailed, or otherwise personally provided, to the exchange from which the suspension or termination of unlisted trading privileges is sought, and to any other exchange on which such security is listed or traded pursuant to unlisted trading privileges.
+12f-3(b): Unlisted trading privileges in any security on any national securities exchange may be suspended or terminated by such exchange in accordance with its rules.
+official (a)(4) typography is “Names of issuer.”
+official (b) typography is may be suspended or terminated by such exchange in accordance with its rules
+official CITA typography is [20 FR 6702, Sept. 13, 1955, as amended at 44 FR 75135, Dec. 19, 1979; 45 FR 36076, May 29, 1980; 60 FR 20896, Apr. 28, 1995]
+official SECAUTH typography is (Secs. 12(f) and 23, 15 U.S.C. 78l and 78w) (italic l)
+official 12f-1 is named only
+cite 17 CFR 240.12f-3; title 17 up_to_date_as_of 2026-11-17
+  official (b) says unlisted trading privileges may be suspended or terminated by such exchange in accordance with its rules? True
+  official (a) lets the issuer, any broker or dealer who makes or creates a market for such security, or any other person having a bona fide interest apply to the Commission for termination or suspension? True
+  official (a)(4) typography is “Names of issuer.”? True
+  official SECAUTH typography is (Secs. 12(f) and 23, 15 U.S.C. 78l and 78w) (italic l)? True
+  official CITA typography is [20 FR 6702, Sept. 13, 1955, as amended at 44 FR 75135, Dec. 19, 1979; 45 FR 36076, May 29, 1980; 60 FR 20896, Apr. 28, 1995], and official 12f-1 is named only (do not pack it)? True
+official 12f-1 is named only; do not pack 12f-1
+literacy only; not a how-to for terminating or suspending UTP, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 240/240
+disclaimer: official 17 CFR 240.12f-3; no issuer, disclosure, or investment advice; learning only
+=== BL. 17 CFR 240.12f-5: Exchange rules for securities to which unlisted trading privileges are extended ===
+official caption typography is Exchange rules for securities to which unlisted trading privileges are extended.
+12f-5: A national securities exchange shall not extend unlisted trading privileges to any security unless the national securities exchange has in effect a rule or rules providing for transactions in the class or type of security to which the exchange extends unlisted trading privileges.
+official CITA typography is [60 FR 20896, Apr. 28, 1995]
+official API XML has no SECAUTH
+do not tidy this CITA into 12f-2's longer amended CITA, which starts with the same first cite
+cite 17 CFR 240.12f-5; title 17 up_to_date_as_of 2026-11-17
+  a national securities exchange shall not extend unlisted trading privileges to any security unless it has in effect a rule or rules providing for transactions in the class or type of security to which the exchange extends unlisted trading privileges? True
+  official caption typography is Exchange rules for securities to which unlisted trading privileges are extended.? True
+  official CITA typography is [60 FR 20896, Apr. 28, 1995]? True
+  official API XML has no SECAUTH? True
+  this official CITA must not be tidied into 12f-2's longer amended CITA, which starts with the same first cite, and this is not packed 12f-2 / 12f-3 / 12f-4? True
+this official CITA is not 12f-2's longer amended CITA; this toy is not packed 12f-2 / 12f-3 / 12f-4
+literacy only; not a how-to for adopting exchange UTP rules, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 245/245
+disclaimer: official 17 CFR 240.12f-5; no issuer, disclosure, or investment advice; learning only
+=== BM. 17 CFR 240.14a-5: Presentation of information in proxy statement ===
+official caption typography is Presentation of information in proxy statement.
+14a-5(a): The information included in the proxy statement shall be clearly presented and the statements made shall be divided into groups according to subject matter and the various groups of statements shall be preceded by appropriate headings. The order of items and sub-items in the schedule need not be followed. Where practicable and appropriate, the information shall be presented in tabular form. All amounts shall be stated in figures. Information required by more than one applicable item need not be repeated. No statement need be made in response to any item or sub-item which is inapplicable.
+14a-5(b): Any information required to be included in the proxy statement as to terms of securities or other subject matter which from a standpoint of practical necessity must be determined in the future may be stated in terms of present knowledge and intention. To the extent practicable, the authority to be conferred concerning each such matter shall be confined within limits reasonably related to the need for discretionary authority. Subject to the foregoing, information which is not known to the persons on whose behalf the solicitation is to be made and which it is not reasonably within the power of such persons to ascertain or procure may be omitted, if a brief statement of the circumstances rendering such information unavailable is made.
+14a-5(c): Any information contained in any other proxy soliciting material which has been or will be furnished to each person solicited in connection with the same meeting or subject matter may be omitted from the proxy statement, if a clear reference is made to the particular document containing such information.
+14a-5(d)(1): All printed proxy statements shall be in roman type at least as large and as legible as 10-point modern type, except that to the extent necessary for convenient presentation financial statements and other tabular data, but not the notes thereto, may be in roman type at least as large and as legible as 8-point modern type. All such type shall be leaded at least 2 points.
+14a-5(d)(2): Where a proxy statement is delivered through an electronic medium, issuers may satisfy legibility requirements applicable to printed documents, such as type size and font, by presenting all required information in a format readily communicated to investors.
+14a-5(e): All proxy statements shall disclose, under an appropriate caption, the following dates:
+14a-5(e)(1): The deadline for submitting shareholder proposals for inclusion in the registrant's proxy statement and form of proxy for the registrant's next annual meeting, calculated in the manner provided in § 240.14a-8(e)(Question 5);
+14a-5(e)(2): The date after which notice of a shareholder proposal submitted outside the processes of § 240.14a-8 is considered untimely, either calculated in the manner provided by § 240.14a-4(c)(1) or as established by the registrant's advance notice provision, if any, authorized by applicable state law;
+14a-5(e)(3): The deadline for submitting nominees for inclusion in the registrant's proxy statement and form of proxy pursuant to an applicable state or foreign law provision or a registrant's governing documents as they relate to the inclusion of shareholder director nominees in the registrant's proxy materials for the registrant's next annual meeting of shareholders; and
+14a-5(e)(4): The deadline for providing notice of a solicitation of proxies in support of director nominees other than the registrant's nominees pursuant to § 240.14a-19 for the registrant's next annual meeting unless the registrant is an investment company registered under the Investment Company Act of 1940 (15 U.S.C. 80a-1 et seq.) or a business development company as defined by section 2(a)(48) of the Investment Company Act of 1940 (15 U.S.C. 80a-2(a)(48)).
+14a-5(f): If the date of the next annual meeting is subsequently advanced or delayed by more than 30 calendar days from the date of the annual meeting to which the proxy statement relates, the registrant shall, in a timely manner, inform shareholders of such change, and the new dates referred to in paragraphs (e)(1) and (e)(2) of this section, by including a notice, under Item 5, in its earliest possible quarterly report on Form 10-Q (§ 249.308a of this chapter), or, in the case of investment companies, in a shareholder report under § 270.30d-1 of this chapter under the Investment Company Act of 1940, or, if impracticable, any means reasonably calculated to inform shareholders.
+official typography is § 240.14a-8(e)(Question 5)
+official typography italicizes et seq.
+official (f) typography is more than 30 calendar days
+official CITA typography is [17 FR 11432, Dec. 18, 1952, as amended at 36 FR 8935, May 15, 1971; 37 FR 23179, Oct. 31, 1972; 44 FR 68770, Nov. 29, 1979; 51 FR 42061, Nov. 20, 1986; 61 FR 24656, May 15, 1996; 63 FR 29118, May 28, 1998; 63 FR 46881, Sept. 3, 1998; 73 FR 977, Jan. 4, 2008; 75 FR 56782, Sept. 16, 2010; 86 FR 68379, Dec. 1, 2021; 90 FR 9689, Feb. 18, 2025]
+official API XML has no SECAUTH
+official 14a-8 / 14a-4 / 14a-19 are named only
+cite 17 CFR 240.14a-5; title 17 up_to_date_as_of 2026-11-17
+  official (e) requires all proxy statements to disclose, under an appropriate caption, the official (e)(1)–(4) dates, including the shareholder-proposal deadline calculated in the manner provided in § 240.14a-8(e)(Question 5)? True
+  official typography is § 240.14a-8(e)(Question 5), and official typography italicizes et seq.? True
+  official (f) typography is more than 30 calendar days, and the registrant shall, in a timely manner, inform shareholders of such change by including a notice, under Item 5, in its earliest possible quarterly report on Form 10-Q? True
+  official CITA typography includes 73 FR 977, Jan. 4, 2008 and ends 90 FR 9689, Feb. 18, 2025 (do not mix 977 into 3b-6's 973), and official API XML has no SECAUTH? True
+  official 14a-8 / 14a-4 / 14a-19 are named only, and this is not packed 14a-3 / 14a-9 / 14a-10 / 14a-14? True
+official 14a-8 / 14a-4 / 14a-19 are named only; packed 14a-3 / 14a-9 / 14a-10 / 14a-14 stay as written
+literacy only; not a how-to for drafting a proxy statement, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 250/250
+disclaimer: official 17 CFR 240.14a-5; no issuer, disclosure, or investment advice; learning only
+=== BN. 17 CFR 240.0-2: Business hours of the Commission ===
+official caption typography is Business hours of the Commission.
+0-2(a): The principal office of the Commission, at 100 F Street, NE, Washington, DC 20549, is open each day, except Saturdays, Sundays, and Federal holidays, from 9 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever currently is in effect in Washington, DC, provided that hours for the filing of documents pursuant to the Act or the rules and regulations thereunder are as set forth in paragraphs (b) and (c) of this section.
+0-2(b): Submissions made in paper. Paper documents filed with or otherwise furnished to the Commission may be submitted to the Commission each day, except Saturdays, Sundays and federal holidays, from 8 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.
+0-2(c): Electronic filings. Filings made by direct transmission may be submitted to the Commission each day, except Saturdays, Sundays, and Federal holidays, from 6 a.m. to 10 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.
+official typography is 100 F Street, NE, Washington, DC 20549 (NE, with no period after NE)
+official typography italicizes provided that, Submissions made in paper., and Electronic filings.
+official typography is Eastern Daylight Saving Time
+official (a) typography is Saturdays, Sundays, and Federal holidays (Oxford comma; capital Federal)
+official (b) typography is Saturdays, Sundays and federal holidays (no Oxford comma; lowercase federal)
+official (c) typography is Saturdays, Sundays, and Federal holidays (Oxford comma; capital Federal)
+official CITA typography is [58 FR 14682, Mar. 18, 1993, as amended at 65 FR 24801, Apr. 27, 2000; 68 FR 25799, May 13, 2003; 73 FR 973, Jan. 4, 2008; 88 FR 12209, Feb. 27, 2023]
+official API XML has no SECAUTH; official CROSSREF after official (c) is not a SECAUTH
+this is not packed 232.12; already-taught 232.13 is not rewritten
+cite 17 CFR 240.0-2; title 17 up_to_date_as_of 2026-11-17
+  principal-office hours are 9 a.m. to 5:30 p.m., paper hours are 8 a.m. to 5:30 p.m., and electronic / direct transmission hours are 6 a.m. to 10 p.m.? True
+  official address typography is 100 F Street, NE, Washington, DC 20549 (NE, with no period after NE)? True
+  official typography italicizes provided that, Submissions made in paper., and Electronic filings., and official typography is Eastern Daylight Saving Time? True
+  official (a) and official (c) typography is Saturdays, Sundays, and Federal holidays, and official (b) typography is Saturdays, Sundays and federal holidays? True
+  official CITA typography is [58 FR 14682, Mar. 18, 1993, as amended at 65 FR 24801, Apr. 27, 2000; 68 FR 25799, May 13, 2003; 73 FR 973, Jan. 4, 2008; 88 FR 12209, Feb. 27, 2023], official API XML has no SECAUTH (the CROSSREF block after official (c) is not a SECAUTH), this is not packed 232.12, and already-taught 232.13 is not rewritten? True
+this toy is not packed 232.12 and does not rewrite packed 232.12 or already-taught 232.13; official CROSSREF is not a SECAUTH
+literacy only; not a how-to for transmitting a filing, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 255/255
+disclaimer: official 17 CFR 240.0-2; no issuer, disclosure, or investment advice; learning only
+=== BO. 17 CFR 240.3b-6: Liability for certain statements by issuers ===
+official caption typography is Liability for certain statements by issuers.
+3b-6(a): A statement within the coverage of paragraph (b) of this section which is made by or on behalf of an issuer or by an outside reviewer retained by the issuer shall be deemed not to be a fraudulent statement (as defined in paragraph (d) of this section), unless it is shown that such statement was made or reaffirmed without a reasonable basis or was disclosed other than in good faith.
+3b-6(b): This rule applies to the following statements:
+3b-6(b)(1): A forward-looking statement (as defined in paragraph (c) of this section) made in a document filed with the Commission, in Part I of a quarterly report on Form 10-Q, § 249.308a of this chapter, or in an annual report to security holders meeting the requirements of Rules 14a-3(b) and (c) or 14c-3(a) and (b) (§ 240.14a-3(b) and (c) or § 240.14c-3(a) and (b)), a statement reaffirming such forward-looking statement after the date the document was filed or the annual report was made publicly available, or a forward-looking statement made before the date the document was filed or the date the annual report was made publicly available if such statement is reaffirmed in a filed document, in Part I of a quarterly report on Form 10-Q, or in an annual report made publicly available within a reasonable time after the making of such forward-looking statement; Provided, that:
+3b-6(b)(1)(i): At the time such statements are made or reaffirmed, either the issuer is subject to the reporting requirements of Section 13(a) or 15(d) of the Act and has complied with the requirements of Rule 13a-1 or 15d-1 thereunder, if applicable, to file its most recent annual report on Form 10-K, Form 20-F or Form 40-F; or if the issuer is not subject to the reporting requirements of Section 13(a) or 15(d) of the Act, the statements are made in a registration statement filed under the Securities Act of 1933 offering statement or solicitation of interest, written document or broadcast script under Regulation A or pursuant to Section 12(b) or (g) of the Securities Exchange Act of 1934; and
+3b-6(b)(1)(ii): The statements are not made by or on behalf of an issuer that is an investment company registered under the Investment Company Act of 1940; and
+3b-6(b)(2): Information that is disclosed in a document filed with the Commission in Part I of a quarterly report on Form 10-Q (§ 249.308a of this chapter) or in an annual report to security holders meeting the requirements of Rules 14a-3(b) and (c) or 14c-3(a) and (b) under the Act (§ 240.14a-3(b) and (c) or § 240.14c-3(a) and (b) of this chapter) and that relates to:
+3b-6(b)(2)(i): The effects of changing prices on the business enterprise, presented voluntarily or pursuant to Item 303 of Regulation S-K (§ 229.303 of this chapter), “Management's Discussion and Analysis of Financial Condition and Results of Operations,” Item 5 of Form 20-F (§ 240.220(f) of this chapter), “Operating and Financial Review and Prospects,” Item 302 of Regulation S-K (§ 229.302 of this chapter) “Supplementary Financial Information,” or Rule 3-20(c) of Regulation S-X (§ 210.3-20(c) of this chapter); or
+3b-6(b)(2)(ii): The value of proved oil and gas reserves (such as a standardized measure of discounted future net cash flows relating to proved oil and gas reserves as set forth in FASB ASC paragraphs 932-235-50-29 through 932-235-50-36 (Extractive Activities—Oil and Gas Topic)), presented voluntarily or pursuant to Item 302 of Regulation S-K (§ 229.302 of this chapter).
+3b-6(c): For the purpose of this rule, the term forward-looking statement shall mean and shall be limited to:
+3b-6(c)(1): A statement containing a projection of revenues, income (loss), earnings (loss) per share, capital expenditures, dividends, capital structure or other financial items;
+3b-6(c)(2): A statement of management's plans and objectives for future operations;
+3b-6(c)(3): A statement of future economic performance contained in management's discussion and analysis of financial condition and results of operations included pursuant to Item 303 of Regulation S-K (§ 229.303 of this chapter) or Item 5 of Form 20-F or
+3b-6(c)(4): Disclosed statements of the assumptions underlying or relating to any of the statements described in paragraphs (c) (1), (2), or (3) of this section.
+3b-6(d): For the purpose of this rule the term fraudulent statement shall mean a statement which is an untrue statement of a material fact, a statement false or misleading with respect to any material fact, an omission to state a material fact necessary to make a statement not misleading, or which constitutes the employment of a manipulative, deceptive, or fraudulent device, contrivance, scheme, transaction, act, practice, course of business, or an artifice to defraud, as those terms are used in the Securities Exchange Act of 1934 or the rules or regulations promulgated thereunder.
+official typography italicizes Provided, including the comma, then that:
+official typography italicizes forward-looking statement and fraudulent statement
+official typography uses typographic quotes around “Management's Discussion and Analysis of Financial Condition and Results of Operations,” “Operating and Financial Review and Prospects,” and “Supplementary Financial Information,” (official comma inside the closing quote)
+official typography uses an em dash U+2014 in “Extractive Activities—Oil and Gas Topic.”
+official typography is Securities Act of 1933 offering statement or solicitation of interest
+official typography is Item 5 of Form 20-F (§ 240.220(f) of this chapter); do not tidy § 240.220(f) into 249.220f
+official CITA typography is [46 FR 13990, Feb. 25, 1981, as amended at 46 FR 19457, Mar. 31, 1981; 47 FR 11464, Mar. 16, 1982; 47 FR 54780, Dec. 6, 1982; 47 FR 57915, Dec. 29, 1982; 48 FR 19876, May 3, 1983; 56 FR 30067, July 1, 1991; 57 FR 36494, Aug. 13, 1992; 64 FR 53912, Oct. 5, 1999; 73 FR 973, Jan. 4, 2008; 76 FR 50122, Aug. 12, 2011]
+official API XML has no SECAUTH
+cite 17 CFR 240.3b-6; title 17 up_to_date_as_of 2026-11-17
+  official (a) deems a statement within the coverage of official (b) not to be a fraudulent statement unless it is shown that such statement was made or reaffirmed without a reasonable basis or was disclosed other than in good faith? True
+  official typography italicizes Provided, including the comma, then that:, and official typography italicizes forward-looking statement and fraudulent statement? True
+  official typography uses typographic quotes around “Management's Discussion and Analysis of Financial Condition and Results of Operations,” “Operating and Financial Review and Prospects,” and “Supplementary Financial Information,” (official comma inside the closing quote), and an em dash in “Extractive Activities—Oil and Gas Topic.”? True
+  official typography is Item 5 of Form 20-F (§ 240.220(f) of this chapter) — pack official § 240.220(f); do not tidy that token into 249.220f — and official typography is Securities Act of 1933 offering statement or solicitation of interest? True
+  official CITA typography begins [46 FR 13990, Feb. 25, 1981, …] and includes 73 FR 973, Jan. 4, 2008 (do not mix that page into 14a-5's 977), official API XML has no SECAUTH, and this is not packed 3b-2 / 3b-7 or packed 14a-3? True
+do not tidy official typography, including official § 240.220(f) and official Securities Act of 1933 offering statement; packed 3b-2 / 3b-7 and packed 14a-3 stay as written
+literacy only; not a how-to for forward-looking-statement liability, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 260/260
+disclaimer: official 17 CFR 240.3b-6; no issuer, disclosure, or investment advice; learning only

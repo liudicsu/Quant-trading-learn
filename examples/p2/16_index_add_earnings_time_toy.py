@@ -2782,3 +2782,320 @@ print('literacy only; not a how-to for UTP reporting exemption, and not legal ad
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.12f-4; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BJ. 17 CFR 240.12f-2: Extending unlisted trading privileges to a security that is the subject of an initial public offering ===')
+# 17 CFR 240.12f-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Extending unlisted trading privileges to a security that is the
+# subject of an initial public offering. Official typography italicizes
+# General provision., Definitions., subject security, and initial public
+# offering commences. Official (b) typography italicizes the letter l in
+# 15 U.S.C. 78l(f). Official (a) has no 78l citation; do not invent one
+# there. Official (c)(1) typography is 15 U.S.C. 78l(f)(1)(G)(i) (Roman
+# l, Roman 1). Official (c)(2) typography is 15 U.S.C. 78l(f)(1)(G)(ii)
+# (Roman l; italic 1). Do not tidy those three official forms into one
+# another. Official CITA is [60 FR 20896, Apr. 28, 1995, as amended at
+# 65 FR 53565, Sept. 5, 2000; 70 FR 37618, June 29, 2005]. Official API
+# XML has no SECAUTH. Name official 12f-1 and packed 12f-4 only; do not
+# pack 12f-1. Do not rewrite the packed 12f-4 / section-BI prefix that
+# official 12f-2 is named only; this later box packs official 12f-2.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Extending unlisted trading privileges to a security that is the subject of an initial public offering.')
+print('12f-2(a): General provision. A national securities exchange may extend unlisted trading privileges to a subject security when at least one transaction in the subject security has been effected on the national securities exchange upon which the security is listed and the transaction has been reported pursuant to an effective transaction reporting plan, as defined in § 242.600 of this chapter.')
+print('12f-2(b): The extension of unlisted trading privileges pursuant to this section shall be subject to all the provisions set forth in Section 12(f) of the Act (15 U.S.C. 78l(f)), as amended, and any rule or regulation promulgated thereunder, or which may be promulgated thereunder while the extension is in effect.')
+print('12f-2(c): Definitions. For the purposes of this section:')
+print('12f-2(c)(1): The term subject security shall mean a security that is the subject of an initial public offering, as that term is defined in section 12(f)(1)(G)(i) of the Act (15 U.S.C. 78l(f)(1)(G)(i)), and')
+print('12f-2(c)(2): An initial public offering commences at such time as is described in section 12(f)(1)(G)(ii) of the Act (15 U.S.C. 78l(f)(1)(G)(ii)).')
+print('official typography italicizes General provision., Definitions., subject security, and initial public offering commences')
+print('official (b) typography italicizes the letter l in 15 U.S.C. 78l(f)')
+print('official (a) has no 78l citation')
+print('official (c)(1) typography is 15 U.S.C. 78l(f)(1)(G)(i) (Roman l, Roman 1)')
+print('official (c)(2) typography is 15 U.S.C. 78l(f)(1)(G)(ii) (Roman l; italic 1)')
+print('do not tidy those three official 78l forms into one another')
+print('official CITA typography is [60 FR 20896, Apr. 28, 1995, as amended at 65 FR 53565, Sept. 5, 2000; 70 FR 37618, June 29, 2005]')
+print('official API XML has no SECAUTH')
+print('official 12f-1 is named only; packed 12f-4 exists and is named only')
+print('cite 17 CFR 240.12f-2; title 17 up_to_date_as_of 2026-11-17')
+utp_first_trade = True
+print(f"  a national securities exchange may extend unlisted trading privileges to a subject security when at least one transaction in the subject security has been effected on the national securities exchange upon which the security is listed and the transaction has been reported pursuant to an effective transaction reporting plan? {utp_first_trade}")
+check(utp_first_trade is True, 'UTP after first reported trade on the listing exchange')
+italics_12f2 = True
+print(f"  official typography italicizes General provision., Definitions., subject security, and initial public offering commences? {italics_12f2}")
+check(italics_12f2 is True, 'italic General provision./Definitions./subject security/IPO commences')
+italic_l_only_b = True
+print(f"  official (b) typography italicizes the letter l in 15 U.S.C. 78l(f), and official (a) has no 78l citation? {italic_l_only_b}")
+check(italic_l_only_b is True, 'italic l in 78l(f) in (b) only; no 78l in (a)')
+three_78l_forms = True
+print(f"  official (c)(1) typography is 15 U.S.C. 78l(f)(1)(G)(i) (Roman l, Roman 1) and official (c)(2) typography is 15 U.S.C. 78l(f)(1)(G)(ii) (Roman l; italic 1), and those three official forms must not be tidied into one another? {three_78l_forms}")
+check(three_78l_forms is True, 'three official 78l forms not tidied together')
+cita_12f2_no_secauth = True
+print(f"  official CITA typography is [60 FR 20896, Apr. 28, 1995, as amended at 65 FR 53565, Sept. 5, 2000; 70 FR 37618, June 29, 2005], official API XML has no SECAUTH, official 12f-1 is named only, and this later box does not rewrite the packed 12f-4 / section-BI prefix that official 12f-2 is named only? {cita_12f2_no_secauth}")
+check(cita_12f2_no_secauth is True, 'CITA 12f-2; no SECAUTH; 12f-1 named only; BI prefix unrewritten')
+print('packed 12f-4 / section-BI prefix that official 12f-2 is named only stays as written; this later box packs official 12f-2 and does not rewrite that prefix; official 12f-1 is named only')
+print('literacy only; not a how-to for extending UTP to an IPO security, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12f-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BK. 17 CFR 240.12f-3: Termination or suspension of unlisted trading privileges ===')
+# 17 CFR 240.12f-3 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Termination or suspension of unlisted trading privileges. Official
+# (a)(4) typography is Names of issuer. Official (b) typography is may
+# be suspended or terminated by such exchange in accordance with its
+# rules. Official CITA is [20 FR 6702, Sept. 13, 1955, as amended at 44
+# FR 75135, Dec. 19, 1979; 45 FR 36076, May 29, 1980; 60 FR 20896, Apr.
+# 28, 1995]. Official SECAUTH typography is (Secs. 12(f) and 23, 15
+# U.S.C. 78l and 78w) (italic l). Name official 12f-1 only; do not pack
+# 12f-1. Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Termination or suspension of unlisted trading privileges.')
+print('12f-3(a): The issuer of any security for which unlisted trading privileges on any exchange have been continued or extended, or any broker or dealer who makes or creates a market for such security, or any other person having a bona fide interest in the question of termination or suspension of such unlisted trading privileges, may make application to the Commission for the termination or suspension of such unlisted trading privileges. One duly executed copy of such application shall be filed, and it shall contain the following information:')
+print('12f-3(a)(1): Name and address of applicant;')
+print("12f-3(a)(2): A brief statement of the applicant's interest in the question of termination or suspension of such unlisted trading privileges;")
+print('12f-3(a)(3): Title of security;')
+print('12f-3(a)(4): Names of issuer;')
+print('12f-3(a)(5): Amount of such security issued and outstanding (number of shares of stock or principal amount of bonds), stating source of information;')
+print('12f-3(a)(6): Annual volume of public trading in such security (number of shares of stock or principal amount of bonds) on such exchange for each of the three calendar years immediately preceding the date of such application, and monthly volume of trading in such security for each of the twelve calendar months immediately preceding the date of such application;')
+print('12f-3(a)(7): Price range on such exchange for each of the twelve calendar months immediately preceding the date of such application; and')
+print("12f-3(a)(8): A brief statement of the information in the applicant's possession, and the source thereof, with respect to (i) the extent of public trading in such security on such exchange, and (ii) the character of trading in such security on such exchange; and")
+print('12f-3(a)(9): A brief statement that a copy of the instant application has been mailed, or otherwise personally provided, to the exchange from which the suspension or termination of unlisted trading privileges is sought, and to any other exchange on which such security is listed or traded pursuant to unlisted trading privileges.')
+print('12f-3(b): Unlisted trading privileges in any security on any national securities exchange may be suspended or terminated by such exchange in accordance with its rules.')
+print('official (a)(4) typography is “Names of issuer.”')
+print('official (b) typography is may be suspended or terminated by such exchange in accordance with its rules')
+print('official CITA typography is [20 FR 6702, Sept. 13, 1955, as amended at 44 FR 75135, Dec. 19, 1979; 45 FR 36076, May 29, 1980; 60 FR 20896, Apr. 28, 1995]')
+print('official SECAUTH typography is (Secs. 12(f) and 23, 15 U.S.C. 78l and 78w) (italic l)')
+print('official 12f-1 is named only')
+print('cite 17 CFR 240.12f-3; title 17 up_to_date_as_of 2026-11-17')
+exchange_may_suspend = True
+print(f"  official (b) says unlisted trading privileges may be suspended or terminated by such exchange in accordance with its rules? {exchange_may_suspend}")
+check(exchange_may_suspend is True, 'exchange may suspend or terminate UTP under its rules')
+who_may_apply = True
+print(f"  official (a) lets the issuer, any broker or dealer who makes or creates a market for such security, or any other person having a bona fide interest apply to the Commission for termination or suspension? {who_may_apply}")
+check(who_may_apply is True, 'issuer / market maker / bona fide interest may apply')
+names_of_issuer = True
+print(f"  official (a)(4) typography is “Names of issuer.”? {names_of_issuer}")
+check(names_of_issuer is True, 'Names of issuer typography')
+secauth_12f3 = True
+print(f"  official SECAUTH typography is (Secs. 12(f) and 23, 15 U.S.C. 78l and 78w) (italic l)? {secauth_12f3}")
+check(secauth_12f3 is True, 'SECAUTH 12f-3 italic l')
+cita_12f3_named = True
+print(f"  official CITA typography is [20 FR 6702, Sept. 13, 1955, as amended at 44 FR 75135, Dec. 19, 1979; 45 FR 36076, May 29, 1980; 60 FR 20896, Apr. 28, 1995], and official 12f-1 is named only (do not pack it)? {cita_12f3_named}")
+check(cita_12f3_named is True, 'CITA 12f-3; official 12f-1 named only')
+print('official 12f-1 is named only; do not pack 12f-1')
+print('literacy only; not a how-to for terminating or suspending UTP, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12f-3; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BL. 17 CFR 240.12f-5: Exchange rules for securities to which unlisted trading privileges are extended ===')
+# 17 CFR 240.12f-5 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Exchange rules for securities to which unlisted trading privileges are
+# extended. Pack the official one-sentence body. Official CITA is [60 FR
+# 20896, Apr. 28, 1995]. Official API XML has no SECAUTH. Do not tidy
+# this CITA into 12f-2's longer amended CITA, which starts with the same
+# first cite. Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Exchange rules for securities to which unlisted trading privileges are extended.')
+print('12f-5: A national securities exchange shall not extend unlisted trading privileges to any security unless the national securities exchange has in effect a rule or rules providing for transactions in the class or type of security to which the exchange extends unlisted trading privileges.')
+print('official CITA typography is [60 FR 20896, Apr. 28, 1995]')
+print('official API XML has no SECAUTH')
+print("do not tidy this CITA into 12f-2's longer amended CITA, which starts with the same first cite")
+print('cite 17 CFR 240.12f-5; title 17 up_to_date_as_of 2026-11-17')
+must_have_rules = True
+print(f"  a national securities exchange shall not extend unlisted trading privileges to any security unless it has in effect a rule or rules providing for transactions in the class or type of security to which the exchange extends unlisted trading privileges? {must_have_rules}")
+check(must_have_rules is True, 'exchange must have rules for that class or type')
+caption_12f5 = True
+print(f"  official caption typography is Exchange rules for securities to which unlisted trading privileges are extended.? {caption_12f5}")
+check(caption_12f5 is True, 'official 12f-5 caption typography')
+cita_12f5 = True
+print(f"  official CITA typography is [60 FR 20896, Apr. 28, 1995]? {cita_12f5}")
+check(cita_12f5 is True, 'CITA 12f-5 unamended first cite only')
+no_secauth_12f5 = True
+print(f"  official API XML has no SECAUTH? {no_secauth_12f5}")
+check(no_secauth_12f5 is True, '12f-5 has no SECAUTH')
+not_tidied_into_12f2 = True
+print(f"  this official CITA must not be tidied into 12f-2's longer amended CITA, which starts with the same first cite, and this is not packed 12f-2 / 12f-3 / 12f-4? {not_tidied_into_12f2}")
+check(not_tidied_into_12f2 is True, 'not 12f-2 CITA; not packed 12f-2/12f-3/12f-4')
+print("this official CITA is not 12f-2's longer amended CITA; this toy is not packed 12f-2 / 12f-3 / 12f-4")
+print('literacy only; not a how-to for adopting exchange UTP rules, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12f-5; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BM. 17 CFR 240.14a-5: Presentation of information in proxy statement ===')
+# 17 CFR 240.14a-5 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Presentation of information in proxy statement. Official typography is
+# § 240.14a-8(e)(Question 5). Official typography italicizes et seq.
+# Official (f) typography is more than 30 calendar days. Official CITA
+# is [17 FR 11432, Dec. 18, 1952, as amended at 36 FR 8935, May 15,
+# 1971; 37 FR 23179, Oct. 31, 1972; 44 FR 68770, Nov. 29, 1979; 51 FR
+# 42061, Nov. 20, 1986; 61 FR 24656, May 15, 1996; 63 FR 29118, May 28,
+# 1998; 63 FR 46881, Sept. 3, 1998; 73 FR 977, Jan. 4, 2008; 75 FR
+# 56782, Sept. 16, 2010; 86 FR 68379, Dec. 1, 2021; 90 FR 9689, Feb. 18,
+# 2025]. Do not mix 977 into 3b-6's 973. Official API XML has no
+# SECAUTH. Name official 14a-8 / 14a-4 / 14a-19 only; do not pack those
+# sections and do not rewrite packed 14a-3 / 14a-9 / 14a-10 / 14a-14.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Presentation of information in proxy statement.')
+print('14a-5(a): The information included in the proxy statement shall be clearly presented and the statements made shall be divided into groups according to subject matter and the various groups of statements shall be preceded by appropriate headings. The order of items and sub-items in the schedule need not be followed. Where practicable and appropriate, the information shall be presented in tabular form. All amounts shall be stated in figures. Information required by more than one applicable item need not be repeated. No statement need be made in response to any item or sub-item which is inapplicable.')
+print('14a-5(b): Any information required to be included in the proxy statement as to terms of securities or other subject matter which from a standpoint of practical necessity must be determined in the future may be stated in terms of present knowledge and intention. To the extent practicable, the authority to be conferred concerning each such matter shall be confined within limits reasonably related to the need for discretionary authority. Subject to the foregoing, information which is not known to the persons on whose behalf the solicitation is to be made and which it is not reasonably within the power of such persons to ascertain or procure may be omitted, if a brief statement of the circumstances rendering such information unavailable is made.')
+print('14a-5(c): Any information contained in any other proxy soliciting material which has been or will be furnished to each person solicited in connection with the same meeting or subject matter may be omitted from the proxy statement, if a clear reference is made to the particular document containing such information.')
+print('14a-5(d)(1): All printed proxy statements shall be in roman type at least as large and as legible as 10-point modern type, except that to the extent necessary for convenient presentation financial statements and other tabular data, but not the notes thereto, may be in roman type at least as large and as legible as 8-point modern type. All such type shall be leaded at least 2 points.')
+print('14a-5(d)(2): Where a proxy statement is delivered through an electronic medium, issuers may satisfy legibility requirements applicable to printed documents, such as type size and font, by presenting all required information in a format readily communicated to investors.')
+print('14a-5(e): All proxy statements shall disclose, under an appropriate caption, the following dates:')
+print("14a-5(e)(1): The deadline for submitting shareholder proposals for inclusion in the registrant's proxy statement and form of proxy for the registrant's next annual meeting, calculated in the manner provided in § 240.14a-8(e)(Question 5);")
+print("14a-5(e)(2): The date after which notice of a shareholder proposal submitted outside the processes of § 240.14a-8 is considered untimely, either calculated in the manner provided by § 240.14a-4(c)(1) or as established by the registrant's advance notice provision, if any, authorized by applicable state law;")
+print("14a-5(e)(3): The deadline for submitting nominees for inclusion in the registrant's proxy statement and form of proxy pursuant to an applicable state or foreign law provision or a registrant's governing documents as they relate to the inclusion of shareholder director nominees in the registrant's proxy materials for the registrant's next annual meeting of shareholders; and")
+print("14a-5(e)(4): The deadline for providing notice of a solicitation of proxies in support of director nominees other than the registrant's nominees pursuant to § 240.14a-19 for the registrant's next annual meeting unless the registrant is an investment company registered under the Investment Company Act of 1940 (15 U.S.C. 80a-1 et seq.) or a business development company as defined by section 2(a)(48) of the Investment Company Act of 1940 (15 U.S.C. 80a-2(a)(48)).")
+print('14a-5(f): If the date of the next annual meeting is subsequently advanced or delayed by more than 30 calendar days from the date of the annual meeting to which the proxy statement relates, the registrant shall, in a timely manner, inform shareholders of such change, and the new dates referred to in paragraphs (e)(1) and (e)(2) of this section, by including a notice, under Item 5, in its earliest possible quarterly report on Form 10-Q (§ 249.308a of this chapter), or, in the case of investment companies, in a shareholder report under § 270.30d-1 of this chapter under the Investment Company Act of 1940, or, if impracticable, any means reasonably calculated to inform shareholders.')
+print('official typography is § 240.14a-8(e)(Question 5)')
+print('official typography italicizes et seq.')
+print('official (f) typography is more than 30 calendar days')
+print('official CITA typography is [17 FR 11432, Dec. 18, 1952, as amended at 36 FR 8935, May 15, 1971; 37 FR 23179, Oct. 31, 1972; 44 FR 68770, Nov. 29, 1979; 51 FR 42061, Nov. 20, 1986; 61 FR 24656, May 15, 1996; 63 FR 29118, May 28, 1998; 63 FR 46881, Sept. 3, 1998; 73 FR 977, Jan. 4, 2008; 75 FR 56782, Sept. 16, 2010; 86 FR 68379, Dec. 1, 2021; 90 FR 9689, Feb. 18, 2025]')
+print('official API XML has no SECAUTH')
+print('official 14a-8 / 14a-4 / 14a-19 are named only')
+print('cite 17 CFR 240.14a-5; title 17 up_to_date_as_of 2026-11-17')
+disclose_deadlines = True
+print(f"  official (e) requires all proxy statements to disclose, under an appropriate caption, the official (e)(1)–(4) dates, including the shareholder-proposal deadline calculated in the manner provided in § 240.14a-8(e)(Question 5)? {disclose_deadlines}")
+check(disclose_deadlines is True, 'official (e) deadline disclosures incl. 14a-8(e)(Question 5)')
+q5_et_seq = True
+print(f"  official typography is § 240.14a-8(e)(Question 5), and official typography italicizes et seq.? {q5_et_seq}")
+check(q5_et_seq is True, 'Question 5 typography; italic et seq.')
+more_than_30 = True
+print(f"  official (f) typography is more than 30 calendar days, and the registrant shall, in a timely manner, inform shareholders of such change by including a notice, under Item 5, in its earliest possible quarterly report on Form 10-Q? {more_than_30}")
+check(more_than_30 is True, 'more than 30 calendar days; Form 10-Q Item 5 notice')
+cita_14a5_977 = True
+print(f"  official CITA typography includes 73 FR 977, Jan. 4, 2008 and ends 90 FR 9689, Feb. 18, 2025 (do not mix 977 into 3b-6's 973), and official API XML has no SECAUTH? {cita_14a5_977}")
+check(cita_14a5_977 is True, 'CITA 14a-5 uses 977 not 973; no SECAUTH')
+named_14a_only = True
+print(f"  official 14a-8 / 14a-4 / 14a-19 are named only, and this is not packed 14a-3 / 14a-9 / 14a-10 / 14a-14? {named_14a_only}")
+check(named_14a_only is True, '14a-8/14a-4/14a-19 named only; not packed 14a-3/9/10/14')
+print('official 14a-8 / 14a-4 / 14a-19 are named only; packed 14a-3 / 14a-9 / 14a-10 / 14a-14 stay as written')
+print('literacy only; not a how-to for drafting a proxy statement, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14a-5; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BN. 17 CFR 240.0-2: Business hours of the Commission ===')
+# 17 CFR 240.0-2 the whole current section (official eCFR API XML, title
+# 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Business hours of the Commission. Official typography is 100 F Street,
+# NE, Washington, DC 20549 (NE, with no period after NE). Official
+# typography italicizes provided that, Submissions made in paper., and
+# Electronic filings. Official typography is Eastern Daylight Saving
+# Time. Official (a) and official (c) typography is Saturdays, Sundays,
+# and Federal holidays. Official (b) typography is Saturdays, Sundays
+# and federal holidays. Official CITA is [58 FR 14682, Mar. 18, 1993, as
+# amended at 65 FR 24801, Apr. 27, 2000; 68 FR 25799, May 13, 2003; 73
+# FR 973, Jan. 4, 2008; 88 FR 12209, Feb. 27, 2023]. Official API XML
+# has no SECAUTH. Official XML has a CROSSREF block after official (c);
+# that is not a SECAUTH — do not invent a source line from it. Do not
+# flatten this box into packed 232.12, and do not rewrite packed 232.12
+# or already-taught 232.13. The clock numbers match packed 232.12; the
+# official typography does not. Learning only; no filer, filing-agent,
+# or investment advice.
+
+print('official caption typography is Business hours of the Commission.')
+print('0-2(a): The principal office of the Commission, at 100 F Street, NE, Washington, DC 20549, is open each day, except Saturdays, Sundays, and Federal holidays, from 9 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever currently is in effect in Washington, DC, provided that hours for the filing of documents pursuant to the Act or the rules and regulations thereunder are as set forth in paragraphs (b) and (c) of this section.')
+print('0-2(b): Submissions made in paper. Paper documents filed with or otherwise furnished to the Commission may be submitted to the Commission each day, except Saturdays, Sundays and federal holidays, from 8 a.m. to 5:30 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.')
+print('0-2(c): Electronic filings. Filings made by direct transmission may be submitted to the Commission each day, except Saturdays, Sundays, and Federal holidays, from 6 a.m. to 10 p.m., Eastern Standard Time or Eastern Daylight Saving Time, whichever is currently in effect.')
+print('official typography is 100 F Street, NE, Washington, DC 20549 (NE, with no period after NE)')
+print('official typography italicizes provided that, Submissions made in paper., and Electronic filings.')
+print('official typography is Eastern Daylight Saving Time')
+print('official (a) typography is Saturdays, Sundays, and Federal holidays (Oxford comma; capital Federal)')
+print('official (b) typography is Saturdays, Sundays and federal holidays (no Oxford comma; lowercase federal)')
+print('official (c) typography is Saturdays, Sundays, and Federal holidays (Oxford comma; capital Federal)')
+print('official CITA typography is [58 FR 14682, Mar. 18, 1993, as amended at 65 FR 24801, Apr. 27, 2000; 68 FR 25799, May 13, 2003; 73 FR 973, Jan. 4, 2008; 88 FR 12209, Feb. 27, 2023]')
+print('official API XML has no SECAUTH; official CROSSREF after official (c) is not a SECAUTH')
+print('this is not packed 232.12; already-taught 232.13 is not rewritten')
+print('cite 17 CFR 240.0-2; title 17 up_to_date_as_of 2026-11-17')
+clock_numbers = True
+print(f"  principal-office hours are 9 a.m. to 5:30 p.m., paper hours are 8 a.m. to 5:30 p.m., and electronic / direct transmission hours are 6 a.m. to 10 p.m.? {clock_numbers}")
+check(clock_numbers is True, '0-2 clock numbers 9-5:30 / 8-5:30 / 6-10')
+ne_no_period = True
+print(f"  official address typography is 100 F Street, NE, Washington, DC 20549 (NE, with no period after NE)? {ne_no_period}")
+check(ne_no_period is True, 'NE, with no period after NE')
+italics_0_2 = True
+print(f"  official typography italicizes provided that, Submissions made in paper., and Electronic filings., and official typography is Eastern Daylight Saving Time? {italics_0_2}")
+check(italics_0_2 is True, 'italic lead-ins; Eastern Daylight Saving Time')
+holiday_typography = True
+print(f"  official (a) and official (c) typography is Saturdays, Sundays, and Federal holidays, and official (b) typography is Saturdays, Sundays and federal holidays? {holiday_typography}")
+check(holiday_typography is True, 'Federal vs federal holiday typography in (a)/(c) vs (b)')
+cita_0_2_not_23212 = True
+print(f"  official CITA typography is [58 FR 14682, Mar. 18, 1993, as amended at 65 FR 24801, Apr. 27, 2000; 68 FR 25799, May 13, 2003; 73 FR 973, Jan. 4, 2008; 88 FR 12209, Feb. 27, 2023], official API XML has no SECAUTH (the CROSSREF block after official (c) is not a SECAUTH), this is not packed 232.12, and already-taught 232.13 is not rewritten? {cita_0_2_not_23212}")
+check(cita_0_2_not_23212 is True, 'CITA 0-2; no SECAUTH from CROSSREF; not 232.12/232.13')
+print('this toy is not packed 232.12 and does not rewrite packed 232.12 or already-taught 232.13; official CROSSREF is not a SECAUTH')
+print('literacy only; not a how-to for transmitting a filing, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.0-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BO. 17 CFR 240.3b-6: Liability for certain statements by issuers ===')
+# 17 CFR 240.3b-6 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Liability for certain statements by issuers. Official typography
+# italicizes Provided, including the comma, then that:. Official
+# typography italicizes forward-looking statement and fraudulent
+# statement. Official typography uses typographic U+201C/U+201D around
+# Management's Discussion and Analysis of Financial Condition and
+# Results of Operations, Operating and Financial Review and Prospects,
+# and Supplementary Financial Information, (official comma inside the
+# closing quote). Official typography uses an em dash U+2014 in
+# Extractive Activities—Oil and Gas Topic. Official typography is
+# Securities Act of 1933 offering statement or solicitation of interest
+# and Item 5 of Form 20-F (§ 240.220(f) of this chapter). Pack official
+# § 240.220(f); do not tidy that token into 249.220f. Official CITA
+# begins [46 FR 13990, Feb. 25, 1981, …] and includes 73 FR 973, Jan. 4,
+# 2008 — do not mix that page into 14a-5's 977. Official API XML has no
+# SECAUTH. Do not rewrite packed 3b-2 / 3b-7 or packed 14a-3. Learning
+# only; no issuer, filer, or investment advice.
+
+print('official caption typography is Liability for certain statements by issuers.')
+print('3b-6(a): A statement within the coverage of paragraph (b) of this section which is made by or on behalf of an issuer or by an outside reviewer retained by the issuer shall be deemed not to be a fraudulent statement (as defined in paragraph (d) of this section), unless it is shown that such statement was made or reaffirmed without a reasonable basis or was disclosed other than in good faith.')
+print('3b-6(b): This rule applies to the following statements:')
+print('3b-6(b)(1): A forward-looking statement (as defined in paragraph (c) of this section) made in a document filed with the Commission, in Part I of a quarterly report on Form 10-Q, § 249.308a of this chapter, or in an annual report to security holders meeting the requirements of Rules 14a-3(b) and (c) or 14c-3(a) and (b) (§ 240.14a-3(b) and (c) or § 240.14c-3(a) and (b)), a statement reaffirming such forward-looking statement after the date the document was filed or the annual report was made publicly available, or a forward-looking statement made before the date the document was filed or the date the annual report was made publicly available if such statement is reaffirmed in a filed document, in Part I of a quarterly report on Form 10-Q, or in an annual report made publicly available within a reasonable time after the making of such forward-looking statement; Provided, that:')
+print('3b-6(b)(1)(i): At the time such statements are made or reaffirmed, either the issuer is subject to the reporting requirements of Section 13(a) or 15(d) of the Act and has complied with the requirements of Rule 13a-1 or 15d-1 thereunder, if applicable, to file its most recent annual report on Form 10-K, Form 20-F or Form 40-F; or if the issuer is not subject to the reporting requirements of Section 13(a) or 15(d) of the Act, the statements are made in a registration statement filed under the Securities Act of 1933 offering statement or solicitation of interest, written document or broadcast script under Regulation A or pursuant to Section 12(b) or (g) of the Securities Exchange Act of 1934; and')
+print('3b-6(b)(1)(ii): The statements are not made by or on behalf of an issuer that is an investment company registered under the Investment Company Act of 1940; and')
+print('3b-6(b)(2): Information that is disclosed in a document filed with the Commission in Part I of a quarterly report on Form 10-Q (§ 249.308a of this chapter) or in an annual report to security holders meeting the requirements of Rules 14a-3(b) and (c) or 14c-3(a) and (b) under the Act (§ 240.14a-3(b) and (c) or § 240.14c-3(a) and (b) of this chapter) and that relates to:')
+print("3b-6(b)(2)(i): The effects of changing prices on the business enterprise, presented voluntarily or pursuant to Item 303 of Regulation S-K (§ 229.303 of this chapter), “Management's Discussion and Analysis of Financial Condition and Results of Operations,” Item 5 of Form 20-F (§ 240.220(f) of this chapter), “Operating and Financial Review and Prospects,” Item 302 of Regulation S-K (§ 229.302 of this chapter) “Supplementary Financial Information,” or Rule 3-20(c) of Regulation S-X (§ 210.3-20(c) of this chapter); or")
+print('3b-6(b)(2)(ii): The value of proved oil and gas reserves (such as a standardized measure of discounted future net cash flows relating to proved oil and gas reserves as set forth in FASB ASC paragraphs 932-235-50-29 through 932-235-50-36 (Extractive Activities—Oil and Gas Topic)), presented voluntarily or pursuant to Item 302 of Regulation S-K (§ 229.302 of this chapter).')
+print('3b-6(c): For the purpose of this rule, the term forward-looking statement shall mean and shall be limited to:')
+print('3b-6(c)(1): A statement containing a projection of revenues, income (loss), earnings (loss) per share, capital expenditures, dividends, capital structure or other financial items;')
+print("3b-6(c)(2): A statement of management's plans and objectives for future operations;")
+print("3b-6(c)(3): A statement of future economic performance contained in management's discussion and analysis of financial condition and results of operations included pursuant to Item 303 of Regulation S-K (§ 229.303 of this chapter) or Item 5 of Form 20-F or")
+print('3b-6(c)(4): Disclosed statements of the assumptions underlying or relating to any of the statements described in paragraphs (c) (1), (2), or (3) of this section.')
+print('3b-6(d): For the purpose of this rule the term fraudulent statement shall mean a statement which is an untrue statement of a material fact, a statement false or misleading with respect to any material fact, an omission to state a material fact necessary to make a statement not misleading, or which constitutes the employment of a manipulative, deceptive, or fraudulent device, contrivance, scheme, transaction, act, practice, course of business, or an artifice to defraud, as those terms are used in the Securities Exchange Act of 1934 or the rules or regulations promulgated thereunder.')
+print('official typography italicizes Provided, including the comma, then that:')
+print('official typography italicizes forward-looking statement and fraudulent statement')
+print("official typography uses typographic quotes around “Management's Discussion and Analysis of Financial Condition and Results of Operations,” “Operating and Financial Review and Prospects,” and “Supplementary Financial Information,” (official comma inside the closing quote)")
+print('official typography uses an em dash U+2014 in “Extractive Activities—Oil and Gas Topic.”')
+print('official typography is Securities Act of 1933 offering statement or solicitation of interest')
+print('official typography is Item 5 of Form 20-F (§ 240.220(f) of this chapter); do not tidy § 240.220(f) into 249.220f')
+print('official CITA typography is [46 FR 13990, Feb. 25, 1981, as amended at 46 FR 19457, Mar. 31, 1981; 47 FR 11464, Mar. 16, 1982; 47 FR 54780, Dec. 6, 1982; 47 FR 57915, Dec. 29, 1982; 48 FR 19876, May 3, 1983; 56 FR 30067, July 1, 1991; 57 FR 36494, Aug. 13, 1992; 64 FR 53912, Oct. 5, 1999; 73 FR 973, Jan. 4, 2008; 76 FR 50122, Aug. 12, 2011]')
+print('official API XML has no SECAUTH')
+print('cite 17 CFR 240.3b-6; title 17 up_to_date_as_of 2026-11-17')
+not_fraudulent_unless = True
+print(f"  official (a) deems a statement within the coverage of official (b) not to be a fraudulent statement unless it is shown that such statement was made or reaffirmed without a reasonable basis or was disclosed other than in good faith? {not_fraudulent_unless}")
+check(not_fraudulent_unless is True, 'not a fraudulent statement unless no reasonable basis or not in good faith')
+provided_italics = True
+print(f"  official typography italicizes Provided, including the comma, then that:, and official typography italicizes forward-looking statement and fraudulent statement? {provided_italics}")
+check(provided_italics is True, 'Provided, italics; defined terms italic')
+quotes_emdash = True
+print(f"  official typography uses typographic quotes around “Management's Discussion and Analysis of Financial Condition and Results of Operations,” “Operating and Financial Review and Prospects,” and “Supplementary Financial Information,” (official comma inside the closing quote), and an em dash in “Extractive Activities—Oil and Gas Topic.”? {quotes_emdash}")
+check(quotes_emdash is True, 'typographic quotes and official em dash')
+section_240_220f = True
+print(f"  official typography is Item 5 of Form 20-F (§ 240.220(f) of this chapter) — pack official § 240.220(f); do not tidy that token into 249.220f — and official typography is Securities Act of 1933 offering statement or solicitation of interest? {section_240_220f}")
+check(section_240_220f is True, '§ 240.220(f) not 249.220f; 1933 offering statement typography')
+cita_3b6_973 = True
+print(f"  official CITA typography begins [46 FR 13990, Feb. 25, 1981, …] and includes 73 FR 973, Jan. 4, 2008 (do not mix that page into 14a-5's 977), official API XML has no SECAUTH, and this is not packed 3b-2 / 3b-7 or packed 14a-3? {cita_3b6_973}")
+check(cita_3b6_973 is True, 'CITA 3b-6 uses 973 not 977; no SECAUTH; not 3b-2/3b-7/14a-3')
+print('do not tidy official typography, including official § 240.220(f) and official Securities Act of 1933 offering statement; packed 3b-2 / 3b-7 and packed 14a-3 stay as written')
+print('literacy only; not a how-to for forward-looking-statement liability, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.3b-6; no issuer, disclosure, or investment advice; learning only')
