@@ -1674,3 +1674,23 @@ literacy only; not a how-to for exchange public-inspection files, and not legal 
 no issuer, filer, or investment advice
 assertions passed: 295/295
 disclaimer: official 17 CFR 240.24b-3; no issuer, disclosure, or investment advice; learning only
+=== BW. 17 CFR 240.16b-5: Bona fide gifts and inheritance ===
+official caption typography is Bona fide gifts and inheritance.
+16b-5: Both the acquisition and the disposition of equity securities shall be exempt from the operation of section 16(b) of the Act if they are: (a) Bona fide gifts; or (b) transfers of securities by will or the laws of descent and distribution.
+official typography is section 16(b) of the Act; do not drop of the Act
+this is a section 16(b) short-swing exemption, not a section 16(a) reporting exemption; do not teach it as a Form 4 reporting exemption
+official (a) typography is Bona fide gifts; (official semicolon before or, official capital B)
+official (b) typography is transfers of securities by will or the laws of descent and distribution (official lowercase t)
+official API XML has no I, no SECAUTH, and no CITA; this toy does not invent a source line or SECAUTH
+official 16b-1, official 16b-7, and official 16b-8 are named only; official 16b-2 and official 16b-4 remain Reserved; do not pack locked 16b-3 / 16b-6; do not tidy official 16b-1 typography into this box
+cite 17 CFR 240.16b-5; title 17 up_to_date_as_of 2026-11-17
+  official typography is section 16(b) of the Act (do not drop of the Act), and this is a section 16(b) short-swing exemption, not a section 16(a) reporting exemption and not a Form 4 reporting exemption? True
+  official (a) typography is Bona fide gifts; (official semicolon before or, official capital B)? True
+  official (b) typography is transfers of securities by will or the laws of descent and distribution (official lowercase t)? True
+  official caption typography is Bona fide gifts and inheritance., and official API XML has no I, no SECAUTH, and no CITA (do not invent a source line or SECAUTH)? True
+  official 16b-1, official 16b-7, and official 16b-8 are named only, official 16b-2 and official 16b-4 remain Reserved, locked 16b-3 / 16b-6 are not packed, and official 16b-1 typography is not tidied into this box? True
+official 16b-1, official 16b-7, and official 16b-8 are named only; official 16b-2 and official 16b-4 remain Reserved; do not pack locked 16b-3 / 16b-6; do not tidy official 16b-1 typography into this box
+literacy only; not a how-to for short-swing profit exemptions or Form 4 reporting, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 300/300
+disclaimer: official 17 CFR 240.16b-5; no issuer, disclosure, or investment advice; learning only

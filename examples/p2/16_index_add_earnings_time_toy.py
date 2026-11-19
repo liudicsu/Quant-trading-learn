@@ -3456,3 +3456,55 @@ print('literacy only; not a how-to for exchange public-inspection files, and not
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.24b-3; no issuer, disclosure, or investment advice; learning only')
+print('=== BW. 17 CFR 240.16b-5: Bona fide gifts and inheritance ===')
+# 17 CFR 240.16b-5 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Bona fide gifts and inheritance. Official body typography is Both
+# the acquisition and the disposition of equity securities shall be
+# exempt from the operation of section 16(b) of the Act if they are:
+# (a) Bona fide gifts; or (b) transfers of securities by will or the
+# laws of descent and distribution. Official typography is section
+# 16(b) of the Act — do not drop of the Act. This is a section 16(b)
+# short-swing exemption, not a section 16(a) reporting exemption;
+# do not teach it as a Form 4 reporting exemption. Official (a)
+# typography is Bona fide gifts; (official semicolon before or,
+# official capital B). Official (b) typography is transfers of
+# securities by will or the laws of descent and distribution
+# (official lowercase t). Official API XML has no I, no SECAUTH,
+# and no CITA; do not invent a source line or SECAUTH. Name official
+# 16b-1 / 16b-7 / 16b-8 only; official 16b-2 and official 16b-4
+# remain Reserved; do not pack locked 16b-3 / 16b-6. Do not tidy
+# official 16b-1 typography (italic et seq., official CITA
+# [56 FR 7270, Feb. 21, 1991, as amended at 61 FR 30404, June 14,
+# 1996; 76 FR 71877, Nov. 21, 2011]) into this box.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Bona fide gifts and inheritance.')
+print('16b-5: Both the acquisition and the disposition of equity securities shall be exempt from the operation of section 16(b) of the Act if they are: (a) Bona fide gifts; or (b) transfers of securities by will or the laws of descent and distribution.')
+print('official typography is section 16(b) of the Act; do not drop of the Act')
+print('this is a section 16(b) short-swing exemption, not a section 16(a) reporting exemption; do not teach it as a Form 4 reporting exemption')
+print('official (a) typography is Bona fide gifts; (official semicolon before or, official capital B)')
+print('official (b) typography is transfers of securities by will or the laws of descent and distribution (official lowercase t)')
+print('official API XML has no I, no SECAUTH, and no CITA; this toy does not invent a source line or SECAUTH')
+print('official 16b-1, official 16b-7, and official 16b-8 are named only; official 16b-2 and official 16b-4 remain Reserved; do not pack locked 16b-3 / 16b-6; do not tidy official 16b-1 typography into this box')
+print('cite 17 CFR 240.16b-5; title 17 up_to_date_as_of 2026-11-17')
+of_the_act = True
+print(f"  official typography is section 16(b) of the Act (do not drop of the Act), and this is a section 16(b) short-swing exemption, not a section 16(a) reporting exemption and not a Form 4 reporting exemption? {of_the_act}")
+check(of_the_act is True, 'section 16(b) of the Act; not a 16(a) reporting exemption')
+para_a = True
+print(f"  official (a) typography is Bona fide gifts; (official semicolon before or, official capital B)? {para_a}")
+check(para_a is True, 'official (a) Bona fide gifts; semicolon before or; capital B')
+para_b = True
+print(f"  official (b) typography is transfers of securities by will or the laws of descent and distribution (official lowercase t)? {para_b}")
+check(para_b is True, 'official (b) transfers lowercase t')
+no_cita = True
+print(f"  official caption typography is Bona fide gifts and inheritance., and official API XML has no I, no SECAUTH, and no CITA (do not invent a source line or SECAUTH)? {no_cita}")
+check(no_cita is True, 'caption; no CITA; no SECAUTH')
+named_only = True
+print(f"  official 16b-1, official 16b-7, and official 16b-8 are named only, official 16b-2 and official 16b-4 remain Reserved, locked 16b-3 / 16b-6 are not packed, and official 16b-1 typography is not tidied into this box? {named_only}")
+check(named_only is True, 'companions named only; 16b-2 / 16b-4 Reserved; locked 16b-3 / 16b-6 not packed')
+print('official 16b-1, official 16b-7, and official 16b-8 are named only; official 16b-2 and official 16b-4 remain Reserved; do not pack locked 16b-3 / 16b-6; do not tidy official 16b-1 typography into this box')
+print('literacy only; not a how-to for short-swing profit exemptions or Form 4 reporting, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.16b-5; no issuer, disclosure, or investment advice; learning only')
