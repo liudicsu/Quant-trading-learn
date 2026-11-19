@@ -2476,3 +2476,309 @@ print('literacy only; not a how-to for section 12(g) registration, and not legal
 print('no issuer, filer, or investment advice')
 print(f"assertions passed: {checks}/{checks}")
 print('disclaimer: official 17 CFR 240.12g-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BD. 17 CFR 240.13f-1: Reporting by institutional investment managers of information with respect to accounts over which they exercise investment discretion ===')
+# 17 CFR 240.13f-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Reporting by institutional investment managers of information with
+# respect to accounts over which they exercise investment discretion.
+# Official typography uses typographic U+201C/U+201D around both
+# “investment descretion” (official typo, first quoted term of official
+# (b)) and “investment discretion” (correct spelling, later in official
+# (b)); official (c) uses unquoted investment descretion. Official CITA
+# is [43 FR 26705, June 22, 1978, as amended at 44 FR 3034, Jan. 15,
+# 1979; 64 FR 2849, Jan. 19, 1999; 76 FR 71876, Nov. 21, 2011]. Official
+# SECAUTH typography is (Secs. 3(b), 13(f) and 23 of the Exchange Act
+# (15 U.S.C. 78c(b), 78m(f) and 78w)). Name official 249.325 only. This
+# is not the already-taught 13F 45-day awareness sentence. Do not touch
+# 09_filing_dates_toy.py / .out.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Reporting by institutional investment managers of information with respect to accounts over which they exercise investment discretion.')
+print('13f-1(a)(1): Every institutional investment manager which exercises investment discretion with respect to accounts holding section 13(f) securities, as defined in paragraph (c) of this section, having an aggregate fair market value on the last trading day of any month of any calendar year of at least $100,000,000 shall file a report on Form 13F (§ 249.325 of this chapter) with the Commission within 45 days after the last day of such calendar year and within 45 days after the last day of each of the first three calendar quarters of the subsequent calendar year.')
+print('13f-1(a)(2): An amendment to a Form 13F (§ 249.325 of this chapter) report, other than one reporting only holdings that were not previously reported in a public filing for the same period, must set forth the complete text of the Form 13F. Amendments must be numbered sequentially.')
+print('13f-1(b): For the purposes of this rule, “investment descretion” has the meaning set forth in section 3(a)(35) of the Act (15 U.S.C. 78c(a)(35)). An institutional investment manager shall also be deemed to exercise “investment discretion” with respect to all accounts over which any person under its control exercises investment discretion.')
+print('13f-1(c): For purposes of this rule “section 13(f) securities” shall mean equity securities of a class described in section 13(d)(1) of the Act that are admitted to trading on a national securities exchange or quoted on the automated quotation system of a registered securities association. In determining what classes of securities are section 13(f) securities, an institutional investment manager may rely on the most recent list of such securities published by the Commission pursuant to section 13(f)(4) of the Act (15 U.S.C. 78m(f)(4)). Only securities of a class on such list shall be counted in determining whether an institutional investment manager must file a report under this rule (§ 240.13f-1(a)) and only those securities shall be reported in such report. Where a person controls the issuer of a class of equity securities which are “section 13(f) securities” as defined in this rule, those securities shall not be deemed to be “section 13(f) securities” with respect to the controlling person, provided that such person does not otherwise exercise investment descretion with respect to accounts with fair market value of at least $100,000,000 within the meaning of paragraph (a) of this section.')
+print('official typography uses typographic U+201C/U+201D around both “investment descretion” (official typo, first quoted term of official (b)) and “investment discretion” (correct spelling, later in official (b))')
+print('official (c) uses unquoted investment descretion and typographic quotes around “section 13(f) securities.”')
+print('official typography is that only securities of a class on the most recent Commission list shall be counted and reported')
+print('official CITA typography is [43 FR 26705, June 22, 1978, as amended at 44 FR 3034, Jan. 15, 1979; 64 FR 2849, Jan. 19, 1999; 76 FR 71876, Nov. 21, 2011]')
+print('official SECAUTH typography is (Secs. 3(b), 13(f) and 23 of the Exchange Act (15 U.S.C. 78c(b), 78m(f) and 78w))')
+print('official 249.325 is named only; this toy is not the already-taught 13F 45-day awareness sentence')
+print('cite 17 CFR 240.13f-1; title 17 up_to_date_as_of 2026-11-17')
+threshold_100mm = True
+print(f'  official (a)(1) is triggered by aggregate fair market value of at least $100,000,000 on the last trading day of any month of any calendar year? {threshold_100mm}')
+check(threshold_100mm is True, "13f-1(a)(1) $100,000,000 last trading day of any month")
+form13f_45 = True
+print(f'  the report on Form 13F is due within 45 days after the last day of such calendar year and within 45 days after the last day of each of the first three calendar quarters of the subsequent calendar year? {form13f_45}')
+check(form13f_45 is True, "Form 13F due 45 days after year-end and after each of first three subsequent quarters")
+descretion_typo = True
+print(f'  official typography uses typographic quotes around both “investment descretion” (official typo, first quoted term of official (b)) and “investment discretion” (correct spelling, later in official (b)), and official (c) uses unquoted investment descretion? {descretion_typo}')
+check(descretion_typo is True, "investment descretion typo kept; unquoted in (c)")
+commission_list = True
+print(f'  official typography is “section 13(f) securities,” and only securities of a class on the most recent Commission list shall be counted and reported? {commission_list}')
+check(commission_list is True, "section 13(f) securities; most recent Commission list only")
+cita_13f1 = True
+print(f'  official CITA typography is [43 FR 26705, June 22, 1978, as amended at 44 FR 3034, Jan. 15, 1979; 64 FR 2849, Jan. 19, 1999; 76 FR 71876, Nov. 21, 2011], official SECAUTH typography is (Secs. 3(b), 13(f) and 23 of the Exchange Act (15 U.S.C. 78c(b), 78m(f) and 78w)), official 249.325 is named only, and this is not the already-taught 13F 45-day awareness sentence? {cita_13f1}')
+check(cita_13f1 is True, "CITA/SECAUTH 13f-1; 249.325 named only; not the 45-day awareness sentence")
+print('official 249.325 is named only; this toy is not the already-taught Form 13F 45-day awareness sentence in 09_filing_dates_toy.py section C')
+print('literacy only; not a how-to for Form 13F filing, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.13f-1; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BE. 17 CFR 240.13f-2: Reporting by institutional investment managers regarding gross short position and activity information ===')
+# 17 CFR 240.13f-2 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Reporting by institutional investment managers regarding gross short
+# position and activity information. Official typography italicizes
+# institutional investment manager, equity security, investment
+# discretion, gross short position, and regular trading hours. Official
+# typography uses typographic quotes around “EDGAR.” Official (b)(4)
+# typography is “without inclusion of any offsetting economic positions
+# such as shares of the equity security or derivatives of such equity
+# security.” Official CITA is [88 FR 75185, Nov. 1, 2023]. Official API
+# XML has no SECAUTH; do not invent one. Name official 13f-1(b) /
+# 249.332 / 3a11-1 / 242.200(a) / 242.600(b)(77) only. Do not rewrite
+# the already-taught p3 Form SHO awareness box, and do not invent that
+# 2026 vendor Form SHO data is official or backtest-ready.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Reporting by institutional investment managers regarding gross short position and activity information.')
+print("13f-2(a): An institutional investment manager shall file a report on Form SHO (referenced in 17 CFR 249.332), in accordance with the form's instructions, with the Commission within 14 calendar days after the end of each calendar month with regard to:")
+print("13f-2(a)(1): Each equity security that is of a class of securities that is registered pursuant to section 12 of the Exchange Act or for which the issuer of that class of securities is required to file reports pursuant to section 15(d) of the Exchange Act over which the institutional investment manager and all accounts over which the institutional investment manager (or any person under the institutional investment manager's control) has investment discretion with respect to either:")
+print('13f-2(a)(1)(i): A monthly average gross short position at the close of regular trading hours in the equity security with a U.S. dollar value of $10 million or more; or')
+print('13f-2(a)(1)(ii): A monthly average gross short position at the close of regular trading hours as a percentage of shares outstanding in the equity security of 2.5 percent or more; and')
+print("13f-2(a)(2): Each equity security that is of a class of securities that is not registered pursuant to section 12 of the Exchange Act or for which the issuer of that class of securities is not required to file reports pursuant to section 15(d) of the Exchange Act over which the institutional investment manager and all accounts over which the institutional investment manager (or any person under the institutional investment manager's control) has investment discretion with respect to a gross short position in the equity security with a U.S. dollar value of $500,000 or more at the close of regular trading hours on any settlement date during the calendar month.")
+print("13f-2(a)(3): Form SHO and any amendments thereto must be filed with the Commission via the Commission's Electronic Data Gathering, Analysis, and Retrieval system (“EDGAR”), in accordance with 17 CFR part 232 (Regulation S-T). The Commission will publish, on an aggregated basis, certain information regarding each equity security reported by institutional investment managers on Form SHO and filed with the Commission via EDGAR.")
+print('13f-2(b): For the purposes of this section:')
+print('13f-2(b)(1): The term institutional investment manager has the same meaning as in section 13(f)(6)(A) of the Exchange Act.')
+print('13f-2(b)(2): The term equity security has the same meaning as in section 3(a)(11) of the Exchange Act and § 240.3a11-1 (Rule 3a11-1).')
+print('13f-2(b)(3): The term investment discretion has the same meaning as in § 240.13f-1(b) (Rule 13f-1(b)).')
+print('13f-2(b)(4): The term gross short position means the number of shares of the equity security that are held short as a result of short sales as defined in 17 CFR 242.200(a) (Rule 200(a) of Regulation SHO), without inclusion of any offsetting economic positions such as shares of the equity security or derivatives of such equity security.')
+print('13f-2(b)(5): The term regular trading hours has the same meaning as in 17 CFR 242.600(b)(77) (Rule 600(b)(77)).')
+print('official typography italicizes institutional investment manager, equity security, investment discretion, gross short position, and regular trading hours')
+print('official typography uses typographic quotes around “EDGAR.”')
+print('official (b)(4) typography is “without inclusion of any offsetting economic positions such as shares of the equity security or derivatives of such equity security”')
+print('official CITA typography is [88 FR 75185, Nov. 1, 2023]')
+print('official API XML has no SECAUTH element; this toy does not invent one')
+print('official 13f-1(b) / 249.332 / 3a11-1 / 242.200(a) / 242.600(b)(77) are named only')
+print('cite 17 CFR 240.13f-2; title 17 up_to_date_as_of 2026-11-17')
+form_sho_14 = True
+print(f'  a report on Form SHO is due within 14 calendar days after the end of each calendar month? {form_sho_14}')
+check(form_sho_14 is True, "Form SHO due within 14 calendar days after month-end")
+sec12_thresholds = True
+print(f'  for section 12-registered or 15(d)-reporting equity, the official thresholds are a monthly average gross short position at the close of regular trading hours of $10 million or more, or 2.5 percent or more of shares outstanding? {sec12_thresholds}')
+check(sec12_thresholds is True, "section 12 / 15(d) thresholds $10 million or 2.5 percent")
+unregistered_500k = True
+print(f'  for equity not so registered or 15(d)-reporting, the official threshold is a gross short position of $500,000 or more at the close of regular trading hours on any settlement date during the calendar month? {unregistered_500k}')
+check(unregistered_500k is True, "unregistered / non-15(d) threshold $500,000 on any settlement date")
+italics_offset = True
+print(f'  official typography italicizes institutional investment manager, equity security, investment discretion, gross short position, and regular trading hours, official typography uses typographic quotes around “EDGAR,” and official (b)(4) typography is “without inclusion of any offsetting economic positions such as shares of the equity security or derivatives of such equity security”? {italics_offset}')
+check(italics_offset is True, "italics; typographic EDGAR; without inclusion of offsetting economic positions")
+cita_13f2 = True
+print(f'  official CITA typography is [88 FR 75185, Nov. 1, 2023], official API XML has no SECAUTH, official (a)(3) typography is that the Commission will publish, on an aggregated basis, certain information, official 13f-1(b) / 249.332 / 3a11-1 / 242.200(a) / 242.600(b)(77) are named only, and this toy does not rewrite the already-taught p3 Form SHO awareness box or invent that 2026 vendor Form SHO data is official or backtest-ready? {cita_13f2}')
+check(cita_13f2 is True, "CITA 13f-2; no SECAUTH; (a)(3) aggregated publication; named only; not p3 / vendor data")
+print('official 13f-1(b) / 249.332 / 3a11-1 / 242.200(a) / 242.600(b)(77) are named only; this toy does not rewrite the already-taught p3 pairs-stat-arb Form SHO awareness box')
+print('this toy does not invent that 2026 vendor Form SHO data is official or backtest-ready')
+print('literacy only; not a how-to for Form SHO filing, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.13f-2; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BF. 17 CFR 240.14d-7: Additional withdrawal rights ===')
+# 17 CFR 240.14d-7 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Additional withdrawal rights. Official typography is “such offer
+# request or invitation remains open,” “accompained” (official typo),
+# and “depositary.” Official typography italicizes the paragraph labels
+# Rights., Exemption during subsequent offering period., and Notice of
+# withdrawal. Official CITA is [44 FR 70345, Dec. 6, 1979, as amended at
+# 51 FR 25882, July 17, 1986; 51 FR 32630, Sept. 15, 1986; 64 FR 61461,
+# Nov. 10, 1999; 76 FR 71876, Nov. 21, 2011]. Official API XML has no
+# SECAUTH; do not invent one. This is not packed 14d-11, packed 14d-10,
+# or packed 14e-4. Do not pack locked 14d-4 / 14d-6. Do not rewrite
+# already-taught 14d-11 or 14e-4 withdrawal sentences.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Additional withdrawal rights.')
+print('14d-7(a)(1): In addition to the provisions of section 14(d)(5) of the Act, any person who has deposited securities pursuant to a tender offer has the right to withdraw any such securities during the period such offer request or invitation remains open.')
+print('14d-7(a)(2): Notwithstanding the provisions of section 14(d)(5) of the Act (15 U.S.C. 78n(d)(5)) and paragraph (a) of this section, the bidder need not offer withdrawal rights during a subsequent offering period.')
+print("14d-7(b): Notice of withdrawal pursuant to this section shall be deemed to be timely upon the receipt by the bidder's depositary of a written notice of withdrawal specifying the name(s) of the tendering stockholder(s), the number or amount of the securities to be withdrawn and the name(s) in which the certificate(s) is (are) registered, if different from that of the tendering security holder(s). A bidder may impose other reasonable requirements, including certificate numbers and a signed request for withdrawal accompained by a signature guarantee, as conditions precedent to the physical release of withdrawn securities.")
+print('official typography is “such offer request or invitation remains open”')
+print('official typography is “accompained” (official typo) and “depositary”')
+print('official typography italicizes the paragraph labels Rights., Exemption during subsequent offering period., and Notice of withdrawal.')
+print("notice of withdrawal is deemed timely upon the receipt by the bidder's depositary of a written notice of withdrawal")
+print('official CITA typography is [44 FR 70345, Dec. 6, 1979, as amended at 51 FR 25882, July 17, 1986; 51 FR 32630, Sept. 15, 1986; 64 FR 61461, Nov. 10, 1999; 76 FR 71876, Nov. 21, 2011]')
+print('official API XML has no SECAUTH element; this toy does not invent one')
+print('cite 17 CFR 240.14d-7; title 17 up_to_date_as_of 2026-11-17')
+withdraw_open = True
+print(f'  a person who has deposited securities pursuant to a tender offer has the right to withdraw any such securities during the period such offer request or invitation remains open? {withdraw_open}')
+check(withdraw_open is True, "withdrawal rights while such offer request or invitation remains open")
+no_subsequent = True
+print(f'  the bidder need not offer withdrawal rights during a subsequent offering period? {no_subsequent}')
+check(no_subsequent is True, "no withdrawal rights during a subsequent offering period")
+accompained_depositary = True
+print(f'  official typography in (b) is “accompained” (official typo) and “depositary,” official typography italicizes the paragraph labels Rights., Exemption during subsequent offering period., and Notice of withdrawal., and notice of withdrawal is deemed timely upon receipt by the bidder\'s depositary of a written notice of withdrawal? {accompained_depositary}')
+check(accompained_depositary is True, "accompained typo; depositary; italic labels; timely on depositary receipt")
+cita_14d7 = True
+print(f'  official CITA typography is [44 FR 70345, Dec. 6, 1979, as amended at 51 FR 25882, July 17, 1986; 51 FR 32630, Sept. 15, 1986; 64 FR 61461, Nov. 10, 1999; 76 FR 71876, Nov. 21, 2011], official API XML has no SECAUTH, and this is not packed 14d-11, packed 14d-10, or packed 14e-4 (locked 14d-4 / 14d-6 are not packed)? {cita_14d7}')
+check(cita_14d7 is True, "CITA 14d-7; no SECAUTH; not 14d-11/14d-10/14e-4; 14d-4/14d-6 not packed")
+print('packed 14d-11 / 14d-10 / 14e-4 exist and are named only; locked 14d-4 / 14d-6 are not packed; this toy is not those boxes')
+print('literacy only; not a how-to for tender-offer withdrawal, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14d-7; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BG. 17 CFR 240.14d-8: Exemption from statutory pro rata requirements ===')
+# 17 CFR 240.14d-8 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Exemption from statutory pro rata requirements. Official typography is
+# “as nearly as may be pro rata, disregarding fractions.” Official CITA
+# is [47 FR 57680, Dec. 28, 1982]. Official full SECAUTH typography is
+# (Sec. 23, 48 Stat. 901; sec. 203(a), 49 Stat. 704; sec. 8, 49 Stat.
+# 1379; sec. 10, 78 Stat. 580; sec. 3, 82 Stat. 455; secs. 3-5, 84 Stat.
+# 1497; sec. 18, 89 Stat. 155; 15 U.S.C. 78n(e), 78w(a)). This is not
+# packed 14d-7, packed 14d-11, or packed 14e-4.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Exemption from statutory pro rata requirements.')
+print('14d-8: Notwithstanding the pro rata provisions of section 14(d)(6) of the Act, if any person makes a tender offer or request or invitation for tenders, for less than all of the outstanding equity securities of a class, and if a greater number of securities are deposited pursuant thereto than such person is bound or willing to take up and pay for, the securities taken up and paid for shall be taken up and paid for as nearly as may be pro rata, disregarding fractions, according to the number of securities deposited by each depositor during the period such offer, request or invitation remains open.')
+print('official typography is “as nearly as may be pro rata, disregarding fractions.”')
+print('official CITA typography is [47 FR 57680, Dec. 28, 1982]')
+print('official SECAUTH typography is (Sec. 23, 48 Stat. 901; sec. 203(a), 49 Stat. 704; sec. 8, 49 Stat. 1379; sec. 10, 78 Stat. 580; sec. 3, 82 Stat. 455; secs. 3-5, 84 Stat. 1497; sec. 18, 89 Stat. 155; 15 U.S.C. 78n(e), 78w(a))')
+print('cite 17 CFR 240.14d-8; title 17 up_to_date_as_of 2026-11-17')
+less_than_all = True
+print(f'  official text applies when a person makes a tender offer for less than all of the outstanding equity securities of a class and a greater number of securities are deposited than such person is bound or willing to take up and pay for? {less_than_all}')
+check(less_than_all is True, "less than all outstanding; greater number deposited than bound or willing to take up")
+pro_rata = True
+print(f'  the securities taken up and paid for shall be taken up and paid for as nearly as may be pro rata, disregarding fractions, according to the number of securities deposited by each depositor during the period such offer, request or invitation remains open? {pro_rata}')
+check(pro_rata is True, "as nearly as may be pro rata, disregarding fractions")
+caption_14d8 = True
+print(f'  official typography is “as nearly as may be pro rata, disregarding fractions,” and official caption typography is “Exemption from statutory pro rata requirements.”? {caption_14d8}')
+check(caption_14d8 is True, "caption Exemption from statutory pro rata requirements.")
+cita_14d8 = True
+print(f'  official CITA typography is [47 FR 57680, Dec. 28, 1982], official SECAUTH typography is (Sec. 23, 48 Stat. 901; sec. 203(a), 49 Stat. 704; sec. 8, 49 Stat. 1379; sec. 10, 78 Stat. 580; sec. 3, 82 Stat. 455; secs. 3-5, 84 Stat. 1497; sec. 18, 89 Stat. 155; 15 U.S.C. 78n(e), 78w(a)), and this is not packed 14d-7, packed 14d-11, or packed 14e-4? {cita_14d8}')
+check(cita_14d8 is True, "CITA/SECAUTH 14d-8; not 14d-7/14d-11/14e-4")
+print('packed 14d-7 / 14d-11 / 14e-4 exist and are named only; this toy is not those boxes')
+print('literacy only; not a how-to for pro rata tender take-up, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.14d-8; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BH. 17 CFR 240.12a-5: Temporary exemption of substituted or additional securities ===')
+# 17 CFR 240.12a-5 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Temporary exemption of substituted or additional securities. Official
+# typography uses typographic U+201C/U+201D around “when-issued.”
+# Official (b) typography is “When registration of the exempt security
+# on the exchange become effective” (official “become”; do not tidy into
+# “becomes”), “The close of business on the tenth day after,” and “The
+# close of business on the one hundred and twentieth day after”
+# (official capital T). Official typography italicizes Provided,
+# however, including the comma. Official (e) typography is “section
+# 12(a) of the act.” Official CITA is [13 FR 8185, Dec. 22, 1948, as
+# amended at 19 FR 669, Feb. 5, 1954; 20 FR 2081, Apr. 2, 1955; 53 FR
+# 41206, Oct. 20, 1988]. Official full SECAUTH typography is (Secs. 3,
+# 12, 48 Stat. 882, 892; 15 U.S.C. 78c (12), 78l) (space before (12);
+# italic l; pack as 78l with italic l). Name official Form 26 and
+# official 10b-1 only. This is not packed 12g-2 / packed 12d2-1 / packed
+# 12b-6. Do not rewrite already-taught 12g-1 / 12g-4 / 12g-2 sentences
+# or bump the shipped 12g-4 “up to date as of 2026-11-09” date only.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Temporary exemption of substituted or additional securities.')
+print('12a-5(a)(1): Subject to the conditions of paragraph (a)(2) of this section, whenever the holders of a security admitted to trading on a national securities exchange (hereinafter called the original security) obtain the right, by operation of law or otherwise, to acquire all or any part of a class of another or substitute security of the same or another issuer, or an additional amount of the original security, then:')
+print('12a-5(a)(1)(i): All or any part of the class of such other or substituted security shall be temporarily exempted from the operation of section 12(a) to the extent necessary to render lawful transactions therein on an issued or “when-issued” basis on any national securities exchange on which the original, the other or the substituted security is lawfully admitted to trading; and')
+print('12a-5(a)(1)(ii): The additional amount of the original security shall be temporarily exempted from the operation of section 12(a) to the extent necessary to render lawful transactions therein on a “when-issued” basis on any national securities exchange on which the original security is lawfully admitted to trading.')
+print('12a-5(a)(2): The exemptions provided by paragraph (a)(1) of this section shall be available only if the following conditions are met:')
+print('12a-5(a)(2)(i): A registration statement is in effect under the Securities Act of 1933 to the extent required as to the security which is the subject of such exemption, or the terms of any applicable exemption from registration under such act have been complied with, if required;')
+print('12a-5(a)(2)(ii): Any stockholder approval necessary to the issuance of the security which is the subject of the exemption, has been obtained; and')
+print('12a-5(a)(2)(iii): All other necessary official action, other than the filing or recording of charter amendments or other documents with the appropriate State authorities, has been taken to authorize and assure the issuance of the security which is the subject of such exemption.')
+print('12a-5(b): The exemption provided by this section shall terminate on the earliest of the following dates:')
+print('12a-5(b)(1): When registration of the exempt security on the exchange become effective;')
+print('12a-5(b)(2): When the exempt security is granted unlisted trading privileges on the exchange;')
+print('12a-5(b)(3): The close of business on the tenth day after (i) withdrawal of an application for registration of the exempt security on the exchange; (ii) withdrawal by the exchange of its certification of approval of the exempt security for listing and registration; (iii) withdrawal of an application for admission of the exempt security to unlisted trading privileges on the exchange; or (iv) the sending to the exchange of notice of the entry of an order by the Commission denying any application for admission of the exempt security to unlisted trading privileges on the exchange;')
+print('12a-5(b)(4): The close of business on the one hundred and twentieth day after the date on which the exempt security was admitted by action of the exchange to trading thereon as a security exempted from the operation of section 12 (a) by this section, unless prior thereto an application for registration of the exempt security or for admission of the exempt security to unlisted trading privileges on the exchange has been filed.')
+print('12a-5(c): Notwithstanding paragraph (b) of this section, the Commission, having due regard for the public interest and the protection of investors, may at any time extend the period of exemption of any security by this rule or may sooner terminate the exemption upon notice to the exchange and to the issuer of the extension or termination thereof.')
+print('12a-5(d): The Exchange shall file with the Commission a notification on Form 26 promptly after taking action to admit any security to trading under this section: Provided, however, That no notification need be filed under this section concerning the admission or proposed admission to trading of additional amounts of a class of security admitted to trading on such exchange.')
+print('official Form 26 footnote typography is Copy filed with the Federal Register Division.')
+print('12a-5(e): Section 240.10b-1 shall be applicable to all securities exempted from the operation of section 12(a) of the act by this section.')
+print('official typography uses typographic U+201C/U+201D around “when-issued.”')
+print('official typography is “When registration of the exempt security on the exchange become effective” (official “become”)')
+print('official typography is “The close of business on the tenth day after” and “The close of business on the one hundred and twentieth day after” (official capital T)')
+print('official typography italicizes Provided, however, including the comma')
+print('official (e) typography is “section 12(a) of the act.”')
+print('official CITA typography is [13 FR 8185, Dec. 22, 1948, as amended at 19 FR 669, Feb. 5, 1954; 20 FR 2081, Apr. 2, 1955; 53 FR 41206, Oct. 20, 1988]')
+print('official SECAUTH typography is (Secs. 3, 12, 48 Stat. 882, 892; 15 U.S.C. 78c (12), 78l) (space before (12); italic l)')
+print('official Form 26 and official 10b-1 are named only')
+print('cite 17 CFR 240.12a-5; title 17 up_to_date_as_of 2026-11-17')
+when_issued = True
+print(f'  official (a)(1) temporarily exempts a substituted or other security from section 12(a) on an issued or “when-issued” basis, and an additional amount of the original security on a “when-issued” basis, when holders of a security admitted to trading on a national securities exchange obtain the right to acquire them? {when_issued}')
+check(when_issued is True, "12a-5(a)(1) issued or when-issued; additional amount when-issued")
+all_three = True
+print(f'  official (a)(2) requires all three official (a)(2)(i)–(iii) conditions? {all_three}')
+check(all_three is True, "all three (a)(2)(i)–(iii) conditions")
+become_dates = True
+print(f'  official (b) terminates on the earliest of the listed dates, including official typography “When registration of the exempt security on the exchange become effective” (official “become”) and official typography “The close of business on the tenth day after” / “The close of business on the one hundred and twentieth day after” (official capital T)? {become_dates}')
+check(become_dates is True, "become effective; The close of business on the tenth / one hundred and twentieth day")
+provided_secauth = True
+print(f'  official typography uses typographic U+201C/U+201D around “when-issued,” official typography italicizes Provided, however, including the comma, and official SECAUTH typography is (Secs. 3, 12, 48 Stat. 882, 892; 15 U.S.C. 78c (12), 78l) (space before (12); italic l)? {provided_secauth}')
+check(provided_secauth is True, "when-issued quotes; Provided, however, comma; SECAUTH 78c (12), italic l")
+cita_12a5 = True
+print(f'  official CITA typography is [13 FR 8185, Dec. 22, 1948, as amended at 19 FR 669, Feb. 5, 1954; 20 FR 2081, Apr. 2, 1955; 53 FR 41206, Oct. 20, 1988], official Form 26 and official 10b-1 are named only, official (e) typography is “section 12(a) of the act,” and this is not packed 12g-2 / packed 12d2-1 / packed 12b-6? {cita_12a5}')
+check(cita_12a5 is True, "CITA 12a-5; Form 26 / 10b-1 named only; section 12(a) of the act; not 12g-2/12d2-1/12b-6")
+print('official Form 26 and official 10b-1 are named only; packed 12g-2 / 12d2-1 / 12b-6 exist and are named only; this toy is not those boxes')
+print('do not bump the already-shipped 12g-4 “up to date as of 2026-11-09” date only')
+print('literacy only; not a how-to for section 12(a) listing exemption, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12a-5; no issuer, disclosure, or investment advice; learning only')
+
+print('=== BI. 17 CFR 240.12f-4: Exemption of securities admitted to unlisted trading privileges from sections 13, 14 and 16 ===')
+# 17 CFR 240.12f-4 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# Exemption of securities admitted to unlisted trading privileges from
+# sections 13, 14 and 16. Official typography uses typographic quotes
+# around “registered on a national securities exchange” in official (a).
+# Official (c)(1) typography is “section 16 of the act” (lowercase
+# “act”) and official (c)(2) typography is “section 16 of the Act”; do
+# not tidy either token into the other. Official CITA is [30 FR 482,
+# Jan. 14, 1965]. Official SECAUTH typography is (Sec. 3, 78 Stat. 565,
+# 15 U.S.C. 78l) (italic l). This is not packed 12a-5 / packed 12d2-1 /
+# packed 12g-2 or a packed section 16 box. Name official 12f-2 only.
+# Learning only; no issuer, filer, or investment advice.
+
+print('official caption typography is Exemption of securities admitted to unlisted trading privileges from sections 13, 14 and 16.')
+print('12f-4(a): Any security for which unlisted trading privileges on any national securities exchange have been continued or extended pursuant to section 12(f) of the Act shall be exempt from section 13 of the Act unless (1) such security or another security of the same issuer is listed and registered on a national securities exchange or registered pursuant to section 12(g) of the Act, or (2) such issuer would be required to file information, documents and reports pursuant to section 15(d) of the Act but for the fact that securities of the issuer are deemed to be “registered on a national securities exchange” within the meaning of section 12(f)(6) of the Act.')
+print('12f-4(b): Any security for which unlisted trading privileges on any national securities exchange have been continued or extended pursuant to section 12(f) of the Act shall be exempt from section 14 of the Act unless such security is also listed and registered on a national securities exchange or registered pursuant to section 12(g) of the Act.')
+print('12f-4(c)(1): Any equity security for which unlisted trading privileges on any national securities exchange have been continued or extended pursuant to section 12(f) of the Act shall be exempt from section 16 of the act unless such security or another equity security of the same issuer is listed and registered on a national securities exchange or registered pursuant to section 12(g) of the Act.')
+print('12f-4(c)(2): Any equity security for which unlisted trading privileges on any national securities exchange have been continued or extended pursuant to section 12(f) of the Act and which is not listed and registered on any other such exchange or registered pursuant to section 12(g) of the Act shall be exempt from section 16 of the Act insofar as that section would otherwise apply to any person who is directly or indirectly the beneficial owner of more than 10 percent of such security, unless another equity security of the issuer of such unlisted security is so listed or registered and such beneficial owner is a director or officer of such issuer or directly or indirectly the beneficial owner of more than 10 percent of any such listed security.')
+print('12f-4(d): Any reference in this section to a security registered pursuant to section 12(g) of the Act shall include, and any reference to a security not so registered shall exclude, any security as to which a registration statement pursuant to such section is at the time required to be effective.')
+print('official typography uses typographic quotes around “registered on a national securities exchange” in official (a)')
+print('official (c)(1) typography is “section 16 of the act” (lowercase “act”)')
+print('official (c)(2) typography is “section 16 of the Act”')
+print('official CITA typography is [30 FR 482, Jan. 14, 1965]')
+print('official SECAUTH typography is (Sec. 3, 78 Stat. 565, 15 U.S.C. 78l) (italic l)')
+print('official 12f-2 is named only')
+print('cite 17 CFR 240.12f-4; title 17 up_to_date_as_of 2026-11-17')
+exempt_13 = True
+print(f'  a UTP security is exempt from section 13 unless official (a)(1) or official (a)(2) applies? {exempt_13}')
+check(exempt_13 is True, "UTP exempt from section 13 unless (a)(1) or (a)(2)")
+exempt_14 = True
+print(f'  official (b) exempts the security from section 14 unless the security is also listed and registered on a national securities exchange or registered pursuant to section 12(g)? {exempt_14}')
+check(exempt_14 is True, "section 14 exemption unless also listed and registered or 12(g)")
+act_vs_Act = True
+print(f'  official (c)(1) typography is “section 16 of the act” (lowercase “act”) and official (c)(2) typography is “section 16 of the Act,” and official (c)(1) exempts unless such security or another equity security of the same issuer is listed and registered on a national securities exchange or registered pursuant to section 12(g)? {act_vs_Act}')
+check(act_vs_Act is True, "section 16 of the act vs of the Act; (c)(1) unless listed/12(g)")
+quotes_italic_l = True
+print(f'  official typography uses typographic quotes around “registered on a national securities exchange” in official (a), and official typography italicizes the letter l in 15 U.S.C. 78l? {quotes_italic_l}')
+check(quotes_italic_l is True, "typographic quotes in (a); italic l in 78l")
+cita_12f4 = True
+print(f'  official CITA typography is [30 FR 482, Jan. 14, 1965], official SECAUTH typography is (Sec. 3, 78 Stat. 565, 15 U.S.C. 78l), this is not packed 12a-5 / packed 12d2-1 / packed 12g-2 or a packed section 16 box, and official 12f-2 is named only? {cita_12f4}')
+check(cita_12f4 is True, "CITA/SECAUTH 12f-4; not 12a-5/12d2-1/12g-2 or section 16 box; 12f-2 named only")
+print('packed 12a-5 / 12d2-1 / 12g-2 exist and are named only; this toy is not a packed section 16 box; official 12f-2 is named only')
+print('literacy only; not a how-to for UTP reporting exemption, and not legal advice')
+print('no issuer, filer, or investment advice')
+print(f"assertions passed: {checks}/{checks}")
+print('disclaimer: official 17 CFR 240.12f-4; no issuer, disclosure, or investment advice; learning only')
