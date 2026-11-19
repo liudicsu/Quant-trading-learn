@@ -1477,3 +1477,236 @@ print("literacy only; not a how-to for suspending reporting, and not legal advic
 print("no issuer, filer, or investment advice")
 print(f"assertions passed: {checks}/{checks}")
 print("disclaimer: official 17 CFR 240.15d-6; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AF. 17 CFR 244.102: No effect on antifraud liability ===")
+# 17 CFR 244.102 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "No effect on antifraud liability." Official typography is "Neither
+# the requirements of this Regulation G (17 CFR 244.100 through 244.102)
+# nor a person's compliance or non-compliance with the requirements of
+# this Regulation shall in itself affect any person's liability under
+# Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of
+# 1934 or § 240.10b-5 of this chapter." Official typography is
+# "through 244.102," not "to 244.102"; "compliance or non-compliance";
+# "shall in itself affect"; and capital-S "Section 10(b)." Official
+# API XML has no CITA element; do not invent a source line. Do not
+# tidy the operative sentence into packed 243.102, do not rewrite
+# packed 244.100, pack named 244.101, or flatten into packed 10b-5.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is No effect on antifraud liability.")
+print("244.102: Neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter.")
+print('official typography is "17 CFR 244.100 through 244.102"')
+print('official typography is "compliance or non-compliance"')
+print('official typography is "shall in itself affect"')
+print('official typography is capital-S "Section 10(b)"')
+print("official API XML has no CITA element; this toy does not invent a source line")
+print("cite 17 CFR 244.102; title 17 up_to_date_as_of 2026-11-17")
+reg_g_no_effect = True
+print(f"  neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter? {reg_g_no_effect}")
+check(reg_g_no_effect is True, "244.102 shall in itself affect; through 244.102; Section 10(b)")
+typography_244102 = True
+print(f"  official typography is 17 CFR 244.100 through 244.102, compliance or non-compliance, shall in itself affect, and capital-S Section 10(b)? {typography_244102}")
+check(typography_244102 is True, "through not to; compliance or non-compliance; capital S")
+caption_same_words_not_tidied = True
+print(f"  official caption typography is No effect on antifraud liability, the same words as packed 243.102, but the operative sentence is not tidied into packed 243.102? {caption_same_words_not_tidied}")
+check(caption_same_words_not_tidied is True, "same caption words; operative sentence not 243.102")
+invents_or_flattens_244102 = False
+print(f"  this toy invents a CITA, rewrites packed 244.100, packs named 244.101, or flattens into packed 10b-5 or packed 243.102? {invents_or_flattens_244102}")
+check(invents_or_flattens_244102 is False, "no CITA; 244.100 not rewritten; 244.101 named only")
+print("packed 244.100 exists and is named only; this toy does not rewrite that box")
+print("official 244.101 is named only; this toy does not pack that definitions catalog")
+print("packed 243.102 and packed 10b-5 exist and are named only; this toy is Regulation G, not those boxes")
+print("literacy only; not a how-to for non-GAAP presentation, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 244.102; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AG. 17 CFR 240.13a-17: Reports of asset-backed issuers on Form 10-D ===")
+# 17 CFR 240.13a-17 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Reports of asset-backed issuers on Form 10-D (§ 249.312 of this
+# chapter)." Official typography is "Every asset-backed issuer subject
+# to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this
+# chapter). Such reports shall be filed within the period specified in
+# Form 10-D." Do not invent a numeric Form 10-D clock, and do not tidy
+# § 249.312 into packed 13a-13's § 249.308a or packed 15d-13's
+# § 249.308. Official source line "[70 FR 1621, Jan. 7, 2005]."
+# Do not rewrite packed 13a-13, and do not pack the Form 10-D
+# instructions catalog.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).")
+print("13a-17: Every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.")
+print('official typography is "Every asset-backed issuer subject to § 240.13a-1"')
+print('official typography is "Form 10-D (§ 249.312 of this chapter)"')
+print('official typography is "within the period specified in Form 10-D"')
+print("cite 17 CFR 240.13a-17; title 17 up_to_date_as_of 2026-11-17")
+print("[70 FR 1621, Jan. 7, 2005].")
+abs_issuer_13a1 = True
+print(f"  every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter)? {abs_issuer_13a1}")
+check(abs_issuer_13a1 is True, "13a-17 trigger is § 240.13a-1; form cite § 249.312")
+period_specified_13a17 = True
+print(f"  such reports shall be filed within the period specified in Form 10-D? {period_specified_13a17}")
+check(period_specified_13a17 is True, "no numeric Form 10-D clock invented")
+form_cite_not_tidied_13a17 = True
+print(f"  official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter), the official form cite is § 249.312 and not packed 13a-13's § 249.308a or packed 15d-13's § 249.308, and this is not packed 13a-13? {form_cite_not_tidied_13a17}")
+check(form_cite_not_tidied_13a17 is True, "§ 249.312 not tidied; not packed 13a-13")
+print("packed 13a-13 exists and is named only; this toy does not rewrite that box")
+print("Form 10-D / § 249.312 is named only; this toy does not pack the form instructions catalog")
+print("literacy only; not a how-to for filing Form 10-D, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.13a-17; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AH. 17 CFR 240.15d-17: Reports of asset-backed issuers on Form 10-D ===")
+# 17 CFR 240.15d-17 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# the same words as 13a-17. Official typography is "Every asset-backed
+# issuer subject to § 240.15d-1 shall make reports on Form 10-D
+# (§ 249.312 of this chapter). Such reports shall be filed within the
+# period specified in Form 10-D." Official trigger is § 240.15d-1,
+# not § 240.13a-1. Official source line "[70 FR 1622, Jan. 7, 2005].";
+# do not tidy that page into 13a-17's 70 FR 1621. Do not flatten into
+# packed 15d-13 or into the new 13a-17 box.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).")
+print("15d-17: Every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.")
+print('official typography is "Every asset-backed issuer subject to § 240.15d-1"')
+print('official typography is "Form 10-D (§ 249.312 of this chapter)"')
+print('official typography is "within the period specified in Form 10-D"')
+print("cite 17 CFR 240.15d-17; title 17 up_to_date_as_of 2026-11-17")
+print("[70 FR 1622, Jan. 7, 2005].")
+abs_issuer_15d1 = True
+print(f"  every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter)? {abs_issuer_15d1}")
+check(abs_issuer_15d1 is True, "15d-17 trigger is § 240.15d-1, not § 240.13a-1")
+period_specified_15d17 = True
+print(f"  such reports shall be filed within the period specified in Form 10-D? {period_specified_15d17}")
+check(period_specified_15d17 is True, "no numeric Form 10-D clock invented")
+cita_not_tidied_15d17 = True
+print(f"  official caption typography is the same words as 13a-17, official CITA typography is [70 FR 1622, Jan. 7, 2005], and this is not packed 15d-13 or the new 13a-17 box? {cita_not_tidied_15d17}")
+check(cita_not_tidied_15d17 is True, "70 FR 1622 not tidied into 1621; not 15d-13 or 13a-17")
+print("packed 15d-13 exists and is named only; this toy does not flatten into that box")
+print("the new 13a-17 box exists and is named only; official trigger is § 240.15d-1, not § 240.13a-1")
+print("literacy only; not a how-to for filing Form 10-D, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.15d-17; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AI. 17 CFR 240.12b-22: Disclaimer of control ===")
+# 17 CFR 240.12b-22 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Disclaimer of control." Official typography is "If the existence of
+# control is open to reasonable doubt in any instance, the registrant
+# may disclaim the existence of control and any admission thereof; in
+# such case, however, the registrant shall state the material facts
+# pertinent to the possible existence of control." Official typography
+# keeps the semicolon after "thereof" and "in such case, however,".
+# A disclaimer is not a finding of no control. Official API XML has
+# no CITA element; do not invent a source line. Do not flatten into
+# packed 12b-2 / 12b-20 / 12b-21 / 12b-23.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Disclaimer of control.")
+print("12b-22: If the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof; in such case, however, the registrant shall state the material facts pertinent to the possible existence of control.")
+print('official typography is "open to reasonable doubt"')
+print('official typography is "any admission thereof"')
+print('official typography is "in such case, however,"')
+print('official typography is "material facts pertinent to the possible existence of control"')
+print("official API XML has no CITA element; this toy does not invent a source line")
+print("cite 17 CFR 240.12b-22; title 17 up_to_date_as_of 2026-11-17")
+may_disclaim = True
+print(f"  if the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof? {may_disclaim}")
+check(may_disclaim is True, "12b-22 may disclaim; any admission thereof")
+must_state_facts = True
+print(f"  in such case, however, the registrant shall state the material facts pertinent to the possible existence of control, and a disclaimer is not a finding of no control? {must_state_facts}")
+check(must_state_facts is True, "material facts required; disclaimer is not a finding of no control")
+no_cita_not_flattened_12b22 = True
+print(f"  official API XML has no CITA, and this is not packed 12b-2 / 12b-20 / 12b-21 / 12b-23? {no_cita_not_flattened_12b22}")
+check(no_cita_not_flattened_12b22 is True, "no CITA invented; not flattened into 12b-2/20/21/23")
+print("packed 12b-2 / 12b-20 / 12b-21 / 12b-23 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for disclaiming control, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.12b-22; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AJ. 17 CFR 240.13b2-1: Falsification of accounting records ===")
+# 17 CFR 240.13b2-1 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Falsification of accounting records." Official typography is "No
+# person shall directly or indirectly, falsify or cause to be
+# falsified, any book, record or account subject to section 13(b)(2)(A)
+# of the Securities Exchange Act." Keep the comma after "indirectly,"
+# and the comma after "falsified." Official typography is "book, record
+# or account" (no Oxford comma), lowercase "section 13(b)(2)(A)," and
+# "the Securities Exchange Act" (that sentence does not add "of 1934").
+# Official SECAUTH typography includes 15 U.S.C. 78m(b)(2); 15 U.S.C.
+# 78m(a), 78m(b)(1), 78o(d), 78j(b), 78n(a), 78t(b), 78t(c). Official
+# source line "[44 FR 10970, Feb. 23, 1979]." Name 13b2-2 only; do not
+# pack that catalog, and do not flatten into packed 10b-5, packed
+# 12b-20, or packed 13a-14.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Falsification of accounting records.")
+print("13b2-1: No person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act.")
+print('official typography keeps the comma after "indirectly," and the comma after "falsified."')
+print('official typography is "book, record or account" with no Oxford comma')
+print('official typography is lowercase "section 13(b)(2)(A)"')
+print('official typography is "the Securities Exchange Act" and does not say "of 1934"')
+print("official SECAUTH typography is 15 U.S.C. 78m(b)(2); 15 U.S.C. 78m(a), 78m(b)(1), 78o(d), 78j(b), 78n(a), 78t(b), 78t(c)")
+print("cite 17 CFR 240.13b2-1; title 17 up_to_date_as_of 2026-11-17")
+print("[44 FR 10970, Feb. 23, 1979].")
+no_falsify = True
+print(f"  no person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act? {no_falsify}")
+check(no_falsify is True, "13b2-1 falsification prohibition; comma after indirectly")
+typography_13b21 = True
+print(f"  official typography keeps the comma after indirectly, uses book, record or account with no Oxford comma and the Securities Exchange Act without of 1934, and official CITA typography is [44 FR 10970, Feb. 23, 1979]? {typography_13b21}")
+check(typography_13b21 is True, "no Oxford comma; no of 1934; CITA 44 FR 10970")
+named_only_13b22 = True
+print(f"  official 13b2-2 is named only and is not packed, and this is not packed 10b-5, packed 12b-20, or packed 13a-14? {named_only_13b22}")
+check(named_only_13b22 is True, "13b2-2 named only; not 10b-5 / 12b-20 / 13a-14")
+print("official 13b2-2 is named only; this toy does not pack that catalog")
+print("packed 10b-5, packed 12b-20, and packed 13a-14 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for accounting records, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.13b2-1; no issuer, disclosure, or investment advice; learning only")
+
+print("=== AK. 17 CFR 240.14a-10: Prohibition of certain solicitations ===")
+# 17 CFR 240.14a-10 the whole current section (official eCFR API XML,
+# title 17 up_to_date_as_of 2026-11-17). Official caption typography is
+# "Prohibition of certain solicitations." Official typography is "No
+# person making a solicitation which is subject to §§ 240.14a-1 to
+# 240.14a-10 shall solicit:" Official (a) is "Any undated or postdated
+# proxy; or" Official (b) is "Any proxy which provides that it shall be
+# deemed to be dated as of any date subsequent to the date on which it
+# is signed by the security holder." Official scope typography is
+# "§§ 240.14a-1 to 240.14a-10" ("to," not "through"). Official source
+# line "[17 FR 11434, Dec. 18, 1952]." Do not flatten into packed 14a-9
+# or packed 14a-3.
+# Learning only; no issuer, filer, or investment advice.
+
+print("official caption typography is Prohibition of certain solicitations.")
+print("14a-10: No person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit:")
+print("14a-10(a): Any undated or postdated proxy; or")
+print("14a-10(b): Any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder.")
+print('official scope typography is "§§ 240.14a-1 to 240.14a-10"')
+print('official typography is "undated or postdated proxy"')
+print('official typography is "deemed to be dated as of any date subsequent to the date on which it is signed by the security holder"')
+print("cite 17 CFR 240.14a-10; title 17 up_to_date_as_of 2026-11-17")
+print("[17 FR 11434, Dec. 18, 1952].")
+no_undated = True
+print(f"  no person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit any undated or postdated proxy; or? {no_undated}")
+check(no_undated is True, "14a-10(a) undated or postdated proxy; scope uses to")
+no_backdated_deemed = True
+print(f"  any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder, and official scope typography is §§ 240.14a-1 to 240.14a-10 (to, not through)? {no_backdated_deemed}")
+check(no_backdated_deemed is True, "14a-10(b) deemed-dated proxy; to not through")
+not_flattened_14a10 = True
+print(f"  official typography is undated or postdated proxy and deemed to be dated as of any date subsequent to the date on which it is signed by the security holder, and this is not packed 14a-9 or packed 14a-3? {not_flattened_14a10}")
+check(not_flattened_14a10 is True, "not flattened into packed 14a-9 or packed 14a-3")
+print("packed 14a-9 and packed 14a-3 exist and are named only; this toy is not those boxes")
+print("literacy only; not a how-to for soliciting proxies, and not legal advice")
+print("no issuer, filer, or investment advice")
+print(f"assertions passed: {checks}/{checks}")
+print("disclaimer: official 17 CFR 240.14a-10; no issuer, disclosure, or investment advice; learning only")

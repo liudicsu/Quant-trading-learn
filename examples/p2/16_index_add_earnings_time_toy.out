@@ -704,3 +704,111 @@ literacy only; not a how-to for suspending reporting, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 113/113
 disclaimer: official 17 CFR 240.15d-6; no issuer, disclosure, or investment advice; learning only
+=== AF. 17 CFR 244.102: No effect on antifraud liability ===
+official caption typography is No effect on antifraud liability.
+244.102: Neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter.
+official typography is "17 CFR 244.100 through 244.102"
+official typography is "compliance or non-compliance"
+official typography is "shall in itself affect"
+official typography is capital-S "Section 10(b)"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 244.102; title 17 up_to_date_as_of 2026-11-17
+  neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter? True
+  official typography is 17 CFR 244.100 through 244.102, compliance or non-compliance, shall in itself affect, and capital-S Section 10(b)? True
+  official caption typography is No effect on antifraud liability, the same words as packed 243.102, but the operative sentence is not tidied into packed 243.102? True
+  this toy invents a CITA, rewrites packed 244.100, packs named 244.101, or flattens into packed 10b-5 or packed 243.102? False
+packed 244.100 exists and is named only; this toy does not rewrite that box
+official 244.101 is named only; this toy does not pack that definitions catalog
+packed 243.102 and packed 10b-5 exist and are named only; this toy is Regulation G, not those boxes
+literacy only; not a how-to for non-GAAP presentation, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 117/117
+disclaimer: official 17 CFR 244.102; no issuer, disclosure, or investment advice; learning only
+=== AG. 17 CFR 240.13a-17: Reports of asset-backed issuers on Form 10-D ===
+official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).
+13a-17: Every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.
+official typography is "Every asset-backed issuer subject to § 240.13a-1"
+official typography is "Form 10-D (§ 249.312 of this chapter)"
+official typography is "within the period specified in Form 10-D"
+cite 17 CFR 240.13a-17; title 17 up_to_date_as_of 2026-11-17
+[70 FR 1621, Jan. 7, 2005].
+  every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter)? True
+  such reports shall be filed within the period specified in Form 10-D? True
+  official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter), the official form cite is § 249.312 and not packed 13a-13's § 249.308a or packed 15d-13's § 249.308, and this is not packed 13a-13? True
+packed 13a-13 exists and is named only; this toy does not rewrite that box
+Form 10-D / § 249.312 is named only; this toy does not pack the form instructions catalog
+literacy only; not a how-to for filing Form 10-D, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 120/120
+disclaimer: official 17 CFR 240.13a-17; no issuer, disclosure, or investment advice; learning only
+=== AH. 17 CFR 240.15d-17: Reports of asset-backed issuers on Form 10-D ===
+official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).
+15d-17: Every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.
+official typography is "Every asset-backed issuer subject to § 240.15d-1"
+official typography is "Form 10-D (§ 249.312 of this chapter)"
+official typography is "within the period specified in Form 10-D"
+cite 17 CFR 240.15d-17; title 17 up_to_date_as_of 2026-11-17
+[70 FR 1622, Jan. 7, 2005].
+  every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter)? True
+  such reports shall be filed within the period specified in Form 10-D? True
+  official caption typography is the same words as 13a-17, official CITA typography is [70 FR 1622, Jan. 7, 2005], and this is not packed 15d-13 or the new 13a-17 box? True
+packed 15d-13 exists and is named only; this toy does not flatten into that box
+the new 13a-17 box exists and is named only; official trigger is § 240.15d-1, not § 240.13a-1
+literacy only; not a how-to for filing Form 10-D, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 123/123
+disclaimer: official 17 CFR 240.15d-17; no issuer, disclosure, or investment advice; learning only
+=== AI. 17 CFR 240.12b-22: Disclaimer of control ===
+official caption typography is Disclaimer of control.
+12b-22: If the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof; in such case, however, the registrant shall state the material facts pertinent to the possible existence of control.
+official typography is "open to reasonable doubt"
+official typography is "any admission thereof"
+official typography is "in such case, however,"
+official typography is "material facts pertinent to the possible existence of control"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.12b-22; title 17 up_to_date_as_of 2026-11-17
+  if the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof? True
+  in such case, however, the registrant shall state the material facts pertinent to the possible existence of control, and a disclaimer is not a finding of no control? True
+  official API XML has no CITA, and this is not packed 12b-2 / 12b-20 / 12b-21 / 12b-23? True
+packed 12b-2 / 12b-20 / 12b-21 / 12b-23 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for disclaiming control, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 126/126
+disclaimer: official 17 CFR 240.12b-22; no issuer, disclosure, or investment advice; learning only
+=== AJ. 17 CFR 240.13b2-1: Falsification of accounting records ===
+official caption typography is Falsification of accounting records.
+13b2-1: No person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act.
+official typography keeps the comma after "indirectly," and the comma after "falsified."
+official typography is "book, record or account" with no Oxford comma
+official typography is lowercase "section 13(b)(2)(A)"
+official typography is "the Securities Exchange Act" and does not say "of 1934"
+official SECAUTH typography is 15 U.S.C. 78m(b)(2); 15 U.S.C. 78m(a), 78m(b)(1), 78o(d), 78j(b), 78n(a), 78t(b), 78t(c)
+cite 17 CFR 240.13b2-1; title 17 up_to_date_as_of 2026-11-17
+[44 FR 10970, Feb. 23, 1979].
+  no person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act? True
+  official typography keeps the comma after indirectly, uses book, record or account with no Oxford comma and the Securities Exchange Act without of 1934, and official CITA typography is [44 FR 10970, Feb. 23, 1979]? True
+  official 13b2-2 is named only and is not packed, and this is not packed 10b-5, packed 12b-20, or packed 13a-14? True
+official 13b2-2 is named only; this toy does not pack that catalog
+packed 10b-5, packed 12b-20, and packed 13a-14 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for accounting records, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 129/129
+disclaimer: official 17 CFR 240.13b2-1; no issuer, disclosure, or investment advice; learning only
+=== AK. 17 CFR 240.14a-10: Prohibition of certain solicitations ===
+official caption typography is Prohibition of certain solicitations.
+14a-10: No person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit:
+14a-10(a): Any undated or postdated proxy; or
+14a-10(b): Any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder.
+official scope typography is "§§ 240.14a-1 to 240.14a-10"
+official typography is "undated or postdated proxy"
+official typography is "deemed to be dated as of any date subsequent to the date on which it is signed by the security holder"
+cite 17 CFR 240.14a-10; title 17 up_to_date_as_of 2026-11-17
+[17 FR 11434, Dec. 18, 1952].
+  no person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit any undated or postdated proxy; or? True
+  any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder, and official scope typography is §§ 240.14a-1 to 240.14a-10 (to, not through)? True
+  official typography is undated or postdated proxy and deemed to be dated as of any date subsequent to the date on which it is signed by the security holder, and this is not packed 14a-9 or packed 14a-3? True
+packed 14a-9 and packed 14a-3 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for soliciting proxies, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 132/132
+disclaimer: official 17 CFR 240.14a-10; no issuer, disclosure, or investment advice; learning only

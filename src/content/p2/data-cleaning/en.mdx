@@ -1,6 +1,6 @@
 ## Learning goals
 
-This lesson (~**45.25 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources & licensing/PIT lab + 2h corporate actions & delisting + 1h ALFRED revision as-of + 0.5h dividend dates under T+1 + 0.25h yfinance auto_adjust version trap + 0.5h filing deadlines & EDGAR dates + 0.5h delisting returns & permanent IDs + 0.5h spin-offs & mergers in price series + 0.5h insider & large-holder filing lags (Form 4 / 13D / 13G) + 0.5h reverse splits & Nasdaq bid-price rule status + 0.5h SEC XBRL API as-of (`filed` date) + 0.25h Rule 10b5-1 plan flag & cooling-off + 0.5h NYSE price criteria & $0.25 rule + 0.5h Rule 10b-18 repurchase safe harbor + 0.25h Item 703 monthly disclosure lag + 0.5h tender offers (Rule 14e-1 minimum period) + 0.25h Rule 10b-18 after-hours prong (no official 23/5 mapping) + 0.25h Rule 10b-17 issuer notice of record dates + 0.25h Form 4 transaction codes and Form 3 / Form 5 clocks + 0.5h 13G-to-13D switch and 13d-3 beneficial ownership + 0.25h Rule 14e-5 purchases outside a tender offer + 0.25h when-issued / when-distributed contracts (FINRA 11130; Nasdaq CQS WI) + 0.25h 12b-2 filer thresholds and hysteresis + 0.25h Rule 12b-25 / Form 12b-25 late-filing notification + 0.25h Nasdaq CQS suffixes beyond WI/WD + 0.25h Form 8-K items beyond Item 2.02 + 0.25h Form 20-F four-month / Form 6-K promptly-furnished clocks + 0.25h Rule 13d-2 1% material test and 13G amendment clocks + 0.25h Rule 14e-2 subject-company position statement + 0.25h Rule 14d-11 subsequent offering period + 0.25h Rule 14d-10 all-holders / best-price + 0.25h Rule 14e-4 short tendering / net long in a partial tender + 0.25h Section 12(g) / Rule 12g-1 registration thresholds + 0.25h Rule 14e-3 disclose-or-abstain + 0.25h Rule 12g-4 / section 12(g)(4) termination + 0.25h Rule 14d-2 commencement + 0.25h Form 8-K Item 5.07 special clock + 0.25h Rule 14d-3 Schedule TO filing and transmittal + 0.25h Rule 13e-1 issuer purchases during a third-party tender + 0.25h Rule 14a-9 false or misleading proxy statements + 0.25h Rule 12b-20 additional material information + 0.25h Rule 13a-14 certification of disclosure in annual and quarterly reports + 0.25h Rule 10D-1 recovery of erroneously awarded compensation + 0.25h Regulation G 244.100 non-GAAP financial measure presentation and reconciliation + 0.25h Rule 14a-3(b) annual report to security holders accompanying or preceding the proxy + 0.25h Rule 14c-3(a) annual report to security holders accompanying or preceding the information statement + 0.25h Rule 14c-6 false or misleading statements in an information statement + 0.25h 17 CFR 240.15c1-9 use of pro forma balance sheets + 0.25h Rule 12b-15 amendments marked with the letter “A” + 0.25h Rule 12b-6 when securities are deemed registered + 0.25h 17 CFR 232.12 Commission business hours (6 a.m. to 10 p.m. electronic window) + 0.25h Rule 16a-6 small acquisitions on Form 5 + 0.25h Rule 16a-9 stock splits, stock dividends, and pro rata rights + 0.25h Rule 16a-11 dividend or interest reinvestment plans + 0.25h Rule 14e-8 pre-commencement tender announcements + 0.25h Rule 12b-4 supplemental information + 0.25h Rule 12b-23 incorporation by reference + 0.25h Rule 13a-11 current reports on Form 8-K + 0.25h Rule 16a-4 derivative securities + 0.25h Rule 16a-10 exemptions under section 16(a) + 0.25h Rule 16a-13 change in form of beneficial ownership + 0.25h Rule 12b-10 requirements as to proper form + 0.25h Rule 12b-21 information unknown or not available + 0.25h Rule 13a-1 requirements of annual reports + 0.25h Rule 13a-13 quarterly reports on Form 10-Q + 0.25h 17 CFR 243.102 no effect on antifraud liability + 0.25h Rule 16a-12 domestic relations orders + 0.25h 17 CFR 232.14 paper filings not accepted without exemption + 0.25h 17 CFR 243.103 no effect on Exchange Act reporting status + 0.25h Rule 15d-1 requirement of annual reports + 0.25h Rule 15d-11 current reports on Form 8-K + 0.25h Rule 15d-13 quarterly reports on Form 10-Q + 0.25h Rule 15d-6 suspension of duty to file reports) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
+This lesson (~**46.75 hours**: 5h concepts + 6h pipeline lab incl. mask-first + 2h info-bars + 1h crypto-PIT note + 3h docs/quiz + 2h data-versions/corporate-actions/calendar lab + 3h US data sources & licensing/PIT lab + 2h corporate actions & delisting + 1h ALFRED revision as-of + 0.5h dividend dates under T+1 + 0.25h yfinance auto_adjust version trap + 0.5h filing deadlines & EDGAR dates + 0.5h delisting returns & permanent IDs + 0.5h spin-offs & mergers in price series + 0.5h insider & large-holder filing lags (Form 4 / 13D / 13G) + 0.5h reverse splits & Nasdaq bid-price rule status + 0.5h SEC XBRL API as-of (`filed` date) + 0.25h Rule 10b5-1 plan flag & cooling-off + 0.5h NYSE price criteria & $0.25 rule + 0.5h Rule 10b-18 repurchase safe harbor + 0.25h Item 703 monthly disclosure lag + 0.5h tender offers (Rule 14e-1 minimum period) + 0.25h Rule 10b-18 after-hours prong (no official 23/5 mapping) + 0.25h Rule 10b-17 issuer notice of record dates + 0.25h Form 4 transaction codes and Form 3 / Form 5 clocks + 0.5h 13G-to-13D switch and 13d-3 beneficial ownership + 0.25h Rule 14e-5 purchases outside a tender offer + 0.25h when-issued / when-distributed contracts (FINRA 11130; Nasdaq CQS WI) + 0.25h 12b-2 filer thresholds and hysteresis + 0.25h Rule 12b-25 / Form 12b-25 late-filing notification + 0.25h Nasdaq CQS suffixes beyond WI/WD + 0.25h Form 8-K items beyond Item 2.02 + 0.25h Form 20-F four-month / Form 6-K promptly-furnished clocks + 0.25h Rule 13d-2 1% material test and 13G amendment clocks + 0.25h Rule 14e-2 subject-company position statement + 0.25h Rule 14d-11 subsequent offering period + 0.25h Rule 14d-10 all-holders / best-price + 0.25h Rule 14e-4 short tendering / net long in a partial tender + 0.25h Section 12(g) / Rule 12g-1 registration thresholds + 0.25h Rule 14e-3 disclose-or-abstain + 0.25h Rule 12g-4 / section 12(g)(4) termination + 0.25h Rule 14d-2 commencement + 0.25h Form 8-K Item 5.07 special clock + 0.25h Rule 14d-3 Schedule TO filing and transmittal + 0.25h Rule 13e-1 issuer purchases during a third-party tender + 0.25h Rule 14a-9 false or misleading proxy statements + 0.25h Rule 12b-20 additional material information + 0.25h Rule 13a-14 certification of disclosure in annual and quarterly reports + 0.25h Rule 10D-1 recovery of erroneously awarded compensation + 0.25h Regulation G 244.100 non-GAAP financial measure presentation and reconciliation + 0.25h Rule 14a-3(b) annual report to security holders accompanying or preceding the proxy + 0.25h Rule 14c-3(a) annual report to security holders accompanying or preceding the information statement + 0.25h Rule 14c-6 false or misleading statements in an information statement + 0.25h 17 CFR 240.15c1-9 use of pro forma balance sheets + 0.25h Rule 12b-15 amendments marked with the letter “A” + 0.25h Rule 12b-6 when securities are deemed registered + 0.25h 17 CFR 232.12 Commission business hours (6 a.m. to 10 p.m. electronic window) + 0.25h Rule 16a-6 small acquisitions on Form 5 + 0.25h Rule 16a-9 stock splits, stock dividends, and pro rata rights + 0.25h Rule 16a-11 dividend or interest reinvestment plans + 0.25h Rule 14e-8 pre-commencement tender announcements + 0.25h Rule 12b-4 supplemental information + 0.25h Rule 12b-23 incorporation by reference + 0.25h Rule 13a-11 current reports on Form 8-K + 0.25h Rule 16a-4 derivative securities + 0.25h Rule 16a-10 exemptions under section 16(a) + 0.25h Rule 16a-13 change in form of beneficial ownership + 0.25h Rule 12b-10 requirements as to proper form + 0.25h Rule 12b-21 information unknown or not available + 0.25h Rule 13a-1 requirements of annual reports + 0.25h Rule 13a-13 quarterly reports on Form 10-Q + 0.25h 17 CFR 243.102 no effect on antifraud liability + 0.25h Rule 16a-12 domestic relations orders + 0.25h 17 CFR 232.14 paper filings not accepted without exemption + 0.25h 17 CFR 243.103 no effect on Exchange Act reporting status + 0.25h Rule 15d-1 requirement of annual reports + 0.25h Rule 15d-11 current reports on Form 8-K + 0.25h Rule 15d-13 quarterly reports on Form 10-Q + 0.25h Rule 15d-6 suspension of duty to file reports + 0.25h 17 CFR 244.102 no effect on antifraud liability + 0.25h Rule 13a-17 reports of asset-backed issuers on Form 10-D + 0.25h Rule 15d-17 reports of asset-backed issuers on Form 10-D + 0.25h Rule 12b-22 disclaimer of control + 0.25h Rule 13b2-1 falsification of accounting records + 0.25h Rule 14a-10 prohibition of certain solicitations) makes versioned data a habit: hashes, survivorship, PIT, timezone mislabels, adj vs raw, and a data sheet. Prereq: `eval-lab`.
 
 **Goals:** version downloads and hashes; survivorship examples; write a data sheet.
 
@@ -387,6 +387,37 @@ assertions passed: 25/25
 disclaimer: official 17 CFR 240.14a-9; no issuer or voting advice; learning only
 ```
 
+## 17 CFR 240.14a-10: Prohibition of certain solicitations (checked 2026-11-19)
+
+Packed 14a-9 and packed 14a-3 stay as written. This box is a different rule: “No person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit:” official (a) “Any undated or postdated proxy; or” official (b) “Any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder.” Official scope typography is “§§ 240.14a-1 to 240.14a-10” (“to,” not “through”). Official caption typography is “Prohibition of certain solicitations.” Official source line: “[17 FR 11434, Dec. 18, 1952].” Do not flatten this box into packed 14a-9 or packed 14a-3. Learning only; no issuer, filer, or investment advice.
+
+[17 CFR 240.14a-10](https://www.ecfr.gov/current/title-17/section-240.14a-10): “No person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit:” Official (a) “Any undated or postdated proxy; or” Official (b) “Any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder.” Official caption typography is “Prohibition of certain solicitations.” Official source line: “[17 FR 11434, Dec. 18, 1952].” Title 17 `up_to_date_as_of` 2026-11-17.
+
+Packed 14a-9 and packed 14a-3 exist and are named only.
+
+**Lab:** section AK of the same script (after section AJ / 13b2-1; 132/132 after AK):
+
+```text
+=== AK. 17 CFR 240.14a-10: Prohibition of certain solicitations ===
+official caption typography is Prohibition of certain solicitations.
+14a-10: No person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit:
+14a-10(a): Any undated or postdated proxy; or
+14a-10(b): Any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder.
+official scope typography is "§§ 240.14a-1 to 240.14a-10"
+official typography is "undated or postdated proxy"
+official typography is "deemed to be dated as of any date subsequent to the date on which it is signed by the security holder"
+cite 17 CFR 240.14a-10; title 17 up_to_date_as_of 2026-11-17
+[17 FR 11434, Dec. 18, 1952].
+  no person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit any undated or postdated proxy; or? True
+  any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder, and official scope typography is §§ 240.14a-1 to 240.14a-10 (to, not through)? True
+  official typography is undated or postdated proxy and deemed to be dated as of any date subsequent to the date on which it is signed by the security holder, and this is not packed 14a-9 or packed 14a-3? True
+packed 14a-9 and packed 14a-3 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for soliciting proxies, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 132/132
+disclaimer: official 17 CFR 240.14a-10; no issuer, disclosure, or investment advice; learning only
+```
+
 ## 17 CFR 240.12b-20: additional material information in a statement or report (checked 2026-11-12)
 
 Packed 14a-9 above, packed 10b-5, and already-taught Regulation FD and Form 8-K Item 5.07, stay as written. Do not rewrite those already-shipped boxes. This section adds official 12b-20 so a student does not flatten additional material information in a statement or report into packed 14a-9 or 10b-5, tidy the official typography into those rules' wording, or insert a comma after “made.” Learning only; no issuer or disclosure advice.
@@ -447,6 +478,38 @@ official (b) 18 U.S.C. 1350 furnished certifications, official (d)/(e) ABS, offi
 no issuer or disclosure advice
 assertions passed: 31/31
 disclaimer: official 17 CFR 240.13a-14; no issuer or disclosure advice; learning only
+```
+
+## 17 CFR 240.13b2-1: Falsification of accounting records (checked 2026-11-19)
+
+Packed 10b-5, packed 12b-20, and packed 13a-14 stay as written. This box is a different rule: “No person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act.” Keep the comma after “indirectly,” and the comma after “falsified.” Official typography is “book, record or account” (no Oxford comma), lowercase “section 13(b)(2)(A),” and “the Securities Exchange Act” (that sentence does not add “of 1934”). Official caption typography is “Falsification of accounting records.” Official SECAUTH typography is 15 U.S.C. 78m(b)(2); 15 U.S.C. 78m(a), 78m(b)(1), 78o(d), 78j(b), 78n(a), 78t(b), 78t(c). Official source line: “[44 FR 10970, Feb. 23, 1979].” Name 13b2-2 only; do not pack that catalog, and do not flatten this rule into packed 10b-5, packed 12b-20, or packed 13a-14. Learning only; no issuer, filer, or investment advice.
+
+[17 CFR 240.13b2-1](https://www.ecfr.gov/current/title-17/section-240.13b2-1): “No person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act.” Official caption typography is “Falsification of accounting records.” Official SECAUTH typography is 15 U.S.C. 78m(b)(2); 15 U.S.C. 78m(a), 78m(b)(1), 78o(d), 78j(b), 78n(a), 78t(b), 78t(c). Official source line: “[44 FR 10970, Feb. 23, 1979].” Title 17 `up_to_date_as_of` 2026-11-17.
+
+Official 13b2-2 is named only; this box does not pack that catalog. Packed 10b-5, packed 12b-20, and packed 13a-14 exist and are named only.
+
+**Lab:** section AJ of the same script (after section AI / 12b-22; 129/129 after AJ):
+
+```text
+=== AJ. 17 CFR 240.13b2-1: Falsification of accounting records ===
+official caption typography is Falsification of accounting records.
+13b2-1: No person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act.
+official typography keeps the comma after "indirectly," and the comma after "falsified."
+official typography is "book, record or account" with no Oxford comma
+official typography is lowercase "section 13(b)(2)(A)"
+official typography is "the Securities Exchange Act" and does not say "of 1934"
+official SECAUTH typography is 15 U.S.C. 78m(b)(2); 15 U.S.C. 78m(a), 78m(b)(1), 78o(d), 78j(b), 78n(a), 78t(b), 78t(c)
+cite 17 CFR 240.13b2-1; title 17 up_to_date_as_of 2026-11-17
+[44 FR 10970, Feb. 23, 1979].
+  no person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act? True
+  official typography keeps the comma after indirectly, uses book, record or account with no Oxford comma and the Securities Exchange Act without of 1934, and official CITA typography is [44 FR 10970, Feb. 23, 1979]? True
+  official 13b2-2 is named only and is not packed, and this is not packed 10b-5, packed 12b-20, or packed 13a-14? True
+official 13b2-2 is named only; this toy does not pack that catalog
+packed 10b-5, packed 12b-20, and packed 13a-14 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for accounting records, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 129/129
+disclaimer: official 17 CFR 240.13b2-1; no issuer, disclosure, or investment advice; learning only
 ```
 
 ## 17 CFR 240.10D-1(b)(1): recover reasonably promptly the amount of erroneously awarded incentive-based compensation (checked 2026-11-12)
@@ -567,6 +630,39 @@ learning only; a non-GAAP figure is not a substitute for the accompanying GAAP m
 no investment advice and no use / avoid non-GAAP product recommendation
 assertions passed: 37/37
 disclaimer: official 17 CFR 244.100; no issuer, disclosure, or investment advice; learning only
+```
+
+## 17 CFR 244.102: No effect on antifraud liability (checked 2026-11-19)
+
+Packed 244.100 stays as written; official 244.101 is named only. Packed 243.102, packed 10b-5, and already-taught Regulation FD clocks also stay as written. This box is a different rule: “Neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter.” Official typography is “17 CFR 244.100 through 244.102” (“through,” not “to”), “compliance or non-compliance,” and “shall in itself affect.” Official “Section 10(b)” has a capital S. Official caption typography is “No effect on antifraud liability.” — the same words as packed 243.102, but this is Regulation G rather than Regulation FD; do not tidy the operative sentence into packed 243.102’s “No failure to make a public disclosure required solely by § 243.100 shall be deemed to be a violation of Rule 10b-5 (17 CFR 240.10b-5) under the Securities Exchange Act.” The official API XML has no CITA element; do not invent a source line. Do not rewrite the packed 244.100 box, pack named 244.101, or flatten this rule into packed 10b-5 or packed 243.102. Learning only; no issuer, filer, or investment advice.
+
+[17 CFR 244.102](https://www.ecfr.gov/current/title-17/section-244.102): “Neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter.” Official caption typography is “No effect on antifraud liability.” The official API XML has no CITA element; this lesson does not invent a source line. Title 17 `up_to_date_as_of` 2026-11-17.
+
+Packed 244.100 exists and is named only; this box does not rewrite that box. Official 244.101 is named only; this box does not pack that definitions catalog. Packed 243.102 and packed 10b-5 exist and are named only.
+
+**Lab:** section AF of the same script (after section AE / 15d-6; 117/117 after AF):
+
+```text
+=== AF. 17 CFR 244.102: No effect on antifraud liability ===
+official caption typography is No effect on antifraud liability.
+244.102: Neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter.
+official typography is "17 CFR 244.100 through 244.102"
+official typography is "compliance or non-compliance"
+official typography is "shall in itself affect"
+official typography is capital-S "Section 10(b)"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 244.102; title 17 up_to_date_as_of 2026-11-17
+  neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter? True
+  official typography is 17 CFR 244.100 through 244.102, compliance or non-compliance, shall in itself affect, and capital-S Section 10(b)? True
+  official caption typography is No effect on antifraud liability, the same words as packed 243.102, but the operative sentence is not tidied into packed 243.102? True
+  this toy invents a CITA, rewrites packed 244.100, packs named 244.101, or flattens into packed 10b-5 or packed 243.102? False
+packed 244.100 exists and is named only; this toy does not rewrite that box
+official 244.101 is named only; this toy does not pack that definitions catalog
+packed 243.102 and packed 10b-5 exist and are named only; this toy is Regulation G, not those boxes
+literacy only; not a how-to for non-GAAP presentation, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 117/117
+disclaimer: official 17 CFR 244.102; no issuer, disclosure, or investment advice; learning only
 ```
 
 ## 17 CFR 240.14a-3(b): annual report to security holders accompanying or preceding the proxy (checked 2026-11-12)
@@ -1079,6 +1175,36 @@ assertions passed: 79/79
 disclaimer: official 17 CFR 240.12b-21; no issuer, disclosure, or investment advice; learning only
 ```
 
+## 17 CFR 240.12b-22: Disclaimer of control (checked 2026-11-19)
+
+Packed 12b-2 / 12b-20 / 12b-21 / 12b-23 stay as written. This box is a different rule: “If the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof; in such case, however, the registrant shall state the material facts pertinent to the possible existence of control.” Official typography is “open to reasonable doubt,” “any admission thereof,” “in such case, however,” and “material facts pertinent to the possible existence of control.” Official typography keeps the semicolon after “thereof”. A disclaimer is not a finding of no control. Official caption typography is “Disclaimer of control.” The official API XML has no CITA element; do not invent a source line. Do not flatten this rule into packed 12b-2 / 12b-20 / 12b-21 / 12b-23. Learning only; no issuer, filer, or investment advice.
+
+[17 CFR 240.12b-22](https://www.ecfr.gov/current/title-17/section-240.12b-22): “If the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof; in such case, however, the registrant shall state the material facts pertinent to the possible existence of control.” Official caption typography is “Disclaimer of control.” The official API XML has no CITA element; this lesson does not invent a source line. Title 17 `up_to_date_as_of` 2026-11-17.
+
+Packed 12b-2 / 12b-20 / 12b-21 / 12b-23 exist and are named only.
+
+**Lab:** section AI of the same script (after section AH / 15d-17; 126/126 after AI):
+
+```text
+=== AI. 17 CFR 240.12b-22: Disclaimer of control ===
+official caption typography is Disclaimer of control.
+12b-22: If the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof; in such case, however, the registrant shall state the material facts pertinent to the possible existence of control.
+official typography is "open to reasonable doubt"
+official typography is "any admission thereof"
+official typography is "in such case, however,"
+official typography is "material facts pertinent to the possible existence of control"
+official API XML has no CITA element; this toy does not invent a source line
+cite 17 CFR 240.12b-22; title 17 up_to_date_as_of 2026-11-17
+  if the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof? True
+  in such case, however, the registrant shall state the material facts pertinent to the possible existence of control, and a disclaimer is not a finding of no control? True
+  official API XML has no CITA, and this is not packed 12b-2 / 12b-20 / 12b-21 / 12b-23? True
+packed 12b-2 / 12b-20 / 12b-21 / 12b-23 exist and are named only; this toy is not those boxes
+literacy only; not a how-to for disclaiming control, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 126/126
+disclaimer: official 17 CFR 240.12b-22; no issuer, disclosure, or investment advice; learning only
+```
+
 ## 17 CFR 240.13a-1: Requirements of annual reports (checked 2026-11-19)
 
 Already-taught Form 10-K clocks, packed 13a-11, and packed 13a-14 stay as written. This box is a different rule: every issuer with securities registered pursuant to section 12 of the Act shall file an annual report “for each fiscal year after the last full fiscal year for which financial statements were filed in its registration statement.” Official typography is “Annual reports shall be filed within the period specified in the appropriate form.” Do not invent a numeric clock inside 13a-1 itself. Official typography is “section 12 of the Act (15 U.S.C. 78<em>l</em>),” with official italic on the letter l; do not tidy that italic l into a plain “78l” or “781.” Student-facing typography is 15 U.S.C. 78<em>l</em>. Name official 15d-1 only — official 15d-1 caption typography is singular “Requirement of annual reports.” — and do not pack 15d-1 as a second core. Do not flatten this rule into already-taught Form 10-K clocks, packed 13a-11, or packed 13a-14. Learning only; no issuer, filer, or investment advice.
@@ -1151,6 +1277,36 @@ literacy only; not a how-to for filing Form 10-Q, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 87/87
 disclaimer: official 17 CFR 240.13a-13; no issuer, disclosure, or investment advice; learning only
+```
+
+## 17 CFR 240.13a-17: Reports of asset-backed issuers on Form 10-D (checked 2026-11-19)
+
+Packed 13a-13 stays as written. This box is a different rule: every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed “within the period specified in Form 10-D.” Do not invent a numeric Form 10-D clock. Official caption typography is “Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).” The official form cite is § 249.312, not packed 13a-13’s § 249.308a or packed 15d-13’s § 249.308. Official source line: “[70 FR 1621, Jan. 7, 2005].” Name Form 10-D / § 249.312 only; do not pack the form instructions catalog, and do not rewrite the packed 13a-13 box. Learning only; no issuer, filer, or investment advice.
+
+[17 CFR 240.13a-17](https://www.ecfr.gov/current/title-17/section-240.13a-17): “Every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.” Official caption typography is “Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).” Official source line: “[70 FR 1621, Jan. 7, 2005].” Title 17 `up_to_date_as_of` 2026-11-17.
+
+Packed 13a-13 exists and is named only; this box does not rewrite that box. Form 10-D / § 249.312 is named only; this box does not pack the form instructions catalog.
+
+**Lab:** section AG of the same script (after section AF / 244.102; 120/120 after AG):
+
+```text
+=== AG. 17 CFR 240.13a-17: Reports of asset-backed issuers on Form 10-D ===
+official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).
+13a-17: Every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.
+official typography is "Every asset-backed issuer subject to § 240.13a-1"
+official typography is "Form 10-D (§ 249.312 of this chapter)"
+official typography is "within the period specified in Form 10-D"
+cite 17 CFR 240.13a-17; title 17 up_to_date_as_of 2026-11-17
+[70 FR 1621, Jan. 7, 2005].
+  every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter)? True
+  such reports shall be filed within the period specified in Form 10-D? True
+  official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter), the official form cite is § 249.312 and not packed 13a-13's § 249.308a or packed 15d-13's § 249.308, and this is not packed 13a-13? True
+packed 13a-13 exists and is named only; this toy does not rewrite that box
+Form 10-D / § 249.312 is named only; this toy does not pack the form instructions catalog
+literacy only; not a how-to for filing Form 10-D, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 120/120
+disclaimer: official 17 CFR 240.13a-17; no issuer, disclosure, or investment advice; learning only
 ```
 
 ## 17 CFR 243.102: No effect on antifraud liability (checked 2026-11-19)
@@ -1324,6 +1480,36 @@ literacy only; not a how-to for filing Form 10-Q, and not legal advice
 no issuer, filer, or investment advice
 assertions passed: 110/110
 disclaimer: official 17 CFR 240.15d-13; no issuer, disclosure, or investment advice; learning only
+```
+
+## 17 CFR 240.15d-17: Reports of asset-backed issuers on Form 10-D (checked 2026-11-19)
+
+Packed 15d-13 stays as written. The new 13a-17 box also stays as written. This box is a different rule: every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Official trigger typography is § 240.15d-1, not § 240.13a-1. Such reports shall be filed “within the period specified in Form 10-D.” Official caption typography is the same words as 13a-17: “Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).” Official source line: “[70 FR 1622, Jan. 7, 2005].” Do not tidy that page into 13a-17’s 70 FR 1621, and do not flatten this box into packed 15d-13 or into the new 13a-17 box. Learning only; no issuer, filer, or investment advice.
+
+[17 CFR 240.15d-17](https://www.ecfr.gov/current/title-17/section-240.15d-17): “Every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.” Official caption typography is “Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).” Official source line: “[70 FR 1622, Jan. 7, 2005].” Title 17 `up_to_date_as_of` 2026-11-17.
+
+Packed 15d-13 exists and is named only; this box does not flatten into that box. The new 13a-17 box exists and is named only; official trigger is § 240.15d-1, not § 240.13a-1.
+
+**Lab:** section AH of the same script (after section AG / 13a-17; 123/123 after AH):
+
+```text
+=== AH. 17 CFR 240.15d-17: Reports of asset-backed issuers on Form 10-D ===
+official caption typography is Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).
+15d-17: Every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D.
+official typography is "Every asset-backed issuer subject to § 240.15d-1"
+official typography is "Form 10-D (§ 249.312 of this chapter)"
+official typography is "within the period specified in Form 10-D"
+cite 17 CFR 240.15d-17; title 17 up_to_date_as_of 2026-11-17
+[70 FR 1622, Jan. 7, 2005].
+  every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter)? True
+  such reports shall be filed within the period specified in Form 10-D? True
+  official caption typography is the same words as 13a-17, official CITA typography is [70 FR 1622, Jan. 7, 2005], and this is not packed 15d-13 or the new 13a-17 box? True
+packed 15d-13 exists and is named only; this toy does not flatten into that box
+the new 13a-17 box exists and is named only; official trigger is § 240.15d-1, not § 240.13a-1
+literacy only; not a how-to for filing Form 10-D, and not legal advice
+no issuer, filer, or investment advice
+assertions passed: 123/123
+disclaimer: official 17 CFR 240.15d-17; no issuer, disclosure, or investment advice; learning only
 ```
 
 ## 17 CFR 240.15d-6: Suspension of duty to file reports (checked 2026-11-19)
@@ -2401,6 +2587,12 @@ disclaimer: synthetic fixtures; learning only
 75. Inventing a numeric clock inside 15d-11 itself, inventing that official (b) names 13a-16 instead of 15d-16, inventing that a failure to file the official (c) items is deemed a 10b-5 violation, or tidying the official 15d-11 CITA into packed 13a-11.
 76. Inventing that 15d-13 requires a Form 10-Q for all four fiscal quarters, tidying “had been required” into “has been required,” adding a trailing period after official “A.1,” tidying the official Form 10-Q cite § 249.308 into § 249.308a, dropping official (e), inventing that official (d) authorizes a substitute filing, dropping typographic quotes around “filed,” tidying lowercase “section 18” into “Section 18,” tidying the official comma between 54 FR 10319 and 61 FR 30403 into a semicolon, or flattening 15d-13 into packed 13a-13.
 77. Inventing a different Form 15 clock than “within 30 days after the beginning of the first fiscal year,” tidying the official 15d-6 caption together with official 12h-3’s caption, packing 12h-3 as a second core, or flattening 15d-6 into packed 12g-4 or the statutory section 15(d) suspension test.
+78. Inventing that a Regulation G miss is automatically a Rule 10b-5 violation, or that complying with Regulation G is a 10b-5 safe harbor, tidying “through 244.102” into “to,” dropping capital-S “Section 10(b),” inventing a source line, rewriting packed 244.100, packing 244.101, or flattening 244.102 into packed 243.102 or packed 10b-5.
+79. Inventing a numeric Form 10-D clock inside 13a-17, tidying the official form cite § 249.312 into packed 13a-13’s § 249.308a or packed 15d-13’s § 249.308, packing the Form 10-D instructions, or rewriting packed 13a-13.
+80. Inventing that official 15d-17 is triggered by § 240.13a-1, tidying the official CITA page 70 FR 1622 into 13a-17’s 70 FR 1621, inventing a numeric Form 10-D clock, or flattening 15d-17 into packed 15d-13 or the new 13a-17 box.
+81. Treating a 12b-22 disclaimer as a finding of no control, dropping “in such case, however,” or the duty to state the material facts pertinent to the possible existence of control, inventing a source line, or flattening 12b-22 into packed 12b-2 / 12b-20 / 12b-21 / 12b-23.
+82. Dropping the official comma after “indirectly,” adding an Oxford comma to “book, record or account,” adding “of 1934” to that official sentence, packing 13b2-2 as a second core, or flattening 13b2-1 into packed 10b-5, packed 12b-20, or packed 13a-14.
+83. Tidying official 14a-10 scope typography “§§ 240.14a-1 to 240.14a-10” into “through,” inventing that an undated or postdated proxy, or a proxy deemed dated after it is signed, may be solicited under this section, or flattening 14a-10 into packed 14a-9 or packed 14a-3.
 
 ## Practice (1:1 with the checklist)
 
@@ -2480,6 +2672,12 @@ disclaimer: synthetic fixtures; learning only
 70. **ex-15d11** — run section AC of the same script; explain official 15d-11(a)–(c), including official (b)’s 15d-16 / Form 6-K cite and official (c)’s 10b-5 negation; **done when**: you refuse to invert that negation, you can point to § 240.15d-16 and § 249.308, and you do not tidy the official CITA into packed 13a-11.
 71. **ex-15d13** — run section AD of the same script; explain official 15d-13(a)–(e), the general clock, and the first-report 45-day alternative; **done when**: you refuse a fourth-quarter 10-Q, you can point to “had been required,” “General Instruction A.1” with no trailing period after “A.1,” typographic quotes around “filed,” official (e), and § 249.308, and you do not tidy the official CITA comma into a semicolon or flatten this into packed 13a-13.
 72. **ex-15d6** — run section AE of the same script; explain official 15d-6 typography, the Form 15 notice clock, and whether this packs Rule 12h-3; **done when**: you can point to “within 30 days after the beginning of the first fiscal year,” “unless Form 15 has already been filed pursuant to Rule 12h-3,” and official 12h-3 is named only.
+73. **ex-244102** — run section AF of the same script; explain official 244.102 typography, whether compliance or non-compliance in itself affects 10b-5 liability, and whether this rewrites packed 244.100; **done when**: you can point to “17 CFR 244.100 through 244.102,” “shall in itself affect,” capital-S “Section 10(b),” and official API XML has no CITA.
+74. **ex-13a17** — run section AG of the same script; explain official 13a-17 typography, the Form 10-D clock, and the official form cite; **done when**: you can point to “within the period specified in Form 10-D,” “§ 249.312,” and this is not packed 13a-13.
+75. **ex-15d17** — run section AH of the same script; explain official 15d-17 typography, the official trigger, and the official CITA page; **done when**: you can point to “subject to § 240.15d-1,” “within the period specified in Form 10-D,” and “[70 FR 1622, Jan. 7, 2005].”
+76. **ex-12b22** — run section AI of the same script; explain official 12b-22 typography, and whether a disclaimer is a finding of no control; **done when**: you can point to “open to reasonable doubt,” “in such case, however,” “material facts pertinent to the possible existence of control,” and official API XML has no CITA.
+77. **ex-13b21** — run section AJ of the same script; explain official 13b2-1 typography, and whether 13b2-2 is packed; **done when**: you can point to the comma after “indirectly,” “book, record or account,” “the Securities Exchange Act,” and official 13b2-2 is named only.
+78. **ex-14a10** — run section AK of the same script; explain official 14a-10 typography, and whether this packs 14a-9; **done when**: you can point to “§§ 240.14a-1 to 240.14a-10,” “undated or postdated proxy,” and official (b) “deemed to be dated as of any date subsequent to the date on which it is signed by the security holder.”
 
 ## Quiz
 
@@ -2572,6 +2770,12 @@ disclaimer: synthetic fixtures; learning only
 <Quiz id="dc-15d11" question="Under 17 CFR 240.15d-11, who must file a current report on Form 8-K, what does official (b) name, and is a failure to file the official (c) items deemed a 10b-5 violation?" options={["Every registrant subject to § 240.13a-1 shall file, official (b) names 13a-16, and a failure to file those items shall be deemed a 10b-5 violation.", "This is packed 13a-11, and the official CITA may be tidied into 13a-11’s source line.", "Except as provided in official (b), every registrant subject to § 240.15d-1 shall file a current report on Form 8-K within the period specified in that form unless substantially the same information has been previously reported. Official (b) names § 240.15d-16 and Form 6-K (§ 249.306 of this chapter), not 13a-16. Official (c) says no failure to file a report required solely pursuant to Item 1.01, 1.02, 1.05, 2.03, 2.04, 2.05, 2.06, 4.02(a), 5.02(e), or 6.03 of Form 8-K shall be deemed to be a violation of 15 U.S.C. 78j(b) and § 240.10b-5. Official source line: “[42 FR 4429, Jan. 25, 1977, as amended at 50 FR 27939, July 9, 1985; 68 FR 4355, Jan. 28, 2002; 69 FR 15618, Mar. 25, 2004; 70 FR 1622, Jan. 7, 2005; 71 FR 53263, Sept. 8, 2006; 75 FR 56792, Sept. 16, 2010; 81 FR 82020, Nov. 18, 2016; 88 FR 51943, Aug. 4, 2023; 90 FR 9690, Feb. 18, 2025].” Title 17 up_to_date_as_of 2026-11-17.", "Official typography invents a numeric clock inside 15d-11 itself, and official (c) adds Item 2.02 and Item 5.07 to the list."]} answer={2} explanation="Official 15d-11(a) applies to every registrant subject to § 240.15d-1, with a form-specified clock and a previously-reported carve-out. Official (b) names 15d-16 / Form 6-K, not 13a-16. Official (c) is a 10b-5 negation, not a finding of a violation. Do not tidy this CITA into packed 13a-11." />
 <Quiz id="dc-15d13" question="Under 17 CFR 240.15d-13, what is the general Form 10-Q clock, what is the official first-report typography, and is official (e) packed?" options={["A Form 10-Q is due for all four fiscal quarters, official typography is has been required, and the form cite is § 249.308a.", "Official (e) may be dropped, official (d) authorizes a substitute filing, and the official CITA uses a semicolon between 54 FR 10319 and 61 FR 30403.", "Every issuer required to file annual reports pursuant to section 15(d) of the Act on Form 10-K shall file a quarterly report on Form 10-Q (§ 249.308 of this chapter) within the period specified in General Instruction A.1 to that form for each of the first three quarters. Official typography is “had been required,” not “has been required.” Official typography has no trailing period after “A.1.” Official (d) typography is lowercase “section 18,” with typographic quotes around “filed.” Official (e) is packed verbatim, including financial information submitted in lieu thereof pursuant to paragraph (d). Official source line: “[42 FR 24065, May 12, 1977, as amended at 46 FR 63255, Dec. 31, 1981; 50 FR 27939, July 9, 1985; 54 FR 10319, Mar. 13, 1989, 61 FR 30403, June 14, 1996; 70 FR 1622, Jan. 7, 2005; 73 FR 978, Jan. 4, 2008; 81 FR 82020, Nov. 18, 2016].” Title 17 up_to_date_as_of 2026-11-17.", "This flattens 15d-13 into packed 13a-13, and official (b) names 13a-16 / 13a-17."]} answer={2} explanation="Official 15d-13 uses § 249.308, General Instruction A.1 with no trailing period after A.1, and “had been required.” Official (e) is packed; do not invent that official (d) authorizes a substitute filing. The official CITA uses a comma, not a semicolon, between 54 FR 10319 and 61 FR 30403. This is not packed 13a-13." />
 <Quiz id="dc-15d6" question="Under 17 CFR 240.15d-6, when must the issuer file a notice on Form 15, and does this box pack Rule 12h-3?" options={["The notice is due within 60 days, official typography omits the 12h-3 already-filed carve-out, and this is packed 12h-3.", "This is packed 12g-4, or the statutory section 15(d) suspension test, and the official 15d-6 caption is tidied into official 12h-3’s caption.", "If the duty of an issuer to file reports pursuant to section 15(d) of the Act as to any fiscal year is suspended as provided in section 15(d) of the Act, such issuer shall, within 30 days after the beginning of the first fiscal year, file a notice on Form 15 informing the Commission of such suspension unless Form 15 has already been filed pursuant to Rule 12h-3. Official typography is “the issuer's merger into, or consolidation with, another issuer or issuers.” Official caption typography is “Suspension of duty to file reports.” Official 12h-3 is named only. Official source line: “[49 FR 12690, Mar. 30, 1984].” Title 17 up_to_date_as_of 2026-11-17.", "Official typography is within 30 business days after the fiscal year ends, and official SECAUTH flattens the italic letter l into a plain 781."]} answer={2} explanation="Official 15d-6 is a Form 15 notice clock: within 30 days after the beginning of the first fiscal year, unless Form 15 has already been filed pursuant to Rule 12h-3. Official 12h-3 is named only; do not tidy the two captions together. This is not packed 12g-4 and is not the statutory section 15(d) suspension test." />
+<Quiz id="dc-244102" question="Under 17 CFR 244.102, does a person’s compliance or non-compliance with Regulation G in itself affect Section 10(b) or Rule 10b-5 liability, and is the official caption the same words as packed 243.102?" options={["Compliance with Regulation G is a Rule 10b-5 safe harbor, official typography is \"to 244.102,\" and this box rewrites packed 244.100.", "A Regulation G miss is automatically a Rule 10b-5 violation, official typography is \"shall be deemed to be a violation,\" and official API XML invents a CITA.", "Neither the requirements of this Regulation G (17 CFR 244.100 through 244.102) nor a person's compliance or non-compliance with the requirements of this Regulation shall in itself affect any person's liability under Section 10(b) (15 U.S.C. 78j(b)) of the Securities Exchange Act of 1934 or § 240.10b-5 of this chapter. Official typography is “through 244.102,” “compliance or non-compliance,” “shall in itself affect,” and capital-S “Section 10(b).” Official caption typography is “No effect on antifraud liability.” Official API XML has no CITA. Packed 244.100 is not rewritten; 244.101 is named only. Title 17 up_to_date_as_of 2026-11-17.", "Official typography packs 244.101 as a second core, and this box flattens the operative sentence into packed 243.102."]} answer={2} explanation="Official 244.102 is a Regulation G consequence rule: neither the requirements of this Regulation G, nor a person’s compliance or non-compliance, shall in itself affect liability under Section 10(b) or § 240.10b-5. Official typography is “through 244.102” and capital-S “Section 10(b).” The official caption uses the same words as packed 243.102, but the operative sentence must not be tidied into that box. Official API XML has no CITA." />
+<Quiz id="dc-13a17" question="Under 17 CFR 240.13a-17, who must make reports on Form 10-D, what is the official clock, and what is the official form cite?" options={["Every issuer subject to § 240.13a-1 files Form 10-Q under this section, and the official form cite is § 249.308a.", "The reports are due 15 days after the distribution date, and official typography tidies § 249.312 into packed 15d-13’s § 249.308.", "Every asset-backed issuer subject to § 240.13a-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D. Official caption typography is “Reports of asset-backed issuers on Form 10-D (§ 249.312 of this chapter).” Official source line: “[70 FR 1621, Jan. 7, 2005].” This box does not pack the Form 10-D instructions and does not rewrite packed 13a-13. Title 17 up_to_date_as_of 2026-11-17.", "Official typography invents a numeric Form 10-D clock inside 13a-17 itself, and this is packed 13a-13."]} answer={2} explanation="Official 13a-17 is the Form 10-D reporting hook for asset-backed issuers subject to § 240.13a-1. Official typography is “within the period specified in Form 10-D” — do not invent a numeric clock. The official form cite is § 249.312, not packed 13a-13’s § 249.308a or packed 15d-13’s § 249.308." />
+<Quiz id="dc-15d17" question="Under 17 CFR 240.15d-17, what is the official trigger, what is the official Form 10-D clock, and what is the official CITA page?" options={["The official trigger is § 240.13a-1, and official typography tidies the CITA page into 70 FR 1621.", "This is packed 15d-13, and official typography invents a 15-day Form 10-D clock.", "Every asset-backed issuer subject to § 240.15d-1 shall make reports on Form 10-D (§ 249.312 of this chapter). Such reports shall be filed within the period specified in Form 10-D. Official caption typography is the same words as 13a-17. Official source line: “[70 FR 1622, Jan. 7, 2005].” This is not packed 15d-13 and is not the new 13a-17 box. Title 17 up_to_date_as_of 2026-11-17.", "Official typography is subject to § 240.13a-1, and the official form cite is § 249.308."]} answer={2} explanation="Official 15d-17 is the section 15(d) counterpart of 13a-17. Official trigger typography is § 240.15d-1, not § 240.13a-1. Official typography is still “within the period specified in Form 10-D.” Official CITA typography is “[70 FR 1622, Jan. 7, 2005],” not 13a-17’s 70 FR 1621." />
+<Quiz id="dc-12b22" question="Under 17 CFR 240.12b-22, if the existence of control is open to reasonable doubt, may the registrant disclaim control, and is that disclaimer a finding of no control?" options={["A 12b-22 disclaimer is a finding of no control, and official typography drops the duty to state the material facts.", "Official typography invents a CITA, and this box flattens into packed 12b-21.", "If the existence of control is open to reasonable doubt in any instance, the registrant may disclaim the existence of control and any admission thereof; in such case, however, the registrant shall state the material facts pertinent to the possible existence of control. Official typography is “open to reasonable doubt,” “any admission thereof,” and “in such case, however.” A disclaimer is not a finding of no control. Official API XML has no CITA. This is not packed 12b-2 / 12b-20 / 12b-21 / 12b-23. Title 17 up_to_date_as_of 2026-11-17.", "Official typography is a finding of no control whenever a disclaimer is filed, and official caption typography is Information unknown or not available."]} answer={2} explanation="Official 12b-22 lets the registrant disclaim the existence of control and any admission thereof when control is open to reasonable doubt, but “in such case, however,” the registrant shall state the material facts pertinent to the possible existence of control. A disclaimer is not a finding of no control. Official API XML has no CITA." />
+<Quiz id="dc-13b21" question="Under 17 CFR 240.13b2-1, what does official typography prohibit, and does this box pack 13b2-2?" options={["Official typography adds an Oxford comma to “book, record, or account” and adds “of 1934” to that sentence, and this box packs 13b2-2.", "Official typography drops the comma after “indirectly,” and this is packed 10b-5 or packed 13a-14.", "No person shall directly or indirectly, falsify or cause to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act. Official typography keeps the comma after “indirectly,” uses “book, record or account” with no Oxford comma, lowercase “section 13(b)(2)(A),” and “the Securities Exchange Act” without “of 1934.” Official source line: “[44 FR 10970, Feb. 23, 1979].” Official 13b2-2 is named only. Title 17 up_to_date_as_of 2026-11-17.", "Official typography is a certification rule like packed 13a-14, and official CITA is tidied into a later amendment page."]} answer={2} explanation="Official 13b2-1 prohibits falsifying, or causing to be falsified, any book, record or account subject to section 13(b)(2)(A) of the Securities Exchange Act. Keep the comma after “indirectly,” and do not add an Oxford comma or “of 1934” to that sentence. Official 13b2-2 is named only; this is not packed 10b-5, packed 12b-20, or packed 13a-14." />
+<Quiz id="dc-14a10" question="Under 17 CFR 240.14a-10, which solicitations are prohibited, and is official scope typography “to” or “through”?" options={["Official typography is §§ 240.14a-1 through 240.14a-10, and an undated proxy may be solicited.", "This is packed 14a-9, and official typography allows a proxy deemed dated after it is signed.", "No person making a solicitation which is subject to §§ 240.14a-1 to 240.14a-10 shall solicit: any undated or postdated proxy; or any proxy which provides that it shall be deemed to be dated as of any date subsequent to the date on which it is signed by the security holder. Official scope typography is “§§ 240.14a-1 to 240.14a-10” (“to,” not “through”). Official source line: “[17 FR 11434, Dec. 18, 1952].” This is not packed 14a-9 or packed 14a-3. Title 17 up_to_date_as_of 2026-11-17.", "Official typography prohibits only postdated proxies, and official (b) is not packed."]} answer={2} explanation="Official 14a-10 prohibits soliciting any undated or postdated proxy, or any proxy deemed dated as of any date subsequent to the date on which it is signed by the security holder. Official scope typography is “§§ 240.14a-1 to 240.14a-10” (“to,” not “through”). This is not packed 14a-9 or packed 14a-3." />
 
 
 
@@ -2601,6 +2805,7 @@ enrich39 (checked 2026-11-12): [17 CFR 240.14c-6](https://www.ecfr.gov/current/t
 enrich41 (checked 2026-11-19): [17 CFR 240.12b-4](https://www.ecfr.gov/current/title-17/section-240.12b-4); [17 CFR 240.12b-23](https://www.ecfr.gov/current/title-17/section-240.12b-23); [17 CFR 240.13a-11](https://www.ecfr.gov/current/title-17/section-240.13a-11); [17 CFR 240.16a-4](https://www.ecfr.gov/current/title-17/section-240.16a-4); [17 CFR 240.16a-10](https://www.ecfr.gov/current/title-17/section-240.16a-10); [17 CFR 240.16a-13](https://www.ecfr.gov/current/title-17/section-240.16a-13).
 enrich42 (checked 2026-11-19): [17 CFR 240.12b-10](https://www.ecfr.gov/current/title-17/section-240.12b-10); [17 CFR 240.12b-21](https://www.ecfr.gov/current/title-17/section-240.12b-21); [17 CFR 240.13a-1](https://www.ecfr.gov/current/title-17/section-240.13a-1); [17 CFR 240.13a-13](https://www.ecfr.gov/current/title-17/section-240.13a-13); [17 CFR 243.102](https://www.ecfr.gov/current/title-17/section-243.102); [17 CFR 240.16a-12](https://www.ecfr.gov/current/title-17/section-240.16a-12).
 enrich43 (checked 2026-11-19): [17 CFR 232.14](https://www.ecfr.gov/current/title-17/section-232.14); [17 CFR 243.103](https://www.ecfr.gov/current/title-17/section-243.103); [17 CFR 240.15d-1](https://www.ecfr.gov/current/title-17/section-240.15d-1); [17 CFR 240.15d-11](https://www.ecfr.gov/current/title-17/section-240.15d-11); [17 CFR 240.15d-13](https://www.ecfr.gov/current/title-17/section-240.15d-13); [17 CFR 240.15d-6](https://www.ecfr.gov/current/title-17/section-240.15d-6).
+enrich44 (checked 2026-11-19): [17 CFR 244.102](https://www.ecfr.gov/current/title-17/section-244.102); [17 CFR 240.13a-17](https://www.ecfr.gov/current/title-17/section-240.13a-17); [17 CFR 240.15d-17](https://www.ecfr.gov/current/title-17/section-240.15d-17); [17 CFR 240.12b-22](https://www.ecfr.gov/current/title-17/section-240.12b-22); [17 CFR 240.13b2-1](https://www.ecfr.gov/current/title-17/section-240.13b2-1); [17 CFR 240.14a-10](https://www.ecfr.gov/current/title-17/section-240.14a-10).
 
 
 <Summary>
