@@ -1,6 +1,6 @@
 ## 学习目标
 
-本课（约 **18.50 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + FINRA Rule 6121.02(c)(2) 已提交、尚未实施的 23/5 Level 3 otherwise-than-on-an-exchange 恢复时钟 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h + LULD 计划第 VII 节复牌时钟 0.25h + Cboe Rule 5.1(e)(3) 提前收盘日 Curb 0.25h + Nasdaq 停牌代码 T1 / H10 / LUDP / MWC1–3 0.25h + FINRA 5260 停牌期间不得交易或报价 0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
+本课（约 **18.75 学时**：概念 4.5h + 实验 5h + 测验/复盘 1.5h + 期权/VIX 风险框 1h + MWCB/LULD/Reg SHO 对照 1h + 隔夜 LULD 价格带 0.5h + 美股期权入门（合约单位、行权方式、看跌看涨平价、BSM 只作参照、股息与提前指派）1.5h + 23/5 下 MWCB Level 3 的恢复时间 0.25h + FINRA Rule 6121.02(c)(2) 已提交、尚未实施的 23/5 Level 3 otherwise-than-on-an-exchange 恢复时钟 0.25h + SEC 暂停交易与交易所停牌的区别 0.25h + 到期日例外行权（OCC exercise-by-exception）0.25h + 明显错误成交（FINRA 11892 与 2026 隔夜延伸）0.5h + OCC 指派程序 0.25h + 上午结算指数期权的特别开盘报价（SOQ）0.5h + OCC 现金股息合约调整（每份合约 12.50 美元）0.25h + LULD 计划第 VII 节复牌时钟 0.25h + Cboe Rule 5.1(e)(3) 提前收盘日 Curb 0.25h + Nasdaq 停牌代码 T1 / H10 / LUDP / MWC1–3 0.25h + FINRA 5260 停牌期间不得交易或报价 0.25h + FINRA 11892 已提交并公布的隔夜明显错误修订（SR-FINRA-2026-027 / 34-106946；现行规则书仍为旧正文）0.25h）教你用**可操作、可因果**的方式读「市场状态」（regime）与危机压力——**不是**预测明天涨跌，也**不是**择时圣杯。前置：`risk-systems-lab`（滞后风险估计、回撤刹车）。
 
 **课内目标：** 能写出 regime 的工程定义；用 `shift(1)` 搭检测栈；按四类剧本写识别特征 / 工程应对 / 失败模式；能指出平滑 HMM 概率的前瞻泄漏；把新闻日波动与已定义 regime 分开。
 
@@ -446,7 +446,7 @@ the Primary Listing Exchange MAY declare a Regulatory Halt; then orders are reje
 does not reopen during that night's Overnight Protected Hours. Bands are not a fill guarantee.
 ```
 
-## 明显错误成交：常规时段一般不可复核，隔夜延伸尚未生效（核实于 2026-11-12）
+## 明显错误成交：常规时段一般不可复核；FINRA 已提交 SR-FINRA-2026-027，但 2026-11-26 打开的现行 11892 规则书仍印刷旧正文（核实于 2026-11-26）
 
 行情带上的一笔成交，后来有可能被宣布无效。这叫**明显错误成交**（clearly erroneous）复核。
 
@@ -456,7 +456,17 @@ does not reopen during that night's Overnight Protected Hours. Bands are not a f
 
 [FINRA Rule 11892](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11892) 覆盖的是**场外**对上市证券的成交；交易所场内成交适用执行该笔交易的交易所的平行规则（例如 NYSE Rule 7.10、Nasdaq Equity 11 Rule 11890）。
 
-**2026 年的隔夜延伸还没有生效。** 多家交易所提交了即时生效的修改，把“价格带有效期间一般不可复核”的逻辑延伸到**隔夜保护时段**，**在计划于 2026-12-06 全行业开始的 23/5 交易启动时生效**（不是今天已经生效）。已打开的文件包括 NYSE [34-106407](https://www.sec.gov/files/rules/sro/nyse/2026/34-106407.pdf)（Rule 7.10）、Nasdaq [34-106631](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106631.pdf)、Cboe EDGX [34-106604](https://www.sec.gov/files/rules/sro/cboeedgx/2026/34-106604.pdf)、MEMX [34-106727](https://www.sec.gov/files/rules/sro/memx/2026/34-106727.pdf)、LTSE [34-106649](https://www.sec.gov/files/rules/sro/ltse/2026/34-106649.pdf)。这些公告写它们*理解*其他交易所和 FINRA 也会提交实质相同的修改；但 2026-11-12 检索到的 FINRA 11892 正文里，仍然没有隔夜保护时段条款。**不要**写成“FINRA 已经修改了 11892”，或“全市场已经有统一的隔夜明显错误规则”。在 23/5 开始之前，常规时段以外的复核仍使用常规时段以外的数量指引。一旦隔夜价格带和该场所的规则都已生效，落在隔夜价格带以内的成交，一般预期会成立。
+**FINRA 已提交 SR-FINRA-2026-027；2026-11-26 打开的现行 11892 规则书仍印刷旧正文。** 官方 SEC PDF 标题印刷是 “[Release No. 34-106946; File No. SR-FINRA-2026-027]”，官方日期印刷是 “November 20, 2026.” 官方正文印刷是 “notice is hereby given that on November 18, 2026, the Financial Industry Regulatory Authority, Inc. (“FINRA”) filed with the Securities and Exchange Commission”（[SEC 34-106946](https://www.sec.gov/files/rules/sro/finra/2026/34-106946.pdf)）。官方《联邦公报》页眉印刷是 “75956 Federal Register / Vol. 91, No. 225 / Tuesday, November 24, 2026 / Notices”。官方 FR Doc 印刷是 “[FR Doc. 2026–23915 Filed 11–23–26; 8:45 am]”（官方 “2026–23915” 里是官方 en dash U+2013）（[91 FR 75956](https://www.govinfo.gov/content/pkg/FR-2026-11-24/pdf/2026-23915.pdf)）。官方《联邦公报》发布编号印刷使用官方 “34–106946” 和官方 “SR–FINRA–2026–027”，都是官方 en dash。引用官方 SEC PDF 时，本课保持官方 SEC 连字符印刷；引用官方《联邦公报》页时，保持官方 FR en dash 印刷。不要把一种改整齐成另一种。
+
+官方 Exhibit 5（官方 “EXHIBIT 5” / 官方 “Below is the text of the proposed rule change. Proposed new language is underlined; proposed deletions are in brackets.”）是官方拟议规则正文印刷（[SR-FINRA-2026-027](https://www.finra.org/sites/default/files/2026-11/SR-FINRA-2026-027.pdf)）。官方定义印刷是 “For the purposes of this Rule, “LULD Protected Hours” includes Normal Market Hours (9:30 a.m. Eastern Time to 4:00 p.m. Eastern Time) and Overnight Protected Hours as defined in Section VIII of the Plan to Address Extraordinary Market Volatility Pursuant to Rule 608 of SEC Regulation NMS under the Exchange Act (“LULD Plan”).” 官方印刷引号出现在官方 “LULD Protected Hours” 和官方 “LULD Plan” 两侧。该官方 Exhibit 5 定义里的官方时段印刷是官方 “9:30 a.m. Eastern Time to 4:00 p.m. Eastern Time”（官方 “to”，官方 “Eastern Time” 写全）。不要把官方 Exhibit 5 印刷改整齐成官方目的条款印刷 “9:30 a.m. Eastern Time (“E.T.”) to 4:00 p.m. E.T.”，也不要反过来改。
+
+官方 Exhibit 5 (b)(1) 正文印刷是 “If the execution time of the transaction(s) under review is during LULD Protected Hours[Normal Market Hours], the transaction will not be reviewable as clearly erroneous unless the transaction:” 官方 “will stand and not be broken” 是官方目的条款 / 官方委员会 2022 年引文印刷，不是官方 Exhibit 5 规则正文印刷，不要把它改写进那句官方规则句。
+
+官方委员会印刷同时包含官方 “become operative on December 6, 2026, when exchanges will commence 23/5 Trading” 和官方 “the Commission waives the 30-day operative delay and designates the proposed rule change to be operative upon filing.” 两句都要保留，不要把一句改整齐成另一句。提交日期印刷仍是官方 November 18, 2026。
+
+2026-11-26 打开的现行 [FINRA 11892](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11892) 规则书 HTML，官方可见印刷仍是 “If the execution time of the transaction(s) under review is during Normal Market Hours, the transaction will not be reviewable as clearly erroneous unless the transaction:” 官方规则正文里没有官方 “Overnight Protected Hours”，也没有官方 “LULD Protected Hours”。官方修订行印刷仍止于官方 “Amended by SR-FINRA-2022-027 eff. Oct. 1, 2022.”，并不包含官方 “SR-FINRA-2026-027”。规则书版本 `<option>` 标签 “Dec 06, 2026 onwards” 是官方页面框印刷，不是官方现行规则正文印刷。不要写成现行规则书已经印出新规则正文，也不要写成 FINRA 尚未提交。
+
+同类配套提交（官方《联邦公报》印刷）包括官方 IEX “Release No. 34–106920” / 官方 “Rule 11.270”（[91 FR 75414](https://www.govinfo.gov/content/pkg/FR-2026-11-20/pdf/2026-23651.pdf)）和官方 TXSE “Release No. 34–106938” / 官方 “Rule 11.014”（[91 FR 75935](https://www.govinfo.gov/content/pkg/FR-2026-11-24/pdf/2026-23846.pdf)）。本课仍保留较早的交易所文件：NYSE [34-106407](https://www.sec.gov/files/rules/sro/nyse/2026/34-106407.pdf)（Rule 7.10）、Nasdaq [34-106631](https://www.sec.gov/files/rules/sro/nasdaq/2026/34-106631.pdf)、Cboe EDGX [34-106604](https://www.sec.gov/files/rules/sro/cboeedgx/2026/34-106604.pdf)、MEMX [34-106727](https://www.sec.gov/files/rules/sro/memx/2026/34-106727.pdf)、LTSE [34-106649](https://www.sec.gov/files/rules/sro/ltse/2026/34-106649.pdf)。不要写成全市场已经统一。本框不折进剩余的官方 N7 / 官方 FINRA 6121.02 印刷。在 23/5 开始之前，常规时段以外的复核仍使用常规时段以外的数量指引。Nasdaq Stock Market 操作时钟印刷（官方 Equity Trader Alert #2026 - 72，包括官方 “3:55 a.m. ET” 和官方 “cancelled”）打包在 `microstructure-orders`；那条官方操作时钟不是对已经教过的官方 LULD Overnight Protected Hours 印刷（官方 “9:00 p.m. through 4:00 a.m. E.T.”）的改写。仅供学习；不是法律建议；没有交易场所或投资建议。
 
 **实验：** `examples/p6/14_clearly_erroneous_toy.py`（不联网；不是完整规则引擎）：
 
@@ -475,16 +485,34 @@ NYSE Rule 7.10 Exhibit 5 labels the first two rows: Between $0.00 and $25.00 / B
   not subject to the LULD Plan: reviewable=True
   LULD-covered, bands unavailable (listed exception): reviewable=True
 the old percentage table is not the regular-hours test for ordinary LULD stocks
-=== C. Outside hours, and the 2026-12-06 overnight extension ===
+=== C. Outside hours, and the filed 2026-12-06 overnight extension ===
 until 23/5 starts (scheduled 2026-12-06), outside-hours reviews still use the outside-hours numerical guidelines
-FINRA 11892 retrieved 2026-11-12 has no Overnight Protected Hours clause;
-do not write that FINRA has already amended 11892, or that the whole market has one overnight CE rule
-  2026-11-12, FINRA 11892 as retrieved: print inside overnight bands generally expected to stand? False
+FINRA filed SR-FINRA-2026-027 on November 18, 2026
+official SEC PDF caption typography is [Release No. 34-106946; File No. SR-FINRA-2026-027]
+official SEC notice-date typography is November 20, 2026.
+official body typography is notice is hereby given that on November 18, 2026, the Financial Industry Regulatory Authority, Inc. (“FINRA”) filed with the Securities and Exchange Commission
+official Federal Register header typography is 75956 Federal Register / Vol. 91, No. 225 / Tuesday, November 24, 2026 / Notices
+official FR Doc typography is [FR Doc. 2026–23915 Filed 11–23–26; 8:45 am]
+official FR release typography uses official 34–106946 and official SR–FINRA–2026–027
+official Commission typography contains both become operative on December 6, 2026, when exchanges will commence 23/5 Trading
+and the Commission waives the 30-day operative delay and designates the proposed rule change to be operative upon filing.
+official live FINRA 11892 rulebook opened 2026-11-26 still has: If the execution time of the transaction(s) under review is during Normal Market Hours, the transaction will not be reviewable as clearly erroneous unless the transaction:
+official amendment-line typography still ends at Amended by SR-FINRA-2022-027 eff. Oct. 1, 2022.
+do not write that the live rulebook has already printed the new rule text, and do not write that FINRA has not filed
+  2026-11-26, live FINRA 11892 rulebook as opened: print inside overnight bands generally expected to stand? False
   2026-12-06, NYSE Rule 7.10 as amended (34-106407): print inside overnight bands generally expected to stand? True
   2026-12-05, even on a venue that has filed: print inside overnight bands generally expected to stand? False
 === D. Toy: is this away from the reference by at least the outside-hours guideline? ===
   reference $20.00 print $24.00: 20% away; outside-hours guideline 20%; meets guideline? True
-assertions passed: 11/11
+=== E. Official typography checks (Exhibit 5 vs live rulebook; both operative phrases) ===
+official Exhibit 5 definition typography is For the purposes of this Rule, “LULD Protected Hours” includes Normal Market Hours (9:30 a.m. Eastern Time to 4:00 p.m. Eastern Time) and Overnight Protected Hours as defined in Section VIII of the Plan to Address Extraordinary Market Volatility Pursuant to Rule 608 of SEC Regulation NMS under the Exchange Act (“LULD Plan”).
+official Exhibit 5 (b)(1) typography is If the execution time of the transaction(s) under review is during LULD Protected Hours[Normal Market Hours], the transaction will not be reviewable as clearly erroneous unless the transaction:
+official will stand and not be broken is official purpose / official Commission 2022 quotation typography, not official Exhibit 5 (b)(1)
+do not tidy official Exhibit 5 Eastern Time to official purpose E.T. typography
+do not tidy official SEC hyphen typography to official FR en-dash typography
+same-kind companions may be named: official IEX Release No. 34–106920 / official Rule 11.270 and official TXSE Release No. 34–106938 / official Rule 11.014
+do not claim the whole market is already uniform; do not fold this item into leftover official N7 / official FINRA 6121.02
+assertions passed: 24/24
 ```
 
 
@@ -632,7 +660,7 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
 11. 把 4 美元的期权报价当成一张合约 4 美元（实际是 400 美元）；把 BSM 模型价和市场价的差当成 alpha；忘了普通股息不调整期权条款；以为 Level 3 熔断后当晚隔夜时段就恢复交易。
 12. 把 SEC 暂停交易当成当天就结束的普通交易所停牌；在暂停窗口里前向填充价格；把被 SEC 认为可能涉及操纵的价格暴涨当成正常动量拿去训练模型。
 13. 把 OCC 的例外行权不加限定地叫做“自动行权”，或以为每家券商都用 0.01 美元的门槛；把所有到期期权都当成作废，从而漏掉被指派后出现的 100 股股票头寸。
-14. 用旧的百分比表去判断常规时段里普通 LULD 股票的成交该不该作废；写成“FINRA 已经修改了 11892”，或“全市场已经有统一的隔夜明显错误规则”。
+14. 用旧的百分比表去判断常规时段里普通 LULD 股票的成交该不该作废；写成现行 FINRA 11892 规则书已经印出新规则正文；写成 FINRA 尚未提交；或写成“全市场已经有统一的隔夜明显错误规则”。
 15. 以为 OCC 会把行权通知直接随机指派给每一位零售客户，或以为券商端的分配方法必须是随机的；发明一条对所有零售客户一律适用的 OCC 截止时间（例如下午 5:30）。
 16. 把上午结算的指数期权按周四收盘价、周五官方指数开盘价或之后的即期点位到期，而不是按 SOQ（SET）；写成最后交易日已经改到周五上午 9:25（该项变更仍是 Effective TBD）。
 17. 把每笔现金股息都当成自动调整期权合约，或把 12.50 美元的测试当成按股计算；以为 150 股合约上的 0.10 美元特别股息，即使标准 100 股合约不调整也一定调整；把发行人写的“特别”，或 FINRA 11140(b) 对 25% 以上股息推迟除息日的规则，当成 OCC 的调整标准。
@@ -655,7 +683,7 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
 9. **ex-ovb** — 运行 `08_overnight_bands_toy.py`，手算「after-hours news gap」一行（收盘 50、19:30 价 44）；**完成标准**：得到 35.20 / 60.00，并说明为何下限用 44、上限用 50。
 10. **ex-opt** — 运行 `09_options_basics_toy.py`，写出报价 4 美元的一张合约要付多少钱、卖出看跌的最坏亏损、平价关系的误差；再运行 `10_mwcb_overnight_resume_toy.py`，写出周三 13:00 ET 触发 Level 3 后最早何时恢复；**完成标准**：400 美元、−9750.00、误差小于 1e-9、周四 04:00 ET，与输出一致。
 11. **ex-suspend** — 根据 SEC 暂停交易命令 34-106668，写出窗口起止的美东时间和北京时间，并标出回测里哪些日线行不可交易；**完成标准**：美东 2026-10-15 04:00 = 北京 16:00，美东 2026-10-28 23:59 = 北京 2026-10-29 11:59，2026-10-15 至 2026-10-28 的每个交易日都被屏蔽。
-12. **ex-ceprint** — 运行 `14_clearly_erroneous_toy.py`；写出常规时段里普通 LULD 股票、没有列出例外时可否复核，以及 2026-11-12 检索到的 FINRA 11892 是否已把“带内不可复核”延伸到隔夜；**完成标准**：不可复核，且尚未延伸，与输出一致。
+12. **ex-ceprint** — 运行 `14_clearly_erroneous_toy.py`；写出常规时段里普通 LULD 股票、没有列出例外时可否复核，确认 FINRA 已提交 SR-FINRA-2026-027，且 2026-11-26 打开的现行 FINRA 11892 规则书仍印刷旧正文（官方规则正文里没有官方 “LULD Protected Hours” / 官方 “Overnight Protected Hours”）；**完成标准**：不可复核，已提交但现行规则书仍为旧正文，与 24/24 输出一致。
 13. **ex-assign** — 看 `13_exercise_by_exception_toy.py` 新增的指派一节；写出 OCC 把行权通知指派给谁，以及当天交易时段内已经平掉的空头当晚会不会被指派；**完成标准**：清算会员账户，不会，与输出一致。
 14. **ex-soq** — 运行 `15_soq_occ_adj_toy.py`；写出上午结算指数期权（计划中的 VIX 变更除外）现行的最后交易日，并在周四收盘价、周五官方指数开盘价、之后的即期点位和 SOQ 里指出哪个是结算价；**完成标准**：通常是周四收盘，结算价是 SOQ / SET，与输出一致，并写一句 周五上午 9:25 的变更仍是 Effective TBD。
 15. **ex-occadj** — 用同一段输出，说明 0.10 美元特别股息是否调整 100 股和 150 股合约，以及 0.15 美元特别股息是否调整 100 股和 50 股合约；**完成标准**：否和否；是和否，与 OCC 的计算例子一致。
@@ -682,7 +710,7 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
 <Quiz id="rc-mwcb3" question="按 NYSE SR-NYSE-2026-43，13:00 ET 触发 Level 3 熔断后，最早何时可以恢复交易？" options={["当晚 21:00 ET", "下一交易日 04:00 ET 或更晚", "15 分钟后", "必须等 SEC 下令"]} answer={1} explanation="条文现为「直到下一交易日 04:00 ET 或更晚」；Nasdaq、Cboe 等也做了同样修改，但截至 2026-11-10 并非所有交易场所都已提交。FINRA 已提交 SR-FINRA-2026-025 / 34-106879，实施日期为 2026-12-06。" />
 <Quiz id="rc-suspend" question="SEC 暂停交易和交易所的 LULD 暂停有什么不同？" options={["是同一件事的两个名字", "SEC 暂停交易最多 15 分钟", "标普 500 跌 7% 时会自动触发 SEC 暂停交易", "SEC 为保护投资者以命令决定，最长可达 10 个营业日；LULD 暂停是自动的价格带机制"]} answer={3} explanation="《证券交易法》第 12(k)(1)(A) 条允许 SEC 即时暂停某只证券的交易，期限不超过 10 个营业日。LULD 暂停是 NMS 计划的价格带机制；标普 500 跌 7% 是 MWCB 第一级的触发条件。" />
 <Quiz id="rc-exbyex" question="到期时，OCC 的例外行权会做什么？" options={["它会自动行权客户所有价内期权，任何人不能反对", "它让每张股票期权都到期作废，所以回测可以忽略股票头寸", "它是 Cboe 的规则，把合约单位从 100 股改成 1 股", "对至少价内 0.01 美元的到期期权，OCC 会行权，除非清算会员给出相反指示；这是 OCC 和清算会员之间的程序，不是对客户的强制要求；一张标准股票期权被指派后，会产生 100 股股票头寸，按 T+1 交收"]} answer={3} explanation="OIC 常见问题引用 OCC Rule 805 及解释 .02，门槛是 0.01 美元。券商可以对客户使用不同门槛；回测如果把所有到期期权都当成作废，就会漏掉由此产生的股票头寸。" />
-<Quiz id="rc-ceprint" question="常规交易时段里，一笔普通的、受 LULD 计划约束的 NMS 股票成交，一般能不能按明显错误成交来复核？" options={["可以，一律套用旧的 10%/5%/3% 百分比表", "一般不可复核，除非适用条文列出的例外；旧百分比表不是这类股票在常规时段的检验标准", "只要偏离最后成交超过 3% 就自动作废", "FINRA 已经修改 11892，全市场已经有统一的隔夜明显错误规则"]} answer={1} explanation="FINRA 11892(b)(1)：常规时段内，除非适用列出的例外，否则不可按明显错误复核。隔夜延伸要到计划于 2026-12-06 开始的 23/5 启动时才生效；2026-11-12 检索到的 FINRA 11892 仍无隔夜保护时段条款。" />
+<Quiz id="rc-ceprint" question="常规交易时段里，一笔普通的、受 LULD 计划约束的 NMS 股票成交，一般能不能按明显错误成交来复核？" options={["可以，一律套用旧的 10%/5%/3% 百分比表", "一般不可复核，除非适用条文列出的例外；旧百分比表不是这类股票在常规时段的检验标准", "只要偏离最后成交超过 3% 就自动作废", "2026-11-26 打开的现行 FINRA 11892 规则书已经印出官方 LULD Protected Hours 印刷，全市场已经有统一的隔夜明显错误规则"]} answer={1} explanation="2026-11-26 打开的现行规则书所印的 FINRA 11892(b)(1)：常规时段（Normal Market Hours）内，除非适用列出的例外，否则不可按明显错误复核。FINRA 已提交 SR-FINRA-2026-027（官方 November 18, 2026）。官方委员会印刷同时包含 “become operative on December 6, 2026, when exchanges will commence 23/5 Trading” 和 “the Commission waives the 30-day operative delay and designates the proposed rule change to be operative upon filing.” 现行规则书正文仍没有官方 “LULD Protected Hours” 或官方 “Overnight Protected Hours”；官方修订行印刷仍止于官方 “Amended by SR-FINRA-2022-027 eff. Oct. 1, 2022.” 不要写成现行规则书已经印出新规则正文，也不要写成 FINRA 尚未提交。" />
 <Quiz id="rc-assign" question="按 OIC 的说明，OCC 怎样分配行权通知？券商再怎样分给客户？" options={["OCC 直接随机指派给每一位零售客户，方法必须是随机的", "OCC 用随机程序指派给清算会员账户；被指派的券商再用交易所批准的方法（通常是随机或先进先出）分配，该方法必须公平，但不一定是随机", "和你开仓时对面的那一个买方绑定，只有他行权你才会被指派", "OCC 规定零售客户的行权截止一律是下午 5:30"]} answer={1} explanation="OIC 指派常见问题：OCC 随机指派给清算会员；券商使用交易所批准的公平方法，通常是随机或 FIFO，但不一定是随机。客户截止时间因券商而异，不要发明统一的下午 5:30 规则。" />
 <Quiz id="rc-soq" question="标准上午结算 SPX 期权的行权结算价是什么，这类期权目前何时停止交易？" options={["指数在周四的官方收盘价", "周五的官方指数开盘价，或之后任何盘中即期点位", "到期日（通常是第三个周五）成分股官方开盘价算出的特别开盘报价（SOQ，发布为 SET）；目前这类期权通常在到期日前一个营业日（通常是周四）收盘时停止交易。周五上午 9:25 的变更仍是 Effective TBD", "它们已经在周五上午 9:25 ET 停止交易"]} answer={2} explanation="Cboe 的 SOQ 说明：结算价是成分股官方开盘价的特别开盘报价，不是前一日收盘、周五官方指数开盘或之后的即期点位。24/5 常见问题：目前在前一营业日收盘时停止交易；GTH 变更仍是 Effective TBD。" />
 <Quiz id="rc-occadj" question="OCC 通常在什么情况下为上市股票期权的现金股息做调整？" options={["每笔现金股息都下调行权价，下调幅度等于每股股息", "按定期政策支付的普通现金股息无论金额大小都不调整；非普通股息通常只有达到每份合约至少 12.50 美元才调整，发行人写的“特别”没有约束力", "只要 FINRA 11140(b) 因股息达到 25% 或以上而推迟除息日，期权就调整", "150 股合约上的 0.10 美元特别股息一定调整，因为 15 美元超过 12.50 美元，即使标准 100 股合约不调整"]} answer={1} explanation="OCC 信息备忘录 54262：普通股息不引起调整，无论金额大小。12.50 美元测试按合约计算。在 0.10 美元 / 150 股的例子里，因为标准合约未达到门槛，150 股合约也不调整。决定一事一议，发行人的标签没有约束力。" />
@@ -704,6 +732,7 @@ disclaimer: official FINRA 5260 member-level halt prohibition; not a halt-code o
  enrich22（核实于 2026-11-12）：[Nasdaq Trade Halt Codes](https://www.nasdaqtrader.com/Trader.aspx?id=TradeHaltCodes)（T1 新闻待发；H10 SEC 暂停交易；LUDP / LUDS 波动暂停；MWC1–3 市场范围熔断；MWC0 前一日结转；T5 官方表句子不是现行 LULD）。
 enrich27（核实于 2026-11-12）：[FINRA Rule 5260](https://www.finra.org/rules-guidance/rulebooks/finra-rules/5260)。没有产品、券商或交易场所建议。
 enrich46（核实于 2026-11-19）：[SR-FINRA-2026-025](https://www.finra.org/sites/default/files/2026-11/SR-FINRA-2026-025.pdf) / [SEC 34-106879](https://www.sec.gov/files/rules/sro/finra/2026/34-106879.pdf) / [91 FR 73851](https://www.govinfo.gov/content/pkg/FR-2026-11-17/pdf/2026-23339.pdf)（已提交、尚未实施的 Rule 6121.02(c)(2) 23/5 Level 3 otherwise-than-on-an-exchange 恢复时钟；官方实施日期印刷是 December 6, 2026；现行官方印刷仍是 “for the remainder of the trading day”）。
+enrich86（核实于 2026-11-26）：[SEC 34-106946](https://www.sec.gov/files/rules/sro/finra/2026/34-106946.pdf) / [91 FR 75956](https://www.govinfo.gov/content/pkg/FR-2026-11-24/pdf/2026-23915.pdf) / [SR-FINRA-2026-027](https://www.finra.org/sites/default/files/2026-11/SR-FINRA-2026-027.pdf) / [FINRA Rule 11892](https://www.finra.org/rules-guidance/rulebooks/finra-rules/11892)（官方已提交并公布的 11892 隔夜明显错误印刷；官方 Exhibit 5 是官方拟议规则正文印刷；2026-11-26 打开的现行规则书仍印刷旧正文；两条官方委员会实施印刷都要保留；不要写成现行规则书已经印出新规则正文，也不要写成 FINRA 尚未提交）；[Equity Trader Alert #2026 - 72](https://www.nasdaqtrader.com/TraderNews.aspx?id=ETA2026-72)（官方 Nasdaq Stock Market 操作时钟印刷，包括官方 “3:55 a.m. ET” 和官方 “cancelled”；打包在 `microstructure-orders`；不是对官方 LULD Overnight Protected Hours 印刷官方 “9:00 p.m. through 4:00 a.m. E.T.” 的改写）。
 
 <Summary>
 **要点**：regime 要可操作且因果；平滑 HMM 会泄漏；四剧本写清失败模式；熔断与新闻 correction 都不是课程交易信号；波动管理是风险工程不是收益承诺。  

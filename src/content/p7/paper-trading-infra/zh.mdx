@@ -130,6 +130,7 @@ intents=6 unique_orders_sent=5（重复重试被忽略）
 只读文档 + 本地 fixture，不接 API。下面的券商规则以 Alpaca 24/5 文档为例（[Alpaca](https://docs.alpaca.markets/us/docs/245-trading-for-trading-api)），**不是**推荐券商，其他券商规则可能不同。
 
 - **时段：** Alpaca 隔夜时段 20:00–04:00 ET，经 BOATS（ATS）。交易所隔夜盘计划 2026-12-06 上线，取决于系统改造（[SEC 34-106042](https://www.sec.gov/files/rules/sro/nms/2026/34-106042.pdf)、[CTA FAQ](https://www.ctaplan.com/publicdocs/ctaplan/CTA_Extended_Trading_Hours_FAQ.pdf)）。
+- **Nasdaq Stock Market 操作时钟：** 官方 Equity Trader Alert #2026 - 72 印刷打包在 `microstructure-orders`。官方印刷是官方 “3:55 a.m. ET - Trading ends and all open orders are cancelled”（官方拼写是官方 “cancelled”）。那条官方操作时钟不是对已经教过的官方 Alpaca ATS 8:00 PM–4:00 AM 印刷的改写，也不是官方 LULD Overnight Protected Hours 印刷（官方 “9:00 p.m. through 4:00 a.m. E.T.”）。
 - **订单：** 隔夜只接受限价单，有效期只能是 day 或 gtc。
 - **交易日：** 隔夜时段是**新交易日**的开始，从该日按 T+1 交收（文档例子：周一 21:00 ET 成交 → 交易日周二 → 周三交收）；在除息日的隔夜时段买入拿不到该次分红。
 - **标的：** 资产接口有 `overnight_tradable` 与 `overnight_halted` 字段；可交易名单可能有限。文档同时写「all NMS securities」与名单可能有限，以字段为准。

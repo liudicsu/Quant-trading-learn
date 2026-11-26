@@ -1,4 +1,4 @@
-"""Clearly erroneous print reviewability and numerical guidelines (checked 2026-11-12).
+"""Clearly erroneous print reviewability and numerical guidelines (checked 2026-11-26).
 
 Sources:
 - FINRA Rule 11892: during Normal Market Hours (09:30–16:00 ET), a transaction is
@@ -19,14 +19,30 @@ Sources:
   ("Between $0.00 and $25.00" / "Between $25.01 and $50.00") with the same
   percentages. This toy does not invent a blended table; it prints both wordings
   and applies only the FINRA labels when it classifies a reference price.
-- 2026 overnight extension: several exchanges filed immediately effective changes
-  to extend the "not reviewable while bands are in place" logic to Overnight
-  Protected Hours, operative at the commencement of 23/5 trading, scheduled
-  industry-wide 2026-12-06 (SEC 34-106407, 34-106631, 34-106604, 34-106727,
-  34-106649). Those notices say they understand other exchanges and FINRA will
-  file identical substance. The FINRA 11892 text retrieved 2026-11-12 still has
-  no Overnight Protected Hours clause — this toy does not treat FINRA 11892 as
-  already amended, and does not invent a single market-wide overnight CE rule.
+- 2026 overnight extension: FINRA filed SR-FINRA-2026-027 on November 18, 2026
+  (official SEC PDF caption typography "[Release No. 34-106946; File No.
+  SR-FINRA-2026-027]", official "November 20, 2026."). Official Exhibit 5 is
+  official proposed rule-body typography. Official Commission typography contains
+  both "become operative on December 6, 2026, when exchanges will commence 23/5
+  Trading" and "the Commission waives the 30-day operative delay and designates
+  the proposed rule change to be operative upon filing." The official live FINRA
+  11892 rulebook HTML opened 2026-11-26 still has official visible typography
+  "If the execution time of the transaction(s) under review is during Normal
+  Market Hours, the transaction will not be reviewable as clearly erroneous
+  unless the transaction:" and does not contain official "Overnight Protected
+  Hours" or official "LULD Protected Hours" in the official rule body. Official
+  amendment-line typography still ends at official "Amended by SR-FINRA-2022-027
+  eff. Oct. 1, 2022." This toy does not write that the live rulebook has already
+  printed the new rule text, and does not write that FINRA has not filed. Several
+  exchanges also filed immediately effective changes (SEC 34-106407, 34-106631,
+  34-106604, 34-106727, 34-106649). Official IEX "Release No. 34–106920" /
+  official "Rule 11.270" and official TXSE "Release No. 34–106938" / official
+  "Rule 11.014" may be named as same-kind companions. This toy does not invent a
+  single market-wide overnight CE rule, and does not fold this item into leftover
+  official N7 / official FINRA 6121.02 typography. Official "will stand and not
+  be broken" is official purpose / official Commission 2022 quotation typography,
+  not official Exhibit 5 rule-body typography, and is not rewritten into the
+  official Exhibit 5 (b)(1) sentence.
 
 Learning only; not a recommendation of any venue or a complete rule engine.
 """
@@ -43,6 +59,41 @@ def check(cond, label):
 
 
 OPERATIVE = date(2026, 12, 6)
+
+# Official typography from official file bytes (checked 2026-11-26).
+SEC_CAPTION = "[Release No. 34-106946; File No. SR-FINRA-2026-027]"
+SEC_NOTICE_DATE = "November 20, 2026."
+SEC_FILED = (
+    "notice is hereby given that on November 18, 2026, the Financial Industry "
+    "Regulatory Authority, Inc. (\u201cFINRA\u201d) filed with the Securities and Exchange Commission"
+)
+FR_HEADER = "75956 Federal Register / Vol. 91, No. 225 / Tuesday, November 24, 2026 / Notices"
+FR_DOC = "[FR Doc. 2026\u201323915 Filed 11\u201323\u201326; 8:45 am]"
+FR_RELEASE = "34\u2013106946"
+FR_FILE = "SR\u2013FINRA\u20132026\u2013027"
+EXHIBIT_5_DEF = (
+    "For the purposes of this Rule, \u201cLULD Protected Hours\u201d includes Normal Market Hours "
+    "(9:30 a.m. Eastern Time to 4:00 p.m. Eastern Time) and Overnight Protected Hours as defined "
+    "in Section VIII of the Plan to Address Extraordinary Market Volatility Pursuant to Rule 608 "
+    "of SEC Regulation NMS under the Exchange Act (\u201cLULD Plan\u201d)."
+)
+EXHIBIT_5_B1 = (
+    "If the execution time of the transaction(s) under review is during LULD Protected "
+    "Hours[Normal Market Hours], the transaction will not be reviewable as clearly erroneous "
+    "unless the transaction:"
+)
+PURPOSE_HOURS = "9:30 a.m. Eastern Time (\u201cE.T.\u201d) to 4:00 p.m. E.T."
+OPERATIVE_DEC6 = "become operative on December 6, 2026, when exchanges will commence 23/5 Trading"
+OPERATIVE_UPON_FILING = (
+    "the Commission waives the 30-day operative delay and designates the proposed rule change "
+    "to be operative upon filing."
+)
+LIVE_B1 = (
+    "If the execution time of the transaction(s) under review is during Normal Market Hours, "
+    "the transaction will not be reviewable as clearly erroneous unless the transaction:"
+)
+AMENDMENT_LINE = "Amended by SR-FINRA-2022-027 eff. Oct. 1, 2022."
+STAND_PHRASE = "will stand and not be broken"
 
 
 def finra_bucket(reference):
@@ -99,21 +150,31 @@ for label, covered, exc, expect in cases:
     check(got is expect, label)
 print("the old percentage table is not the regular-hours test for ordinary LULD stocks")
 
-print("=== C. Outside hours, and the 2026-12-06 overnight extension ===")
+print("=== C. Outside hours, and the filed 2026-12-06 overnight extension ===")
 print("until 23/5 starts (scheduled 2026-12-06), outside-hours reviews still use the outside-hours numerical guidelines")
-print("FINRA 11892 retrieved 2026-11-12 has no Overnight Protected Hours clause;")
-print("do not write that FINRA has already amended 11892, or that the whole market has one overnight CE rule")
+print("FINRA filed SR-FINRA-2026-027 on November 18, 2026")
+print(f"official SEC PDF caption typography is {SEC_CAPTION}")
+print(f"official SEC notice-date typography is {SEC_NOTICE_DATE}")
+print(f"official body typography is {SEC_FILED}")
+print(f"official Federal Register header typography is {FR_HEADER}")
+print(f"official FR Doc typography is {FR_DOC}")
+print(f"official FR release typography uses official {FR_RELEASE} and official {FR_FILE}")
+print(f"official Commission typography contains both {OPERATIVE_DEC6}")
+print(f"and {OPERATIVE_UPON_FILING}")
+print(f"official live FINRA 11892 rulebook opened 2026-11-26 still has: {LIVE_B1}")
+print(f"official amendment-line typography still ends at {AMENDMENT_LINE}")
+print("do not write that the live rulebook has already printed the new rule text, and do not write that FINRA has not filed")
 
 
 def overnight_generally_stands(as_of, venue_rule_extended):
     """Once 23/5 has started and the executing venue's rule is operative, a print
-    inside overnight bands is generally expected to stand. FINRA 11892 as of
-    2026-11-12 is not that rule."""
+    inside overnight bands is generally expected to stand. The live FINRA 11892
+    rulebook opened 2026-11-26 is not that printed rule body."""
     return as_of >= OPERATIVE and venue_rule_extended
 
 
 for label, as_of, extended, expect in (
-    ("2026-11-12, FINRA 11892 as retrieved", date(2026, 11, 12), False, False),
+    ("2026-11-26, live FINRA 11892 rulebook as opened", date(2026, 11, 26), False, False),
     ("2026-12-06, NYSE Rule 7.10 as amended (34-106407)", date(2026, 12, 6), True, True),
     ("2026-12-05, even on a venue that has filed", date(2026, 12, 5), True, False),
 ):
@@ -129,4 +190,26 @@ away = pct_away(px, ref)
 meets = away >= outside
 print(f"  reference ${ref} print ${px}: {away:.0%} away; outside-hours guideline {outside:.0%}; meets guideline? {meets}")
 check(meets is True, "20% away at $20")
+
+print("=== E. Official typography checks (Exhibit 5 vs live rulebook; both operative phrases) ===")
+check("-" in SEC_CAPTION and "\u2013" not in SEC_CAPTION, "SEC caption uses hyphens, not en dashes")
+check(SEC_CAPTION == "[Release No. 34-106946; File No. SR-FINRA-2026-027]", "SEC caption typography")
+check(SEC_NOTICE_DATE == "November 20, 2026.", "SEC notice date typography")
+check("November 18, 2026" in SEC_FILED and "(\u201cFINRA\u201d)" in SEC_FILED, "SEC filing-date typography")
+check("\u2013" in FR_DOC and FR_DOC == "[FR Doc. 2026\u201323915 Filed 11\u201323\u201326; 8:45 am]", "FR Doc en-dash typography")
+check(FR_RELEASE == "34\u2013106946" and FR_FILE == "SR\u2013FINRA\u20132026\u2013027", "FR release en-dash typography")
+check("Eastern Time to 4:00 p.m. Eastern Time" in EXHIBIT_5_DEF, "Exhibit 5 Eastern Time written out")
+check(PURPOSE_HOURS not in EXHIBIT_5_DEF, "do not tidy Exhibit 5 hours to purpose E.T. typography")
+check(EXHIBIT_5_B1.endswith("unless the transaction:"), "Exhibit 5 (b)(1) ends at unless the transaction:")
+check(STAND_PHRASE not in EXHIBIT_5_B1, "do not rewrite will stand and not be broken into Exhibit 5 (b)(1)")
+check(OPERATIVE_DEC6 != OPERATIVE_UPON_FILING, "keep both official Commission operative phrases")
+check("LULD Protected Hours" not in LIVE_B1 and "Overnight Protected Hours" not in LIVE_B1, "live rule body still Normal Market Hours")
+check("SR-FINRA-2026-027" not in AMENDMENT_LINE, "live amendment line has no SR-FINRA-2026-027")
+print(f"official Exhibit 5 definition typography is {EXHIBIT_5_DEF}")
+print(f"official Exhibit 5 (b)(1) typography is {EXHIBIT_5_B1}")
+print("official will stand and not be broken is official purpose / official Commission 2022 quotation typography, not official Exhibit 5 (b)(1)")
+print("do not tidy official Exhibit 5 Eastern Time to official purpose E.T. typography")
+print("do not tidy official SEC hyphen typography to official FR en-dash typography")
+print("same-kind companions may be named: official IEX Release No. 34\u2013106920 / official Rule 11.270 and official TXSE Release No. 34\u2013106938 / official Rule 11.014")
+print("do not claim the whole market is already uniform; do not fold this item into leftover official N7 / official FINRA 6121.02")
 print(f"assertions passed: {checks}/{checks}")
