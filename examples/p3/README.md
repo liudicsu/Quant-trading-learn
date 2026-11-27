@@ -24,3 +24,5 @@ Charts land in `public/p3/`.
 - enrich14 (2026-11-11): `08_regsho_locate_closeout_toy.py` — locate ≠ completed borrow, Rule 204 close-out under T+1 (short fail morning of T+2; Thanksgiving-week settlement), Rule 201 NBB test, threshold-security size test (15 assertions).
 
 - enrich16 (2026-11-12): `09_rule200_10b21_toy.py` — Rule 200 long-marking test (net long and possession/control or reasonably expected by settlement) and Rule 10b-21 deception-and-fail checklist (9 assertions; not a finding of liability).
+
+- enrich169 (2026-11-27): `08_regsho_locate_closeout_toy.py` section E — official [Release No. 34–106971] temporary locate relief outside of 9:30 a.m. to 4 p.m. ET, until November 23, 2027; Rule 204 still applies (20 assertions; sections A–D unchanged).

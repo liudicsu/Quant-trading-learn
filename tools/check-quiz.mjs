@@ -37,6 +37,8 @@ const SEM = [
   ["p6mrc-q5", "en", "not a trade signal", "A sell signal"],
   ["cb-605", "zh", "排除特殊处理订单", "你自己账户的所有订单"],
   ["cb-605", "en", "excluding special-handling orders", "Every order in your own account"],
+  ["ps-106971", "zh", "该笔延时交易卖空不必遵守 Rule 203(b)(1) 的 locate 要求", "locate 已被废除"],
+  ["ps-106971", "en", "Not required to comply with the Rule 203(b)(1) locate requirement for that extended-hours short sale", "locate has been repealed"],
 ];
 for (const [id, lang, right, wrong] of SEM) {
   const q = all[lang].get(id);

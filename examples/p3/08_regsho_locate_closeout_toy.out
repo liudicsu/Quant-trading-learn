@@ -16,4 +16,8 @@ prior listing-market close 20.00; last sale 17.90 is a 10.5% decline -> Rule 201
 === D. threshold security (Rule 203(c)(6)): 10,000 shares AND 0.5% of shares outstanding, five settlement days, on an SRO list ===
 fail 12,000 shares vs 0.5% of 2,000,000 = 10,000; fail is 0.60% of outstanding
 size test met? True; still needs five consecutive settlement days and an SRO list to be a threshold security
-OK 15 assertions
+=== E. SEC Release No. 34–106971: temporary locate relief outside regular trading hours ===
+  short sale at 10:00 p.m. ET during the relief: locate_required=False
+  short sale at 10:00 a.m. ET during the relief: locate_required=True
+  Rule 204 still applies to a failure to deliver from the 10:00 p.m. ET short sale: True
+OK 20 assertions

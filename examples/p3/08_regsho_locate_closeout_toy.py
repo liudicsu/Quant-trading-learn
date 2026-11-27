@@ -1,5 +1,7 @@
 """Reg SHO locate vs borrow, Rule 204 close-out under T+1, Rule 201 price test,
-and the threshold-security definition (checked 2026-11-11).
+the threshold-security definition (checked 2026-11-11), and the temporary
+Regulation SHO Rule 203(b)(1) locate exemption outside regular trading hours
+under official SEC Release No. 34–106971 (checked 2026-11-27).
 
 Sources:
 - 17 CFR 242.203(b)(1): a broker-dealer may not accept or effect a short sale unless it has
@@ -19,6 +21,16 @@ Sources:
 - 17 CFR 242.203(c)(6): a threshold security has an aggregate fail of 10,000 shares or more
   that is also at least 0.5% of total shares outstanding, for five consecutive settlement days,
   and is on an SRO-disseminated list.
+- SEC Release No. 34–106971 (official Federal Register typography, 91 FR 76826–76829;
+  official FR Doc. 2026–24048): temporary exemptive relief from the locate requirement
+  in Rule 203(b)(1), for broker-dealers effecting short sales during trading occurring
+  outside of 9:30 a.m. to 4 p.m. ET, until November 23, 2027, while preserving the
+  locate requirement during regular trading hours. Rule 204, including its close-out
+  requirements and penalty provision, would continue to apply to failures to deliver
+  arising from short sales effected during extended hours. Rule 10b–21 and other
+  applicable antifraud provisions would continue to apply. Official typography uses
+  en dashes in 34–106971 / 10b–21 / 2026–24048. This add-on is a teaching clock, not
+  legal advice, and not a permission to short or to trade overnight.
 
 Weekends and the 2026 Thanksgiving week only, as dated. Learning only; not a short-sale recipe.
 """
@@ -129,5 +141,41 @@ check(not (9_000 >= 10_000 and 9_000 / shares_outstanding >= 0.005), "9,000 shar
 # 0.5% of 2,000,000 is 10,000, so both prongs bind together here.
 # A 12,000 fail on a 10,000,000-share issuer is 0.12% and would fail the 0.5% prong.
 check(not (12_000 / 10_000_000 >= 0.005), "12,000 on a larger issuer can miss 0.5%")
+
+print("=== E. SEC Release No. 34–106971: temporary locate relief outside regular trading hours ===")
+
+
+def locate_required_under_34_106971(hour_et, minute_et=0, relief_in_force=True):
+    """Teaching clock only. Official typography grants temporary relief from the
+    locate requirement in Rule 203(b)(1), for broker-dealers effecting short sales
+    during trading occurring outside of 9:30 a.m. to 4 p.m. ET, until November 23, 2027.
+    Regular-hours locate still applies. Not legal advice.
+    """
+    t = hour_et + minute_et / 60.0
+    in_regular_hours = 9.5 <= t <= 16.0
+    if not relief_in_force:
+        return True
+    return in_regular_hours
+
+
+for label, hour, minute, expect in (
+    ("short sale at 10:00 p.m. ET during the relief", 22, 0, False),
+    ("short sale at 10:00 a.m. ET during the relief", 10, 0, True),
+):
+    got = locate_required_under_34_106971(hour, minute, relief_in_force=True)
+    print(f"  {label}: locate_required={got}")
+    check(got is expect, label)
+
+# Official typography: Rule 204, including its close-out requirements and penalty
+# provision, would continue to apply to failures to deliver arising from short
+# sales effected during extended hours.
+rule204_still_applies_to_extended_hours_fail = True
+print(
+    "  Rule 204 still applies to a failure to deliver from the 10:00 p.m. ET short sale: "
+    f"{rule204_still_applies_to_extended_hours_fail}"
+)
+check(rule204_still_applies_to_extended_hours_fail, "Rule 204 still applies during the relief")
+check(locate_required_under_34_106971(9, 30) is True, "9:30 a.m. ET is inside regular hours")
+check(locate_required_under_34_106971(16, 0) is True, "4 p.m. ET is inside regular hours")
 
 print(f"OK {checks} assertions")
